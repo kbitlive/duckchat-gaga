@@ -1296,6 +1296,7 @@ html, body{
 .group-desc-body {
     font-size:1.13rem;
     color:rgba(153,153,153,1);
+    width: 26rem;
 }
 .group-member-body {
     height: 14rem;
@@ -1521,7 +1522,6 @@ button:active{
     visibility: visible;
     width: 100%;
     margin-bottom: 2rem;
-    margin-left: 0.5rem;
 }
 .add-friend-div-img{
     margin-top: 5rem;
