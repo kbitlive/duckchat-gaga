@@ -252,11 +252,15 @@
             data: {"loginName" : loginName},
             success:function (resp, status, request) {
                 var error = JSON.parse(resp);
-                if(error["errCode"].length>1) {
+                if(error["errCode"].length>1 && error["errCode"] != "success") {
                     zalyjsAlert(error['errCode']);
                     return;
                 }
-                window.close();
+                try{
+                    zalyjsNavClosePlugin();
+                }catch (error) {
+
+                }
             },
             failed:function (error) {
                 console.log(error);
