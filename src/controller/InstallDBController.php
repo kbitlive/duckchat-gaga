@@ -55,14 +55,6 @@ class InstallDBController
         $config = require($sampleFileName);
         $sqliteName = "";
 
-        if (!empty($sqliteName)) {
-            $sqliteName = dirname(__FILE__) . '/../' . $sqliteName;
-            $isInstalled = file_exists($sqliteName);
-            if ($isInstalled) {
-
-            }
-        }
-
         $this->lang = $_GET['lang'];
 
         $method = $_SERVER['REQUEST_METHOD'];
