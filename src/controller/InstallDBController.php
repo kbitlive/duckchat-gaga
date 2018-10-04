@@ -45,23 +45,15 @@ class InstallDBController
 
         $configFileName = dirname(__FILE__) . "/../" . $this->configName;
         $sampleFileName = dirname(__FILE__) . "/../" . $this->sampleConfigName;
+
         if (file_exists($configFileName)) {
-            $config = require($configFileName);
-            $sqliteName = $config['sqlite']['sqliteDBName'];
-        } else {
-            $config = require($sampleFileName);
-            $sqliteName = "";
+            $apiPageIndex = ZalyConfig::getConfig("apiPageIndex");
+            header("Location:" . $apiPageIndex);
+            exit();
         }
 
-        if (!empty($sqliteName)) {
-            $sqliteName = dirname(__FILE__) . '/../' . $sqliteName;
-            $isInstalled = file_exists($sqliteName);
-            if ($isInstalled) {
-                $apiPageIndex = ZalyConfig::getConfig("apiPageIndex");
-                header("Location:" . $apiPageIndex);
-                exit();
-            }
-        }
+        $config = require($sampleFileName);
+        $sqliteName = "";
 
         $this->lang = $_GET['lang'];
 
@@ -391,7 +383,7 @@ class InstallDBController
             ],
             [
                 'pluginId' => 101,
-                'name' => "平台登陆",
+                'name' => "平台登陆小程序",
                 'logo' => "",
                 'sort' => 101,
                 'landingPageUrl' => "http://open.akaxin.com:5208/index.php?action=page.login",
@@ -403,7 +395,7 @@ class InstallDBController
             ],
             [
                 'pluginId' => 102,
-                'name' => "密码登陆",
+                'name' => "密码登陆小程序",
                 'logo' => "",
                 'sort' => 102, //order = 102
                 'landingPageUrl' => "index.php?action=page.passport.login",
@@ -451,7 +443,7 @@ class InstallDBController
 //            ],
             [
                 'pluginId' => 105,
-                'name' => "账户密码管理",
+                'name' => "账户密码管理小程序",
                 'logo' => "",
                 'sort' => 104, //order = 2
                 'landingPageUrl' => "index.php?action=miniProgram.passport.account",
