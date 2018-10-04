@@ -44,6 +44,13 @@ class InstallDBController
         ];
 
         $configFileName = dirname(__FILE__) . "/../" . $this->configName;
+
+        if(file_exists($configFileName)) {
+            $apiPageIndex = ZalyConfig::getConfig("apiPageIndex");
+            header("Location:" . $apiPageIndex);
+            exit();
+        }
+
         $sampleFileName = dirname(__FILE__) . "/../" . $this->sampleConfigName;
         if (file_exists($configFileName)) {
             $config = require($configFileName);
@@ -51,16 +58,6 @@ class InstallDBController
         } else {
             $config = require($sampleFileName);
             $sqliteName = "";
-        }
-
-        if (!empty($sqliteName)) {
-            $sqliteName = dirname(__FILE__) . '/../' . $sqliteName;
-            $isInstalled = file_exists($sqliteName);
-            if ($isInstalled) {
-                $apiPageIndex = ZalyConfig::getConfig("apiPageIndex");
-                header("Location:" . $apiPageIndex);
-                exit();
-            }
         }
 
         $this->lang = $_GET['lang'];
