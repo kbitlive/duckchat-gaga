@@ -43,6 +43,16 @@ class ZalyConfig
         return self::$config[$key];
     }
 
+    public static function getApiIndexUrl()
+    {
+        $domain = self::getDomain();
+        $pageIndexUrl = self::$config['apiIndexUrl'];
+        if(strpos($pageIndexUrl,"./") == 0) {
+            $pageIndexUrl = str_replace("./", "/", $pageIndexUrl);
+        }
+        return $domain.$pageIndexUrl;
+    }
+
     public static function getApiPageJumpUrl()
     {
         $domain = self::getDomain();

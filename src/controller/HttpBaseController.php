@@ -98,7 +98,7 @@ abstract class HttpBaseController extends \Wpf_Controller
                 }
             }
             $x = isset($_GET['x']) ? $_GET['x'] : "";
-            $apiPageIndex = ZalyConfig::getConfig("apiPageIndex");
+            $apiPageIndex = ZalyConfig::getApiIndexUrl();
             if ($x) {
                 if (strpos($apiPageIndex, "?")) {
                     $apiPageIndex . "&x=" . $x;
