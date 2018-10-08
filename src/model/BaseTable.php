@@ -182,7 +182,6 @@ class BaseTable
                 "error_info" => $this->db->errorInfo(),
             ];
             if ($this->db->errorCode() == 'HY000') {
-                $this->ctx->ZalyDB->upgradeDB();
                 $this->ctx->Wpf_Logger->error("===================table result ==", var_export($this->db->errorInfo(), true));
             }
             $this->ctx->Wpf_Logger->error($tag, json_encode($error));
@@ -209,7 +208,6 @@ class BaseTable
             if ($result && $prepare->errorCode() == '00000') {
                 return true;
             } elseif ($prepare->errorCode() == 'HY000') {
-                $this->ctx->ZalyDB->upgradeDB();
                 $this->ctx->Wpf_Logger->error("table not exists =" . var_export($prepare->errorInfo(), true));
             }
 

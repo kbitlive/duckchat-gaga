@@ -63,6 +63,7 @@ class InstallDBController
             exit();
         }
 
+
         $config = require($sampleFileName);
 
         $sqliteName = "";
