@@ -719,7 +719,8 @@ function isCheckEndMsgDialog()
     var sh = rightchatBox.scrollHeight;
     var ch = rightchatBox.clientHeight;
     var st = $(".right-chatbox").scrollTop();
-    if(sh - ch - st == 0) {
+    ///差值小于等于150 px末， 默认底部
+    if(sh - ch - st <= 150) {
         return true
     }
     return false;
