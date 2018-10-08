@@ -21,6 +21,7 @@
 
 <body>
     <!--左列， 以及会话帧-->
+    <div style="background-color: red;height: 5rem;display: none" class="site-warning"></div>
     <?php include(dirname(__DIR__) . '/base/baseView.php'); ?>
     <!-- 右边聊天窗口，包括消息帧 -->
     <div class="layout-right msg-chat-dialog" >
@@ -83,6 +84,25 @@
 
     localStorage.setItem(chatTypeKey, DefaultChat);
     getRoomList();
+
+    function isWeixinBrowser(){
+        return /micromessenger/.test(navigator.userAgent.toLowerCase())
+    }
+
+    function checkAvailableBrowser(){ //detection PC and Mobile
+        if(!(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) && !isWeixinBrowser()) {
+            return true;
+        }
+        return false;
+    }
+
+    var isAvaliableFlag = checkAvailableBrowser();
+
+    if(!isAvaliableFlag) {
+        $(".site-warning")[0].style.display='block';
+        var tip = "暂不支持此系统，请使用手机客户端或者PC访问站点！";
+        $(".site-warning").html(tip);
+    }
 
     history.pushState(null, null, document.URL);
     window.addEventListener('popstate', function () {

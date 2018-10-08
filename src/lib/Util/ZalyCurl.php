@@ -197,6 +197,7 @@ class ZalyCurl
     public function requestAndReturnHeaders($url, $method, $params = [], $headers = [])
     {
         try {
+            error_log("headers ===".json_encode($headers));
             $urlParams = parse_url($url);
             $query = isset($urlParams['query']) ? $urlParams['query'] : [];
             $urlParams = $this->convertUrlQuery($query);

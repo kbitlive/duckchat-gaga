@@ -13,6 +13,7 @@
 
 </head>
 <body>
+<div style="background-color: red;height: 5rem;display: none" class="site-warning"></div>
 
 <div class="zaly_container" >
     <div class="zaly_login zaly_login_by_pwd" >
@@ -153,5 +154,25 @@
 <script src="../../public/js/im/zalyBaseWs.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/login/login.js?_version=<?php echo $versionCode?>"></script>
 
+<script type="text/javascript">
+    function isWeixinBrowser(){
+        return /micromessenger/.test(navigator.userAgent.toLowerCase())
+    }
+
+    function isDuckchatApp(){
+        alert("navigator.userAgent==="+navigator.userAgent);
+        if(/duckchat/i.test(navigator.userAgent)) {
+            return true;
+        }
+        return false;
+    }
+
+    var isAppFlag = isDuckchatApp();
+    if(!isAppFlag) {
+        $(".site-warning")[0].style.display='block';
+        var tip = "暂不支持此系统，请使用手机客户端或者PC访问站点！";
+        $(".site-warning").html(tip);
+    }
+</script>
 </body>
 </html>

@@ -394,9 +394,9 @@
                  <div class="item p-2" id="remove-admin" data-local-value="removeAdminTip">移除管理员</div>
             {{/if}}
 
-            {{if (isOwner == 1 && !memberIsSpeaker)}}
+            {{if (!memberIsSpeaker)}}
                     <div class="item p-2" id="set-speaker" data-local-value="setSpeakerTip">设为发言人</div>
-            {{else if (isOwner == 1 && memberIsSpeaker != false)}}
+            {{else if (memberIsSpeaker != false)}}
                     <div class="item p-2" id="remove-speaker" data-local-value="removeSpeakerTip">移除发言人</div>
             {{/if}}
 

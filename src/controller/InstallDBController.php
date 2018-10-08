@@ -395,18 +395,6 @@ class InstallDBController
                 'authKey' => "",
             ],
             [
-                'pluginId' => 101,
-                'name' => "平台登陆小程序",
-                'logo' => "",
-                'sort' => 101,
-                'landingPageUrl' => "http://open.akaxin.com:5208/index.php?action=page.login",
-                'landingPageWithProxy' => 0, //1 表示走site代理
-                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageLogin,
-                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingNewPage,
-                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
-                'authKey' => "",
-            ],
-            [
                 'pluginId' => 102,
                 'name' => "密码登陆小程序",
                 'logo' => "",

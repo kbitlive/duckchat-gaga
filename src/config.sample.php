@@ -16,7 +16,6 @@ return array(
     'loginPluginId' => '106',
     'apiPageWidget' => './index.php?action=page.widget',
     'apiPageSiteInit' => "./index.php?action=installDB",
-    'session_verify_101' => 'http://open.akaxin.com:5208/index.php?action=api.session.verify&body_format=base64pb',
     'session_verify_102' => './index.php?action=api.session.verify&body_format=base64pb',
     'session_verify_106' => 'http://127.0.0.1:8081/duckchat/duckchat.php?action=api.session.verify&body_format=base64pb',
     "siteAddress" => '',
