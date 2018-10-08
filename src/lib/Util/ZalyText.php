@@ -19,6 +19,7 @@ class ZalyText
         "text.group.notMember" => ["you aren't group member", "你不是群组成员"],
         "text.group.create" => ["group created,invite your friends to join chat", "群组已创建成功,邀请你的好友加入群聊吧"],
         "upload.file.size" => ["file exceeds maximum limit", "文件超过最大限制"],
+        "text.open.web" => ["web is not allowed", "该站点没有开起web版本"],
     ];
 
     public static $keyGroupInvite = "{key.group.invite}";

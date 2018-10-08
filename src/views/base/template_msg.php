@@ -681,8 +681,8 @@
                 <img src="../../public/img/msg/default_user.png" class="user-image-for-search info-avatar-{{userId}}"/>
                 <span class="search-user-title">{{nickname}}</span>
             </div>
-            <div>
-                <button class="search-add-friend-btn" data-local-value="addTip" userId="{{userId}}">添加</button>
+            <div style="width: 5.63rem;height: 2.63rem;margin-right: 2rem;">
+                <button class="search-add-friend-btn search-friend-{{userId}}" data-local-value="addTip" userId="{{userId}}">添加</button>
             </div>
         </div>
     {{else}}
@@ -701,7 +701,7 @@
 <script id="tpl-search-user-div" type="text/html">
     <div class="search-user-header">
         <div class="search-user-header-content">
-        <input type="text" class="form-control create_group_box_div_input search-user-input" onkeydown="searchUserByKeyPress(event)" onblur="searchUserByOnBlur(event)"  data-local-placeholder="searchFriendPlaceholder" placeholder="搜索好友">
+        <input type="text" class="form-control create_group_box_div_input search-user-input" onkeydown="searchUserByKeyDown(event)" onblur="searchUserByOnBlur(event)"  data-local-placeholder="searchFriendPlaceholder" placeholder="搜索好友">
         </div>
         <img src="../../public/img/msg/search_icon.png" style="width:2rem; height:2rem;">
         </div>

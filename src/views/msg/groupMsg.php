@@ -57,6 +57,7 @@
     $(window).resize(function () {
         setFontSize();
     });
+
     setFontSize();
     function setFontSize()
     {

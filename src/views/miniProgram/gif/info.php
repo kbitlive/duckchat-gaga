@@ -70,11 +70,11 @@
         <img id="gifInfo" src='{{gifUrl}}' class='gif' gifId='{{gifId}}'>
         {{if isDefault == "0" }}
         <div class="gif_div_button">
-            <button class="save_gif save_button" gifId='{{gifId}}'>收藏</button>
+            <button class="save_gif save_button " gifId='{{gifId}}'>收藏</button>
         </div>
         {{ else }}
         <div class="gif_div_button">
-            <button class="save_gif save_button" gifId='{{gifId}}' disabled>已收藏</button>
+            <button class="save_button" gifId='{{gifId}}' disabled>已收藏</button>
         </div>
         {{/if}}
     </div>
@@ -161,7 +161,6 @@
 
     function sendPostToServer(reqData)
     {
-        console.log("save gif =======" + JSON.stringify(reqData));
         $.ajax({
             method: "POST",
             url:"./index.php?action=miniProgram.gif.index&type="+saveGifType+"&lang="+languageNum,
@@ -172,7 +171,7 @@
                     zalyjsAlert(data.errorInfo);
                     return false;
                 }
-                window.close();
+                $(".save_gif").html("已收藏");
             }
         });
     }

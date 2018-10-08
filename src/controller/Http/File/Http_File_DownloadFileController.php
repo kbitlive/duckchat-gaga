@@ -23,6 +23,7 @@ class Http_File_DownloadFileController extends \HttpBaseController
         $isGroupMessage = isset($_GET['isGroupMessage']) ? $_GET['isGroupMessage'] : "";
         $messageId = isset($_GET['messageId']) ? $_GET['messageId'] : "";
         $returnBase64 = $_GET['returnBase64'];
+
         try{
             if(!in_array($mimeType, $this->notMsgMimeType) && !$messageId) {
                 throw new Exception("it's msg attachment");
@@ -35,10 +36,8 @@ class Http_File_DownloadFileController extends \HttpBaseController
                         throw new Exception("no group premission, can't load img");
                     }
                 } else {
-
                     ////TODO u2 can load img
                     $info = $this->ctx->SiteU2MessageTable->queryMessageByMsgId([$messageId]);
-
                     if(!$info) {
                         throw new Exception("no premission, can't load img");
                     }
@@ -49,7 +48,6 @@ class Http_File_DownloadFileController extends \HttpBaseController
                         throw new Exception("no read permission, can't load img");
                     }
                 }
-                $this->ctx->Wpf_Logger->error($tag, "download file info ==" . json_encode($info) );
 
                 $contentJson = $info['content'];
                 $contentArr  = json_decode($contentJson, true);
@@ -58,17 +56,18 @@ class Http_File_DownloadFileController extends \HttpBaseController
                     throw new Exception("get img content is not ok");
                 }
             }
-
             $fileContent = $this->ctx->File_Manager->readFile($fileId);
 
             if(strlen($fileContent)<1) {
                 throw new Exception("load file void");
             }
+
             header('Cache-Control: max-age=86400, public');
             header("Content-type:$mimeType");
             if($mimeType == $this->documentMimeType) {
                 header("Content-Disposition:attachment");
             }
+
             if($returnBase64) {
                 echo base64_decode($fileContent);
             } else {
@@ -76,7 +75,7 @@ class Http_File_DownloadFileController extends \HttpBaseController
             }
         }catch (Exception $ex) {
             header("Content-type:$mimeType");
-            $this->ctx->Wpf_Logger->error($tag, $ex );
+            $this->ctx->Wpf_Logger->error($tag, $ex);
             echo "failed";
         }
     }

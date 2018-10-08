@@ -47,12 +47,24 @@ class InstallDBController
         $sampleFileName = dirname(__FILE__) . "/../" . $this->sampleConfigName;
 
         if (file_exists($configFileName)) {
+            $newConfig = require($configFileName);
+            $dbType = $newConfig['dbType'];
+            $sqliteName = $newConfig['sqlite']['sqliteDBName'];
+            if($dbType == "sqlite" && $sqliteName) {
+                $sqliteName = $this->_dbPath . "/" . $sqliteName;
+                $fileExists = file_exists($sqliteName);
+                if($newConfig['dbType'] == "sqlite" && !$fileExists) {
+                    echo "sqlite DB 文件不存在, 请删除config.php文件，初始化站点";
+                    return;
+                }
+            }
             $apiPageIndex = ZalyConfig::getConfig("apiPageIndex");
             header("Location:" . $apiPageIndex);
             exit();
         }
 
         $config = require($sampleFileName);
+
         $sqliteName = "";
 
         $this->lang = $_GET['lang'];
@@ -417,30 +429,30 @@ class InstallDBController
                 'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
                 'authKey' => "",
             ],
-//            [
-//                'pluginId' => 104,
-//                'name' => "gif小程序",
-//                'logo' => "",
-//                'sort' => 2, //order = 2
-//                'landingPageUrl' => "index.php?action=miniProgram.gif.index",
-//                'landingPageWithProxy' => 1, //1 表示走site代理
-//                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageU2Message,
-//                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
-//                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
-//                'authKey' => "",
-//            ],
-//            [
-//                'pluginId' => 104,
-//                'name' => "gif小程序",
-//                'logo' => "",
-//                'sort' => 2, //order = 2
-//                'landingPageUrl' => "index.php?action=miniProgram.gif.index",
-//                'landingPageWithProxy' => 1, //1 表示走site代理
-//                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageGroupMessage,
-//                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
-//                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
-//                'authKey' => "",
-//            ],
+            [
+                'pluginId' => 104,
+                'name' => "gif小程序",
+                'logo' => "",
+                'sort' => 2, //order = 2
+                'landingPageUrl' => "index.php?action=miniProgram.gif.index",
+                'landingPageWithProxy' => 1, //1 表示走site代理
+                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageU2Message,
+                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
+                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
+                'authKey' => "",
+            ],
+            [
+                'pluginId' => 104,
+                'name' => "gif小程序",
+                'logo' => "",
+                'sort' => 2, //order = 2
+                'landingPageUrl' => "index.php?action=miniProgram.gif.index",
+                'landingPageWithProxy' => 1, //1 表示走site代理
+                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageGroupMessage,
+                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
+                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
+                'authKey' => "",
+            ],
             [
                 'pluginId' => 105,
                 'name' => "账户密码管理小程序",

@@ -384,7 +384,6 @@ abstract class BaseController extends \Wpf_Controller
             $this->language = Zaly\Proto\Core\UserClientLangType::UserClientLangEN;
             $this->zalyError = $this->ctx->ZalyErrorEn;
         }
-
     }
 
     private function returnErrorSession($errorInfo = false)

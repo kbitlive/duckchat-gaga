@@ -15,7 +15,7 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
     private $u2Type = "u";
     private $userRelationAction = "duckChat.user.relation";
     private $limit=30;
-    private $title = "GIF小程序";
+    private $title = "GIF";
     private $roomType="";
     private $toId;
     private $seeType = "see_gif";
@@ -101,7 +101,7 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
                 }
                 unset($gif['userId']);
                 //gifId, gifUrl, width, height, userId
-                $gif['gifUrl'] = "./index.php?action=http.file.downloadGif&gifId=".$gif['gifId'];
+                $gif['gifUrl'] = "./index.php?action=miniProgram.gif.info&gifId=".$gif['gifId'];
                 echo $this->display("miniProgram_gif_info", $gif);
                 return;
             } else {

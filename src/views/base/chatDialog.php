@@ -4,7 +4,7 @@
     <div class="actions">
         <img src="../../public/img/msg/invite_people.png"  class="invite_people"/>
         <img src="../../public/img/msg/add_friend.png"  class="add_friend add-friend-btn"/>
-        <img src="../../public/img/msg/setting.png" class="see_group_profile"/>
+        <img src="../../public/img/msg/setting.png" class="see_group_profile" is_show_profile="1"/>
     </div>
 </div>
 
@@ -133,7 +133,7 @@
     <div class="right-body-sidebar">
 
         <div class="right-body-sidebar-menu">
-            <img src="../../public/img/msg/btn-close.png" onclick="$('.right-body-sidebar').hide()" />
+            <img src="../../public/img/msg/btn-close.png"style="cursor: pointer;" onclick="$('.right-body-sidebar').hide()" />
         </div>
 
         <div style="position: relative">

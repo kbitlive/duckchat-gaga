@@ -63,6 +63,11 @@ var ZalyAction = {
             }
             actionUrl = serverAddressForApi+actionUrl;
         }
+        if(actionUrl.indexOf("?") == -1) {
+            actionUrl = actionUrl + "?lang="+languageNum;
+        } else {
+            actionUrl = actionUrl + "&lang="+languageNum;
+        }
         return actionUrl;
     }
 }

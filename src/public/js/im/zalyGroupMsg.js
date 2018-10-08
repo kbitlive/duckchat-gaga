@@ -102,23 +102,32 @@ function getNotMsgImg(userId, avatarImgId)
     }
     sessionStorage.setItem(userImgKey, Date.parse(new Date()));
 
-    var requestUrl =  downloadFileUrl + "&fileId="+avatarImgId+"&returnBase64=0";
+    var requestUrl =  downloadFileUrl + "&fileId="+avatarImgId+"&returnBase64=0&lang="+languageNum;
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && (this.status == 200 || this.status == 304)) {
             var blob = this.response;
             var src = window.URL.createObjectURL(blob);
             // Typical action to be performed when the document is ready:
-            $(".info-avatar-"+userId).attr("src", src);
-            if(userId == token) {
-                localStorage.setItem(selfInfoAvatar, src);
+            var img = new Image();
+            img.src = src;
+            console.log("download img is error msg src=="+src);
+
+            img.onload = function(){
+                $(".info-avatar-"+userId).attr("src", src);
+                if(userId == token) {
+                    localStorage.setItem(selfInfoAvatar, src);
+                }
+            }
+            img.onerror = function (ev) {
+                console.log("download img is error msg =="+ev.message);
             }
             sessionStorage.removeItem(userImgKey);
         }
     };
     xhttp.open("GET", requestUrl, true);
     xhttp.responseType = "blob";
-    xhttp.setRequestHeader('Cache-Control', "max-age=2592000, public");
+    xhttp.setRequestHeader('Cache-Control', "max-age=84600, public");
     xhttp.send();
 }
 
@@ -128,7 +137,7 @@ function getMsgImg(imgId, isGroupMessage, msgId)
     if(imgId == undefined || imgId == "" || imgId.length<1) {
         return false;
     }
-    var requestUrl = downloadFileUrl +  "&fileId="+imgId + "&returnBase64=0&isGroupMessage="+isGroupMessage+"&messageId="+msgId;
+    var requestUrl = downloadFileUrl +  "&fileId="+imgId + "&returnBase64=0&isGroupMessage="+isGroupMessage+"&messageId="+msgId+"&lang="+languageNum;
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && (this.status == 200 || this.status == 304)) {
@@ -870,15 +879,20 @@ function displayGroupMemberForGroupInfo(results)
 $(document).on("click", ".see_group_profile", function () {
     var chatSessionId   = localStorage.getItem(chatSessionIdKey);
     var chatSessionType = localStorage.getItem(chatSessionId);
-
-
-    if(chatSessionType == U2_MSG) {
-        sendFriendProfileReq(chatSessionId);
+    var isShowProfile = $(this).attr("is_show_profile");
+    if(1 == Number(isShowProfile)) {
+        $('.right-body-sidebar').hide();
+        $(this).attr("is_show_profile", 0);
     } else {
-        getGroupMembers(0, 18, displayGroupMemberForGroupInfo);
-        sendGroupProfileReq(chatSessionId, handleGetGroupProfile);
+        $(this).attr("is_show_profile", 1);
+        if(chatSessionType == U2_MSG) {
+            sendFriendProfileReq(chatSessionId);
+        } else {
+            getGroupMembers(0, 18, displayGroupMemberForGroupInfo);
+            sendGroupProfileReq(chatSessionId, handleGetGroupProfile);
+        }
+        $('.right-body-sidebar').show();
     }
-    $('.right-body-sidebar').show();
 });
 
 groupMemberListOffset=0;
@@ -1173,6 +1187,7 @@ function displayRightPage(displayType)
                     $(".no-chat-dialog-div")[0].style.display = "block";
                     $(".chat-dialog")[0].style.display = "none";
                 }
+                $(".msg_content").focus()
                 $(".friend-apply-dialog")[0].style.display = "none";
                 break;
             case DISPLAY_APPLY_FRIEND_LIST:
@@ -2802,7 +2817,9 @@ function friendUpdate(userId, value)
     handleClientSendRequest(action, reqData, handleGetFriendProfile);
 }
 
-$(document).on("click", ".selfInfo", function () {
+////展示个人消息
+function displaySelfInfo()
+{
     var html = template("tpl-self-info", {
         userId:token,
         nickname:nickname,
@@ -2811,7 +2828,18 @@ $(document).on("click", ".selfInfo", function () {
     html = handleHtmlLanguage(html);
     $(".wrapper").append(html);
     getNotMsgImg(token, avatar);
+}
+
+$(document).on("click", ".selfInfo", function () {
+    displaySelfInfo();
 });
+
+$(".selfInfo").mouseover(function(){
+    displaySelfInfo();
+}).mouseout(function () {
+
+});
+
 
 $(document).on("click", ".delete-friend", function () {
     var tip = $.i18n.map['deleteFriendJsTip'] != undefined ? $.i18n.map['deleteFriendJsTip']: "确定要删除好友么?";
@@ -3016,15 +3044,22 @@ $(document).on("click", ".web-msg-click", function(){
     window.open(url);
 });
 
-function searchUserByKeyPress(event)
+///解决回车和失去焦点冲突
+var isSearchUser=false;
+function searchUserByKeyDown(event)
 {
     if(checkIsEnterBack(event) == false) {
         return;
     }
+    isSearchUser = true;
     searchUser();
 }
 
-function searchUserByOnBlur(){
+function searchUserByOnBlur() {
+    if(isSearchUser == true) {
+        isSearchUser = false;
+        return;
+    }
     searchUser();
 }
 
@@ -3064,12 +3099,19 @@ function handleSearchUser(results)
     }
 }
 
+function handleFriendApplyReq()
+{
+    alert("发送申请成功");
+}
+
+
 $(document).on("click", ".search-add-friend-btn", function () {
     var userId = $(this).attr("userId");
-    sendFriendApplyReq(userId, "", "");
+    sendFriendApplyReq(userId, "", handleFriendApplyReq);
     $(this).attr("disabled", "disabled");
-    alert("发送申请成功");
+    $(this)[0].style.backgroundColor = "#cccccc";
 });
+
 
 function closeMaskDiv(str)
 {
@@ -3082,7 +3124,8 @@ function downloadFile(elementObject) {
     var originName = elementObject.attr("originName");
     var currentRoom = localStorage.getItem(chatSessionIdKey);
     var isGroupMessage = localStorage.getItem(currentRoom) == GROUP_MSG ? 1 : 0;
-    var requestUrl = downloadFileUrl +  "&fileId="+fileId + "&returnBase64=0&isGroupMessage="+isGroupMessage+"&messageId="+msgId;
+    var requestUrl = downloadFileUrl +  "&fileId="+fileId + "&returnBase64=0&isGroupMessage="+isGroupMessage+"&messageId="+msgId+"&lang="+languageNum;
+    requestUrl = encodeURI(requestUrl);
     var downloadLink = document.createElement('a');
     downloadLink.download = originName;
     downloadLink.href =requestUrl;

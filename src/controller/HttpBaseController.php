@@ -34,6 +34,7 @@ abstract class HttpBaseController extends \Wpf_Controller
     private $jumpRoomId = "";
     private $jumpRelation = "";
     public $siteCookieName = "zaly_site_user";
+    public $language = "";
 
     protected $ctx;
 
@@ -58,20 +59,18 @@ abstract class HttpBaseController extends \Wpf_Controller
     public function doIndex()
     {
         $tag = __CLASS__ . "-" . __FUNCTION__;
-
         try {
             parent::doIndex();
             $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
             $action = isset($_GET['action']) ? $_GET['action'] : "";
-
+            $this->getAndSetClientLang();
             if ($preSessionId) {
                 $this->handlePreSessionId();
             }
-
             if (!in_array($action, $this->whiteAction)) {
                 $flag = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_OPEN_WEB_EDITION);
                 if ($flag != 1) {
-                    echo "该站点没有开起web版本";
+                    echo ZalyText::getText("text.open.web", $this->language);
                     die();
                 }
                 $this->getUserIdByCookie();
@@ -82,6 +81,16 @@ abstract class HttpBaseController extends \Wpf_Controller
         } catch (Exception $ex) {
             $this->ctx->Wpf_Logger->error($tag, "error msg =" . $ex->getMessage());
             $this->setLogout();
+        }
+    }
+
+    protected function getAndSetClientLang()
+    {
+        $headLang = isset($_GET['lang']) ? $_GET['lang'] : "";
+        if (isset($headLang) && $headLang == Zaly\Proto\Core\UserClientLangType::UserClientLangZH) {
+            $this->language = Zaly\Proto\Core\UserClientLangType::UserClientLangZH;
+        } else {
+            $this->language = Zaly\Proto\Core\UserClientLangType::UserClientLangEN;
         }
     }
 
