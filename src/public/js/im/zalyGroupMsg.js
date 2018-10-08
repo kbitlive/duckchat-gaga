@@ -1661,30 +1661,49 @@ function insertGroupRoom(groupId, groupName)
 $(document).on("click", ".group_cancle", function(){
     $(".group_name").val("");
 });
+var clickImgUserMsgId = '';
+var clickImgUserId = '';
+
+function handleClickGroupUserImg(results)
+{
+    var groupProfile = results.profile;
+
+    if(groupProfile) {
+        groupProfile.memberType = results.memberType ? results.memberType : GroupMemberType.GroupMemberGuest;
+
+        var isOwner = groupProfile.memberType == GroupMemberType.GroupMemberOwner ? 1 : 0;
+        var isAdmin = groupProfile.memberType == GroupMemberType.GroupMemberAdmin || isOwner ? 1 : 0 ;
+
+        var memberIsAdmin = checkGroupMemberAdminType(clickImgUserId, groupProfile);
+        var memberIsSpeaker = checkGroupMemberSpeakerType(clickImgUserId, groupProfile);
+        var memberIsOwner = checkGroupOwnerType(clickImgUserId, groupProfile);
+        console.log("memberIsOwner===="+memberIsOwner);
+        var isFriend = localStorage.getItem(friendRelationKey+clickImgUserId) == FriendRelation.FriendRelationFollow ? 1 : 0;
+        var html = template("tpl-group-user-menu", {
+            userId : clickImgUserId,
+            isFriend : isFriend,
+            isOwner:isOwner,
+            isAdmin:isAdmin,
+            memberIsSpeaker:memberIsSpeaker == false ? false : true,
+            memberIsAdmin:memberIsAdmin == false ? false : true,
+            memberIsOwner:memberIsOwner == false? false : true
+        });
+
+        html = handleHtmlLanguage(html);
+        var node = $(".group-user-img-"+clickImgUserMsgId)[0].parentNode.nextSibling.nextSibling;
+        $(node).append($(html));
+    }
+    handleGetGroupProfile(results);
+
+}
 
 $(document).on("click", ".group-user-img", function(){
     var groupId = localStorage.getItem(chatSessionIdKey);
-
     var userId = $(this).attr("userId");
-    var node = $(this)[0].parentNode.nextSibling.nextSibling;
+    clickImgUserMsgId = $(this).attr("msgId");
+    clickImgUserId = userId;
     $("#group-user-menu").attr("userId", userId);
-
-    var groupProfile = getGroupProfile(groupId);
-    var isOwner = groupProfile.memberType == GroupMemberType.GroupMemberOwner ? 1 : 0;
-    var isAdmin = groupProfile.memberType == GroupMemberType.GroupMemberAdmin || isOwner ? 1 : 0 ;
-    var memberIsAdmin = checkGroupMemberAdminType(userId, groupProfile);
-    var memberIsSpeaker = checkGroupMemberSpeakerType(userId, groupProfile);
-    var isFriend = localStorage.getItem(friendRelationKey+userId) == FriendRelation.FriendRelationFollow ? 1 : 0;
-    var html = template("tpl-group-user-menu", {
-        userId : userId,
-        isFriend : isFriend,
-        isOwner:isOwner,
-        isAdmin:isAdmin,
-        memberIsSpeaker:memberIsSpeaker == false ? false : true,
-        memberIsAdmin:memberIsAdmin == false ? false : true,
-    });
-    html = handleHtmlLanguage(html);
-    $(node).append($(html));
+    sendGroupProfileReq(groupId, handleClickGroupUserImg);
 });
 
 

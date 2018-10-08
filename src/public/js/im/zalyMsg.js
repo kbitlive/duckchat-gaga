@@ -799,7 +799,7 @@ function appendMsgHtml(msg)
         userId = token;
     }
     var msgTime = getMsgTimeByMsg(msg.timeServer);
-    var groupUserImageClassName = msg.roomType == GROUP_MSG ? "group-user-img" : "";
+    var groupUserImageClassName = msg.roomType == GROUP_MSG ? "group-user-img group-user-img-"+msg.msgId : "";
     var msgStatus = msg.status ? msg.status : "";
     var userAvatar = sendBySelf ? avatar : msg.userAvatar;
     var userAvatarSrc = sendBySelf ?  localStorage.getItem(selfInfoAvatar) : "";
