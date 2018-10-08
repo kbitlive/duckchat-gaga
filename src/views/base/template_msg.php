@@ -333,6 +333,13 @@
 
 <script id="tpl-apply-friend-list" type="text/html">
 
+    <div class="pw-contact-row  search-user" >
+        <div class="pw-contact-row-image" style="position: relative;">
+            <img src="../../public/img/msg/search_add_friend.png" />
+        </div>
+        <div class="pw-contact-row-name" data-local-value="searchTip">添加好友</div>
+    </div>
+
     <div class="pw-contact-row  apply-friend-list" >
         <div class="pw-contact-row-image" style="position: relative;">
             <img src="../../public/img/msg/apply_list.png" />
@@ -340,6 +347,26 @@
         </div>
         <div class="pw-contact-row-name" data-local-value="newFriendsTip">新朋友</div>
     </div>
+
+    <div class="friend-list-div" data-local-value="friendListTip">
+        好友列表
+    </div>
+</script>
+
+
+
+<script id="tpl-create-group" type="text/html">
+    <div class="pw-contact-row create-group" >
+        <div class="pw-contact-row-image" style="position: relative;">
+            <img src="../../public/img/msg/create_group.png" />
+        </div>
+        <div class="pw-contact-row-name" data-local-value="createGroupTip">创建群聊</div>
+    </div>
+
+    <div class="group-list-div" data-local-value="groupListTip">
+        群聊列表
+    </div>
+
 </script>
 
 <script id="tpl-room-no-data" type="text/html">

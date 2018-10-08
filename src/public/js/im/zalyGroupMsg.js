@@ -547,7 +547,6 @@ $(document).on("click", ".l-sb-item", function(){
             $(".friend-lists")[0].style.display = "none";
             groupOffset = 0;
             getGroupList();
-            $(".left-body-create-group")[0].style.display = "flex";
             break;
         case "chatSession" :
             $(".left-body-chatsession").addClass("chat-session-list");
@@ -557,7 +556,6 @@ $(document).on("click", ".l-sb-item", function(){
             $(".chatsession-lists")[0].style.display = "block";
             $(".group-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
-            $(".left-body-create-group")[0].style.display = "none";
             break;
         case "friend":
             $(".left-body-chatsession").addClass("friend-list");
@@ -568,14 +566,6 @@ $(document).on("click", ".l-sb-item", function(){
             $(".group-lists")[0].style.display = "none";
             friendOffset = 0;
             getFriendList();
-            $(".left-body-create-group")[0].style.display = "none";
-
-            break;
-        case "search":
-            var html = template("tpl-search-user-div", {});
-            $("#search-user-div").html(html);
-            showWindow($("#search-user-div"));
-            $(".left-body-create-group")[0].style.display = "none";
             break;
         case "more":
             displayDownloadApp();
@@ -794,11 +784,11 @@ function getGroupList()
 function initGroupList(results)
 {
     $(".group-lists").html("");
-    if(results == undefined || !results.hasOwnProperty("list")) {
-        var html = template("tpl-group-no-data", {});
-        html = handleHtmlLanguage(html);
-        $(".group-lists").html(html);
-    } else {
+    var html = template("tpl-create-group", {});
+    $(".group-lists").html(html);
+
+    if(results.hasOwnProperty("list")) {
+
         getGroupListHtml(results);
     }
 }
@@ -1568,10 +1558,12 @@ function handleAddMemberToGroup()
     syncMsgForRoom();
 }
 
-$(document).on("click", ".create-group-btn", function () {
+$(document).on("click", ".create-group", function () {
     $(".group_name").val('');
     showWindow($("#create-group"));
 });
+
+
 
 $(document).on("click", ".create_group_button" , function(){
     createGroup();
@@ -2608,6 +2600,14 @@ $(document).on("click", ".apply-friend-list", function () {
     addActiveForPwContactRow($(this));
     applyFriendListOffset = 0;
     getFriendApplyList();
+});
+
+$(document).on("click", ".search-user", function () {
+    addActiveForPwContactRow($(this));
+    var html = template("tpl-search-user-div", {});
+    $("#search-user-div").html(html);
+    showWindow($("#search-user-div"));
+    $(".left-body-create-group")[0].style.display = "none";
 });
 
 function getFriendApplyList()

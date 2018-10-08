@@ -148,7 +148,10 @@ input,
 
 .input_login_site::-webkit-input-placeholder,
 input::-webkit-input-placeholder,
-.register_site::-webkit-input-placeholder{
+.register_site::-webkit-input-placeholder,
+.input_login_site::-moz-placeholder,
+input::-moz-placeholder,
+.register_site::-moz-placeholder{
     font-size:1.31rem;
     font-family:PingFangSC-Regular;
     color:rgba(153,153,153,1);
