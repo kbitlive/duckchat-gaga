@@ -166,12 +166,30 @@
         }
         return false;
     }
+
+    function isAvailableBrowser(){
+        var userAgent = navigator.userAgent;
+        var isFirefox = userAgent.indexOf("Firefox") != -1;
+        var isChrome = userAgent.indexOf("Chrome") && window.chrome;
+        var isSafari = userAgent.indexOf("Safari") != -1 && userAgent.indexOf("Version") != -1;
+        if(isFirefox || isChrome || isSafari) {
+            return true;
+        }
+        return false;
+    }
     var isDuckchatFlag = $(".isDuckchat").val();
     var isPhoneFlag = isPhone();
     if(isPhoneFlag && isDuckchatFlag == 0) {
         $(".site-warning")[0].style.display='flex';
         var tip = "暂不支持此系统，请使用手机客户端或者PC访问站点！";
         $(".site-warning").html(tip);
+    } else {
+        var isAvailabelBrowserFlag = isAvailableBrowser();
+        if(!isAvailabelBrowserFlag) {
+            $(".site-warning")[0].style.display='flex';
+            var tip = "暂不支持此系统，请使用手机客户端或者火狐，Chrome, Safari浏览器访问站点！";
+            $(".site-warning").html(tip);
+        }
     }
 </script>
 </body>
