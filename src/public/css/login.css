@@ -7,6 +7,15 @@ body,html {
     -webkit-tap-highlight-color: transparent;
 }
 
+.site-warning {
+    background-color: red;
+    height: 5rem;
+    display: none;
+    line-height: 5rem;
+    justify-content: center;
+    color: white;
+    font-size: 1.31rem;
+}
 .zaly_container {
     padding:0;
     height: 100%;

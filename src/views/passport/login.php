@@ -13,7 +13,7 @@
 
 </head>
 <body>
-<div style="background-color: red;height: 5rem;display: none" class="site-warning"></div>
+<div class="site-warning"></div>
 
 <div class="zaly_container" >
     <div class="zaly_login zaly_login_by_pwd" >
@@ -148,6 +148,7 @@
 </div>
 <?php include(dirname(__DIR__) . '/passport/template_login.php'); ?>
 
+<input type="hidden" value="<?php echo $isDuckchat; ?>" class="isDuckchat">
 <script src="../../public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/im/zalyClient.js?_version=<?php echo $versionCode?>"></script>
@@ -159,17 +160,16 @@
         return /micromessenger/.test(navigator.userAgent.toLowerCase())
     }
 
-    function isDuckchatApp(){
-        alert("navigator.userAgent==="+navigator.userAgent);
-        if(/duckchat/i.test(navigator.userAgent)) {
+    function isPhone(){
+        if((/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) || isWeixinBrowser()) {
             return true;
         }
         return false;
     }
-
-    var isAppFlag = isDuckchatApp();
-    if(!isAppFlag) {
-        $(".site-warning")[0].style.display='block';
+    var isDuckchatFlag = $(".isDuckchat").val();
+    var isPhoneFlag = isPhone();
+    if(isPhoneFlag && isDuckchatFlag == 0) {
+        $(".site-warning")[0].style.display='flex';
         var tip = "暂不支持此系统，请使用手机客户端或者PC访问站点！";
         $(".site-warning").html(tip);
     }
