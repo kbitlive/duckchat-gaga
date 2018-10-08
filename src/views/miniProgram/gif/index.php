@@ -9,8 +9,6 @@
     <script type="text/javascript" src="../../../public/js/jquery.min.js"></script>
     <script src="../../../public/js/zalyjsNative.js"></script>
     <script src="../../../public/js/template-web.js"></script>
-    <script src="../../../public/js/zalyHelper.js"></script>
-
     <style>
         body, html {
             font-size: 10.66px;
@@ -86,6 +84,7 @@
 
 <script type="text/javascript">
     gifs  = '<?php echo $gifs;?>';
+    console.log("gifs ====");
     gifArr = JSON.parse(gifs);
     gifLength = gifArr.length ;
     var line = 0;
@@ -150,6 +149,13 @@
                 $(".zaly_container").append(html);
             }
         }
+    } else {
+        var html = '';
+        html += "<div class='gif_div gif_div_0'  gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
+        html += "<div class='gif_content_div'><img src='../../../public/img/add.png' class='add_gif'>  " +
+            "<input id='gifFile' type='file' onchange='uploadFile(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
+        html += "</div>";
+        $(".zaly_container").append(html);
     }
     var slideHtml = "";
     for(var i=0; i<line; i++){

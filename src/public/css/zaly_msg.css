@@ -213,7 +213,10 @@ html, body{
     overflow-y: scroll;
     display: block;
     box-shadow:0rem 0.09rem 0.38rem 0rem rgba(0,0,0,0.2);
+}
+.group-lists {
     margin-bottom: 10rem;
+    overflow-y: scroll;
 }
 
 .create-group-btn {
@@ -569,7 +572,7 @@ html, body{
 }
 
 #group-invite-people .pw-left{
-    width: 30rem;
+    width: 29rem;
     border-right: #c9c9c9 solid 0.09rem;
     overflow: hidden;
     overflow-y: scroll;

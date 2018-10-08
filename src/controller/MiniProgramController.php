@@ -29,6 +29,9 @@ abstract class MiniProgramController extends \Wpf_Controller
 
     protected $language = Zaly\Proto\Core\UserClientLangType::UserClientLangEN;
     protected $requestData;
+    protected $whiteAction = [
+        "miniProgram.gif.info"
+    ];
 
 
     public function __construct(Wpf_Ctx $context)
@@ -76,24 +79,27 @@ abstract class MiniProgramController extends \Wpf_Controller
 
             $this->logger->info("site.manage.base", "cookie=" . json_encode($_COOKIE));
 
-            $duckchatSessionId = $_COOKIE["duckchat_sessionid"];
+            $action = $_GET['action'];
+            if(!in_array($action, $this->whiteAction)) {
+                $duckchatSessionId = $_COOKIE["duckchat_sessionid"];
 
-            if (empty($duckchatSessionId)) {
-                throw new Exception("duckchat_sessionid is empty in cookie");
+                if (empty($duckchatSessionId)) {
+                    throw new Exception("duckchat_sessionid is empty in cookie");
+                }
+                $miniProgramId = $this->getMiniProgramId();
+                //get user profile from duckchat_sessionid
+                $userPublicProfile = $this->getDuckChatUserProfileFromSessionId($duckchatSessionId, $miniProgramId);
+
+                if (empty($userPublicProfile) || empty($userPublicProfile->getUserId())) {
+                    throw new Exception("get empty user profile by duckchat_sessionid error");
+                }
+
+                $this->userProfile = $userPublicProfile;
+                $this->userId = $userPublicProfile->getUserId();
+                $this->loginName = $userPublicProfile->getLoginName();
+                $this->ctx->Wpf_Logger->info("", "Mini Program Request UserId=" . $this->userId);
+
             }
-            $miniProgramId = $this->getMiniProgramId();
-
-            //get user profile from duckchat_sessionid
-            $userPublicProfile = $this->getDuckChatUserProfileFromSessionId($duckchatSessionId, $miniProgramId);
-
-            if (empty($userPublicProfile) || empty($userPublicProfile->getUserId())) {
-                throw new Exception("get empty user profile by duckchat_sessionid error");
-            }
-
-            $this->userProfile = $userPublicProfile;
-            $this->userId = $userPublicProfile->getUserId();
-            $this->loginName = $userPublicProfile->getLoginName();
-            $this->ctx->Wpf_Logger->info("", "Mini Program Request UserId=" . $this->userId);
 
             $this->getAndSetClientLang();
 

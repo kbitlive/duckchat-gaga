@@ -55,10 +55,12 @@
                 <div class="left-body-chatsession group-lists"  style="display: none;position: relative;">
 
                 </div>
+
                 <div class="left-body-chatsession friend-lists" style="display: none;position: relative;">
 
                 </div>
-                <div class="left-body-create-group">
+
+                <div class="left-body-create-group" style="display: none;">
                     <button class="create-group-btn" data-local-value="createGroupTip">创建群组</button>
                 </div>
             </div>

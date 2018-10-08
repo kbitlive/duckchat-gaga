@@ -123,23 +123,25 @@
     {
         var image = new Image();
         image.src = src;
-        var imageNaturalWidth  = image.naturalWidth;
-        var imageNaturalHeight = image.naturalHeight;
-
-        if (imageNaturalWidth < w && imageNaturalHeight<h) {
-            imgObject.width  = imageNaturalWidth == 0 ? w : imageNaturalWidth;
-            imgObject.height = imageNaturalHeight == 0 ? h : imageNaturalHeight;
-        } else {
-            if (w / h <= imageNaturalWidth/ imageNaturalHeight) {
-                imgObject.width  = w;
-                imgObject.height = w* (imageNaturalHeight / imageNaturalWidth);
+        image.onload = function (ev) {
+            var imageNaturalWidth  = image.naturalWidth;
+            var imageNaturalHeight = image.naturalHeight;
+            if (imageNaturalWidth < w && imageNaturalHeight<h) {
+                imgObject.width  = imageNaturalWidth == 0 ? w : imageNaturalWidth;
+                imgObject.height = imageNaturalHeight == 0 ? h : imageNaturalHeight;
             } else {
-                imgObject.width  = h * (imageNaturalWidth / imageNaturalHeight);
-                imgObject.height = h;
+                if (w / h <= imageNaturalWidth/ imageNaturalHeight) {
+                    imgObject.width  = w;
+                    imgObject.height = w* (imageNaturalHeight / imageNaturalWidth);
+                } else {
+                    imgObject.width  = h * (imageNaturalWidth / imageNaturalHeight);
+                    imgObject.height = h;
+                }
             }
+            $("#gifInfo")[0].style.width =  imgObject.width+"px";
+            $("#gifInfo")[0].style.height =  imgObject.height+"px";
         }
-        $("#gifInfo")[0].style.width =  imgObject.width+"px";
-        $("#gifInfo")[0].style.height =  imgObject.height+"px";
+
     }
 
     function isMobile() {

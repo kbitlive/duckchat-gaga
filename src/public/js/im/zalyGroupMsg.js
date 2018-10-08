@@ -95,9 +95,10 @@ function getNotMsgImg(userId, avatarImgId)
     }
     var userImgKey = userId+avatarImgId;
     var isReqTime = sessionStorage.getItem(userImgKey);
+
     var nowTimeStamp = Date.parse(new Date());
     ////5分钟的过期时间，如果还没有请求回来，下一个请求会继续冲重新请求
-    if(isReqTime != false &&  nowTimeStamp-isReqTime<reqTimeout) {
+    if(isReqTime != false &&  nowTimeStamp-isReqTime<reqTimeout && isReqTime != null) {
         return ;
     }
     sessionStorage.setItem(userImgKey, Date.parse(new Date()));
@@ -111,8 +112,6 @@ function getNotMsgImg(userId, avatarImgId)
             // Typical action to be performed when the document is ready:
             var img = new Image();
             img.src = src;
-            console.log("download img is error msg src=="+src);
-
             img.onload = function(){
                 $(".info-avatar-"+userId).attr("src", src);
                 if(userId == token) {
@@ -122,8 +121,8 @@ function getNotMsgImg(userId, avatarImgId)
             img.onerror = function (ev) {
                 console.log("download img is error msg =="+ev.message);
             }
-            sessionStorage.removeItem(userImgKey);
         }
+        sessionStorage.removeItem(userImgKey);
     };
     xhttp.open("GET", requestUrl, true);
     xhttp.responseType = "blob";
@@ -548,6 +547,7 @@ $(document).on("click", ".l-sb-item", function(){
             $(".friend-lists")[0].style.display = "none";
             groupOffset = 0;
             getGroupList();
+            $(".left-body-create-group")[0].style.display = "flex";
             break;
         case "chatSession" :
             $(".left-body-chatsession").addClass("chat-session-list");
@@ -557,6 +557,7 @@ $(document).on("click", ".l-sb-item", function(){
             $(".chatsession-lists")[0].style.display = "block";
             $(".group-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
+            $(".left-body-create-group")[0].style.display = "none";
             break;
         case "friend":
             $(".left-body-chatsession").addClass("friend-list");
@@ -567,11 +568,14 @@ $(document).on("click", ".l-sb-item", function(){
             $(".group-lists")[0].style.display = "none";
             friendOffset = 0;
             getFriendList();
+            $(".left-body-create-group")[0].style.display = "none";
+
             break;
         case "search":
             var html = template("tpl-search-user-div", {});
             $("#search-user-div").html(html);
             showWindow($("#search-user-div"));
+            $(".left-body-create-group")[0].style.display = "none";
             break;
         case "more":
             displayDownloadApp();
@@ -840,7 +844,6 @@ $(function () {
         }
     });
 });
-
 
 function displayGroupMemberForGroupInfo(results)
 {
