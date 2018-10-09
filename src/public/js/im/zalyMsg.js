@@ -780,9 +780,7 @@ function appendMsgHtml(msg)
     var msgType = msg.type;
     var msgId = msg.msgId;
 
-    var groupId = msg.toGroupId;
     var sendBySelf;
-    var userId;
     if( msg.fromUserId != token) {
         sendBySelf = false;
     } else if(msg.fromUserId == token) {

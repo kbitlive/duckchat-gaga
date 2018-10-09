@@ -374,8 +374,8 @@ class File_Manager
     public function judgeFileSize($fileSize, $maxFileSize)
     {
         if($maxFileSize ) {
-            $maxFileSizeKB = $maxFileSize*1024*1024;
-            if($maxFileSizeKB < $fileSize) {
+            $maxFileSizeBytes = $maxFileSize*1024*1024;
+            if($maxFileSizeBytes < $fileSize) {
                 return false;
             }
         }

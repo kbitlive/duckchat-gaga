@@ -25,6 +25,7 @@ class InstallDBController
      * @var \PDO
      */
     private $db;
+    private $curl;
 
     /**
      * @var ZalyHelper
@@ -35,6 +36,7 @@ class InstallDBController
     {
         $this->logger = $content->getLogger();
         $this->helper = new ZalyHelper();
+        $this->curl   = new ZalyCurl();
     }
 
     public function doIndex()
@@ -170,6 +172,10 @@ class InstallDBController
             }
         } else if ($method == "GET") {
             //check system
+            if(isset($_GET['for']) && $_GET['for'] == 'test_curl') {
+                echo "success";
+                return;
+            }
             $permissionDirectory = is_writable(dirname(dirname(__FILE__)));
             $configFile = dirname(dirname(__FILE__)) . "/config.php";
             $attachDir = dirname(dirname(__FILE__)) . "/attachment";
@@ -180,6 +186,10 @@ class InstallDBController
             if (file_exists($attachDir) && !is_writable($attachDir)) {
                 $permissionDirectory = false;
             }
+            $sampleFile = require (dirname(dirname(__FILE__)) . "/config.sample.php");
+            $testCurlUrl = $sampleFile['test_curl'];
+            $testCurlUrl = ZalyHelper::getFullReqUrl($testCurlUrl);
+            $curlResult  = $this->curl->request($testCurlUrl, 'get');
 
             $params = [
                 "isPhpVersionValid" => version_compare(PHP_VERSION, "5.6.0") >= 0,
@@ -188,23 +198,24 @@ class InstallDBController
                 "isLoadPDOMysql" => extension_loaded("pdo_mysql"),
                 "isLoadCurl" => extension_loaded("curl"),
                 "isWritePermission" => $permissionDirectory,
+                "siteVersion" => isset($sampleFile['siteVersionCode']) ? $sampleFile['siteVersionCode'] : "",
+                "isCanUseCurl" => $curlResult == "success" ? true : false,
             ];
-
-
             //get db file
             $dbDir = dirname(__DIR__);
             $dbFiles = scandir($dbDir);
 
             if (!empty($dbFiles)) {
+                $sqliteFiles = [];
                 foreach ($dbFiles as $dbFile) {
                     $fileExt = pathinfo($dbFile, PATHINFO_EXTENSION);
                     if (isset($fileExt) && ($fileExt == "sqlite" || $fileExt == "sqlite3")) {
-                        $params['dbFiles'][] = $dbFile;
+                        $sqliteFiles[] = $dbFile;
                     }
                 }
+                $params['dbFiles'] = json_encode($sqliteFiles);
             }
-
-            echo $this->display("init_installSite", $params);
+            echo $this->display("init_init", $params);
             return;
         }
     }
@@ -240,8 +251,6 @@ class InstallDBController
         $dbPort = $config['mysql']['dbPort'];
         $dbUserName = $config['mysql']['dbUserName'];
         $dbPwssword = $config['mysql']['dbPassword'];
-
-
         //check mysql args
 
         $dbDsn = "mysql:host=$dbHost;port=$dbPort;";//;dbname=$dbName

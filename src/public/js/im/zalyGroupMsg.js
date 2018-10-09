@@ -1373,7 +1373,6 @@ function sendMsgBySend()
         return false;
     }
     $(".msg_content").val('');
-    console.log("msgContent 1=====" + msgContent);
 
     sendMsg(chatSessionId, chatSessionType, msgContent, MessageType.MessageText);
 }
