@@ -49,6 +49,7 @@ abstract class  ZalyErrorBase
     public $errorFriendUpdate = "error.friend.update";
     public $errorFriendDelete = "error.friend.delete";
     public $errorFriend = "error.friend";
+    public $errorFriendIs = "error.friend.is";
 
     public $errorFileDownload = "error.file.download";
 

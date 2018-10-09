@@ -73,7 +73,8 @@ class Im_Cts_MessageController extends Im_BaseController
             $isLawful = $this->checkIsGroupMember($fromUserId, $this->toId);
             if (!$isLawful) {
                 //if user is not group member
-                $noticeText = ZalyText::getText(ZalyText::$textGroupNotMember);
+//                $noticeText = ZalyText::getText(ZalyText::$textGroupNotMember);
+                $noticeText = ZalyText::$keyGroupNotMember;
                 $this->returnGroupNotLawfulMessage($msgId, $msgRoomType, $fromUserId, $this->toId, $noticeText);
                 return;
             }
