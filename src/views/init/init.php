@@ -10,6 +10,13 @@
     <script src="../../public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
+    <script type="text/javascript">
+        var latestVersion="0";
+        function setLasteVersion(lasteVersion) {
+            latestVersion = lasteVersion;
+        }
+    </script>
+    <script src="https://duckchat.akaxin.com/static/checkVersion.js?_version=<?php echo $versionCode?>"></script>
 
 </head>
 <body>
@@ -25,7 +32,6 @@
 
         </div>
     </div>
-<input type="hidden" value="" class="latest_version">
 <input type="hidden" value="<?php echo $siteVersion?>" class="site_version">
 
     <input type="hidden" value="<?php echo $isPhpVersionValid;?>" class="isPhpVersionValid">
@@ -115,11 +121,13 @@
     initProtocol();
 
     $(document).on("click", ".zaly_protocol_sure",function () {
-        var latestVersion = $(".latest_version").val();
-        latestVersion = "1.0.1.9";
         var siteVersion = $(".site_version").val();
-        latestVersion = latestVersion.split('.').join('');
-        siteVersion = siteVersion.split('.').join('');
+        if(latestVersion.indexOf(".") != -1) {
+            latestVersion = latestVersion.split('.').join('');
+        }
+        if(siteVersion.indexOf(".") != -1) {
+            siteVersion = siteVersion.split('.').join('');
+        }
 
         if(Number(latestVersion) > Number(siteVersion)) {
             $(".zaly_window")[0].style.display = "flex";
@@ -128,7 +136,9 @@
             });
             upgradeHtml = handleHtmlLanguage(upgradeHtml)
             $(".zaly_window").html(upgradeHtml);
+            return;
         }
+        newStepForCheckEnv("check_site_env");
     });
 
     $(document).on("click", ".zaly_site_upgrade_sure", function () {
