@@ -35,7 +35,6 @@ function getRoomList()
     msgBoxScrollToBottom();
 }
 
-
 function handleRoomListFromLocalStorage(roomMsg)
 {
     try{
