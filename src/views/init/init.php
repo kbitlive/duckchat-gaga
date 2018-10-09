@@ -5,7 +5,7 @@
     <title>login</title>
     <!-- Latest compiled and minified CSS -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="../../public/css/init.css?_version=<?php echo $version?>">
+    <link rel="stylesheet" href="../../public/css/init.css?_version=<?php echo $versionCode?>">
     <script type="text/javascript" src="../../../public/js/jquery.min.js"></script>
     <script src="../../public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
@@ -50,7 +50,7 @@
     var isCanUseCurl = $(".isCanUseCurl").val();
     var isCanLoadPropertites = false;
     var dbFiles = $(".dbFiles").val();
-
+    var isAvaliableSiteEnv = true;
 
     var dbHost = "";
     var dbPort = "";
@@ -59,6 +59,7 @@
     var dbName = "";
     var sqliteFileName = "";
     var dbType = "sqlite";
+    var upgradeUrl='https://github.com/duckchat/gaga/releases';
 
     function testCanLoadPropertites()
     {
@@ -132,7 +133,7 @@
 
     $(document).on("click", ".zaly_site_upgrade_sure", function () {
         event.preventDefault();
-        window.open("http://duckchat.akaxin.com");
+        window.open(upgradeUrl);
         newStepForCheckEnv('upgrade_site');
     });
 
@@ -165,30 +166,41 @@
             isLoadCurl:isLoadCurl,
             isWritePermission:isWritePermission,
             isLoadProperties:isCanLoadPropertites,
-            isCanUseCurl:isCanUseCurl,
+            isCanUseCurl:isCanUseCurl
         });
         html = handleHtmlLanguage(html);
         $(".zaly_init").html(html);
         if(!isPhpVersionValid) {
             $(".isPhpVersionValid")[0].style.color="#F44336";
+            isAvaliableSiteEnv = false;
         }
         if(!isLoadOpenssl) {
             $(".isLoadOpenssl")[0].style.color="#F44336";
+            isAvaliableSiteEnv = false;
         }
         if(!isLoadPDOSqlite) {
             $(".isLoadPDOSqlite")[0].style.color="#F44336";
+            isAvaliableSiteEnv = false;
         }
         if(!isLoadPDOMysql) {
             $(".isLoadPDOMysql")[0].style.color="#F44336";
+            isAvaliableSiteEnv = false;
         }
         if(!isLoadCurl) {
             $(".isLoadCurl")[0].style.color="#F44336";
+            isAvaliableSiteEnv = false;
         }
         if(!isWritePermission) {
             $(".isWritePermission")[0].style.color="#F44336";
+            isAvaliableSiteEnv = false;
         }
         if(!isCanLoadPropertites) {
             $(".isLoadProperties")[0].style.color="#F44336";
+            isAvaliableSiteEnv = false;
+        }
+        if(isAvaliableSiteEnv == false) {
+            $(".next_init_data")[0].style.background="rgba(201,201,201,1)";
+            $(".next_init_data").attr("disabled", "disabled");
         }
     }
     
@@ -197,6 +209,9 @@
     });
     
     $(document).on("click", ".next_init_data", function () {
+        if(isAvaliableSiteEnv == false) {
+            return;
+        }
         var sqliteFiles = JSON.parse(dbFiles);
 
         var initDataHtml = template("tpl-init-data", {
@@ -383,33 +398,60 @@
                 dbName: dbName,
                 dbType: dbType,
                 uic: uic
-            }
-        } else {
-            var selector = document.getElementById('sqlite-file');
-            sqliteFileName = $(selector[selector.selectedIndex]).attr("fileName");
-            var data = {
-                pluginId: pluginId,
-                dbType: dbType,
-                sqliteDbFile: sqliteFileName,
-                uic: uic
             };
+            testConnectMysql(data);
+            return;
         }
 
+        var selector = document.getElementById('sqlite-file');
+        sqliteFileName = $(selector[selector.selectedIndex]).attr("fileName");
+        var data = {
+            pluginId: pluginId,
+            dbType: dbType,
+            sqliteDbFile: sqliteFileName,
+            uic: uic
+        };
+        initSite(data);
+    });
+
+    function initSite(data)
+    {
         $.ajax({
             method: "POST",
             url: "./index.php?action=installDB",
             data: data,
             success: function (resp) {
-                console.log("init db sqlite " + resp);
                 if (resp == "success") {
                     window.location.href = "./index.php?action=page.logout";
                 } else {
-                    $(".errorInfo").html(resp);
+                    var html = template("tpl-error-info", {
+                        errorInfo:resp
+                    })
+                    $(".errorInfo").html(html);
                 }
             }
         });
-    });
+    }
 
+    function testConnectMysql(data)
+    {
+        $.ajax({
+            method: "POST",
+            url: "./index.php?action=installDB&for=test_connect_mysql",
+            data: data,
+            success: function (resp) {
+                if (resp == "success") {
+                    initSite(data);
+                } else {
+                    var html = template("tpl-error-info", {
+                        errorInfo:resp
+                    })
+
+                    $(".errorInfo").html(html);
+                }
+            }
+        });
+    }
 
 </script>
 </body>

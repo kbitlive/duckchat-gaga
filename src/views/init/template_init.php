@@ -7,10 +7,36 @@
             DuckChat用户协议及免责声明
         </div>
         <div class="zaly_protocol_content">
-                        <textarea disabled>特别提示
-            北京阿卡信信息技术有限公司在此特别提醒您（用户）在注册成为用户之前，请认真阅读本《用户协议》（以下简称“如故用户协议”），确保您充分理解本协议中各条款。请您审慎阅读并选择接受或不接受本协议。除非您接受本协议所有条款，否则您无权注册、登录或使用本协议所涉服务。您的注册、登录、使用等行为将视为对本协议的接受，并同意接受本协议各项条款的约束。
-            本协议约定深圳越界创新科技有限公司与用户之间关于“如故”软件服务（以下简称“服务”）的权利义务。“用户”是指注册、登录、使用本服务的个人。本协议可由深圳越界创新科技有限公司随时更新，更新后的协议条款一旦公布即代替原来的协议条款，恕不再另行通知，用户可在本网站查阅最新版协议条款。在深圳越界创新科技有限公司修改协议条款后，如果用户不接受修改后的条款，请立即停止使用深圳越界创新科技有限公司提供的服务，用户继续使用深圳越界创新科技有限公司提供的服务将被视为接受修改后的协议。
-            一、帐号注册 1、用户在使用本服务前需要注册一个“如故”帐号。“如故”帐号应当使用手机号码绑定注册，请用户使用尚未与“如故”帐号绑定的手机号码，以及未被深圳越界创新科技有限公司根据本协议封禁的手机号码注册“如故”帐号。深圳越界创新科技有限公司可以根据用户需求或产品需要对帐号注册和绑定的方式进行变更，而无须事先通知用户。
+                        <textarea disabled>
+北京阿卡信信息技术有限公司（以下简称”我公司”）提醒您：在使用DuckChat客户端（以下简称”本软件”）前，请您务必仔细阅读并透彻理解本声明。
+
+1. 如果您使用本软件，您的使用行为将被视为对本声明全部内容的认可。除非您已充分阅读、完全理解并接受本协议所有条款，否则您无权使用服务。您点击“同意”或“下一步”，或您使用服务，或者以其他任何明示或者默示方式表示接受本协议的，均视为您已阅读并同意签署本协议。本协议即在您与我公司之间产生法律效力，成为对双方均具有约束力的法律文件。
+2. 此软件是一个用以访问特定IM协议服务器的客户端，最终服务由您输入的服务器地址对应的站点提供，此软件只是一个访问工具。您在使用站点服务的过程前后，任何疑问、需求、投诉，应自行联系站点管理员予以解决。
+3. 我公司尊重用户的个人隐私权，此软件自身不会收集您手机号、身份证、银行等信息。但是为了提高产品质量，您同意我们收集程序质量相关日志用以提高产品质量，如崩溃后的崩溃日志等。
+4. 在您使用站点服务的过程中，如在登录过程、聊天记录等涉及到您的手机号、银行卡、昵称等各类数据，均保存在您访问的站点上，由您正在访问的站点负责管控，与我公司无关。我公司在此提醒您：在访问第三方站点时请谨慎输入个人隐私资料。
+5. 为了您的使用安全，请勿绕过AppStore等其他官方渠道下载被嵌入恶意代码的客户端，如果您自行下载的恶意客户端窃取了您的资料，我公司不予负责。
+6. 因软件为一个技术产品，难免会有Bug等问题，我公司对于用户的反馈将认真负责，积极解决，但无法保证随时响应随时解决，也无法对您无法正常使用此软件造成的损失予以负责。
+7. 您通过本客户端发出与传播的内容（包括但不限于网页、文字、图片、音频、视频、图表等），应符合相关法律规定，并由您承担责任。
+8. 若用户未满18周岁，则为未成年人，应在监护人监护、指导下阅读本协议和使用本软件。
+9. 您在访问站点的过程中，请遵守站点所在国的相关法律以及站点管理员的其他协议告知，否则站点管理员有权、有责任对您在站点的数据进行删除、屏蔽等，相关行为包括但不限于：
+    - 反对宪法所确定的基本原则的。
+    - 危害国家安全，泄露国家秘密，颠覆国家政权，破坏国家统一的。
+    - 损害国家荣誉和利益的。
+    - 煽动民族仇恨、民族歧视，破坏民族团结的。
+    - 破坏国家宗教政策，宣扬邪教和封建迷信的。
+    - 散布谣言，扰乱社会秩序，破坏社会稳定的。
+    - 散布淫秽、色情、赌博、暴力、凶杀、恐怖或者教唆犯罪的。
+    - 侮辱或者诽谤他人，侵害他人合法权益的。
+    - 其他您与站点在使用服务前签署的使用协议。
+10. 若本协议有中文、英文等多个语言版本，相应内容不一致的，均以中文版的内容为准。
+11. 本协议的签署地为北京市朝阳区。
+12. 如果您是中国大陆地区以外的用户，您订立或履行本协议还需要同时遵守您所属和/或所处国家或地区的法律。
+13. 对此条款的解释、修改及更新权均属于我公司所有。
+
+
+北京阿卡信信息技术有限公司
+
+2018-09-26
                         </textarea>
         </div>
     </div>
@@ -84,10 +110,10 @@
             </div>
         </div>
 
-        <div class="init_check_info justify-content-left  ext_pdo_mysql" isLoad="{{isLoadPDOMysql}}"
-             style="display:none;">
+
+        <div class="init_check_info justify-content-left ext_curl" isLoad="{{isLoadPDOMysql}}">
             <div class="init_check isLoadPDOMysql">
-                3.是否安装PDO_Mysql
+                4.是否安装PDO_Mysql
             </div>
             <div class="init_check_result">
                 {{if isLoadPDOMysql}}
@@ -100,7 +126,7 @@
 
         <div class="init_check_info justify-content-left ext_curl" isLoad="{{isLoadCurl}}">
             <div class="init_check isLoadCurl">
-                4.是否安装Curl
+                5.是否安装Curl
             </div>
             <div class="init_check_result">
                 {{if isLoadCurl}}
@@ -113,7 +139,7 @@
 
         <div class="init_check_info justify-content-left ext_curl" isLoad="{{isCanUseCurl}}">
             <div class="init_check isLoadCurl">
-                5.是否可以正确Curl请求
+                6.是否可以正确Curl请求
             </div>
             <div class="init_check_result">
                 {{if isCanUseCurl}}
@@ -127,7 +153,7 @@
 
         <div class="init_check_info justify-content-left  ext_is_write" isLoad="{{isWritePermission}}">
             <div class="init_check isWritePermission">
-                6.当前目录写权限
+                7.当前目录写权限
             </div>
             <div class="init_check_result">
                 {{if isWritePermission}}
@@ -140,7 +166,7 @@
 
         <div class="init_check_info justify-content-left  ext_is_write" isLoad="{{isLoadProperties}}">
             <div class="init_check isLoadProperties">
-                7.是否可以加载语言包
+                8.是否可以加载语言包
             </div>
             <div class="init_check_result">
                 {{if isLoadProperties}}
@@ -150,6 +176,7 @@
                 {{/if}}
             </div>
         </div>
+
         <div style="margin-top:4rem;margin-bottom: 5rem;">
             <button class="previte_init_protocol" data-local-value="prevStepTip">上一步</button>
             <button class="next_init_data" data-local-value="nextStepTip">下一步</button>
@@ -231,8 +258,13 @@
         <div class="errorInfo">
         </div>
 
-        <div class="d-flex flex-row justify-content-center " style="text-align: center;margin-bottom: 7rem;">
+        <div class="d-flex flex-row justify-content-center init_data_btn" >
             <button type="button" class="btn login_button"><span class="span_btn_tip">初始化数据</span></button>
         </div>
     </div>
 </script>
+
+<script id="tpl-error-info" type="text/html">
+        {{errorInfo}}
+        <a style='color:rgba(76,59,177,1);' href='https://duckchat.akaxin.com/wiki/server/faq-mysql.md'>数据库常见问题汇总</a>
+    </script>

@@ -45,6 +45,10 @@ body,html {
     border-radius:0.94rem;
 }
 
+.init_data_btn {
+    text-align: center;
+    margin-bottom: 7rem;
+}
 .zaly_protocol {
     width:71.29rem;
     height:35.65rem;
@@ -78,6 +82,12 @@ body,html {
     overflow-y:scroll ;
     resize: none;
     cursor: pointer;
+}
+.zaly_protocol_content {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
 }
 .zaly_protocol_operation{
     display: flex;
@@ -426,7 +436,7 @@ button {
 
     }
     .zaly_protocol_content textarea{
-        width: 90%;
+        width: 85%;
         height: 27.2rem;
         font-size: 1.01rem;
         font-family: PingFangSC-Regular;
@@ -476,6 +486,10 @@ button {
         margin-left: 2rem;
         margin-right: 2rem;
     }
+    .init_data_btn {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
 
     .initHeader{
         text-align: center;
@@ -484,6 +498,15 @@ button {
         font-family:PingFangSC-Medium;
         font-weight:500;
         color:rgba(76,59,177,1);
+    }
+
+    .errorInfo {
+        width: 90%;
+        margin-left: 2rem;
+        font-size: 1.13rem;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: rgba(244,67,54,1);
     }
 
     .initHeader-title,
@@ -499,6 +522,12 @@ button {
         margin-top: 4rem;
     }
 
+    .failed_img {
+        position: absolute;
+        left: 29rem;
+        top: 1.5rem;
+        display: none;
+    }
     .init_check {
         margin-left: 3rem;
         font-size: 1.31rem;

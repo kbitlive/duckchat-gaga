@@ -70,12 +70,17 @@ class InstallDBController
 
         $sqliteName = "";
 
-        $this->lang = $_GET['lang'];
+        $this->lang = isset($_GET['lang']) ? $_GET['lang'] : "1";
 
         $method = $_SERVER['REQUEST_METHOD'];
         if ($method == 'POST') {
             //install site
             try {
+                if(isset($_GET['for']) && $_GET['for'] == "test_connect_mysql") {
+                    echo $this->testConnectMysql();
+                    return;
+                }
+
                 $serverHost = $_SERVER['HTTP_HOST'];
                 $port = $_SERVER['SERVER_PORT'];
                 $dbType = $_POST['dbType'];
@@ -176,6 +181,7 @@ class InstallDBController
                 echo "success";
                 return;
             }
+
             $permissionDirectory = is_writable(dirname(dirname(__FILE__)));
             $configFile = dirname(dirname(__FILE__)) . "/config.php";
             $attachDir = dirname(dirname(__FILE__)) . "/attachment";
@@ -186,20 +192,43 @@ class InstallDBController
             if (file_exists($attachDir) && !is_writable($attachDir)) {
                 $permissionDirectory = false;
             }
+
+            $testCanWriteFile =  (dirname(dirname(__FILE__)) . "/test_write.duckchat");
+            $flag = file_put_contents($testCanWriteFile, "duckchat");
+            if($flag === false) {
+                $permissionDirectory = false;
+            }
+            @unlink($testCanWriteFile);
+
             $sampleFile = require (dirname(dirname(__FILE__)) . "/config.sample.php");
             $testCurlUrl = $sampleFile['test_curl'];
             $testCurlUrl = ZalyHelper::getFullReqUrl($testCurlUrl);
             $curlResult  = $this->curl->request($testCurlUrl, 'get');
+            $doucmentRoot = isset($_SERVER['DOCUMENT_ROOT']) ? str_replace("//", "/", $_SERVER['DOCUMENT_ROOT']) : "";
+            $scriptRoot = isset($_SERVER['SCRIPT_FILENAME']) ? str_replace("//", "/",  $_SERVER['SCRIPT_FILENAME']) : "";
+            $isInstallRootPath = true;
 
+            if(!$doucmentRoot || !$scriptRoot) {
+                $isInstallRootPath = false;
+            }
+            if($doucmentRoot."/index.php" != $scriptRoot) {
+                $isInstallRootPath = false;
+            }
+            if($isInstallRootPath === false) {
+                echo $this->lang == 1 ? "目前只支持根目录运行" : "Currently only the root directory is supported.";
+                return;
+            }
             $params = [
                 "isPhpVersionValid" => version_compare(PHP_VERSION, "5.6.0") >= 0,
-                "isLoadOpenssl" => extension_loaded("openssl") && false != ZalyRsa::newRsaKeyPair(2048),
-                "isLoadPDOSqlite" => extension_loaded("pdo_sqlite"),
-                "isLoadPDOMysql" => extension_loaded("pdo_mysql"),
-                "isLoadCurl" => extension_loaded("curl"),
+                "isLoadOpenssl"     => extension_loaded("openssl") && false != ZalyRsa::newRsaKeyPair(2048),
+                "isLoadPDOSqlite"   => extension_loaded("pdo_sqlite"),
+                "isLoadPDOMysql"    => extension_loaded("pdo_mysql"),
+                "isLoadCurl"        => extension_loaded("curl"),
                 "isWritePermission" => $permissionDirectory,
-                "siteVersion" => isset($sampleFile['siteVersionCode']) ? $sampleFile['siteVersionCode'] : "",
-                "isCanUseCurl" => $curlResult == "success" ? true : false,
+                "siteVersion"       => isset($sampleFile['siteVersionCode']) ? $sampleFile['siteVersionCode'] : "",
+                "isCanUseCurl"      => $curlResult == "success" ? true : false,
+                "versionCode"       => $sampleFile['siteVersionCode'],
+                "isInstallRootPath" => $isInstallRootPath,
             ];
             //get db file
             $dbDir = dirname(__DIR__);
@@ -250,7 +279,7 @@ class InstallDBController
         $dbHost = $config['mysql']['dbHost'];
         $dbPort = $config['mysql']['dbPort'];
         $dbUserName = $config['mysql']['dbUserName'];
-        $dbPwssword = $config['mysql']['dbPassword'];
+        $dbPassword = $config['mysql']['dbPassword'];
         //check mysql args
 
         $dbDsn = "mysql:host=$dbHost;port=$dbPort;";//;dbname=$dbName
@@ -258,7 +287,7 @@ class InstallDBController
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4',
         );
 
-        $this->db = new PDO($dbDsn, $dbUserName, $dbPwssword, $options);//创建一个pdo对象
+        $this->db = new PDO($dbDsn, $dbUserName, $dbPassword, $options);//创建一个pdo对象
 
         if (!$this->db) {
             throw new Exception("connect mysql error");
@@ -427,30 +456,6 @@ class InstallDBController
                 'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
                 'authKey' => "",
             ],
-//            [
-//                'pluginId' => 104,
-//                'name' => "gif小程序",
-//                'logo' => "",
-//                'sort' => 2, //order = 2
-//                'landingPageUrl' => "index.php?action=miniProgram.gif.index",
-//                'landingPageWithProxy' => 1, //1 表示走site代理
-//                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageU2Message,
-//                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
-//                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
-//                'authKey' => "",
-//            ],
-//            [
-//                'pluginId' => 104,
-//                'name' => "gif小程序",
-//                'logo' => "",
-//                'sort' => 2, //order = 2
-//                'landingPageUrl' => "index.php?action=miniProgram.gif.index",
-//                'landingPageWithProxy' => 1, //1 表示走site代理
-//                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageGroupMessage,
-//                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
-//                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
-//                'authKey' => "",
-//            ],
             [
                 'pluginId' => 105,
                 'name' => "账户密码管理小程序",
@@ -545,5 +550,39 @@ class InstallDBController
             ];
             $this->logger->error($tag, "error_msg=" . json_encode($error));
         }
+    }
+
+    public function testConnectMysql()
+    {
+        if (isset($_POST['dbName'])) {
+            $dbName = $_POST['dbName'];
+        }
+        if (isset($_POST['dbHost'])) {
+            $dbHost = $_POST['dbHost'];
+        }
+        if (isset($_POST['dbPort'])) {
+            $dbPort = $_POST['dbPort'];
+        } else {
+            $dbPort = 3306;
+        }
+        if (isset($_POST['dbUserName'])) {
+            $dbUserName = $_POST['dbUserName'];
+        }
+        if (isset($_POST['dbPassword'])) {
+            $dbPassword = $_POST['dbPassword'];
+        }
+
+        //check mysql args
+        $dbDsn = "mysql:host=$dbHost;port=$dbPort;";//;dbname=$dbName
+        $options = array(
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4',
+        );
+
+        $this->db = new PDO($dbDsn, $dbUserName, $dbPassword, $options);//创建一个pdo对象
+
+        if (!$this->db) {
+            throw new Exception("connect mysql error");
+        }
+        return "success";
     }
 }
