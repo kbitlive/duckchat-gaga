@@ -77,7 +77,7 @@ function jump()
                 localStorage.setItem(chatSessionIdKey, jumpRoomId);
                 localStorage.setItem(jumpRoomId, jumpRoomType);
                 sendFriendProfileReq(jumpRoomId);
-                insertU2Room(jumpRoomId);
+                insertU2Room(undefined, jumpRoomId);
             }
         }
     }
@@ -1134,8 +1134,7 @@ $(document).on("click", ".contact-row-u2-profile", function () {
     $(".user-image-for-add").attr("class", "user-image-for-add");
     $(".user-image-for-add").attr("src", "../../public/img/msg/default_user.png");
     sendFriendProfileReq(userId);
-    handleMsgRelation($(this), userId);
-    insertU2Room(userId);
+    insertU2Room($(this), userId);
 });
 
 function handleMsgRelation(jqElement, chatSessionId)
@@ -1857,13 +1856,13 @@ function openU2Chat(result)
         localStorage.setItem(chatSessionIdKey, userId);
         localStorage.setItem(userId, U2_MSG);
         $(".user-desc-body").html(userId);
-        handleMsgRelation(undefined, userId);
-        insertU2Room(userId);
+        insertU2Room(undefined, userId);
     }
 }
 
-function insertU2Room(userId)
+function insertU2Room(jqElement, userId)
 {
+    handleMsgRelation(jqElement, userId);
     var msg = {
         "fromUserId": token,
         "pointer": "78",
@@ -2594,8 +2593,10 @@ function applyFriend() {
     sendFriendApplyReq(userId, greetings, handleApplyFriend);
 }
 
+var friendApplyUserId ;
 function sendFriendApplyReq(userId, greetings, callback)
 {
+    friendApplyUserId = userId;
     var action = "api.friend.apply";
     var reqData  = {
         "toUserId" : userId,
@@ -2604,9 +2605,12 @@ function sendFriendApplyReq(userId, greetings, callback)
     handleClientSendRequest(action, reqData, callback)
 }
 
-function handleApplyFriend(results)
+function handleApplyFriend(type)
 {
     removeWindow($("#add-friend-div"));
+    if(type == errorFriendIsKey) {
+        hanleAddFriendForFriendIs(friendApplyUserId);
+    }
 }
 
 ////好友申请
@@ -3137,14 +3141,27 @@ function handleSearchUser(results)
     }
 }
 
-function handleFriendApplyReq()
+function handleFriendApplyReq(type)
 {
-    alert("发送申请成功");
+    if(type == errorFriendIsKey) {
+        hanleAddFriendForFriendIs(friendApplyUserId);
+        removeWindow($("#search-user-div"));
+        return;
+    }
+}
+
+function hanleAddFriendForFriendIs(friendApplyUserId)
+{
+    localStorage.setItem(chatSessionIdKey, friendApplyUserId);
+    localStorage.setItem(friendApplyUserId, U2_MSG);
+    insertU2Room(undefined, friendApplyUserId);
+    sendFriendProfileReq(friendApplyUserId, handleGetFriendProfile);
 }
 
 
 $(document).on("click", ".search-add-friend-btn", function () {
     var userId = $(this).attr("userId");
+    friendApplyUserId = userId;
     sendFriendApplyReq(userId, "", handleFriendApplyReq);
     $(this).attr("disabled", "disabled");
     $(this)[0].style.backgroundColor = "#cccccc";

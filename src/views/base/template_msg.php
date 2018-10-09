@@ -251,7 +251,7 @@
 
 
 <script id="tpl-receive-msg-text" type="text/html">
-    <div class="msg-row msg-left msg-text"> <div class="msg-avatar "> <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/> </div> <div class="right-msg-body  text-align-left" > {{if roomType == "MessageRoomGroup"}} <div class="msg-nickname-time"> <div class="msg-nickname nickname_{{userId}}">{{nickname}}</div> </div> <div class="msg-content hint--bottom" aria-label="{{msgTime}}"> {{else}} <div class="msg-content hint--bottom" aria-label="{{msgTime}}" style="margin-top: 1rem;"> {{/if}} <div class="text-align-left msgContent"><pre>{{msgContent}}</pre></div> </div> </div> </div>
+    <div class="msg-row msg-left msg-text"> <div class="msg-avatar "> <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/> </div> <div class="right-msg-body  text-align-left" > {{if roomType == "MessageRoomGroup"}} <div class="msg-nickname-time"> <div class="msg-nickname nickname_{{userId}}">{{nickname}}</div> </div> <div class="msg-content hint--bottom" aria-label="{{msgTime}}"> {{else}} <div class="msg-content hint--bottom" aria-label="{{msgTime}}" style="margin-top: 1rem;"> {{/if}} <div class="text-align-left msgContent"><pre>{{msgContent}}</div> </div> </div> </div>
 </script>
 
 
@@ -705,7 +705,7 @@
 
 <script id="tpl-search-user-info" type="text/html">
     {{if userId != token}}
-        <div class="search-user">
+        <div class="search-user-detail">
             <div class="search-user-info">
                 <img src="../../public/img/msg/default_user.png" class="user-image-for-search info-avatar-{{userId}}"/>
                 <span class="search-user-title">{{nickname}}</span>

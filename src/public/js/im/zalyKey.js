@@ -213,3 +213,5 @@ uploadFileUrl = './index.php?action=http.file.uploadWeb';
 isSyncingMsg = false;
 isPreSyncingMsgTime="";
 
+errorFriendIsKey = "error.friend.is";
+

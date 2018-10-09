@@ -1619,7 +1619,7 @@ button:active{
     top: 1.5rem;
 }
 
-.search-user,create-group {
+.search-user,create-group,.search-user-detail {
     height:6rem;
     text-align: left;
     display: flex;
@@ -1628,7 +1628,8 @@ button:active{
 }
 
 .search-user img,
-.create-group img{
+.create-group img,
+.search-user-detail img{
     width:4rem;
     height:4rem;
     border-radius: 50%;
@@ -1648,6 +1649,7 @@ button:active{
     cursor: pointer;
     outline: none;
 }
+
 .search-user-info {
     position: relative;
 }
