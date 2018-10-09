@@ -201,20 +201,20 @@ class Api_Site_ConfigController extends \BaseController
             $addressForIM = "";
             if (isset($zalyPort) && $zalyPort > 0 && $zalyPort < 65535) {
                 //support zaly protocol
-                $addressForAPi = "zaly://" . "$host" . ":" . $zalyPort;
-                $addressForIM = "zaly://" . "$host" . ":" . $zalyPort;
+                $addressForAPi = $this->buildAddress("zaly", $host, $zalyPort);
+                $addressForIM = $this->buildAddress("zaly", $host, $zalyPort);
             } else if (isset($wsPort) && $wsPort > 0 && $wsPort < 65535) {
                 //support ws protocol
-                $addressForAPi = $scheme . "://" . "$host" . ":" . $port;
-                $addressForIM = "ws://" . "$host" . ":" . "$wsPort";
+                $addressForAPi = $this->buildAddress($scheme, $host, $port);
+                $addressForIM = $this->buildAddress("ws", $host, $wsPort);
             } else {
                 //support http protocol
-                $addressForAPi = $scheme . "://" . "$host" . ":" . $port;
-                $addressForIM = $scheme . "://" . "$host" . ":" . $port;
+                $addressForAPi = $this->buildAddress($scheme, $host, $port);
+                $addressForIM = $addressForAPi;
             }
 
-            $this->ctx->Wpf_Logger->info("api.site.config", "addressForAPi=" . $addressForAPi);
-            $this->ctx->Wpf_Logger->info("api.site.config", "addressForIM=" . $addressForIM);
+            $this->ctx->Wpf_Logger->error("api.site.config", "addressForAPi=" . $addressForAPi);
+            $this->ctx->Wpf_Logger->error("api.site.config", "addressForIM=" . $addressForIM);
 
             $config->setServerAddressForApi($addressForAPi);
             $config->setServerAddressForIM($addressForIM);
@@ -261,24 +261,16 @@ class Api_Site_ConfigController extends \BaseController
         return $response;
     }
 
-//    private function doSiteConfigInit($siteName, $host, $port)
-//    {
-//        //初始化 config and plugin
-//        $this->ctx->initSite($siteName, $host, $port, 'http', 'http');
-//    }
-
-    ////TODO 临时检测数据库是否可写， 以后移出到创建站点的引导页
-    private function checkDBCanWrite()
+    private function buildAddress($scheme, $host, $port)
     {
-        $dbFilePath = dirname(__DIR__) . "/openzalySiteDB.sqlite3";
-        $flag = is_writable($dbFilePath);
-        if (!$flag) {
-            $errorCode = $this->zalyError->errorDBWritable;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            $this->setRpcError($errorCode, $errorInfo);
-            $this->rpcReturn($this->action, null);
-            return;
+        if ("http" == $scheme && $port == 80) {
+            return $scheme . "://" . "$host";
+        } elseif ("https" == $scheme && $port == 443) {
+            return $scheme . "://" . "$host";
         }
+
+        return $scheme . "://" . "$host" . ":" . $port;
     }
+
 }
 

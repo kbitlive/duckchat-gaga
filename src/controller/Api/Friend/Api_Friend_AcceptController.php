@@ -31,7 +31,8 @@ class Api_Friend_AcceptController extends BaseController
         try {
             $result = false;
             if ($userId == $applyUserId) {
-                throw new Exception("unable add yourself as friend");
+                $eMessage = $this->language == 1 ? "请勿添加自己为好友" : "unable add yourself as friend";
+                throw new Exception($eMessage);
             }
             if ($isAgree) {
                 $result = $this->agreeFriendApply($userId, $applyUserId);
@@ -114,20 +115,14 @@ class Api_Friend_AcceptController extends BaseController
         return false;
     }
 
-    private function proxyNewFriendMessage($agreeUserId, $applyUserId, $greetings)
+    private function proxyNewFriendMessage($fromUserId, $toUserId, $greetings)
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         try {
-            $fromUserId = $agreeUserId;
 
-            $text = "I accept your friend apply, let's talk";
-            $text = "我接受了你的好友申请, 现在找我聊天吧";
+            $text = ZalyText::$keyFriendAcceptFrom;
 
-//            if ($this->language == Zaly\Proto\Core\UserClientLangType::UserClientLangZH) {
-//                $text = "我接受了你的好友申请，现在开始聊天吧";
-//            }
-
-            $this->ctx->Message_Client->proxyU2TextMessage($applyUserId, $fromUserId, $applyUserId, $text);
+            $this->ctx->Message_Client->proxyU2TextMessage($toUserId, $fromUserId, $toUserId, $text);
 
         } catch (Exception $e) {
             $this->ctx->Wpf_Logger->error($tag, $e);
@@ -135,13 +130,9 @@ class Api_Friend_AcceptController extends BaseController
 
         try {
             if (empty($greetings)) {
-                $greetings = "we are friends, just talk to me";
-
-                if ($this->language == Zaly\Proto\Core\UserClientLangType::UserClientLangZH) {
-                    $greetings = "我添加了你为好友，开始聊天吧";
-                }
+                $greetings = $text = ZalyText::$keyFriendAcceptTo;
             }
-            $this->ctx->Message_Client->proxyU2TextMessage($fromUserId, $applyUserId, $fromUserId, $greetings);
+            $this->ctx->Message_Client->proxyU2TextMessage($fromUserId, $toUserId, $fromUserId, $greetings);
         } catch (Exception $e) {
             $this->ctx->Wpf_Logger->error($tag, $e);
         }
