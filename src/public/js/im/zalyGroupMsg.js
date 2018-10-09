@@ -576,10 +576,7 @@ $(document).on("click", ".l-sb-item", function(){
 
 function displayDownloadApp() {
     var html = template("tpl-download-app-div", {});
-    console.log("old html ==="+html);
     html = handleHtmlLanguage(html);
-    console.log("new html ==="+html);
-
     $("#download-app-div").html(html);
     var urlLink = changeZalySchemeToDuckChat("", "download_app");
     var src = "../../public/img/duckchat.png";
@@ -1045,8 +1042,8 @@ $(function () {
 $(document).on("click", ".group-profile", function () {
     var groupId =  $(this).attr("chat-session-id");
 
-    if(groupId == undefined) {
-        alert("not found group-id by click group-profile");
+    if(groupId == undefined || !groupId) {
+        $(this).remove();
         return ;
     }
     var groupName = $('.nickname_'+groupId).html();
@@ -1193,6 +1190,9 @@ function displayRightPage(displayType)
     }
 }
 
+$(".input-box").on("click",function () {
+    $(".msg_content").focus()
+});
 function addActiveForPwContactRow(jqElement)
 {
     var pwContactRows = $(".pw-contact-row");
@@ -1296,8 +1296,12 @@ function getFriendProfile(userId, isForceSend, callback)
             return userProfile;
         }
     }
-    if(reqProfileTime != false && reqProfileTime != null && (nowTimestamp-reqProfileTime<reqTimeout) && isForceSend == false) {
+    if(reqProfileTime != false && reqProfileTime != null && reqProfileTime != undefined && (nowTimestamp-reqProfileTime<reqTimeout) && isForceSend == false) {
         return false;
+    }
+
+    if(callback == undefined) {
+        callback = handleGetFriendProfile;
     }
     sessionStorage.setItem(friendInfoReqKey, nowTimestamp);
     sendFriendProfileReq(userId, callback);
@@ -1315,6 +1319,7 @@ function sendFriendProfileReq(userId, callback)
 
 function handleGetFriendProfile(result)
 {
+console.log("user info ======result ===="+JSON.stringify(result));
 
     if(result == undefined) {
         return;
@@ -1329,6 +1334,7 @@ function handleGetFriendProfile(result)
         var userProfilekey = profileKey + userProfile["userId"];
         userProfile['updateTime'] = Date.parse(new Date());
         localStorage.setItem(userProfilekey, JSON.stringify(userProfile));
+        console.log("user info ======userProfilekey ===="+userProfilekey);
 
         var muteKey = msgMuteKey + userProfile["userId"];
         var mute = profile.mute ? 1 : 0;
@@ -1367,6 +1373,7 @@ function sendMsgBySend()
         return false;
     }
     $(".msg_content").val('');
+    console.log("msgContent 1=====" + msgContent);
 
     sendMsg(chatSessionId, chatSessionType, msgContent, MessageType.MessageText);
 }
@@ -1866,7 +1873,8 @@ function insertU2Room(userId)
 function displayProfile(profileId, profileType)
 {
     var chatSessionId   = localStorage.getItem(chatSessionIdKey);
-
+    console.log("displayProfile  profileId ====="+profileId);
+    console.log("displayProfile  profileId profileType====="+profileType);
     if(profileId == chatSessionId) {
         displayCurrentProfile();
         return;
@@ -1876,7 +1884,7 @@ function displayProfile(profileId, profileType)
 
 function updateInfo(profileId, profileType)
 {
-    var name ;
+    var name;
     var mute;
     if(profileType == U2_MSG) {
         var friendProfile = getFriendProfile(profileId, false, handleGetFriendProfile);
@@ -2607,7 +2615,6 @@ $(document).on("click", ".search-user", function () {
     var html = template("tpl-search-user-div", {});
     $("#search-user-div").html(html);
     showWindow($("#search-user-div"));
-    $(".left-body-create-group")[0].style.display = "none";
 });
 
 function getFriendApplyList()

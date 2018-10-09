@@ -221,12 +221,12 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
 function handleMsgInfo(msg)
 {
     var toGroupId = msg.toGroupId;
-    var groupId = msg.groupId
     var userId;
     var nowTimestamp = Date.parse(new Date());
-    if(groupId != undefined || toGroupId != undefined) {
+
+    if(toGroupId != undefined) {
         msg.className = "group-profile";
-        msg.chatSessionId = groupId != undefined ? groupId : toGroupId;
+        msg.chatSessionId = toGroupId;
         msg.roomType = GROUP_MSG;
         var groupProfile = getGroupProfile(msg.chatSessionId);
         if(groupProfile) {
@@ -250,7 +250,7 @@ function handleMsgInfo(msg)
     var unreadMuteKey = msgUnReadMuteKey+msg.chatSessionId;
     msg.isMuteMsgNum = localStorage.getItem(unreadMuteKey) == 1 ? 1 : 0;
 
-    var userProfile = getFriendProfile(userId, handleGetFriendProfile());
+    var userProfile = getFriendProfile(userId, false, handleGetFriendProfile);
     if(userProfile) {
         msg.nickname   = userProfile['nickname'];
         msg.userAvatar = userProfile['avatar'];
@@ -668,10 +668,9 @@ function sendMsg( chatSessionId, chatSessionType, msgContent, msgType, params)
         case MessageType.MessageDocument:
             message['type'] = MessageType.MessageDocument;
             message['document'] = {url:msgContent, size:params.size, name:params.name};
-            displayContent = "[文件消息]";
+            displayContent = "[文件]";
             break;
     }
-
     var reqData = {
         "message" : message
     };
@@ -784,27 +783,18 @@ function appendMsgHtml(msg)
     var groupId = msg.toGroupId;
     var sendBySelf;
     var userId;
-    if(groupId != undefined && msg.fromUserId != token) {
+    if( msg.fromUserId != token) {
         sendBySelf = false;
-        userId = msg.fromUserId;
-    } else if (groupId != undefined && msg.fromUserId == token) {
+    } else if(msg.fromUserId == token) {
         sendBySelf = true;
-        userId = token;
-    }
-    if(groupId == undefined && msg.fromUserId != token) {
-        sendBySelf = false;
-        userId = msg.fromUserId;
-    } else if(groupId == undefined && msg.fromUserId == token) {
-        sendBySelf = true;
-        userId = token;
+        msg.userAvatar = avatar;
     }
     var msgTime = getMsgTimeByMsg(msg.timeServer);
     var groupUserImageClassName = msg.roomType == GROUP_MSG ? "group-user-img group-user-img-"+msg.msgId : "";
     var msgStatus = msg.status ? msg.status : "";
-    var userAvatar = sendBySelf ? avatar : msg.userAvatar;
     var userAvatarSrc = sendBySelf ?  localStorage.getItem(selfInfoAvatar) : "";
+
     if(sendBySelf) {
-        getNotMsgImg(token, userAvatar);
         switch(msgType) {
             case MessageType.MessageText :
                 var msgContent = msg['text'].body;
@@ -815,9 +805,9 @@ function appendMsgHtml(msg)
                     msgTime : msgTime,
                     msgContent:msgContent,
                     msgStatus:msgStatus,
-                    avatar:userAvatar,
+                    avatar:msg.userAvatar,
                     userAvatarSrc:userAvatarSrc,
-                    userId:token,
+                    userId:msg.fromUserId,
                     timeServer:msg.timeServer
                 });
                 break;
@@ -833,9 +823,9 @@ function appendMsgHtml(msg)
                     url:url,
                     msgTime : msgTime,
                     msgStatus:msgStatus,
-                    avatar:userAvatar,
+                    avatar:msg.userAvatar,
                     userAvatarSrc:userAvatarSrc,
-                    userId:token,
+                    userId:msg.fromUserId,
                     fileSize:size,
                     fileName:fileName,
                     originName:originName,
@@ -850,11 +840,11 @@ function appendMsgHtml(msg)
                     msgId : msgId,
                     msgTime : msgTime,
                     msgStatus:msgStatus,
-                    avatar:userAvatar,
+                    avatar:msg.userAvatar,
                     width:imgObject.width,
                     height:imgObject.height,
                     userAvatarSrc:userAvatarSrc,
-                    userId:token,
+                    userId:msg.fromUserId,
                     timeServer:msg.timeServer
                 });
                 break;
@@ -865,9 +855,9 @@ function appendMsgHtml(msg)
                     msgId : msgId,
                     msgTime : msgTime,
                     msgStatus:msgStatus,
-                    avatar:userAvatar,
+                    avatar:msg.userAvatar,
                     userAvatarSrc:userAvatarSrc,
-                    userId:token,
+                    userId:msg.fromUserId,
                     timeServer:msg.timeServer
                 });
                 break;
@@ -888,13 +878,12 @@ function appendMsgHtml(msg)
                     webHeight:webSize.height,
                     msgId : msgId,
                     msgTime : msgTime,
-                    userId :msg.fromUserId,
                     groupUserImg : groupUserImageClassName,
-                    avatar:userAvatar,
+                    avatar:msg.userAvatar,
                     hrefURL:hrefUrl,
                     linkUrl :linkUrl,
                     userAvatarSrc:userAvatarSrc,
-                    userId:token,
+                    userId:msg.fromUserId,
                     timeServer:msg.timeServer,
                 });
                 break;
@@ -914,15 +903,14 @@ function appendMsgHtml(msg)
                     msgTime : msgTime,
                     msgStatus:msgStatus,
                     msgContent:msgContent,
-                    avatar:userAvatar,
+                    avatar:msg.userAvatar,
                     userAvatarSrc:userAvatarSrc,
-                    userId:token,
+                    userId:msg.fromUserId,
                     timeServer:msg.timeServer
                 });
                 break;
         }
     } else {
-        getNotMsgImg(msg.fromUserId,msg.userAvatar);
         switch(msgType) {
             case MessageType.MessageText:
                 var msgContent = msg['text'].body;
@@ -1033,9 +1021,9 @@ function appendMsgHtml(msg)
     if(msgType == MessageType.MessageText) {
         html = trimMsgContentBr(html);
     }
-
     // html = "请前往客户端查看web消息";
     $(".right-chatbox").append(html);
+    getNotMsgImg(msg.fromUserId,msg.userAvatar);
     getMsgImgSrc(msg, msgId);
 }
 
@@ -1046,6 +1034,7 @@ function trimMsgContentBr(html)
     html = html.replace(new RegExp('\\<br>+$', 'g'), '');
     return html;
 }
+
 function getMsgImgSrc(msg, msgId)
 {
     if(msg.hasOwnProperty("image")) {
