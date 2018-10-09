@@ -48,16 +48,13 @@ class  Api_Friend_ApplyController extends BaseController
             $fromRelation = $this->getIsFollow($this->userId, $toUserId);
             $toRelation = $this->getIsFollow($toUserId, $this->userId);
 
-            $this->logger->info("================", "fromRelation=" . $fromRelation);
-            $this->logger->info("================", "toRelation=" . $toRelation);
-
             if ($fromRelation == 1 && $toRelation == 1) {
                 $errorCode = $this->zalyError->errorFriendApplyFriendExists;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
                 $this->setRpcError($errorCode, $errorInfo);
                 throw new Exception($errorInfo);
             } elseif ($toRelation == 1 && empty($fromRelation)) {
-                $this->logger->error("================", "toRelation=" . $toRelation);
+
                 if ($this->becomeFriendAsFollowed($this->userId, $toUserId)) {
                     $errorCode = $this->zalyError->errorFriendIs;
                     $this->setRpcError($errorCode, "");
