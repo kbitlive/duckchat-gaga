@@ -1194,7 +1194,6 @@ function displayRightPage(displayType)
 function checkOsVersion()
 {
     var userAgent = navigator.userAgent;
-    console.log("userAgent ==="+userAgent);
     if(userAgent.indexOf("Windows") != -1 && ((userAgent.indexOf("Windows NT 5") != -1)
             || (userAgent.indexOf("Windows NT 6") != -1) || (userAgent.indexOf("Windows NT 7") != -1))) {
         try{
