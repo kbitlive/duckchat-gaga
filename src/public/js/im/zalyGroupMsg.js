@@ -1179,6 +1179,7 @@ function displayRightPage(displayType)
                 }
                 $(".msg_content").focus()
                 $(".friend-apply-dialog")[0].style.display = "none";
+                checkOsVersion();
                 break;
             case DISPLAY_APPLY_FRIEND_LIST:
                 $(".msg-chat-dialog")[0].style.display = "none";
@@ -1187,6 +1188,20 @@ function displayRightPage(displayType)
         }
     }catch (error) {
         // console.log(error.message);
+    }
+}
+
+function checkOsVersion()
+{
+    var userAgent = navigator.userAgent;
+    console.log("userAgent ==="+userAgent);
+    if(userAgent.indexOf("Windows") != -1 && ((userAgent.indexOf("Windows NT 5") != -1)
+            || (userAgent.indexOf("Windows NT 6") != -1) || (userAgent.indexOf("Windows NT 7") != -1))) {
+        try{
+            $(".emotions")[0].style.display = "none";
+        }catch (error) {
+
+        }
     }
 }
 
@@ -1319,7 +1334,6 @@ function sendFriendProfileReq(userId, callback)
 
 function handleGetFriendProfile(result)
 {
-console.log("user info ======result ===="+JSON.stringify(result));
 
     if(result == undefined) {
         return;
@@ -1334,7 +1348,6 @@ console.log("user info ======result ===="+JSON.stringify(result));
         var userProfilekey = profileKey + userProfile["userId"];
         userProfile['updateTime'] = Date.parse(new Date());
         localStorage.setItem(userProfilekey, JSON.stringify(userProfile));
-        console.log("user info ======userProfilekey ===="+userProfilekey);
 
         var muteKey = msgMuteKey + userProfile["userId"];
         var mute = profile.mute ? 1 : 0;
@@ -1373,7 +1386,6 @@ function sendMsgBySend()
         return false;
     }
     $(".msg_content").val('');
-    console.log("msgContent 1=====" + msgContent);
 
     sendMsg(chatSessionId, chatSessionType, msgContent, MessageType.MessageText);
 }
@@ -1873,8 +1885,6 @@ function insertU2Room(userId)
 function displayProfile(profileId, profileType)
 {
     var chatSessionId   = localStorage.getItem(chatSessionIdKey);
-    console.log("displayProfile  profileId ====="+profileId);
-    console.log("displayProfile  profileId profileType====="+profileType);
     if(profileId == chatSessionId) {
         displayCurrentProfile();
         return;

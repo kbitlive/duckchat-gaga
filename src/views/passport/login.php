@@ -179,11 +179,14 @@
     }
     var isDuckchatFlag = $(".isDuckchat").val();
     var isPhoneFlag = isPhone();
+
     if(isPhoneFlag && isDuckchatFlag == 0) {
         $(".site-warning")[0].style.display='flex';
         var tip = "暂不支持手机浏览器，请使用手机客户端或者PC访问站点！";
         $(".site-warning").html(tip);
-    } else {
+    }
+
+    if(isPhoneFlag == false) {
         var isAvailabelBrowserFlag = isAvailableBrowser();
         if(!isAvailabelBrowserFlag) {
             $(".site-warning")[0].style.display='flex';
