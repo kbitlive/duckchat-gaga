@@ -84,31 +84,31 @@
 
         <div class="list-item-center">
 
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">是否开启手机号</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Enable Phone Number</div>
-                        <?php } ?>
-
-
-                        <div class="item-body-tail">
-                            <div class="item-body-value">
-                                <?php if ($enableRealName == 1) { ?>
-                                    <input id="enableRealNameSwitch" class="weui_switch" type="checkbox" checked>
-                                <?php } else { ?>
-                                    <input id="enableRealNameSwitch" class="weui_switch" type="checkbox">
-                                <?php } ?>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
+            <!--            <div class="item-row">-->
+            <!--                <div class="item-body">-->
+            <!--                    <div class="item-body-display">-->
+            <!--                        --><?php //if ($lang == "1") { ?>
+            <!--                            <div class="item-body-desc">是否开启手机号</div>-->
+            <!--                        --><?php //} else { ?>
+            <!--                            <div class="item-body-desc">Enable Phone Number</div>-->
+            <!--                        --><?php //} ?>
+            <!---->
+            <!---->
+            <!--                        <div class="item-body-tail">-->
+            <!--                            <div class="item-body-value">-->
+            <!--                                --><?php //if ($enableRealName == 1) { ?>
+            <!--                                    <input id="enableRealNameSwitch" class="weui_switch" type="checkbox" checked>-->
+            <!--                                --><?php //} else { ?>
+            <!--                                    <input id="enableRealNameSwitch" class="weui_switch" type="checkbox">-->
+            <!--                                --><?php //} ?>
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!---->
+            <!--                    </div>-->
+            <!---->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--            <div class="division-line"></div>-->
 
             <div class="item-row">
                 <div class="item-body">
@@ -134,7 +134,7 @@
 
             <div class="item-row">
                 <div class="item-body">
-                    <div class="item-body-display">
+                    <div class="item-body-display loginMiniProgram">
                         <?php if ($lang == "1") { ?>
                             <div class="item-body-desc">登陆小程序ID</div>
                         <?php } else { ?>
@@ -142,7 +142,10 @@
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <div class="item-body-value"> <?php echo $loginPluginId; ?></div>
+                            <div class="item-body-value" id="loginMiniProgramId"> <?php echo $loginPluginId; ?></div>
+                            <div class="item-body-value"><img class="more-img"
+                                                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            </div>
                         </div>
                     </div>
 
@@ -275,7 +278,7 @@
                 <div class="item-body" id="push-notice-type" data="<?php echo $pushType ?>">
                     <div class="item-body-display">
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">Push推送通知类型</div>
+                            <div class="item-body-desc">Push通知类型</div>
                         <?php } else { ?>
                             <div class="item-body-desc">Push Notice Type</div>
                         <?php } ?>
@@ -305,57 +308,56 @@
 
 
     <!--   part 4 -->
-    <div class="layout-all-row">
-
-        <div class="list-item-center">
-
-            <!--      part1: site name      -->
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">允许分享群聊</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Enable Share Group</div>
-                        <?php } ?>
-
-                        <div class="item-body-tail">
-                            <?php if ($enableShareGroup == 1) { ?>
-                                <input id="enableShareGroupSwitch" class="weui_switch" type="checkbox" checked>
-                            <?php } else { ?>
-                                <input id="enableShareGroupSwitch" class="weui_switch" type="checkbox">
-                            <?php } ?>
-
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">允许分享个人</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Enable Share User</div>
-                        <?php } ?>
-
-                        <div class="item-body-tail">
-                            <?php if ($enableShareUser == 1) { ?>
-                                <input id="enableShareUserSwitch" class="weui_switch" type="checkbox" checked>
-                            <?php } else { ?>
-                                <input id="enableShareUserSwitch" class="weui_switch" type="checkbox">
-                            <?php } ?>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-        </div>
-    </div>
+    <!--    <div class="layout-all-row">-->
+    <!---->
+    <!--        <div class="list-item-center">-->
+    <!--            -->
+    <!--            <div class="item-row">-->
+    <!--                <div class="item-body">-->
+    <!--                    <div class="item-body-display">-->
+    <!--                        --><?php //if ($lang == "1") { ?>
+    <!--                            <div class="item-body-desc">允许分享群聊</div>-->
+    <!--                        --><?php //} else { ?>
+    <!--                            <div class="item-body-desc">Enable Share Group</div>-->
+    <!--                        --><?php //} ?>
+    <!---->
+    <!--                        <div class="item-body-tail">-->
+    <!--                            --><?php //if ($enableShareGroup == 1) { ?>
+    <!--                                <input id="enableShareGroupSwitch" class="weui_switch" type="checkbox" checked>-->
+    <!--                            --><?php //} else { ?>
+    <!--                                <input id="enableShareGroupSwitch" class="weui_switch" type="checkbox">-->
+    <!--                            --><?php //} ?>
+    <!---->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!---->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--            <div class="division-line"></div>-->
+    <!---->
+    <!--            <div class="item-row">-->
+    <!--                <div class="item-body">-->
+    <!--                    <div class="item-body-display">-->
+    <!--                        --><?php //if ($lang == "1") { ?>
+    <!--                            <div class="item-body-desc">允许分享个人</div>-->
+    <!--                        --><?php //} else { ?>
+    <!--                            <div class="item-body-desc">Enable Share User</div>-->
+    <!--                        --><?php //} ?>
+    <!---->
+    <!--                        <div class="item-body-tail">-->
+    <!--                            --><?php //if ($enableShareUser == 1) { ?>
+    <!--                                <input id="enableShareUserSwitch" class="weui_switch" type="checkbox" checked>-->
+    <!--                            --><?php //} else { ?>
+    <!--                                <input id="enableShareUserSwitch" class="weui_switch" type="checkbox">-->
+    <!--                            --><?php //} ?>
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!---->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--            <div class="division-line"></div>-->
+    <!--        </div>-->
+    <!--    </div>-->
 
 
     <!--   part 5 -->
@@ -363,26 +365,26 @@
 
         <div class="list-item-center">
 
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display" id="max-mobile-num" onclick="updateMaxMobileNum();">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">手机端登陆设备数</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Max Mobile Num</div>
-                        <?php } ?>
-
-                        <div class="item-body-tail">
-                            <div class="item-body-value"><?php echo $maxMobileNum ?></div>
-                            <div class="item-body-value"><img class="more-img"
-                                                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
+            <!--            <div class="item-row">-->
+            <!--                <div class="item-body">-->
+            <!--                    <div class="item-body-display" id="max-mobile-num" onclick="updateMaxMobileNum();">-->
+            <!--                        --><?php //if ($lang == "1") { ?>
+            <!--                            <div class="item-body-desc">手机端登陆设备数</div>-->
+            <!--                        --><?php //} else { ?>
+            <!--                            <div class="item-body-desc">Max Mobile Num</div>-->
+            <!--                        --><?php //} ?>
+            <!---->
+            <!--                        <div class="item-body-tail">-->
+            <!--                            <div class="item-body-value">--><?php //echo $maxMobileNum ?><!--</div>-->
+            <!--                            <div class="item-body-value"><img class="more-img"-->
+            <!--                                                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!---->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--            <div class="division-line"></div>-->
 
             <!--            <div class="item-row">-->
             <!--                <div class="item-body">-->
@@ -406,59 +408,58 @@
             <!--            <div class="division-line"></div>-->
 
             <!--            <div class="web-condition" style='-->
-            <?php //echo $openWebEdition == 1 ? '' : 'display: none;'; ?><!--'>-->
-            <div class="web-condition">
-                <div class="item-row" id="web-ws-port">
-                    <div class="item-body">
-                        <div class="item-body-display">
-                            <?php if ($lang == "1") { ?>
-                                <div class="item-body-desc">WebSocket端口</div>
+
+            <div class="item-row" id="web-ws-port">
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">WebSocket端口</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">WebSocket Port</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <?php if (isset($wsPort) && $wsPort > 0) { ?>
+                                <div class="item-body-value"><?php echo $wsPort; ?></div>
                             <?php } else { ?>
-                                <div class="item-body-desc">WebSocket Port</div>
+                                <div class="item-body-desc"><?php
+                                    if ($lang == 1) {
+                                        echo "未设置端口表示未开启";
+                                    } else {
+                                        echo "disable with empty port";
+                                    }
+                                    ?></div>
                             <?php } ?>
 
-                            <div class="item-body-tail">
-                                <?php if (isset($wsPort) && $wsPort > 0) { ?>
-                                    <div class="item-body-value"><?php echo $wsPort; ?></div>
-                                <?php } else { ?>
-                                    <div class="item-body-desc"><?php
-                                        if ($lang == 1) {
-                                            echo "未设置端口表示未开启";
-                                        } else {
-                                            echo "disable with empty port";
-                                        }
-                                        ?></div>
-                                <?php } ?>
-
-                                <div class="item-body-value-more"><img class="more-img"
-                                                                       src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
-                                </div>
+                            <div class="item-body-value-more"><img class="more-img"
+                                                                   src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
                             </div>
-
                         </div>
+
                     </div>
                 </div>
-                <div class="division-line"></div>
-
-                <div class="item-row" id="max-web-num">
-                    <div class="item-body">
-                        <div class="item-body-display">
-                            <?php if ($lang == "1") { ?>
-                                <div class="item-body-desc">Web端登陆设备数</div>
-                            <?php } else { ?>
-                                <div class="item-body-desc">Max Web Num</div>
-                            <?php } ?>
-
-                            <div class="item-body-tail">
-                                <div class="item-body-value" style="color: #999999"><?php echo $maxWebNum; ?></div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="division-line"></div>
-
             </div>
+            <div class="division-line"></div>
+
+            <!--                <div class="item-row" id="max-web-num">-->
+            <!--                    <div class="item-body">-->
+            <!--                        <div class="item-body-display">-->
+            <!--                            --><?php //if ($lang == "1") { ?>
+            <!--                                <div class="item-body-desc">Web端登陆设备数</div>-->
+            <!--                            --><?php //} else { ?>
+            <!--                                <div class="item-body-desc">Max Web Num</div>-->
+            <!--                            --><?php //} ?>
+            <!---->
+            <!--                            <div class="item-body-tail">-->
+            <!--                                <div class="item-body-value" style="color: #999999">-->
+            <?php //echo $maxWebNum; ?><!--</div>-->
+            <!--                            </div>-->
+            <!---->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--                <div class="division-line"></div>-->
+
 
             <!--            <div class="item-row">-->
             <!--                <div class="item-body">-->
@@ -885,17 +886,24 @@
     });
 
     //enable realName
-    $("#enableRealNameSwitch").change(function () {
-        var isChecked = $(this).is(':checked');
-        var url = "index.php?action=manage.config.update&key=enableRealName";
+    // $("#enableRealNameSwitch").change(function () {
+    //     var isChecked = $(this).is(':checked');
+    //     var url = "index.php?action=manage.config.update&key=enableRealName";
+    //
+    //     var data = {
+    //         'key': 'enableRealName',
+    //         'value': isChecked ? 1 : 0,
+    //     };
+    //
+    //     zalyjsCommonAjaxPostJson(url, data, enableRealNameResponse);
+    //
+    // });
 
-        var data = {
-            'key': 'enableRealName',
-            'value': isChecked ? 1 : 0,
-        };
-
-        zalyjsCommonAjaxPostJson(url, data, enableRealNameResponse);
-
+    //loginMiniProgramId item-body-value
+    $(".loginMiniProgram").click(function () {
+        var miniProgramId = $(this).find("#loginMiniProgramId").html();
+        var url = "index.php?action=manage.miniProgram.profile&lang=" + getLanguage() + "&pluginId=" + miniProgramId;
+        zalyjsCommonOpenPage(url);
     });
 
     function enableRealNameResponse(url, data, result) {
