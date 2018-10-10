@@ -213,8 +213,8 @@ class Api_Site_ConfigController extends \BaseController
                 $addressForIM = $addressForAPi;
             }
 
-//            $this->ctx->Wpf_Logger->error("api.site.config", "addressForAPi=" . $addressForAPi);
-//            $this->ctx->Wpf_Logger->error("api.site.config", "addressForIM=" . $addressForIM);
+//            $this->ctx->Wpf_Logger->error("api.site.config", "================addressForAPi=" . $addressForAPi);
+//            $this->ctx->Wpf_Logger->error("api.site.config", "================addressForIM=" . $addressForIM);
 
             $config->setServerAddressForApi($addressForAPi);
             $config->setServerAddressForIM($addressForIM);
