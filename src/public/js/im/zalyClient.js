@@ -64,6 +64,8 @@ function handleClientReceivedMessage(resp, callback)
                     callback(result.body);
                 } else if(result.action == "api.friend.apply" && result.header[HeaderErrorCode] == errorFriendIsKey) {
                     callback("error.friend.is");
+                } else if(result.action == "api.group.members") {
+                    callback(result);
                 } else {
                     alert(result.header[HeaderErrorInfo]);
                     return;

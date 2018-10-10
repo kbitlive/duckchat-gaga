@@ -185,9 +185,8 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
     }
 
     var avatar = msg.roomType == GROUP_MSG ? msg.avatar : msg.userAvatar;
-
+    name = name.trim();
     if(name.length>10) {
-        name = name.trim();
         name = name.substr(0, 8) + "...";
     }
     var html = template("tpl-chatSession", {

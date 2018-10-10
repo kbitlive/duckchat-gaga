@@ -319,11 +319,13 @@ $(document).on("click", ".remove_member_from_group", function () {
     }
     removeMemberFromGroup(groupId, removeUserIds, removeMemberItemFromGroup)
 });
+
 removeMemberId="";
 function handleRemoveMember()
 {
    try{
        $("."+removeMemberId).remove();
+       getGroupMembers(0, 18, displayGroupMemberForGroupInfo);
    }catch (error) {
 
    }
@@ -969,12 +971,14 @@ function handleGetGroupMemberInfo(result)
     if(profile != undefined && profile["profile"]) {
         var userProfile = profile["profile"];
         var relation = profile.relation == undefined ? FriendRelation.FriendRelationInvalid : profile.relation;
+        var isSelf = userProfile.userId == token ? true : false;
 
         var html = template("tpl-group-member-info", {
             userId : userProfile.userId,
             nickname:userProfile.nickname,
             loginName:userProfile.loginName,
-            relation:relation
+            relation:relation,
+            isSelf:isSelf
         });
         html = handleHtmlLanguage(html);
         $(".group-member-info").html(html);
@@ -1005,13 +1009,19 @@ function closeGroupMemberInfo()
 $(document).on("click", ".group-member", function (event) {
     event.stopPropagation();
     event.preventDefault();
+    if(event.target.className == "remove_group_btn") {
+        return;
+    }
+
     var userId = $(this).attr("userId");
+    var isSelf = userId == token ? true : false;
     var relation = localStorage.getItem(friendRelationKey+userId);
     var html = template("tpl-group-member-info", {
         userId : userId,
         nickname:$(this).attr("nickname"),
         relation:relation,
         avatar:$(".info-avatar-"+userId).attr("src"),
+        isSelf:isSelf
     });
     html = handleHtmlLanguage(html);
     $(".group-member-info").html(html);
@@ -1607,8 +1617,9 @@ function addMemberToGroup(userIds, groupId)
 
 function handleAddMemberToGroup()
 {
-    window.location.reload();
+    removeWindow($("#group-invite-people"));
     syncMsgForRoom();
+    getGroupMembers(0, 18, displayGroupMemberForGroupInfo);
 }
 
 $(document).on("click", ".create-group", function () {
@@ -1944,9 +1955,9 @@ function updateInfo(profileId, profileType)
     var name = template("tpl-string", {
         string : name
     });
+    name = name.trim();
     var subName = name;
     if(name.length>10) {
-        name = name.trim();
         subName = name.substr(0, 8) + "...";
     }
     $(".nickname_"+profileId).html(name);
@@ -2069,6 +2080,8 @@ function displayCurrentProfile()
             }catch (error) {
 
             }
+
+            getGroupMembers(0, 18, displayGroupMemberForGroupInfo);
 
             try{
                 var permissionJoin = groupProfile.permissionJoin;

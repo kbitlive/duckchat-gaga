@@ -531,13 +531,15 @@
     <div class="group-member-loginname">
         {{loginName}}
     </div>
-    <div class="group-member-line">
-    </div>
-    {{if relation == "FriendRelationFollow"}}
-        <button class="group-member-btn open_chat" data-local-value="openChatTip" userId="{{userId}}" > 发起聊天</button>
-    {{else}}
-     <button class="group-member-btn add-friend-by-group-member" data-local-value="addFriendTip" userId="{{userId}}">添加好友</button>
 
+    {{if isSelf == false}}
+        <div class="group-member-line">
+        </div>
+        {{if relation == "FriendRelationFollow"}}
+            <button class="group-member-btn open_chat" data-local-value="openChatTip" userId="{{userId}}"> 发起聊天</button>
+        {{else relation != "FriendRelationFollow"}}
+         <button class="group-member-btn add-friend-by-group-member" data-local-value="addFriendTip" userId="{{userId}}">添加好友</button>
+        {{/if}}
     {{/if}}
 
 </script>
