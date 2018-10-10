@@ -21,17 +21,17 @@ function getRoomList()
     var i;
     for(i=0;i <length; i++) {
         var msg = roomList[i];
+        msg = handleMsgInfo(msg);
         if(!currentChatSessionId &&  i==length-1) {
             localStorage.setItem(chatSessionIdKey, msg.chatSessionId);
+            currentChatSessionId = msg.chatSessionId;
         }
         if( msg.chatSessionId == currentChatSessionId) {
-            localStorage.setItem( msg.chatSessionId, msg.roomType);
+            localStorage.setItem(msg.chatSessionId, msg.roomType);
         }
-        msg = handleMsgInfo(msg);
         appendOrInsertRoomList(msg, false, false);
     }
     displayCurrentProfile();
-    displayRightPage(DISPLAY_CHAT);
     msgBoxScrollToBottom();
 }
 
@@ -215,6 +215,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
 
     if(msg.chatSessionId == localStorage.getItem(chatSessionIdKey)) {
         $(".chat_session_id_"+msg.chatSessionId).addClass("chatsession-row-active");
+        displayCurrentProfile();
     }
     if(msg.fromUserId != token && showNotification) {
         showWebNotification(msg, msgContent);
@@ -383,7 +384,6 @@ function handleSyncMsgForRoom(results)
             }
         }
     }catch (error) {
-        console.log("error msg ==" + error.message);
         isSyncingMsg = false;
     }
 }
@@ -1097,7 +1097,6 @@ function uploadMsgFileFromInput(obj, fileType) {
                     size:obj.files.item(0).size,
                     name:obj.files.item(0).name
                 };
-                console.log("file info ==" + JSON.stringify(params));
                 uploadMsgFileToServer(formData, src, uploadFileForMsg, params);
             } else if(fileType == FileType.FileImage) {
                 getMsgImageSize(src);
@@ -1247,7 +1246,6 @@ function uploadMsgFileToServer(formData, src, type, params)
             }
         },
         error:function(err){
-            console.log("file upload failed");
             alert("发送失败,稍后重试");
             return false;
         }

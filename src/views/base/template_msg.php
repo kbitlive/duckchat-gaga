@@ -547,7 +547,7 @@
 <script id="tpl-group-member-for-speaker" type="text/html">
     <div class="speaker-group-member">
         <div class="sub-speaker-div">
-            <div class="sub-speaker-title" data-local-value="allGroupMemberTip"> 群成员 </div>
+            <div class="sub-speaker-title" data-local-value="otherGroupMemberTip"> 其他成员 </div>
         </div>
         <div class="speaker-line"></div>
         <div class="speaker-group-member-div" style="width: 100%;">
