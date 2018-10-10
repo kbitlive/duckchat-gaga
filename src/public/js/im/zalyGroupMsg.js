@@ -889,7 +889,6 @@ $(document).on("click", ".see_group_profile", function () {
             sendFriendProfileReq(chatSessionId);
             $('.right-body-sidebar').show();
         } else if(chatSessionType == GROUP_MSG) {
-            getGroupMembers(0, 18, displayGroupMemberForGroupInfo);
             sendGroupProfileReq(chatSessionId, handleGetGroupProfile);
             $('.right-body-sidebar').show();
         } else {
@@ -1097,11 +1096,8 @@ function handleGetGroupProfileByClick(results)
         var chatSessionId = localStorage.getItem(chatSessionIdKey);
         localStorage.removeItem(roomKey+chatSessionId);
         removeRoomFromRoomList(chatSessionId);
-    } else {
-        getGroupMembers(0, 18, displayGroupMemberForGroupInfo);
     }
     handleGetGroupProfile(results);
-
 }
 // contact-row-u2-profile
 $(document).on("click", ".contact-row-group-profile", function () {
@@ -1155,7 +1151,6 @@ function getFriendProfileByClickChatSessionRow(jqElement)
 $(document).on("click", ".u2-profile", function () {
     getFriendProfileByClickChatSessionRow($(this));
 });
-
 
 
 $(document).on("click", ".chatsession-row", function(){
