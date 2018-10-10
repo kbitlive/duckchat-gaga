@@ -40,6 +40,33 @@ if (!function_exists("mb_strlen")) {
     }
 }
 
+if(!function_exists("mb_substr")) {
+    function mb_substr($string, $start, $length) {
+        if (mb_strlen($string) > $length) {
+            $str = null;
+            $len = 0;
+            $i = $start;
+            while ( $len < $length) {
+                if (ord(substr($string, $i, 1)) > 0xc0) {
+                    ///utf8, 大于A,
+                    $str .=substr($string, $i, 3);
+                    $i+= 3;
+                }elseif (ord(substr($string, $i, 1)) > 0xa0) {
+                    //gbk ASCII oxao 表示汉字的开始
+                    $str .= substr($string, $i, 2);
+                    $i+= 2;
+                }else {
+                    $str.=substr($string, $i, 1);
+                    $i++;
+                }
+                $len ++;
+            }
+            return $str;
+        }
+        return $string;
+    }
+}
+
 if(extension_loaded("openssl")) {
     // fix OpenSSL
     //

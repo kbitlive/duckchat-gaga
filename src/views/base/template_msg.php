@@ -345,7 +345,7 @@
             <img src="../../public/img/msg/apply_list.png" />
             <div  class="apply-friend-list apply_friend_num" style="display: none;" ></div>
         </div>
-        <div class="pw-contact-row-name" data-local-value="newFriendsTip">新朋友</div>
+        <div class="pw-contact-row-name new-friends-apply" data-local-value="newFriendsTip">新朋友</div>
     </div>
 
     <div class="friend-list-div" data-local-value="friendListTip">
@@ -365,6 +365,8 @@
 
     <div class="group-list-div" data-local-value="groupListTip">
         群聊列表
+    </div>
+    <div class="group-list-contact-row">
     </div>
 
 </script>

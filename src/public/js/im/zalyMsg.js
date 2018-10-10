@@ -221,7 +221,6 @@ function handleMsgInfo(msg)
 {
     var toGroupId = msg.toGroupId;
     var userId;
-    var nowTimestamp = Date.parse(new Date());
 
     if(toGroupId != undefined) {
         msg.className = "group-profile";
@@ -717,8 +716,8 @@ function isCheckEndMsgDialog()
     var sh = rightchatBox.scrollHeight;
     var ch = rightchatBox.clientHeight;
     var st = $(".right-chatbox").scrollTop();
-    ///差值小于等于150 px末， 默认底部
-    if(sh - ch - st <= 150) {
+    ///差值小于等于Math.ceil(ch*2) px末， 默认底部
+    if(sh - ch - st <= Math.ceil(ch*2)) {
         return true
     }
     return false;

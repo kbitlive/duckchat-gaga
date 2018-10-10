@@ -807,7 +807,8 @@ function getGroupListHtml(results) {
                 groupName : group.name,
             });
             html = handleHtmlLanguage(html);
-            $(".group-lists").append(html);
+            // $(".group-lists").append(html);
+            $(".group-list-contact-row").append(html);
             getNotMsgImg(group.id, group.avatar)
         }
     }
@@ -1244,13 +1245,17 @@ function getGroupProfile(groupId)
     var groupProfile = false;
 
     if(groupProfileStr != false && groupProfileStr != null) {
-        groupProfile = JSON.parse(groupProfileStr);
-        if(groupProfile && (nowTimestamp - groupProfile['updateTime'])<ProfileTimeout) {
-            return groupProfile;
+        try{
+            groupProfile = JSON.parse(groupProfileStr);
+            if(groupProfile && (nowTimestamp - groupProfile['updateTime'])<ProfileTimeout) {
+                return groupProfile;
+            }
+        }catch (error) {
+
         }
     }
 
-    if(reqProfileTime != false && reqProfileTime != null && ((nowTimestamp-reqProfileTime)<reqTimeout) ) {
+    if(reqProfileTime != false && reqProfileTime != null && reqProfileTime !=undefined  && ((nowTimestamp-reqProfileTime)<reqTimeout) ) {
         return false;
     }
     sessionStorage.setItem(groupInfoReqKey, nowTimestamp);
@@ -3201,3 +3206,5 @@ $(document).on("click", ".right_msg_file_div", function () {
 $(document).on("click", ".left_msg_file_div", function () {
     downloadFile($(this));
 });
+
+
