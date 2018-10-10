@@ -62,6 +62,15 @@ class Api_User_UpdateController extends BaseController
                 case \Zaly\Proto\Site\ApiUserUpdateType::ApiUserUpdateNickname:
                     //update user name
                     $nickName = $v->getNickname();
+
+                    if (empty($nickName)) {
+                        throw new Exception("nickname is null");
+                    }
+
+                    if (mb_strlen($nickName) > 16) {
+                        $nickName = mb_substr($nickName, 0, 16);
+                    }
+
                     $updateData['nickname'] = $nickName;
                     $pinyin = new \Overtrue\Pinyin\Pinyin();
                     $updateData['nicknameInLatin'] = $pinyin->permalink($nickName, "");
