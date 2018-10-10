@@ -245,7 +245,14 @@
                     <div class="item-body">
                         <div class="item-body-display">
                             <div class="item-body-desc" onclick="showUserChat('<?php echo $user["userId"] ?>')">
-                                <?php echo $user['nickname'] ?>
+                                <?php
+                                $length = mb_strlen($user['nickname']);
+                                if ($length > 10) {
+                                    echo mb_substr($user['nickname'], 0, 10) . "...";
+                                } else {
+                                    echo $user['nickname'];
+                                }
+                                ?>
                             </div>
 
                             <div class="item-body-tail">
