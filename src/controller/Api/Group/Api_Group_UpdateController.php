@@ -55,7 +55,7 @@ class Api_Group_UpdateController extends Api_Group_BaseController
             $updateValues = [];
             $adminUserIds = [];
             $isMuteValues = [];
-            $writeUpdateAdminType = "";
+            $writeUpdateAdminType = false;
             foreach ($values as $v) {
                 $updateType = $v->getType();
                 $this->ctx->Wpf_Logger->info($tag, " group profile updateType  =". $updateType);
@@ -109,8 +109,9 @@ class Api_Group_UpdateController extends Api_Group_BaseController
                 $this->ctx->SiteGroupUserTable->updateGroupUserInfo($where, $isMuteValues);
             }
 
-            $this->ctx->Wpf_Logger->error($tag, " group profile adminUserIds  =". json_encode($adminUserIds));
-            $this->ctx->Wpf_Logger->error($tag, " group profile updateValues  =". json_encode($updateValues));
+            $this->ctx->Wpf_Logger->info($tag, " group profile adminUserIds  =". json_encode($adminUserIds));
+            $this->ctx->Wpf_Logger->info($tag, " group profile updateValues  =". json_encode($updateValues));
+            $this->ctx->Wpf_Logger->info($tag, " group profile writeUpdateAdminType  =". $writeUpdateAdminType);
 
             if(!$adminUserIds && !$updateValues) {
                 return;
@@ -120,20 +121,11 @@ class Api_Group_UpdateController extends Api_Group_BaseController
 
             $groupInfo = $this->getGroupProfile($groupId);
 
-            if($writeUpdateAdminType) {
+            if($writeUpdateAdminType !== false) {
                 $this->isGroupOwner($groupId);
                 switch ($writeUpdateAdminType){
-                    case \Zaly\Proto\Core\DataWriteType::WriteAdd:
-                        $userIds      = $adminUserIds[\Zaly\Proto\Core\DataWriteType::WriteAdd];
-                        $memberType   = \Zaly\Proto\Core\GroupMemberType::GroupMemberAdmin;
-                        $resultUserId = array_diff($userIds, [$groupInfo['owner']]);
-                        $resultUserId = array_values($resultUserId);
-                        $resultUserId = array_unique($resultUserId);
-                        $this->ctx->SiteGroupUserTable->addMemberRole($resultUserId, $groupId, $memberType);
-                        break;
                     case \Zaly\Proto\Core\DataWriteType::WriteUpdate:
-                        $userIds          = $adminUserIds[\Zaly\Proto\Core\DataWriteType::WriteUpdate];
-                        $resultUserId     = array_diff($userIds, [$groupInfo['owner']]);
+                        $resultUserId     = array_diff($adminUserIds, [$groupInfo['owner']]);
                         $adminMemberType  = \Zaly\Proto\Core\GroupMemberType::GroupMemberAdmin;
                         $nomalMemberType  = \Zaly\Proto\Core\GroupMemberType::GroupMemberNormal;
                         $ownerMemberType  = \Zaly\Proto\Core\GroupMemberType::GroupMemberOwner;
@@ -141,10 +133,16 @@ class Api_Group_UpdateController extends Api_Group_BaseController
                         $resultUserId = array_unique($resultUserId);
                         $this->ctx->SiteGroupUserTable->updateMemberRole($resultUserId, $groupId, $adminMemberType, $nomalMemberType, $ownerMemberType);
                         break;
+                    case \Zaly\Proto\Core\DataWriteType::WriteAdd:
+                        $memberType   = \Zaly\Proto\Core\GroupMemberType::GroupMemberAdmin;
+                        $resultUserId = array_diff($adminUserIds, [$groupInfo['owner']]);
+                        $resultUserId = array_values($resultUserId);
+                        $resultUserId = array_unique($resultUserId);
+                        $this->ctx->SiteGroupUserTable->addMemberRole($resultUserId, $groupId, $memberType);
+                        break;
                     case \Zaly\Proto\Core\DataWriteType::WriteDel:
-                        $userIds      = $adminUserIds[\Zaly\Proto\Core\DataWriteType::WriteDel];
                         $memberType   = \Zaly\Proto\Core\GroupMemberType::GroupMemberNormal;
-                        $resultUserId = array_diff($userIds, [$groupInfo['owner']]);
+                        $resultUserId = array_diff($adminUserIds, [$groupInfo['owner']]);
                         $resultUserId = array_values($resultUserId);
                         $resultUserId = array_unique($resultUserId);
                         $this->ctx->SiteGroupUserTable->removeMemberRole($resultUserId, $groupId, $memberType);
@@ -159,8 +157,6 @@ class Api_Group_UpdateController extends Api_Group_BaseController
             if($updateValues) {
                 $updateData = array_merge($updateData, $updateValues);
             }
-
-            $this->ctx->Wpf_Logger->error($tag, " group profile update values  =". json_encode($updateData));
 
             if(!count($updateData)) {
                 return ;

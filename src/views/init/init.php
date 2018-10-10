@@ -119,16 +119,8 @@
         $(".zaly_init").html(protocolHtml)
     }
     initProtocol();
-
     $(document).on("click", ".zaly_protocol_sure",function () {
         var siteVersion = $(".site_version").val();
-        if(latestVersion.indexOf(".") != -1) {
-            latestVersion = latestVersion.split('.').join('');
-        }
-        if(siteVersion.indexOf(".") != -1) {
-            siteVersion = siteVersion.split('.').join('');
-        }
-
         if(Number(latestVersion) > Number(siteVersion)) {
             $(".zaly_window")[0].style.display = "flex";
             var upgradeHtml = template("tpl-upgrade-tip", {

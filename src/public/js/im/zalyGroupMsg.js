@@ -2668,6 +2668,7 @@ $(document).on("click", ".apply-friend-list", function () {
 $(document).on("click", ".search-user", function () {
     addActiveForPwContactRow($(this));
     var html = template("tpl-search-user-div", {});
+    html = handleHtmlLanguage(html);
     $("#search-user-div").html(html);
     showWindow($("#search-user-div"));
 });
