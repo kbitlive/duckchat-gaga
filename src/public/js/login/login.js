@@ -90,9 +90,13 @@ function zalyLoginConfig(results) {
 }
 
 
-function loginFailed()
+function loginFailed(result)
 {
-    zalyjsAlert("登录失败");
+    zalyjsAlert(result);
+    if(isRegister == true && enableInvitationCode == 1) {
+        $(".register_button").attr("is_type", updateInvitationCodeType);
+        apiPassportPasswordLogin(failedApiPassportPasswordLogin);
+    }
 }
 
 getOsType();
@@ -356,7 +360,7 @@ function registerAndLogin()
     invitationCode = $(".register_input_code").val();
 
     if(isType == updateInvitationCodeType) {
-        updatePassportPassword();
+        updatePassportPasswordInvitationCode();
     } else {
         var flag = checkRegisterInfo();
         if(flag == false) {
@@ -380,10 +384,10 @@ function failedApiPassportPasswordLogin(results) {
 
 $(document).on("click", ".update_code_btn", function () {
     invitationCode = $(".update_input_code").val();
-    updatePassportPassword();
+    updatePassportPasswordInvitationCode();
 });
 
-function updatePassportPassword()
+function updatePassportPasswordInvitationCode()
 {
     var action = "api.passport.passwordUpdateInvitationCode";
     var reqData = {
@@ -476,17 +480,25 @@ function loginPassport()
 function apiPassportPasswordLogin(callback)
 {
     var action = "api.passport.passwordLogin";
-    var reqData = {
-        loginName:loginName,
-        password:loginPassword,
-        sitePubkPem:sitePubkPem,
-    };
+
+    if(isRegister == true) {
+        var reqData = {
+            loginName:registerLoginName,
+            password:registerPassword,
+            sitePubkPem:sitePubkPem,
+        };
+    } else {
+        var reqData = {
+            loginName:loginName,
+            password:loginPassword,
+            sitePubkPem:sitePubkPem,
+        };
+    }
     handleClientSendRequest(action, reqData, callback);
 }
 
 function handleApiPassportPasswordLogin(results)
 {
-    isRegister = false;
     preSessionId = results.preSessionId;
     zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailNeedRegister);
 }
