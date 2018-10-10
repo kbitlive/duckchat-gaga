@@ -1040,8 +1040,9 @@ $(function () {
 });
 
 
-$(document).on("click", ".group-profile", function () {
-    var groupId =  $(this).attr("chat-session-id");
+function getGroupProfileByClickChatSessionRow(jqElement)
+{
+    var groupId =  jqElement.attr("chat-session-id");
 
     if(groupId == undefined || !groupId) {
         $(this).remove();
@@ -1062,6 +1063,10 @@ $(document).on("click", ".group-profile", function () {
     $("#share_group").addClass("info-avatar-"+groupId);
 
     handleMsgRelation($(this), groupId);
+}
+
+$(document).on("click", ".group-profile", function () {
+    getGroupProfileByClickChatSessionRow($(this));
 });
 
 function handleGetGroupProfileByClick(results)
@@ -1104,8 +1109,9 @@ function handleClickRowGroupProfile(groupId)
     handleMsgRelation($(this), groupId);
 }
 
-$(document).on("click", ".u2-profile", function () {
-    var userId = $(this).attr("chat-session-id");
+function getFriendProfileByClickChatSessionRow(jqElement)
+{
+    var userId = jqElement.attr("chat-session-id");
     if(userId == undefined) {
         return false;
     }
@@ -1123,6 +1129,21 @@ $(document).on("click", ".u2-profile", function () {
     localStorage.setItem(chatSessionIdKey, userId);
     localStorage.setItem(userId, U2_MSG);
     handleMsgRelation($(this), userId);
+}
+
+$(document).on("click", ".u2-profile", function () {
+    getFriendProfileByClickChatSessionRow($(this));
+});
+
+
+
+$(document).on("click", ".chatsession-row", function(){
+    var roomType = $(this).attr("roomType");
+    if(roomType == U2_MSG) {
+        getFriendProfileByClickChatSessionRow($(this));
+    } else {
+        getGroupProfileByClickChatSessionRow($(this));
+    }
 });
 
 $(document).on("click", ".contact-row-u2-profile", function () {
@@ -1914,9 +1935,13 @@ function updateInfo(profileId, profileType)
     var name = template("tpl-string", {
         string : name
     });
-
+    var subName = name;
+    if(name.length>10) {
+        name = name.trim();
+        subName = name.substr(0, 8) + "...";
+    }
     $(".nickname_"+profileId).html(name);
-
+    $(".chatsession-row .nickname_"+profileId).html(subName);
     try{
         if(mute>0) {
             $(".room-chatsession-mute_"+profileId)[0].style.display = "block";
@@ -3021,6 +3046,10 @@ function updateSelfNickName(event)
         return;
     }
     var nickname = $(".nickname").val();
+    if(nickname.length > 16) {
+        alert("长度16个字符");
+        return;
+    }
     var values = new Array();
     var value = {
         type : "ApiUserUpdateNickname",

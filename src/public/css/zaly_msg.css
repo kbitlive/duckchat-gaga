@@ -252,7 +252,7 @@ html, body{
 .create_button {
     cursor: pointer;
 }
-.chatsession-row {
+.chatsession-row{
     position: relative;
     height: 7rem;
     width: 100%;
@@ -264,7 +264,11 @@ html, body{
 .cancle_invite_people {
     outline: none;
 }
-.chatsession-row:hover {
+.chatsession-row:hover
+/*.u2-profile:hover,*/
+/*.group-profile:hover*/
+
+{
     background: #F5F4F9;
     cursor: pointer;
 }
@@ -1649,6 +1653,7 @@ button:active{
 
 .search-user-info {
     position: relative;
+    width:24rem;
 }
 
 .search-user-info img{

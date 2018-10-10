@@ -186,6 +186,10 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
 
     var avatar = msg.roomType == GROUP_MSG ? msg.avatar : msg.userAvatar;
 
+    if(name.length>10) {
+        name = name.trim();
+        name = name.substr(0, 8) + "...";
+    }
     var html = template("tpl-chatSession", {
         className:msg.roomType == U2_MSG ? "u2-profile" : "group-profile",
         isMute:msg.isMute,
