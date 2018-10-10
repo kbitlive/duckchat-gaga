@@ -129,9 +129,9 @@ class Im_Cts_MessageController extends Im_BaseController
         $toUserName = $this->ctx->SiteUserTable->getUserNickName($toUserId);
 
         $title = '[notice]';
-        $code = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="background: #DFDFDF;margin:0;padding:0"><div style="text-align: center;font-size: 14px"> <font color=#FFFFFF>' . $toUserName . ' is not your friend, add friend to chat </font><font color=#4C3BB1><br/>send a friend apply</font></div></body></html>';
+        $code = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="background: #DFDFDF;margin:5px 0 0 0;padding:0"><div style="text-align: center;font-size: 14px"> <font color=#FFFFFF>' . $toUserName . ' 不是你的好友，点击发送 </font><font color=#4C3BB1>好友申请</font></div></body></html>';
         $hrefUrl = 'duckchat://0.0.0.0/goto?page=applyFriend&x=u-' . $toUserId;
-        $height = '135';
+        $height = '80';
 
         //代发一个web消息给from
         $this->ctx->Message_Client->proxyU2WebNoticeMessage($fromUserId, $toUserId, $fromUserId, $title, $code, $hrefUrl, $height);
