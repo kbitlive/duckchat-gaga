@@ -214,9 +214,6 @@ html, body{
     display: block;
     box-shadow:0rem 0.09rem 0.38rem 0rem rgba(0,0,0,0.2);
 }
-.group-lists {
-    overflow-y: scroll;
-}
 
 .create-group-btn {
     margin:0 auto;
@@ -1320,7 +1317,7 @@ html, body{
 .group-desc-body {
     font-size:1.13rem;
     color:rgba(153,153,153,1);
-    width: 26rem;
+    width:24.27rem;
 }
 .group-member-body {
     height: 14rem;
