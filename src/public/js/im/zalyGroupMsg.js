@@ -1139,6 +1139,8 @@ $(document).on("click", ".u2-profile", function () {
 
 $(document).on("click", ".chatsession-row", function(){
     var roomType = $(this).attr("roomType");
+    var chatSessionId = $(this).attr("chat-session-id");
+    updateRoomChatSessionContent(chatSessionId);
     if(roomType == U2_MSG) {
         getFriendProfileByClickChatSessionRow($(this));
     } else {

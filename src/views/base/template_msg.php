@@ -296,7 +296,7 @@
             <div class="chatsession-row-title nickname_{{chatSessionId}}">{{name}}</div>
             <div class="chatsession-row-time" msgTime="{{msgServerTime}}">{{msgTime}}</div>
         </div>
-        <div class="chatsession-row-desc">{{msgContent}}</div>
+        <div class="chatsession-row-desc chatsession-row-desc-{{chatSessionId}}">{{msgContent}}</div>
         {{ if isMute >0 }}
                 <div class="room-chatsession-mute  room-chatsession-mute_{{chatSessionId}}" >
                 <img src="../../public/img/msg/ic_notification_off.png" class="mute">
