@@ -7,17 +7,16 @@
  */
 
 return array(
-    'siteVersionName' => '1.0-beta-8',
+    'siteVersionName' => '1.0.9',
     'siteVersionCode' => '10009',
     'apiPageIndex' => './index.php?action=page.index',
     'apiPageLogin' => './index.php?action=page.login',
     'apiPageLogout' => './index.php?action=page.logout',
     'apiPageJump' => "./index.php?action=page.jump",
-    'loginPluginId' => '106',
+    'loginPluginId' => '102',
     'apiPageWidget' => './index.php?action=page.widget',
     'apiPageSiteInit' => "./index.php?action=installDB",
     'session_verify_102' => './index.php?action=api.session.verify&body_format=base64pb',
-    'session_verify_106' => 'http://127.0.0.1:8081/duckchat/duckchat.php?action=api.session.verify&body_format=base64pb',
     'test_curl' => "./index.php?action=installDB&for=test_curl",
     "siteAddress" => '',
     'passport_cookie_name' => "duckchat_passport_cookie",
