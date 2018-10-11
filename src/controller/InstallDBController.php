@@ -211,9 +211,11 @@ class InstallDBController
             if(!$doucmentRoot || !$scriptRoot) {
                 $isInstallRootPath = false;
             }
-            if($doucmentRoot."/index.php" != $scriptRoot) {
+
+            if($doucmentRoot.DIRECTORY_SEPARATOR."index.php" != $scriptRoot) {
                 $isInstallRootPath = false;
             }
+
             if($isInstallRootPath === false) {
                 echo $this->lang == 1 ? "目前只支持根目录运行" : "Currently only the root directory is supported.";
                 return;

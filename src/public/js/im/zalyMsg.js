@@ -959,6 +959,21 @@ function base64ToBlob(base64, mime)
     return new Blob(byteArrays, {type: mime});
 }
 
+function handleMsgContentText(str)
+{
+    var reg=/((http|ftp|https):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
+    var arr = str.match(reg);
+    console.log("reg ===" + JSON.stringify(arr));
+
+    if(arr == null) {
+        return str;
+    }
+    var urlLink = arr.shift();
+    var urlLinkHtml = "<a href='"+urlLink+"'>"+urlLink+"</a>";
+    str = str.replace(urlLink, urlLinkHtml);
+    return str;
+}
+
 //---------------------------------------------append msg html to chat dialog-------------------------------------------------
 
 function appendMsgHtmlToChatDialog(msg)
@@ -986,6 +1001,7 @@ function appendMsgHtmlToChatDialog(msg)
         switch(msgType) {
             case MessageType.MessageText :
                 var msgContent = msg['text'].body;
+                msgContent = handleMsgContentText(msgContent);
                 html = template("tpl-send-msg-text", {
                     roomType: msg.roomType,
                     nickname:nickname,
