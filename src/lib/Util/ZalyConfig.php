@@ -46,7 +46,7 @@ class ZalyConfig
     public static function getApiIndexUrl()
     {
         $domain = self::getDomain();
-        $pageIndexUrl = self::$config['apiIndexUrl'];
+        $pageIndexUrl = self::$config['apiPageIndex'];
         if(strpos($pageIndexUrl,"./") == 0) {
             $pageIndexUrl = str_replace("./", "/", $pageIndexUrl);
         }

@@ -95,7 +95,8 @@
                             <div class="item-body-value">
                                 <img id="group-avatar-img" class="site-image"
                                      onclick="uploadFile('group-avatar-img-input')"
-                                     src="./../public/img/msg/group_default_avatar.png">
+                                     src="/_api_file_download_/?fileId=<?php echo $avatar ?>"
+                                     onerror="src='./../public/img/msg/group_default_avatar.png'">
 
                                 <input id="group-avatar-img-input" type="file"
                                        accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
