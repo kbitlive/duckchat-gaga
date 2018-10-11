@@ -26,8 +26,19 @@ class Manage_Config_UpdateController extends Manage_CommonController
                 throw new Exception("config key permission error");
             }
 
-            if ("pluginPublicKey" == $configKey) {
+            if (SiteConfig::SITE_PLUGIN_PLBLIC_KEY == $configKey) {
                 $configValue = $this->ctx->ZalyHelper->generateStrKey(32);
+            } elseif (SiteConfig::SITE_ZALY_PORT == $configKey || SiteConfig::SITE_WS_PORT == $configKey) {
+                if (empty($configValue)) {
+                    $configValue = 0;
+                }
+            }
+
+            //判断是否为数字
+            if (in_array($configKey, SiteConfig::$numericKeys)) {
+                if (!is_numeric($configValue)) {
+                    throw new Exception("value is not number");
+                }
             }
 
             $result = $this->updateSiteConfig($configKey, $configValue);

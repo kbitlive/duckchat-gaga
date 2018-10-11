@@ -11,7 +11,12 @@ class Page_Passport_LoginController extends  HttpBaseController
 
     public function index()
     {
-        echo $this->display("passport_login");
+        $cookieStr = $_SERVER['HTTP_COOKIE'];
+        $isDuckchat = 0;
+        if(strpos($cookieStr, "duckchat_sessionid") !== false) {
+            $isDuckchat = 1;
+        }
+        echo $this->display("passport_login", ['isDuckchat' => $isDuckchat]);
         return;
     }
 }

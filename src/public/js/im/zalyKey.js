@@ -154,10 +154,7 @@ MaxStorageStore=3;
 DISPLAY_CHAT = "chat";
 DISPLAY_APPLY_FRIEND_LIST = "apply_friend_list";
 
-
-currentGroupProfileKey = "current_group_profile";
 defaultCountKey = 200;
-
 chatSessionIdKey = "chat_session_id";
 localPotiner    = "group_pointer_";
 profileKey = "profile_";
@@ -215,4 +212,6 @@ languageNum = getLanguage();
 uploadFileUrl = './index.php?action=http.file.uploadWeb';
 isSyncingMsg = false;
 isPreSyncingMsgTime="";
+
+errorFriendIsKey = "error.friend.is";
 

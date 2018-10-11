@@ -30,20 +30,12 @@
                         </div>
                     </div>
 
-                    <div class=" hint--right" style="width: 7.5rem;" aria-label="搜索" data-local="aria-label:searchTip">
-                        <div class="l-sb-item"  data="search" >
-                            <img src="../../public/img/msg/search_unselect.png" data="unselect" class="search-unselect item-img" />
-                            <img src="../../public/img/msg/search.png" data="select" class="search-select item-img" style="display: none;"/>
-                        </div>s
-                    </div>
-
-                    <div class=" hint--right" style="width: 7.5rem;bottom: 1rem;position: absolute" aria-label="更多" data-local="aria-label:moreTip">
+                    <div class=" hint--right" style="width: 7.5rem;bottom: 1rem;position: absolute;display: block;" aria-label="更多" data-local="aria-label:moreTip">
                         <div class="l-sb-item"  data="more" >
                             <img src="../../public/img/msg/more_unselect.png" data="unselect" class="more-unselect item-img" />
                             <img src="../../public/img/msg/more.png" data="select" class="more-select item-img" style="display: none;"/>
                         </div>
                     </div>
-
                 </div>
         </div>
 
@@ -55,12 +47,11 @@
                 <div class="left-body-chatsession group-lists"  style="display: none;position: relative;">
 
                 </div>
+
                 <div class="left-body-chatsession friend-lists" style="display: none;position: relative;">
 
                 </div>
-                <div class="left-body-create-group">
-                    <button class="create-group-btn" data-local-value="createGroupTip">创建群组</button>
-                </div>
+
             </div>
 
         </div>

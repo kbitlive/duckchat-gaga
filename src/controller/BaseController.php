@@ -148,7 +148,8 @@ abstract class BaseController extends \Wpf_Controller
         if (!$this->checkDBIsExist()) {
             $this->action = $_GET['action'];
             $this->requestTransportData = new \Zaly\Proto\Core\TransportData();
-            $this->setRpcError($this->errorSiteInit, ZalyConfig::getConfig("apiPageSiteInit"));
+            $pageSiteInit = ZalyHelper::getFullReqUrl(ZalyConfig::getConfig("apiPageSiteInit"));
+            $this->setRpcError($this->errorSiteInit, $pageSiteInit);
             $this->bodyFormatType = isset($_GET['body_format']) ? $_GET['body_format'] : "";
             $this->bodyFormatType = strtolower($this->bodyFormatType);
             if (!in_array($this->bodyFormatType, $this->bodyFormatArr)) {
@@ -384,7 +385,6 @@ abstract class BaseController extends \Wpf_Controller
             $this->language = Zaly\Proto\Core\UserClientLangType::UserClientLangEN;
             $this->zalyError = $this->ctx->ZalyErrorEn;
         }
-
     }
 
     private function returnErrorSession($errorInfo = false)

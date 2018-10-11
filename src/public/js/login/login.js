@@ -61,12 +61,12 @@ invitationCode='';
 nickname="";
 allowShareRealname=0;
 preSessionId="";
-refererUrl = document.referrer;
 secondNum  = 120;
 isSending  = false;
-refererUrlKey = "documentReferer";
 updateInvitationCodeType = "update_invitation_code";
 
+refererUrl = document.referrer;
+refererUrlKey = "documentReferer";
 if(refererUrl.length>0) {
     localStorage.setItem(refererUrlKey, refererUrl);
     refererUrlKeyVal = localStorage.getItem(refererUrlKey);
@@ -89,57 +89,19 @@ function zalyLoginConfig(results) {
     sitePubkPem = siteConfig.sitePubkPem;
 }
 
-function loginSuccess()
+
+function loginFailed(result)
 {
-
-    handleRedirect();
-}
-
-function handleRedirect()
-{
-    var refererUrl = localStorage.getItem(refererUrlKey);
-    if(refererUrl) {
-        if(refererUrl.indexOf("?") > -1) {
-            refererUrl = refererUrl+"&preSessionId="+preSessionId+"&isRegister="+isRegister;
-        } else {
-            refererUrl = refererUrl+"?preSessionId="+preSessionId+"&isRegister="+isRegister;
-        }
-        // window.location.href = refererUrl;
-        refererUrl = refererUrl + " &fail_callback=failedCallBack&&success_callback=successCallBack";
-        addJsByDynamic(refererUrl);
-    }
-}
-
-function failedCallBack(result) {
     zalyjsAlert(result);
-    $(".register_button").attr("is_type", updateInvitationCodeType);
-    apiPassportPasswordLogin(failedApiPassportPasswordLogin);
-}
-
-function failedApiPassportPasswordLogin(results) {
-    isRegister = false;
-    preSessionId = results.preSessionId;
-}
-
-function successCallBack(result) {
-    console.log(result);
-    localStorage.clear();
-    window.location.href = result;
-}
-
-function loginFailed()
-{
-    zalyjsAlert("登录失败");
+    if(isRegister == true && enableInvitationCode == 1) {
+        $(".register_button").attr("is_type", updateInvitationCodeType);
+        apiPassportPasswordLogin(failedApiPassportPasswordLogin);
+    }
 }
 
 getOsType();
 
-if(refererUrl != undefined && refererUrl.length>1 || clientType == "PC") {
-    siteConfigJsUrl = "./index.php?action=page.siteConfig&callback=zalyLoginConfig";
-    addJsByDynamic(siteConfigJsUrl);
-} else {
-    zalyjsLoginConfig(zalyLoginConfig);
-}
+zalyjsLoginConfig(zalyLoginConfig);
 
 function addJsByDynamic(url)
 {
@@ -353,6 +315,13 @@ function loginNameExist()
     zalyjsAlert("用户名已经在站点被注册");
 }
 
+function handlePassportPasswordReg(results)
+{
+    isRegister = true;
+    preSessionId = results.preSessionId;
+    zalyjsLoginSuccess(registerLoginName, preSessionId, isRegister, loginFailed);
+}
+
 function loginNameNotExist()
 {
     if(sitePubkPem.length<1) {
@@ -391,23 +360,34 @@ function registerAndLogin()
     invitationCode = $(".register_input_code").val();
 
     if(isType == updateInvitationCodeType) {
-        updatePassportPassword();
+        updatePassportPasswordInvitationCode();
     } else {
         var flag = checkRegisterInfo();
         if(flag == false) {
             return false;
         }
-        var jsUrl = "./index.php?action=page.js&loginName="+registerLoginName+"&success_callback=loginNameExist&fail_callback=loginNameNotExist";
-        addJsByDynamic(jsUrl);
+        zalyjsWebCheckUserExists(loginNameNotExist, loginNameExist);
     }
+}
+
+///更新邀请码，并且登录site
+function failedCallBack(result) {
+    zalyjsAlert(result);
+    $(".register_button").attr("is_type", updateInvitationCodeType);
+    apiPassportPasswordLogin(failedApiPassportPasswordLogin);
+}
+
+function failedApiPassportPasswordLogin(results) {
+    isRegister = false;
+    preSessionId = results.preSessionId;
 }
 
 $(document).on("click", ".update_code_btn", function () {
     invitationCode = $(".update_input_code").val();
-    updatePassportPassword();
+    updatePassportPasswordInvitationCode();
 });
 
-function updatePassportPassword()
+function updatePassportPasswordInvitationCode()
 {
     var action = "api.passport.passwordUpdateInvitationCode";
     var reqData = {
@@ -422,24 +402,10 @@ function handlePassportPasswordUpdateInvationCode(results)
 {
     isRegister = true;
     preSessionId = results.preSessionId;
-    if(refererUrl != undefined && refererUrl.length>1) {
-        handleRedirect();
-    } else {
-        zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailed);
-    }
+    zalyjsLoginSuccess(loginName, preSessionId, isRegister, failedCallBack);
 }
 
-function handlePassportPasswordReg(results)
-{
-    isRegister = true;
-    preSessionId = results.preSessionId;
-    if(refererUrl != undefined && refererUrl.length>1 || clientType == "PC") {
-        handleRedirect();
-    } else {
-        zalyjsLoginSuccess(registerLoginName, preSessionId, isRegister, loginFailed);
-    }
-}
-
+//验证邮箱
 function validateEmail(email)
 {
     var re = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
@@ -514,24 +480,27 @@ function loginPassport()
 function apiPassportPasswordLogin(callback)
 {
     var action = "api.passport.passwordLogin";
-    var reqData = {
-        loginName:loginName,
-        password:loginPassword,
-        sitePubkPem:sitePubkPem,
-    };
+
+    if(isRegister == true) {
+        var reqData = {
+            loginName:registerLoginName,
+            password:registerPassword,
+            sitePubkPem:sitePubkPem,
+        };
+    } else {
+        var reqData = {
+            loginName:loginName,
+            password:loginPassword,
+            sitePubkPem:sitePubkPem,
+        };
+    }
     handleClientSendRequest(action, reqData, callback);
 }
 
 function handleApiPassportPasswordLogin(results)
 {
-    isRegister = false;
     preSessionId = results.preSessionId;
-    if(refererUrl != undefined && refererUrl.length>1 || clientType == "PC") {
-        var jsUrl = "./index.php?action=page.js&loginName="+loginName+"&success_callback=loginSuccess&fail_callback=loginFailNeedRegister";
-        addJsByDynamic(jsUrl);
-    } else {
-        zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailNeedRegister);
-    }
+    zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailNeedRegister);
 }
 
 function loginFailNeedRegister()
@@ -541,11 +510,8 @@ function loginFailNeedRegister()
             return false;
         }
         isRegister = true;
-        if(refererUrl != undefined && refererUrl.length>1) {
-            handleRedirect();
-        } else {
-            zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailed);
-        }
+        zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailed);
+
     } else {
         $(".zaly_login_by_pwd")[0].style.display = "none";
         $(".zaly_site_update-invitecode")[0].style.display = "block";

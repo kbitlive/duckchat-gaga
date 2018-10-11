@@ -40,6 +40,33 @@ if (!function_exists("mb_strlen")) {
     }
 }
 
+if(!function_exists("mb_substr")) {
+    function mb_substr($string, $start, $length) {
+        if (mb_strlen($string) > $length) {
+            $str = null;
+            $len = 0;
+            $i = $start;
+            while ( $len < $length) {
+                if (ord(substr($string, $i, 1)) > 0xc0) {
+                    ///utf8, 大于A,
+                    $str .=substr($string, $i, 3);
+                    $i+= 3;
+                }elseif (ord(substr($string, $i, 1)) > 0xa0) {
+                    //gbk ASCII oxao 表示汉字的开始
+                    $str .= substr($string, $i, 2);
+                    $i+= 2;
+                }else {
+                    $str.=substr($string, $i, 1);
+                    $i++;
+                }
+                $len ++;
+            }
+            return $str;
+        }
+        return $string;
+    }
+}
+
 if(extension_loaded("openssl")) {
     // fix OpenSSL
     //
@@ -57,19 +84,11 @@ if(!function_exists('mime_content_type')) {
         $mimeTypeHexs = [
             "89504e470d0a1a0a" => "image/png",
             "ffd8ffe0010"      => "image/jpg",
+            "ffd8ffe0"         => "image/jpeg",
             "474946383961"     => 'image/gif',
             "667479704d534e56" => 'video/mp4',
             '6674797069736f6d' => 'audio/mp4',
             '667479704d344120' => 'audio/x-m4a',
-            '25504446'         => 'application/pdf',
-            '526172211a0700'   => 'application/x-rar-compressed',
-            '57696e5a6970'     => 'application/zip',
-            'cf11e0a1b11ae100' => 'application/msword',
-            'eca5c100'         => 'application/msword',
-            '3c3f786d6c2076657273696f6e3d' => 'application/xml',
-            '4d534346' => 'application/vnd.ms-powerpoint',
-            'a0461df0' => 'application/vnd.ms-powerpoint',
-            'fdffffffnnnn0000' => 'application/vnd.ms-powerpoint'
         ];
 
         $fileContent    = file_get_contents($path);

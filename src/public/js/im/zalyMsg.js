@@ -21,20 +21,19 @@ function getRoomList()
     var i;
     for(i=0;i <length; i++) {
         var msg = roomList[i];
+        msg = handleMsgInfo(msg);
         if(!currentChatSessionId &&  i==length-1) {
             localStorage.setItem(chatSessionIdKey, msg.chatSessionId);
+            currentChatSessionId = msg.chatSessionId;
         }
         if( msg.chatSessionId == currentChatSessionId) {
-            localStorage.setItem( msg.chatSessionId, msg.roomType);
+            localStorage.setItem(msg.chatSessionId, msg.roomType);
         }
-        msg = handleMsgInfo(msg);
         appendOrInsertRoomList(msg, false, false);
     }
     displayCurrentProfile();
-    displayRightPage(DISPLAY_CHAT);
     msgBoxScrollToBottom();
 }
-
 
 function handleRoomListFromLocalStorage(roomMsg)
 {
@@ -186,7 +185,10 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
     }
 
     var avatar = msg.roomType == GROUP_MSG ? msg.avatar : msg.userAvatar;
-
+    name = name.trim();
+    if(name.length>10) {
+        name = name.substr(0, 8) + "...";
+    }
     var html = template("tpl-chatSession", {
         className:msg.roomType == U2_MSG ? "u2-profile" : "group-profile",
         isMute:msg.isMute,
@@ -212,6 +214,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
 
     if(msg.chatSessionId == localStorage.getItem(chatSessionIdKey)) {
         $(".chat_session_id_"+msg.chatSessionId).addClass("chatsession-row-active");
+        displayCurrentProfile();
     }
     if(msg.fromUserId != token && showNotification) {
         showWebNotification(msg, msgContent);
@@ -221,12 +224,11 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
 function handleMsgInfo(msg)
 {
     var toGroupId = msg.toGroupId;
-    var groupId = msg.groupId
     var userId;
-    var nowTimestamp = Date.parse(new Date());
-    if(groupId != undefined || toGroupId != undefined) {
+
+    if(toGroupId != undefined) {
         msg.className = "group-profile";
-        msg.chatSessionId = groupId != undefined ? groupId : toGroupId;
+        msg.chatSessionId = toGroupId;
         msg.roomType = GROUP_MSG;
         var groupProfile = getGroupProfile(msg.chatSessionId);
         if(groupProfile) {
@@ -250,7 +252,7 @@ function handleMsgInfo(msg)
     var unreadMuteKey = msgUnReadMuteKey+msg.chatSessionId;
     msg.isMuteMsgNum = localStorage.getItem(unreadMuteKey) == 1 ? 1 : 0;
 
-    var userProfile = getFriendProfile(userId, handleGetFriendProfile());
+    var userProfile = getFriendProfile(userId, false, handleGetFriendProfile);
     if(userProfile) {
         msg.nickname   = userProfile['nickname'];
         msg.userAvatar = userProfile['avatar'];
@@ -381,7 +383,6 @@ function handleSyncMsgForRoom(results)
             }
         }
     }catch (error) {
-        console.log("error msg ==" + error.message);
         isSyncingMsg = false;
     }
 }
@@ -668,10 +669,9 @@ function sendMsg( chatSessionId, chatSessionType, msgContent, msgType, params)
         case MessageType.MessageDocument:
             message['type'] = MessageType.MessageDocument;
             message['document'] = {url:msgContent, size:params.size, name:params.name};
-            displayContent = "[文件消息]";
+            displayContent = "[文件]";
             break;
     }
-
     var reqData = {
         "message" : message
     };
@@ -719,7 +719,8 @@ function isCheckEndMsgDialog()
     var sh = rightchatBox.scrollHeight;
     var ch = rightchatBox.clientHeight;
     var st = $(".right-chatbox").scrollTop();
-    if(sh - ch - st == 0) {
+    ///差值小于等于Math.ceil(ch*2) px末， 默认底部
+    if(sh - ch - st <= Math.ceil(ch*2)) {
         return true
     }
     return false;
@@ -780,30 +781,19 @@ function appendMsgHtml(msg)
     var msgType = msg.type;
     var msgId = msg.msgId;
 
-    var groupId = msg.toGroupId;
     var sendBySelf;
-    var userId;
-    if(groupId != undefined && msg.fromUserId != token) {
+    if( msg.fromUserId != token) {
         sendBySelf = false;
-        userId = msg.fromUserId;
-    } else if (groupId != undefined && msg.fromUserId == token) {
+    } else if(msg.fromUserId == token) {
         sendBySelf = true;
-        userId = token;
-    }
-    if(groupId == undefined && msg.fromUserId != token) {
-        sendBySelf = false;
-        userId = msg.fromUserId;
-    } else if(groupId == undefined && msg.fromUserId == token) {
-        sendBySelf = true;
-        userId = token;
+        msg.userAvatar = avatar;
     }
     var msgTime = getMsgTimeByMsg(msg.timeServer);
-    var groupUserImageClassName = msg.roomType == GROUP_MSG ? "group-user-img" : "";
+    var groupUserImageClassName = msg.roomType == GROUP_MSG ? "group-user-img group-user-img-"+msg.msgId : "";
     var msgStatus = msg.status ? msg.status : "";
-    var userAvatar = sendBySelf ? avatar : msg.userAvatar;
     var userAvatarSrc = sendBySelf ?  localStorage.getItem(selfInfoAvatar) : "";
+
     if(sendBySelf) {
-        getNotMsgImg(token, userAvatar);
         switch(msgType) {
             case MessageType.MessageText :
                 var msgContent = msg['text'].body;
@@ -814,9 +804,9 @@ function appendMsgHtml(msg)
                     msgTime : msgTime,
                     msgContent:msgContent,
                     msgStatus:msgStatus,
-                    avatar:userAvatar,
+                    avatar:msg.userAvatar,
                     userAvatarSrc:userAvatarSrc,
-                    userId:token,
+                    userId:msg.fromUserId,
                     timeServer:msg.timeServer
                 });
                 break;
@@ -832,9 +822,9 @@ function appendMsgHtml(msg)
                     url:url,
                     msgTime : msgTime,
                     msgStatus:msgStatus,
-                    avatar:userAvatar,
+                    avatar:msg.userAvatar,
                     userAvatarSrc:userAvatarSrc,
-                    userId:token,
+                    userId:msg.fromUserId,
                     fileSize:size,
                     fileName:fileName,
                     originName:originName,
@@ -849,11 +839,11 @@ function appendMsgHtml(msg)
                     msgId : msgId,
                     msgTime : msgTime,
                     msgStatus:msgStatus,
-                    avatar:userAvatar,
+                    avatar:msg.userAvatar,
                     width:imgObject.width,
                     height:imgObject.height,
                     userAvatarSrc:userAvatarSrc,
-                    userId:token,
+                    userId:msg.fromUserId,
                     timeServer:msg.timeServer
                 });
                 break;
@@ -864,9 +854,9 @@ function appendMsgHtml(msg)
                     msgId : msgId,
                     msgTime : msgTime,
                     msgStatus:msgStatus,
-                    avatar:userAvatar,
+                    avatar:msg.userAvatar,
                     userAvatarSrc:userAvatarSrc,
-                    userId:token,
+                    userId:msg.fromUserId,
                     timeServer:msg.timeServer
                 });
                 break;
@@ -887,13 +877,12 @@ function appendMsgHtml(msg)
                     webHeight:webSize.height,
                     msgId : msgId,
                     msgTime : msgTime,
-                    userId :msg.fromUserId,
                     groupUserImg : groupUserImageClassName,
-                    avatar:userAvatar,
+                    avatar:msg.userAvatar,
                     hrefURL:hrefUrl,
                     linkUrl :linkUrl,
                     userAvatarSrc:userAvatarSrc,
-                    userId:token,
+                    userId:msg.fromUserId,
                     timeServer:msg.timeServer,
                 });
                 break;
@@ -913,15 +902,14 @@ function appendMsgHtml(msg)
                     msgTime : msgTime,
                     msgStatus:msgStatus,
                     msgContent:msgContent,
-                    avatar:userAvatar,
+                    avatar:msg.userAvatar,
                     userAvatarSrc:userAvatarSrc,
-                    userId:token,
+                    userId:msg.fromUserId,
                     timeServer:msg.timeServer
                 });
                 break;
         }
     } else {
-        getNotMsgImg(msg.fromUserId,msg.userAvatar);
         switch(msgType) {
             case MessageType.MessageText:
                 var msgContent = msg['text'].body;
@@ -1032,9 +1020,9 @@ function appendMsgHtml(msg)
     if(msgType == MessageType.MessageText) {
         html = trimMsgContentBr(html);
     }
-
     // html = "请前往客户端查看web消息";
     $(".right-chatbox").append(html);
+    getNotMsgImg(msg.fromUserId,msg.userAvatar);
     getMsgImgSrc(msg, msgId);
 }
 
@@ -1045,6 +1033,7 @@ function trimMsgContentBr(html)
     html = html.replace(new RegExp('\\<br>+$', 'g'), '');
     return html;
 }
+
 function getMsgImgSrc(msg, msgId)
 {
     if(msg.hasOwnProperty("image")) {
@@ -1107,7 +1096,6 @@ function uploadMsgFileFromInput(obj, fileType) {
                     size:obj.files.item(0).size,
                     name:obj.files.item(0).name
                 };
-                console.log("file info ==" + JSON.stringify(params));
                 uploadMsgFileToServer(formData, src, uploadFileForMsg, params);
             } else if(fileType == FileType.FileImage) {
                 getMsgImageSize(src);
@@ -1257,7 +1245,6 @@ function uploadMsgFileToServer(formData, src, type, params)
             }
         },
         error:function(err){
-            console.log("file upload failed");
             alert("发送失败,稍后重试");
             return false;
         }

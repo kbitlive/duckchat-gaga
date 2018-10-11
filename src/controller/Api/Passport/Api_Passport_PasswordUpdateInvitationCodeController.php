@@ -35,7 +35,7 @@ class Api_Passport_PasswordUpdateInvitationCodeController extends BaseController
                 throw new Exception("sitePubkPem  is  not exists");
             }
 
-            if(!$invitationCode || strlen($invitationCode) < 0 ) {
+            if(strlen($invitationCode) < 0 ) {
                 $errorCode = $this->zalyError->errorUpdateInvitation;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
                 $this->setRpcError($errorCode, $errorInfo);
@@ -95,7 +95,6 @@ class Api_Passport_PasswordUpdateInvitationCodeController extends BaseController
             $this->ctx->PassportPasswordPreSessionTable->updatePreSessionData($updatePreSessionWhere, $preSessionInfo);
 
             $this->ctx->BaseTable->db->commit();
-
             return $newPreSessionId;
         }catch (Exception $ex) {
             $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $ex->getMessage());

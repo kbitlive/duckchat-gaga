@@ -21,6 +21,7 @@
 
 <body>
     <!--左列， 以及会话帧-->
+    <div style="background-color: red;height: 5rem;display: none" class="site-warning"></div>
     <?php include(dirname(__DIR__) . '/base/baseView.php'); ?>
     <!-- 右边聊天窗口，包括消息帧 -->
     <div class="layout-right msg-chat-dialog" >
@@ -57,6 +58,7 @@
     $(window).resize(function () {
         setFontSize();
     });
+
     setFontSize();
     function setFontSize()
     {

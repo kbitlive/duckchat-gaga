@@ -15,7 +15,7 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
     private $u2Type = "u";
     private $userRelationAction = "duckChat.user.relation";
     private $limit=30;
-    private $title = "GIF小程序";
+    private $title = "GIF";
     private $roomType="";
     private $toId;
     private $seeType = "see_gif";
@@ -101,13 +101,13 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
                 }
                 unset($gif['userId']);
                 //gifId, gifUrl, width, height, userId
-                $gif['gifUrl'] = "./index.php?action=http.file.downloadGif&gifId=".$gif['gifId'];
+                $gif['gifUrl'] = "./index.php?action=miniProgram.gif.info&gifId=".$gif['gifId'];
                 echo $this->display("miniProgram_gif_info", $gif);
                 return;
             } else {
                 $gifs = $this->ctx->SiteUserGifTable->getGifByUserId($this->userId, 0, $this->limit);
                 foreach ($gifs as $key => $gif) {
-                    $gif['gifUrl'] = "./index.php?action=http.file.downloadGif&gifId=".$gif['gifId'];
+                    $gif['gifUrl'] = "./index.php?action=miniProgram.gif.info&gifId=".$gif['gifId'];
                     $gif['isDefault'] = $gif['userId'] === 0 ?  0 : 1;
                     $gifs[$key] = $gif;
                 }
@@ -148,7 +148,7 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
         }
 
         $gifInfo = $this->ctx->SiteUserGifTable->getGifByGifId($gifId);
-        $gifUrl = "index.php?action=http.file.downloadGif&gifId=".$gifInfo['gifId'];
+        $gifUrl = "index.php?action=miniProgram.gif.info&gifId=".$gifInfo['gifId'];
         $webCode = '<!DOCTYPE html> <html> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><style>body, html{margin:0; padding:0;}</style></head> <body> <img src="'.$gifUrl.'" width="100%" height="100%"> </body> </html>';
 
         $landingPageUrl = "index.php?action=miniProgram.gif.index&type=see_gif&gifId=".$gifInfo['gifId'];

@@ -84,36 +84,6 @@ abstract class Wpf_Controller
         return false;
     }
 
-    public function checkDBVersion()
-    {
-        $configFileName = WPF_LIB_DIR . "/../". $this->configName;
-        $sampleFileName = WPF_LIB_DIR . "/../". $this->sampleConfigName;
-        $configOlder = require($configFileName);
-        $configSampleNew =  require($sampleFileName);
-        $configOlder['dbVersion'] = isset($configOlder['dbVersion'] ) ? $configOlder['dbVersion']  : 0;
-
-        $ctx = new BaseCtx();
-        if(file_exists($configFileName) && ($configOlder['dbVersion'] < $configSampleNew['dbVersion'])) {
-            $configs = array_merge($configSampleNew, $configOlder);
-            $contents = var_export($configs, true);
-            file_put_contents($configFileName, "<?php\n return {$contents};\n ");
-            if (function_exists("opcache_reset")) {
-                opcache_reset();
-            }
-            $upgradeFlag = $ctx->ZalyDB->upgradeDB();
-            if($upgradeFlag == false) {
-                $ctx->getLogger()->error("zaly.db", "upgrade db is failed");
-                return;
-            }
-            $configOlder['dbVersion'] = $configSampleNew['dbVersion'];
-            $contents = var_export($configOlder, true);
-            file_put_contents($configFileName, "<?php\n return {$contents};\n ");
-            if (function_exists("opcache_reset")) {
-                opcache_reset();
-            }
-        }
-    }
-
     public function setCookie($val, $cookieName)
     {
         setcookie($cookieName, $val, time() + $this->sessionIdTimeOut, "/", "", false, true);

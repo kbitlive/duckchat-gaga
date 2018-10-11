@@ -54,8 +54,8 @@ class Api_Group_UpdateController extends Api_Group_BaseController
 
             $updateValues = [];
             $adminUserIds = [];
-            $speakUserIds = [];
             $isMuteValues = [];
+            $writeUpdateAdminType = false;
             foreach ($values as $v) {
                 $updateType = $v->getType();
                 $this->ctx->Wpf_Logger->info($tag, " group profile updateType  =". $updateType);
@@ -92,15 +92,9 @@ class Api_Group_UpdateController extends Api_Group_BaseController
                         $updateValues['descriptionType'] = $description->getType();
                         break;
                     case \Zaly\Proto\Site\ApiGroupUpdateType::ApiGroupUpdateAdmin:
-                        $writeType = $v->getWriteType();
+                        $writeUpdateAdminType = $v->getWriteType();
                         foreach($v->getAdminUserIds() as $userId ) {
-                            $adminUserIds[$writeType][] = $userId;
-                        }
-                        break;
-                    case \Zaly\Proto\Site\ApiGroupUpdateType::ApiGroupUpdateSpeaker:
-                        $writeType  = $v->getWriteType();
-                        foreach($v->getSpeakerUserIds() as $userId ) {
-                            $speakUserIds[$writeType][] = $userId;
+                            $adminUserIds[] = $userId;
                         }
                         break;
                 }
@@ -115,79 +109,49 @@ class Api_Group_UpdateController extends Api_Group_BaseController
                 $this->ctx->SiteGroupUserTable->updateGroupUserInfo($where, $isMuteValues);
             }
 
-            $this->ctx->Wpf_Logger->error($tag, " group profile adminUserIds  =". json_encode($adminUserIds));
-            $this->ctx->Wpf_Logger->error($tag, " group profile speakUserIds  =".json_encode($speakUserIds));
-            $this->ctx->Wpf_Logger->error($tag, " group profile updateValues  =". json_encode($updateValues));
+            $this->ctx->Wpf_Logger->info($tag, " group profile adminUserIds  =". json_encode($adminUserIds));
+            $this->ctx->Wpf_Logger->info($tag, " group profile updateValues  =". json_encode($updateValues));
+            $this->ctx->Wpf_Logger->info($tag, " group profile writeUpdateAdminType  =". $writeUpdateAdminType);
 
-            if(!$adminUserIds && !$speakUserIds && !$updateValues) {
-                return;
-            }
+
             //只有群主管理员可以修改
             $this->isGroupAdmin($groupId);
 
             $groupInfo = $this->getGroupProfile($groupId);
 
-            if(count($adminUserIds)) {
+            if($writeUpdateAdminType !== false) {
                 $this->isGroupOwner($groupId);
-                foreach($adminUserIds as $writeType => $userIds) {
-                    switch ($writeType){
-                        case \Zaly\Proto\Core\DataWriteType::WriteAdd:
-                            $userIds      = $adminUserIds[\Zaly\Proto\Core\DataWriteType::WriteAdd];
-                            $memberType   = \Zaly\Proto\Core\GroupMemberType::GroupMemberAdmin;
-                            $resultUserId = array_diff($userIds, [$groupInfo['owner']]);
-                            $resultUserId = array_values($resultUserId);
-                            $resultUserId = array_unique($resultUserId);
-                            $this->ctx->SiteGroupUserTable->addMemberRole($resultUserId, $groupId, $memberType);
-                            break;
-                        case \Zaly\Proto\Core\DataWriteType::WriteUpdate:
-                            $userIds          = $adminUserIds[\Zaly\Proto\Core\DataWriteType::WriteUpdate];
-                            $resultUserId     = array_diff($userIds, [$groupInfo['owner']]);
-                            $adminMemberType  = \Zaly\Proto\Core\GroupMemberType::GroupMemberAdmin;
-                            $nomalMemberType  = \Zaly\Proto\Core\GroupMemberType::GroupMemberNormal;
-                            $ownerMemberType  = \Zaly\Proto\Core\GroupMemberType::GroupMemberOwner;
-                            $resultUserId     = array_values($resultUserId);
-                            $resultUserId = array_unique($resultUserId);
-                            $this->ctx->SiteGroupUserTable->updateMemberRole($resultUserId, $groupId, $adminMemberType, $nomalMemberType, $ownerMemberType);
-                            break;
-                        case \Zaly\Proto\Core\DataWriteType::WriteDel:
-                            $userIds      = $adminUserIds[\Zaly\Proto\Core\DataWriteType::WriteDel];
-                            $memberType   = \Zaly\Proto\Core\GroupMemberType::GroupMemberNormal;
-                            $resultUserId = array_diff($userIds, [$groupInfo['owner']]);
-                            $resultUserId = array_values($resultUserId);
-                            $resultUserId = array_unique($resultUserId);
+                switch ($writeUpdateAdminType){
+                    case \Zaly\Proto\Core\DataWriteType::WriteUpdate:
+                        $resultUserId     = array_diff($adminUserIds, [$groupInfo['owner']]);
+                        $adminMemberType  = \Zaly\Proto\Core\GroupMemberType::GroupMemberAdmin;
+                        $nomalMemberType  = \Zaly\Proto\Core\GroupMemberType::GroupMemberNormal;
+                        $ownerMemberType  = \Zaly\Proto\Core\GroupMemberType::GroupMemberOwner;
+                        $resultUserId     = array_values($resultUserId);
+                        $resultUserId = array_unique($resultUserId);
+                        $this->ctx->SiteGroupUserTable->updateMemberRole($resultUserId, $groupId, $adminMemberType, $nomalMemberType, $ownerMemberType);
+                        break;
+                    case \Zaly\Proto\Core\DataWriteType::WriteAdd:
+                        $memberType   = \Zaly\Proto\Core\GroupMemberType::GroupMemberAdmin;
+                        $resultUserId = array_diff($adminUserIds, [$groupInfo['owner']]);
+                        $resultUserId = array_values($resultUserId);
+                        $resultUserId = array_unique($resultUserId);
+                        $this->ctx->SiteGroupUserTable->addMemberRole($resultUserId, $groupId, $memberType);
+                        break;
+                    case \Zaly\Proto\Core\DataWriteType::WriteDel:
+                        $memberType   = \Zaly\Proto\Core\GroupMemberType::GroupMemberNormal;
+                        $resultUserId = array_diff($adminUserIds, [$groupInfo['owner']]);
+                        $resultUserId = array_values($resultUserId);
+                        $resultUserId = array_unique($resultUserId);
+                        $this->ctx->SiteGroupUserTable->removeMemberRole($resultUserId, $groupId, $memberType);
+                        break;
+                }
+            }
 
-                            $this->ctx->SiteGroupUserTable->removeMemberRole($resultUserId, $groupId, $memberType);
-                            break;
-                    }
-                }
+            if(!$updateValues) {
+                return;
             }
-            $speakUserIdStr = "";
-            if(count($speakUserIds)) {
-                $speakers = (isset($groupInfo['speakers']) && $groupInfo['speakers'] != "")
-                    ? json_decode($groupInfo['speakers'], true)
-                    : [];
-                foreach($speakUserIds as $writeType => $userIds) {
-                    switch ($writeType){
-                        case \Zaly\Proto\Core\DataWriteType::WriteAdd:
-                            $userIds  = $speakUserIds[\Zaly\Proto\Core\DataWriteType::WriteAdd];
-                            $speakers = array_merge($speakers, $userIds);
-                            $speakers = array_unique($speakers);
-                            $speakUserIdStr = json_encode($speakers);
-                            break;
-                        case \Zaly\Proto\Core\DataWriteType::WriteUpdate:
-                            $userIds = $speakUserIds[\Zaly\Proto\Core\DataWriteType::WriteUpdate];
-                            $speakers = array_unique($speakers);
-                            $speakUserIdStr = json_encode($userIds);
-                            break;
-                        case \Zaly\Proto\Core\DataWriteType::WriteDel:
-                            $userIds = $speakUserIds[\Zaly\Proto\Core\DataWriteType::WriteDel];
-                            $speakers = array_diff($speakers, $userIds);
-                            $speakers = array_unique($speakers);
-                            $speakUserIdStr = json_encode($speakers);
-                            break;
-                    }
-                }
-            }
+
             $where = [
                 "groupId" => $groupId
             ];
@@ -195,10 +159,6 @@ class Api_Group_UpdateController extends Api_Group_BaseController
             if($updateValues) {
                 $updateData = array_merge($updateData, $updateValues);
             }
-            if(strlen($speakUserIdStr)) {
-                $updateData['speakers'] = $speakUserIdStr;
-            }
-            $this->ctx->Wpf_Logger->error($tag, " group profile update values  =". json_encode($updateData));
 
             if(!count($updateData)) {
                 return ;

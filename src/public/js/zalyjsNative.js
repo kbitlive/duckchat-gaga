@@ -1,6 +1,17 @@
-var clientType = "iOS"
+var clientType = "iOS";
 // var callbackIdParamName = "_zalyjsCallbackId"
-var callbackIdParamName = "zalyjsCallbackId"
+var callbackIdParamName = "zalyjsCallbackId";
+
+//set pc web referrer
+//localStorage, prevent page flush, and the referrer is lost
+var refererUrl = document.referrer;
+var refererUrlKey = "documentReferer";
+if(refererUrl.length>0) {
+    localStorage.setItem(refererUrlKey, refererUrl);
+    refererUrlKeyVal = localStorage.getItem(refererUrlKey);
+}
+var zalyjsSiteLoginMessageBody={};
+
 
 function zalyjsCallbackHelperConstruct() {
 
@@ -76,6 +87,15 @@ function jsonToQueryString(json) {
 }
 
 
+function addJsByDynamic(url)
+{
+    var script = document.createElement("script")
+    script.type = "text/javascript";
+    //Firefox, Opera, Chrome, Safari 3+
+    script.src = url;
+    $(".zaly_container")[0].appendChild(script);
+}
+
 //
 //
 // Javascript Bridge Begin
@@ -112,9 +132,56 @@ function zalyjsLoginSuccess(loginName, sessionid, isRegister, callback) {
         window.Android.zalyjsLoginSuccess(messageBody)
     } else if(isIOS()) {
         window.webkit.messageHandlers.zalyjsLoginSuccess.postMessage(messageBody)
+    } else {
+        loginPcClient(messageBody, callback.name);
     }
 }
 
+function zalyjsWebSuccessCallBack(result) {
+    localStorage.clear();
+    window.location.href = result;
+}
+
+////登录pc, 暂时没有使用callbackId,
+function loginPcClient(messageBody, callbackName)
+{
+    messageBody = JSON.parse(messageBody);
+    var refererUrl = localStorage.getItem(refererUrlKey);
+    zalyjsSiteLoginMessageBody = messageBody;
+    zalyjsSiteLoginMessageBody.refererUrl = refererUrl;
+    zalyjsSiteLoginMessageBody.callbackName = callbackName;
+
+    if(messageBody.isRegister == false)  {
+        var jsUrl = "./index.php?action=page.js&loginName="+messageBody.loginName+"&success_callback=zalyjsWebLoginSuccess&fail_callback="+callbackName;
+        addJsByDynamic(jsUrl);
+        return;
+    }
+    zalyjsWebLoginSuccess();
+}
+
+////登录成功后，web回调
+function zalyjsWebLoginSuccess()
+{
+    var refererUrl = zalyjsSiteLoginMessageBody.refererUrl;
+    if(refererUrl) {
+        if(refererUrl.indexOf("?") > -1) {
+            var refererUrl = zalyjsSiteLoginMessageBody.refererUrl+"&preSessionId="+zalyjsSiteLoginMessageBody.sessionid+"&isRegister="+zalyjsSiteLoginMessageBody.isRegister;
+        } else {
+            var refererUrl = zalyjsSiteLoginMessageBody.refererUrl+"?preSessionId="+zalyjsSiteLoginMessageBody.sessionid+"&isRegister="+zalyjsSiteLoginMessageBody.isRegister;
+        }
+        refererUrl = refererUrl + " &fail_callback="+zalyjsSiteLoginMessageBody.callbackName+"&&success_callback=zalyjsWebSuccessCallBack";
+        addJsByDynamic(refererUrl);
+    }
+}
+
+//web 检查用户是否已经被注册
+function zalyjsWebCheckUserExists(failedCallback, successCallback)
+{
+    var jsUrl = "./index.php?action=page.js&loginName="+registerLoginName+"&success_callback="+successCallback.name+"&fail_callback="+failedCallback.name;
+    addJsByDynamic(jsUrl);
+}
+
+//android, ios, pc
 function zalyjsLoginConfig(callback) {
     var callbackId = zalyjsCallbackHelper.register(callback)
 
@@ -126,6 +193,9 @@ function zalyjsLoginConfig(callback) {
         window.Android.zalyjsLoginConfig(messageBody)
     } else if(isIOS()) {
         window.webkit.messageHandlers.zalyjsLoginConfig.postMessage(messageBody)
+    } else {
+        var siteConfigJsUrl = "./index.php?action=page.siteConfig&callback="+callback.name;
+        addJsByDynamic(siteConfigJsUrl);
     }
 }
 
@@ -137,8 +207,6 @@ function zalyjsNavClosePlugin()
         window.webkit.messageHandlers.zalyjsNavClosePlugin()
     }
 }
-
-
 
 function zalyjsAlert(str)
 {

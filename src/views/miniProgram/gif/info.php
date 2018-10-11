@@ -70,11 +70,11 @@
         <img id="gifInfo" src='{{gifUrl}}' class='gif' gifId='{{gifId}}'>
         {{if isDefault == "0" }}
         <div class="gif_div_button">
-            <button class="save_gif save_button" gifId='{{gifId}}'>收藏</button>
+            <button class="save_gif save_button " gifId='{{gifId}}'>收藏</button>
         </div>
         {{ else }}
         <div class="gif_div_button">
-            <button class="save_gif save_button" gifId='{{gifId}}' disabled>已收藏</button>
+            <button class="save_button" gifId='{{gifId}}' disabled>已收藏</button>
         </div>
         {{/if}}
     </div>
@@ -123,23 +123,25 @@
     {
         var image = new Image();
         image.src = src;
-        var imageNaturalWidth  = image.naturalWidth;
-        var imageNaturalHeight = image.naturalHeight;
-
-        if (imageNaturalWidth < w && imageNaturalHeight<h) {
-            imgObject.width  = imageNaturalWidth == 0 ? w : imageNaturalWidth;
-            imgObject.height = imageNaturalHeight == 0 ? h : imageNaturalHeight;
-        } else {
-            if (w / h <= imageNaturalWidth/ imageNaturalHeight) {
-                imgObject.width  = w;
-                imgObject.height = w* (imageNaturalHeight / imageNaturalWidth);
+        image.onload = function (ev) {
+            var imageNaturalWidth  = image.naturalWidth;
+            var imageNaturalHeight = image.naturalHeight;
+            if (imageNaturalWidth < w && imageNaturalHeight<h) {
+                imgObject.width  = imageNaturalWidth == 0 ? w : imageNaturalWidth;
+                imgObject.height = imageNaturalHeight == 0 ? h : imageNaturalHeight;
             } else {
-                imgObject.width  = h * (imageNaturalWidth / imageNaturalHeight);
-                imgObject.height = h;
+                if (w / h <= imageNaturalWidth/ imageNaturalHeight) {
+                    imgObject.width  = w;
+                    imgObject.height = w* (imageNaturalHeight / imageNaturalWidth);
+                } else {
+                    imgObject.width  = h * (imageNaturalWidth / imageNaturalHeight);
+                    imgObject.height = h;
+                }
             }
+            $("#gifInfo")[0].style.width =  imgObject.width+"px";
+            $("#gifInfo")[0].style.height =  imgObject.height+"px";
         }
-        $("#gifInfo")[0].style.width =  imgObject.width+"px";
-        $("#gifInfo")[0].style.height =  imgObject.height+"px";
+
     }
 
     function isMobile() {
@@ -161,7 +163,6 @@
 
     function sendPostToServer(reqData)
     {
-        console.log("save gif =======" + JSON.stringify(reqData));
         $.ajax({
             method: "POST",
             url:"./index.php?action=miniProgram.gif.index&type="+saveGifType+"&lang="+languageNum,
@@ -172,7 +173,7 @@
                     zalyjsAlert(data.errorInfo);
                     return false;
                 }
-                window.close();
+                $(".save_gif").html("已收藏");
             }
         });
     }

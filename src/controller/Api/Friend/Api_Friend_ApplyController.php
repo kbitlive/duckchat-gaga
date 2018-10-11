@@ -42,27 +42,44 @@ class  Api_Friend_ApplyController extends BaseController
             $greetings = $request->getGreetings();
 
             //check site allow addfriend
-
             $this->checkSiteAddFriendConfig($this->userId);
 
             //check is friend before is friend,with exception
-            $this->checkIsFriend($toUserId);
+            $fromRelation = $this->getIsFollow($this->userId, $toUserId);
+            $toRelation = $this->getIsFollow($toUserId, $this->userId);
 
-            //save data
-            $this->addApplyData($toUserId, $greetings);
+            if ($fromRelation == 1 && $toRelation == 1) {
+                $errorCode = $this->zalyError->errorFriendApplyFriendExists;
+                $errorInfo = $this->zalyError->getErrorInfo($errorCode);
+                $this->setRpcError($errorCode, $errorInfo);
+                throw new Exception($errorInfo);
+            } elseif ($toRelation == 1 && empty($fromRelation)) {
 
-            $this->setRpcError($this->defaultErrorCode, "");
-            $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
+                if ($this->becomeFriendAsFollowed($this->userId, $toUserId)) {
+                    $errorCode = $this->zalyError->errorFriendIs;
+                    $this->setRpcError($errorCode, "");
+                    $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
+                } else {
+                    throw new Exception("apply friend error");
+                }
+            } else {
+                //save data
+                $this->addApplyData($toUserId, $greetings);
 
-            $this->finish_request();
+                $this->setRpcError($this->defaultErrorCode, "");
+                $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
 
-            //代发消息 && push
-            $this->ctx->Message_Client->proxyNewFriendApplyMessage($toUserId, $this->userId, $toUserId);
+                $this->finish_request();
+
+                //代发消息 && push
+                $this->ctx->Message_Client->proxyNewFriendApplyMessage($toUserId, $this->userId, $toUserId);
+            }
         } catch (Exception $ex) {
             $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $ex->getMessage());
             $this->setRpcError("error.alert", $ex->getMessage());
             $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
         }
+        return;
     }
 
     private function checkSiteAddFriendConfig($userId)
@@ -79,15 +96,10 @@ class  Api_Friend_ApplyController extends BaseController
         }
     }
 
-    private function checkIsFriend($toUserId)
+
+    private function getIsFollow($fromUserId, $toUserId)
     {
-        $isFriend = $this->ctx->SiteUserFriendTable->isFriend($this->userId, $toUserId);
-        if ($isFriend) {
-            $errorCode = $this->zalyError->errorFriendApplyFriendExists;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            $this->setRpcError($errorCode, $errorInfo);
-            throw new Exception($errorInfo);
-        }
+        return $this->ctx->SiteUserFriendTable->isFollow($fromUserId, $toUserId);
     }
 
     /**
@@ -127,5 +139,26 @@ class  Api_Friend_ApplyController extends BaseController
             $this->ctx->SiteFriendApplyTable->updateApplyData($where, $data);
         }
     }
+
+    /**
+     *
+     * $fromUserId --(follow)---> $toUserId
+     *
+     * $toUserId already follow $fromUserId
+     *
+     * @param $fromUserId
+     * @param $toUserId
+     * @return bool
+     */
+    private function becomeFriendAsFollowed($fromUserId, $toUserId)
+    {
+        $result = $this->ctx->SiteUserFriendTable->saveUserFriend($fromUserId, $toUserId);
+        if ($result) {
+            //更新 version
+            $this->ctx->SiteUserTable->updateNextFriendVersion($fromUserId);
+        }
+        return $result;
+    }
+
 }
 
