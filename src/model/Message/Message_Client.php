@@ -456,11 +456,9 @@ class Message_Client
             if ($title) {
                 $webNotice->setTitle($title);
             }
-            if (!empty($code)) {
-                $webNotice->setCode($code);
-            } else {
-                $webNotice->setHrefURL($hrefUrl);
-            }
+
+            $webNotice->setCode($code);
+//            $webNotice->setHrefURL($hrefUrl);
             $webNotice->setHeight($height);
 
             $message = new Zaly\Proto\Core\Message();
