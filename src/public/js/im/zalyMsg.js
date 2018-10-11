@@ -100,16 +100,10 @@ function removeRoomFromRoomList(chatSessionId)
     return roomList;
 }
 
-function appendOrInsertRoomList(msg, isInsert, showNotification)
+function getMsgContentForChatSession(msg)
 {
-    if(msg != undefined && msg.hasOwnProperty("type") && msg.type == MessageStatus.MessageEventSyncEnd) {
-        return ;
-    }
-    var unReadNum = localStorage.getItem(roomMsgUnReadNum + msg.chatSessionId) ? localStorage.getItem(roomMsgUnReadNum + msg.chatSessionId): 0;
-    unReadNum  = unReadNum > 99 ? "99+" : unReadNum;
-    var name   =  msg.roomType == GROUP_MSG ? msg.name : msg.nickname;
-    var msgType = msg.msgType != undefined ? msg.msgType : msg.type;
     var msgContent;
+    var msgType = msg.msgType != undefined ? msg.msgType : msg.type;
 
     switch (msgType) {
         case MessageType.MessageText:
@@ -142,10 +136,47 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
         default:
             msgContent = "[暂不支持此类型消息]";
     }
+    return msgContent;
+}
+
+function updateRoomChatSessionContentFoMsg(msg, nodes, msgContent) {
+    var msgTime = msg.msgTime != undefined ? msg.msgTime : msg.timeServer;
+    msgTime = getRoomMsgTime(msgTime);
+    var childrens = $(nodes)[0].children;
+    var unReadNum = getRoomMsgUnreadNum(msg.chatSessionId);
+    var isMuteNum = localStorage.getItem(msgUnReadMuteKey+msg.chatSessionId);
+    var isMute = localStorage.getItem(msgMuteKey+msg.chatSessionId);
+    if(isMuteNum == 1 && isMute == 1) {
+        $(".room-chatsession-unread_"+msg.chatSessionId)[0].style.display = "none";
+        $(".room-chatsession-mute-num_"+msg.chatSessionId)[0].style.display = "block";
+    } else {
+        if(unReadNum>0 && (msg.chatSessionId != localStorage.getItem(chatSessionIdKey))) {
+            $(".room-chatsession-unread_"+msg.chatSessionId).html(unReadNum);
+            $(".room-chatsession-unread_"+msg.chatSessionId)[0].style.display = "block";
+            $(".room-chatsession-mute-num_"+msg.chatSessionId)[0].style.display = "none";
+        }
+    }
+    if(msgContent != undefined && msgContent.length>0) {
+        $(childrens[2]).html(msgContent);
+    }
+
+    var subChildrens = $(childrens[1])[0].children;
+    $(subChildrens[1]).html(msgTime);
+}
+
+function appendOrInsertRoomList(msg, isInsert, showNotification)
+{
+    if(msg != undefined && msg.hasOwnProperty("type") && msg.type == MessageStatus.MessageEventSyncEnd) {
+        return ;
+    }
+    var unReadNum = localStorage.getItem(roomMsgUnReadNum + msg.chatSessionId) ? localStorage.getItem(roomMsgUnReadNum + msg.chatSessionId): 0;
+    unReadNum  = unReadNum > 99 ? "99+" : unReadNum;
+    var name   =  msg.roomType == GROUP_MSG ? msg.name : msg.nickname;
 
     var nodes = $(".chat_session_id_" + msg.chatSessionId);
     var msgTime = msg.msgTime != undefined ? msg.msgTime : msg.timeServer;
     msgTime = getRoomMsgTime(msgTime);
+    var msgContent = getMsgContentForChatSession(msg);
 
     if(isInsert) {
         handleRoomListFromLocalStorage(msg);
@@ -153,26 +184,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
 
     if(nodes.length) {
         if($(nodes).attr("msg_time") < msg.timeServer) {
-            var childrens = $(nodes)[0].children;
-            var unReadNum = getRoomMsgUnreadNum(msg.chatSessionId);
-            var isMuteNum = localStorage.getItem(msgUnReadMuteKey+msg.chatSessionId);
-            var isMute = localStorage.getItem(msgMuteKey+msg.chatSessionId);
-            if(isMuteNum == 1 && isMute == 1) {
-                $(".room-chatsession-unread_"+msg.chatSessionId)[0].style.display = "none";
-                $(".room-chatsession-mute-num_"+msg.chatSessionId)[0].style.display = "block";
-            } else {
-                 if(unReadNum>0 && (msg.chatSessionId != localStorage.getItem(chatSessionIdKey))) {
-                    $(".room-chatsession-unread_"+msg.chatSessionId).html(unReadNum);
-                    $(".room-chatsession-unread_"+msg.chatSessionId)[0].style.display = "block";
-                    $(".room-chatsession-mute-num_"+msg.chatSessionId)[0].style.display = "none";
-                }
-            }
-            if(msgContent != undefined && msgContent.length>0) {
-                $(childrens[2]).html(msgContent);
-            }
-
-            var subChildrens = $(childrens[1])[0].children;
-            $(subChildrens[1]).html(msgTime);
+            updateRoomChatSessionContentFoMsg(msg, nodes, msgContent);
             sortRoomList($(nodes));
         }
         if(msg.chatSessionId == localStorage.getItem(chatSessionIdKey)) {
@@ -218,6 +230,22 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
     }
     if(msg.fromUserId != token && showNotification) {
         showWebNotification(msg, msgContent);
+    }
+}
+////防止两个浏览器开着，点击的时候消息列表的内容不是最新的
+function updateRoomChatSessionContent(chatSessionId)
+{
+    var nodes = $(".chat_session_id_" + chatSessionId);
+    var roomList = handleRoomListFromLocalStorage();
+    var length = roomList.length;
+    var i;
+    for(i =0; i<length;  i++) {
+        var msg = roomList[i];
+        if(msg.chatSessionId == chatSessionId) {
+            msg = handleMsgInfo(msg);
+            var msgContent = getMsgContentForChatSession(msg);
+            updateRoomChatSessionContentFoMsg(msg, nodes, msgContent);
+        }
     }
 }
 
