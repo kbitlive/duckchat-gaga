@@ -56,9 +56,10 @@
 
 
                         <div class="item-body-tail">
-                            <div class="item-body-value" id="site-logo-fileid" fileId="<?php echo $logo ?>">
+                            <div class="item-body-value" id="site-logo-fileid">
                                 <img class="site-logo-image" onclick="uploadFile('upload-site-logo')"
-                                     src="../../public/img/manage/site_default.png">
+                                     src="/_api_file_download_/?fileId=<?php echo $logo ?>"
+                                     onerror="src='../../public/img/manage/site_default.png'">
 
                                 <input id="upload-site-logo" type="file" onchange="uploadImageFile(this)"
                                        accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
@@ -756,41 +757,11 @@
         var res = JSON.parse(result);
 
         if (res.errCode) {
-
             var fileId = data.value;
-            console.log("updateLogoResponse imageId fileId==" + fileId);
-
-            showSiteLogo(fileId);
+            // showSiteLogo(fileId);
         } else {
             alert("errorInfo:" + res.errInfo);
         }
-    }
-
-    downloadFileUrl = "./index.php?action=http.file.downloadFile";
-
-
-    function showSiteLogo(fileId) {
-
-        var requestUrl = "./_api_file_download_/test?fileId=" + fileId;
-
-
-        if (!isMobile()) {
-            requestUrl = downloadFileUrl + "&fileId=" + fileId + "&returnBase64=0";
-        }
-
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && (this.status == 200 || this.status == 304)) {
-                var blob = this.response;
-                var src = window.URL.createObjectURL(blob);
-                console.log("showSiteLogo imageId response src=" + src);
-                $(".site-logo-image").attr("src", src);
-            }
-        };
-        xhttp.open("GET", requestUrl, true);
-        xhttp.responseType = "blob";
-        // xhttp.setRequestHeader('Cache-Control', "max-age=2592000, public");
-        xhttp.send();
     }
 
     function showWindow(jqElement) {
@@ -827,11 +798,6 @@
         }
     });
 
-
-    $(function () {
-        var fileId = $("#site-logo-fileid").attr("fileId");
-        showSiteLogo(fileId)
-    });
 
     function updateDataValue() {
 
