@@ -15,6 +15,8 @@
     <script src="../../public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
 
+    <link class="icon" rel="icon" href="http://127.0.0.1/favicon.ico" type="image/vnd.microsoft.icon" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 </head>
@@ -55,6 +57,21 @@
 
 <script type="text/javascript">
 
+    iconNum = 0;
+    // setInterval(function () {
+    //     if(Number(iconNum%2) == 0) {
+    //         console.log("iconNum ======="+iconNum);
+    //
+    //         $(".icon").attr("href", "http://127.0.0.1/favicon.ico");
+    //         $(".icon").attr("type", "image/vnd.microsoft.icon");
+    //     } else {
+    //         $(".icon").attr("href", "http://127.0.0.1/tenor.gif");
+    //         $(".icon").attr("type", "image/gif");
+    //     }
+    //     iconNum = Number(iconNum+1);
+    // }, 500);
+
+
     $(window).resize(function () {
         setFontSize();
     });
@@ -89,6 +106,7 @@
     window.addEventListener('popstate', function () {
         history.pushState(null, null, document.URL);
     });
+
 
     jQuery.i18n.properties({
         name: "lang",

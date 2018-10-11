@@ -462,9 +462,6 @@
 
         <div style="text-align: center;margin:0 auto;width: 34rem; height:1px;background:rgba(223,223,223,1);" ></div>
         <div class="d-flex flex-row justify-content-center">
-<!--            <div class="self-qrcode" id="self-qrcode" style="margin-top: 1rem;" >-->
-<!--                <span class="self-qrcode" data-local-value="friendQrcodeTip" onclick="getSelfQrcode()">二维码</span>-->
-<!--            </div>-->
             <div class="self-qrcode" id="logout" >
                 <span class="logout-span" id="logout-span" data-local-value="logoutTip" onclick="logout(event)">退出</span>
             </div>
@@ -504,7 +501,7 @@
             <img class="useravatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png" />
         </div>
         <div class="pw-contact-row-name">{{nickname}}</div>
-            {{if isType == "member" && isAdmin == true}}
+            {{if isMemberType == "member" && isSelfAdminRole == true}}
                 {{if isSpeaker == true}}
                 <div class="pw-contact-row-btn speaker_remove_people" >
                     <button class="remove_speaker_btn" userId="{{userId}}"  nickname="{{nickname}}" avatar="{{avatar}}" data-local-value="cancelTip">取消</button>

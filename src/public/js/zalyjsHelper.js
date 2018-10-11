@@ -51,3 +51,11 @@ function getLanguageName() {
 
 languageName = getLanguageName();
 languageNum = getLanguage();
+
+//点击触发一个对象的点击
+function uploadFile(obj)
+{
+    $("#"+obj).val("");
+    $("#"+obj).click();
+}
+
