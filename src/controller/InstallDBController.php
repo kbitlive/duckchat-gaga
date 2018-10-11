@@ -207,8 +207,6 @@ class InstallDBController
             //防止自己配置nginx的时候，多写一个/
             $doucmentRoot = isset($_SERVER['DOCUMENT_ROOT']) ? str_replace("//", "/", $_SERVER['DOCUMENT_ROOT']) : "";
             $scriptRoot = isset($_SERVER['SCRIPT_FILENAME']) ? str_replace("//", "/",  $_SERVER['SCRIPT_FILENAME']) : "";
-
-
             $isInstallRootPath = true;
 
             if(!$doucmentRoot || !$scriptRoot) {
