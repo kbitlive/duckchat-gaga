@@ -204,16 +204,21 @@ class InstallDBController
             $testCurlUrl = $sampleFile['test_curl'];
             $testCurlUrl = ZalyHelper::getFullReqUrl($testCurlUrl);
             $curlResult  = $this->curl->request($testCurlUrl, 'get');
+            //防止自己配置nginx的时候，多写一个/
             $doucmentRoot = isset($_SERVER['DOCUMENT_ROOT']) ? str_replace("//", "/", $_SERVER['DOCUMENT_ROOT']) : "";
             $scriptRoot = isset($_SERVER['SCRIPT_FILENAME']) ? str_replace("//", "/",  $_SERVER['SCRIPT_FILENAME']) : "";
+
+
             $isInstallRootPath = true;
 
             if(!$doucmentRoot || !$scriptRoot) {
                 $isInstallRootPath = false;
             }
-            if($doucmentRoot."/index.php" != $scriptRoot) {
+
+            if($doucmentRoot.DIRECTORY_SEPARATOR."index.php" != $scriptRoot) {
                 $isInstallRootPath = false;
             }
+
             if($isInstallRootPath === false) {
                 echo $this->lang == 1 ? "目前只支持根目录运行" : "Currently only the root directory is supported.";
                 return;
