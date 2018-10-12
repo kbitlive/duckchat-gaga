@@ -950,7 +950,6 @@ function base64ToBlob(base64, mime)
     return new Blob(byteArrays, {type: mime});
 }
 
-
 //replace \n from html
 function trimMsgContentBr(html)
 {

@@ -959,18 +959,40 @@ html, body{
     line-height:2.08rem;
 }
 
-.text-align-left {
+.text-align-left,
+.text-align-right{
     text-align: left;
     position:relative;
     word-break: break-all;
 }
-.text-align-left pre,
-.text-align-right pre{
+
+.text-align-left-text pre,
+.text-align-right-text pre{
     margin:0px;
     padding:0px;
     display: inline;
     white-space: pre-wrap;
 }
+
+.text-align-left-text pre a,
+.text-align-left-text pre a:hover,
+.text-align-left-text pre a:visited {
+    font-size:1.31rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    /*color:rgba(255,255,255,1);*/
+    color: #FFAF5D;
+}
+
+.text-align-right-text pre a,
+.text-align-right-text pre a:hover,
+.text-align-right-text pre a:visited {
+    font-size:1.31rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(48,165,255,1);
+}
+
 
 .text-align-right {
     text-align: right;
