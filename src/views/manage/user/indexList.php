@@ -20,6 +20,10 @@
             line-height: 20px;
             margin: 17px 0px 7px 10px;
         }
+
+        #search-user-div {
+            text-align: center;
+        }
     </style>
 
 </head>
@@ -30,7 +34,13 @@
 
     <div class="item-search">
         <img class="search-img" width="19px" height="19px" src="../../public/img/manage/search.png">
-        <input class="search-input" placeholder="通过昵称、登录名、手机号搜索成员">
+
+        <?php if ($lang == "1") { ?>
+            <input class="search-input" placeholder="通过登录名、昵称、用户ID 搜索用户">
+        <?php } else { ?>
+            <input class="search-input" placeholder="search loginName,nickname,userId">
+        <?php } ?>
+
     </div>
 
     <div class="layout-all-row" id="search-content" style="display: none">
@@ -38,51 +48,17 @@
 
             <div id="search-title" class="item-row-title">
                 <?php if ($lang == "1") { ?>
-                    群组搜索结果
+                    用户搜索结果
                 <?php } else { ?>
                     Search Groups
                 <?php } ?>
 
             </div>
 
-            <div class="item-row group-list">
-                <div class="item-body" onclick="showGroupProfile('<?php echo($profile["groupId"]) ?>');">
-                    <div class="item-body-display">
-                        <div class="item-body-desc">
-                            <?php echo $profile["name"]; ?>
-                        </div>
 
-                        <div class="item-body-tail">
-                            <div class="item-body-value">
-                                <img class="more-img"
-                                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
-                            </div>
-                        </div>
-                    </div>
+            <div id="search-user-div">
 
-                </div>
             </div>
-            <div class="division-line"></div>
-
-            <div class="item-row group-list">
-                <div class="item-body" onclick="showGroupProfile('<?php echo($profile["groupId"]) ?>');">
-                    <div class="item-body-display">
-                        <div class="item-body-desc">
-                            <?php echo $profile["name"]; ?>
-                        </div>
-
-                        <div class="item-body-tail">
-                            <div class="item-body-value">
-                                <img class="more-img"
-                                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
         </div>
     </div>
 
@@ -99,7 +75,6 @@
                     <?php } ?>
                     (<?php echo $totalUserCount ?>)
                 </div>
-
             </div>
 
             <?php foreach ($userList as $key => $profile) { ?>
@@ -168,8 +143,54 @@
     });
 
     function searchUsers(searchValue) {
-        alert(searchValue);
         $("#search-content").show();
+
+        var url = "./index.php?action=manage.user.search&lang=" + getLanguage();
+        var data = {
+            "searchValue": searchValue
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, searchUsersResponse);
+    }
+
+    function searchUsersResponse(url, data, result) {
+
+        $("#search-user-div").html("");
+
+        if (result) {
+
+            var res = JSON.parse(result);
+
+            if (res.errCode == "success") {
+
+                var userList = res['users'];
+
+                $.each(userList, function (index, user) {
+
+                    var html = '<div class="item-row">'
+                        + '<div class="item-body" onclick="showUserProfile(\'' + user["userId"] + '\');">'
+                        + '<div class="item-body-display">'
+                        + '<div class="item-body-desc">' + user["nickname"] + '</div>'
+
+                        + '<div class="item-body-tail">'
+                        + '<img class="more-img" src="../../public/img/manage/more.png"/>'
+                        + '</div>'
+                        + '</div>'
+
+                        + '</div>'
+                        + '</div>'
+                        + '<div class="division-line"></div>';
+                    $("#search-user-div").append(html);
+                });
+
+            } else {
+                var html = "";
+                $("#search-user-div").append("没有找到结果");
+            }
+
+        } else {
+            $("#search-user-div").append("没有找到结果");
+        }
     }
 
     function showUserProfile(userId) {

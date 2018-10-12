@@ -117,6 +117,20 @@ class SiteGroupTable extends BaseTable
         return null;
     }
 
+    public function getGroupProfileByNameInLatin($nameInLatin)
+    {
+        $tag = __CLASS__ . "-" . __FUNCTION__;
+        $startTime = microtime(true);
+        $sql = "select $this->selectColumns from $this->table where nameInLatin like :nameInLatin limit 20";
+        $prepare = $this->dbSlave->prepare($sql);
+        $this->handlePrepareError($tag, $prepare);
+        $prepare->bindValue(":nameInLatin", "%" . $nameInLatin . "%");
+        $prepare->execute();
+        $result = $prepare->fetchAll(\PDO::FETCH_ASSOC);
+        $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, $nameInLatin, $startTime);
+        return $result;
+    }
+
     public function getGroupName($groupId)
     {
         $tag = __CLASS__ . "-" . __FUNCTION__;
