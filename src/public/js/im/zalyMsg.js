@@ -827,15 +827,6 @@ function getWebMessageSize(imageNaturalHeight, imageNaturalWidth, h, w)
     return webObject;
 }
 
-//replace \n from html
-function trimMsgContentBr(html)
-{
-    html = html.replace(new RegExp('\n','g'),"<br>");
-    html = html.replace(new RegExp('^\\<br>+', 'g'), '');
-    html = html.replace(new RegExp('\\<br>+$', 'g'), '');
-    return html;
-}
-
 function getMsgImgSrc(msg, msgId)
 {
     if(msg.hasOwnProperty("image")) {
@@ -959,18 +950,33 @@ function base64ToBlob(base64, mime)
     return new Blob(byteArrays, {type: mime});
 }
 
+
+//replace \n from html
+function trimMsgContentBr(html)
+{
+    html = html.replace(new RegExp('\n','g'),"<br>");
+    html = html.replace(new RegExp('^\\<br>+', 'g'), '');
+    html = html.replace(new RegExp('\\<br>+$', 'g'), '');
+    html = html.replace(new RegExp('&#38;','g'),"&");
+    return html;
+}
+
 function handleMsgContentText(str)
 {
-    var reg=/((http|ftp|https):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
+    str = trimMsgContentBr(str);
+    var reg=/(blob:)?((http|ftp|https):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
     var arr = str.match(reg);
-    console.log("reg ===" + JSON.stringify(arr));
-
     if(arr == null) {
         return str;
     }
-    var urlLink = arr.shift();
-    var urlLinkHtml = "<a href='"+urlLink+"'>"+urlLink+"</a>";
-    str = str.replace(urlLink, urlLinkHtml);
+    var length = arr.length;
+    for(var i=0; i<length;i++) {
+        var urlLink = arr[i];
+        if(urlLink.indexOf("blob:") == -1) {
+            var urlLinkHtml = "<a href='"+urlLink+"'target='_blank'>"+urlLink+"</a>";
+            str = str.replace(urlLink, urlLinkHtml);
+        }
+    }
     return str;
 }
 
@@ -1001,7 +1007,6 @@ function appendMsgHtmlToChatDialog(msg)
         switch(msgType) {
             case MessageType.MessageText :
                 var msgContent = msg['text'].body;
-                msgContent = handleMsgContentText(msgContent);
                 html = template("tpl-send-msg-text", {
                     roomType: msg.roomType,
                     nickname:nickname,
@@ -1223,7 +1228,7 @@ function appendMsgHtmlToChatDialog(msg)
     }
 
     if(msgType == MessageType.MessageText) {
-        html = trimMsgContentBr(html);
+        html = handleMsgContentText(html);
     }
     // html = "请前往客户端查看web消息";
     $(".right-chatbox").append(html);
