@@ -153,6 +153,22 @@ class SiteGroupTable extends BaseTable
         return null;
     }
 
+    public function getSiteGroupCount()
+    {
+        $tag = __CLASS__ . "-" . __FUNCTION__;
+        try {
+            $startTime = microtime(true);
+            $sql = "select count(groupId) from  siteGroup;";
+            $prepare = $this->dbSlave->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->execute();
+            $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, [], $startTime);
+            return $prepare->fetchColumn(0);
+        } catch (Exception $ex) {
+            $this->ctx->Wpf_Logger->error($tag, "error_msg = " . $ex->getMessage());
+        }
+    }
+
     /**
      * user的群总数
      * @param $userId

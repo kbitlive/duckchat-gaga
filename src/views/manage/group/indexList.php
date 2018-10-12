@@ -25,6 +25,7 @@
             text-align: center;
         }
     </style>
+
 </head>
 
 <body>

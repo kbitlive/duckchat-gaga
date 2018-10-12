@@ -25,11 +25,25 @@ class Manage_GroupController extends Manage_CommonController
             $length = 500;
         }
 
+        // totalGroupCount
+        $params['totalGroupCount'] = $this->getTotalGroupCount();
+
         $params['groupList'] = $this->getGroupListByOffset($offset, $length);
 
         echo $this->display("manage_group_indexList", $params);
 
         return;
+    }
+
+    private function getTotalGroupCount()
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        try {
+            return $this->ctx->SiteGroupTable->getSiteGroupCount();
+        } catch (Exception $e) {
+            $this->logger->error($tag, $e);
+        }
+        return 0;
     }
 
     private function getGroupListByOffset($offset, $length)
