@@ -93,8 +93,10 @@ class Site_Login
 
             ///获取数据
             $key = $response->getKey();
+
             $aesData = $response->getEncryptedProfile();
             $randomKey = $this->ctx->ZalyRsa->decrypt($key, $sitePrikPem);
+
             $serialize = $this->ctx->ZalyAes->decrypt($aesData, $randomKey);
 
             //获取LoginUserProfile

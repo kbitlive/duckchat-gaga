@@ -454,7 +454,8 @@ function handleSyncMsg(msg)
     } else if(msg.chatSessionId != currentChatSessionId && isNewMsg) {
         if(msg.chatSessionId != token) {
             setRoomMsgUnreadNum(msg.chatSessionId);
-            setDocumentTitle("new_msg");
+            localStorage.setItem(newSiteTipKey, "new_msg");
+            setDocumentTitle();
         }
     }
     appendOrInsertRoomList(msg, true, true);
@@ -641,7 +642,8 @@ function clearRoomUnreadMsgNum(chatSessionId)
         $(".room-chatsession-unread_"+chatSessionId)[0].style.display = "none";
         $(".room-chatsession-mute-num_"+chatSessionId+"")[0].style.display = "none";
     }
-    setDocumentTitle("clear");
+    localStorage.setItem(newSiteTipKey, "clear");
+    setDocumentTitle();
 }
 
 function compare(msg1, msg2) {

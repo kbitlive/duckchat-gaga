@@ -93,7 +93,8 @@ function displayRoomListMsgUnReadNum()
             if(unReadAllNum>99) {
                 unReadAllNum = "99+";
             }
-            setDocumentTitle("new_msg");
+            localStorage.setItem(newSiteTipKey, "new_msg");
+            setDocumentTitle();
             $(".room-list-msg-unread")[0].style.display = 'block';
             $(".room-list-msg-unread").html(unReadAllNum);
         } else {
@@ -101,7 +102,8 @@ function displayRoomListMsgUnReadNum()
             if(mute >= 1) {
                 $(".unread-num-mute")[0].style.display = "block";
             } else {
-                setDocumentTitle("clear");
+                localStorage.setItem(newSiteTipKey, "clear");
+                setDocumentTitle();
                 $(".room-list-msg-unread")[0].style.display = 'none';
             }
         }
@@ -118,7 +120,8 @@ function displayRoomListMsgUnReadNum()
     var friendListNum = localStorage.getItem(applyFriendListNumKey);
 
     if(friendListNum > 0 && friendListNum != undefined && data != "friend" ) {
-        setDocumentTitle("add_friend");
+        localStorage.setItem(newSiteTipKey, "add_friend");
+        setDocumentTitle();
         $(".apply_friend_list_num")[0].style.display = "block";
     } else {
         $(".apply_friend_list_num")[0].style.display = "none";
@@ -386,19 +389,24 @@ function downloadImgFormQrcode(idName)
 
 //--------------------------------------set document tile---------------------------------------------
 
-function setDocumentTitle(type)
+function setDocumentTitle()
 {
-    switch (type){
-        case "new_msg" :
-            document.title = " 有新消息,请及时查看！" + DefaultTitle ;
-        break;
-        case "add_friend":
-            document.title = " 有好友请求,请及时查看！" + document.title;
-            break;
-        case "clear" :
-            document.title = DefaultTitle;
-            break;
-    }
+    iconNum = 0;
+    intervalId = setInterval(function () {
+        var siteTip = localStorage.getItem(newSiteTipKey);
+        if(siteTip == "clear") {
+            $(".icon").attr("href", "favicon.ico");
+            iconNum = 0;
+            clearInterval(intervalId);
+        } else {
+            if(Number(iconNum%2) == 0) {
+                $(".icon").attr("href", "favicon.ico");
+            } else {
+                $(".icon").attr("href", "tip.png");
+            }
+            iconNum = Number(iconNum+1);
+        }
+    }, 500);
 }
 
 //--------------------------------------logout----------------------------------------------
