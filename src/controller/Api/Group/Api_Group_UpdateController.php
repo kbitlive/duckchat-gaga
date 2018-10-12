@@ -113,10 +113,6 @@ class Api_Group_UpdateController extends Api_Group_BaseController
             $this->ctx->Wpf_Logger->info($tag, " group profile updateValues  =". json_encode($updateValues));
             $this->ctx->Wpf_Logger->info($tag, " group profile writeUpdateAdminType  =". $writeUpdateAdminType);
 
-
-            //只有群主管理员可以修改
-            $this->isGroupAdmin($groupId);
-
             $groupInfo = $this->getGroupProfile($groupId);
 
             if($writeUpdateAdminType !== false) {
@@ -151,6 +147,9 @@ class Api_Group_UpdateController extends Api_Group_BaseController
             if(!$updateValues) {
                 return;
             }
+
+            //只有群主管理员可以修改
+            $this->isGroupAdmin($groupId);
 
             $where = [
                 "groupId" => $groupId
