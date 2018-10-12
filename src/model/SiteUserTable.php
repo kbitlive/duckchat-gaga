@@ -119,6 +119,26 @@ class SiteUserTable extends BaseTable
         }
     }
 
+    //nicknameInLatin
+    public function getUserByNicknameInLatin($nicknameInLatin)
+    {
+        $tag = __CLASS__ . "-" . __FILE__;
+        $startTime = microtime(true);
+        try {
+            $sql = "select $this->selectColumns from $this->table where nicknameInLatin like :nicknameInLatin limit 20;";
+            $prepare = $this->dbSlave->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->bindValue(":nicknameInLatin", "%" . $nicknameInLatin . "%");
+            $prepare->execute();
+            $user = $prepare->fetchAll(\PDO::FETCH_ASSOC);
+            $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, $nicknameInLatin, $startTime);
+            return $user;
+        } catch (Exception $ex) {
+            $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $ex);
+            return false;
+        }
+    }
+
     public function getUserNickName($userId)
     {
         $tag = __CLASS__ . "-" . __FILE__;
@@ -233,7 +253,7 @@ class SiteUserTable extends BaseTable
             $prepare->bindValue(":pageSize", (int)$pageSize, PDO::PARAM_INT);
             $prepare->execute();
 
-            $this->logger->error("================", "result=" . var_export($prepare->errorInfo(), true));
+//            $this->logger->error($tag, "result=" . var_export($prepare->errorInfo(), true));
 
             $result = $prepare->fetchAll(PDO::FETCH_ASSOC);
             return $result;
@@ -307,8 +327,7 @@ class SiteUserTable extends BaseTable
      * get site total user count
      * @return bool|mixed
      */
-    public
-    function getSiteUserCount()
+    public function getSiteUserCount()
     {
         try {
             $startTime = microtime(true);
