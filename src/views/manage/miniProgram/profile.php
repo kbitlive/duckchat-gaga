@@ -739,6 +739,32 @@
     <div class="layout-all-row">
 
         <div class="list-item-center">
+            <div class="item-row">
+                <div class="item-body">
+                    <div class="item-body-display">
+
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">管理地址</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Management</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <?php echo $management ?>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="division-line"></div>
+
+        </div>
+    </div>
+
+    <div class="layout-all-row">
+
+        <div class="list-item-center">
 
             <div class="item-row">
                 <div class="item-body">
@@ -790,7 +816,6 @@
     </div>
 
 </div>
-
 
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../public/jquery/jquery-weui.min.js"></script>

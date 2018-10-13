@@ -1950,7 +1950,11 @@ function updateInfo(profileId, profileType)
     var name = template("tpl-string", {
         string : name
     });
-    name = name.trim();
+    try{
+        name = name.trim();
+    }catch (error) {
+
+    }
     var subName = name;
     if(name.length>10) {
         subName = name.substr(0, 8) + "...";
