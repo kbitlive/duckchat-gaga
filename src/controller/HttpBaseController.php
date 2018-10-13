@@ -65,9 +65,9 @@ abstract class HttpBaseController extends \Wpf_Controller
             $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
             $action = isset($_GET['action']) ? $_GET['action'] : "";
             $this->getAndSetClientLang();
-//            if($action != 'page.version.check') {
-//                $this->checkIsNeedUpgrade();
-//            }
+            if($action != 'page.version.check') {
+                $this->checkIsNeedUpgrade();
+            }
 
             if ($preSessionId) {
                 $this->handlePreSessionId();
