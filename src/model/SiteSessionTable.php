@@ -144,16 +144,17 @@ class SiteSessionTable extends BaseTable
     }
 
 
-    public function getUserLatestDeviceId($userId, $limit = 1)
+    public function getUserLatestDeviceId($userId, $clientSideType, $limit = 1)
     {
         $tag = __CLASS__ . '-' . __FUNCTION__;
         $startTime = microtime(true);
-        $sql = "select deviceId from $this->table where userId=:userId order by timeActive DESC limit :limit;";
+        $sql = "select deviceId from $this->table where userId=:userId and clientSideType=:clientSideType order by timeActive DESC limit :limit;";
 
         try {
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
             $prepare->bindValue(":userId", $userId);
+            $prepare->bindValue(":clientSideType", $clientSideType, PDO::PARAM_INT);
             $prepare->bindValue(":limit", $limit, PDO::PARAM_INT);
             $flag = $prepare->execute();
             $userTokenInfo = $prepare->fetchAll(\PDO::FETCH_ASSOC);

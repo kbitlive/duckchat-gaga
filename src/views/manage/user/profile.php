@@ -539,7 +539,8 @@
                             <div class="item-body-value">
                                 <img id="user-avatar-img" class="site-image"
                                      onclick="uploadFile('user-avatar-img-input')"
-                                     src="../../public/img/msg/default_user.png">
+                                     src="/_api_file_download_/?fileId=<?php echo $avatar ?>"
+                                     onerror="src='../../public/img/msg/default_user.png'">
 
                                 <input id="user-avatar-img-input" type="file" onchange="uploadImageFile(this)"
                                        accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
@@ -713,40 +714,9 @@
 
 <script type="text/javascript">
 
-    $(function () {
-        var fileId = $("#user-avatar-img-id").attr("fileId");
-        showImage(fileId, 'user-avatar-img');
-    });
-
     function uploadFile(obj) {
         $("#" + obj).val("");
         $("#" + obj).click();
-    }
-
-    downloadFileUrl = "./index.php?action=http.file.downloadFile";
-
-    function showImage(fileId, htmlImgId) {
-
-        var requestUrl = "./_api_file_download_/test?fileId=" + fileId;
-
-
-        if (!isMobile()) {
-            requestUrl = downloadFileUrl + "&fileId=" + fileId + "&returnBase64=0";
-        }
-
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && (this.status == 200 || this.status == 304)) {
-                var blob = this.response;
-                var src = window.URL.createObjectURL(blob);
-
-                $("#" + htmlImgId).attr("src", src);
-            }
-        };
-        xhttp.open("GET", requestUrl, true);
-        xhttp.responseType = "blob";
-        // xhttp.setRequestHeader('Cache-Control', "max-age=2592000, public");
-        xhttp.send();
     }
 
     function uploadImageFile(obj) {

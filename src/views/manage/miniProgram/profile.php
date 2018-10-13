@@ -517,7 +517,8 @@
                             <div class="item-body-value" id="mini-program-img-id" fileId="<?php echo $logo ?>">
                                 <img id="mini-program-img" class="site-image"
                                      onclick="uploadFile('mini-program-img-input')"
-                                     src="../../public/img/manage/plugin_default.png">
+                                     src="/_api_file_download_/?fileId=<?php echo $logo ?>"
+                                     onerror="src='../../public/img/manage/plugin_default.png'">
 
                                 <input id="mini-program-img-input" type="file" onchange="uploadImageFile(this)"
                                        accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
@@ -794,6 +795,7 @@
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../public/jquery/jquery-weui.min.js"></script>
 <script type="text/javascript" src="../../public/js/jquery-confirm.js"></script>
+<script type="text/javascript" src="../../public/manage/native.js"></script>
 
 <script type="text/javascript">
 
