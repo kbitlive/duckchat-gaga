@@ -200,12 +200,12 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
     }
 
     var avatar = msg.roomType == GROUP_MSG ? msg.avatar : msg.userAvatar;
+    
     try{
         name = name.trim();
-    }catch (error){
+    }catch (error) {
 
     }
-
     if(name !=undefined && name.length>10) {
         name = name.substr(0, 8) + "...";
     }

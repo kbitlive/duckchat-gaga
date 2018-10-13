@@ -474,8 +474,7 @@
                                 <?php } else { ?>
                                     <div id="mini-program-usage-text" style="margin-right: 4px">Home Page</div>
                                 <?php } ?>
-                                <img class="more-img"
-                                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
                         </div>
                     </div>
@@ -516,8 +515,8 @@
                                 <?php } else { ?>
                                     <div id="mini-program-display-text" style="margin-right: 4px">New Page</div>
                                 <?php } ?>
-                                <img class="more-img"
-                                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
                         </div>
 
@@ -547,6 +546,39 @@
 
         </div>
 
+        <!-- part 4  miniPrograme management -->
+        <div class="layout-all-row">
+
+            <div class="list-item-center">
+
+                <div class="item-row">
+                    <div class="item-body">
+                        <div class="item-body-display">
+
+                            <?php if ($lang == "1") { ?>
+                                <div class="item-body-desc">管理地址</div>
+                                <div class="item-body-tail">
+                                    <input id="mini-program-management" type="text" class="plugin-add-input"
+                                           placeholder="管理小程序地址">
+                                </div>
+
+                            <?php } else { ?>
+
+                                <div class="item-body-desc">Management Url</div>
+                                <div class="item-body-tail">
+                                    <input id="mini-program-management" type="text" class="plugin-add-input"
+                                           placeholder="management url">
+                                </div>
+                            <?php } ?>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="division-line"></div>
+
+            </div>
+        </div>
     </div>
 
 
@@ -801,6 +833,8 @@
             var miniProgramDisplay = $("#mini-program-display").attr('data');
             var miniProgramSecretKey = $("#mini-program-secret-key-switch").is(':checked');
 
+            var miniProgramManagement = $("#mini-program-management").val();
+
             if (miniProgramName == null || miniProgramName == "") {
                 alert(getLanguage() == 1 ? "请输入小程序名称" : "please input mini program name");
                 alert("mini program name must not be null");
@@ -837,6 +871,7 @@
             } else {
                 data['secretKey'] = 0;
             }
+            data['management'] = miniProgramManagement;
 
 
             var url = "./index.php?action=manage.miniProgram.add&type=save&lang=" + getLanguage();
