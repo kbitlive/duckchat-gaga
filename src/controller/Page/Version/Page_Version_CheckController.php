@@ -31,12 +31,11 @@ class Page_Version_CheckController extends Page_VersionController
                 }
             }
 
-            echo json_encode($versions);
-
-            $params["version"] = $versions;
-
+//            echo json_encode($versions);
+            $params["version"] = json_encode($versions);
+var_export($params);exit;
             //显示界面
-            echo $this->display("page_version_upgrade", $params);
+            echo $this->display("upgrade_upgrade", $params);
 
         } elseif ($method == 'POST') {
             //检测当前版本是否已经升级完

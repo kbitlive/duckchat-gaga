@@ -100,16 +100,10 @@ function removeRoomFromRoomList(chatSessionId)
     return roomList;
 }
 
-function appendOrInsertRoomList(msg, isInsert, showNotification)
+function getMsgContentForChatSession(msg)
 {
-    if(msg != undefined && msg.hasOwnProperty("type") && msg.type == MessageStatus.MessageEventSyncEnd) {
-        return ;
-    }
-    var unReadNum = localStorage.getItem(roomMsgUnReadNum + msg.chatSessionId) ? localStorage.getItem(roomMsgUnReadNum + msg.chatSessionId): 0;
-    unReadNum  = unReadNum > 99 ? "99+" : unReadNum;
-    var name   =  msg.roomType == GROUP_MSG ? msg.name : msg.nickname;
-    var msgType = msg.msgType != undefined ? msg.msgType : msg.type;
     var msgContent;
+    var msgType = msg.msgType != undefined ? msg.msgType : msg.type;
 
     switch (msgType) {
         case MessageType.MessageText:
@@ -142,10 +136,50 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
         default:
             msgContent = "[暂不支持此类型消息]";
     }
+    return msgContent;
+}
+
+//----------------------------------handle room list--------------------------------------------------------------------------
+
+function updateRoomChatSessionContentFoMsg(msg, nodes, msgContent) {
+
+    var msgTime = msg.msgTime != undefined ? msg.msgTime : msg.timeServer;
+    msgTime = getRoomMsgTime(msgTime);
+    var childrens = $(nodes)[0].children;
+    var unReadNum = getRoomMsgUnreadNum(msg.chatSessionId);
+    var isMuteNum = localStorage.getItem(msgUnReadMuteKey+msg.chatSessionId);
+    var isMute = localStorage.getItem(msgMuteKey+msg.chatSessionId);
+    if(isMuteNum == 1 && isMute == 1) {
+        $(".room-chatsession-unread_"+msg.chatSessionId)[0].style.display = "none";
+        $(".room-chatsession-mute-num_"+msg.chatSessionId)[0].style.display = "block";
+    } else {
+        if(unReadNum>0 && (msg.chatSessionId != localStorage.getItem(chatSessionIdKey))) {
+            $(".room-chatsession-unread_"+msg.chatSessionId).html(unReadNum);
+            $(".room-chatsession-unread_"+msg.chatSessionId)[0].style.display = "block";
+            $(".room-chatsession-mute-num_"+msg.chatSessionId)[0].style.display = "none";
+        }
+    }
+    if(msgContent != undefined && msgContent.length>0) {
+        $(childrens[2]).html(msgContent);
+    }
+
+    var subChildrens = $(childrens[1])[0].children;
+    $(subChildrens[1]).html(msgTime);
+}
+
+function appendOrInsertRoomList(msg, isInsert, showNotification)
+{
+    if(msg != undefined && msg.hasOwnProperty("type") && msg.type == MessageStatus.MessageEventSyncEnd) {
+        return ;
+    }
+    var unReadNum = localStorage.getItem(roomMsgUnReadNum + msg.chatSessionId) ? localStorage.getItem(roomMsgUnReadNum + msg.chatSessionId): 0;
+    unReadNum  = unReadNum > 99 ? "99+" : unReadNum;
+    var name   =  msg.roomType == GROUP_MSG ? msg.name : msg.nickname;
 
     var nodes = $(".chat_session_id_" + msg.chatSessionId);
     var msgTime = msg.msgTime != undefined ? msg.msgTime : msg.timeServer;
     msgTime = getRoomMsgTime(msgTime);
+    var msgContent = getMsgContentForChatSession(msg);
 
     if(isInsert) {
         handleRoomListFromLocalStorage(msg);
@@ -153,26 +187,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
 
     if(nodes.length) {
         if($(nodes).attr("msg_time") < msg.timeServer) {
-            var childrens = $(nodes)[0].children;
-            var unReadNum = getRoomMsgUnreadNum(msg.chatSessionId);
-            var isMuteNum = localStorage.getItem(msgUnReadMuteKey+msg.chatSessionId);
-            var isMute = localStorage.getItem(msgMuteKey+msg.chatSessionId);
-            if(isMuteNum == 1 && isMute == 1) {
-                $(".room-chatsession-unread_"+msg.chatSessionId)[0].style.display = "none";
-                $(".room-chatsession-mute-num_"+msg.chatSessionId)[0].style.display = "block";
-            } else {
-                 if(unReadNum>0 && (msg.chatSessionId != localStorage.getItem(chatSessionIdKey))) {
-                    $(".room-chatsession-unread_"+msg.chatSessionId).html(unReadNum);
-                    $(".room-chatsession-unread_"+msg.chatSessionId)[0].style.display = "block";
-                    $(".room-chatsession-mute-num_"+msg.chatSessionId)[0].style.display = "none";
-                }
-            }
-            if(msgContent != undefined && msgContent.length>0) {
-                $(childrens[2]).html(msgContent);
-            }
-
-            var subChildrens = $(childrens[1])[0].children;
-            $(subChildrens[1]).html(msgTime);
+            updateRoomChatSessionContentFoMsg(msg, nodes, msgContent);
             sortRoomList($(nodes));
         }
         if(msg.chatSessionId == localStorage.getItem(chatSessionIdKey)) {
@@ -191,7 +206,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
     }catch (error) {
 
     }
-    if(name.length>10) {
+    if(name !=undefined && name.length>10) {
         name = name.substr(0, 8) + "...";
     }
     var html = template("tpl-chatSession", {
@@ -225,6 +240,23 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
         showWebNotification(msg, msgContent);
     }
 }
+////防止两个浏览器开着，点击的时候消息列表的内容不是最新的
+function updateRoomChatSessionContent(chatSessionId)
+{
+    var nodes = $(".chat_session_id_" + chatSessionId);
+    var roomList = handleRoomListFromLocalStorage();
+    var length = roomList.length;
+    var i;
+    for(i =0; i<length;  i++) {
+        var msg = roomList[i];
+        if(msg.chatSessionId == chatSessionId) {
+            msg = handleMsgInfo(msg);
+            var msgContent = getMsgContentForChatSession(msg);
+            updateRoomChatSessionContentFoMsg(msg, nodes, msgContent);
+        }
+    }
+}
+//----------------------------------handle msg info --------------------------------------------------------------------------
 
 function handleMsgInfo(msg)
 {
@@ -292,6 +324,7 @@ function handleSetItemError(error)
     }
 }
 enableWebsocketGw = localStorage.getItem(websocketGW);
+console.log("enableWebsocketGw==="+enableWebsocketGw)
 
 if(enableWebsocketGw == "false" || enableWebsocketGw == null) {
     ///1秒 sync
@@ -415,14 +448,15 @@ function handleSyncMsg(msg)
     ///是自己群的消息，并且是新消息
     if(msg.chatSessionId  == currentChatSessionId && isNewMsg) {
         var isEndMsgDialog = isCheckEndMsgDialog();
-        appendMsgHtml(msg);
+        appendMsgHtmlToChatDialog(msg);
         if(isEndMsgDialog == true) {
             msgBoxScrollToBottom();
         }
     } else if(msg.chatSessionId != currentChatSessionId && isNewMsg) {
         if(msg.chatSessionId != token) {
             setRoomMsgUnreadNum(msg.chatSessionId);
-            setDocumentTitle("new_msg");
+            localStorage.setItem(newSiteTipKey, "new_msg");
+            setDocumentTitle();
         }
     }
     appendOrInsertRoomList(msg, true, true);
@@ -580,7 +614,7 @@ function getMsgFromRoom(chatSessionId)
         for(i=0; i<length; i++) {
             var msg = msgList[i];
             msg = handleMsgInfo(msg);
-            appendMsgHtml(msg);
+            appendMsgHtmlToChatDialog(msg);
         }
     }
     var jqElement = $(".chat_session_id_"+chatSessionId);
@@ -609,7 +643,8 @@ function clearRoomUnreadMsgNum(chatSessionId)
         $(".room-chatsession-unread_"+chatSessionId)[0].style.display = "none";
         $(".room-chatsession-mute-num_"+chatSessionId+"")[0].style.display = "none";
     }
-    setDocumentTitle("clear");
+    localStorage.setItem(newSiteTipKey, "clear");
+    setDocumentTitle();
 }
 
 function compare(msg1, msg2) {
@@ -636,6 +671,59 @@ function getRoomMsgTime(time)
     var date = new Date(time); //获取一个时间对象
     var minutes =  date.getMinutes()>=10 ? date.getMinutes():"0"+date.getMinutes();
     return date.getHours()+":"+minutes;
+}
+
+//---------------------------------------------send msg-------------------------------------------------
+
+
+function isCheckEndMsgDialog()
+{
+    var rightchatBox = $(".right-chatbox")[0];
+    var sh = rightchatBox.scrollHeight;
+    var ch = rightchatBox.clientHeight;
+    var st = $(".right-chatbox").scrollTop();
+    ///差值小于等于Math.ceil(ch*2) px末， 默认底部
+    if(sh - ch - st <= Math.ceil(ch*2)) {
+        return true
+    }
+    return false;
+}
+
+function msgBoxScrollToBottom()
+{
+    var rightchatBox = $(".right-chatbox")[0];
+    var sh = rightchatBox.scrollHeight;
+    var ch  = rightchatBox.clientHeight;
+    var scrollTop = sh-ch;
+    $(".right-chatbox").scrollTop(scrollTop);
+
+}
+
+function addMsgToChatDialog(chatSessionId, msg)
+{
+    msg.status = MessageStatus.MessageStatusSending;
+
+    appendMsgHtmlToChatDialog(msg);
+
+    var node = $(".chat_dession_id_"+chatSessionId);
+    sortRoomList(node);
+
+    setTimeout(function () {
+        var msgLoadings = $("[is-display='yes']");
+        var length = msgLoadings.length;
+        var i;
+        for(i=0;i<length;i++) {
+            var msgLoading = msgLoadings[i];
+            var msgId = $(msgLoading).attr("msgId");
+            var sendTime = $(msgLoading).attr("sendTime");
+            var nowTime = Date.now();
+            if(nowTime - sendTime >= 10000) {
+                handleMsgStatusResult(msgId, MessageStatus.MessageStatusFailed);
+            }
+        }
+    }, 10000);///10秒执行
+    ///在上部分查看消息的时候不滚动
+    msgBoxScrollToBottom();
 }
 
 function sendMsg( chatSessionId, chatSessionType, msgContent, msgType, params)
@@ -691,46 +779,9 @@ function sendMsg( chatSessionId, chatSessionType, msgContent, msgType, params)
 };
 
 
-function addMsgToChatDialog(chatSessionId, msg)
-{
-    msg.status = MessageStatus.MessageStatusSending;
+//---------------------------------------------msg realtion function-------------------------------------------------
 
-    appendMsgHtml(msg);
-
-    var node = $(".chat_dession_id_"+chatSessionId);
-    sortRoomList(node);
-
-    setTimeout(function () {
-        var msgLoadings = $("[is-display='yes']");
-        var length = msgLoadings.length;
-        var i;
-        for(i=0;i<length;i++) {
-            var msgLoading = msgLoadings[i];
-            var msgId = $(msgLoading).attr("msgId");
-            var sendTime = $(msgLoading).attr("sendTime");
-            var nowTime = Date.now();
-            if(nowTime - sendTime >= 10000) {
-                handleMsgStatusResult(msgId, MessageStatus.MessageStatusFailed);
-            }
-        }
-    }, 10000);///10秒执行
-    ///在上部分查看消息的时候不滚动
-    msgBoxScrollToBottom();
-}
-
-function isCheckEndMsgDialog()
-{
-    var rightchatBox = $(".right-chatbox")[0];
-    var sh = rightchatBox.scrollHeight;
-    var ch = rightchatBox.clientHeight;
-    var st = $(".right-chatbox").scrollTop();
-    ///差值小于等于Math.ceil(ch*2) px末， 默认底部
-    if(sh - ch - st <= Math.ceil(ch*2)) {
-        return true
-    }
-    return false;
-}
-
+//get msg  document size
 function getMessageDocumentSize(size)
 {
     if(Number(size) < 1024) {
@@ -745,6 +796,7 @@ function getMessageDocumentSize(size)
     return size;
 }
 
+//get msg  document name
 function getMessageDocumentName(name)
 {
     if(name.length>15) {
@@ -759,6 +811,7 @@ function getMessageDocumentName(name)
     return name;
 }
 
+//get webMsg size
 function getWebMessageSize(imageNaturalHeight, imageNaturalWidth, h, w)
 {
     var webObject = {};
@@ -777,7 +830,162 @@ function getWebMessageSize(imageNaturalHeight, imageNaturalWidth, h, w)
     return webObject;
 }
 
-function appendMsgHtml(msg)
+function getMsgImgSrc(msg, msgId)
+{
+    if(msg.hasOwnProperty("image")) {
+        var imgId = msg['image'].url;
+        var imgUrlKey = sendMsgImgUrlKey + imgId;
+        var src =  localStorage.getItem(imgUrlKey);
+        if(!src) {
+            var isGroupMessage = msg.roomType == GROUP_MSG ? 1 : 0;
+            getMsgImg(imgId, isGroupMessage, msgId);
+        } else {
+            $(".msg-img-"+msgId).attr("src", src);
+        }
+        localStorage.removeItem(imgUrlKey);
+    }
+}
+
+function getMsgSizeForDiv(msg)
+{
+    var chatType = localStorage.getItem(chatTypeKey);
+    var h;
+    var w;
+    if(chatType != DefaultChat) {
+        h = 300;
+        w = 200;
+    } else {
+        h = 400;
+        w = 300;
+    }
+    return getMsgSize(msg['image'].width, msg['image'].height, h, w);
+}
+
+
+function getWebMsgHref(msgId, msgRoomType)
+{
+    var url = "./index.php?action=http.file.downloadWebMsg&msgId="+msgId+"&isGroupMessage="+(msgRoomType==GROUP_MSG ? 1 : 0);
+    return url;
+}
+
+
+function getMsgImageSize(src)
+{
+    var image = new Image();
+    image.src = src;
+    image.onload = function (ev) {
+        msgImageSize = {
+            width:image.width,
+            height:image.height
+        }
+    };
+}
+
+function autoMsgImgSize(imgObject, h, w)
+{
+    var image = new Image();
+    image.src = imgObject.src;
+    var imageNaturalWidth  = image.naturalWidth;
+    var imageNaturalHeight = image.naturalHeight;
+
+    if (imageNaturalWidth < w && imageNaturalHeight<h) {
+        imgObject.width  = imageNaturalWidth == 0 ? w : imageNaturalWidth;
+        imgObject.height = imageNaturalHeight == 0 ? h : imageNaturalHeight;
+    } else {
+        if (w / h <= imageNaturalWidth/ imageNaturalHeight) {
+            imgObject.width  = w;
+            imgObject.height = w* (imageNaturalHeight / imageNaturalWidth);
+        } else {
+            imgObject.width  = h * (imageNaturalWidth / imageNaturalHeight);
+            imgObject.height = h;
+        }
+    }
+}
+
+function getMsgSize(imageNaturalWidth,imageNaturalHeight, h, w)
+{
+    var imgObject = {};
+    if (imageNaturalWidth < w && imageNaturalHeight<h) {
+        imgObject.width  = imageNaturalWidth == 0 ? w : imageNaturalWidth;
+        imgObject.height = imageNaturalHeight == 0 ? h : imageNaturalHeight;
+    } else {
+        if (w / h <= imageNaturalWidth/ imageNaturalHeight) {
+            imgObject.width  = w;
+            imgObject.height = w* (imageNaturalHeight / imageNaturalWidth);
+        } else {
+            imgObject.width  = h * (imageNaturalWidth / imageNaturalHeight);
+            imgObject.height = h;
+        }
+    }
+    imgObject = {
+        width:imgObject.width + "px",
+        height:imgObject.height + "px",
+    };
+    return imgObject;
+}
+
+
+function base64ToBlob(base64, mime)
+{
+    mime = mime || '';
+    var sliceSize = 1024;
+    var byteChars = window.atob(base64);
+    var byteArrays = [];
+
+    for (var offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
+        var endOffset = (offset+sliceSize);
+        if(endOffset > byteChars.length) {
+            endOffset = byteChars.length;
+        }
+
+        var slice = byteChars.slice(offset, endOffset);
+
+        var byteNumbers = new Array(slice.length);
+        for (var i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        var byteArray = new Uint8Array(byteNumbers);
+
+        byteArrays.push(byteArray);
+    }
+
+    return new Blob(byteArrays, {type: mime});
+}
+
+//replace \n from html
+function trimMsgContentBr(html)
+{
+    html = html.replace(new RegExp('\n','g'),"<br>");
+    html = html.replace(new RegExp('^\\<br>+', 'g'), '');
+    html = html.replace(new RegExp('\\<br>+$', 'g'), '');
+    html = html.replace(new RegExp('&#38;','g'),"&");
+    return html;
+}
+
+function handleMsgContentText(str)
+{
+    str = trimMsgContentBr(str);
+    var reg=/(blob:)?((http|ftp|https):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
+    var arr = str.match(reg);
+    if(arr == null) {
+        return str;
+    }
+    var length = arr.length;
+    for(var i=0; i<length;i++) {
+        var urlLink = arr[i];
+        if(urlLink.indexOf("blob:") == -1 && (urlLink.indexOf("http") != -1 || urlLink.indexOf("https") != -1)) {
+            var urlLinkHtml = "<a href='"+urlLink+"'target='_blank'>"+urlLink+"</a>";
+            str = str.replace(urlLink, urlLinkHtml);
+        }
+    }
+
+    return str;
+}
+
+//---------------------------------------------append msg html to chat dialog-------------------------------------------------
+
+function appendMsgHtmlToChatDialog(msg)
 {
     if(msg == undefined) {
         return;
@@ -1023,7 +1231,7 @@ function appendMsgHtml(msg)
     }
 
     if(msgType == MessageType.MessageText) {
-        html = trimMsgContentBr(html);
+        html = handleMsgContentText(html);
     }
     // html = "请前往客户端查看web消息";
     $(".right-chatbox").append(html);
@@ -1031,62 +1239,9 @@ function appendMsgHtml(msg)
     getMsgImgSrc(msg, msgId);
 }
 
-function trimMsgContentBr(html)
-{
-    html = html.replace(new RegExp('\n','g'),"<br>");
-    html = html.replace(new RegExp('^\\<br>+', 'g'), '');
-    html = html.replace(new RegExp('\\<br>+$', 'g'), '');
-    return html;
-}
-
-function getMsgImgSrc(msg, msgId)
-{
-    if(msg.hasOwnProperty("image")) {
-        var imgId = msg['image'].url;
-        var imgUrlKey = sendMsgImgUrlKey + imgId;
-        var src =  localStorage.getItem(imgUrlKey);
-        if(!src) {
-            var isGroupMessage = msg.roomType == GROUP_MSG ? 1 : 0;
-            getMsgImg(imgId, isGroupMessage, msgId);
-        } else {
-            $(".msg-img-"+msgId).attr("src", src);
-        }
-        localStorage.removeItem(imgUrlKey);
-    }
-}
-
-function getMsgSizeForDiv(msg)
-{
-    var chatType = localStorage.getItem(chatTypeKey);
-    var h;
-    var w;
-    if(chatType != DefaultChat) {
-        h = 300;
-        w = 200;
-    } else {
-        h = 400;
-        w = 300;
-    }
-    return getMsgSize(msg['image'].width, msg['image'].height, h, w);
-}
 
 
-function getWebMsgHref(msgId, msgRoomType)
-{
-    var url = "./index.php?action=http.file.downloadWebMsg&msgId="+msgId+"&isGroupMessage="+(msgRoomType==GROUP_MSG ? 1 : 0);
-    return url;
-}
-
-function msgBoxScrollToBottom()
-{
-    var rightchatBox = $(".right-chatbox")[0];
-    var sh = rightchatBox.scrollHeight;
-    var ch  = rightchatBox.clientHeight;
-    var scrollTop = sh-ch;
-    $(".right-chatbox").scrollTop(scrollTop);
-
-}
-
+//---------------------------------------------upload file -------------------------------------------------
 function uploadMsgFileFromInput(obj, fileType) {
 
     if (obj) {
@@ -1125,90 +1280,6 @@ function uploadMsgImgFromCopy(image)
     var src = window.URL.createObjectURL(blob);
     getMsgImageSize(src);
     uploadMsgFileToServer(formData, src, uploadImgForMsg, "");
-}
-
-function getMsgImageSize(src)
-{
-    var image = new Image();
-    image.src = src;
-    image.onload = function (ev) {
-        msgImageSize = {
-            width:image.width,
-            height:image.height
-        }
-    };
-}
-
-function autoMsgImgSize(imgObject, h, w)
-{
-    var image = new Image();
-    image.src = imgObject.src;
-    var imageNaturalWidth  = image.naturalWidth;
-    var imageNaturalHeight = image.naturalHeight;
-
-    if (imageNaturalWidth < w && imageNaturalHeight<h) {
-        imgObject.width  = imageNaturalWidth == 0 ? w : imageNaturalWidth;
-        imgObject.height = imageNaturalHeight == 0 ? h : imageNaturalHeight;
-    } else {
-        if (w / h <= imageNaturalWidth/ imageNaturalHeight) {
-            imgObject.width  = w;
-            imgObject.height = w* (imageNaturalHeight / imageNaturalWidth);
-        } else {
-            imgObject.width  = h * (imageNaturalWidth / imageNaturalHeight);
-            imgObject.height = h;
-        }
-    }
-}
-
-function getMsgSize(imageNaturalWidth,imageNaturalHeight, h, w)
-{
-    var imgObject = {};
-    if (imageNaturalWidth < w && imageNaturalHeight<h) {
-        imgObject.width  = imageNaturalWidth == 0 ? w : imageNaturalWidth;
-        imgObject.height = imageNaturalHeight == 0 ? h : imageNaturalHeight;
-    } else {
-        if (w / h <= imageNaturalWidth/ imageNaturalHeight) {
-            imgObject.width  = w;
-            imgObject.height = w* (imageNaturalHeight / imageNaturalWidth);
-        } else {
-            imgObject.width  = h * (imageNaturalWidth / imageNaturalHeight);
-            imgObject.height = h;
-        }
-    }
-    imgObject = {
-        width:imgObject.width + "px",
-        height:imgObject.height + "px",
-    };
-    return imgObject;
-}
-
-
-function base64ToBlob(base64, mime)
-{
-    mime = mime || '';
-    var sliceSize = 1024;
-    var byteChars = window.atob(base64);
-    var byteArrays = [];
-
-    for (var offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
-        var endOffset = (offset+sliceSize);
-        if(endOffset > byteChars.length) {
-            endOffset = byteChars.length;
-        }
-
-        var slice = byteChars.slice(offset, endOffset);
-
-        var byteNumbers = new Array(slice.length);
-        for (var i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
-        }
-
-        var byteArray = new Uint8Array(byteNumbers);
-
-        byteArrays.push(byteArray);
-    }
-
-    return new Blob(byteArrays, {type: mime});
 }
 
 
@@ -1267,7 +1338,6 @@ function uploadUserImgFromInput(obj) {
 
             var src = window.URL.createObjectURL(obj.files.item(0));
             getMsgImageSize(src);
-
             uploadMsgFileToServer(formData, src, uploadImgForSelfAvatar, "");
 
             $(".user-image-upload").attr("src", src);

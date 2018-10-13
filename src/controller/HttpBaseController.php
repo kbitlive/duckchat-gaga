@@ -26,7 +26,8 @@ abstract class HttpBaseController extends \Wpf_Controller
         "page.js",
         "page.siteConfig",
         "page.passport.login",
-        "page.jump"
+        "page.jump",
+        "page.version.check",
     ];
     private $groupType = "g";
     private $u2Type = "u";
@@ -45,7 +46,6 @@ abstract class HttpBaseController extends \Wpf_Controller
             header("Location:" . $initUrl);
             exit();
         }
-
         $this->logger = $context->getLogger();
         $this->ctx = $context;
 
@@ -65,6 +65,10 @@ abstract class HttpBaseController extends \Wpf_Controller
             $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
             $action = isset($_GET['action']) ? $_GET['action'] : "";
             $this->getAndSetClientLang();
+//            if($action != 'page.version.check') {
+//                $this->checkIsNeedUpgrade();
+//            }
+
             if ($preSessionId) {
                 $this->handlePreSessionId();
             }
@@ -84,7 +88,19 @@ abstract class HttpBaseController extends \Wpf_Controller
             $this->setLogout();
         }
     }
-
+    //TODO check need upgrade
+    protected function checkIsNeedUpgrade()
+    {
+        $sampleFileName = dirname(__FILE__) . "/../config.sample.php" ;
+        $sampleConfig = require($sampleFileName);
+        $sampleVersionCode = isset($sampleConfig['siteVersionCode']) ? $sampleConfig['siteVersionCode'] : 0;
+        $configVersionCode = ZalyConfig::getConfig('siteVersionCode');
+        if($sampleVersionCode > $configVersionCode) {
+            $upgradeUrl = './index.php?action=page.version.check';
+            header("Location:" . $upgradeUrl);
+            exit;
+        }
+    }
     protected function getAndSetClientLang()
     {
         $headLang = isset($_GET['lang']) ? $_GET['lang'] : "";

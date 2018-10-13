@@ -15,6 +15,8 @@
     <script src="../../public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
 
+    <link class="icon" rel="icon" href="favicon.ico" type="image/png" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 </head>
@@ -55,6 +57,7 @@
 
 <script type="text/javascript">
 
+
     $(window).resize(function () {
         setFontSize();
     });
@@ -89,6 +92,7 @@
     window.addEventListener('popstate', function () {
         history.pushState(null, null, document.URL);
     });
+
 
     jQuery.i18n.properties({
         name: "lang",
