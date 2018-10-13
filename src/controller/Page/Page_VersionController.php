@@ -63,7 +63,7 @@ abstract class Page_VersionController extends HttpBaseController
         return $fileName;
     }
 
-    private function getPasswordFileName()
+    protected function getPasswordFileName()
     {
         $versionInfos = $this->getUpgradeVersion();
 
