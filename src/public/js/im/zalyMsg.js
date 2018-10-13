@@ -452,6 +452,8 @@ function handleSyncMsg(msg)
         if(isEndMsgDialog == true) {
             msgBoxScrollToBottom();
         }
+        localStorage.setItem(newSiteTipKey, "new_msg");
+        setDocumentTitle();
     } else if(msg.chatSessionId != currentChatSessionId && isNewMsg) {
         if(msg.chatSessionId != token) {
             setRoomMsgUnreadNum(msg.chatSessionId);

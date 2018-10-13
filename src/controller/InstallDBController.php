@@ -197,10 +197,7 @@ class InstallDBController
             }
             @unlink($testCanWriteFile);
 
-            $sampleFile = require (dirname(dirname(__FILE__)) . "/config.sample.php");
-            $testCurlUrl = $sampleFile['test_curl'];
-            $testCurlUrl = ZalyHelper::getFullReqUrl($testCurlUrl);
-            $curlResult  = $this->curl->request($testCurlUrl, 'get');
+
             //防止自己配置nginx的时候，多写一个/
             $requestUri = isset($_SERVER['REQUEST_URI']) ? str_replace(array("\\", "//"), array("/", "/"),  $_SERVER['REQUEST_URI']) : "";
             $requestUris = explode("/", $requestUri);
@@ -209,6 +206,10 @@ class InstallDBController
             if(count($requestUris) > 2) {
                 $isInstallRootPath = false;
             }
+            $sampleFile = require (dirname(dirname(__FILE__)) . "/config.sample.php");
+            $testCurlUrl = $sampleFile['test_curl'];
+            $testCurlUrl = ZalyHelper::getFullReqUrl($testCurlUrl);
+            $curlResult  = $this->curl->request($testCurlUrl, 'get');
 
             if($isInstallRootPath === false) {
                 echo $this->lang == 1 ? "目前只支持根目录运行" : "Currently only the root directory is supported.";
@@ -221,8 +222,7 @@ class InstallDBController
                 "isLoadPDOMysql"    => extension_loaded("pdo_mysql"),
                 "isLoadCurl"        => extension_loaded("curl"),
                 "isWritePermission" => $permissionDirectory,
-                "siteVersion"       => isset($sampleFile['siteVersionCode']) ? $sampleFile['siteVersionCode'] : "",
-                "isCanUseCurl"      => $curlResult == "success" ? true : false,
+                "siteVersion"       => isset($sampleFile['siteVersionName']) ? $sampleFile['siteVersionName'] : "",
                 "versionCode"       => $sampleFile['siteVersionCode'],
                 "isInstallRootPath" => $isInstallRootPath,
             ];
@@ -243,6 +243,11 @@ class InstallDBController
             echo $this->display("init_init", $params);
             return;
         }
+    }
+
+    private function isCanUserCurl()
+    {
+
     }
 
     private function display($viewName, $params = [])

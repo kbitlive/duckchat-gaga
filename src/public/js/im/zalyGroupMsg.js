@@ -392,31 +392,33 @@ intervalId = undefined
 function setDocumentTitle()
 {
     iconNum = 0;
-    var siteTip = localStorage.getItem(newSiteTipKey);
-
-    if(intervalId == undefined && siteTip != "clear") {
-        intervalId = setInterval(function () {
-            if(siteTip == "clear") {
-                $(".icon").attr("href", "favicon.ico");
-                iconNum = 0;
-            } else {
-                if(Number(iconNum%2) == 0) {
+    if(document.hidden == true) {
+        var siteTip = localStorage.getItem(newSiteTipKey);
+        if(intervalId == undefined && siteTip != "clear") {
+            intervalId = setInterval(function () {
+                if(siteTip == "clear") {
                     $(".icon").attr("href", "favicon.ico");
+                    iconNum = 0;
                 } else {
-                    $(".icon").attr("href", "tip.png");
+                    if(Number(iconNum%2) == 0) {
+                        $(".icon").attr("href", "favicon.ico");
+                    } else {
+                        $(".icon").attr("href", "tip.png");
+                    }
+                    iconNum = Number(iconNum+1);
                 }
-                iconNum = Number(iconNum+1);
-            }
-        }, 500);
+            }, 5);
+        }
+        return ;
     }
-    if(siteTip == "clear" && intervalId != undefined) {
-        $(".icon").attr("href", "favicon.ico");
-        iconNum = 0;
-        clearInterval(intervalId);
-        intervalId = undefined
-    }
-
+    $(".icon").attr("href", "favicon.ico");
+    iconNum = 0;
+    clearInterval(intervalId);
+    intervalId = undefined
 }
+document.addEventListener('visibilitychange', function(){
+   setDocumentTitle();
+}, false);
 
 //--------------------------------------logout----------------------------------------------
 $(document).on("click", "#logout", function (event) {

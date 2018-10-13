@@ -259,5 +259,5 @@
 
 <script id="tpl-error-info" type="text/html">
         {{errorInfo}}
-        <a style='color:rgba(76,59,177,1);' href='https://duckchat.akaxin.com/wiki/server/faq-mysql.md'>数据库常见问题汇总</a>
+        <a style='color:rgba(76,59,177,1);' target="_blank" href='https://duckchat.akaxin.com/wiki/server/faq-mysql.md'>数据库常见问题汇总</a>
     </script>
