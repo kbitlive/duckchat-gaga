@@ -67,11 +67,8 @@ class InstallDBController
 
 
         $config = require($sampleFileName);
-
         $sqliteName = "";
-
         $this->lang = isset($_GET['lang']) ? $_GET['lang'] : "1";
-
         $method = $_SERVER['REQUEST_METHOD'];
         if ($method == 'POST') {
             //install site
@@ -206,16 +203,15 @@ class InstallDBController
             $curlResult  = $this->curl->request($testCurlUrl, 'get');
             $doucmentRoot = isset($_SERVER['DOCUMENT_ROOT']) ? str_replace("//", "/", $_SERVER['DOCUMENT_ROOT']) : "";
             $scriptRoot = isset($_SERVER['SCRIPT_FILENAME']) ? str_replace("//", "/",  $_SERVER['SCRIPT_FILENAME']) : "";
-            $isInstallRootPath = true;
+            $doucmentUri = isset($_SERVER['DOCUMENT_URI']) ? $_SERVER['DOCUMENT_URI'] : "";
 
+            $isInstallRootPath = true;
             if(!$doucmentRoot || !$scriptRoot) {
                 $isInstallRootPath = false;
             }
-
-            if($doucmentRoot.DIRECTORY_SEPARATOR."index.php" != $scriptRoot) {
+            if($doucmentRoot.$doucmentUri != $scriptRoot) {
                 $isInstallRootPath = false;
             }
-
             if($isInstallRootPath === false) {
                 echo $this->lang == 1 ? "目前只支持根目录运行" : "Currently only the root directory is supported.";
                 return;
@@ -455,6 +451,30 @@ class InstallDBController
                 'landingPageWithProxy' => 0, //1 表示走site代理
                 'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageIndex,
                 'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingNewPage,
+                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
+                'authKey' => "",
+            ],
+            [
+                'pluginId' => 104,
+                'name' => "gif小程序",
+                'logo' => "",
+                'sort' => 2, //order = 2
+                'landingPageUrl' => "index.php?action=miniProgram.gif.index",
+                'landingPageWithProxy' => 1, //1 表示走site代理
+                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageU2Message,
+                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
+                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
+                'authKey' => "",
+            ],
+            [
+                'pluginId' => 104,
+                'name' => "gif小程序",
+                'logo' => "",
+                'sort' => 2, //order = 2
+                'landingPageUrl' => "index.php?action=miniProgram.gif.index",
+                'landingPageWithProxy' => 1, //1 表示走site代理
+                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageGroupMessage,
+                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
                 'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
                 'authKey' => "",
             ],

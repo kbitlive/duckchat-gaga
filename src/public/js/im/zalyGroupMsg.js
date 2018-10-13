@@ -2176,9 +2176,8 @@ function updateInfo(profileId, profileType)
     }catch (error) {
 
     }
-
     var subName = name;
-    if(name.length>10) {
+    if(name!=undefined && name.length>10) {
         subName = name.substr(0, 8) + "...";
     }
     $(".nickname_"+profileId).html(name);
@@ -2475,8 +2474,6 @@ $(document).on("click", ".permission-join", function () {
     showWindow($("#permission-join"));
 });
 
-
-
 $(document).on("click", ".mark_down", function () {
     var isMarkDown = $(".mark_down").attr("is_on");
     if(isMarkDown == "on") {
@@ -2487,8 +2484,6 @@ $(document).on("click", ".mark_down", function () {
         $(".mark_down").attr("src", "../../public/img/msg/icon_switch_on.png");
     }
 });
-
-
 
 $(document).on("click", ".imgDiv", function () {
     var imgDivs = $(".imgDiv");
@@ -2650,11 +2645,6 @@ function handleHtmlLanguage(html)
 
     return html;
 }
-
-
-
-
-
 
 
 

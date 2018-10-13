@@ -206,7 +206,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
 
     }
 
-    if(name.length>10) {
+    if(name !=undefined && name.length>10) {
         name = name.substr(0, 8) + "...";
     }
     var html = template("tpl-chatSession", {
