@@ -205,15 +205,11 @@ class InstallDBController
             $testCurlUrl = ZalyHelper::getFullReqUrl($testCurlUrl);
             $curlResult  = $this->curl->request($testCurlUrl, 'get');
             //防止自己配置nginx的时候，多写一个/
-            $doucmentRoot = isset($_SERVER['DOCUMENT_ROOT']) ? str_replace("//", "/", $_SERVER['DOCUMENT_ROOT']) : "";
-            $scriptRoot = isset($_SERVER['SCRIPT_FILENAME']) ? str_replace("//", "/",  $_SERVER['SCRIPT_FILENAME']) : "";
+            $requestUri = isset($_SERVER['REQUEST_URI']) ? str_replace(array("\\", "//"), array("/", "/"),  $_SERVER['REQUEST_URI']) : "";
+            $requestUris = explode("/", $requestUri);
             $isInstallRootPath = true;
 
-            if(!$doucmentRoot || !$scriptRoot) {
-                $isInstallRootPath = false;
-            }
-
-            if($doucmentRoot.DIRECTORY_SEPARATOR."index.php" != $scriptRoot) {
+            if(count($requestUris) > 2) {
                 $isInstallRootPath = false;
             }
 
