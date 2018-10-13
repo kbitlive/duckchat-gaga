@@ -135,7 +135,7 @@
     </div>
 </div>
 
-<input type="hidden" value='<?php echo $versions;?>' class="siteVersion">
+<input type="hidden" value='<?php echo $version;?>' class="siteVersion">
 <?php include (dirname(__DIR__) . '/upgrade/template_upgrade.php');?>
 
 <script>
