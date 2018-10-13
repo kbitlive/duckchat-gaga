@@ -179,6 +179,11 @@ class InstallDBController
                 return;
             }
 
+            if(isset($_GET['for']) && $_GET['for'] == 'test_curl_result') {
+                echo $this->isCanUserCurl();
+                return;
+            }
+
             $permissionDirectory = is_writable(dirname(dirname(__FILE__)));
             $configFile = dirname(dirname(__FILE__)) . "/config.php";
             $attachDir = dirname(dirname(__FILE__)) . "/attachment";
@@ -197,7 +202,6 @@ class InstallDBController
             }
             @unlink($testCanWriteFile);
 
-
             //防止自己配置nginx的时候，多写一个/
             $requestUri = isset($_SERVER['REQUEST_URI']) ? str_replace(array("\\", "//"), array("/", "/"),  $_SERVER['REQUEST_URI']) : "";
             $requestUris = explode("/", $requestUri);
@@ -207,9 +211,6 @@ class InstallDBController
                 $isInstallRootPath = false;
             }
             $sampleFile = require (dirname(dirname(__FILE__)) . "/config.sample.php");
-            $testCurlUrl = $sampleFile['test_curl'];
-            $testCurlUrl = ZalyHelper::getFullReqUrl($testCurlUrl);
-            $curlResult  = $this->curl->request($testCurlUrl, 'get');
 
             if($isInstallRootPath === false) {
                 echo $this->lang == 1 ? "目前只支持根目录运行" : "Currently only the root directory is supported.";
@@ -247,7 +248,11 @@ class InstallDBController
 
     private function isCanUserCurl()
     {
-
+        $sampleFile = require (dirname(dirname(__FILE__)) . "/config.sample.php");
+        $testCurlUrl = $sampleFile['test_curl'];
+        $testCurlUrl = ZalyHelper::getFullReqUrl($testCurlUrl);
+        $curlResult  = $this->curl->request($testCurlUrl, 'get');
+        echo $curlResult;
     }
 
     private function display($viewName, $params = [])
