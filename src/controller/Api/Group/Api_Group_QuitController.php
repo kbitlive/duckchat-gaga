@@ -33,7 +33,10 @@ class Api_Group_QuitController extends Api_Group_BaseController
                 $this->setRpcError($errorCode, $errorInfo);
                 throw new Exception($errorInfo);
             }
+
             $this->quitGroup($groupId);
+
+            $this->updateGroupAvatar($groupId);
 
             $this->setRpcError($this->defaultErrorCode, "");
             $this->rpcReturn($transportData->getAction(), new \Zaly\Proto\Site\ApiGroupQuitResponse());

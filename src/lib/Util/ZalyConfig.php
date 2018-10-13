@@ -8,38 +8,65 @@
 
 class ZalyConfig
 {
-    public static $config;
-    private static $verifySessionKey="session_verify_";
+    private static $verifySessionKey = "session_verify_";
 
-    public static function getConfigFile()
+    public static $configSiteVersionNameKey = "siteVersionName";
+    public static $configSiteVersionCodeKey = "siteVersionCode";
+
+    public static $config;
+    public static $sampleConfig;
+
+    //load config.php
+    public static function loadConfigFile()
     {
-        $fileName = dirname(__FILE__) ."/../../config.php";
-        if(!file_exists($fileName)) {
-            $fileName = dirname(__FILE__) ."/../../config.sample.php";
+        $fileName = dirname(__FILE__) . "/../../config.php";
+        if (!file_exists($fileName)) {
+            $fileName = dirname(__FILE__) . "/../../config.sample.php";
         }
 
         self::$config = require($fileName);
     }
 
-    public static function  getConfig($key = "")
+    // load sample.config.php
+    public static function loadSampleConfigFile()
     {
-        self::getConfigFile();
-        if(isset(self::$config[$key])) {
+        $sampleConfigFileName = dirname(__FILE__) . "/../../config.sample.php";
+
+        self::$sampleConfig = require($sampleConfigFileName);
+    }
+
+    public static function getConfig($key = "")
+    {
+        self::loadConfigFile();
+        if (isset(self::$config[$key])) {
             return self::$config[$key];
         }
         return false;
     }
+
+    public static function getSampleConfig($key = "")
+    {
+
+        self::loadSampleConfigFile();
+
+        if (isset(self::$sampleConfig[$key])) {
+            return self::$sampleConfig[$key];
+        }
+
+        return false;
+    }
+
     public static function getAllConfig()
     {
-        self::getConfigFile();
+        self::loadConfigFile();
         return self::$config;
     }
 
 
     public static function getSessionVerifyUrl($pluginId)
     {
-        self::getConfigFile();
-        $key = self::$verifySessionKey.$pluginId;
+        self::loadConfigFile();
+        $key = self::$verifySessionKey . $pluginId;
         return self::$config[$key];
     }
 
@@ -47,39 +74,39 @@ class ZalyConfig
     {
         $domain = self::getDomain();
         $pageIndexUrl = self::$config['apiPageIndex'];
-        if(strpos($pageIndexUrl,"./") == 0) {
+        if (strpos($pageIndexUrl, "./") == 0) {
             $pageIndexUrl = str_replace("./", "/", $pageIndexUrl);
         }
-        return $domain.$pageIndexUrl;
+        return $domain . $pageIndexUrl;
     }
 
     public static function getApiPageJumpUrl()
     {
         $domain = self::getDomain();
         $pageJumpUrl = self::$config['apiPageJump'];
-        if(strpos($pageJumpUrl,"./") == 0) {
+        if (strpos($pageJumpUrl, "./") == 0) {
             $pageJumpUrl = str_replace("./", "/", $pageJumpUrl);
         }
-        return $domain.$pageJumpUrl;
+        return $domain . $pageJumpUrl;
     }
 
     public static function getApiPageWidget()
     {
         $domain = self::getDomain();
         $pageWidgetUrl = self::$config['apiPageWidget'];
-        if(strpos($pageWidgetUrl,"./") == 0) {
+        if (strpos($pageWidgetUrl, "./") == 0) {
             $pageWidgetUrl = str_replace("./", "/", $pageWidgetUrl);
         }
-        return $domain.$pageWidgetUrl;
+        return $domain . $pageWidgetUrl;
     }
 
     public static function getDomain()
     {
-        self::getConfigFile();
+        self::loadConfigFile();
 
-        $scheme = isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME']."://" : "http://";
-        $domain = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "" ;
+        $scheme = isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] . "://" : "http://";
+        $domain = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "";
 
-        return $scheme.$domain;
+        return $scheme . $domain;
     }
 }
