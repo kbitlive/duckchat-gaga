@@ -29,7 +29,7 @@ function ZalyIm(params)
     localStorage.setItem(apiUrl, serverAddressForApi);
     var loginPluginProfile = params.loginPluginProfile;
     var webSocketGwDomain = config[siteConfigKeys.serverAddressForIM];
-    if(webSocketGwDomain == undefined || webSocketGwDomain == null || webSocketGwDomain.length<1 || webSocketGwDomain.indexOf("http://") > -1) {
+    if(webSocketGwDomain == undefined || webSocketGwDomain == null || webSocketGwDomain.length<1 || webSocketGwDomain.indexOf("http://") > -1 ||  webSocketGwDomain.indexOf("https://") > -1) {
         localStorage.setItem(websocketGW, "false");////是否开启    console.log("webSocketGwDomain ==" + webSocketGwDomain);
     } else {
         var webSocketGw = webSocketGwDomain + wsUrlSuffix;
