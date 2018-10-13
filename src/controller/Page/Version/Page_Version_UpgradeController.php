@@ -6,18 +6,23 @@
  * Time: 3:54 PM
  */
 
-class Page_Version_UpgradeController
+class Page_Version_UpgradeController extends Page_VersionController
 {
 
-
-    private $versions = [
-        10011 => "1.0.11",
-
-        10012 => "1.0.12"
-    ];
-
-    public function index()
+    function doRequest()
     {
+        $currentVersionCode = $_POST["versionCode"];
+
+        if (empty($currentVersionCode)) {
+            $currentVersionCode = 10011;
+        }
+
+        switch ($currentVersionCode) {
+            case 10011:
+                break;
+            case 10012:
+                break;
+        }
 
     }
 

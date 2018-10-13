@@ -11,16 +11,14 @@ class Page_Version_CheckController extends Page_VersionController
 
     public function doRequest()
     {
-
-        $versionCode = $_POST["versionCode"];
-
         $oldVersionCode = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionCodeKey);
 
         if (!is_numeric($oldVersionCode)) {
             $oldVersionCode = 10011;
         }
 
-        if (empty($versionCode)) {
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method == 'GET') {
             //给所有的版本
             $newVersionCode = ZalyConfig::getSampleConfig(ZalyConfig::$configSiteVersionCodeKey);
             $this->logger->error("==================", "oldVersion=" . $oldVersionCode . " to newVersion=" . $newVersionCode);
@@ -34,7 +32,13 @@ class Page_Version_CheckController extends Page_VersionController
             }
 
             echo json_encode($versions);
-        } else {
+
+            $params["version"] = $versions;
+
+            //显示界面
+            echo $this->display("page_version_upgrade", $params);
+
+        } elseif ($method == 'POST') {
             //检测当前版本是否已经升级完
             $upgradeInfo = $this->getUpgradeVersion();
 
@@ -45,6 +49,5 @@ class Page_Version_CheckController extends Page_VersionController
 
         return;
     }
-
 
 }

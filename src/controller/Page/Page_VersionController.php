@@ -30,22 +30,45 @@ abstract class Page_VersionController extends HttpBaseController
             "versionName" => "",
             "upgradeErrCode" => "",
             "upgradeErrInfo" => "",
+            "passwordFileName" => $this->setPasswordFileName(),//升级口令文件名称
         ];
 
-        $fileName = dirname(__FILE__) . "/../../version.php";
-        $contents = var_export($siteVersion, true);
-        file_put_contents($fileName, "<?php\n return {$contents};\n ");
+        $fileName = dirname(__FILE__) . "/../../upgrade.php";
+
+        if (!file_exists($fileName)) {
+            $contents = var_export($siteVersion, true);
+            file_put_contents($fileName, "<?php\n return {$contents};\n ");
+
+            $passwordFileName = dirname(__FILE__) . "/../../" . $siteVersion['passwordFileName'];
+            file_put_contents($passwordFileName, ZalyHelper::generateNumberKey());
+        }
     }
 
     protected function getUpgradeVersion()
     {
-        $fileName = dirname(__FILE__) . "/../../version.php";
-        if (file_exists($fileName)) {
+        $fileName = dirname(__FILE__) . "/../../upgrade.php";
+        if (!file_exists($fileName)) {
             $this->initUpgradeVersion();
         }
         $versionArrays = require($fileName);
 
         return $versionArrays;
+    }
+
+    private function setPasswordFileName()
+    {
+        $dateDir = date("Ymd");
+        $fileName = ZalyHelper::generateStrKey(10) . "-" . $dateDir . ".upgrade";
+
+        return $fileName;
+    }
+
+    private function getPasswordFileName()
+    {
+        $versionInfos = $this->getUpgradeVersion();
+
+        $fileName = $versionInfos['passwordFileName'];
+        return $fileName;
     }
 
     /**
@@ -61,9 +84,10 @@ abstract class Page_VersionController extends HttpBaseController
             "versionName" => $versionName,
             "upgradeErrCode" => $upgradeErrCode,
             "upgradeErrInfo" => $upgradeErrInfo,
+            "passwordFileName" => $this->getPasswordFileName(),//升级口令文件名称
         ];
 
-        $fileName = dirname(__FILE__) . "/../../version.php";
+        $fileName = dirname(__FILE__) . "/../../upgrade.php";
         $contents = var_export($siteVersion, true);
         file_put_contents($fileName, "<?php\n return {$contents};\n ");
     }
