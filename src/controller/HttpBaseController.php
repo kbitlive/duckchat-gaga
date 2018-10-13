@@ -51,6 +51,7 @@ abstract class HttpBaseController extends \Wpf_Controller
 
     }
 
+    abstract public function index();
 
     /**
      * 处理方法， 根据bodyFormatType, 获取transData
