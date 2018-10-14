@@ -25,7 +25,8 @@ class SitePluginTable extends BaseTable
         "loadingType",
         "permissionType",
         "authKey",
-        "addTime"
+        "addTime",
+        "management",
     ];
 
     private $queryColumns;
@@ -51,6 +52,7 @@ class SitePluginTable extends BaseTable
                      usageType,
                      loadingType,
                      permissionType,
+                     management,
                      authKey,
                      addTime)
                 values
@@ -63,6 +65,7 @@ class SitePluginTable extends BaseTable
                     :usageType, 
                     :loadingType, 
                     :permissionType,
+                    :management,
                     :authKey,
                     :addTime);
                 ';
@@ -79,6 +82,7 @@ class SitePluginTable extends BaseTable
             $prepare->bindValue(":usageType", $miniProgramProfile["usageType"], PDO::PARAM_INT);
             $prepare->bindValue(":loadingType", $miniProgramProfile["loadingType"], PDO::PARAM_INT);
             $prepare->bindValue(":permissionType", $miniProgramProfile["permissionType"], PDO::PARAM_INT);
+            $prepare->bindValue(":management", $miniProgramProfile["management"]);
             $prepare->bindValue(":authKey", $miniProgramProfile["authKey"]);
             $prepare->bindValue(":addTime", $miniProgramProfile["addTime"]);
             $flag = $prepare->execute();

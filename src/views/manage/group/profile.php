@@ -16,9 +16,8 @@
         .site-image {
             width: 30px;
             height: 30px;
-            /*margin-top: 5px;*/
-            margin-bottom: 7px;
-            /*border-radius: 50%;*/
+            margin-top: 12px;
+            border-radius: 50%;
             cursor: pointer;
         }
 

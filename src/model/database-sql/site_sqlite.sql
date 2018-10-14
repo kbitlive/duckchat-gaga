@@ -179,6 +179,7 @@ CREATE TABLE sitePlugin(
               permissionType INTEGER ,    /*使用权限*/
               authKey VARCHAR(32) NOT NULL,
               addTime BIGINT,
+              management TEXT,
               UNIQUE(pluginId,usageType));
 
 CREATE INDEX IF NOT EXISTS indexSitePluginSort ON sitePlugin(sort);
