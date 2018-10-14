@@ -11,9 +11,6 @@ class Page_Version_UpgradeController extends Page_VersionController
 
     function doRequest()
     {
-
-        $latestVersionCode = ZalyConfig::getSampleConfig(ZalyConfig::$configSiteVersionCodeKey);
-
         try {
             //校验upgradePassword
             if (!$this->checkUpgradePassword()) {
@@ -23,12 +20,16 @@ class Page_Version_UpgradeController extends Page_VersionController
             if (empty($currentVersionCode)) {
                 $currentVersionCode = 10011;
             }
-            switch ($currentVersionCode) {
-                case 10011:
-                    $this->upgrade_10011_10012();
-                    break;
-                case 10012:
-                    break;
+
+            if ($currentVersionCode <= 10011) {
+                $this->upgrade_10011_10012();
+            } elseif ($currentVersionCode == 10012) {
+                //下次升级
+            }
+
+            //update cache if exists
+            if (function_exists("opcache_reset")) {
+                opcache_reset();
             }
         } catch (Exception $e) {
             $this->logger->error("page.version.upgrade", "");
@@ -79,9 +80,9 @@ class Page_Version_UpgradeController extends Page_VersionController
     private function upgrade_10011_10012_mysql()
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
-        $sql = "alter table sitePlugin ADD COLUMN IF NOT EXISTS management TEXT;";
+        $sql = "alter table sitePlugin ADD COLUMN management TEXT;";
 
-        $prepare = $this->ctx->db->prepare();
+        $prepare = $this->ctx->db->prepare($sql);
 
         $flag = $prepare->execute();
 
