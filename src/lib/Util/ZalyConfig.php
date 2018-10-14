@@ -10,8 +10,8 @@ class ZalyConfig
 {
     private static $verifySessionKey = "session_verify_";
 
-    public static $configSiteVersionNameKey = "siteVersionName";
     public static $configSiteVersionCodeKey = "siteVersionCode";
+    public static $configSiteVersionNameKey = "siteVersionName";
 
     public static $config;
     public static $sampleConfig;

@@ -109,15 +109,18 @@ class Page_Version_UpgradeController extends Page_VersionController
 
         //
         $sql = "drop table sitePlugin_temp_10011";
-        $prepare = $this->ctx->db->exec($sql);
+        $result = $this->ctx->db->exec($sql);
+        $this->logger->error($tag, "drop table sitePlugin_temp_10011 result=" . $result);
 
-        $sql = "alter table sitePlugin rename to temp_10011_sitePlugin";
-        $prepare = $this->ctx->db->exec($sql);
+        $sql = "alter table sitePlugin rename to sitePlugin_temp_10011";
+        $result = $this->ctx->db->exec($sql);
+        $this->logger->error($tag, "rename table sitePlugin to sitePlugin_temp_10011 result=" . $result);
 
         $this->executeSqliteScript();
+        $this->logger->error($tag, "upgrade sqlite,execute sqlite script");
 
         $insertSql = "insert into sitePlugin(id,pluginId,name,logo,sort,landingPageUrl,landingPageWithProxy,usageType,loadingType,permissionType,authKey,addTime) 
-          select id,pluginId,name,logo,sort,landingPageUrl,landingPageWithProxy,usageType,loadingType,permissionType,authKey,addTime from temp_10011_sitePlugin";
+          select id,pluginId,name,logo,sort,landingPageUrl,landingPageWithProxy,usageType,loadingType,permissionType,authKey,addTime from sitePlugin_temp_10011";
 
         $prepare = $this->ctx->db->prepare($insertSql);
         $flag = $prepare->execute();

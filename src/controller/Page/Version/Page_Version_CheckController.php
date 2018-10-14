@@ -18,6 +18,8 @@ class Page_Version_CheckController extends Page_VersionController
 
             $fileName = $this->getPasswordFileName();
             $params["passwordFileName"] = $fileName;
+            //tell client if need upgrade
+            $params["needUpgrade"] = $this->needUpgrade;
 
             //显示界面
             echo $this->display("upgrade_upgrade", $params);
