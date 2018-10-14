@@ -18,9 +18,9 @@
         {{each versions  version index}}
             <div class="textcenter margin-right2">
                 {{if nowLength == 0}}
-                    <div><img id="v_{{index}}" class="upgrade_img {{index}}" version="{{index}}" src="../../public/img/upgrade/success.png"></div>
+                    <div><img id="v_{{index}}" class="upgrade_img {{index}}" version="{{index}}" versionName="{{version}}" src="../../public/img/upgrade/success.png"></div>
                 {{else}}
-                <div> <img id="v_{{index}}" class="upgrade_img {{index}}" version="{{index}}" src="../../public/img/upgrade/todo.png"></div>
+                <div> <img id="v_{{index}}" class="upgrade_img {{index}}" version="{{index}}" versionName="{{version}}" src="../../public/img/upgrade/todo.png"></div>
                 {{/if}}
                 <span class="text_{{index}}">{{version}}</span>
             </div>
@@ -51,8 +51,8 @@
     </div>
 </script>
 
-<script id="tpl-upgrade-errorInfo" type="text/html">
-    <div style="color: RGBA(244, 67, 54, 1);">
+<script id="tpl-upgrade-upgradeInfo" type="text/html">
+    <div class="version_{{versionCode}}" style="padding-top: 1rem;padding-left: 2rem;color:{{color}}; ">
         {{errorInfo}}
     </div>
 </script>
