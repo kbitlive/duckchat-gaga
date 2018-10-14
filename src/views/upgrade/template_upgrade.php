@@ -15,18 +15,19 @@
 <script id="tpl-upgrade-init" type="text/html">
     <div class="upgrade_init_title textcenter">自动检测需要执行以下过程</div>
     <div class="upgrade_process textcenter">
-        {{each versions as version index}}
+        {{each versions  version index}}
             <div class="textcenter margin-right2">
-                {{if index == 0}}
-                    <div><img id="v_{{index}}" class="upgrade_img {{version}}" version=" {{version}}" src="../../public/img/upgrade/current.png"></div>
+                {{if nowLength == 0}}
+                    <div><img id="v_{{index}}" class="upgrade_img {{index}}" version="{{index}}" src="../../public/img/upgrade/current.png"></div>
                 {{else}}
-                <div> <img id="v_{{index}}" class="upgrade_img {{version}}" version="{{version}}" src="../../public/img/upgrade/todo.png"></div>
+                <div> <img id="v_{{index}}" class="upgrade_img {{index}}" version="{{index}}" src="../../public/img/upgrade/todo.png"></div>
                 {{/if}}
                 <span>{{version}}</span>
             </div>
-            {{if index < (length-1) }}
+            {{if nowLength < (length-1) }}
                 <div>  <img id="v_line_{{index}}" class="upgrade_line_img margin-right2" src="../../public/img/upgrade/todo_line.png"></div>
             {{/if}}
+            <input type="hidden" value="{{nowLength = (nowLength+1)}}">
         {{/each}}
 
     </div>
