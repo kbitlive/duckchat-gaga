@@ -12,6 +12,8 @@ class Page_Version_UpgradeController extends Page_VersionController
     function doRequest()
     {
 
+
+
         try {
             //校验upgradePassword
             if (!$this->checkUpgradePassword()) {
