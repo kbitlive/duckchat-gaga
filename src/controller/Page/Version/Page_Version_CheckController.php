@@ -26,14 +26,13 @@ class Page_Version_CheckController extends Page_VersionController
             $versions = [];
 
             foreach ($this->versions as $code => $name) {
-                if ($oldVersionCode >= $code) {
-                    $versions[] = [$code => $name];
+                if ($oldVersionCode <= $code) {
+                    $versions[$code] = $name;
                 }
             }
 
-//            echo json_encode($versions);
             $params["version"] = json_encode($versions);
-var_export($params);exit;
+            
             //显示界面
             echo $this->display("upgrade_upgrade", $params);
 
