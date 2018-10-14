@@ -26,6 +26,7 @@
 </div>
 
 <input type="hidden" value='<?php echo $passwordFileName;?>' class="passwordFileName">
+<input type="hidden" value='<?php echo $needUpgrade;?>' class="needUpgrade">
 <?php include (dirname(__DIR__) . '/upgrade/template_upgrade.php');?>
 <script src="../../public/js/upgrade/upgrade.js?_version=<?php echo $versionCode?>"></script>
 
