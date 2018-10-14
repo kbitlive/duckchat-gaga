@@ -151,6 +151,7 @@
     var isSureSiteBackup = "is_sure_site_backup";
     var versionsKey = "versions";
     var currentUpgradeVersionKey = "current_upgrade_version";
+    var endUpgradeVersionKey = "end_upgrade_version";
     var upgradeId = undefined;
 
     function displayInitUpgrade() {
@@ -186,7 +187,9 @@
                     var versions = versionData.versions;
                     localStorage.setItem(versionsKey, JSON.stringify(versions));
                     upgradeVersion = Object.keys(versions)[0];
-                    localStorage.setItem(currentUpgradeVersionKey,upgradeVersion);
+                    localStorage.setItem(currentUpgradeVersionKey, upgradeVersion);
+                    var length = Object.keys(versions).length-1;
+                    localStorage.setItem(endUpgradeVersionKey, Object.keys(versions)[length]);
                     var html = template("tpl-backup-tip", {});
                     $(".zaly_window").html(html);
                     $(".zaly_window")[0].style.display = "flex";
@@ -225,6 +228,11 @@
 
 
     $(document).on("click", ".upgrade_staring_btn", function () {
+        var goto = $(this).attr("goto");
+        if(goto == "site") {
+            window.location.href="./index.php";
+            return;
+        }
         sendUpgrade();
     });
 
@@ -252,6 +260,9 @@
 
                     $(".errorInfo").html(html);
                 }
+            },
+            fail:function (resp) {
+                $(".upgrade_info_msg").append(resp);
             }
         });
     }
@@ -267,6 +278,13 @@
         $("#v_line_"+upgradeVersionNum).attr("src", "../../public/img/upgrade/current_line.png");
         upgradeVersionNum = Number(upgradeVersionNum+1);
         localStorage.setItem(currentUpgradeVersionKey, upgradeVersionNum);
+        var endUpgradeNum = localStorage.getItem(endUpgradeVersionKey);
+        if(upgradeVersionNum > Number(endUpgradeNum)) {
+            var html = "升级完成，前往站点";
+            $(".upgrade_staring_btn").html(html);
+            $(".upgrade_staring_btn").attr("goto", "site");
+            return;
+        };
         sendUpgrade();
     }
 
