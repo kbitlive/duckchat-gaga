@@ -23,12 +23,11 @@ class Page_Version_UpgradeController extends Page_VersionController
             if (empty($currentVersionCode)) {
                 $currentVersionCode = 10011;
             }
-            switch ($currentVersionCode) {
-                case 10011:
-                    $this->upgrade_10011_10012();
-                    break;
-                case 10012:
-                    break;
+
+            if ($currentVersionCode <= 10011) {
+                $this->upgrade_10011_10012();
+            } elseif ($currentVersionCode == 10012) {
+                //下次升级
             }
         } catch (Exception $e) {
             $this->logger->error("page.version.upgrade", "");
