@@ -24,12 +24,11 @@ class Page_Version_PasswordController extends Page_VersionController
 
         //check password for upgrade
         $fileName = $this->getPasswordFileName();
-
         $passwordFileName = dirname(__FILE__) . "/../../../" . $fileName;
-
         $this->logger->error("==================", $passwordFileName);
-
         $serverPassword = file_get_contents($passwordFileName);
+        $this->logger->error("==================",
+            "clientPwd=" . $password . " serverPwd=" . $serverPassword);
 
         if ($password == $serverPassword) {
             setcookie("upgradePassword", sha1($serverPassword));
@@ -52,7 +51,11 @@ class Page_Version_PasswordController extends Page_VersionController
 
             echo json_encode($result);
         } else {
-            echo "error";
+            $error = [
+                "errCode" => "error",
+                "errInfo" => "升级口令错误"
+            ];
+            echo json_encode($error);
         }
 
         return;
