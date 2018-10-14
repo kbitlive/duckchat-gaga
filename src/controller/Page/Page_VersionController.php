@@ -8,6 +8,7 @@
 
 abstract class Page_VersionController extends HttpBaseController
 {
+
     protected $versions = [
         10011 => "1.0.11",
 
@@ -19,7 +20,6 @@ abstract class Page_VersionController extends HttpBaseController
     public function index()
     {
         $this->initUpgradeVersion();
-
         $this->doRequest();
     }
 
@@ -92,4 +92,66 @@ abstract class Page_VersionController extends HttpBaseController
         file_put_contents($fileName, "<?php\n return {$contents};\n ");
     }
 
+
+    protected function setUpgradeErrInfo($upgradeErrCode, $upgradeErrInfo)
+    {
+        $currentVersion = $this->getUpgradeVersion();
+
+        $siteVersion = [
+            "versionCode" => $currentVersion["versionCode"],
+            "versionName" => $currentVersion['versionName'],
+            "upgradeErrCode" => $upgradeErrCode,
+            "upgradeErrInfo" => $upgradeErrInfo,
+            "passwordFileName" => $this->getPasswordFileName(),//升级口令文件名称
+        ];
+
+        $fileName = dirname(__FILE__) . "/../../upgrade.php";
+        $contents = var_export($siteVersion, true);
+        file_put_contents($fileName, "<?php\n return {$contents};\n ");
+    }
+
+    protected function executeMysqlScript()
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $mysqlScriptPath = dirname(__DIR__) . "/model/database-sql/site_mysql.sql";
+
+        $this->logger->error("site.install.db", "mysql script=" . $mysqlScriptPath);
+
+        $_sqlContent = file_get_contents($mysqlScriptPath);//写自己的.sql文件
+        $_sqlArr = explode(';', $_sqlContent);
+
+        try {
+            $this->ctx->db->beginTransaction();
+            foreach ($_sqlArr as $sql) {
+                $this->ctx->db->exec($sql);
+            }
+            $this->ctx->db->commit();
+        } catch (Throwable $e) {
+            $this->ctx->db->rollBack();
+            $this->logger->error($tag, $e);
+            throw $e;
+        }
+
+    }
+
+    protected function executeSqliteScript()
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $mysqlScriptPath = dirname(__DIR__) . "/model/database-sql/site_sqlite.sql";
+        $_sqlContent = file_get_contents($mysqlScriptPath);//写自己的.sql文件
+        $_sqlArr = explode(';', $_sqlContent);
+
+        try {
+            $this->ctx->db->beginTransaction();
+            foreach ($_sqlArr as $sql) {
+                $this->ctx->db->exec($sql);
+            }
+            $this->ctx->db->commit();
+        } catch (Exception $e) {
+            $this->ctx->db->rollBack();
+            $this->ctx->logger->error($tag, $e);
+            throw $e;
+        }
+
+    }
 }

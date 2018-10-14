@@ -47,6 +47,9 @@ class BaseCtx extends Wpf_Ctx
     private $_dbName = "openzalySiteDB.sqlite3";
     private $_dbPath = ".";
 
+    /**
+     * @var PDO
+     */
     public $db;
 
     public function __construct()
