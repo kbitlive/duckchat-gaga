@@ -103,7 +103,6 @@ function sendUpgrade() {
         url: "./index.php?action=page.version.upgrade",
         data: data,
         success: function (resp) {
-
         },
         fail:function (resp) {
             console.log(resp);
@@ -114,10 +113,9 @@ function sendUpgrade() {
 
 function upgradeSiteVersion() {
     var upgradeVersionNum = localStorage.getItem(currentUpgradeVersionKey);
-    upgradeUpgradeProgress("done");
+    updateUpgradeProgress("done", "");
     var nextUpgradeVersionNum = Number(Number(upgradeVersionNum)+1);
     localStorage.setItem(currentUpgradeVersionKey, nextUpgradeVersionNum);
-
     var endUpgradeNum = localStorage.getItem(endUpgradeVersionKey);
     if(nextUpgradeVersionNum > Number(endUpgradeNum)) {
         var html = "升级完成，前往站点";
@@ -126,7 +124,7 @@ function upgradeSiteVersion() {
         $(".upgrade_staring_btn").attr("disabled", false);
         return;
     };
-    upgradeUpgradeProgress("start");
+    updateUpgradeProgress("start", "");
     sendUpgrade();
 }
 
@@ -137,33 +135,60 @@ function updateSiteVersionFailed(resp)
     } else {
         var info = resp;
     }
-    var info = template("tpl-upgrade-errorInfo", {
-        errorInfo:info
-    });
-    $(".upgrade_info_msg").append(info);
-    var upgradeVersionNum = localStorage.getItem(currentUpgradeVersionKey);
-    $("."+upgradeVersionNum).attr("src", "../../public/img/upgrade/fail.png");
-    $(".text_"+upgradeVersionNum)[0].style.color = "RGBA(244, 67, 54, 1)";
+    updateUpgradeProgress("fail", resp);
     $(".upgrade_staring_btn").html("升级失败");
 }
 
 //-------------------------------------page.version.upgrade-------------------------------------
 
-function upgradeUpgradeProgress(type)
+function updateUpgradeProgress(type, info)
 {
     var upgradeVersionNum = localStorage.getItem(currentUpgradeVersionKey);
 
     try{
-        if(type=="done") {
-            $("#v_line_"+upgradeVersionNum).attr("src", "../../public/img/upgrade/success_line.png");
-            var nextUpgradeVersionNum = Number(Number(upgradeVersionNum)+1);
-            $("#v_"+nextUpgradeVersionNum).attr("src", "../../public/img/upgrade/success.png");
-            $(".text_"+nextUpgradeVersionNum)[0].style.color = "RGBA(76, 59, 177, 1)";
-        } else {
+        if(type == "start"){
             $("#v_line_"+upgradeVersionNum).attr("src", "../../public/img/upgrade/current_line.png");
             var nextUpgradeVersionNum = Number(Number(upgradeVersionNum)+1);
             $("#v_"+nextUpgradeVersionNum).attr("src", "../../public/img/upgrade/current.png");
             $(".text_"+nextUpgradeVersionNum)[0].style.color = "RGBA(73, 205, 186, 1)";
+            var versionCode = $("#v_"+nextUpgradeVersionNum).attr("version");
+            var versionName = $("#v_"+nextUpgradeVersionNum).attr("versionName");
+            var info = template("tpl-upgrade-upgradeInfo", {
+                versionCode:versionCode,
+                color:"rgba(73,205,186,1)",
+                errorInfo:versionName+"版本正在升级中...."
+            });
+            $(".upgrade_info_msg").append(info);
+
+        } else if(type=="done") {
+            $("#v_line_"+upgradeVersionNum).attr("src", "../../public/img/upgrade/success_line.png");
+            var nextUpgradeVersionNum = Number(Number(upgradeVersionNum)+1);
+            $("#v_"+nextUpgradeVersionNum).attr("src", "../../public/img/upgrade/success.png");
+            $(".text_"+nextUpgradeVersionNum)[0].style.color="rgba(76,59,177,1)";
+            var versionCode = $("#v_"+nextUpgradeVersionNum).attr("version");
+            var versionName = $("#v_"+nextUpgradeVersionNum).attr("versionName");
+            $(".version_"+versionCode)[0].style.color="RGBA(20, 16, 48, 1)";
+            var html = versionName+"版本升级完成";
+            $(".version_"+versionCode).html(html);
+
+        } else if (type== "fail") {
+            var nextUpgradeVersionNum = Number(Number(upgradeVersionNum)+1);
+            $("#v_"+nextUpgradeVersionNum).attr("src", "../../public/img/upgrade/fail.png");
+            $(".text_"+nextUpgradeVersionNum)[0].style.color = "RGBA(244, 67, 54, 1)";
+
+            var versionCode = $("#v_"+nextUpgradeVersionNum).attr("version");
+            var versionName = $("#v_"+nextUpgradeVersionNum).attr("versionName");
+            $(".version_"+versionCode)[0].style.color="rgba(244,67,54,1)";
+            var html = versionName+"版本升级失败，失败原因如下";
+            $(".version_"+versionCode).html(html);
+
+            var info = template("tpl-upgrade-upgradeInfo", {
+                versionCode:$("#v_"+upgradeVersionNum).attr("versionName"),
+                color:"rgba(244,67,54,1); padding-left:3rem;",
+                errorInfo:info
+            });
+            $(".upgrade_info_msg").append(info);
+
         }
     }catch(error){
         console.log(error.message);
@@ -180,7 +205,7 @@ $(document).on("click", ".upgrade_staring_btn", function () {
     var html = "正在升级...";
     $(this).html(html);
     $(this).attr("disabled", "disabled");
-    upgradeUpgradeProgress("start");
+    updateUpgradeProgress("start", "");
     sendUpgrade();
 });
 

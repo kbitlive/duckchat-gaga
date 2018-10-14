@@ -103,3 +103,118 @@ body,html {
     justify-content: center;
     margin-top: 2rem;
 }
+
+.upgrade_title {
+    font-size:2.81rem;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(76,59,177,1);
+    margin-top: 9rem;
+    text-align: center;
+}
+.upgrade_token_div {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+}
+.upgrade_token {
+    width:46.9rem;
+    height:5.44rem;
+    border-radius:0.84rem;
+    border:0.09rem solid rgba(151,151,151,1);
+    outline: none;
+}
+.upgrade_tip {
+    font-size:1.31rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(102,102,102,1);
+    margin-left: 14rem;
+    margin-top: 1rem;
+}
+.upgrade_next_btn{
+    width:28.14rem;
+    height:4.69rem;
+    background:rgba(76,59,177,1);
+    border-radius:0.56rem;
+    font-size:1.88rem;
+    font-family:PingFangSC-Semibold;
+    font-weight:600;
+    color:rgba(255,255,255,1);
+    margin-top: 5rem;
+    outline: none;
+    cursor: pointer;
+}
+.textcenter{
+    text-align: center;
+}
+.site_upgrade_div {
+    display: flex;
+    justify-content: center;
+    width: 47rem;
+}
+.upgrade_init_title {
+    height:2.63rem;
+    font-size:2.63rem;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(76,59,177,1);
+    margin-top: 5rem;
+}
+.upgrade_process {
+    margin-top: 3rem;
+    display: flex;
+    justify-content: center;
+    margin-left: 16rem;
+    width:47rem;
+}
+.upgrade_img{
+    width:1.3rem;
+    height: 1.3rem;
+}
+.upgrade_line_img {
+    width: 6rem;
+    height: 0.6rem;
+}
+.margin-right2{
+    margin-right: 2rem;
+}
+.upgrade_info {
+    height:18.76rem;
+    border-radius:0.19rem;
+    text-align: center;
+    margin-top: 3rem;
+    display: flex;
+    justify-content: center;
+}
+.upgrade_info_msg {
+    width:46.9rem;
+    height:18.76rem;
+    resize: none;
+    overflow-y: scroll;
+    background:RGBA(255, 255, 255, 1) ;
+    text-align: left;
+    word-break:break-all;
+}
+.upgrade_staring_btn {
+    width:28.14rem;
+    height:4.69rem;
+    background:rgba(76,59,177,1);
+    border-radius:0.56rem;
+    font-size:1.88rem;
+    font-family:PingFangSC-Semibold;
+    font-weight:600;
+    color:rgba(255,255,255,1);
+    outline: none;
+    cursor: pointer;
+}
+.margin-top3 {
+    margin-top: 3rem;
+}
+.upgrade_token {
+    font-size:1.88rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(153,153,153,1);
+    padding-left: 1rem;
+}
