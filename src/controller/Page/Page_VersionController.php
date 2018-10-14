@@ -113,7 +113,7 @@ abstract class Page_VersionController extends HttpBaseController
     protected function executeMysqlScript()
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
-        $mysqlScriptPath = dirname(__DIR__) . "/model/database-sql/site_mysql.sql";
+        $mysqlScriptPath = dirname(__DIR__) . "/../model/database-sql/site_mysql.sql";
 
         $this->logger->error("site.install.db", "mysql script=" . $mysqlScriptPath);
 
@@ -137,7 +137,7 @@ abstract class Page_VersionController extends HttpBaseController
     protected function executeSqliteScript()
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
-        $mysqlScriptPath = dirname(__DIR__) . "/model/database-sql/site_sqlite.sql";
+        $mysqlScriptPath = dirname(__DIR__) . "/../model/database-sql/site_sqlite.sql";
         $_sqlContent = file_get_contents($mysqlScriptPath);//写自己的.sql文件
         $_sqlArr = explode(';', $_sqlContent);
 
