@@ -5,6 +5,9 @@ var versionsKey = "versions";
 var currentUpgradeVersionKey = "current_upgrade_version";
 var endUpgradeVersionKey = "end_upgrade_version";
 var upgradeId = undefined;
+var needUpgrade =$(".needUpgrade").val();
+console.log("$needUpgrade=="+needUpgrade);
+
 
 //-------------------------------------page upgrade int------------------------------------
 
@@ -16,6 +19,14 @@ function displayInitUpgrade() {
     $(".zaly_upgrade").html(html);
 }
 displayInitUpgrade();
+
+if(needUpgrade != 1) {
+    var html = "已是最新版本";
+    $(".upgrade_next_btn").html(html);
+    $(".upgrade_next_btn").attr("disabled", "disabled");
+    $(".upgrade_token").attr("disabled", "disabled");
+}
+
 
 //-------------------------------------site backup-------------------------------------s
 
@@ -60,7 +71,9 @@ function checkUpgradeToken() {
         url: "./index.php?action=page.version.password",
         data: data,
         success: function (resp) {
-            if (resp == "error") {
+            var data = JSON.parse(resp);
+
+            if (data.errCode == "error") {
                 alert("校验口令失败");
             } else {
                 var versionData = JSON.parse(resp);
