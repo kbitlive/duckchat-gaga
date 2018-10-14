@@ -29,6 +29,11 @@ abstract class HttpBaseController extends \Wpf_Controller
         "page.jump",
         "page.version.check",
     ];
+    public $upgradeAction = [
+        'page.version.check',
+        'page.version.password',
+        'page.version.upgrade',
+    ];
     private $groupType = "g";
     private $u2Type = "u";
     private $jumpRoomType = "";
@@ -65,7 +70,7 @@ abstract class HttpBaseController extends \Wpf_Controller
             $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
             $action = isset($_GET['action']) ? $_GET['action'] : "";
             $this->getAndSetClientLang();
-            if($action != 'page.version.check') {
+            if(!in_array($action, $this->upgradeAction)) {
                 $this->checkIsNeedUpgrade();
             }
 

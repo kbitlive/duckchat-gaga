@@ -131,18 +131,17 @@
         </div>
 
         <div class="init_check_info justify-content-left ext_curl" isLoad="{{isCanUseCurl}}">
-            <div class="init_check isLoadCurl">
+            <div class="init_check isCanUseCurl" style="color: #F44336;">
                 6.是否可以正确Curl请求
             </div>
             <div class="init_check_result">
                 {{if isCanUseCurl}}
-                <img src='../../public/img/init/check_success.png' />
+                <img class="isCanUseCurlImg" src='../../public/img/init/check_success.png' />
                 {{else}}
-                <img src='../../public/img//init/check_failed.png'  />
+                <img class="isCanUseCurlImg" src='../../public/img//init/check_failed.png'  />
                 {{/if}}
             </div>
         </div>
-
 
         <div class="init_check_info justify-content-left  ext_is_write" isLoad="{{isWritePermission}}">
             <div class="init_check isWritePermission">
@@ -172,7 +171,7 @@
 
         <div style="margin-top:4rem;margin-bottom: 5rem;">
             <button class="previte_init_protocol" data-local-value="prevStepTip">上一步</button>
-            <button class="next_init_data" data-local-value="nextStepTip">下一步</button>
+            <button class="next_init_data" style="background:rgba(201,201,201,1);"  disabled data-local-value="nextStepTip">下一步</button>
         </div>
 </script>
 
@@ -259,5 +258,5 @@
 
 <script id="tpl-error-info" type="text/html">
         {{errorInfo}}
-        <a style='color:rgba(76,59,177,1);' href='https://duckchat.akaxin.com/wiki/server/faq-mysql.md'>数据库常见问题汇总</a>
+        <a style='color:rgba(76,59,177,1);' target="_blank" href='https://duckchat.akaxin.com/wiki/server/faq-mysql.md'>数据库常见问题汇总</a>
     </script>

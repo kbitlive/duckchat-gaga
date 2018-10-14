@@ -168,10 +168,12 @@
             isLoadCurl:isLoadCurl,
             isWritePermission:isWritePermission,
             isLoadProperties:isCanLoadPropertites,
-            isCanUseCurl:isCanUseCurl
         });
         html = handleHtmlLanguage(html);
         $(".zaly_init").html(html);
+
+        testCurl();
+
         if(!isPhpVersionValid) {
             $(".isPhpVersionValid")[0].style.color="#F44336";
             isAvaliableSiteEnv = false;
@@ -200,6 +202,7 @@
             $(".isLoadProperties")[0].style.color="#F44336";
             isAvaliableSiteEnv = false;
         }
+
         if(isAvaliableSiteEnv == false) {
             $(".next_init_data")[0].style.background="rgba(201,201,201,1)";
             $(".next_init_data").attr("disabled", "disabled");
@@ -330,7 +333,6 @@
 
         var selector = document.getElementById('verifyPluginId');
         var pluginId = $(selector[selector.selectedIndex]).attr("pluginId");
-        console.log("dbType ==" + dbType);
         if (dbType == "") {
             alert("请选择数据库类型");
             return;
@@ -452,6 +454,27 @@
                     $(".errorInfo").html(html);
                 }
             }
+        });
+    }
+
+    function testCurl()
+    {
+        console.log("lll");
+        $.ajax({
+            method: "GET",
+            url: "./index.php?action=installDB&for=test_curl_result",
+            success: function (resp) {
+                if (resp == "success") {
+                    $(".isCanUseCurlImg").attr("src", "../../public/img/init/check_success.png");
+                    $(".isCanUseCurl")[0].style.color="rgba(102,102,102,1)";
+                    $(".next_init_data")[0].style.background="rgba(76,59,177,1)";
+                    $(".next_init_data").attr("disabled", false);
+                    return;
+                }
+                isAvaliableSiteEnv = false;
+                $(".next_init_data")[0].style.background="rgba(201,201,201,1)";
+                $(".next_init_data").attr("disabled", "disabled");
+            },
         });
     }
 

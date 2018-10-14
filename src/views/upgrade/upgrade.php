@@ -119,6 +119,13 @@
         .margin-top3 {
             margin-top: 3rem;
         }
+        .upgrade_token {
+            font-size:1.88rem;
+            font-family:PingFangSC-Regular;
+            font-weight:400;
+            color:rgba(153,153,153,1);
+            padding-left: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -135,49 +142,109 @@
     </div>
 </div>
 
-<input type="hidden" value='<?php echo $version;?>' class="siteVersion">
+<input type="hidden" value='<?php echo $passwordFileName;?>' class="passwordFileName">
 <?php include (dirname(__DIR__) . '/upgrade/template_upgrade.php');?>
 
 <script>
-    var upgradeVerssion = 0;
+    var upgradeVersion = 0;
+    var isCheckUpgradeTokenKey = "is_check_upgrade_token";
+    var isSureSiteBackup = "is_sure_site_backup";
+    var versionsKey = "versions";
+    var currentUpgradeVersionKey = "current_upgrade_version";
+    var upgradeId = undefined;
 
-    var html = template("tpl-upgrade-token", {});
-    $(".zaly_upgrade").html(html);
+    function displayInitUpgrade() {
+        var passwordFileName = $(".passwordFileName").val();
+        var html = template("tpl-upgrade-token", {
+            passwordFileName:passwordFileName
+        });
+        $(".zaly_upgrade").html(html);
+    }
+    displayInitUpgrade();
+
+    var isCheckUpgradeToken = localStorage.getItem(isCheckUpgradeTokenKey);
+    var isSureSiteBackup = localStorage.getItem(isSureSiteBackup, "yes");
+
+    if(isCheckUpgradeToken == "yes" && isSureSiteBackup == 'yes') {
+        // displayUpgradeVersion();
+    }
+
+    function checkUpgradeToken() {
+        var upgradeToken = $(".upgrade_token").val();
+        var data = {
+            password:upgradeToken
+        }
+        $.ajax({
+            method: "POST",
+            url: "./index.php?action=page.version.password",
+            data: data,
+            success: function (resp) {
+                if (resp == "error") {
+                    alert("校验口令失败");
+                } else {
+                    var versionData = JSON.parse(resp);
+                    var versions = versionData.versions;
+                    localStorage.setItem(versionsKey, JSON.stringify(versions));
+                    upgradeVersion = Object.keys(versions)[0];
+                    localStorage.setItem(currentUpgradeVersionKey,upgradeVersion);
+                    var html = template("tpl-backup-tip", {});
+                    $(".zaly_window").html(html);
+                    $(".zaly_window")[0].style.display = "flex";
+                    localStorage.setItem(isCheckUpgradeTokenKey, "yes");
+                }
+            }
+        });
+    }
 
     $(".upgrade_next_btn").on("click", function () {
-        var html = template("tpl-backup-tip", {});
-        $(".zaly_window").html(html);
-        $(".zaly_window")[0].style.display = "flex";
+        checkUpgradeToken();
     });
 
     $(document).on("click",".zaly_site_backup_sure", function () {
-        console.log("ppp");
-        $(".zaly_window")[0].style.display = "none";
+        localStorage.setItem(isSureSiteBackup, "yes");
         //TODO 拉取需要升级的版本数据
-        var siteVersions = $(".siteVersion").val();
-        siteVersions = JSON.parse(siteVersions);
-        var html = template("tpl-upgrade-init", {
-            versions:siteVersions,
-            length:siteVersions.length
-        });
-        $(".zaly_upgrade").html(html);
+        $(".zaly_window")[0].style.display = "none";
+        displayUpgradeVersion();
     });
 
+    function displayUpgradeVersion()
+    {
+        try{
+            var siteVersionStr = localStorage.getItem(versionsKey);
+            var siteVersions = JSON.parse(siteVersionStr);
+            var html = template("tpl-upgrade-init", {
+                versions:siteVersions,
+                length:Object.keys(siteVersions).length,
+                nowLength:0
+            });
+            $(".zaly_upgrade").html(html);
+        }catch (error) {
+            displayInitUpgrade();
+        }
+    }
+
+
     $(document).on("click", ".upgrade_staring_btn", function () {
-        // sendUpgrade();
-        upgradeSiteVersion();
+        sendUpgrade();
     });
 
     function sendUpgrade() {
-        var upgradeSiteVersion = $("#v_"+upgradeVerssion).attr("version");
-        console.log(upgradeSiteVersion);
+        var upgradeVersionNum = localStorage.getItem(currentUpgradeVersionKey);
+        var upgradeSiteVersion = $("#v_"+upgradeVersionNum).attr("version");
+        console.log("upgradeSiteVersion ==" + upgradeSiteVersion);
+        var data = {
+            versionCode:upgradeSiteVersion
+        }
+        clearInterval(upgradeId);
         $.ajax({
             method: "POST",
-            url: "./index.php?action=installDB&for=test_connect_mysql",
+            url: "./index.php?action=page.version.upgrade",
             data: data,
             success: function (resp) {
                 if (resp == "success") {
-                    initSite(data);
+                    upgradeId = setInterval(function () {
+                        checkUpgradeResult();
+                    }, 1000)
                 } else {
                     var html = template("tpl-error-info", {
                         errorInfo:resp
@@ -190,22 +257,23 @@
     }
 
     function upgradeSiteVersion() {
-        $("#v_"+upgradeVerssion).attr("src", "../../public/img/upgrade/success.png");
-        if(upgradeVerssion != 0) {
-            var preSiteVersion = Number(upgradeVerssion-1);
+        var upgradeVersionNum = localStorage.getItem(currentUpgradeVersionKey);
+
+        $("#v_"+upgradeVersionNum).attr("src", "../../public/img/upgrade/success.png");
+        if(upgradeVersionNum != 0) {
+            var preSiteVersion = Number(upgradeVersionNum-1);
             $("#v_line_"+preSiteVersion).attr("src", "../../public/img/upgrade/success_line.png");
         }
-        $("#v_line_"+upgradeVerssion).attr("src", "../../public/img/upgrade/current_line.png");
-        upgradeVerssion = Number(upgradeVerssion+1);
+        $("#v_line_"+upgradeVersionNum).attr("src", "../../public/img/upgrade/current_line.png");
+        upgradeVersionNum = Number(upgradeVersionNum+1);
+        localStorage.setItem(currentUpgradeVersionKey, upgradeVersionNum);
         sendUpgrade();
     }
 
     function checkUpgradeResult() {
-        var upgradeSiteVersion = $("#v_"+upgradeVerssion).attr("version");
         $.ajax({
             method: "POST",
-            url: "./index.php?action=installDB&for=test_connect_mysql",
-            data: data,
+            url: "./index.php?action=page.version.check",
             success: function (resp) {
                 if (resp == "success") {
                     upgradeSiteVersion();
