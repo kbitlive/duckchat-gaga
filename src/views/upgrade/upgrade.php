@@ -175,7 +175,7 @@
     var isSureSiteBackup = localStorage.getItem(isSureSiteBackup, "yes");
 
     if(isCheckUpgradeToken == "yes" && isSureSiteBackup == 'yes') {
-        displayUpgradeVersion();
+        // displayUpgradeVersion();
     }
 
     $(document).on("click",".zaly_site_backup_sure", function () {
@@ -256,10 +256,7 @@
             url: "./index.php?action=page.version.upgrade",
             data: data,
             success: function (resp) {
-                if (resp == "success") {
-                } else {
-                    updateSiteVersionFailed(resp);
-                }
+
             },
             fail:function (resp) {
                 console.log(resp);
@@ -270,21 +267,19 @@
 
     function upgradeSiteVersion() {
         var upgradeVersionNum = localStorage.getItem(currentUpgradeVersionKey);
-        $("#v_"+upgradeVersionNum).attr("src", "../../public/img/upgrade/success.png");
-        if(upgradeVersionNum != 0) {
-            var preSiteVersion = Number(upgradeVersionNum-1);
-            $("#v_line_"+preSiteVersion).attr("src", "../../public/img/upgrade/success_line.png");
-        }
-        $("#v_line_"+upgradeVersionNum).attr("src", "../../public/img/upgrade/current_line.png");
-        upgradeVersionNum = Number(upgradeVersionNum+1);
-        localStorage.setItem(currentUpgradeVersionKey, upgradeVersionNum);
+        upgradeUpgradeProgress("done");
+        var nextUpgradeVersionNum = Number(Number(upgradeVersionNum)+1);
+        localStorage.setItem(currentUpgradeVersionKey, nextUpgradeVersionNum);
+
         var endUpgradeNum = localStorage.getItem(endUpgradeVersionKey);
-        if(upgradeVersionNum > Number(endUpgradeNum)) {
+        if(nextUpgradeVersionNum > Number(endUpgradeNum)) {
             var html = "升级完成，前往站点";
             $(".upgrade_staring_btn").html(html);
             $(".upgrade_staring_btn").attr("goto", "site");
+            $(".upgrade_staring_btn").attr("disabled", false);
             return;
         };
+        upgradeUpgradeProgress("start");
         sendUpgrade();
     }
 
@@ -293,8 +288,7 @@
         if(resp == "") {
             var info = "请求失败";
         } else {
-            var data = JSON.parse(resp);
-            var info = data.upgradeErrInfo;
+            var info = resp;
         }
         var info = template("tpl-upgrade-errorInfo", {
             errorInfo:info
@@ -308,6 +302,28 @@
 
 //-------------------------------------page.version.upgrade-------------------------------------
 
+    function upgradeUpgradeProgress(type)
+    {
+        var upgradeVersionNum = localStorage.getItem(currentUpgradeVersionKey);
+
+        try{
+            if(type=="done") {
+                $("#v_line_"+upgradeVersionNum).attr("src", "../../public/img/upgrade/success_line.png");
+                var nextUpgradeVersionNum = Number(Number(upgradeVersionNum)+1);
+                $("#v_"+nextUpgradeVersionNum).attr("src", "../../public/img/upgrade/success.png");
+                $(".text_"+nextUpgradeVersionNum)[0].style.color = "RGBA(76, 59, 177, 1)";
+            } else {
+                $("#v_line_"+upgradeVersionNum).attr("src", "../../public/img/upgrade/current_line.png");
+                var nextUpgradeVersionNum = Number(Number(upgradeVersionNum)+1);
+                $("#v_"+nextUpgradeVersionNum).attr("src", "../../public/img/upgrade/current.png");
+                $(".text_"+nextUpgradeVersionNum)[0].style.color = "RGBA(73, 205, 186, 1)";
+            }
+        }catch(error){
+            console.log(error.message);
+        }
+
+    }
+
     $(document).on("click", ".upgrade_staring_btn", function () {
         var goto = $(this).attr("goto");
         if(goto == "site") {
@@ -317,6 +333,7 @@
         var html = "正在升级...";
         $(this).html(html);
         $(this).attr("disabled", "disabled");
+        upgradeUpgradeProgress("start");
         sendUpgrade();
     });
 
@@ -329,8 +346,12 @@
             method: "POST",
             url: "./index.php?action=page.version.check",
             success: function (resp) {
+                var data = JSON.parse(resp);
+                if(data.upgradeErrCode == "") {
+                    return;
+                }
                 clearInterval(upgradeId);
-                if (resp == "success") {
+                if (data.upgradeErrCode == "success") {
                     upgradeSiteVersion();
                 } else {
                     updateSiteVersionFailed(resp);

@@ -18,7 +18,7 @@
         {{each versions  version index}}
             <div class="textcenter margin-right2">
                 {{if nowLength == 0}}
-                    <div><img id="v_{{index}}" class="upgrade_img {{index}}" version="{{index}}" src="../../public/img/upgrade/current.png"></div>
+                    <div><img id="v_{{index}}" class="upgrade_img {{index}}" version="{{index}}" src="../../public/img/upgrade/success.png"></div>
                 {{else}}
                 <div> <img id="v_{{index}}" class="upgrade_img {{index}}" version="{{index}}" src="../../public/img/upgrade/todo.png"></div>
                 {{/if}}
