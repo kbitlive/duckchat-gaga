@@ -6,7 +6,7 @@
  * Time: 3:54 PM
  */
 
-abstract class Page_VersionController extends HttpBaseController
+abstract class Page_VersionController extends UpgradeController
 {
     protected $needUpgrade = false;
     protected $versions = [
