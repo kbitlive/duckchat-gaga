@@ -22,7 +22,7 @@
                 {{else}}
                 <div> <img id="v_{{index}}" class="upgrade_img {{index}}" version="{{index}}" src="../../public/img/upgrade/todo.png"></div>
                 {{/if}}
-                <span>{{version}}</span>
+                <span class="text_{{index}}">{{version}}</span>
             </div>
             {{if nowLength < (length-1) }}
                 <div>  <img id="v_line_{{index}}" class="upgrade_line_img margin-right2" src="../../public/img/upgrade/todo_line.png"></div>
@@ -31,8 +31,8 @@
         {{/each}}
 
     </div>
-    <div class="upgrade_info">
-        <textarea class="upgrade_info_msg" disabled></textarea>
+    <div class="upgrade_info" >
+        <div class="upgrade_info_msg" ></div>
     </div>
     <div class="textcenter margin-top3">
         <button class="upgrade_staring_btn">开始升级</button>
@@ -48,5 +48,11 @@
     <div class="upgrade_tip">升级口令保存在{{passwordFileName}}文件里，请去服务端查看</div>
     <div class="textcenter">
         <button class="upgrade_next_btn">下一步</button>
+    </div>
+</script>
+
+<script id="tpl-upgrade-errorInfo" type="text/html">
+    <div style="color: RGBA(244, 67, 54, 1);">
+        {{errorInfo}}
     </div>
 </script>

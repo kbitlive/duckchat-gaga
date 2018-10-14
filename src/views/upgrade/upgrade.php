@@ -97,12 +97,16 @@
             border-radius:0.19rem;
             text-align: center;
             margin-top: 3rem;
+            display: flex;
+            justify-content: center;
         }
-        .upgrade_info textarea {
+        .upgrade_info_msg {
             width:46.9rem;
             height:18.76rem;
             resize: none;
             overflow-y: scroll;
+            background:RGBA(255, 255, 255, 1) ;
+            text-align: left;
         }
         .upgrade_staring_btn {
             width:28.14rem;
@@ -154,6 +158,8 @@
     var endUpgradeVersionKey = "end_upgrade_version";
     var upgradeId = undefined;
 
+//-------------------------------------page upgrade int------------------------------------
+
     function displayInitUpgrade() {
         var passwordFileName = $(".passwordFileName").val();
         var html = template("tpl-upgrade-token", {
@@ -163,12 +169,38 @@
     }
     displayInitUpgrade();
 
+//-------------------------------------site backup-------------------------------------s
+
     var isCheckUpgradeToken = localStorage.getItem(isCheckUpgradeTokenKey);
     var isSureSiteBackup = localStorage.getItem(isSureSiteBackup, "yes");
 
     if(isCheckUpgradeToken == "yes" && isSureSiteBackup == 'yes') {
-        // displayUpgradeVersion();
+        displayUpgradeVersion();
     }
+
+    $(document).on("click",".zaly_site_backup_sure", function () {
+        localStorage.setItem(isSureSiteBackup, "yes");
+        //TODO 拉取需要升级的版本数据
+        $(".zaly_window")[0].style.display = "none";
+        displayUpgradeVersion();
+    });
+
+    function displayUpgradeVersion()
+    {
+        try{
+            var siteVersionStr = localStorage.getItem(versionsKey);
+            var siteVersions = JSON.parse(siteVersionStr);
+            var html = template("tpl-upgrade-init", {
+                versions:siteVersions,
+                length:Object.keys(siteVersions).length,
+                nowLength:0
+            });
+            $(".zaly_upgrade").html(html);
+        }catch (error) {
+            displayInitUpgrade();
+        }
+    }
+//-------------------------------------page.password.version-------------------------------------
 
     function checkUpgradeToken() {
         var upgradeToken = $(".upgrade_token").val();
@@ -203,38 +235,8 @@
         checkUpgradeToken();
     });
 
-    $(document).on("click",".zaly_site_backup_sure", function () {
-        localStorage.setItem(isSureSiteBackup, "yes");
-        //TODO 拉取需要升级的版本数据
-        $(".zaly_window")[0].style.display = "none";
-        displayUpgradeVersion();
-    });
 
-    function displayUpgradeVersion()
-    {
-        try{
-            var siteVersionStr = localStorage.getItem(versionsKey);
-            var siteVersions = JSON.parse(siteVersionStr);
-            var html = template("tpl-upgrade-init", {
-                versions:siteVersions,
-                length:Object.keys(siteVersions).length,
-                nowLength:0
-            });
-            $(".zaly_upgrade").html(html);
-        }catch (error) {
-            displayInitUpgrade();
-        }
-    }
-
-
-    $(document).on("click", ".upgrade_staring_btn", function () {
-        var goto = $(this).attr("goto");
-        if(goto == "site") {
-            window.location.href="./index.php";
-            return;
-        }
-        sendUpgrade();
-    });
+    //-------------------------------------page.version.upgrade function-------------------------------------
 
     function sendUpgrade() {
         var upgradeVersionNum = localStorage.getItem(currentUpgradeVersionKey);
@@ -244,32 +246,30 @@
             versionCode:upgradeSiteVersion
         }
         clearInterval(upgradeId);
+
+        upgradeId = setInterval(function () {
+            checkUpgradeResult();
+        }, 1000);
+
         $.ajax({
             method: "POST",
             url: "./index.php?action=page.version.upgrade",
             data: data,
             success: function (resp) {
                 if (resp == "success") {
-                    upgradeId = setInterval(function () {
-                        checkUpgradeResult();
-                    }, 1000)
                 } else {
-                    var html = template("tpl-error-info", {
-                        errorInfo:resp
-                    })
-
-                    $(".errorInfo").html(html);
+                    updateSiteVersionFailed(resp);
                 }
             },
             fail:function (resp) {
-                $(".upgrade_info_msg").append(resp);
+                console.log(resp);
+                alert("请求失败");
             }
         });
     }
 
     function upgradeSiteVersion() {
         var upgradeVersionNum = localStorage.getItem(currentUpgradeVersionKey);
-
         $("#v_"+upgradeVersionNum).attr("src", "../../public/img/upgrade/success.png");
         if(upgradeVersionNum != 0) {
             var preSiteVersion = Number(upgradeVersionNum-1);
@@ -288,15 +288,52 @@
         sendUpgrade();
     }
 
+    function updateSiteVersionFailed(resp)
+    {
+        if(resp == "") {
+            var info = "请求失败";
+        } else {
+            var data = JSON.parse(resp);
+            var info = data.upgradeErrInfo;
+        }
+        var info = template("tpl-upgrade-errorInfo", {
+            errorInfo:info
+        });
+        $(".upgrade_info_msg").append(info);
+        var upgradeVersionNum = localStorage.getItem(currentUpgradeVersionKey);
+        $("."+upgradeVersionNum).attr("src", "../../public/img/upgrade/fail.png");
+        $(".text_"+upgradeVersionNum)[0].style.color = "RGBA(244, 67, 54, 1)";
+        $(".upgrade_staring_btn").html("升级失败");
+    }
+
+//-------------------------------------page.version.upgrade-------------------------------------
+
+    $(document).on("click", ".upgrade_staring_btn", function () {
+        var goto = $(this).attr("goto");
+        if(goto == "site") {
+            window.location.href="./index.php";
+            return;
+        }
+        var html = "正在升级...";
+        $(this).html(html);
+        $(this).attr("disabled", "disabled");
+        sendUpgrade();
+    });
+
+
+//-------------------------------------page.version.check-------------------------------------
+
+
     function checkUpgradeResult() {
         $.ajax({
             method: "POST",
             url: "./index.php?action=page.version.check",
             success: function (resp) {
+                clearInterval(upgradeId);
                 if (resp == "success") {
                     upgradeSiteVersion();
                 } else {
-                    $(".upgrade_info_msg").append(resp);
+                    updateSiteVersionFailed(resp);
                 }
             }
         });
