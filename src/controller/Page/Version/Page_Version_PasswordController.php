@@ -13,8 +13,16 @@ class Page_Version_PasswordController extends Page_VersionController
     {
         $password = $_POST["password"];
 
-        //check password for upgrade
 
+        //get old VersionCode
+        $oldVersionCode = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionCodeKey);
+
+        if (!is_numeric($oldVersionCode)) {
+            $oldVersionCode = 10011;
+        }
+
+
+        //check password for upgrade
         $fileName = $this->getPasswordFileName();
 
         $passwordFileName = dirname(__FILE__) . "/../../../" . $fileName;
@@ -25,7 +33,24 @@ class Page_Version_PasswordController extends Page_VersionController
 
         if ($password == $serverPassword) {
             setcookie("upgradePassword", sha1($serverPassword));
-            echo "success";
+
+            $newVersionCode = ZalyConfig::getSampleConfig(ZalyConfig::$configSiteVersionCodeKey);
+            $this->logger->error("==================", "oldVersion=" . $oldVersionCode . " to newVersion=" . $newVersionCode);
+
+            $versions = [];
+
+            foreach ($this->versions as $code => $name) {
+                if ($oldVersionCode <= $code) {
+                    $versions[$code] = $name;
+                }
+            }
+
+            $result = [
+                "errCode" => "success",
+                "versions" => $versions,
+            ];
+
+            echo json_encode($result);
         } else {
             echo "error";
         }
