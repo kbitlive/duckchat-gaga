@@ -11,28 +11,14 @@ class Page_Version_CheckController extends Page_VersionController
 
     public function doRequest()
     {
-        $oldVersionCode = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionCodeKey);
-
-        if (!is_numeric($oldVersionCode)) {
-            $oldVersionCode = 10011;
-        }
 
         $method = $_SERVER['REQUEST_METHOD'];
         if ($method == 'GET') {
             //给所有的版本
-            $newVersionCode = ZalyConfig::getSampleConfig(ZalyConfig::$configSiteVersionCodeKey);
-            $this->logger->error("==================", "oldVersion=" . $oldVersionCode . " to newVersion=" . $newVersionCode);
 
-            $versions = [];
+            $fileName = $this->getPasswordFileName();
+            $params["passwordFileName"] = $fileName;
 
-            foreach ($this->versions as $code => $name) {
-                if ($oldVersionCode <= $code) {
-                    $versions[$code] = $name;
-                }
-            }
-
-            $params["version"] = json_encode($versions);
-            
             //显示界面
             echo $this->display("upgrade_upgrade", $params);
 
