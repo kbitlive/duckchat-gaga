@@ -16,6 +16,19 @@ class ZalyConfig
     public static $config;
     public static $sampleConfig;
 
+    public static function updateConfigFile($newConfig)
+    {
+        if (!$newConfig) {
+            return false;
+        }
+
+        $configFileName = dirname(__FILE__) . "/../../config.php";
+        //write to file
+        $contents = var_export($newConfig, true);
+        file_put_contents($configFileName, "<?php\n return {$contents};\n ");
+        return true;
+    }
+
     //load config.php
     public static function loadConfigFile()
     {

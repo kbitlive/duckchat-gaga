@@ -12,7 +12,7 @@ class Page_Version_UpgradeController extends Page_VersionController
     function doRequest()
     {
 
-
+        $latestVersionCode = ZalyConfig::getSampleConfig(ZalyConfig::$configSiteVersionCodeKey);
 
         try {
             //校验upgradePassword
@@ -74,7 +74,6 @@ class Page_Version_UpgradeController extends Page_VersionController
             //sqlite
             $this->upgrade_10011_10012_sqlite();
         }
-
     }
 
     private function upgrade_10011_10012_mysql()
@@ -82,12 +81,35 @@ class Page_Version_UpgradeController extends Page_VersionController
         $tag = __CLASS__ . "->" . __FUNCTION__;
         $sql = "alter table sitePlugin ADD COLUMN IF NOT EXISTS management TEXT;";
 
-        $this->ctx->db->exec($sql);
+        $prepare = $this->ctx->db->prepare();
+
+        $flag = $prepare->execute();
+
+        $errCode = $prepare->errorCode();
+
+        $upgradeErrCode = "error";
+        $upgradeErrInfo = "";
+        if ($flag && $errCode == "00000") {
+            $upgradeErrCode = "success";
+        } else {
+            $upgradeErrInfo = var_export($prepare->errorInfo(), true);
+        }
+
+        //update version upgrade info
+        $this->setUpgradeVersion(10012, "1.0.12", $upgradeErrCode, $upgradeErrInfo);
+
+        if ($upgradeErrCode == "success") {
+            $this->updateSiteConfigAsUpgrade(10012, "1.0.12");
+        }
     }
 
     private function upgrade_10011_10012_sqlite()
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
+
+        //
+        $sql = "drop table sitePlugin_temp_10011";
+        $prepare = $this->ctx->db->exec($sql);
 
         $sql = "alter table sitePlugin rename to temp_10011_sitePlugin";
         $prepare = $this->ctx->db->exec($sql);
@@ -98,10 +120,24 @@ class Page_Version_UpgradeController extends Page_VersionController
           select id,pluginId,name,logo,sort,landingPageUrl,landingPageWithProxy,usageType,loadingType,permissionType,authKey,addTime from temp_10011_sitePlugin";
 
         $prepare = $this->ctx->db->prepare($insertSql);
-        $prepare->execute($prepare);
+        $flag = $prepare->execute();
 
+        $errCode = $prepare->errorCode();
+
+        $upgradeErrCode = "error";
+        $upgradeErrInfo = "";
+        if ($flag && $errCode == "00000") {
+            $upgradeErrCode = "success";
+        } else {
+            $upgradeErrInfo = var_export($prepare->errorInfo(), true);
+        }
+
+        //update version upgrade info
+        $this->setUpgradeVersion(10012, "1.0.12", $upgradeErrCode, $upgradeErrInfo);
+        if ($upgradeErrCode == "success") {
+            $this->updateSiteConfigAsUpgrade(10012, "1.0.12");
+        }
         $this->logger->error("=========", "upgrade result=" . var_export($prepare->errorInfo(), true));
     }
-
 
 }

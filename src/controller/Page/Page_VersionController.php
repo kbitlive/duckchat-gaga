@@ -154,4 +154,14 @@ abstract class Page_VersionController extends HttpBaseController
         }
 
     }
+
+    protected function updateSiteConfigAsUpgrade($newVersionCode, $newVersionName)
+    {
+        $siteConfig = ZalyConfig::getAllConfig();
+
+        $siteConfig["siteVersionCode"] = $newVersionCode;
+        $siteConfig["siteVersionName"] = $newVersionName;
+
+        ZalyConfig::updateConfigFile($siteConfig);
+    }
 }
