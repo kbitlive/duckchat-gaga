@@ -45,7 +45,7 @@
     <div class="upgrade_token_div">
         <input class="upgrade_token" type="text" placeholder="输入升级口令">
     </div>
-    <div class="upgrade_tip">升级口令保存在src/xxxx文件里，请去服务端查看</div>
+    <div class="upgrade_tip">升级口令保存在{{passwordFileName}}文件里，请去服务端查看</div>
     <div class="textcenter">
         <button class="upgrade_next_btn">下一步</button>
     </div>
