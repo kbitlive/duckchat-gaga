@@ -8,7 +8,7 @@
 
 abstract class Page_VersionController extends HttpBaseController
 {
-
+    protected $needUpgrade = false;
     protected $versions = [
         10011 => "1.0.11",
 
@@ -19,6 +19,17 @@ abstract class Page_VersionController extends HttpBaseController
 
     public function index()
     {
+        //set is latest version
+        $currentVersionCode = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionCodeKey);
+        if (!is_numeric($currentVersionCode)) {
+            $currentVersionCode = 10011;
+        }
+        $latestVersionCode = ZalyConfig::getSampleConfig(ZalyConfig::$configSiteVersionCodeKey);
+        //check if need upgrade
+        if ($currentVersionCode < $latestVersionCode) {
+            $this->needUpgrade = true;
+        }
+
         $this->initUpgradeVersion();
         $this->doRequest();
     }
