@@ -22,13 +22,26 @@ class Manage_GroupController extends Manage_CommonController
         }
 
         if (!$length) {
-            $length = 500;
+            $length = 2000;
         }
 
         // totalGroupCount
         $params['totalGroupCount'] = $this->getTotalGroupCount();
 
-        $params['groupList'] = $this->getGroupListByOffset($offset, $length);
+        $groupList = $this->getGroupListByOffset($offset, $length);
+
+        if ($groupList) {
+            $groupProfiles = [];
+            foreach ($groupList as $group) {
+
+                $groupProfiles[] = [
+                    'groupId' => $group['groupId'],
+                    'name' => htmlspecialchars($group['name']),
+                ];
+
+            }
+            $params['groupList'] = $groupProfiles;
+        }
 
         echo $this->display("manage_group_indexList", $params);
 

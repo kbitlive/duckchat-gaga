@@ -317,6 +317,8 @@
                                     <?php if ($lang == "1") { ?> 临时会话小程序<?php } else { ?> Tmp Chat Mini Program <?php } ?>
                                 <?php } else if ($usageType == "5") { ?>
                                     <?php if ($lang == "1") { ?>群组聊天小程序<?php } else { ?> Group Chat Mini Program <?php } ?>
+                                <?php } else if ($usageType == "6") { ?>
+                                    <?php if ($lang == "1") { ?>账户安全小程序<?php } else { ?> Account Mini Program <?php } ?>
                                 <?php } else { ?>
                                     <?php if ($lang == "1") { ?>无效小程序<?php } else { ?> Invalid Mini Program <?php } ?>
                                 <?php } ?>
@@ -708,6 +710,14 @@
                     $("#mini-program-usage-text").html(language == 0 ? "Login Mini Program" : "登陆小程序");
                     $(".mini-program-usage").attr("data", "2");
                     updateMiniProgramProfile("usageType", "2");
+                }
+            }, {
+                text: language == 0 ? "Account Mini Program" : "账户安全小程序",
+                className: "select-color-primary",
+                onClick: function () {
+                    $("#mini-program-usage-text").html(language == 0 ? "Account Mini Program" : "账户安全小程序");
+                    $(".mini-program-usage").attr("data", "6");
+                    updateMiniProgramProfile("usageType", "6");
                 }
             }, {
                 text: language == 0 ? "Invalid Mini Program" : "无效小程序",
