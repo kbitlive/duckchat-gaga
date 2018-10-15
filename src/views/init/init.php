@@ -40,7 +40,6 @@
     <input type="hidden" value="<?php echo $isLoadPDOMysql; ?>" class="isLoadPDOMysql">
     <input type="hidden" value="<?php echo $isLoadCurl;?>" class="isLoadCurl">
     <input type="hidden" value="<?php echo $isWritePermission;?>" class="isWritePermission">
-    <input type="hidden" value="<?php echo $isCanUseCurl;?>" class="isCanUseCurl">
     <input type="hidden" value='<?php echo $dbFiles;?>' class="dbFiles">
 
     <?php include (dirname(__DIR__) . '/init/template_init.php');?>
@@ -53,7 +52,6 @@
     var isLoadPDOSqlite = $(".isLoadPDOSqlite").val();
     var isWritePermission = $(".isWritePermission").val();
     var isLoadCurl = $(".isLoadCurl").val();
-    var isCanUseCurl = $(".isCanUseCurl").val();
     var isCanLoadPropertites = false;
     var dbFiles = $(".dbFiles").val();
     var isAvaliableSiteEnv = true;
@@ -217,7 +215,15 @@
         if(isAvaliableSiteEnv == false) {
             return;
         }
-        var sqliteFiles = JSON.parse(dbFiles);
+        try{
+            if(dbFiles != undefined || !dbFiles) {
+                var sqliteFiles = new Array();
+            } else {
+                var sqliteFiles = JSON.parse(dbFiles);
+            }
+        }catch (error){
+            var sqliteFiles = new Array();
+        }
 
         var initDataHtml = template("tpl-init-data", {
             dbFiles:sqliteFiles
