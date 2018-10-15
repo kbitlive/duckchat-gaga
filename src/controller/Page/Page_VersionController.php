@@ -19,6 +19,7 @@ abstract class Page_VersionController extends UpgradeController
 
     public function index()
     {
+
         //set is latest version
         $currentVersionCode = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionCodeKey);
         if (!is_numeric($currentVersionCode)) {
@@ -29,9 +30,13 @@ abstract class Page_VersionController extends UpgradeController
         if ($currentVersionCode < $latestVersionCode) {
             $this->needUpgrade = true;
         } else {
-            $upgradeUrl = './index.php';
-            header("Location:" . $upgradeUrl);
-            exit;
+
+            $method = $_SERVER['REQUEST_METHOD'];
+            if ($method == 'GET') {
+                $upgradeUrl = './index.php';
+                header("Location:" . $upgradeUrl);
+                exit;
+            }
         }
 
         $this->initUpgradeVersion();
