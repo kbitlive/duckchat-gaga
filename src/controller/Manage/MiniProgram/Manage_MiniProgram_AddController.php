@@ -26,6 +26,7 @@ class Manage_MiniProgram_AddController extends Manage_CommonController
             $loadingType = $_POST['loadingType'];
             $permissionType = $_POST['permissionType'];
             $openSecretKey = $_POST['secretKey'];
+            $management = $_POST['management'];
 
             $data = [
                 'name' => $name,
@@ -36,7 +37,8 @@ class Manage_MiniProgram_AddController extends Manage_CommonController
                 'usageType' => $usageType,
                 'permissionType' => $permissionType,
                 'addTime' => $this->ctx->ZalyHelper->getMsectime(),
-                'authKey' => ""
+                'authKey' => "",
+                'management' => $management,
             ];
 
             if ($loadingType) {

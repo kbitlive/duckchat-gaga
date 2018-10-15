@@ -196,6 +196,7 @@ CREATE TABLE sitePlugin(
               permissionType INTEGER ,    /*使用权限*/
               authKey VARCHAR(32) NOT NULL,
               addTime BIGINT,
+              management TEXT,
               UNIQUE(pluginId,usageType))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE sitePlugin CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
