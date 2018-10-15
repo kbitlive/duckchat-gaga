@@ -475,30 +475,6 @@ class InstallDBController
                 'authKey' => "",
             ],
             [
-                'pluginId' => 104,
-                'name' => "gif小程序",
-                'logo' => "",
-                'sort' => 2, //order = 2
-                'landingPageUrl' => "index.php?action=miniProgram.gif.index",
-                'landingPageWithProxy' => 1, //1 表示走site代理
-                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageGroupMessage,
-                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
-                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
-                'authKey' => "",
-            ],
-            [
-                'pluginId' => 105,
-                'name' => "账户密码管理",
-                'logo' => "",
-                'sort' => 104, //order = 2
-                'landingPageUrl' => "index.php?action=miniProgram.passport.account",
-                'landingPageWithProxy' => 1, //1 表示走site代理
-                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageAccountSafe,
-                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingNewPage,
-                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
-                'authKey' => "",
-            ],
-            [
                 'pluginId' => 199,  //200+ for user
                 'name' => "用户广场",
                 'logo' => "",
