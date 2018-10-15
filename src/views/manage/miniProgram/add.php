@@ -469,6 +469,13 @@
                         $(".mini-program-usage").attr("data", "5");
                     }
                 }, {
+                    text: language == 0 ? "Account Mini Program" : "账户安全小程序",
+                    className: "select-color-primary",
+                    onClick: function () {
+                        $("#mini-program-usage-text").html(language == 0 ? "Account Mini Program" : "账户安全小程序");
+                        $(".mini-program-usage").attr("data", "6");
+                    }
+                }, {
                     text: language == 0 ? "Invalid Mini Program" : "无效小程序",
                     className: "select-color-primary",
                     onClick: function () {
