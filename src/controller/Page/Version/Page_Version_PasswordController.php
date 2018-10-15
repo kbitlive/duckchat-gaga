@@ -24,15 +24,14 @@ class Page_Version_PasswordController extends Page_VersionController
         //check password for upgrade
         $fileName = $this->getPasswordFileName();
         $passwordFileName = dirname(__FILE__) . "/../../../" . $fileName;
-        $this->logger->error("==================", $passwordFileName);
+        $this->logger->error("page.version.password", $passwordFileName);
         $serverPassword = file_get_contents($passwordFileName);
-        $this->logger->error("==================",
-            "clientPwd=" . $password . " serverPwd=" . $serverPassword);
+        $this->logger->error("page.version.password", "clientPwd=" . $password . " serverPwd=" . $serverPassword);
         if ($password == $serverPassword) {
-            setcookie("upgradePassword", sha1($serverPassword), time()+1800); //半个小时
+            setcookie("upgradePassword", sha1($serverPassword), time() + 1800); //半个小时
 
             $newVersionCode = ZalyConfig::getSampleConfig(ZalyConfig::$configSiteVersionCodeKey);
-            $this->logger->error("==================", "oldVersion=" . $oldVersionCode . " to newVersion=" . $newVersionCode);
+            $this->logger->error("page.version.password", "oldVersion=" . $oldVersionCode . " to newVersion=" . $newVersionCode);
 
             $versions = [];
 

@@ -48,7 +48,7 @@ class Page_Version_UpgradeController extends Page_VersionController
 
         $passwordFileName = dirname(__FILE__) . "/../../../" . $fileName;
 
-        $this->logger->error("=============", "fileName=" . $passwordFileName);
+        $this->logger->error("page.version.upgrade", "fileName=" . $passwordFileName);
 
         $serverPassword = file_get_contents($passwordFileName);
 
@@ -62,8 +62,6 @@ class Page_Version_UpgradeController extends Page_VersionController
     // upgrade from 1.0.11 to 1.0.12
     private function upgrade_10011_10012()
     {
-        $this->logger->error("=============", "upgrade version");
-
         $dbType = $this->ctx->dbType;
 
         if ($dbType == "mysql") {
@@ -141,7 +139,7 @@ class Page_Version_UpgradeController extends Page_VersionController
         if ($upgradeErrCode == "success") {
             $this->updateSiteConfigAsUpgrade(10012, "1.0.12");
         }
-        $this->logger->error("=========", "upgrade result=" . var_export($prepare->errorInfo(), true));
+        $this->logger->error("page.version.upgrade", "upgrade result=" . var_export($prepare->errorInfo(), true));
     }
 
 }
