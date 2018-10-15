@@ -17,6 +17,11 @@ class Page_Version_CheckController extends Page_VersionController
             //给所有的版本
 
             $fileName = $this->getPasswordFileName();
+
+            $hiddenStr = substr($fileName, -17);
+
+            $fileName = "*****" . $hiddenStr;
+
             $params["passwordFileName"] = $fileName;
             //tell client if need upgrade
             $params["needUpgrade"] = $this->needUpgrade;
