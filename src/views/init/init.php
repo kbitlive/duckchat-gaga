@@ -218,7 +218,7 @@
             return;
         }
         try{
-            if(dbFiles != undefined || !dbFiles) {
+            if(dbFiles == undefined || !dbFiles) {
                 var sqliteFiles = new Array();
             } else {
                 var sqliteFiles = JSON.parse(dbFiles);
