@@ -64,7 +64,8 @@ preSessionId="";
 secondNum  = 120;
 isSending  = false;
 updateInvitationCodeType = "update_invitation_code";
-
+registerLoginName=undefined
+registerPassword=undefined
 refererUrl = document.referrer;
 refererUrlKey = "documentReferer";
 if(refererUrl.length>0) {
@@ -480,20 +481,13 @@ function loginPassport()
 function apiPassportPasswordLogin(callback)
 {
     var action = "api.passport.passwordLogin";
-
-    if(isRegister == true) {
-        var reqData = {
-            loginName:registerLoginName,
-            password:registerPassword,
-            sitePubkPem:sitePubkPem,
-        };
-    } else {
-        var reqData = {
-            loginName:loginName,
-            password:loginPassword,
-            sitePubkPem:sitePubkPem,
-        };
-    }
+    var name = registerLoginName == undefined ? loginName : registerLoginName;
+    var password = registerPassword == undefined ? loginPassword : registerPassword;
+    var reqData = {
+        loginName:name,
+        password:password,
+        sitePubkPem:sitePubkPem,
+    };
     handleClientSendRequest(action, reqData, callback);
 }
 

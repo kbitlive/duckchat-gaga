@@ -176,8 +176,10 @@ class Api_Site_ConfigController extends \BaseController
             $scheme = "http";
         }
 
-        if (empty($port)) {
+        if (empty($port) && $scheme=="http") {
             $port = 80;
+        } else if(empty($port) && $scheme=="https") {
+            $port = 443;
         }
 
         ////ApiSiteConfigResponse 对象

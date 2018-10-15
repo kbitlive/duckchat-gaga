@@ -9,7 +9,7 @@ abstract class Wpf_Controller
     public $zalyError;
     private $configName = "config.php";
     private $sampleConfigName = "config.sample.php";
-
+    private $cookieTimeOut = 2592000;//30天 单位s
     public function __construct(BaseCtx $context)
     {
         $this->ctx = $context;
@@ -86,6 +86,6 @@ abstract class Wpf_Controller
 
     public function setCookie($val, $cookieName)
     {
-        setcookie($cookieName, $val, time() + $this->sessionIdTimeOut, "/", "", false, true);
+        setcookie($cookieName, $val, time() + $this->cookieTimeOut, "/", "", false, true);
     }
 }

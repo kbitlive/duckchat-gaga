@@ -202,9 +202,10 @@ function zalyjsLoginConfig(callback) {
 function zalyjsNavClosePlugin()
 {
     if (isAndroid()) {
-        window.Android.zalyjsNavClosePlugin()
+        console.log("is android");
+        window.Android.zalyjsNavClose()
     } else if(isIOS()) {
-        window.webkit.messageHandlers.zalyjsNavClosePlugin()
+        window.webkit.messageHandlers.zalyjsNavClose()
     }
 }
 

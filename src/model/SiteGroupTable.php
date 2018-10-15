@@ -117,6 +117,20 @@ class SiteGroupTable extends BaseTable
         return null;
     }
 
+    public function getGroupProfileByNameInLatin($nameInLatin)
+    {
+        $tag = __CLASS__ . "-" . __FUNCTION__;
+        $startTime = microtime(true);
+        $sql = "select $this->selectColumns from $this->table where nameInLatin like :nameInLatin limit 20";
+        $prepare = $this->dbSlave->prepare($sql);
+        $this->handlePrepareError($tag, $prepare);
+        $prepare->bindValue(":nameInLatin", "%" . $nameInLatin . "%");
+        $prepare->execute();
+        $result = $prepare->fetchAll(\PDO::FETCH_ASSOC);
+        $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, $nameInLatin, $startTime);
+        return $result;
+    }
+
     public function getGroupName($groupId)
     {
         $tag = __CLASS__ . "-" . __FUNCTION__;
@@ -137,6 +151,22 @@ class SiteGroupTable extends BaseTable
             $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, $groupId, $startTime);
         }
         return null;
+    }
+
+    public function getSiteGroupCount()
+    {
+        $tag = __CLASS__ . "-" . __FUNCTION__;
+        try {
+            $startTime = microtime(true);
+            $sql = "select count(groupId) from  siteGroup;";
+            $prepare = $this->dbSlave->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->execute();
+            $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, [], $startTime);
+            return $prepare->fetchColumn(0);
+        } catch (Exception $ex) {
+            $this->ctx->Wpf_Logger->error($tag, "error_msg = " . $ex->getMessage());
+        }
     }
 
     /**

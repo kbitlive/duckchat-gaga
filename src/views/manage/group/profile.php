@@ -16,9 +16,8 @@
         .site-image {
             width: 30px;
             height: 30px;
-            /*margin-top: 5px;*/
-            margin-bottom: 7px;
-            /*border-radius: 50%;*/
+            margin-top: 12px;
+            border-radius: 50%;
             cursor: pointer;
         }
 
@@ -95,7 +94,8 @@
                             <div class="item-body-value">
                                 <img id="group-avatar-img" class="site-image"
                                      onclick="uploadFile('group-avatar-img-input')"
-                                     src="./../public/img/msg/group_default_avatar.png">
+                                     src="/_api_file_download_/?fileId=<?php echo $avatar ?>"
+                                     onerror="src='./../public/img/msg/group_default_avatar.png'">
 
                                 <input id="group-avatar-img-input" type="file"
                                        accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
@@ -435,11 +435,11 @@
             if ("success" == res.errCode) {
                 location.reload();
             } else {
-                alert(getLanguage() == 1 ? "删除失败" : "delete error");
+                alert(getLanguage() == 1 ? "更新失败" : "update error");
             }
 
         } else {
-            alert(getLanguage() == 1 ? "删除失败" : "delete error");
+            alert(getLanguage() == 1 ? "更新失败" : "update error");
         }
     }
 

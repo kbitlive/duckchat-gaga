@@ -30,7 +30,7 @@
                         </div>
                     </div>
 
-                    <div class=" hint--right" style="width: 7.5rem;bottom: 1rem;position: absolute;display: block;" aria-label="更多" data-local="aria-label:moreTip">
+                    <div class=" hint--right" style="width: 7.5rem;bottom: 1rem;position: absolute;display: block;left:0rem;right:0rem;" aria-label="更多" data-local="aria-label:moreTip">
                         <div class="l-sb-item"  data="more" >
                             <img src="../../public/img/msg/more_unselect.png" data="unselect" class="more-unselect item-img" />
                             <img src="../../public/img/msg/more.png" data="select" class="more-select item-img" style="display: none;"/>

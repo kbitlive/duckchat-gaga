@@ -56,9 +56,10 @@
 
 
                         <div class="item-body-tail">
-                            <div class="item-body-value" id="site-logo-fileid" fileId="<?php echo $logo ?>">
+                            <div class="item-body-value" id="site-logo-fileid">
                                 <img class="site-logo-image" onclick="uploadFile('upload-site-logo')"
-                                     src="../../public/img/manage/site_default.png">
+                                     src="/_api_file_download_/?fileId=<?php echo $logo ?>"
+                                     onerror="src='../../public/img/manage/site_default.png'">
 
                                 <input id="upload-site-logo" type="file" onchange="uploadImageFile(this)"
                                        accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
@@ -83,6 +84,27 @@
     <div class="layout-all-row">
 
         <div class="list-item-center">
+
+            <div class="item-row">
+                <div class="item-body">
+                    <div class="item-body-display loginMiniProgram">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">登陆小程序ID</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Login Mini Program ID</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <div class="item-body-value" id="loginMiniProgramId"> <?php echo $loginPluginId; ?></div>
+                            <div class="item-body-value"><img class="more-img"
+                                                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
 
             <!--            <div class="item-row">-->
             <!--                <div class="item-body">-->
@@ -114,9 +136,9 @@
                 <div class="item-body">
                     <div class="item-body-display">
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">是否开启邀请码</div>
+                            <div class="item-body-desc">登陆开启邀请码</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Enable Invite Code</div>
+                            <div class="item-body-desc">Login By Invite Code</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
@@ -132,17 +154,72 @@
             </div>
             <div class="division-line"></div>
 
+        </div>
+
+    </div>
+
+    <!-- part 3   -->
+    <div class="layout-all-row">
+
+        <div class="list-item-center">
+
             <div class="item-row">
                 <div class="item-body">
-                    <div class="item-body-display loginMiniProgram">
+                    <div class="item-body-display">
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">登陆小程序ID</div>
+                            <div class="item-body-desc">允许创建群组</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Login Mini Program ID</div>
+                            <div class="item-body-desc">Enable Create Group</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <div class="item-body-value" id="loginMiniProgramId"> <?php echo $loginPluginId; ?></div>
+                            <?php if ($enableCreateGroup == 1) { ?>
+                                <input id="enableCreateGroupSwitch" class="weui_switch" type="checkbox" checked>
+                            <?php } else { ?>
+                                <input id="enableCreateGroupSwitch" class="weui_switch" type="checkbox">
+                            <?php } ?>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+            <div class="item-row">
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">允许群组中加好友</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Enable Add Friend In Group</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <?php if ($enableAddFriendInGroup == 1) { ?>
+                                <input id="enableAddFriendInGroupSwitch" class="weui_switch" type="checkbox" checked>
+                            <?php } else { ?>
+                                <input id="enableAddFriendInGroupSwitch" class="weui_switch" type="checkbox">
+                            <?php } ?>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+            <div class="item-row" id="group-max-members">
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">群组最大成员数</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Group Max Members</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <div class="item-body-value"><?php echo $maxGroupMembers ?></div>
                             <div class="item-body-value"><img class="more-img"
                                                               src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
                             </div>
@@ -152,11 +229,12 @@
                 </div>
             </div>
             <div class="division-line"></div>
+
         </div>
 
     </div>
 
-    <!-- part 3   -->
+
     <div class="layout-all-row">
 
         <div class="list-item-center">
@@ -208,29 +286,6 @@
             <div class="division-line"></div>
 
 
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">允许创建群组</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Enable Create Group</div>
-                        <?php } ?>
-
-                        <div class="item-body-tail">
-                            <?php if ($enableCreateGroup == 1) { ?>
-                                <input id="enableCreateGroupSwitch" class="weui_switch" type="checkbox" checked>
-                            <?php } else { ?>
-                                <input id="enableCreateGroupSwitch" class="weui_switch" type="checkbox">
-                            <?php } ?>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
             <div class="item-row" id="file-max-size">
                 <div class="item-body">
                     <div class="item-body-display">
@@ -253,26 +308,6 @@
             </div>
             <div class="division-line"></div>
 
-            <div class="item-row" id="group-max-members">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">群组最大成员数</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Group Max Members</div>
-                        <?php } ?>
-
-                        <div class="item-body-tail">
-                            <div class="item-body-value"><?php echo $maxGroupMembers ?></div>
-                            <div class="item-body-value"><img class="more-img"
-                                                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
 
             <div class="item-row">
                 <div class="item-body" id="push-notice-type" data="<?php echo $pushType ?>">
@@ -305,7 +340,6 @@
         </div>
 
     </div>
-
 
     <!--   part 4 -->
     <!--    <div class="layout-all-row">-->
@@ -756,41 +790,11 @@
         var res = JSON.parse(result);
 
         if (res.errCode) {
-
             var fileId = data.value;
-            console.log("updateLogoResponse imageId fileId==" + fileId);
-
-            showSiteLogo(fileId);
+            // showSiteLogo(fileId);
         } else {
             alert("errorInfo:" + res.errInfo);
         }
-    }
-
-    downloadFileUrl = "./index.php?action=http.file.downloadFile";
-
-
-    function showSiteLogo(fileId) {
-
-        var requestUrl = "./_api_file_download_/test?fileId=" + fileId;
-
-
-        if (!isMobile()) {
-            requestUrl = downloadFileUrl + "&fileId=" + fileId + "&returnBase64=0";
-        }
-
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && (this.status == 200 || this.status == 304)) {
-                var blob = this.response;
-                var src = window.URL.createObjectURL(blob);
-                console.log("showSiteLogo imageId response src=" + src);
-                $(".site-logo-image").attr("src", src);
-            }
-        };
-        xhttp.open("GET", requestUrl, true);
-        xhttp.responseType = "blob";
-        // xhttp.setRequestHeader('Cache-Control', "max-age=2592000, public");
-        xhttp.send();
     }
 
     function showWindow(jqElement) {
@@ -827,11 +831,6 @@
         }
     });
 
-
-    $(function () {
-        var fileId = $("#site-logo-fileid").attr("fileId");
-        showSiteLogo(fileId)
-    });
 
     function updateDataValue() {
 
@@ -1066,6 +1065,30 @@
             var res = JSON.parse(result);
 
             if (!"success" == res.errCode) {
+                alert(getLanguage() == 1 ? "操作失败" : "update error");
+            }
+
+        } else {
+            alert(getLanguage() == 1 ? "操作失败" : "update error");
+        }
+    }
+
+    $("#enableAddFriendInGroupSwitch").change(function () {
+        var isChecked = $(this).is(':checked');
+        var url = "index.php?action=manage.config.update&key=enableCreateGroup";
+
+        var data = {
+            'key': 'enableAddFriendInGroup',
+            'value': isChecked ? 1 : 0,
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, enableAddFriendInGroupResponse);
+    });
+
+    function enableAddFriendInGroupResponse(url, data, result) {
+        if (result) {
+            var res = JSON.parse(result);
+            if ("success" != res.errCode) {
                 alert(getLanguage() == 1 ? "操作失败" : "update error");
             }
 

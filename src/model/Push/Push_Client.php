@@ -176,25 +176,30 @@ class Push_Client
 
     /**
      * @param $userId
-     * @return null|\Zaly\Proto\Platform\PushTo
+     * @return array
      */
     private function getUserDeviceIds($userId)
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         try {
-            $deviceIds = $this->ctx->SiteSessionTable->getUserLatestDeviceId($userId, 2);
+            $deviceIds = $this->ctx->SiteSessionTable->getUserLatestDeviceId($userId, Zaly\Proto\Core\UserClientType::UserClientMobileApp, 2);
 
+            $deviceList = [];
             if (!empty($deviceIds)) {
-                $deviceList = [];
+                //mobile client
                 foreach ($deviceIds as $deviceId) {
                     $deviceList[] = $deviceId['deviceId'];
                 }
                 return $deviceList;
+            } else {
+                //web client
+                $deviceList[] = "da39a3ee5e6b4b0d3255bfef95601890afd80709";
             }
+            return $deviceList;
         } catch (Exception $e) {
             $this->ctx->Wpf_Logger->error($tag, $e);
         }
-        return null;
+        return [];
     }
 
     private function isUserFriendMute($userId, $friendUserId)

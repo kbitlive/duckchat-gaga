@@ -53,22 +53,22 @@ checkDockerImageExist () {
 		echo
 		echo "[DuckChat] duckchat镜像不存在"
 		echo "[DuckChat] 开始拉取duckchat镜像"
-		docker pull $duckchatDockerName 
+		docker pull $duckchatDockerName
 		if [ $? != 0 ];then
 			echo "[DuckChat] 拉取duckchat镜像失败 "
 			exit
 		else
-			dockerImageExist=true	
+			dockerImageExist=true
 		fi
 	fi
 }
 getStopDockerContainerId () {
 	containers=` docker ps -af "name=$stopDockerName" | awk '{print \$1}'`
-	OLD_IFS="$IFS" 
-	IFS=" " 
-	IFS="$OLD_IFS" 
+	OLD_IFS="$IFS"
+	IFS=" "
+	IFS="$OLD_IFS"
 	for container in $containers
-	do 
+	do
 		if [ "$container" != "CONTAINER" ];then
 			stopDockerContainerId=$container
 		fi
@@ -81,11 +81,11 @@ getStopDockerContainerId () {
 
 checkDockerContainerIdExist () {
 	containers=` docker ps -af "name=duckchat" | awk '{print \$1}'`
-	OLD_IFS="$IFS" 
-	IFS=" " 
-	IFS="$OLD_IFS" 
+	OLD_IFS="$IFS"
+	IFS=" "
+	IFS="$OLD_IFS"
 	for container in $containers
-	do 
+	do
 		if [ "$container" != "CONTAINER" ];then
 			dockerContainerIdExists=true
 		fi
@@ -97,35 +97,35 @@ do
 	name=`echo $arg | cut -d \= -f 1`
 	value=`echo $arg | cut -d \= -f 2`
 	case "$name" in
-		-h|--help ) 
+		-h|--help )
 echo "\
 -http=[port]
-	指定http服务端口号，默认为 80 
+	指定http服务端口号，默认为 80
 -zaly=[port]
 	指定zaly服务器的监听地址与端口，默认为 “:2021”
 -ws=[port]
 	指定websocket服务器的监听地址与端口，默认为：”:2031”
 start
 	启动duckchat镜像
-stop [-i stopDockerName] 
+stop [-i stopDockerName]
 	终止duckchat镜像
-ls 
+ls
 	列出所有的镜像
 "
 		exit 0;;
-		-base) 
-				originDirName=$value 
-				continue 
+		-base)
+				originDirName=$value
+				continue
 			;;
-		-http) 
+		-http)
 				httpPort=$value
-				continue 
+				continue
 			;;
-		-zaly) 
+		-zaly)
 				zalyPort=$value
 				continue
 			;;
-		-ws) 
+		-ws)
 				wsPort=$value
 				continue
 			;;
@@ -157,8 +157,7 @@ ls
 			fi
 			;;
 		-i)
-			stopDockerContainer=$value
-			duckchatDockerName=$value
+			duckchatName=$value
 	    esac
 done
 
@@ -173,9 +172,9 @@ fi
 case $operation in
 	start)
 		if [ "$sysOS" = "Linux"  ] || [ "$sysOS" = "Darwin" ];then
-			echo "[Command] docker -v"; 
+			echo "[Command] docker -v";
 			docker -v
-			 
+
 			if [ $? != 0 ];then
 				echo "[DuckChat] 请根据文档安装Docker服务器集成环境: https://duckchat.akaxin.com/wiki/server/docker.md"
 				echo
@@ -195,16 +194,16 @@ case $operation in
 				exit
 			fi
 
-			echo 
-			echo "#" docker run -itd -p $httpPort:80 -p $wsPort:2031 -p $zalyPort:2021 --name $duckchatName -v $originDirName:/home/gaga $duckchatDockerName 
-			
+			echo
+			echo "#" docker run -itd -p $httpPort:80 -p $wsPort:2031 -p $zalyPort:2021 --name $duckchatName -v $originDirName:/home/gaga $duckchatDockerName
+
 			su -c "setenforce 0" 2>/dev/null
-			docker run -itd -p $httpPort:80 -p $wsPort:2031 -p $zalyPort:2021 --name $duckchatName -v $originDirName:/home/gaga $duckchatDockerName 
+			docker run -itd -p $httpPort:80 -p $wsPort:2031 -p $zalyPort:2021 --name $duckchatName -v $originDirName:/home/gaga $duckchatDockerName
 			if [ $? != 0 ];then
 				echo "[DuckChat] 启动duckchat镜像失败"
 				exit
 			fi
-			
+
 			chmod -R 777 $originDirName/src
 			echo "[DuckChat] 请稍后片刻"
 			sleep 9
@@ -212,11 +211,7 @@ case $operation in
 		fi
 		;;
 	stop)
-		if [ "$stopDockerContainer" != "" ];then
-			stopDockerName=$stopDockerName
-		elif  [ -z "$stopDockerContainer" ];then
-			stopDockerName=$duckchatName
-		fi
+		stopDockerName=$duckchatName
 		getStopDockerContainerId
 
 		echo "开始终止$stopDockerName 实例: $stopDockerContainerId"
@@ -228,7 +223,7 @@ case $operation in
 		fi
 
 		echo "[DuckChat] 终止 $stopDockerName 镜像成功"
-		echo "[DuckChat] 开始删除容器 : $stopDockerName" 
+		echo "[DuckChat] 开始删除容器 : $stopDockerName"
 		docker rm $stopDockerName
 		if [ $? != 0 ];then
 			echo "[DuckChat] 删除镜像失败"
@@ -240,3 +235,4 @@ case $operation in
 		docker ps -a
 	;;
 esac
+
