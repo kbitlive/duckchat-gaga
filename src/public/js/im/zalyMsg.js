@@ -977,7 +977,7 @@ function handleMsgContentText(str)
     for(var i=0; i<length;i++) {
         var urlLink = arr[i];
         console.log("urlLink.indexOf(\"../..\") =="+urlLink.indexOf("../.."));
-        if(urlLink.indexOf("blob:") == -1 && (urlLink.indexOf("../..") != -1 && urlLink.indexOf("../..") != 0)) {
+        if(urlLink.indexOf("blob:") == -1 && urlLink.indexOf("../..") != 0) {
             var newUrlLink = urlLink;
             if(urlLink.indexOf("http://") == -1) {
                 newUrlLink = "http://"+urlLink;
