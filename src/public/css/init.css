@@ -26,13 +26,14 @@ body,html {
     padding:0;
     height: 100%;
     position: relative;
+
 }
 .zaly_init {
     width:75.05rem;
     position: absolute;
     left: 0;
     right: 0;
-    margin: 14rem auto;
+    margin: 0 auto;
     background:rgba(243,243,243,1);
     box-shadow:0rem 0.94rem 1.41rem 0.47rem rgba(74,56,180,1);
     border-radius:0.94rem;

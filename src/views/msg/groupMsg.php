@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>DuckChat 私有部署IM、社群运营神奇，支持iOS、Android、Web，最多支持500台服务器集群！</title>
+    <title>主页面</title>
     <link rel="stylesheet" href="../../public/css/zaly-action-row.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" href="../../public/css/zaly_contact.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" href="../../public/css/zaly_apply_friend_list.css?_version=<?php echo $versionCode?>" />
@@ -15,7 +15,7 @@
     <script src="../../public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
 
-    <link class="icon" rel="icon" href="favicon.ico" type="image/png" />
+    <link class="icon" rel="icon" href="favicon.ico?_version=<?php echo $versionCode?>" type="image/png" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -140,8 +140,6 @@
                 return;
             }
         });
-
-
     }
 
 </script>

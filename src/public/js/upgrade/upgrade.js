@@ -6,8 +6,6 @@ var currentUpgradeVersionKey = "current_upgrade_version";
 var endUpgradeVersionKey = "end_upgrade_version";
 var upgradeId = undefined;
 var needUpgrade =$(".needUpgrade").val();
-console.log("$needUpgrade=="+needUpgrade);
-
 
 //-------------------------------------page upgrade int------------------------------------
 
@@ -124,6 +122,13 @@ function sendUpgrade() {
     });
 }
 
+function isPhone(){
+    if((/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) || isWeixinBrowser()) {
+        return true;
+    }
+    return false;
+}
+
 function upgradeSiteVersion() {
     var upgradeVersionNum = localStorage.getItem(currentUpgradeVersionKey);
     updateUpgradeProgress("done", "");
@@ -131,9 +136,14 @@ function upgradeSiteVersion() {
     localStorage.setItem(currentUpgradeVersionKey, nextUpgradeVersionNum);
     var endUpgradeNum = localStorage.getItem(endUpgradeVersionKey);
     if(nextUpgradeVersionNum > Number(endUpgradeNum)) {
-        var html = "升级完成，前往站点";
+        if(isPhone()) {
+            var html = "升级完成，关闭当前页面";
+            $(".upgrade_staring_btn").attr("goto", "close_page");
+        }else {
+            var html = "升级完成，前往站点";
+            $(".upgrade_staring_btn").attr("goto", "site");
+        }
         $(".upgrade_staring_btn").html(html);
-        $(".upgrade_staring_btn").attr("goto", "site");
         $(".upgrade_staring_btn").attr("disabled", false);
         return;
     };
@@ -213,6 +223,9 @@ $(document).on("click", ".upgrade_staring_btn", function () {
     var goto = $(this).attr("goto");
     if(goto == "site") {
         window.location.href="./index.php";
+        return;
+    } else if(goto == "close_page") {
+        zalyjsNavClosePlugin();
         return;
     }
     var html = "正在升级...";

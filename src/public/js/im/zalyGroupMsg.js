@@ -397,17 +397,18 @@ function setDocumentTitle()
         if(intervalId == undefined && siteTip != "clear") {
             intervalId = setInterval(function () {
                 if(siteTip == "clear") {
-                    $(".icon").attr("href", "favicon.ico");
+                    $(".icon").attr("href", "favicon.ico?_v="+intervalId);
                     iconNum = 0;
                 } else {
                     if(Number(iconNum%2) == 0) {
-                        $(".icon").attr("href", "favicon.ico");
+                        $(".icon").attr("href", "favicon.ico?_v="+intervalId);
                     } else {
-                        $(".icon").attr("href", "tip.png");
+                        $(".icon").attr("href", "tip.png?_v="+intervalId);
                     }
+
                     iconNum = Number(iconNum+1);
                 }
-            }, 5);
+            }, 100);
         }
         return ;
     }

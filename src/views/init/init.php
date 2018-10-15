@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>login</title>
+    <title>初始化站点</title>
     <!-- Latest compiled and minified CSS -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="../../public/css/init.css?_version=<?php echo $versionCode?>">
@@ -23,9 +23,11 @@
     <div class="container">
 
         <div class="zaly_container">
-            <div class="zaly_init">
+           <div style="padding-top: 14rem;">
+               <div class="zaly_init">
 
-            </div>
+               </div>
+           </div>
         </div>
 
         <div class="zaly_window">
@@ -40,7 +42,6 @@
     <input type="hidden" value="<?php echo $isLoadPDOMysql; ?>" class="isLoadPDOMysql">
     <input type="hidden" value="<?php echo $isLoadCurl;?>" class="isLoadCurl">
     <input type="hidden" value="<?php echo $isWritePermission;?>" class="isWritePermission">
-    <input type="hidden" value="<?php echo $isCanUseCurl;?>" class="isCanUseCurl">
     <input type="hidden" value='<?php echo $dbFiles;?>' class="dbFiles">
 
     <?php include (dirname(__DIR__) . '/init/template_init.php');?>
@@ -53,7 +54,6 @@
     var isLoadPDOSqlite = $(".isLoadPDOSqlite").val();
     var isWritePermission = $(".isWritePermission").val();
     var isLoadCurl = $(".isLoadCurl").val();
-    var isCanUseCurl = $(".isCanUseCurl").val();
     var isCanLoadPropertites = false;
     var dbFiles = $(".dbFiles").val();
     var isAvaliableSiteEnv = true;
@@ -71,7 +71,7 @@
     {
         $.ajax({
             method: "GET",
-            url: "./public/js/config/lang_init_en.properties?_"+Date.now(),
+            url: "./public/js/config/lang_init_"+languageName+".properties?_"+Date.now(),
             success: function () {
                 isCanLoadPropertites = true;
             }
@@ -217,7 +217,15 @@
         if(isAvaliableSiteEnv == false) {
             return;
         }
-        var sqliteFiles = JSON.parse(dbFiles);
+        try{
+            if(dbFiles != undefined || !dbFiles) {
+                var sqliteFiles = new Array();
+            } else {
+                var sqliteFiles = JSON.parse(dbFiles);
+            }
+        }catch (error){
+            var sqliteFiles = new Array();
+        }
 
         var initDataHtml = template("tpl-init-data", {
             dbFiles:sqliteFiles
