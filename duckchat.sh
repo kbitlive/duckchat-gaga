@@ -2,7 +2,7 @@
 LANG="en_US.UTF-8" 
 LANG="zh_CN.UTF-8"
 
-echo "
+echo "\
 +-------------------------------------------+
 | Duckchat - 一个安全的私有聊天软件         |
 +-------------------------------------------+
@@ -11,6 +11,11 @@ echo "
 | Github : https://github.com/duckchat/gaga |
 +-------------------------------------------+
 "
+
+
+
+
+
 originDirName=""
 httpPort=80
 zalyPort=2021
@@ -25,6 +30,17 @@ stopDockerName=""
 duckchatName="duckchat"
 isExit=false
 dockerContainerIdExists=false
+
+
+
+# check permission
+if [ "$sysOS" = "Linux"  ];then
+    uid=`id -u`
+	if [ $uid -ne 0 ]; then
+    	echo "[DuckChat] 需要 root 权限，请使用: " sudo sh $0
+    	exit 1
+	fi
+fi
 
 checkDockerImageExist () {
 
@@ -82,14 +98,12 @@ do
 	value=`echo $arg | cut -d \= -f 2`
 	case "$name" in
 		-h|--help )
-echo "
--base
-	指定源码目录，默认为duckchat.sh文件自身所在目录的src目录
--http
+echo "\
+-http=[port]
 	指定http服务端口号，默认为 80
--zaly
+-zaly=[port]
 	指定zaly服务器的监听地址与端口，默认为 “:2021”
--ws
+-ws=[port]
 	指定websocket服务器的监听地址与端口，默认为：”:2031”
 start
 	启动duckchat镜像
@@ -162,7 +176,7 @@ case $operation in
 			docker -v
 
 			if [ $? != 0 ];then
-				echo "[DuckChat] 请安装docker环境: https://docs.docker-cn.com"
+				echo "[DuckChat] 请根据文档安装Docker服务器集成环境: https://duckchat.akaxin.com/wiki/server/docker.md"
 				echo
 				exit
 			fi
@@ -181,13 +195,18 @@ case $operation in
 			fi
 
 			echo
-			echo "# " docker run -itd -p $httpPort:80 -p $wsPort:2031 -p $zalyPort:2021 --name $duckchatName -v $originDirName:/home/gaga $duckchatDockerName
+			echo "#" docker run -itd -p $httpPort:80 -p $wsPort:2031 -p $zalyPort:2021 --name $duckchatName -v $originDirName:/home/gaga $duckchatDockerName
 
+			su -c "setenforce 0" 2>/dev/null
 			docker run -itd -p $httpPort:80 -p $wsPort:2031 -p $zalyPort:2021 --name $duckchatName -v $originDirName:/home/gaga $duckchatDockerName
 			if [ $? != 0 ];then
 				echo "[DuckChat] 启动duckchat镜像失败"
 				exit
 			fi
+
+			chmod -R 777 $originDirName/src
+			echo "[DuckChat] 请稍后片刻"
+			sleep 9
 			echo "[DuckChat] 启动duckchat镜像成功"
 		fi
 		;;
