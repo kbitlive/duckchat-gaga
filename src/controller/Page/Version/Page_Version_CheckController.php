@@ -28,7 +28,7 @@ class Page_Version_CheckController extends Page_VersionController
             //检测当前版本是否已经升级完
             $upgradeInfo = $this->getUpgradeVersion();
 
-            $this->logger->error("==================", var_export($upgradeInfo, true));
+            $this->logger->error("page.version.check", var_export($upgradeInfo, true));
 
             echo json_encode($upgradeInfo);
         }
