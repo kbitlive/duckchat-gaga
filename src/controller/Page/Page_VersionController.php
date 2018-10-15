@@ -28,6 +28,10 @@ abstract class Page_VersionController extends UpgradeController
         //check if need upgrade
         if ($currentVersionCode < $latestVersionCode) {
             $this->needUpgrade = true;
+        } else {
+            $upgradeUrl = './index.php';
+            header("Location:" . $upgradeUrl);
+            exit;
         }
 
         $this->initUpgradeVersion();
