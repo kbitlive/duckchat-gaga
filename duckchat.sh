@@ -211,11 +211,7 @@ case $operation in
 		fi
 		;;
 	stop)
-		if [ "$stopDockerContainer" != "" ];then
-			stopDockerName=$stopDockerName
-		elif  [ -z "$stopDockerContainer" ];then
-			stopDockerName=$duckchatName
-		fi
+		stopDockerName=$duckchatName
 		getStopDockerContainerId
 
 		echo "开始终止$stopDockerName 实例: $stopDockerContainerId"
@@ -239,3 +235,4 @@ case $operation in
 		docker ps -a
 	;;
 esac
+
