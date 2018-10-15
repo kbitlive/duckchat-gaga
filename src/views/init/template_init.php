@@ -241,7 +241,7 @@
             本地文件
             <select id="sqlite-file">
                 <option class="selectOption" fileName="">创建新Sqlite数据库</option>
-                    {{each dbFiles as file }}
+                    {{each dbFiles file }}
                         <option class="selectOption {{file}}" fileName="{{file}}">{{file}}</option>
                     {{/each}}
             </select>
