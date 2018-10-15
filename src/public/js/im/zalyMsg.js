@@ -976,12 +976,15 @@ function handleMsgContentText(str)
     var length = arr.length;
     for(var i=0; i<length;i++) {
         var urlLink = arr[i];
-        if(urlLink.indexOf("blob:") == -1 && (urlLink.indexOf("http") != -1 || urlLink.indexOf("https") != -1)) {
-            var urlLinkHtml = "<a href='"+urlLink+"'target='_blank'>"+urlLink+"</a>";
+        if(urlLink.indexOf("blob:") == -1) {
+            var newUrlLink = urlLink;
+            if(urlLink.indexOf("http://") == -1) {
+                newUrlLink = "http://"+urlLink;
+            }
+            var urlLinkHtml = "<a href='"+newUrlLink+"'target='_blank'>"+urlLink+"</a>";
             str = str.replace(urlLink, urlLinkHtml);
         }
     }
-
     return str;
 }
 
