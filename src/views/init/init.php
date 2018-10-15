@@ -23,9 +23,11 @@
     <div class="container">
 
         <div class="zaly_container">
-            <div class="zaly_init">
+           <div style="padding-top: 14rem;">
+               <div class="zaly_init">
 
-            </div>
+               </div>
+           </div>
         </div>
 
         <div class="zaly_window">
