@@ -435,11 +435,11 @@
             if ("success" == res.errCode) {
                 location.reload();
             } else {
-                alert(getLanguage() == 1 ? "删除失败" : "delete error");
+                alert(getLanguage() == 1 ? "更新失败" : "update error");
             }
 
         } else {
-            alert(getLanguage() == 1 ? "删除失败" : "delete error");
+            alert(getLanguage() == 1 ? "更新失败" : "update error");
         }
     }
 
