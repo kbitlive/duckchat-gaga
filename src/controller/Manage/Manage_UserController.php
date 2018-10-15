@@ -31,10 +31,24 @@ class Manage_UserController extends Manage_CommonController
             }
 
             if (empty($length)) {
-                $length = 500;
+                $length = 2000;
             }
 
-            $params['userList'] = $this->getUserListByOffset($offset, $length);
+
+            $userList = $this->getUserListByOffset($offset, $length);
+
+            if ($userList) {
+                $userProfiles = [];
+                foreach ($userList as $user) {
+                    $userProfiles[] = [
+                        'userId' => $user['userId'],
+                        'nickname' => htmlspecialchars($user['nickname']),
+                        'loginName' => htmlspecialchars($user['loginName']),
+                    ];
+
+                }
+                $params['userList'] = $userProfiles;
+            }
 
             $params['totalUserCount'] = $this->getTotalUsers();
 
