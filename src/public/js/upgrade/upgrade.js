@@ -123,7 +123,7 @@ function sendUpgrade() {
 }
 
 function isPhone(){
-    if((/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) || isWeixinBrowser()) {
+    if((/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent))) {
         return true;
     }
     return false;
