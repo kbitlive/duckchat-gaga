@@ -186,7 +186,7 @@ class SiteGroupUserTable extends BaseTable
             $sql .= " and siteGroupUser.memberType=:memberType";
         }
 
-        $sql .= " order by siteGroupUser.timeJoin ASC limit :offset, :pageSize;";
+        $sql .= " order by siteGroupUser.memberType DESC,siteGroupUser.timeJoin ASC limit :offset, :pageSize;";
 
         $prepare = $this->dbSlave->prepare($sql);
         $this->handlePrepareError($tag, $prepare);
