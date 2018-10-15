@@ -71,7 +71,7 @@
     {
         $.ajax({
             method: "GET",
-            url: "./public/js/config/lang_init_en.properties?_"+Date.now(),
+            url: "./public/js/config/lang_init_"+languageName+".properties?_"+Date.now(),
             success: function () {
                 isCanLoadPropertites = true;
             }
