@@ -101,14 +101,12 @@ class ZalyText
                 $keyToValue = self::$templateKeys[$key];
                 if (!empty($keyToValue)) {
                     $values[] = $keyToValue[$lang];
+                    $keys[$i] = "{" . $key . "}";
                 } else {
-                    $values[] = "";
+                    unset($keys[$i]);
                 }
-                $keys[$i] = "{" . $key . "}";
             }
-
             $body = str_replace($keys, $values, $body);
-
         }
 
         return $body;
