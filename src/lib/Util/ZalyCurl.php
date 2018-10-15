@@ -307,8 +307,8 @@ class ZalyCurl
         curl_setopt($this->_curlObj, CURLOPT_MAXREDIRS, 6);
         curl_setopt($this->_curlObj, CURLOPT_RETURNTRANSFER, true);
         //跳过ssl校验
-        curl_setopt($this->_curlObj, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($this->_curlObj, CURLOPT_SSL_VERIFYHOST, FALSE);
+//        curl_setopt($this->_curlObj, CURLOPT_SSL_VERIFYPEER, false);
+//        curl_setopt($this->_curlObj, CURLOPT_SSL_VERIFYHOST, FALSE);
 
         switch (strtoupper($method)) {
             case 'HEAD':
