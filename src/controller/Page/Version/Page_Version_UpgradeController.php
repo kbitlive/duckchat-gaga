@@ -228,15 +228,10 @@ class Page_Version_UpgradeController extends Page_VersionController
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
 
-        $sql = "select site";
-
         $sql = "insert into siteConfig(configKey,configValue) values('enableAddFriendInGroup',1)";
         $prepare = $this->ctx->db->prepare($sql);
 
         $flag = $prepare->execute();
-
-        $this->logger->error("================", "result=" . $flag);
-        $this->logger->error("================", "errCode=" . $prepare->errorCode());
 
         if (($flag && $prepare->errorCode() == "00000") || $prepare->errorCode() == "23000") {
             return true;
