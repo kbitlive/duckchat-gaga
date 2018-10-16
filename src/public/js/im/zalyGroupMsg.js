@@ -26,9 +26,9 @@ function showWebNotification(msg, msgContent)
     } else {
          notification = "["+name+"] "+nickname+":" + msgContent;
     }
-
+    var icon = $(".info-avatar-"+msg.chatSessionId).attr("src");
     if(window.Notification && Notification.permission !== "denied"){
-        new Notification(notification, {"tag":msgId});
+        new Notification(notification, {"tag":msg.msgId, "icon":icon});
     }
 }
 

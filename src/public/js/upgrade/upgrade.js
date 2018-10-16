@@ -240,6 +240,10 @@ $(document).on("click", ".upgrade_staring_btn", function () {
 
 
 function checkUpgradeResult() {
+    if(upgradeId == undefined) {
+        return ;
+    }
+
     $.ajax({
         method: "POST",
         url: "./index.php?action=page.version.check",
@@ -249,6 +253,7 @@ function checkUpgradeResult() {
                 return;
             }
             clearInterval(upgradeId);
+            upgradeId = undefined;
             if (data.upgradeErrCode == "success") {
                 upgradeSiteVersion();
             } else {
