@@ -62,10 +62,10 @@ class Api_Group_CreateController extends Api_Group_BaseController
 
             $this->finish_request();
 
-            ///TODO 创建成功了之后，代发消息，
+            // 创建成功了之后，代发消息，
             $groupId = $groupProfile['groupId'];
 
-            $noticeText = ZalyText::getText(ZalyText::$textGroupCreate, $this->language);
+            $noticeText = ZalyText::$keyGroupCreate;
 
             $this->ctx->Message_Client->proxyGroupNoticeMessage($this->userId, $groupId, $noticeText);
 

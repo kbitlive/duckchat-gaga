@@ -37,6 +37,13 @@ class Api_Group_ProfileController extends Api_Group_BaseController
 
             //get group profile
             $groupProfile = $this->getGroupProfile($groupId);
+
+            if (!$groupProfile) {
+                $exText = $this->language == 1 ? "群组不存在" : "group does not exists";
+                $this->returnErrorCodeRPC("error.group.notExists", $exText);
+                return;
+            }
+
             $canAddFriend = $groupProfile["canAddFriend"];
 
             //get site config
@@ -59,6 +66,7 @@ class Api_Group_ProfileController extends Api_Group_BaseController
             $response = new \Zaly\Proto\Site\ApiGroupProfileResponse();
             return $response;
         }
+
         $memberType = !$group['memberType'] ? \Zaly\Proto\Core\GroupMemberType::GroupMemberGuest : $group['memberType'];
         $groupProfile = $this->getPublicGroupProfile($group);
         $isMute = isset($group['isMute']) && $group['isMute'] == 1 ? 1 : 0;

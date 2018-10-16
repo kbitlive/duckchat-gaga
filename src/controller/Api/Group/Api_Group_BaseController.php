@@ -70,6 +70,26 @@ class Api_Group_BaseController extends BaseController
         return $user;
     }
 
+    //是否是群管理员
+    public function isGroupAdminMember($groupId, $userId)
+    {
+        $tag = __CLASS__ . '-' . __FUNCTION__;
+        try {
+            //管理员，或者群主
+            $ownerType = \Zaly\Proto\Core\GroupMemberType::GroupMemberOwner;
+            $adminType = \Zaly\Proto\Core\GroupMemberType::GroupMemberAdmin;
+
+            $user = $this->ctx->SiteGroupUserTable->getGroupAdmin($groupId, $userId, $adminType, $ownerType);
+            if ($user) {
+                return true;
+            }
+
+        } catch (Exception $e) {
+            $this->logger->error($tag . " " . $this->action, $e);
+        }
+        return false;
+    }
+
     //群信息
     public function getGroupInfo($groupId)
     {
@@ -145,7 +165,7 @@ class Api_Group_BaseController extends BaseController
         $groupProfile->setPermissionJoin($group['permissionJoin']);
         $groupProfile->setCanGuestReadMessage($group['canGuestReadMessage']);
         $groupProfile->setTimeCreate($group['timeCreate']);
-        $groupProfile->setCanAddFriend($groupProfile["canAddFriend"]);
+        $groupProfile->setCanAddFriend($group["canAddFriend"]);
 
         $ownerUser = "";
         $adminUsers = [];

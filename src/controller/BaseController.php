@@ -142,6 +142,12 @@ abstract class BaseController extends \Wpf_Controller
         $this->rpcReturn($this->action, $response);
     }
 
+    public function returnErrorCodeRPC($errCode, $errInfo, $response = null)
+    {
+        $this->setRpcError($errCode, $errInfo);
+        $this->rpcReturn($this->action, $response);
+    }
+
     // ignore.~
     public function __construct(Wpf_Ctx $context)
     {
