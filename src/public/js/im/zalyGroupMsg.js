@@ -943,6 +943,11 @@ function groupCreateSuccess(results) {
 
 function createGroup()
 {
+    var enableCreateGroup = getEnableCreateGroup();
+    if(!enableCreateGroup) {
+        enableCreateGroupTip();
+        return;
+    }
     var groupName = $(".group_name").val();
     if(groupName.length > 10 || groupName.length < 1) {
         var tip = $.i18n.map['createGroupNameTip'] != undefined ? $.i18n.map['createGroupNameTip']: "群组名称长度限制1-10";
@@ -981,9 +986,48 @@ $(document).on("click", ".group_cancle", function(){
 });
 
 $(document).on("click", ".create-group", function () {
-    $(".group_name").val('');
-    showWindow($("#create-group"));
+    requestSiteConfig(checkEnableCreateGroup);
 });
+
+function getEnableCreateGroup()
+{
+    var enableCreateGroup = true;
+   try{
+       var siteConfigStr = localStorage.getItem(siteConfigKey);
+       var siteConfig = JSON.parse(siteConfigStr);
+       enableCreateGroup = siteConfig.enableCreateGroup == true ? true : false;
+       var master = siteConfig.hasOwnProperty("masters") ? siteConfig.masters : undefined;
+       if(master != undefined) {
+           var masterStr = JSON.parse(master).join(",");
+           if(masterStr.indexOf(token) != -1) {
+               enableCreateGroup = true;
+           }
+       }
+   }catch (error) {
+
+   }
+    return enableCreateGroup;
+}
+function checkEnableCreateGroup(results)
+{
+    ZalyIm(results);
+    var enableCreateGroup = getEnableCreateGroup();
+    var html = template("tpl-create-group-div", {
+        enableCreateGroup:enableCreateGroup,
+    });
+    html = handleHtmlLanguage(html);
+    $("#create-group").html(html);
+    showWindow($("#create-group"));
+
+
+}
+
+function enableCreateGroupTip()
+{
+
+    var tip = $.i18n.map['notEnableCreateGroupTip'] ? $.i18n.map['notEnableCreateGroupTip'] : "站点禁止创建群组";
+    alert(tip);
+}
 
 $(document).on("click", ".create_group_button" , function(){
     createGroup();
