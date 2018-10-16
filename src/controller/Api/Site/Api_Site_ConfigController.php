@@ -176,9 +176,9 @@ class Api_Site_ConfigController extends \BaseController
             $scheme = "http";
         }
 
-        if (empty($port) && $scheme=="http") {
+        if (empty($port) && $scheme == "http") {
             $port = 80;
-        } else if(empty($port) && $scheme=="https") {
+        } else if (empty($port) && $scheme == "https") {
             $port = 443;
         }
 
@@ -189,8 +189,22 @@ class Api_Site_ConfigController extends \BaseController
             $config = new PublicSiteConfig();
             $config->setName($configData[SiteConfig::SITE_NAME]);
             $config->setLogo($configData[SiteConfig::SITE_LOGO]);//        //notice
+
             if (isset($configData[SiteConfig::SITE_OWNER])) {
-                $config->setMasters($configData[SiteConfig::SITE_OWNER]);
+
+                $siteAdmins = [
+                    $configData[SiteConfig::SITE_OWNER]
+                ];
+
+                $managersValueStr = $configData[SiteConfig::SITE_MANAGERS];
+
+                if (isset($managersValueStr)) {
+                    $managersArray = explode(",", $managersValueStr);
+                    $siteAdmins = array_merge($siteAdmins, $managersArray);
+                    $siteAdmins = array_unique($siteAdmins);
+                }
+
+                $config->setMasters(json_encode($siteAdmins));
             }
 
             $zalyPort = $configData[SiteConfig::SITE_ZALY_PORT];
