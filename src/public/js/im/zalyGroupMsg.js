@@ -155,9 +155,6 @@ $(document).on("click", ".l-sb-item", function(){
 
     switch (dataType){
         case "group":
-            $(".left-body-chatsession").addClass("group-list");
-            $(".left-body-chatsession").removeClass("friend-list");
-            $(".left-body-chatsession").removeClass("chat-session-list");
             $(".group-lists")[0].style.display = "block";
             $(".chatsession-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
@@ -165,18 +162,12 @@ $(document).on("click", ".l-sb-item", function(){
             getGroupList(initGroupList);
             break;
         case "chatSession" :
-            $(".left-body-chatsession").addClass("chat-session-list");
-            $(".left-body-chatsession").removeClass("group-list");
-            $(".left-body-chatsession").removeClass("friend-list");
             getRoomList();
             $(".chatsession-lists")[0].style.display = "block";
             $(".group-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
             break;
         case "friend":
-            $(".left-body-chatsession").addClass("friend-list");
-            $(".left-body-chatsession").removeClass("chat-session-list");
-            $(".left-body-chatsession").removeClass("group-list");
             $(".friend-lists")[0].style.display = "block";
             $(".chatsession-lists")[0].style.display = "none";
             $(".group-lists")[0].style.display = "none";
@@ -459,13 +450,26 @@ $(document).on("click", ".see_group_profile", function () {
             sendFriendProfileReq(chatSessionId);
             $('.right-body-sidebar').show();
         } else if(chatSessionType == GROUP_MSG) {
-            sendGroupProfileReq(chatSessionId, handleGetGroupProfile);
-            $('.right-body-sidebar').show();
+            sendGroupProfileReq(chatSessionId, handleClickSeeGroupProfile);
         } else {
             $('.right-body-sidebar').hide();
         }
     }
 });
+
+function  handleClickSeeGroupProfile(results)
+{
+
+    var groupProfile = results.profile;
+    if(!groupProfile) {
+        var tip = $.i18n.map['notInGroupTip'] != undefined ? $.i18n.map['notInGroupTip'] : "你已不在此群";
+        $(this).attr("is_show_profile", 0);
+        alert(tip);
+    } else {
+        $('.right-body-sidebar').show();
+    }
+    handleGetGroupProfile(results);
+}
 
 
 ////check is group speaker
@@ -569,11 +573,11 @@ function getGroupList(callback)
 /// group operation - api.group.list - init html
 function initGroupList(results)
 {
-    $(".group-lists").html("");
-    var html = template("tpl-create-group", {});
-    html = handleHtmlLanguage(html);
-    $(".group-lists").html(html);
-
+    // $(".group-lists").html("");
+    // var html = template("tpl-create-group", {});
+    // html = handleHtmlLanguage(html);
+    // $(".group-lists").html(html);
+    $(".group-list-contact-row").html("");
     if(results.hasOwnProperty("list")) {
         appendGroupListHtml(results);
     }
@@ -585,6 +589,7 @@ function appendGroupListHtml(results) {
         return ;
     }
     var groupList = results.list;
+    console.log("list ==="+JSON.stringify(groupList));
     if(groupList) {
         groupOffset = Number(groupOffset + defaultCountKey);
         var groupLength = groupList.length;
@@ -773,7 +778,9 @@ function handleGetGroupProfile(result)
         var muteKey = msgMuteKey + groupProfile.id;
         localStorage.setItem(muteKey, (result.isMute ? 1 : 0) );
         displayProfile(groupProfile.id, GROUP_MSG);
+        return;
     }
+
 }
 
 //---------------------------------------api.group.members-----------------------------------------------
@@ -1660,7 +1667,7 @@ function getGroupProfileByClickChatSessionRow(jqElement)
     });
     $(".chatsession-title").html(groupName);
 
-    sendGroupProfileReq(groupId, handleGetGroupProfileByClick);
+    sendGroupProfileReq(groupId, handleGetGroupProfile);
 
     localStorage.setItem(chatSessionIdKey, groupId);
     localStorage.setItem(groupId, GROUP_MSG);
@@ -1675,17 +1682,6 @@ $(document).on("click", ".group-profile", function () {
     getGroupProfileByClickChatSessionRow($(this));
 });
 
-function handleGetGroupProfileByClick(results)
-{
-    var groupProfile = results.profile;
-    if(groupProfile == null) {
-        alert("不是群成员，无法查看群消息");
-        // var chatSessionId = localStorage.getItem(chatSessionIdKey);
-        // localStorage.removeItem(roomKey+chatSessionId);
-        // removeRoomFromRoomList(chatSessionId);
-    }
-    handleGetGroupProfile(results);
-}
 // contact-row-u2-profile
 $(document).on("click", ".contact-row-group-profile", function () {
     var groupId =  $(this).attr("chat-session-id");
@@ -1701,7 +1697,7 @@ $(document).on("click", ".contact-row-group-profile", function () {
 
 function handleClickRowGroupProfile(groupId)
 {
-    sendGroupProfileReq(groupId, handleGetGroupProfileByClick);
+    sendGroupProfileReq(groupId, handleGetGroupProfile);
 
     var groupName = $('.nickname_'+groupId).html();
     groupName = template("tpl-string", {
@@ -1886,7 +1882,7 @@ $(document).on("click", ".groupName",function () {
     $(this)[0].parentNode.replaceChild($(html)[0], $(this)[0]);
 });
 
-//---------------------------------api.group.quit-------------------------------------------
+//---------------------------------api.group.quit api.group.delete-------------------------------------------
 
 $(document).on("click", ".quit-group", function () {
     var tip = $.i18n.map['quitGroupJsTip'] != undefined ? $.i18n.map['quitGroupJsTip']: "退出群组?";
@@ -1903,6 +1899,11 @@ $(document).on("click", ".quit-group", function () {
 
 //---------------------------------api.group.delete-------------------------------------------
 
+function handleDeleteOrQuitGroup() {
+    $(".see_group_profile").attr("is_show_profile", 0);
+    $(".right-body-sidebar").hide();
+}
+
 $(document).on("click", ".delete-group", function () {
     var tip = $.i18n.map['disbandGroupJsTip'] != undefined ? $.i18n.map['disbandGroupJsTip']: "解散群?";
     if(confirm(tip)) {
@@ -1911,19 +1912,10 @@ $(document).on("click", ".delete-group", function () {
         var reqData = {
             "groupId": groupId
         };
-        handleClientSendRequest(action, reqData, handleDeleteOrQuitGroup);
+        handleClientSendRequest(action, reqData, handleDeleteOrQuitGroup());
     }
 });
 
-function handleDeleteOrQuitGroup() {
-    var groupId = localStorage.getItem(chatSessionIdKey);
-    localStorage.removeItem(groupId);
-    localStorage.setItem(chatSessionIdKey, "");
-    localStorage.removeItem(roomKey + groupId);
-    localStorage.removeItem(roomMsgUnReadNum + groupId);
-    removeRoomFromRoomList(groupId);
-    getRoomList();
-}
 
 
 //-------------------------------*******Friend*******----------------------------------------------
@@ -1990,7 +1982,7 @@ function  appendFriendListHtml(results)
                 nickname: u2.nickname ? u2.nickname : defaultUserName,
             });
             html = handleHtmlLanguage(html);
-            $(".friend-lists").append(html);
+            $(".friend-list-contact-row").append(html);
             getNotMsgImg(u2.userId, u2.avatar);
         }
     }
@@ -1999,10 +1991,7 @@ function  appendFriendListHtml(results)
 // friend operation -- api.friend.list - init html
 function initFriendList(results)
 {
-    $(".friend-lists").html("");
-    var html = template("tpl-apply-friend-list",{});
-    html = handleHtmlLanguage(html);
-    $(".friend-lists").html(html);
+    $(".friend-list-contact-row").html("");
     if(results != undefined && results.hasOwnProperty("friends")) {
         appendFriendListHtml(results);
     }
@@ -2010,11 +1999,11 @@ function initFriendList(results)
 }
 
 // friend operation -- api.friend.list - scroll append html
-$('.friend-list').scroll(function(){
-    var pwLeft = $(".friend-list")[0];
+$('.friend-list-contact-row').scroll(function(){
+    var pwLeft = $(".friend-list-contact-row")[0];
     var ch  = pwLeft.clientHeight;
     var sh = pwLeft.scrollHeight;
-    var st = $('.friend-list').scrollTop();
+    var st = $('.friend-list-contact-row').scrollTop();
     ////文档的高度-视口的高度-滚动条的高度
     if((sh - ch - st) == 0){
         getFriendList(appendFriendListHtml);

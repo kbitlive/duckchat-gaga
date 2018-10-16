@@ -978,7 +978,7 @@ function handleMsgContentText(str)
         var urlLink = arr[i];
         if(urlLink.indexOf("blob:") == -1 && urlLink.indexOf("../..") != 0) {
             var newUrlLink = urlLink;
-            if(urlLink.indexOf("http://") == -1) {
+            if(urlLink.indexOf("http://") == -1 && urlLink.indexOf("https://") == -1 ) {
                 newUrlLink = "http://"+urlLink;
             }
             var urlLinkHtml = "<a href='"+newUrlLink+"'target='_blank'>"+urlLink+"</a>";
