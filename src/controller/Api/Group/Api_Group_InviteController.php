@@ -55,16 +55,28 @@ class Api_Group_InviteController extends Api_Group_BaseController
             //// 成员拉人，判断拉人者 是不是该群成员
             switch ($groupInfo['permissionJoin']) {
                 case  \Zaly\Proto\Core\GroupJoinPermissionType::GroupJoinPermissionAdmin:
-                    $this->isGroupAdmin($groupId);
+
+                    $isAdmin = $this->isGroupAdminMember($groupId, $this->userId);
+
+                    if (!$isAdmin) {
+
+                        $errorInfo = ZalyText::getText(ZalyText::$textGroupAdminInvite, $this->language);
+                        $this->returnErrorCodeRPC("error.group.notAdmin", $errorInfo);
+
+                        return;
+                    }
+
                     break;
                 case \Zaly\Proto\Core\GroupJoinPermissionType::GroupJoinPermissionMember:
                     $this->isGroupMember($groupId);
                     break;
             }
 
-            // TODO 判断群中人数
+            //current group count
             $groupUserCount = $this->getGroupUserCount($groupId);
             $siteMaxGroupMembers = $groupInfo['maxMembers'];
+
+            //default -1
             if ($siteMaxGroupMembers == $this->defaultMaxGroupMembers) {
                 $siteConfigObj = $this->ctx->SiteConfig;
                 $siteConfig = $this->ctx->SiteConfigTable->selectSiteConfig($siteConfigObj::SITE_MAX_GROUP_MEMBERS);
@@ -74,7 +86,8 @@ class Api_Group_InviteController extends Api_Group_BaseController
             $newGroupUserCount = $groupUserCount + count($userIds);
             if ($siteMaxGroupMembers <= $groupUserCount || $siteMaxGroupMembers < $newGroupUserCount) {
                 $errorCode = $this->zalyError->errorGroupMemberCount;
-                $errorInfo = $this->zalyError->getErrorInfo($errorCode);
+                $errorInfo = $this->language == 1 ? "因群组最大成员限制（{$siteMaxGroupMembers}），此操作未成功"
+                    : "failed due to the max members limit of the group ({$siteMaxGroupMembers})";
                 $this->setRpcError($errorCode, $errorInfo);
                 throw new Exception($errorInfo);
             }

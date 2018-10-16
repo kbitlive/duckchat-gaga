@@ -12,7 +12,9 @@ abstract class Page_VersionController extends UpgradeController
     protected $versions = [
         10011 => "1.0.11",
 
-        10012 => "1.0.12"
+        10012 => "1.0.12",
+
+        10013 => "1.0.13",
     ];
 
     abstract function doRequest();
@@ -46,11 +48,11 @@ abstract class Page_VersionController extends UpgradeController
     protected function initUpgradeVersion()
     {
         $siteVersion = [
-            "versionCode" => 10011,
+            "versionCode" => 10011, //默认第一个版本，从1.0.11版本开始支持升级
             "versionName" => "",
             "upgradeErrCode" => "",
             "upgradeErrInfo" => "",
-            "passwordFileName" => $this->setPasswordFileName(),//升级口令文件名称
+            "passwordFileName" => $this->generatePasswordFileName(),//升级口令文件名称
         ];
 
         $fileName = dirname(__FILE__) . "/../../upgrade.php";
@@ -61,7 +63,20 @@ abstract class Page_VersionController extends UpgradeController
 
             $passwordFileName = dirname(__FILE__) . "/../../" . $siteVersion['passwordFileName'];
             file_put_contents($passwordFileName, ZalyHelper::generateNumberKey());
+        } else {
+            //upgrade.php 存在，但是 ***.upgrade 不存在
+            $passwordFilePath = $this->getPasswordFilePath();
+
+            if (!file_exists($passwordFilePath)) {
+                $newPasswordFileName = $this->generatePasswordFileName();
+                $passwordFilePath = dirname(__FILE__) . "/../../" . $newPasswordFileName;
+                file_put_contents($passwordFilePath, ZalyHelper::generateNumberKey());
+                //update upgrade.php
+                $this->updateUpgradePasswordFileName($newPasswordFileName);
+            }
+
         }
+
     }
 
     protected function getUpgradeVersion()
@@ -75,12 +90,22 @@ abstract class Page_VersionController extends UpgradeController
         return $versionArrays;
     }
 
-    private function setPasswordFileName()
+    private function generatePasswordFileName()
     {
         $dateDir = date("Ymd");
         $fileName = ZalyHelper::generateStrKey(10) . "-" . $dateDir . ".upgrade";
 
         return $fileName;
+    }
+
+    protected function getPasswordFilePath()
+    {
+        $versionInfos = $this->getUpgradeVersion();
+
+        $fileName = $versionInfos['passwordFileName'];
+
+        $filePath = dirname(__FILE__) . "/../../" . $fileName;
+        return $filePath;
     }
 
     protected function getPasswordFileName()
@@ -89,6 +114,17 @@ abstract class Page_VersionController extends UpgradeController
 
         $fileName = $versionInfos['passwordFileName'];
         return $fileName;
+    }
+
+    protected function deleteUpgradePasswordFile()
+    {
+        $fileName = $this->getPasswordFileName();
+
+        $passwordFileName = dirname(__FILE__) . "/../../" . $fileName;
+
+        $result = unlink($passwordFileName);
+
+        $this->logger->error("==================", "delete file=" . $passwordFileName . " result=" . $result);
     }
 
     /**
@@ -127,6 +163,17 @@ abstract class Page_VersionController extends UpgradeController
 
         $fileName = dirname(__FILE__) . "/../../upgrade.php";
         $contents = var_export($siteVersion, true);
+        file_put_contents($fileName, "<?php\n return {$contents};\n ");
+    }
+
+    protected function updateUpgradePasswordFileName($passwordFileName)
+    {
+        $versionInfos = $this->getUpgradeVersion();
+
+        $versionInfos['passwordFileName'] = $passwordFileName;
+
+        $fileName = dirname(__FILE__) . "/../../upgrade.php";
+        $contents = var_export($versionInfos, true);
         file_put_contents($fileName, "<?php\n return {$contents};\n ");
     }
 
