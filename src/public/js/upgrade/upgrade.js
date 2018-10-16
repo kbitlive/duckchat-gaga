@@ -135,7 +135,7 @@ function upgradeSiteVersion() {
     var nextUpgradeVersionNum = Number(Number(upgradeVersionNum)+1);
     localStorage.setItem(currentUpgradeVersionKey, nextUpgradeVersionNum);
     var endUpgradeNum = localStorage.getItem(endUpgradeVersionKey);
-    if(nextUpgradeVersionNum > Number(endUpgradeNum)) {
+    if(nextUpgradeVersionNum >= Number(endUpgradeNum)) {
         if(isPhone()) {
             var html = "升级完成，关闭当前页面";
             $(".upgrade_staring_btn").attr("goto", "close_page");
@@ -243,7 +243,6 @@ function checkUpgradeResult() {
     if(upgradeId == undefined) {
         return ;
     }
-
     $.ajax({
         method: "POST",
         url: "./index.php?action=page.version.check",
