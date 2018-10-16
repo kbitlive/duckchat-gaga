@@ -573,10 +573,6 @@ function getGroupList(callback)
 /// group operation - api.group.list - init html
 function initGroupList(results)
 {
-    // $(".group-lists").html("");
-    // var html = template("tpl-create-group", {});
-    // html = handleHtmlLanguage(html);
-    // $(".group-lists").html(html);
     $(".group-list-contact-row").html("");
     if(results.hasOwnProperty("list")) {
         appendGroupListHtml(results);
@@ -589,7 +585,6 @@ function appendGroupListHtml(results) {
         return ;
     }
     var groupList = results.list;
-    console.log("list ==="+JSON.stringify(groupList));
     if(groupList) {
         groupOffset = Number(groupOffset + defaultCountKey);
         var groupLength = groupList.length;
@@ -604,6 +599,9 @@ function appendGroupListHtml(results) {
             $(".group-list-contact-row").append(html);
             getNotMsgImg(group.id, group.avatar)
         }
+        var groupsDivHeight = $(".left-body-groups")[0].clientHeight;
+        var groupToolsHeight = $(".group-tools")[0].clientHeight;
+        $(".group-list-contact-row")[0].style.height = Number(groupsDivHeight-groupToolsHeight)+"px";
     }
 }
 
@@ -1985,6 +1983,9 @@ function  appendFriendListHtml(results)
             $(".friend-list-contact-row").append(html);
             getNotMsgImg(u2.userId, u2.avatar);
         }
+        var friendsDivHeight = $(".left-body-friends")[0].clientHeight;
+        var friendToolsHeight = $(".friend-tools")[0].clientHeight;
+        $(".friend-list-contact-row")[0].style.height = Number(friendsDivHeight-friendToolsHeight)+"px";
     }
 }
 
@@ -1999,11 +2000,12 @@ function initFriendList(results)
 }
 
 // friend operation -- api.friend.list - scroll append html
-$('.friend-list-contact-row').scroll(function(){
+$('.friend-list-contact-row').scroll(function(event){
     var pwLeft = $(".friend-list-contact-row")[0];
     var ch  = pwLeft.clientHeight;
     var sh = pwLeft.scrollHeight;
     var st = $('.friend-list-contact-row').scrollTop();
+    console.log("st ===="+st);
 
     //文档的高度-视口的高度-滚动条的高度
     if((sh - ch - st) == 0){

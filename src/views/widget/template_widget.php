@@ -259,17 +259,6 @@
     </div>
 </script>
 
-<script id="tpl-apply-friend-list" type="text/html">
-
-    <div class="pw-contact-row  apply-friend-list " >
-        <div class="pw-contact-row-image" style="position: relative;">
-            <img src="../../public/img/msg/apply_list.png" />
-            <div  class="apply-friend-list apply_friend_num" style="display: none;" ></div>
-        </div>
-        <div class="pw-contact-row-name">好友申请</div>
-    </div>
-</script>
-
 <script id="tpl-room-no-data" type="text/html">
     <div class="no-room-data">
         <img src="../../public/img/msg/room_no_data.png">
