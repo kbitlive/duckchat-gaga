@@ -251,7 +251,6 @@ function getNotMsgImg(userId, avatarImgId)
                 }
             }
             img.onerror = function (ev) {
-                console.log("download img is error msg =="+ev.message);
             }
         }
         sessionStorage.removeItem(userImgKey);

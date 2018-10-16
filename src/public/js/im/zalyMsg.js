@@ -968,7 +968,8 @@ function trimMsgContentBr(html)
 function handleMsgContentText(str)
 {
     str = trimMsgContentBr(str);
-    var reg=/((http|ftp|https):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
+    console.log("str ===" + str);
+    var reg=/(blob:)?((http|ftp|https):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
     var arr = str.match(reg);
     if(arr == null) {
         return str;
@@ -977,8 +978,7 @@ function handleMsgContentText(str)
     var length = arr.length;
     for(var i=0; i<length;i++) {
         var urlLink = arr[i];
-        console.log("(urlLink)==="+urlLink + " -----IsURL ==="+IsURL (urlLink));
-        if(urlLink.indexOf("blob:") == -1 && IsURL (urlLink)) {
+        if(urlLink.indexOf("blob:") == -1 && IsURL (urlLink) && urlLink != "msg_failed.png") {
             var newUrlLink = urlLink;
             if(urlLink.indexOf("://") == -1) {
                 newUrlLink = "http://"+urlLink;
