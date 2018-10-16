@@ -20,6 +20,7 @@ class SiteGroupTable extends BaseTable
         "descriptionType",
         "permissionJoin",
         "canGuestReadMessage",
+        "canAddFriend",
         "speakers",
         "maxMembers",
         "status",
@@ -231,6 +232,7 @@ class SiteGroupTable extends BaseTable
                     siteGroup.descriptionType,
                     siteGroup.permissionJoin,
                     siteGroup.canGuestReadMessage,
+                    siteGroup.canAddFriend,
                     siteGroup.speakers,
                     siteGroup.maxMembers,
                     siteGroup.timeCreate 
@@ -303,6 +305,7 @@ class SiteGroupTable extends BaseTable
                     siteGroup.descriptionType,
                     siteGroup.permissionJoin,
                     siteGroup.canGuestReadMessage,
+                    siteGroup.canAddFriend,
                     siteGroup.speakers,
                     siteGroup.maxMembers,
                     siteGroup.timeCreate 
@@ -348,6 +351,7 @@ class SiteGroupTable extends BaseTable
                     siteGroup.descriptionType,
                     siteGroup.permissionJoin,
                     siteGroup.canGuestReadMessage,
+                    siteGroup.canAddFriend,
                     siteGroup.speakers,
                     siteGroup.maxMembers,
                     siteGroup.timeCreate 
@@ -392,6 +396,7 @@ class SiteGroupTable extends BaseTable
                     siteGroup.descriptionType,
                     siteGroup.permissionJoin,
                     siteGroup.canGuestReadMessage,
+                    siteGroup.canAddFriend,
                     siteGroup.speakers,
                     siteGroup.maxMembers,
                     siteGroup.timeCreate 

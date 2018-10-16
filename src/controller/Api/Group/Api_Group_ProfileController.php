@@ -35,7 +35,14 @@ class Api_Group_ProfileController extends Api_Group_BaseController
                 throw new Exception($errorInfo);
             }
 
+            //get group profile
             $groupProfile = $this->getGroupProfile($groupId);
+            $canAddFriend = $groupProfile["canAddFriend"];
+
+            //get site config
+            $config = $this->siteConfig;
+            $enableAddFriendInGroup = $config[SiteConfig::SITE_ENABLE_ADD_FRIEND_IN_GROUP];
+            $groupProfile["canAddFriend"] = $canAddFriend && $enableAddFriendInGroup;
 
             $response = $this->buildApiGroupProfileResponse($groupProfile);
 

@@ -28,21 +28,9 @@ class DocumentMessage extends \Google\Protobuf\Internal\Message
      */
     private $name = '';
 
-    /**
-     * Constructor.
-     *
-     * @param array $data {
-     *     Optional. Data for populating the Message object.
-     *
-     *     @type string $url
-     *     @type int $size
-     *          bytes
-     *     @type string $name
-     * }
-     */
-    public function __construct($data = NULL) {
+    public function __construct() {
         \GPBMetadata\Core\Message::initOnce();
-        parent::__construct($data);
+        parent::__construct();
     }
 
     /**

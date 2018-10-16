@@ -57,29 +57,14 @@ class PublicGroupProfile extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>repeated .core.PublicUserProfile speakers = 11;</code>
      */
     private $speakers;
-
     /**
-     * Constructor.
-     *
-     * @param array $data {
-     *     Optional. Data for populating the Message object.
-     *
-     *     @type string $id
-     *     @type string $name
-     *     @type string $nameInLatin
-     *     @type string $avatar
-     *     @type \Zaly\Proto\Core\GroupDescription $description
-     *     @type int $permissionJoin
-     *     @type bool $canGuestReadMessage
-     *     @type int|string $timeCreate
-     *     @type \Zaly\Proto\Core\PublicUserProfile $owner
-     *     @type \Zaly\Proto\Core\PublicUserProfile[]|\Google\Protobuf\Internal\RepeatedField $admins
-     *     @type \Zaly\Proto\Core\PublicUserProfile[]|\Google\Protobuf\Internal\RepeatedField $speakers
-     * }
+     * Generated from protobuf field <code>bool canAddFriend = 12;</code>
      */
-    public function __construct($data = NULL) {
+    private $canAddFriend = false;
+
+    public function __construct() {
         \GPBMetadata\Core\Group::initOnce();
-        parent::__construct($data);
+        parent::__construct();
     }
 
     /**
@@ -320,6 +305,28 @@ class PublicGroupProfile extends \Google\Protobuf\Internal\Message
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Zaly\Proto\Core\PublicUserProfile::class);
         $this->speakers = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>bool canAddFriend = 12;</code>
+     * @return bool
+     */
+    public function getCanAddFriend()
+    {
+        return $this->canAddFriend;
+    }
+
+    /**
+     * Generated from protobuf field <code>bool canAddFriend = 12;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setCanAddFriend($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->canAddFriend = $var;
 
         return $this;
     }

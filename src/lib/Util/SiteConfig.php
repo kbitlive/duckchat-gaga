@@ -16,10 +16,13 @@ class SiteConfig
     const SITE_ENABLE_INVITATION_CODE = "enableInvitationCode";//邀请码
     const SITE_LOGIN_PLUGIN_ID = "loginPluginId";
 
-    const SITE_ENABLE_ADD_FRIEND = "enableAddFriend";
-    const SITE_ENABLE_TMP_CHAT = "enableTmpChat";
+
     const SITE_ENABLE_CREATE_GROUP = "enableCreateGroup";
     const SITE_MAX_GROUP_MEMBERS = "maxGroupMembers";
+    const SITE_ENABLE_ADD_FRIEND_IN_GROUP = "enableAddFriendInGroup";
+
+    const SITE_ENABLE_ADD_FRIEND = "enableAddFriend";
+    const SITE_ENABLE_TMP_CHAT = "enableTmpChat";
     const SITE_SUPPORT_PUSH_TYPE = "pushType";
 
 
@@ -85,6 +88,7 @@ class SiteConfig
         self::SITE_ENABLE_CREATE_GROUP,
         self::SITE_MAX_GROUP_MEMBERS,
         self::SITE_SUPPORT_PUSH_TYPE,
+        self::SITE_ENABLE_ADD_FRIEND_IN_GROUP,
 
 
         self::SITE_ENABLE_SHARE_GROUP,
@@ -132,10 +136,15 @@ class SiteConfig
         self::SITE_LOGIN_PLUGIN_ID => 0,
 
         self::SITE_ENABLE_CREATE_GROUP => 1,
+        self::SITE_ENABLE_ADD_FRIEND_IN_GROUP => 1,
+        self::SITE_GROUP_QR_CODE_EXPIRE_TIME => 0,
+        self::SITE_MAX_GROUP_MEMBERS => 100,
+
         self::SITE_ENABLE_ADD_FRIEND => 1,
         self::SITE_ENABLE_TMP_CHAT => 1,
         self::SITE_ENABLE_INVITATION_CODE => 0,
         self::SITE_ENABLE_REAL_NAME => 0,
+
 
         self::SITE_OPEN_SSL => 0,
         self::SITE_OPEN_WEB_EDITION => 1,
@@ -150,8 +159,6 @@ class SiteConfig
 
         self::SITE_SUPPORT_PUSH_TYPE => Zaly\Proto\Core\PushType::PushNotificationOnly,
         self::SITE_MAX_CLIENTS_NUM => 200,
-        self::SITE_GROUP_QR_CODE_EXPIRE_TIME => 0,
-        self::SITE_MAX_GROUP_MEMBERS => 100,
 
         self::SITE_DEFAULT_FRIENDS => "",
         self::SITE_DEFAULT_GROUPS => "",

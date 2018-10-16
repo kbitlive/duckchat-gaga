@@ -145,6 +145,7 @@ class Api_Group_BaseController extends BaseController
         $groupProfile->setPermissionJoin($group['permissionJoin']);
         $groupProfile->setCanGuestReadMessage($group['canGuestReadMessage']);
         $groupProfile->setTimeCreate($group['timeCreate']);
+        $groupProfile->setCanAddFriend($groupProfile["canAddFriend"]);
 
         $ownerUser = "";
         $adminUsers = [];
@@ -226,10 +227,6 @@ class Api_Group_BaseController extends BaseController
 
             $hasCount = count($avatars);
             $pageCount = $startCount - $hasCount;
-
-            $this->ctx->Wpf_Logger->info("Group-Avatar", "loopNum=" . $loopNum);
-            $this->ctx->Wpf_Logger->info("Group-Avatar", "hasCount=" . $hasCount);
-            $this->ctx->Wpf_Logger->info("Group-Avatar", "pageSize=" . $pageCount);
 
             $groupMembers = $this->getGroupUserList($groupId, $offset, $pageCount);
 
