@@ -764,6 +764,8 @@ function handleGetGroupProfile(result)
     var groupProfile = result.profile;
     if(groupProfile) {
         groupProfile.memberType = result.memberType ? result.memberType : GroupMemberType.GroupMemberGuest;
+        groupProfile.canAddFriend = results.canAddFriend ? results.canAddFriend : false;
+
         groupProfile.permissionJoin = groupProfile.permissionJoin ? groupProfile.permissionJoin : GroupJoinPermissionType.GroupJoinPermissionPublic;
         groupProfile['updateTime'] = Date.parse(new Date());
         localStorage.setItem(groupProfile.id, GROUP_MSG);
@@ -916,6 +918,29 @@ $(".create_group_box_div_input").bind('input porpertychange',function() {
     }
 });
 
+
+function groupCreateSuccess(results) {
+    removeWindow($("#create-group"));
+
+    var groupProfile = results.profile["profile"];
+
+    localStorage.setItem(chatSessionIdKey, groupProfile.id);
+    localStorage.setItem(groupProfile.id, GROUP_MSG);
+
+    var groupName = groupProfile.name;
+    groupName = template("tpl-string", {
+        string : groupName
+    });
+
+    $(".chatsession-title").html(groupName);
+    getGroupMembers(groupProfile.id, 0, 18, displayGroupMemberForGroupInfo);
+    handleGetGroupProfile(results);
+    insertGroupRoom(groupProfile.id, groupProfile.name);
+    handleMsgRelation(undefined, groupProfile.id);
+    $(".l-sb-item[data='chatSession']").click();
+}
+
+
 function createGroup()
 {
     var groupName = $(".group_name").val();
@@ -924,7 +949,6 @@ function createGroup()
         alert(tip);
         return false;
     }
-    removeWindow($("#create-group"));
     var reqData = {
         "groupName" : groupName,
     };
@@ -949,25 +973,6 @@ function insertGroupRoom(groupId, groupName)
     };
     msg = handleMsgInfo(msg);
     appendOrInsertRoomList(msg, true, false);
-}
-
-function groupCreateSuccess(results) {
-    var groupProfile = results.profile["profile"];
-
-    localStorage.setItem(chatSessionIdKey, groupProfile.id);
-    localStorage.setItem(groupProfile.id, GROUP_MSG);
-
-    var groupName = groupProfile.name;
-    groupName = template("tpl-string", {
-        string : groupName
-    });
-
-    $(".chatsession-title").html(groupName);
-    getGroupMembers(groupProfile.id, 0, 18, displayGroupMemberForGroupInfo);
-    handleGetGroupProfile(results);
-    insertGroupRoom(groupProfile.id, groupProfile.name);
-    handleMsgRelation(undefined, groupProfile.id);
-    $(".l-sb-item[data='chatSession']").click();
 }
 
 
@@ -1003,6 +1008,8 @@ function handleClickGroupUserImg(results)
     var groupProfile = results.profile;
 
     if(groupProfile) {
+        console.log("profile results===="+JSON.stringify(results));
+
         groupProfile.memberType = results.memberType ? results.memberType : GroupMemberType.GroupMemberGuest;
 
         var isOwner = groupProfile.memberType == GroupMemberType.GroupMemberOwner ? 1 : 0;
@@ -1012,6 +1019,8 @@ function handleClickGroupUserImg(results)
         var memberIsSpeaker = checkGroupMemberSpeakerType(clickImgUserId, groupProfile);
         var memberIsOwner = checkGroupOwnerType(clickImgUserId, groupProfile);
         var isFriend = localStorage.getItem(friendRelationKey+clickImgUserId) == FriendRelation.FriendRelationFollow ? 1 : 0;
+        var isCanAddFriend = groupProfile.canAddFriend == true ? true : false;
+
         var html = template("tpl-group-user-menu", {
             userId : clickImgUserId,
             isFriend : isFriend,
@@ -1019,7 +1028,8 @@ function handleClickGroupUserImg(results)
             isAdmin:isAdmin,
             memberIsSpeaker:memberIsSpeaker == false ? false : true,
             memberIsAdmin:memberIsAdmin == false ? false : true,
-            memberIsOwner:memberIsOwner == false? false : true
+            memberIsOwner:memberIsOwner == false ? false : true,
+            isCanAddFriend : isCanAddFriend
         });
 
         html = handleHtmlLanguage(html);

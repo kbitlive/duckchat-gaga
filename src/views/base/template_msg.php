@@ -369,11 +369,12 @@
 
 <script id="tpl-group-user-menu" type="text/html">
     <div id="group-user-menu" userId="{{userId}}" >
-        {{if isFriend == 1}}
+        {{if isFriend == 1 }}
             <div class="item p-2" id="open-temp-chat" data-local-value="openChatTip">发起聊天</div>
-        {{else}}
+        {{else if(isCanAddFriend  || (!isCanAddFriend && isAdmin == 1))}}
             <div class="item p-2" id="add-friend" data-local-value="addFriendTip"> 添加好友</div>
         {{/if}}
+
         {{if isAdmin == 1}}
             {{if (isOwner == 1 && !memberIsAdmin)}}
                 <div class="item p-2" id="set-admin" data-local-value="setAdminTip">设为管理员</div>
@@ -387,7 +388,7 @@
                     <div class="item p-2" id="remove-speaker" data-local-value="removeSpeakerTip">移除发言人</div>
             {{/if}}
 
-            {{if (!memberIsOwner && !memberIsAdmin)}}
+            {{if (isOwner == 1 || (!memberIsAdmin && !memberIsOwner))}}
                 <div class="item p-2" id="remove-group-chat" data-local-value="removeGroupMemberTip">移除成员</div>
             {{/if}}
 
