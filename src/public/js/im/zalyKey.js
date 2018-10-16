@@ -215,4 +215,5 @@ isSyncingMsg = false;
 isPreSyncingMsgTime="";
 
 errorFriendIsKey = "error.friend.is";
+errorGroupNotExitsKey = "error.group.notExists";
 

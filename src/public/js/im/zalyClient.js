@@ -52,6 +52,8 @@ function handleClientSendRequest(action, reqData, callback)
 function handleClientReceivedMessage(resp, callback)
 {
     try{
+        console.log("result ==="+resp);
+
         var result = JSON.parse(resp);
         if(result.header != undefined && result.header.hasOwnProperty(HeaderErrorCode)) {
             if(result.header[HeaderErrorCode] != "success") {
@@ -60,15 +62,23 @@ function handleClientReceivedMessage(resp, callback)
                     window.location.href = "./index.php?action=page.logout";
                     return ;
                 }
-                if(result.action == "api.friend.profile") {
-                    callback(result.body);
-                } else if(result.action == "api.friend.apply" && result.header[HeaderErrorCode] == errorFriendIsKey) {
-                    callback("error.friend.is");
-                } else if(result.action == "api.group.members") {
-                    callback(result);
-                } else {
-                    alert(result.header[HeaderErrorInfo]);
-                    return;
+                switch(result.action)
+                {
+                    case "api.friend.profile":
+                        callback(result.body);
+                        break;
+                    case "api.friend.apply":
+                        if(result.header[HeaderErrorCode] == errorFriendIsKey) {
+                            callback("error.friend.is");
+                            break;
+                        }
+                    case "api.group.members":
+                    case "api.group.profile":
+                        callback(result);
+                        break;
+                    default:
+                        alert(result.header[HeaderErrorInfo]);
+                        return;
                 }
             }
         }
@@ -76,6 +86,6 @@ function handleClientReceivedMessage(resp, callback)
             callback(result.body);
         }
     }catch (error) {
-        console.log(error.message);
+        console.log(error);
     }
 }

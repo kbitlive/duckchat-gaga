@@ -459,6 +459,12 @@ $(document).on("click", ".see_group_profile", function () {
 function  handleClickSeeGroupProfile(results)
 {
 
+    if(results.hasOwnProperty("header") &&  results.header[HeaderErrorCode] == errorGroupNotExitsKey) {
+        var tip = $.i18n.map['notInGroupTip'] != undefined ? $.i18n.map['errorGroupExitsTip'] : "此群已解散";
+        alert(tip);
+        return;
+    }
+
     var groupProfile = results.profile;
     if(!groupProfile) {
         var tip = $.i18n.map['notInGroupTip'] != undefined ? $.i18n.map['notInGroupTip'] : "你已不在此群";
@@ -763,8 +769,6 @@ function handleGetGroupProfile(result)
     var groupProfile = result.profile;
     if(groupProfile) {
         groupProfile.memberType = result.memberType ? result.memberType : GroupMemberType.GroupMemberGuest;
-        groupProfile.canAddFriend = results.canAddFriend ? results.canAddFriend : false;
-
         groupProfile.permissionJoin = groupProfile.permissionJoin ? groupProfile.permissionJoin : GroupJoinPermissionType.GroupJoinPermissionPublic;
         groupProfile['updateTime'] = Date.parse(new Date());
         localStorage.setItem(groupProfile.id, GROUP_MSG);
@@ -1952,6 +1956,7 @@ function handleDeleteOrQuitGroup() {
     $(".see_group_profile").attr("is_show_profile", 0);
     $(".right-body-sidebar").hide();
 }
+
 
 $(document).on("click", ".delete-group", function () {
     var tip = $.i18n.map['disbandGroupJsTip'] != undefined ? $.i18n.map['disbandGroupJsTip']: "解散群?";
