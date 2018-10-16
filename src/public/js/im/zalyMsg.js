@@ -968,7 +968,7 @@ function trimMsgContentBr(html)
 function handleMsgContentText(str)
 {
     str = trimMsgContentBr(str);
-    var reg=/(blob:)?((http|ftp|https):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
+    var reg=/((http|ftp|https):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
     var arr = str.match(reg);
     if(arr == null) {
         return str;
@@ -977,14 +977,39 @@ function handleMsgContentText(str)
     var length = arr.length;
     for(var i=0; i<length;i++) {
         var urlLink = arr[i];
-        if(urlLink.indexOf("blob:") == -1 &&
-            (urlLink.indexOf("http://") != -1 || urlLink.indexOf("https://") != -1 || urlLink.indexOf("duckchat://") != -1)) {
+        console.log("(urlLink)==="+urlLink + " -----IsURL ==="+IsURL (urlLink));
+        if(urlLink.indexOf("blob:") == -1 && IsURL (urlLink)) {
             var newUrlLink = urlLink;
+            if(urlLink.indexOf("://") == -1) {
+                newUrlLink = "http://"+urlLink;
+            }
             var urlLinkHtml = "<a href='"+newUrlLink+"'target='_blank'>"+urlLink+"</a>";
             str = str.replace(urlLink, urlLinkHtml);
         }
     }
     return str;
+}
+
+function IsURL (url) {
+    var urls = url.split("?");
+    url = urls.shift()
+    var strRegex = '^((https|http|ftp|rtsp|mms)?://)'
+        + '?(([0-9a-z_!~*\'().&=+$%-]+: )?[0-9a-z_!~*\'().&=+$%-]+@)?' //ftp的user@
+        + '((\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])' // IP形式的URL- 199.194.52.184 最大为255.255.255.255
+        + '|' // 允许IP和DOMAIN（域名）
+        + '([0-9a-z_!~*\'()-]+.)*' // 域名- www.
+        + '([0-9a-z][0-9a-z-]{0,61})?[0-9a-z].' // 二级域名
+        + '[a-z]{2,6})' // first level domain- .com or .museum
+        + '(:[0-9]{1,4})?' // 端口- :80
+        + '((/?)|' // a slash isn't required if there is no file name
+        + '(/[0-9a-z_!~*\'().;?:@&=+$,%#-]+)+/?)$';
+    var re=new RegExp(strRegex);
+    //re.test()
+    if (re.test(url)) {
+        return (true);
+    } else {
+        return (false);
+    }
 }
 
 //---------------------------------------------append msg html to chat dialog-------------------------------------------------

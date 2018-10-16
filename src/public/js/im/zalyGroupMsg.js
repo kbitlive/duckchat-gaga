@@ -1018,8 +1018,6 @@ function checkEnableCreateGroup(results)
     html = handleHtmlLanguage(html);
     $("#create-group").html(html);
     showWindow($("#create-group"));
-
-
 }
 
 function enableCreateGroupTip()
