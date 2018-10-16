@@ -52,8 +52,6 @@ function handleClientSendRequest(action, reqData, callback)
 function handleClientReceivedMessage(resp, callback)
 {
     try{
-        console.log("result ==="+resp);
-
         var result = JSON.parse(resp);
         if(result.header != undefined && result.header.hasOwnProperty(HeaderErrorCode)) {
             if(result.header[HeaderErrorCode] != "success") {

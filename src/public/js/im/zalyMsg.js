@@ -968,7 +968,6 @@ function trimMsgContentBr(html)
 function handleMsgContentText(str)
 {
     str = trimMsgContentBr(str);
-    console.log("str ===" + str);
     var reg=/(blob:)?((http|ftp|https):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
     var arr = str.match(reg);
     if(arr == null) {
@@ -978,7 +977,7 @@ function handleMsgContentText(str)
     var length = arr.length;
     for(var i=0; i<length;i++) {
         var urlLink = arr[i];
-        if(urlLink.indexOf("blob:") == -1 && IsURL (urlLink) && urlLink != "msg_failed.png") {
+        if(urlLink.indexOf("blob:") == -1 && IsURL (urlLink)) {
             var newUrlLink = urlLink;
             if(urlLink.indexOf("://") == -1) {
                 newUrlLink = "http://"+urlLink;
@@ -992,24 +991,21 @@ function handleMsgContentText(str)
 
 function IsURL (url) {
     var urls = url.split("?");
-    url = urls.shift()
-    var strRegex = '^((https|http|ftp|rtsp|mms)?://)'
-        + '?(([0-9a-z_!~*\'().&=+$%-]+: )?[0-9a-z_!~*\'().&=+$%-]+@)?' //ftp的user@
-        + '((\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])' // IP形式的URL- 199.194.52.184 最大为255.255.255.255
-        + '|' // 允许IP和DOMAIN（域名）
-        + '([0-9a-z_!~*\'()-]+.)*' // 域名- www.
-        + '([0-9a-z][0-9a-z-]{0,61})?[0-9a-z].' // 二级域名
-        + '[a-z]{2,6})' // first level domain- .com or .museum
-        + '(:[0-9]{1,4})?' // 端口- :80
-        + '((/?)|' // a slash isn't required if there is no file name
-        + '(/[0-9a-z_!~*\'().;?:@&=+$,%#-]+)+/?)$';
-    var re=new RegExp(strRegex);
-    //re.test()
-    if (re.test(url)) {
-        return (true);
-    } else {
-        return (false);
+    var urlAndSchemAndPort = urls.shift();
+    var urlAndPort = urlAndSchemAndPort.split("://").pop();
+    url = urlAndPort.split(":").shift();
+    var ipRegex = '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
+    var ipReg=new RegExp(ipRegex);
+    if(!ipReg.test(url)) {
+        var domainSuffix = url.split(".").pop();
+        var urlDomain = "com,cn,net,xyz,top,tech,org,gov,edu,ink,red,int,mil,pub,biz,CC,name,TV,mobi,travel,info,tv,pro,coop,aero,me,app,onlone,shop" +
+            ",club,store,life,global,live,museum,jobs,cat,tel,bid,pub,foo,site,";
+        if(urlDomain.indexOf(domainSuffix) != -1) {
+            return true;
+        }
+        return false;
     }
+    return true;
 }
 
 //---------------------------------------------append msg html to chat dialog-------------------------------------------------
