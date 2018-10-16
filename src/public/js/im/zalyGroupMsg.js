@@ -2004,7 +2004,8 @@ $('.friend-list-contact-row').scroll(function(){
     var ch  = pwLeft.clientHeight;
     var sh = pwLeft.scrollHeight;
     var st = $('.friend-list-contact-row').scrollTop();
-    ////文档的高度-视口的高度-滚动条的高度
+
+    //文档的高度-视口的高度-滚动条的高度
     if((sh - ch - st) == 0){
         getFriendList(appendFriendListHtml);
     }
