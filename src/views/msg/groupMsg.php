@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>主页面</title>
+    <title></title>
     <link rel="stylesheet" href="../../public/css/zaly-action-row.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" href="../../public/css/zaly_contact.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" href="../../public/css/zaly_apply_friend_list.css?_version=<?php echo $versionCode?>" />
@@ -57,9 +57,25 @@
 
 <script type="text/javascript">
 
+    requestSiteConfig(ZalyIm);
 
     $(window).resize(function () {
         setFontSize();
+        try{
+            var friendsDivHeight = $(".left-body-friends")[0].clientHeight;
+            var friendToolsHeight = $(".friend-tools")[0].clientHeight;
+            $(".friend-list-contact-row")[0].style.height = Number(friendsDivHeight-friendToolsHeight)+"px";
+        }catch (error) {
+
+        }
+
+        try{
+            var groupsDivHeight = $(".left-body-groups")[0].clientHeight;
+            var groupToolsHeight = $(".group-tools")[0].clientHeight;
+            $(".group-list-contact-row")[0].style.height = Number(groupsDivHeight-groupToolsHeight)+"px";
+        }catch (error) {
+
+        }
     });
 
     setFontSize();
@@ -83,7 +99,6 @@
         return rem;
     }
 
-    requestSiteConfig(ZalyIm);
 
     localStorage.setItem(chatTypeKey, DefaultChat);
     getRoomList();

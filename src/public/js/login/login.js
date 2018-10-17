@@ -1,26 +1,5 @@
 
 
-UserClientLangZH = "1";
-UserClientLangEN = "0";
-
-function getLanguage() {
-    var nl = navigator.language;
-    if ("zh-cn" == nl || "zh-CN" == nl) {
-        return UserClientLangZH;
-    }
-    return UserClientLangEN;
-}
-
-function getLanguageName() {
-    var nl = navigator.language;
-    if ("zh-cn" == nl || "zh-CN" == nl) {
-        return "zh";
-    }
-    return "en";
-}
-var languageName = getLanguageName();
-
-
 jQuery.i18n.properties({
     name: "lang",
     path: '../../public/js/config/',
@@ -78,6 +57,77 @@ var host = window.location.host;
 var pathname = window.location.pathname;
 originDomain = protocol+"//"+host+pathname;
 isRegister=false;
+
+
+function setDocumentTitle(type)
+{
+    switch (type)
+    {
+        case "login":
+            document.title = "login";
+            if(languageName == "zh") {
+                document.title = "登录";
+            } else {
+                document.title = "login";
+            }
+            break;
+        case "register":
+            if(languageName == "zh") {
+                document.title = "注册";
+            } else {
+                document.title = "Register";
+            }
+            break;
+    }
+}
+
+setDocumentTitle("login");
+
+function isWeixinBrowser(){
+    return /micromessenger/.test(navigator.userAgent.toLowerCase())
+}
+
+function isPhone(){
+    if((/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) || isWeixinBrowser()) {
+        return true;
+    }
+    return false;
+}
+
+function isAvailableBrowser(){
+    var userAgent = navigator.userAgent;
+    var isFirefox = userAgent.indexOf("Firefox") != -1;
+    var isChrome = userAgent.indexOf("Chrome") && window.chrome;
+    var isSafari = userAgent.indexOf("Safari") != -1 && userAgent.indexOf("Version") != -1;
+    if(isFirefox || isChrome || isSafari) {
+        return true;
+    }
+    return false;
+}
+var isDuckchatFlag = $(".isDuckchat").val();
+var isPhoneFlag = isPhone();
+
+if(isPhoneFlag && isDuckchatFlag == 0) {
+    $(".site-warning")[0].style.display='flex';
+    var tip = "暂不支持手机浏览器，请使用手机客户端或者PC访问站点！";
+    if(languageName == "en") {
+        tip = "Mobile browser is not supported at this time, please use the mobile client or PC to access the site!";
+    }
+    $(".site-warning").html(tip);
+}
+
+if(isPhoneFlag == false) {
+    var isAvailabelBrowserFlag = isAvailableBrowser();
+    if(!isAvailabelBrowserFlag) {
+        $(".site-warning")[0].style.display='flex';
+        var tip = "";
+        if(languageName == "en") {
+            tip = "This browser is not supported at this time. Please use the mobile client or Firefox, Chrome, Safari browser to visit the site!";
+        }
+        $(".site-warning").html(tip);
+    }
+}
+
 
 function zalyLoginConfig(results) {
     if(typeof results == "object" ) {
@@ -154,6 +204,7 @@ $(".input_login_site").bind('input porpertychange',function(){
 
 function registerForPassportPassword()
 {
+    setDocumentTitle("register");
     var html = template("tpl-register-div", {
         enableInvitationCode : enableInvitationCode
     });
@@ -201,6 +252,7 @@ function forgetPwdForPassportPassword()
 
 function registerForLogin()
 {
+    setDocumentTitle("login");
     // $(".input_login_site").val("");
     $(".zaly_login_by_pwd")[0].style.display = "block";
     $(".zaly_site_register-pwd")[0].style.display = "none";

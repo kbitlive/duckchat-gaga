@@ -43,17 +43,49 @@
             <div class="left-body-container">
                 <div class="left-body-chatsession chatsession-lists" style="position: relative;">
                 </div>
-
-                <div class="left-body-chatsession group-lists"  style="display: none;position: relative;">
-
+<!---->
+                <div class="left-body-groups group-lists "  style="display: none;position: relative;">
+                        <div style="width: 100%;" class="group-tools">
+                            <div class="pw-contact-row create-group" >
+                                <div class="pw-contact-row-image" style="position: relative;">
+                                    <img src="../../public/img/msg/create_group.png" />
+                                </div>
+                                <div class="pw-contact-row-name" data-local-value="createGroupTip">创建群聊</div>
+                            </div>
+                            <div class="group-list-div" data-local-value="groupListTip">群聊列表</div>
+                        </div>
+                        <div style="position: absolute;width: 100%;overflow-y: scroll;margin:0 auto;">
+                            <div class="group-list-contact-row" style="position: relative;">
+                            </div>
+                        </div>
                 </div>
 
-                <div class="left-body-chatsession friend-lists" style="display: none;position: relative;">
 
+
+                <div class="left-body-friends friend-lists"  style="display: none;">
+                    <div style="width: 100%;" class="friend-tools">
+                            <div class="pw-contact-row  search-user" >
+                                <div class="pw-contact-row-image" style="position: relative;">
+                                    <img src="../../public/img/msg/search_add_friend.png" />
+                                </div>
+                                <div class="pw-contact-row-name" data-local-value="searchTip">添加好友</div>
+                            </div>
+                            <div class="pw-contact-row  apply-friend-list" >
+                                <div class="pw-contact-row-image" style="position: relative;">
+                                    <img src="../../public/img/msg/apply_list.png" />
+                                    <div  class="apply-friend-list apply_friend_num" style="display: none;" ></div>
+                                </div>
+                                <div class="pw-contact-row-name new-friends-apply" data-local-value="newFriendsTip">新朋友</div>
+                            </div>
+                            <div class="friend-list-div" data-local-value="friendListTip">好友列表</div>
+                    </div>
+                    <div style="width: 28.14rem;position: absolute;overflow-y: scroll;margin:0 auto;">
+                        <div class="friend-list-contact-row" style="overflow-y: scroll;position: relative">
+                        </div>
+                    </div>
                 </div>
 
             </div>
-
         </div>
     </div>
 

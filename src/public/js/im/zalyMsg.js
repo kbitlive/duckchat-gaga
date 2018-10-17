@@ -324,7 +324,6 @@ function handleSetItemError(error)
     }
 }
 enableWebsocketGw = localStorage.getItem(websocketGW);
-console.log("enableWebsocketGw==="+enableWebsocketGw)
 
 if(enableWebsocketGw == "false" || enableWebsocketGw == null) {
     ///1秒 sync
@@ -968,17 +967,25 @@ function trimMsgContentBr(html)
 function handleMsgContentText(str)
 {
     str = trimMsgContentBr(str);
-    var reg=/(blob:)?((http|ftp|https):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
+    var reg=/(blob:)?((http|ftp|https|duckchat):\/\/)?[\w\-_]+(\:[0-9]+)?(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
     var arr = str.match(reg);
     if(arr == null) {
         return str;
     }
+
     var length = arr.length;
     for(var i=0; i<length;i++) {
         var urlLink = arr[i];
-        if(urlLink.indexOf("blob:") == -1 && urlLink.indexOf("../..") != 0) {
+        if(urlLink.indexOf("blob:") == -1 &&
+            ( IsURL (urlLink)
+                || urlLink.indexOf("http://") != -1
+                || urlLink.indexOf("https://") != -1
+                || urlLink.indexOf("ftp://") != -1
+                || urlLink.indexOf("duckchat://") != -1
+            )
+        ) {
             var newUrlLink = urlLink;
-            if(urlLink.indexOf("http://") == -1) {
+            if(urlLink.indexOf("://") == -1) {
                 newUrlLink = "http://"+urlLink;
             }
             var urlLinkHtml = "<a href='"+newUrlLink+"'target='_blank'>"+urlLink+"</a>";
@@ -986,6 +993,25 @@ function handleMsgContentText(str)
         }
     }
     return str;
+}
+
+function IsURL (url) {
+    var urls = url.split("?");
+    var urlAndSchemAndPort = urls.shift();
+    var urlAndPort = urlAndSchemAndPort.split("://").pop();
+    url = urlAndPort.split(":").shift();
+    var ipRegex = '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
+    var ipReg=new RegExp(ipRegex);
+    if(!ipReg.test(url)) {
+        var domainSuffix = url.split(".").pop();
+        var urlDomain = "com,cn,net,xyz,top,tech,org,gov,edu,ink,red,int,mil,pub,biz,CC,name,TV,mobi,travel,info,tv,pro,coop,aero,me,app,onlone,shop" +
+            ",club,store,life,global,live,museum,jobs,cat,tel,bid,pub,foo,site,";
+        if(urlDomain.indexOf(domainSuffix) != -1) {
+            return true;
+        }
+        return false;
+    }
+    return true;
 }
 
 //---------------------------------------------append msg html to chat dialog-------------------------------------------------

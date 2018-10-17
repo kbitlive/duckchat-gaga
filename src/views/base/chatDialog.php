@@ -1,10 +1,10 @@
 
 <div class="right-head">
-    <div class="title chatsession-title">DuckChat<sup style="font-size: 0.8rem; color: red;">抢先体验版</sup></sup> <SMALL style="font-size: 1rem;">单聊、群聊、小程序、高扩展，支持iOS、Android、Web，进QQ群咨询详情！开源！免费！</SMALL></div>
+    <div class="title chatsession-title"></div>
     <div class="actions">
         <img src="../../public/img/msg/invite_people.png"  class="invite_people"/>
         <img src="../../public/img/msg/add_friend.png"  class="add_friend add-friend-btn"/>
-        <img src="../../public/img/msg/setting.png" class="see_group_profile" is_show_profile="1"/>
+        <img src="../../public/img/msg/setting.png" class="see_group_profile" is_show_profile="0"/>
     </div>
 </div>
 
@@ -130,11 +130,7 @@
 
         </div>
     </div>
-    <div class="right-body-sidebar">
-
-        <div class="right-body-sidebar-menu">
-            <img src="../../public/img/msg/btn-close.png"style="cursor: pointer;" onclick="$('.right-body-sidebar').hide()" />
-        </div>
+    <div class="right-body-sidebar" style="display: none;" >
 
         <div style="position: relative">
             <div class="group-profile-desc">
