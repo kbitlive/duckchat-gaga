@@ -8,12 +8,13 @@
  * Time: 12:28 PM
  */
 
-class MiniProgram_Admin_LoginController extends MiniProgramController
+class MiniProgram_Admin_PasswordLoginController extends MiniProgramController
 {
 
     protected function getMiniProgramId()
     {
         $loginMiniProgramId = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_LOGIN_PLUGIN_ID);
+
         return $loginMiniProgramId;
     }
 
@@ -27,6 +28,7 @@ class MiniProgram_Admin_LoginController extends MiniProgramController
         $currentUserId = $this->userId;
 
         if (!$this->ctx->Site_Config->isManager($currentUserId)) {
+
             echo $this->language == 1 ? "仅站点管理员可用" : "only site managers can use";
             return false;
         }
@@ -39,7 +41,31 @@ class MiniProgram_Admin_LoginController extends MiniProgramController
      */
     protected function doRequest()
     {
-        // TODO: Implement doRequest() method.
+        $method = $_SERVER["REQUEST_METHOD"];
+
+        if ($method == "GET") {
+
+            $config = $this->ctx->Site_Config->getAllConfig();
+
+            $loginMiniProgramId = $config[SiteConfig::SITE_LOGIN_PLUGIN_ID];
+            $enableInvitationCode = $config[SiteConfig::SITE_ENABLE_INVITATION_CODE];
+
+            $params = [
+                "lang" => $this->language,
+//                "enableInvitationCode" => $loginMiniProgramId,
+//                "enableInvitationCode" => $enableInvitationCode,
+            ];
+
+            echo $this->display("miniProgram_admin_passwordLogin", $params);
+
+        } elseif ($method == "POST") {
+
+
+        } else {
+            echo $this->language == 1 ? "不支持的请求方法" : "unSupport request method";
+        }
+
+        return;
     }
 
     /**
@@ -49,6 +75,7 @@ class MiniProgram_Admin_LoginController extends MiniProgramController
      */
     protected function requestException($ex)
     {
-        // TODO: Implement requestException() method.
+        $this->logger->error("miniProgram.admin.login", $ex);
     }
+
 }

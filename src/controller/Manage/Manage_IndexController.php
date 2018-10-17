@@ -15,6 +15,12 @@ class Manage_IndexController extends Manage_CommonController
         $params = ["lang" => $this->language];
 
         if ("home" == $page) {
+
+
+            $pluginAdmins = $this->getMiniProgramList();
+
+            $params['miniProgramList'] = $pluginAdmins;
+
             echo $this->display("manage_home", $params);
         } else {
             echo $this->display("manage_index", $params);
@@ -22,4 +28,25 @@ class Manage_IndexController extends Manage_CommonController
         return;
     }
 
+    private function getMiniProgramList()
+    {
+        $hasAdminMiniPrograms = [];
+
+        $miniPrograms = $this->ctx->SitePluginTable->getAllPluginList();
+
+        if ($miniPrograms) {
+            foreach ($miniPrograms as $miniProgram) {
+
+                $adminPageUrl = $miniProgram['adminPageUrl'];
+
+                if (!empty($adminPageUrl)) {
+                    $miniProgram["name"] .= "后台管理";
+                    $hasAdminMiniPrograms[] = $miniProgram;
+                }
+
+            }
+        }
+
+        return $hasAdminMiniPrograms;
+    }
 }

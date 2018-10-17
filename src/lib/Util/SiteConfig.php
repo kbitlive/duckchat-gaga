@@ -14,7 +14,7 @@ class SiteConfig
 
     const SITE_ENABLE_REAL_NAME = "enableRealName"; //是否实名
     const SITE_ENABLE_INVITATION_CODE = "enableInvitationCode";//邀请码
-    const SITE_LOGIN_PLUGIN_ID = "loginPluginId";
+    const SITE_LOGIN_PLUGIN_ID = "c";
 
 
     const SITE_ENABLE_CREATE_GROUP = "enableCreateGroup";

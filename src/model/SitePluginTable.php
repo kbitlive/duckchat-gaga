@@ -217,7 +217,10 @@ class SitePluginTable extends BaseTable
         $tag = __CLASS__ . "_" . __FUNCTION__;
         $startTime = microtime(true);
         try {
-            $sql = "select distinct a.pluginId as pluginId,a.name as `name`,a.logo as logo from (select pluginId,name,logo from sitePlugin order by id ASC) as a;";
+            $sql = "select 
+                      distinct a.pluginId as pluginId,a.name as name,a.logo as logo,a.management as adminPageUrl 
+                    from 
+                      (select pluginId,name,logo,management from sitePlugin order by id ASC) as a;";
 
             $prepare = $this->dbSlave->prepare($sql);
             $this->handlePrepareError($tag, $prepare);

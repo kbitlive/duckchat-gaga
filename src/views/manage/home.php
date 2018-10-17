@@ -22,7 +22,6 @@
 
         .wrapper {
             width: 100%;
-            height: 100%;
             display: flex;
             align-items: stretch;
         }
@@ -126,6 +125,7 @@
 <body>
 
 <div class="wrapper" id="wrapper">
+
     <div class="layout-all-row">
 
         <div class="list-item-center">
@@ -145,8 +145,7 @@
                         </div>
 
                         <div class="item-body-tail">
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
                         </div>
                     </div>
 
@@ -171,8 +170,7 @@
                         </div>
 
                         <div class="item-body-tail">
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
                         </div>
                     </div>
 
@@ -197,8 +195,7 @@
                         </div>
 
                         <div class="item-body-tail">
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
                         </div>
                     </div>
 
@@ -222,8 +219,7 @@
                         </div>
 
                         <div class="item-body-tail">
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
                         </div>
                     </div>
 
@@ -246,8 +242,30 @@
                             <?php } ?></div>
 
                         <div class="item-body-tail">
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+            <div class="item-row" id="site-custom-page">
+                <div class="item-header">
+                    <img class="site-manage-image"
+                         src="data:image/png;base64,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"/>
+                </div>
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <div class="item-body-desc">
+                            <?php if ($lang == "1") { ?>
+                                自定义项目
+                            <?php } else { ?>
+                                Custom Item
+                            <?php } ?></div>
+
+                        <div class="item-body-tail">
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
                         </div>
                     </div>
 
@@ -261,121 +279,42 @@
 
 </div>
 
+
+<div class="wrapper-bottom" id="wrapper-bottom">
+    <div class="layout-all-row">
+
+        <div class="list-item-center">
+
+            <?php foreach ($miniProgramList as $miniProgram) { ?>
+
+                <div class="item-row">
+                    <div class="item-header">
+                        <img class="site-manage-image" src="../../public/img/manage/plugin_default.png"/>
+                    </div>
+                    <div class="item-body" onclick="showPluginAdmin('<?php echo $miniProgram["adminPageUrl"] ?>')">
+                        <div class="item-body-display">
+                            <div class="item-body-desc">
+                                <?php echo $miniProgram["name"] ?>
+                            </div>
+
+                            <div class="item-body-tail">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="division-line"></div>
+
+            <?php } ?>
+
+        </div>
+
+    </div>
+
+</div>
+
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
-
-<script type="text/javascript">
-
-    function isAndroid() {
-
-        var userAgent = window.navigator.userAgent.toLowerCase();
-        if (userAgent.indexOf("android") != -1) {
-            return true;
-        }
-
-        return false;
-    }
-
-    function isMobile() {
-        if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-            return true;
-        }
-        return false;
-    }
-
-    function getLanguage() {
-        var nl = navigator.language;
-        if ("zh-cn" == nl || "zh-CN" == nl) {
-            return 1;
-        }
-        return 0;
-    }
-
-    function zalyjsNavOpenPage(url) {
-        var messageBody = {}
-        messageBody["url"] = url
-        messageBody = JSON.stringify(messageBody)
-
-        if (isAndroid()) {
-            window.Android.zalyjsNavOpenPage(messageBody)
-        } else {
-            window.webkit.messageHandlers.zalyjsNavOpenPage.postMessage(messageBody)
-        }
-    }
-
-    function zalyjsCommonAjaxGet(url, callBack) {
-        $.ajax({
-            url: url,
-            method: "GET",
-            success: function (result) {
-
-                callBack(url, result);
-
-            },
-            error: function (err) {
-                alert("error");
-            }
-        });
-
-    }
-
-
-    function zalyjsCommonAjaxPost(url, value, callBack) {
-        $.ajax({
-            url: url,
-            method: "POST",
-            data: value,
-            success: function (result) {
-                callBack(url, value, result);
-            },
-            error: function (err) {
-                alert("error");
-            }
-        });
-
-    }
-
-    function zalyjsCommonAjaxPostJson(url, jsonBody, callBack) {
-        $.ajax({
-            url: url,
-            method: "POST",
-            data: jsonBody,
-            success: function (result) {
-
-                callBack(url, jsonBody, result);
-
-            },
-            error: function (err) {
-                alert("error");
-            }
-        });
-
-    }
-
-    /**
-     * _blank    在新窗口中打开被链接文档。
-     * _self    默认。在相同的框架中打开被链接文档。
-     * _parent    在父框架集中打开被链接文档。
-     * _top    在整个窗口中打开被链接文档。
-     * framename    在指定的框架中打开被链接文档。
-     *
-     * @param url
-     * @param target
-     */
-    function zalyjsCommonOpenPage(url) {
-        // window.open(url, target);
-        location.href = url;
-    }
-
-    function zalyjsCommonOpenNewPage(url) {
-        if (isMobile()) {
-            zalyjsNavOpenPage(url);
-        } else {
-            // window.open(url, target);
-            location.href = url;
-        }
-    }
-
-</script>
+<script type="text/javascript" src="../../public/manage/native.js"></script>
 
 <script type="text/javascript">
 
@@ -405,11 +344,22 @@
         zalyjsCommonOpenNewPage(url);
     });
 
+    $("#site-custom-page").click(function () {
+        var url = "index.php?action=manage.custom.page";
+        zalyjsCommonOpenNewPage(url);
+    });
+
     $("#data-report-id").click(function () {
         var url = "index.php?action=manage.dataReport";
         // alert("url=" + url);
-        zalyjsCommonOpenPage(url);
+        zalyjsCommonOpenNewPage(url);
     });
+
+
+    function showPluginAdmin(url) {
+        url += "&lang=" + getLanguage();
+        zalyjsCommonOpenNewPage(url);
+    }
 
 </script>
 

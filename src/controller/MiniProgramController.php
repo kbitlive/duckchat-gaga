@@ -80,7 +80,7 @@ abstract class MiniProgramController extends \Wpf_Controller
             $this->logger->info("site.manage.base", "cookie=" . json_encode($_COOKIE));
 
             $action = $_GET['action'];
-            if(!in_array($action, $this->whiteAction)) {
+            if (!in_array($action, $this->whiteAction)) {
                 $duckchatSessionId = $_COOKIE["duckchat_sessionid"];
 
                 if (empty($duckchatSessionId)) {
@@ -171,7 +171,7 @@ abstract class MiniProgramController extends \Wpf_Controller
         $requestUrl = "/?action=" . $action . "&body_format=pb&miniProgramId=" . $miniProgramId;
         $requestUrl = ZalyHelper::getFullReqUrl($requestUrl);
 
-        $this->ctx->Wpf_Logger->error($action, "fihttp request url =" . $requestUrl);
+//        $this->ctx->Wpf_Logger->error($action, "fihttp request url =" . $requestUrl);
 
         $encryptedHttpTransportResponse = $this->ctx->ZalyCurl->request($requestUrl, "POST", $encryptedTransportData);
         //解密结果
@@ -306,5 +306,5 @@ abstract class MiniProgramController extends \Wpf_Controller
         }
         fastcgi_finish_request();
     }
-
+    
 }
