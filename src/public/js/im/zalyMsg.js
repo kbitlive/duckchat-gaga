@@ -967,7 +967,7 @@ function trimMsgContentBr(html)
 function handleMsgContentText(str)
 {
     str = trimMsgContentBr(str);
-    var reg=/(blob:)?((http|ftp|https|duckchat|):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
+    var reg=/(blob:)?((http|ftp|https|duckchat):\/\/)?[\w\-_]+(\:[0-9]+)?(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
     var arr = str.match(reg);
     if(arr == null) {
         return str;
