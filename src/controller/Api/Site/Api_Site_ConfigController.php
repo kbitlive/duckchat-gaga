@@ -245,6 +245,8 @@ class Api_Site_ConfigController extends \BaseController
             $config->setSiteIdPubkBase64($configData[SiteConfig::SITE_ID_PUBK_PEM]);
             $config->setAccountSafePluginId($configData[SiteConfig::SITE_PASSPORT_ACCOUNT_SAFE_PLUGIN_ID]);
 
+            $config->setVersion($this->getSiteVersion());
+
             $response->setConfig($config);
 
 //            $this->ctx->Wpf_Logger->info("api.site.config", 'responseJson=' . $response->serializeToString());
@@ -286,6 +288,25 @@ class Api_Site_ConfigController extends \BaseController
         }
 
         return $scheme . "://" . "$host" . ":" . $port;
+    }
+
+    private function getSiteVersion()
+    {
+        $versionName = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionNameKey);
+
+        $versionList = [];
+        if (empty($versionName)) {
+            $versionList = [0, 0, 0];
+        } else {
+            $versionList = explode(",", $versionName);
+        }
+
+        $version = new Zaly\Proto\Core\Version();
+        $version->setFirst($versionList[0]);
+        $version->setSecond($versionList[1]);
+        $version->setThird($versionList[2]);
+
+        return $version;
     }
 
 }

@@ -52,8 +52,8 @@ class MiniProgram_Admin_PasswordLoginController extends MiniProgramController
 
             $params = [
                 "lang" => $this->language,
-//                "enableInvitationCode" => $loginMiniProgramId,
-//                "enableInvitationCode" => $enableInvitationCode,
+                "enableInvitationCode" => $loginMiniProgramId,
+                "enableInvitationCode" => $enableInvitationCode,
             ];
 
             echo $this->display("miniProgram_admin_passwordLogin", $params);
