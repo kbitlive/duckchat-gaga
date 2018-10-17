@@ -53,6 +53,12 @@ class PluginProfile extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string userSessionId = 10;</code>
      */
     private $userSessionId = '';
+    /**
+     *小程序管理url
+     *
+     * Generated from protobuf field <code>string adminPageUrl = 11;</code>
+     */
+    private $adminPageUrl = '';
 
     public function __construct() {
         \GPBMetadata\Core\Plugin::initOnce();
@@ -275,6 +281,32 @@ class PluginProfile extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->userSessionId = $var;
+
+        return $this;
+    }
+
+    /**
+     *小程序管理url
+     *
+     * Generated from protobuf field <code>string adminPageUrl = 11;</code>
+     * @return string
+     */
+    public function getAdminPageUrl()
+    {
+        return $this->adminPageUrl;
+    }
+
+    /**
+     *小程序管理url
+     *
+     * Generated from protobuf field <code>string adminPageUrl = 11;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setAdminPageUrl($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->adminPageUrl = $var;
 
         return $this;
     }
