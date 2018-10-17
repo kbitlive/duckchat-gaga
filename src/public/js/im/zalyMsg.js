@@ -324,7 +324,6 @@ function handleSetItemError(error)
     }
 }
 enableWebsocketGw = localStorage.getItem(websocketGW);
-console.log("enableWebsocketGw==="+enableWebsocketGw)
 
 if(enableWebsocketGw == "false" || enableWebsocketGw == null) {
     ///1秒 sync
@@ -968,7 +967,7 @@ function trimMsgContentBr(html)
 function handleMsgContentText(str)
 {
     str = trimMsgContentBr(str);
-    var reg=/(blob:)?((http|ftp|https):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
+    var reg=/(blob:)?((http|ftp|https|duckchat|):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
     var arr = str.match(reg);
     if(arr == null) {
         return str;
@@ -977,7 +976,14 @@ function handleMsgContentText(str)
     var length = arr.length;
     for(var i=0; i<length;i++) {
         var urlLink = arr[i];
-        if(urlLink.indexOf("blob:") == -1 && IsURL (urlLink)) {
+        if(urlLink.indexOf("blob:") == -1 &&
+            ( IsURL (urlLink)
+                || urlLink.indexOf("http://") != -1
+                || urlLink.indexOf("https://") != -1
+                || urlLink.indexOf("ftp://") != -1
+                || urlLink.indexOf("duckchat://") != -1
+            )
+        ) {
             var newUrlLink = urlLink;
             if(urlLink.indexOf("://") == -1) {
                 newUrlLink = "http://"+urlLink;

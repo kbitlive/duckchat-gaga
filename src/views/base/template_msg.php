@@ -727,7 +727,7 @@
             </div>
         {{else}}
             <div class="d-flex flex-row justify-content-center width-percent100 margin-top10" style="text-align:center; ">
-                <button type="button" class="btn create_button " onclick="enableCreateGroupTip()" data-local-value="createTip" style="background: rgba(223,223,223,1);">创建</button>
+                <button type="button" class="btn create_button " onclick="enableCreateGroupTip()" data-local-value="createTip" style="background: rgba(201,201,201,1);">创建</button>
             </div>
         {{/if}}
     </div>

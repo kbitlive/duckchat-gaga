@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>主页面</title>
+    <title></title>
     <link rel="stylesheet" href="../../public/css/zaly-action-row.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" href="../../public/css/zaly_contact.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" href="../../public/css/zaly_apply_friend_list.css?_version=<?php echo $versionCode?>" />
@@ -57,6 +57,8 @@
 
 <script type="text/javascript">
 
+    requestSiteConfig(ZalyIm);
+
     $(window).resize(function () {
         setFontSize();
         try{
@@ -97,7 +99,6 @@
         return rem;
     }
 
-    requestSiteConfig(ZalyIm);
 
     localStorage.setItem(chatTypeKey, DefaultChat);
     getRoomList();

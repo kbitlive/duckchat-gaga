@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>站点登录</title>
+    <title>登录</title>
     <!-- Latest compiled and minified CSS -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="../../public/css/login.css?_version=<?php echo $versionCode?>">
@@ -149,6 +149,7 @@
 <?php include(dirname(__DIR__) . '/passport/template_login.php'); ?>
 
 <input type="hidden" value="<?php echo $isDuckchat; ?>" class="isDuckchat">
+<script src="../../public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/im/zalyClient.js?_version=<?php echo $versionCode?>"></script>
@@ -156,44 +157,7 @@
 <script src="../../public/js/login/login.js?_version=<?php echo $versionCode?>"></script>
 
 <script type="text/javascript">
-    function isWeixinBrowser(){
-        return /micromessenger/.test(navigator.userAgent.toLowerCase())
-    }
 
-    function isPhone(){
-        if((/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) || isWeixinBrowser()) {
-            return true;
-        }
-        return false;
-    }
-
-    function isAvailableBrowser(){
-        var userAgent = navigator.userAgent;
-        var isFirefox = userAgent.indexOf("Firefox") != -1;
-        var isChrome = userAgent.indexOf("Chrome") && window.chrome;
-        var isSafari = userAgent.indexOf("Safari") != -1 && userAgent.indexOf("Version") != -1;
-        if(isFirefox || isChrome || isSafari) {
-            return true;
-        }
-        return false;
-    }
-    var isDuckchatFlag = $(".isDuckchat").val();
-    var isPhoneFlag = isPhone();
-
-    if(isPhoneFlag && isDuckchatFlag == 0) {
-        $(".site-warning")[0].style.display='flex';
-        var tip = "暂不支持手机浏览器，请使用手机客户端或者PC访问站点！";
-        $(".site-warning").html(tip);
-    }
-
-    if(isPhoneFlag == false) {
-        var isAvailabelBrowserFlag = isAvailableBrowser();
-        if(!isAvailabelBrowserFlag) {
-            $(".site-warning")[0].style.display='flex';
-            var tip = "暂不支持此浏览器，请使用手机客户端或者火狐，Chrome, Safari浏览器访问站点！";
-            $(".site-warning").html(tip);
-        }
-    }
 </script>
 </body>
 </html>

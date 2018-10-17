@@ -458,14 +458,19 @@ $(document).on("click", ".see_group_profile", function () {
 
 function  handleClickSeeGroupProfile(results)
 {
+    try{
+        if(results.hasOwnProperty("header") &&  results.header[HeaderErrorCode] == errorGroupNotExitsKey) {
+            var tip = $.i18n.map['notInGroupTip'] != undefined ? $.i18n.map['errorGroupExitsTip'] : "此群已解散";
+            alert(tip);
+            console.log("results----"+JSON.stringify(results));
 
-    if(results.hasOwnProperty("header") &&  results.header[HeaderErrorCode] == errorGroupNotExitsKey) {
-        var tip = $.i18n.map['notInGroupTip'] != undefined ? $.i18n.map['errorGroupExitsTip'] : "此群已解散";
-        alert(tip);
-        return;
+            return;
+        }
+    }catch (error) {
+
     }
 
-    var groupProfile = results.profile;
+    var groupProfile = results != undefined && results.hasOwnProperty("profile") ? results.profile : false;
     if(!groupProfile) {
         var tip = $.i18n.map['notInGroupTip'] != undefined ? $.i18n.map['notInGroupTip'] : "你已不在此群";
         $(this).attr("is_show_profile", 0);
@@ -766,24 +771,27 @@ function sendGroupProfileReq(groupId, callback)
 
 function handleGetGroupProfile(result)
 {
-    var groupProfile = result.profile;
-    if(groupProfile) {
-        groupProfile.memberType = result.memberType ? result.memberType : GroupMemberType.GroupMemberGuest;
-        groupProfile.permissionJoin = groupProfile.permissionJoin ? groupProfile.permissionJoin : GroupJoinPermissionType.GroupJoinPermissionPublic;
-        groupProfile['updateTime'] = Date.parse(new Date());
-        localStorage.setItem(groupProfile.id, GROUP_MSG);
+    try{
+        var groupProfile = result.profile;
+        if(groupProfile) {
+            groupProfile.memberType = result.memberType ? result.memberType : GroupMemberType.GroupMemberGuest;
+            groupProfile.permissionJoin = groupProfile.permissionJoin ? groupProfile.permissionJoin : GroupJoinPermissionType.GroupJoinPermissionPublic;
+            groupProfile['updateTime'] = Date.parse(new Date());
+            localStorage.setItem(groupProfile.id, GROUP_MSG);
 
-        var groupInfoKey = profileKey + groupProfile.id;
-        localStorage.setItem(groupInfoKey, JSON.stringify(groupProfile));
+            var groupInfoKey = profileKey + groupProfile.id;
+            localStorage.setItem(groupInfoKey, JSON.stringify(groupProfile));
 
-        sessionStorage.removeItem(reqProfile+groupProfile.id);
+            sessionStorage.removeItem(reqProfile+groupProfile.id);
 
-        var muteKey = msgMuteKey + groupProfile.id;
-        localStorage.setItem(muteKey, (result.isMute ? 1 : 0) );
-        displayProfile(groupProfile.id, GROUP_MSG);
-        return;
+            var muteKey = msgMuteKey + groupProfile.id;
+            localStorage.setItem(muteKey, (result.isMute ? 1 : 0) );
+            displayProfile(groupProfile.id, GROUP_MSG);
+            return;
+        }
+    }catch (error) {
+
     }
-
 }
 
 //---------------------------------------api.group.members-----------------------------------------------
@@ -994,7 +1002,7 @@ $(document).on("click", ".create-group", function () {
 
 function getEnableCreateGroup()
 {
-    var enableCreateGroup = true;
+    var enableCreateGroup = false;
    try{
        var siteConfigStr = localStorage.getItem(siteConfigKey);
        var siteConfig = JSON.parse(siteConfigStr);
@@ -1007,7 +1015,6 @@ function getEnableCreateGroup()
            }
        }
    }catch (error) {
-
    }
     return enableCreateGroup;
 }
