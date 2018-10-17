@@ -3238,7 +3238,8 @@ function sendMsgBySend()
     var chatSessionType = localStorage.getItem(chatSessionId);
     var msgContent = $(".msg_content").val();
     var imgData = $("#msgImage img").attr("src");
-
+    $("#msgImage").html("");
+    $("#msgImage")[0].style.display = "none";
     if(imgData) {
         uploadMsgImgFromCopy(imgData);
     }
