@@ -468,11 +468,13 @@ html, body{
 
 .msg-right .msg-content-img .msg_img{
     border-radius: 0.94rem 0rem 0.94rem 0.94rem;
+    border:0.09rem solid rgba(201,201,201,1);
     cursor: pointer;
 }
 
 .msg-left .msg-content-img .msg_img{
     border-radius: 0rem 0.94rem  0.94rem 0.94rem;
+    border:0.09rem solid rgba(201,201,201,1);
     cursor: pointer;
 }
 
@@ -1872,8 +1874,8 @@ button:active{
     width:23.64rem;
     height:6.94rem;
     background:rgba(255,255,255,1);
-    border-radius:0.56rem 0rem 0.56rem 0.56rem;
-    border:0.09rem solid rgba(243,243,243,1);
+    border-radius:0rem 0.56rem  0.56rem 0.56rem;
+    border:0.09rem solid rgba(201,201,201,1);
     display: flex;
     justify-content:space-between;
     cursor: pointer;
