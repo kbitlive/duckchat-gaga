@@ -61,7 +61,7 @@ class Api_Site_ConfigController extends \BaseController
 
             $isValid = $this->checkSessionValid($sessionId);
 
-            $configData = $this->getSiteConfigFromDB();
+            $configData = $this->siteConfig;
 
             $randomBase64 = $this->buildRandomBase64($randomValue, $configData[SiteConfig::SITE_ID_PRIK_PEM]);
 
@@ -117,21 +117,6 @@ class Api_Site_ConfigController extends \BaseController
         }
 
         return true;
-    }
-
-    /**
-     * 查库操作
-     */
-    private function getSiteConfigFromDB()
-    {
-        try {
-            $results = $this->ctx->SiteConfigTable->selectSiteConfig();
-            return $results;
-        } catch (Exception $e) {
-            $tag = __CLASS__ . "-" . __FUNCTION__;
-            $this->ctx->Wpf_Logger->error($tag, "bodayFormatType ==  $this->bodyFormatType errorMsg = " . $e->getMessage());
-            return [];
-        }
     }
 
     private function getPluginProfileFromDB($loginPluginId)
@@ -298,7 +283,7 @@ class Api_Site_ConfigController extends \BaseController
         if (empty($versionName)) {
             $versionList = [0, 0, 0];
         } else {
-            $versionList = explode(",", $versionName);
+            $versionList = explode(".", $versionName);
         }
 
         $version = new Zaly\Proto\Core\Version();

@@ -43,31 +43,31 @@
             </div>
             <div class="division-line"></div>
 
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">是否开启手机号</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Enable Phone Number</div>
-                        <?php } ?>
-
-
-                        <div class="item-body-tail">
-                            <div class="item-body-value">
-                                <?php if ($enableRealName == 1) { ?>
-                                    <input id="enableRealNameSwitch" class="weui_switch" type="checkbox" checked>
-                                <?php } else { ?>
-                                    <input id="enableRealNameSwitch" class="weui_switch" type="checkbox">
-                                <?php } ?>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
+            <!--            <div class="item-row">-->
+            <!--                <div class="item-body">-->
+            <!--                    <div class="item-body-display">-->
+            <!--                        --><?php //if ($lang == "1") { ?>
+            <!--                            <div class="item-body-desc">是否开启手机号</div>-->
+            <!--                        --><?php //} else { ?>
+            <!--                            <div class="item-body-desc">Enable Phone Number</div>-->
+            <!--                        --><?php //} ?>
+            <!---->
+            <!---->
+            <!--                        <div class="item-body-tail">-->
+            <!--                            <div class="item-body-value">-->
+            <!--                                --><?php //if ($enableRealName == 1) { ?>
+            <!--                                    <input id="enableRealNameSwitch" class="weui_switch" type="checkbox" checked>-->
+            <!--                                --><?php //} else { ?>
+            <!--                                    <input id="enableRealNameSwitch" class="weui_switch" type="checkbox">-->
+            <!--                                --><?php //} ?>
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!---->
+            <!--                    </div>-->
+            <!---->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--            <div class="division-line"></div>-->
 
             <div class="item-row">
                 <div class="item-body">
@@ -98,6 +98,8 @@
 </div>
 
 
+<script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../public/manage/native.js"></script>
 <script>
 
     //update uic
@@ -127,6 +129,14 @@
             alert(getLanguage() == 1 ? "操作失败" : "update error");
         }
     }
+
+    //loginMiniProgramId item-body-value
+    $(".loginMiniProgram").click(function () {
+        var miniProgramId = $(this).find("#loginMiniProgramId").html();
+        var url = "index.php?action=manage.miniProgram.profile&lang=" + getLanguage() + "&pluginId=" + miniProgramId;
+        zalyjsCommonOpenPage(url);
+    });
+
 </script>
 
 </body>

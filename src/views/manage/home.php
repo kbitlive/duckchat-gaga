@@ -345,7 +345,7 @@
     });
 
     $("#site-custom-page").click(function () {
-        var url = "index.php?action=manage.custom.page";
+        var url = "index.php?action=manage.custom.page&lang=" + getLanguage();
         zalyjsCommonOpenNewPage(url);
     });
 

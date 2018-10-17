@@ -306,5 +306,5 @@ abstract class MiniProgramController extends \Wpf_Controller
         }
         fastcgi_finish_request();
     }
-    
+
 }
