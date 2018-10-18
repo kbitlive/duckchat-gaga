@@ -55,6 +55,12 @@ function handleClientReceivedMessage(resp, callback)
         var result = JSON.parse(resp);
         if(result.header != undefined && result.header.hasOwnProperty(HeaderErrorCode)) {
             if(result.header[HeaderErrorCode] != "success") {
+
+                try{
+                    hideLoading();
+                }catch (error){
+                    console.log(error)
+                }
                 if(result.header[HeaderErrorCode] == ErrorSessionCode || result.header[HeaderErrorCode] == ErrorSiteInit) {
                     localStorage.clear();
                     window.location.href = "./index.php?action=page.logout";
@@ -78,6 +84,7 @@ function handleClientReceivedMessage(resp, callback)
                         alert(result.header[HeaderErrorInfo]);
                         return;
                 }
+
             }
         }
         if(callback instanceof Function && callback != undefined) {

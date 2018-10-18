@@ -366,6 +366,7 @@ function isPassword(password) {
 
 function loginNameExist()
 {
+    hideLoading();
     zalyjsAlert("用户名已经在站点被注册");
 }
 
@@ -379,6 +380,7 @@ function handlePassportPasswordReg(results)
 function loginNameNotExist()
 {
     if(sitePubkPem.length<1) {
+        hideLoading();
         zalyjsAlert("站点公钥获取失败");
         return false;
     }
@@ -409,17 +411,19 @@ function registerAndLoginByKeyDown(event)
 
 function registerAndLogin()
 {
-    showLoading();
+
     var isType = $(".register_button").attr("is_type");
     invitationCode = $(".register_input_code").val();
 
     if(isType == updateInvitationCodeType) {
+        showLoading($(".zaly_container"));
         updatePassportPasswordInvitationCode();
     } else {
         var flag = checkRegisterInfo();
         if(flag == false) {
             return false;
         }
+        showLoading($(".zaly_container"));
         zalyjsWebCheckUserExists(loginNameNotExist, loginNameExist);
     }
 }
@@ -440,7 +444,7 @@ function failedApiPassportPasswordLogin(results) {
 
 $(document).on("click", ".update_code_btn", function () {
     invitationCode = $(".update_input_code").val();
-    showLoading();
+    showLoading($(".zaly_container"));
     updatePassportPasswordInvitationCode();
 });
 
@@ -471,7 +475,6 @@ function validateEmail(email)
 
 
 $(document).on("click", ".login_button", function () {
-    showLoading();
     loginPassport();
 });
 
@@ -528,10 +531,10 @@ function loginPassport()
     $(".login_input_pwd_failed")[0].style.display = "none";
 
     if(sitePubkPem.length<1) {
-        hideLoading();
         zalyjsAlert("站点公钥获取失败");
         return false;
     }
+    showLoading($(".zaly_container"));
     apiPassportPasswordLogin(handleApiPassportPasswordLogin);
 }
 
@@ -551,6 +554,7 @@ function apiPassportPasswordLogin(callback)
 
 function handleApiPassportPasswordLogin(results)
 {
+
     preSessionId = results.preSessionId;
     zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailNeedRegister);
 }
@@ -565,7 +569,6 @@ function loginFailNeedRegister()
         }
         isRegister = true;
         zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailed);
-
     } else {
         $(".zaly_login_by_pwd")[0].style.display = "none";
         $(".zaly_site_update-invitecode")[0].style.display = "block";
