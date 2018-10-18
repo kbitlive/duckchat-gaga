@@ -732,3 +732,28 @@
         {{/if}}
     </div>
 </script>
+
+
+<script type="text/html" id="tpl-desc-group-div">
+    <div class="group-desc-div">
+        <div class="group-desc-header" >
+            <span data-local-value="groupProfileDescTip">群介绍</span>
+            {{ if isAdmin }}
+            <button class="edit_group_desc" data-local-value="groupProfileEditTip" type="edit">编辑</button>
+            {{/if}}
+        </div>
+        <div class="group-desc-detail">
+            <div class="group-desc-area">
+                {{descBody}}
+            </div>
+        </div>
+        <div class="group-desc-footer">
+            <div class="group-desc-line"></div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/html" id="tpl-desc-group-textarea">
+    <textarea class="textarea_desc">{{descBody}}</textarea>
+</script>
