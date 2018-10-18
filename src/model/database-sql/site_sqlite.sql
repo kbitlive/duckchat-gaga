@@ -211,3 +211,11 @@ CREATE TABLE IF NOT EXISTS siteUserGif(
                       gifId VARCHAR(100) NOT NULL,
                       userId VARCHAR(100) NOT NULL,
                       addTime BIGINT);
+
+CREATE TABLE IF NOT EXISTS siteLoginCustom(
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      configKey VARCHAR(100) NOT NULL,
+                      configValue TEXT,
+                      configValueEN TEXT ,
+                      updateUserId VARCHAR(100),
+                      updateTime BIGINT);

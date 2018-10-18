@@ -15,6 +15,7 @@ abstract class MiniProgramController extends \Wpf_Controller
 {
     protected $logger;
 
+    protected $action;
     /**
      * @var \Zaly\Proto\Core\PublicUserProfile
      */
@@ -80,6 +81,7 @@ abstract class MiniProgramController extends \Wpf_Controller
             $this->logger->info("site.manage.base", "cookie=" . json_encode($_COOKIE));
 
             $action = $_GET['action'];
+            $this->action = $action;
             if (!in_array($action, $this->whiteAction)) {
                 $duckchatSessionId = $_COOKIE["duckchat_sessionid"];
 
