@@ -71,6 +71,7 @@ html, body{
 .left-sidebar {
     width: 7.5rem;
     background: rgba(0,0,0,0.95) !important;
+    height: 100%;
 }
 
 .left-body {

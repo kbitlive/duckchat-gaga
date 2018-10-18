@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title><?php echo $siteName;?></title>
     <script src="../../public/js/jquery.min.js"></script>
     <!-- Latest compiled and minified CSS -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -18,18 +18,18 @@
 
 <script type="text/javascript">
 
-    requestSiteConfig(handleLoginSiteConfig);
+     requestSiteConfig(handleLoginSiteConfig);
 
-    function handleLoginSiteConfig(params)
-    {
-        ZalyIm(params);
-        var pluginLoginProfileJsonStr = localStorage.getItem(siteLoginPluginKey);
-        var pluginLoginProfile = JSON.parse(pluginLoginProfileJsonStr);
-        var landingPageUrl = pluginLoginProfile.landingPageUrl;
+     function handleLoginSiteConfig(params)
+     {
+         ZalyIm(params);
+         var pluginLoginProfileJsonStr = localStorage.getItem(siteLoginPluginKey);
+         var pluginLoginProfile = JSON.parse(pluginLoginProfileJsonStr);
+         var landingPageUrl = pluginLoginProfile.landingPageUrl;
 
-        localStorage.clear();
-        window.location.href = landingPageUrl;
-    }
+         localStorage.clear();
+         window.location.href = landingPageUrl;
+     }
 
 </script>
 </body>

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title><?php echo $siteName;?></title>
     <link rel="stylesheet" href="../../public/css/zaly-action-row.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" href="../../public/css/zaly_contact.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" href="../../public/css/zaly_apply_friend_list.css?_version=<?php echo $versionCode?>" />
