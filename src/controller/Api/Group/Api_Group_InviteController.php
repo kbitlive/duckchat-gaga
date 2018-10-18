@@ -50,6 +50,9 @@ class Api_Group_InviteController extends Api_Group_BaseController
 
             //获取群组资料信息
             $groupInfo = $this->getGroupInfo($groupId);
+            if($groupInfo === false) {
+                return;
+            }
 
             //TODO 判断当前群组 进人规则.只能群主拉人，需要判断是不是群主
             //// 成员拉人，判断拉人者 是不是该群成员

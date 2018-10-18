@@ -34,15 +34,13 @@ class Api_Group_ProfileController extends Api_Group_BaseController
                 $this->setRpcError($errorCode, $errorInfo);
                 throw new Exception($errorInfo);
             }
+            $isGroupExists = $this->getGroupInfo($groupId);
+            if($isGroupExists === false) {
+                return;
+            }
 
             //get group profile
             $groupProfile = $this->getGroupProfile($groupId);
-
-            if (!$groupProfile) {
-                $exText = $this->language == 1 ? "群组不存在" : "group does not exists";
-                $this->returnErrorCodeRPC("error.group.notExists", $exText);
-                return;
-            }
 
             $canAddFriend = $groupProfile["canAddFriend"];
 

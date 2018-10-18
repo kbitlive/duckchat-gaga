@@ -97,10 +97,9 @@ class Api_Group_BaseController extends BaseController
         if (!$groupInfo) {
             $tag = __CLASS__ . '-' . __FUNCTION__;
             $this->ctx->Wpf_Logger->error($tag, " errorGroupExist group id = " . $groupId);
-            $errorCode = $this->zalyError->errorGroupExist;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            $this->setRpcError($errorCode, $errorInfo);
-            throw new Exception($errorInfo);
+            $exText = ZalyText::getText("text.group.notExists", $this->language);
+            $this->returnErrorCodeRPC("error.group.notExists", $exText);
+            return false;
         }
         return $groupInfo;
     }
@@ -140,6 +139,7 @@ class Api_Group_BaseController extends BaseController
     {
         return $this->ctx->SiteGroupTable->getGroupProfile($groupId, $this->userId);
     }
+
 
     public function getGroupCount()
     {

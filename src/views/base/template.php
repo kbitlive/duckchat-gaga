@@ -141,5 +141,9 @@
     <div id="download-app-div">
         
     </div>
+
+    <div id="group-desc-div">
+
+    </div>
 </div>
 

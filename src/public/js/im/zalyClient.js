@@ -55,29 +55,37 @@ function handleClientReceivedMessage(resp, callback)
         var result = JSON.parse(resp);
         if(result.header != undefined && result.header.hasOwnProperty(HeaderErrorCode)) {
             if(result.header[HeaderErrorCode] != "success") {
+
+                try{
+                    hideLoading();
+                }catch (error){
+                    console.log(error)
+                }
                 if(result.header[HeaderErrorCode] == ErrorSessionCode || result.header[HeaderErrorCode] == ErrorSiteInit) {
                     localStorage.clear();
                     window.location.href = "./index.php?action=page.logout";
                     return ;
                 }
+
                 switch(result.action)
                 {
                     case "api.friend.profile":
                         callback(result.body);
-                        break;
+                        return;
                     case "api.friend.apply":
                         if(result.header[HeaderErrorCode] == errorFriendIsKey) {
                             callback("error.friend.is");
-                            break;
+                            return;
                         }
                     case "api.group.members":
                     case "api.group.profile":
                         callback(result);
-                        break;
+                        return;
                     default:
                         alert(result.header[HeaderErrorInfo]);
                         return;
                 }
+
             }
         }
         if(callback instanceof Function && callback != undefined) {

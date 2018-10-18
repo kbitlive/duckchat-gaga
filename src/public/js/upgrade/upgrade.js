@@ -30,10 +30,10 @@ if(needUpgrade != 1) {
 
 var isCheckUpgradeToken = localStorage.getItem(isCheckUpgradeTokenKey);
 var isSureSiteBackup = localStorage.getItem(isSureSiteBackup, "yes");
-
-if(isCheckUpgradeToken == "yes" && isSureSiteBackup == 'yes') {
-    // displayUpgradeVersion();
-}
+//
+// if(isCheckUpgradeToken == "yes" && isSureSiteBackup == 'yes') {
+//     // displayUpgradeVersion();
+// }
 
 $(document).on("click",".zaly_site_backup_sure", function () {
     localStorage.setItem(isSureSiteBackup, "yes");
@@ -70,7 +70,7 @@ function checkUpgradeToken() {
         data: data,
         success: function (resp) {
             var data = JSON.parse(resp);
-
+            hideLoading();
             if (data.errCode == "error") {
                 alert("校验口令失败");
             } else {
@@ -86,11 +86,15 @@ function checkUpgradeToken() {
                 $(".zaly_window")[0].style.display = "flex";
                 localStorage.setItem(isCheckUpgradeTokenKey, "yes");
             }
+        },
+        fail:function () {
+            hideLoading();
         }
     });
 }
 
 $(".upgrade_next_btn").on("click", function () {
+    showLoading($(".container"));
     checkUpgradeToken();
 });
 

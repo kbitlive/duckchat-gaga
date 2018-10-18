@@ -404,7 +404,7 @@
                 return;
             }
             $(".dbPasswordFailed")[0].style.display = "none";
-
+            showLoading($(".container"));
             var data = {
                 pluginId: pluginId,
                 dbHost: dbHost,
@@ -440,11 +440,15 @@
                 if (resp == "success") {
                     window.location.href = "./index.php?action=page.logout";
                 } else {
+                    hideLoading();
                     var html = template("tpl-error-info", {
                         errorInfo:resp
                     })
                     $(".errorInfo").html(html);
                 }
+            },
+            fail:function () {
+                hideLoading();
             }
         });
     }
@@ -459,12 +463,17 @@
                 if (resp == "success") {
                     initSite(data);
                 } else {
+                    hideLoading();
+
                     var html = template("tpl-error-info", {
                         errorInfo:resp
                     })
 
                     $(".errorInfo").html(html);
                 }
+            },
+            fail : function () {
+                hideLoading();
             }
         });
     }

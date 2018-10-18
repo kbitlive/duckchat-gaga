@@ -194,7 +194,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
             $(".chat_session_id_"+msg.chatSessionId).addClass("chatsession-row-active");
         }
         if(msg.fromUserId != token && showNotification) {
-            showWebNotification(msg, msgContent);
+            showMsgWebNotification(msg, msgContent);
         }
         return ;
     }
@@ -237,7 +237,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
         displayCurrentProfile();
     }
     if(msg.fromUserId != token && showNotification) {
-        showWebNotification(msg, msgContent);
+        showMsgWebNotification(msg, msgContent);
     }
 }
 ////防止两个浏览器开着，点击的时候消息列表的内容不是最新的
@@ -436,6 +436,7 @@ function handleSyncMsg(msg)
         return;
     }
     if(msg.type == MessageType.MessageEventFriendRequest) {
+        showOtherWebNotification();
         getFriendApplyList();
         return;
     };
@@ -462,6 +463,7 @@ function handleSyncMsg(msg)
     }
     appendOrInsertRoomList(msg, true, true);
 }
+
 
 function handleMsgStatusResult(msgId, msgStatus)
 {
@@ -1032,6 +1034,7 @@ function appendMsgHtmlToChatDialog(msg)
         sendBySelf = true;
         msg.userAvatar = avatar;
     }
+
     var msgTime = getMsgTimeByMsg(msg.timeServer);
     var groupUserImageClassName = msg.roomType == GROUP_MSG ? "group-user-img group-user-img-"+msg.msgId : "";
     var msgStatus = msg.status ? msg.status : "";
@@ -1116,7 +1119,7 @@ function appendMsgHtmlToChatDialog(msg)
                 var webSize = getWebMessageSize(msg['web'].height, msg['web'].width, 300, 400);
                 html = template("tpl-send-msg-web", {
                     roomType: msg.roomType,
-                    nickname: msg.nickname,
+                    nickname: nickname,
                     webWidth:webSize.width,
                     webHeight:webSize.height,
                     msgId : msgId,
@@ -1200,7 +1203,7 @@ function appendMsgHtmlToChatDialog(msg)
                 var originName = msg['document'].name;
                 html = template("tpl-receive-msg-file", {
                     roomType: msg.roomType,
-                    nickname:nickname,
+                    nickname:msg.nickname,
                     msgId : msgId,
                     url:url,
                     msgTime : msgTime,
@@ -1248,7 +1251,7 @@ function appendMsgHtmlToChatDialog(msg)
                 var msgContent = "[当前版本不支持此信息，请尝试升级客户端版本] ";
                 html = template("tpl-receive-msg-default", {
                     roomType: msg.roomType,
-                    nickname:nickname,
+                    nickname:msg.nickname,
                     msgId : msgId,
                     msgTime : msgTime,
                     msgStatus:msgStatus,
@@ -1261,9 +1264,12 @@ function appendMsgHtmlToChatDialog(msg)
         }
     }
 
+
+
     if(msgType == MessageType.MessageText) {
         html = handleMsgContentText(html);
     }
+
     // html = "请前往客户端查看web消息";
     $(".right-chatbox").append(html);
     getNotMsgImg(msg.fromUserId,msg.userAvatar);

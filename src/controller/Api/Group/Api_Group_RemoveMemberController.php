@@ -38,6 +38,11 @@ class Api_Group_RemoveMemberController extends Api_Group_BaseController
                 $this->setRpcError($errorCode, $errorInfo);
                 throw new Exception($errorInfo);
             }
+            $groupInfo = $this->getGroupInfo($groupId);
+            if($groupInfo === false) {
+                return;
+            }
+
             //TODO 判断当前群组.只能管理员
             $this->isGroupAdmin($groupId);
 

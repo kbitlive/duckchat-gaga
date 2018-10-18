@@ -109,6 +109,10 @@ apiUrl = "server_address_for_api";
 ErrorSessionCode = "error.session";
 PageLoginAction  = "page.index";
 ErrorSiteInit = "error.site.init";
+errorFriendIsKey = "error.friend.is";
+errorGroupNotExitsKey = "error.group.notExists";
+
+
 
 sessionId = $(".session_id").attr("data");
 domain    = $(".domain").attr("data");
@@ -213,7 +217,4 @@ languageNum = getLanguage();
 uploadFileUrl = './index.php?action=http.file.uploadWeb';
 isSyncingMsg = false;
 isPreSyncingMsgTime="";
-
-errorFriendIsKey = "error.friend.is";
-errorGroupNotExitsKey = "error.group.notExists";
 
