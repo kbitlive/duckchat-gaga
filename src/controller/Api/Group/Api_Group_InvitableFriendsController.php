@@ -29,7 +29,11 @@ class Api_Group_InvitableFriendsController extends Api_Group_BaseController
             $pageSize = $request->getCount();
             $groupId = $request->getGroupId();
 
+            //获取群组资料信息
             $groupInfo = $this->getGroupInfo($groupId);
+            if($groupInfo === false) {
+                return;
+            }
             //TODO 判断当前群组
             //// 成员拉人，判断拉人者 是不是该群成员
             switch ($groupInfo['permissionJoin']) {

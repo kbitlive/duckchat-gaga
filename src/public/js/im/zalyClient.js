@@ -66,20 +66,21 @@ function handleClientReceivedMessage(resp, callback)
                     window.location.href = "./index.php?action=page.logout";
                     return ;
                 }
+
                 switch(result.action)
                 {
                     case "api.friend.profile":
                         callback(result.body);
-                        break;
+                        return;
                     case "api.friend.apply":
                         if(result.header[HeaderErrorCode] == errorFriendIsKey) {
                             callback("error.friend.is");
-                            break;
+                            return;
                         }
                     case "api.group.members":
                     case "api.group.profile":
                         callback(result);
-                        break;
+                        return;
                     default:
                         alert(result.header[HeaderErrorInfo]);
                         return;

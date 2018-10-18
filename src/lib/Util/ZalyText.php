@@ -14,7 +14,7 @@ class ZalyText
 
     //给发送者自己代发的消息，使用这种
     public static $texts = [
-        "text.group.notExists" => ["group is not exists", "当前群组不存在"],
+        "text.group.notExists" => ["the group has been dissolved", "此群已解散"],
         "text.group.notSpeaker" => ["only speakers and admin can speak,speakers are ", "当前只允许群管理以及发言者发言，发言人者："],
         "upload.file.size" => ["file exceeds maximum limit", "文件超过最大限制"],
         "text.open.web" => ["web is not allowed", "该站点没有开起web版本"],

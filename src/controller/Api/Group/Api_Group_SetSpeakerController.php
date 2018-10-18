@@ -46,6 +46,9 @@ class Api_Group_SetSpeakerController extends Api_Group_BaseController
             }
 
             $groupInfo = $this->getGroupInfo($groupId);
+            if($groupInfo === false) {
+                return;
+            }
 
             $groupSpeakers = $groupInfo['speakers'];
             if (empty($groupSpeakers)) {

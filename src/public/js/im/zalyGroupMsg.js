@@ -27,10 +27,6 @@ function showWebNotification(msg, msgContent)
          notification = "["+name+"] "+nickname+":" + msgContent;
     }
     var chatSessionId = msg.chatSessionId;
-    var chatType = msg.roomType;
-    console.log("chatSessionId ---" + chatSessionId);
-    console.log("chatSessionId chatType ---" + chatType);
-
     var muteKey = msgMuteKey + chatSessionId;
     var mute = localStorage.getItem(muteKey);
     var icon = $(".info-avatar-"+msg.chatSessionId).attr("src");
@@ -40,7 +36,6 @@ function showWebNotification(msg, msgContent)
         }
     }
 }
-
 
 //点击触发一个对象的点击
 function uploadFile(obj)
@@ -458,6 +453,7 @@ $(document).on("click", ".see_group_profile", function () {
             sendFriendProfileReq(chatSessionId);
             $('.right-body-sidebar').show();
         } else if(chatSessionType == GROUP_MSG) {
+            $(this).attr("is_show_profile", 0);
             sendGroupProfileReq(chatSessionId, handleClickSeeGroupProfile);
         } else {
             $('.right-body-sidebar').hide();
@@ -467,22 +463,20 @@ $(document).on("click", ".see_group_profile", function () {
 
 function  handleClickSeeGroupProfile(results)
 {
+
     try{
         if(results.hasOwnProperty("header") &&  results.header[HeaderErrorCode] == errorGroupNotExitsKey) {
             var tip = $.i18n.map['notInGroupTip'] != undefined ? $.i18n.map['errorGroupExitsTip'] : "此群已解散";
             alert(tip);
-            console.log("results----"+JSON.stringify(results));
-
             return;
         }
     }catch (error) {
-
+        console.log(error);
     }
 
     var groupProfile = results != undefined && results.hasOwnProperty("profile") ? results.profile : false;
     if(!groupProfile) {
         var tip = $.i18n.map['notInGroupTip'] != undefined ? $.i18n.map['notInGroupTip'] : "你已不在此群";
-        $(this).attr("is_show_profile", 0);
         alert(tip);
     } else {
         $('.right-body-sidebar').show();

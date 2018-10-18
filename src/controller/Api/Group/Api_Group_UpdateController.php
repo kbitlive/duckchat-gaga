@@ -34,6 +34,11 @@ class Api_Group_UpdateController extends Api_Group_BaseController
                 $this->setRpcError($errorCode, $errorInfo);
                 throw new Exception($errorInfo);
             }
+            $groupInfo = $this->getGroupInfo($groupId);
+            if($groupInfo === false) {
+                return;
+            }
+
             $values = $request->getValues();
             $this->handleValues($values, $groupId);
             $response = $this->getApiGroupUpdateResponse($groupId);
