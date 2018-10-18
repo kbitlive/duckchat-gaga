@@ -23,8 +23,8 @@
         .login-background-image-0 {
             margin: 5px 10px 5px 10px;
             height: 200px;
-            background-position: 100% 100%;
-            background-repeat: no-repeat;
+            background-position: 0 0;
+            background-size: 100% 100%;
         }
 
         .login-background-image-1 {
@@ -38,9 +38,7 @@
         .login-background-image-2 {
             margin: 5px 10px 5px 10px;
             height: 200px;
-            /*background-color: #0bb20c;*/
             background-repeat: repeat;
-            /*background-attachment: fixed;*/
         }
 
 
@@ -128,7 +126,7 @@
                 </div>
             </div>
 
-            <div class="login-background-image-2"
+            <div class="login-background-image-<?php echo $loginBackgroundImageDisplay ?>"
                  style="background-image: url('/_api_file_download_/?fileId=<?php echo $loginBackgroundImage ?>');">
                 <input id="upload-background-image" type="file" onchange="uploadImageFile(this)"
                        accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
@@ -288,8 +286,7 @@
         var res = JSON.parse(result);
 
         if (res.errCode) {
-            var fileId = data.value;
-            alert(fileId);
+            window.location.reload();
         } else {
             alert("errorInfo:" + res.errInfo);
         }
