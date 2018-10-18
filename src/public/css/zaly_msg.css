@@ -468,11 +468,13 @@ html, body{
 
 .msg-right .msg-content-img .msg_img{
     border-radius: 0.94rem 0rem 0.94rem 0.94rem;
+    border:0.09rem solid rgba(201,201,201,1);
     cursor: pointer;
 }
 
 .msg-left .msg-content-img .msg_img{
     border-radius: 0rem 0.94rem  0.94rem 0.94rem;
+    border:0.09rem solid rgba(201,201,201,1);
     cursor: pointer;
 }
 
@@ -527,8 +529,6 @@ html, body{
     color:rgba(153,153,153,1);
     line-height:1.5rem;
 }
-
-
 
 .input-line {
     height:0.19rem;
@@ -1124,6 +1124,7 @@ html, body{
     position: relative;
     margin-right: 3rem;
 }
+
 .loader {
     position: absolute;
     bottom:0;
@@ -1143,6 +1144,7 @@ html, body{
     margin: auto;
     bottom:0;
 }
+
 .path {
     stroke-dasharray: 1, 200;
     stroke-dashoffset: 0;
@@ -1348,12 +1350,7 @@ html, body{
     margin-left: 2rem;
 }
 
-.group-desc-body {
-    font-size:1.13rem;
-    color:rgba(153,153,153,1);
-    width:24.27rem;
-    cursor: pointer;
-}
+
 .group-member-body {
     max-height: 14rem;
     margin-bottom: 1rem;
@@ -1370,19 +1367,6 @@ html, body{
     line-height:1.5rem;
     cursor: pointer;
     outline: none;
-}
-
-.group-desc-body textarea {
-    width:24.27rem;
-    min-height: 4rem;
-    max-height:13.04rem;
-    font-size:1.13rem;
-    color:rgba(153,153,153,1);
-    overflow: scroll;
-    outline: none;
-    border:none;
-    background: white;
-    resize:none;
 }
 
 .add_member_to_group {
@@ -1872,8 +1856,8 @@ button:active{
     width:23.64rem;
     height:6.94rem;
     background:rgba(255,255,255,1);
-    border-radius:0.56rem 0rem 0.56rem 0.56rem;
-    border:0.09rem solid rgba(243,243,243,1);
+    border-radius:0rem 0.56rem  0.56rem 0.56rem;
+    border:0.09rem solid rgba(201,201,201,1);
     display: flex;
     justify-content:space-between;
     cursor: pointer;

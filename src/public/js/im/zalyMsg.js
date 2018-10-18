@@ -1032,6 +1032,7 @@ function appendMsgHtmlToChatDialog(msg)
         sendBySelf = true;
         msg.userAvatar = avatar;
     }
+
     var msgTime = getMsgTimeByMsg(msg.timeServer);
     var groupUserImageClassName = msg.roomType == GROUP_MSG ? "group-user-img group-user-img-"+msg.msgId : "";
     var msgStatus = msg.status ? msg.status : "";
@@ -1116,7 +1117,7 @@ function appendMsgHtmlToChatDialog(msg)
                 var webSize = getWebMessageSize(msg['web'].height, msg['web'].width, 300, 400);
                 html = template("tpl-send-msg-web", {
                     roomType: msg.roomType,
-                    nickname: msg.nickname,
+                    nickname: nickname,
                     webWidth:webSize.width,
                     webHeight:webSize.height,
                     msgId : msgId,
@@ -1200,7 +1201,7 @@ function appendMsgHtmlToChatDialog(msg)
                 var originName = msg['document'].name;
                 html = template("tpl-receive-msg-file", {
                     roomType: msg.roomType,
-                    nickname:nickname,
+                    nickname:msg.nickname,
                     msgId : msgId,
                     url:url,
                     msgTime : msgTime,
@@ -1248,7 +1249,7 @@ function appendMsgHtmlToChatDialog(msg)
                 var msgContent = "[当前版本不支持此信息，请尝试升级客户端版本] ";
                 html = template("tpl-receive-msg-default", {
                     roomType: msg.roomType,
-                    nickname:nickname,
+                    nickname:msg.nickname,
                     msgId : msgId,
                     msgTime : msgTime,
                     msgStatus:msgStatus,
@@ -1261,9 +1262,12 @@ function appendMsgHtmlToChatDialog(msg)
         }
     }
 
+
+
     if(msgType == MessageType.MessageText) {
         html = handleMsgContentText(html);
     }
+
     // html = "请前往客户端查看web消息";
     $(".right-chatbox").append(html);
     getNotMsgImg(msg.fromUserId,msg.userAvatar);

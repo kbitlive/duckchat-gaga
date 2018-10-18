@@ -70,7 +70,7 @@ function checkUpgradeToken() {
         data: data,
         success: function (resp) {
             var data = JSON.parse(resp);
-
+            hideLoading();
             if (data.errCode == "error") {
                 alert("校验口令失败");
             } else {
@@ -86,11 +86,15 @@ function checkUpgradeToken() {
                 $(".zaly_window")[0].style.display = "flex";
                 localStorage.setItem(isCheckUpgradeTokenKey, "yes");
             }
+        },
+        fail:function () {
+            hideLoading();
         }
     });
 }
 
 $(".upgrade_next_btn").on("click", function () {
+    showLoading($(".container"));
     checkUpgradeToken();
 });
 

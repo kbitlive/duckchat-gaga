@@ -527,6 +527,17 @@ function checkGroupOwnerType(userId, groupProfile)
     }
     return false;
 }
+
+function checkGroupAdminContainOwner(userId, groupProfile)
+{
+    var isOwnerType = checkGroupOwnerType(userId, groupProfile);
+    if(isOwnerType == true) {
+        return true;
+    }
+    var isAdminType = checkGroupMemberAdminType(userId, groupProfile);
+    return isAdminType;
+}
+
 ////get  group admins
 function getGroupAdmins(groupProfile)
 {
@@ -543,6 +554,7 @@ function getGroupAdmins(groupProfile)
     }
     return groupAdminId;
 }
+
 ////get  group speakers
 function getGroupSpeakers(groupProfile)
 {
@@ -709,11 +721,16 @@ $(function(){
 
 //---------------------------------------api.group.profile-----------------------------------------------
 
+$(document).on("click", ".group-desc-title", function () {
+    showGroupDescWindow();
+});
+
 $(document).on("click", ".group-desc-body", function () {
-    var length = $(".group-desc-body textarea").length;
-    if(length >0){
-        return ;
-    }
+    showGroupDescWindow();
+});
+
+function showGroupDescWindow()
+{
     var groupId = localStorage.getItem(chatSessionIdKey);
     var groupProfile = getGroupProfile(groupId);
     var descBody = "";
@@ -721,9 +738,55 @@ $(document).on("click", ".group-desc-body", function () {
         descBody = groupProfile.description["body"];
     }
     descBody = descBody == undefined ? "" : descBody;
-    var html = '<textarea class="group-introduce">'+descBody+'</textarea>';
-    $(".group-desc-body").html(html);
-    $(".group-introduce").focus();
+
+    var isAdmin = checkGroupAdminContainOwner(token, groupProfile);
+    if(isAdmin && descBody=="") {
+        descBody = $.i18n.map['defaultGroupDescTip'] != undefined ? $.i18n.map['defaultGroupDescTip'] : "点击填写群介绍，让大家更了解你的群～";
+    }
+    var html = template("tpl-desc-group-div", {
+        descBody:descBody,
+        isAdmin:isAdmin
+    });
+    html = handleHtmlLanguage(html);
+    $("#group-desc-div").html(html);
+    showWindow($("#group-desc-div"));
+}
+
+$(document).on("click", ".edit_group_desc", function (){
+
+    var type = $(this).attr("type");
+    var groupId = localStorage.getItem(chatSessionIdKey);
+    if(type == 'edit') {
+        $(this).attr("type", "done");
+        var doneTip = $.i18n.map['groupProfileDoneTip'] != undefined?$.i18n.map['groupProfileDoneTip'] : "完成";
+        $(this).html(doneTip);
+        var groupProfile = getGroupProfile(groupId);
+        var descBody = "";
+        if(groupProfile != false && groupProfile!= null && groupProfile.hasOwnProperty("description")){
+            descBody = groupProfile.description["body"];
+        }
+        descBody = descBody == undefined ? "" : descBody;
+        var html = template("tpl-desc-group-textarea", {
+            descBody:descBody
+        });
+        $(".group-desc-area").html(html);
+    } else {
+        $(this).attr("type", "edit");
+        var doneTip = $.i18n.map['groupProfileEditTip'] != undefined ? $.i18n.map['groupProfileEditTip'] : "编辑";
+        $(this).html(doneTip);
+        var groupDesc = $(".textarea_desc").val();
+        $(".group-desc-area").html(groupDesc);
+        var values = {
+            type : ApiGroupUpdateType.ApiGroupUpdateDescription,
+            writeType:DataWriteType.WriteUpdate,
+            description : {
+                type: GroupDescriptionType.GroupDescriptionText,
+                body: groupDesc
+            }
+        }
+        updateGroupProfile(groupId, values);
+    }
+
 });
 
 
@@ -1806,23 +1869,6 @@ $(document).on("click", ".can_guest_read_message", function () {
     updateGroupProfile(groupId, values);
 });
 //update group introduce
-$(document).on("click", ".save_group_introduce", function () {
-    var groupId = localStorage.getItem(chatSessionIdKey);
-    var groupDesc = $(".group-introduce").val();
-
-    var isMarkDown = $(".mark_down").attr("is_on");
-    var type = isMarkDown == "on" ? GroupDescriptionType.GroupDescriptionMarkdown : GroupDescriptionType.GroupDescriptionText;
-    var values = {
-        type : ApiGroupUpdateType.ApiGroupUpdateDescription,
-        writeType:DataWriteType.WriteUpdate,
-        description : {
-            type: type,
-            body: groupDesc
-        }
-    }
-    updateGroupProfile(groupId, values);
-});
-
 
 $(document).on("click", ".save-permission-join", function () {
     var groupId = localStorage.getItem(chatSessionIdKey);
@@ -2353,20 +2399,19 @@ function displayCurrentProfile()
                     } else {
 
                         if(descBody == null || descBody == undefined || descBody.length<1 ) {
-                            descBody = "点击填写群介绍，让大家更了解你的群～";
+                            descBody = $.i18n.map['defaultGroupDescTip'] != undefined ? $.i18n.map['defaultGroupDescTip'] : "点击填写群介绍，让大家更了解你的群～";
                         }
+                        try{
+                            descBody = descBody.trim().substr(0, 70)+"......";
+                        }catch (error){
+
+                        }
+                        console.log("descBody.length + " + descBody.length);
                         descBody = template("tpl-string", {
                             string:descBody
                         });
                     }
                     $(".group-desc-body").html(descBody);
-                } else {
-                    if(descBody.length<1) {
-                        descBody = "点击填写群介绍，让大家更了解你的群～";
-                    }
-                    descBody = template("tpl-string", {
-                        string:descBody
-                    });
                 }
             }catch (error) {
                 console.log(error.message)
@@ -3238,7 +3283,8 @@ function sendMsgBySend()
     var chatSessionType = localStorage.getItem(chatSessionId);
     var msgContent = $(".msg_content").val();
     var imgData = $("#msgImage img").attr("src");
-
+    $("#msgImage").html("");
+    $("#msgImage")[0].style.display = "none";
     if(imgData) {
         uploadMsgImgFromCopy(imgData);
     }
@@ -3330,3 +3376,4 @@ function sortRoomList(jqElement)
         $(activeNode).insertBefore($(".chatsession-row")[0]);
     }
 }
+
