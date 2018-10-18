@@ -30,10 +30,10 @@ if(needUpgrade != 1) {
 
 var isCheckUpgradeToken = localStorage.getItem(isCheckUpgradeTokenKey);
 var isSureSiteBackup = localStorage.getItem(isSureSiteBackup, "yes");
-
-if(isCheckUpgradeToken == "yes" && isSureSiteBackup == 'yes') {
-    // displayUpgradeVersion();
-}
+//
+// if(isCheckUpgradeToken == "yes" && isSureSiteBackup == 'yes') {
+//     // displayUpgradeVersion();
+// }
 
 $(document).on("click",".zaly_site_backup_sure", function () {
     localStorage.setItem(isSureSiteBackup, "yes");

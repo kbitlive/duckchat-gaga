@@ -26,9 +26,18 @@ function showWebNotification(msg, msgContent)
     } else {
          notification = "["+name+"] "+nickname+":" + msgContent;
     }
+    var chatSessionId = msg.chatSessionId;
+    var chatType = msg.roomType;
+    console.log("chatSessionId ---" + chatSessionId);
+    console.log("chatSessionId chatType ---" + chatType);
+
+    var muteKey = msgMuteKey + chatSessionId;
+    var mute = localStorage.getItem(muteKey);
     var icon = $(".info-avatar-"+msg.chatSessionId).attr("src");
-    if(window.Notification && Notification.permission !== "denied"){
-        new Notification(notification, {"tag":msg.msgId, "icon":icon});
+    if(document.hidden && (mute == 0)) {
+        if(window.Notification && Notification.permission !== "denied"){
+            new Notification(notification, {"tag":msg.msgId, "icon":icon});
+        }
     }
 }
 
