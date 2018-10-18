@@ -259,9 +259,9 @@
                     <div class="item-body-display">
                         <div class="item-body-desc">
                             <?php if ($lang == "1") { ?>
-                                自定义项目
+                                页面配置
                             <?php } else { ?>
-                                Custom Item
+                                Page Config
                             <?php } ?></div>
 
                         <div class="item-body-tail">

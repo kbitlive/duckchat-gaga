@@ -11,18 +11,52 @@
 
     <link rel="stylesheet" href="../../public/manage/config.css"/>
 
+    <style>
+
+        .color-picker {
+            width: 30px;
+            height: 30px;
+            border: 0px;
+        }
+
+        /*拉伸*/
+        .login-background-image-0 {
+            margin: 5px 10px 5px 10px;
+            height: 200px;
+            background-position: 100% 100%;
+            background-repeat: no-repeat;
+        }
+
+        .login-background-image-1 {
+            margin: 5px 10px 5px 10px;
+            height: 200px;
+            /*background-color: #0bb20c;*/
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        .login-background-image-2 {
+            margin: 5px 10px 5px 10px;
+            height: 200px;
+            /*background-color: #0bb20c;*/
+            background-repeat: repeat;
+            /*background-attachment: fixed;*/
+        }
+
+
+    </style>
+
 </head>
 
 <body>
 
 <div class="wrapper" id="wrapper">
 
-    <!--  site basic config  -->
     <div class="layout-all-row">
 
         <div class="list-item-center">
 
-            <div class="item-row" id="site-name" onclick="showSiteName()">
+            <div class="item-row" id="site-name" onclick="showLoginWelcomeText()">
                 <div class="item-body">
                     <div class="item-body-display">
 
@@ -33,31 +67,9 @@
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <div class="item-body-value"><?php echo $name; ?></div>
-                            <div class="item-body-value"><img class="more-img"
-                                                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-            <div class="item-row" id="site-name" onclick="showSiteName()">
-                <div class="item-body">
-                    <div class="item-body-display">
-
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">登陆页背景颜色</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Login Background Color</div>
-                        <?php } ?>
-
-                        <div class="item-body-tail">
-                            <div class="item-body-value"><?php echo $name; ?></div>
-                            <div class="item-body-value"><img class="more-img"
-                                                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <div class="item-body-value"><?php echo $loginWelcomeText; ?></div>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
                         </div>
                     </div>
@@ -71,24 +83,16 @@
                     <div class="item-body-display">
 
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">登陆页 Logo</div>
+                            <div class="item-body-desc">登陆页背景颜色</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Login Page Logo</div>
+                            <div class="item-body-desc">Login Background Color</div>
                         <?php } ?>
 
-
                         <div class="item-body-tail">
-                            <div class="item-body-value" id="site-logo-fileid">
-                                <img class="site-logo-image" onclick="uploadFile('upload-site-logo')"
-                                     src="/_api_file_download_/?fileId=<?php echo $logo ?>"
-                                     onerror="src='../../public/img/manage/site_default.png'">
-
-                                <input id="upload-site-logo" type="file" onchange="uploadImageFile(this)"
-                                       accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
-                                       style="display: none;">
-                            </div>
-                            <div class="item-body-value"><img class="more-img"
-                                                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <input class="color-picker" type="color" id="html5colorpicker"
+                                   onchange="clickColor(0, -1, -1, 5)" value="<?php echo $loginBackgroundColor; ?>">
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
                         </div>
                     </div>
@@ -101,35 +105,38 @@
 
     </div>
 
-
-    <!-- part 2  register && login plugin-->
     <div class="layout-all-row">
 
         <div class="list-item-center">
 
             <div class="item-row">
                 <div class="item-body">
-                    <div class="item-body-display loginMiniProgram">
+                    <div class="item-body-display" onclick="uploadFile('upload-background-image')">
                         <?php if ($lang == "1") { ?>
                             <div class="item-body-desc">登陆页背景图片</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Login Page Backgroud-image</div>
+                            <div class="item-body-desc">Login Page Background-image</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <div class="item-body-value" id="loginMiniProgramId"> <?php echo $loginPluginId; ?></div>
-                            <div class="item-body-value"><img class="more-img"
-                                                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
                         </div>
                     </div>
 
                 </div>
             </div>
-            <div class="division-line"></div>
+
+            <div class="login-background-image-2"
+                 style="background-image: url('/_api_file_download_/?fileId=<?php echo $loginBackgroundImage ?>');">
+                <input id="upload-background-image" type="file" onchange="uploadImageFile(this)"
+                       accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
+                       style="display: none;">
+            </div>
 
             <div class="item-row">
-                <div class="item-body" id="image-display-type" data="<?php echo $pushType ?>">
+                <div class="item-body" id="image-display-type" data="<?php echo $loginBackgroundImageDisplay ?>">
                     <div class="item-body-display">
                         <?php if ($lang == "1") { ?>
                             <div class="item-body-desc">登陆页背景图片模式</div>
@@ -139,16 +146,16 @@
 
                         <div class="item-body-tail">
                             <div class="item-body-value" id="image-display-type-text">
-                                <?php if ($pushType == "0") { ?>
-                                    <?php if ($lang == "1") { ?> 水平剧种<?php } else { ?> X-Center <?php } ?>
-                                <?php } else if ($pushType == "1") { ?>
-                                    <?php if ($lang == "1") { ?> 顶部对齐<?php } else { ?> Top <?php } ?>
-                                <?php } else if ($pushType == "2") { ?>
-                                    <?php if ($lang == "1") { ?> 不重复<?php } else { ?> No Repeat <?php } ?>
+                                <?php if ($loginBackgroundImageDisplay == "0") { ?>
+                                    <?php if ($lang == "1") { ?> 默认<?php } else { ?> Default <?php } ?>
+                                <?php } else if ($loginBackgroundImageDisplay == "1") { ?>
+                                    <?php if ($lang == "1") { ?> 填充<?php } else { ?> Cover <?php } ?>
+                                <?php } else if ($loginBackgroundImageDisplay == "2") { ?>
+                                    <?php if ($lang == "1") { ?> 平铺<?php } else { ?> Repeat <?php } ?>
                                 <?php } ?>
                             </div>
-                            <div class="item-body-value"><img class="more-img"
-                                                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
                         </div>
                     </div>
@@ -255,7 +262,7 @@
                         var res = JSON.parse(imageFileIdResult);
                         fileId = res.fileId;
                     }
-                    updateSiteLogo(fileId);
+                    updateLoginBackgroundImage(fileId);
                 } else {
                     alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");
                 }
@@ -268,21 +275,21 @@
         });
     }
 
-    function updateSiteLogo(imageFileId) {
-        var url = "index.php?action=manage.config.update";
+    function updateLoginBackgroundImage(imageFileId) {
+        var url = "index.php?action=miniProgram.admin.updateLogin";
         var data = {
-            'key': 'logo',
+            'key': 'loginBackgroundImage',
             'value': imageFileId,
         };
-        zalyjsCommonAjaxPostJson(url, data, updateLogoResponse);
+        zalyjsCommonAjaxPostJson(url, data, updateImageResponse);
     }
 
-    function updateLogoResponse(url, data, result) {
+    function updateImageResponse(url, data, result) {
         var res = JSON.parse(result);
 
         if (res.errCode) {
             var fileId = data.value;
-            // showSiteLogo(fileId);
+            alert(fileId);
         } else {
             alert("errorInfo:" + res.errInfo);
         }
@@ -327,7 +334,7 @@
 
         var key = $("#updatePopupButton").attr("key-value");
 
-        var url = "index.php?action=manage.config.update&key=" + key;
+        var url = "index.php?action=miniProgram.admin.updateLogin&lang=" + getLanguage();
 
         var value = $.trim($(".popup-group-input").val());
 
@@ -351,7 +358,7 @@
         }
     }
 
-    function showSiteName() {
+    function showLoginWelcomeText() {
         var title = $("#site-name").find(".item-body-desc").html();
         var inputBody = $("#site-name").find(".item-body-value").html();
 
@@ -359,20 +366,8 @@
 
         $(".popup-group-title").html(title);
         $(".popup-group-input").val(inputBody);
-        $("#updatePopupButton").attr("key-value", "name");
+        $("#updatePopupButton").attr("key-value", "loginWelcomeText");
     }
-
-    $("#group-max-members").click(function () {
-        var title = $(this).find(".item-body-desc").html();
-        var inputBody = $(this).find(".item-body-value").html();
-
-        showWindow($(".config-hidden"));
-
-        $(".popup-group-title").html(title);
-        $(".popup-group-input").val(inputBody);
-        $("#updatePopupButton").attr("key-value", "maxGroupMembers");
-    });
-
 
     //loginMiniProgramId item-body-value
     $(".loginMiniProgram").click(function () {
@@ -385,59 +380,53 @@
     $("#image-display-type").click(function () {
         var language = getLanguage();
 
-        /**
-         * 0:禁止推送
-         * 1:只推送通知
-         * 2:推送文本
-         */
         $.actions({
             title: "",
             onClose: function () {
                 console.log("close");
             },
             actions: [{
-                text: language == 0 ? "Show Content" : "显示文本内容",
+                text: language == 0 ? "Default" : "默认",
                 className: "select-color-primary",
                 onClick: function () {
-                    $("#image-display-type-text").html(language == 0 ? "Show Content" : "显示文本内容");
-                    $("#image-display-type").attr("data", "2");
-                    updateImageDisplayType(2);
+                    $("#image-display-type-text").html(language == 0 ? "Default" : "默认");
+                    $("#image-display-type").attr("data", "0");
+                    updateImageDisplayType(0);
                 }
             }, {
-                text: language == 0 ? "Hide Content" : "不显示文本内容",
+                text: language == 0 ? "Cover" : "填充",
                 className: "select-color-primary",
                 onClick: function () {
-                    $("#image-display-type-text").html(language == 0 ? "Hide Content" : "不显示文本内容");
+                    $("#image-display-type-text").html(language == 0 ? "Cover" : "填充");
                     $("#image-display-type").attr("data", "1");
                     updateImageDisplayType(1);
                 }
             }, {
-                text: language == 0 ? "Push Disable" : "禁止推送通知",
+                text: language == 0 ? "Repeat" : "平铺",
                 className: "select-color-primary",
                 onClick: function () {
-                    $("#image-display-type-text").html(language == 0 ? "Push Disable" : "禁止推送通知");
-                    $("#image-display-type").attr("data", "0");
+                    $("#image-display-type-text").html(language == 0 ? "Repeat" : "平铺");
+                    $("#image-display-type").attr("data", "2");
 
-                    updateImageDisplayType(0);
+                    updateImageDisplayType(2);
                 }
             }]
         });
     });
 
     //update push notice type
-    function updateImageDisplayType(pushTypeValue) {
-        var url = "index.php?action=manage.config.update";
-
+    function updateImageDisplayType(displayValue) {
+        var url = "index.php?action=miniProgram.admin.updateLogin&lang=" + getLanguage();
         var data = {
-            'key': 'pushType',
-            'value': pushTypeValue,
+            'key': 'loginBackgroundImageDisplay',
+            'value': displayValue,
         };
 
-        zalyjsCommonAjaxPostJson(url, data, updatePushTypeResponse);
+        zalyjsCommonAjaxPostJson(url, data, updateResponse);
     }
 
 
-    function updatePushTypeResponse(url, data, result) {
+    function updateResponse(url, data, result) {
         if (result) {
 
             var res = JSON.parse(result);
@@ -449,6 +438,29 @@
         } else {
             alert(getLanguage() == 1 ? "操作失败" : "update error");
         }
+        window.location.reload();
+    }
+
+    function clickColor(hex, seltop, selleft, html5) {
+
+        var color;
+        if (html5 && html5 == 5) {
+            color = document.getElementById("html5colorpicker").value;
+        } else {
+            if (hex == 0) {
+                color = document.getElementById("entercolor").value;
+            } else {
+                color = hex;
+            }
+        }
+
+        var url = "index.php?action=miniProgram.admin.updateLogin&lang=" + getLanguage();
+        var data = {
+            'key': 'loginBackgroundColor',
+            'value': color,
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, updateResponse);
     }
 
 </script>

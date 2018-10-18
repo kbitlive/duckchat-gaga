@@ -14,8 +14,29 @@ class Manage_Custom_PageController extends Manage_CommonController
      */
     protected function doRequest()
     {
-
         $params['lang'] = $this->language;
+
+        //2.loginConfig
+        $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
+
+        $loginWelcomeTextConfig = $loginConfig[LoginConfig::LOGIN_PAGE_WELCOME_TEXT];
+        $loginWelcomeText = $loginWelcomeTextConfig["configValue"];
+
+        $loginBackgroundColorConfig = $loginConfig[LoginConfig::LOGIN_PAGE_BACKGROUND_COLOR];
+        $loginBackgroundColor = $loginBackgroundColorConfig["configValue"];
+
+        $loginBackgroundImageConfig = $loginConfig[LoginConfig::LOGIN_PAGE_BACKGROUND_IMAGE];
+        $loginBackgroundImage = $loginBackgroundImageConfig["configValue"];
+
+        $loginBackgroundImageDisplayConfig = $loginConfig[LoginConfig::LOGIN_PAGE_BACKGROUND_IMAGE_DISPLAY];
+        $loginBackgroundImageDisplay = $loginBackgroundImageDisplayConfig["configValue"];
+
+        $params['loginWelcomeText'] = $loginWelcomeText;
+        $params['loginBackgroundColor'] = $loginBackgroundColor;
+        $params['loginBackgroundImage'] = $loginBackgroundImage;
+        $params['loginBackgroundImageDisplay'] = $loginBackgroundImageDisplay;
+
+        $this->logger->error("=================", var_export($params, true));
 
         echo $this->display("manage_custom_index", $params);
 

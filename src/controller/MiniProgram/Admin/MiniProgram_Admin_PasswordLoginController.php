@@ -45,14 +45,29 @@ class MiniProgram_Admin_PasswordLoginController extends MiniProgramController
 
         if ($method == "GET") {
 
+            //1.siteConfig
             $config = $this->ctx->Site_Config->getAllConfig();
 
             $loginMiniProgramId = $config[SiteConfig::SITE_LOGIN_PLUGIN_ID];
             $enableInvitationCode = $config[SiteConfig::SITE_ENABLE_INVITATION_CODE];
 
+            //2.loginConfig
+            $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
+            
+            $loginNameAliasConfig = $loginConfig[LoginConfig::LOGIN_NAME_ALIAS];
+            $loginNameAlias = $loginNameAliasConfig["configValue"];
+            $passwordFindWayConfig = $loginConfig[LoginConfig::PASSWORD_FIND_WAY];
+            $passwordFindWay = $passwordFindWayConfig["configValue"];
+
+            //3.miniProgramName
+            $miniProgramName = $this->getMiniProgramName($loginMiniProgramId);
+
             $params = [
                 "lang" => $this->language,
                 "loginPluginId" => $loginMiniProgramId,
+                "loginNameAlias" => $loginNameAlias,
+                "passwordFindWay" => $passwordFindWay,
+                "miniProgramName" => $miniProgramName . "后台",
                 "enableInvitationCode" => $enableInvitationCode,
             ];
 
@@ -76,6 +91,17 @@ class MiniProgram_Admin_PasswordLoginController extends MiniProgramController
     protected function requestException($ex)
     {
         $this->logger->error("miniProgram.admin.login", $ex);
+    }
+
+    private function getMiniProgramName($miniProgramId)
+    {
+        $profile = $this->getMiniProgramProfile($miniProgramId);
+        return $profile["name"];
+    }
+
+    private function getMiniProgramProfile($miniProgramId)
+    {
+        return $this->ctx->SitePluginTable->getPluginById($miniProgramId);
     }
 
 }

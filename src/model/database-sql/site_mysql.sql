@@ -221,10 +221,24 @@ CREATE TABLE IF NOT EXISTS siteGif(
                       width INTEGER not null default 0,
                       height INTEGER not null default 0,
                       addTime BIGINT,
-                      UNIQUE (gifUrl));
+                      UNIQUE (gifUrl))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+
+ALTER TABLE siteGif CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS siteUserGif(
                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
                       gifId VARCHAR(100) NOT NULL,
                       userId VARCHAR(100) NOT NULL,
-                      addTime BIGINT);
+                      addTime BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+
+ALTER TABLE siteUserGif CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS siteLoginCustom(
+                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                      configKey VARCHAR(100) NOT NULL,
+                      configValue TEXT,
+                      configValueEN TEXT ,
+                      updateUserId VARCHAR(100),
+                      updateTime BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+
+ALTER TABLE siteLoginCustom CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
