@@ -3,7 +3,8 @@ $(".left-body-chatsession").html("");
 $(".right-chatbox").html("");
 
 
-function showWebNotification(msg, msgContent)
+
+function showMsgWebNotification(msg, msgContent)
 {
     var msgId = msg.msgId;
     var nickname="";
@@ -36,6 +37,22 @@ function showWebNotification(msg, msgContent)
         }
     }
 }
+
+function showOtherWebNotification()
+{
+    if(document.hidden) {
+        var siteConfigStr = localStorage.getItem(siteConfigKey);
+        var siteConfig = JSON.parse(siteConfigStr);
+        var icon = siteConfig.logo == undefined ? "" : siteConfig.logo;
+        icon  =  downloadFileUrl + "&fileId="+icon+"&returnBase64=0&lang="+languageNum;
+        var notification = languageNum == UserClientLangZH ? "新的好友请求" : "new friend apply request";
+        if(window.Notification && Notification.permission !== "denied"){
+            new Notification(notification, {"icon":icon});
+        }
+    }
+}
+
+
 
 //点击触发一个对象的点击
 function uploadFile(obj)

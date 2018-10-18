@@ -194,7 +194,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
             $(".chat_session_id_"+msg.chatSessionId).addClass("chatsession-row-active");
         }
         if(msg.fromUserId != token && showNotification) {
-            showWebNotification(msg, msgContent);
+            showMsgWebNotification(msg, msgContent);
         }
         return ;
     }
@@ -237,7 +237,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
         displayCurrentProfile();
     }
     if(msg.fromUserId != token && showNotification) {
-        showWebNotification(msg, msgContent);
+        showMsgWebNotification(msg, msgContent);
     }
 }
 ////防止两个浏览器开着，点击的时候消息列表的内容不是最新的
@@ -436,6 +436,7 @@ function handleSyncMsg(msg)
         return;
     }
     if(msg.type == MessageType.MessageEventFriendRequest) {
+        showOtherWebNotification();
         getFriendApplyList();
         return;
     };
@@ -462,6 +463,7 @@ function handleSyncMsg(msg)
     }
     appendOrInsertRoomList(msg, true, true);
 }
+
 
 function handleMsgStatusResult(msgId, msgStatus)
 {
