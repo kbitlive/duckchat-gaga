@@ -6,16 +6,31 @@
     <!-- Latest compiled and minified CSS -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="../../public/css/login.css?_version=<?php echo $versionCode?>">
+    <link rel="stylesheet" href="../../public/css/loading.css?_version=<?php echo $versionCode?>">
     <script type="text/javascript" src="../../public/js/jquery.min.js"></script>
     <script src="../../public/js/jquery.i18n.properties.min.js"></script>
         <script src="../../public/js/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/template-web.js"></script>
+    <script type="text/javascript">
 
+        function showLoading() {
+                $(".loader")[0].style.display = "flex";
+        }
+        function hideLoading() {
+            $(".loader")[0].style.display = "none";
+        }
+    </script>
 </head>
 <body>
 <div class="site-warning"></div>
 
-<div class="zaly_container" >
+<div class="zaly_container">
+    <div class="loader" >
+        <div class="circular_div">
+            <svg class="circular" viewBox="25 25 50 50"> <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/> </svg>
+        </div>
+    </div>
+
     <div class="zaly_login zaly_login_by_pwd" >
         <div class="login_input_div" >
             <div class="d-flex flex-row justify-content-center margin-top5 login-header" style="text-align: center;">
@@ -145,7 +160,10 @@
 
         </div>
     </div>
+
 </div>
+
+
 <?php include(dirname(__DIR__) . '/passport/template_login.php'); ?>
 
 <input type="hidden" value="<?php echo $isDuckchat; ?>" class="isDuckchat">
@@ -156,8 +174,6 @@
 <script src="../../public/js/im/zalyBaseWs.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/login/login.js?_version=<?php echo $versionCode?>"></script>
 
-<script type="text/javascript">
 
-</script>
 </body>
 </html>

@@ -143,6 +143,7 @@ function zalyLoginConfig(results) {
 
 function loginFailed(result)
 {
+    hideLoading();
     zalyjsAlert(result);
     if(isRegister == true && enableInvitationCode == 1) {
         $(".register_button").attr("is_type", updateInvitationCodeType);
@@ -398,7 +399,6 @@ $(document).on("click", ".register_button", function () {
     registerAndLogin();
 });
 
-
 function registerAndLoginByKeyDown(event)
 {
     if(!checkIsEnterBack(event)){
@@ -409,6 +409,7 @@ function registerAndLoginByKeyDown(event)
 
 function registerAndLogin()
 {
+    showLoading();
     var isType = $(".register_button").attr("is_type");
     invitationCode = $(".register_input_code").val();
 
@@ -425,18 +426,21 @@ function registerAndLogin()
 
 ///更新邀请码，并且登录site
 function failedCallBack(result) {
+    hideLoading();
     zalyjsAlert(result);
     $(".register_button").attr("is_type", updateInvitationCodeType);
     apiPassportPasswordLogin(failedApiPassportPasswordLogin);
 }
 
 function failedApiPassportPasswordLogin(results) {
+    hideLoading();
     isRegister = false;
     preSessionId = results.preSessionId;
 }
 
 $(document).on("click", ".update_code_btn", function () {
     invitationCode = $(".update_input_code").val();
+    showLoading();
     updatePassportPasswordInvitationCode();
 });
 
@@ -467,6 +471,7 @@ function validateEmail(email)
 
 
 $(document).on("click", ".login_button", function () {
+    showLoading();
     loginPassport();
 });
 
@@ -523,6 +528,7 @@ function loginPassport()
     $(".login_input_pwd_failed")[0].style.display = "none";
 
     if(sitePubkPem.length<1) {
+        hideLoading();
         zalyjsAlert("站点公钥获取失败");
         return false;
     }
@@ -551,6 +557,8 @@ function handleApiPassportPasswordLogin(results)
 
 function loginFailNeedRegister()
 {
+    hideLoading();
+
     if(enableInvitationCode != "1") {
         if(isRegister == true) {
             return false;

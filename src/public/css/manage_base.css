@@ -1020,19 +1020,6 @@ html, body {
     line-height: 2rem;
 }
 
-.group-desc-body textarea {
-    width: 24.27rem;
-    height: 13.04rem;
-    font-size: 1.13rem;
-    font-family: PingFangSC-Regular;
-    color: rgba(153, 153, 153, 1);
-    overflow: scroll;
-    outline: none;
-    border: none;
-    background: white;
-    resize: none;
-}
-
 .add_member_to_group {
     width: 9.76rem;
     height: 3.93rem;

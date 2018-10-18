@@ -530,8 +530,6 @@ html, body{
     line-height:1.5rem;
 }
 
-
-
 .input-line {
     height:0.19rem;
     background:rgba(201,201,201,1);
@@ -1126,6 +1124,7 @@ html, body{
     position: relative;
     margin-right: 3rem;
 }
+
 .loader {
     position: absolute;
     bottom:0;
@@ -1145,6 +1144,7 @@ html, body{
     margin: auto;
     bottom:0;
 }
+
 .path {
     stroke-dasharray: 1, 200;
     stroke-dashoffset: 0;
@@ -1350,12 +1350,7 @@ html, body{
     margin-left: 2rem;
 }
 
-.group-desc-body {
-    font-size:1.13rem;
-    color:rgba(153,153,153,1);
-    width:24.27rem;
-    cursor: pointer;
-}
+
 .group-member-body {
     max-height: 14rem;
     margin-bottom: 1rem;
@@ -1372,19 +1367,6 @@ html, body{
     line-height:1.5rem;
     cursor: pointer;
     outline: none;
-}
-
-.group-desc-body textarea {
-    width:24.27rem;
-    min-height: 4rem;
-    max-height:13.04rem;
-    font-size:1.13rem;
-    color:rgba(153,153,153,1);
-    overflow: scroll;
-    outline: none;
-    border:none;
-    background: white;
-    resize:none;
 }
 
 .add_member_to_group {
