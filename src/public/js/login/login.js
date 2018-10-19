@@ -39,6 +39,7 @@ sitePubkPem="";
 invitationCode='';
 nickname="";
 allowShareRealname=0;
+siteLogo="";
 preSessionId="";
 secondNum  = 120;
 isSending  = false;
@@ -137,7 +138,9 @@ function zalyLoginConfig(results) {
     enableInvitationCode = siteConfig.enableInvitationCode;
     enableRealName=siteConfig.enableRealName;
     sitePubkPem = siteConfig.sitePubkPem;
+    siteLogo = siteConfig.logo;
 }
+
 
 
 function loginFailed(result)
@@ -154,6 +157,47 @@ getOsType();
 
 zalyjsLoginConfig(zalyLoginConfig);
 
+
+
+var loginNameAlias = $(".loginNameAlias").val();
+var passwordFindWay = $(".passwordFindWay").val();
+var loginWelcomeText = $(".loginWelcomeText").val();
+var loginBackgroundColor = $(".loginBackgroundColor").val();
+var loginBackgroundImage = $(".loginBackgroundImage").val();
+var loginBackgroundImageDisplay = $(".loginBackgroundImageDisplay").val();
+var siteVersionName = $(".siteVersionName").val();
+
+function  getCompanyCustomMade() {
+    var html = template("tpl-company-custom-made", {
+        loginBackgroundColor:loginBackgroundColor,
+        loginBackgroundImage:loginBackgroundImage,
+        loginBackgroundImageDisplay:loginBackgroundImageDisplay,
+        siteVersionName:siteVersionName,
+        siteLogo:siteLogo,
+    });
+    html = handleHtmlLanguage(html);
+    $(".login_custom_made").html(html);
+}
+getCompanyCustomMade();
+
+function getLoginPage()
+{
+    var html = template("tpl-login-div", {
+        loginNameAlias: loginNameAlias,
+        passwordFindWay:passwordFindWay
+    });
+    html = handleHtmlLanguage(html);
+    $('.login_input_div').html(html);
+}
+getLoginPage();
+
+$(document).on("mouseover", "#powered_by_duckchat", function () {
+    $(".duckchat_website")[0].style.textDecoration = "underline";
+});
+
+$(document).on("mouseout", "#powered_by_duckchat", function () {
+    $(".duckchat_website")[0].style.textDecoration = "none";
+});
 function addJsByDynamic(url)
 {
     var script = document.createElement("script")

@@ -12,77 +12,28 @@
         <script src="../../public/js/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/template-web.js"></script>
     <script src="../../public/js/zalyjsHelper.js"></script>
-    <style>
-        </style>
+
+
 </head>
 <body>
 <div class="site-warning"></div>
 <div class="zaly_container">
+    <input type="hidden" value="<?php echo $loginNameAlias;?>" class="loginNameAlias">
+    <input type="hidden" value="<?php echo $passwordFindWay;?>" class="passwordFindWay">
+    <input type="hidden" value="<?php echo $loginWelcomeText;?>" class="loginWelcomeText">
+    <input type="hidden" value="<?php echo $loginBackgroundColor;?>" class="loginBackgroundColor">
+    <input type="hidden" value="<?php echo $loginBackgroundImage;?>" class="loginBackgroundImage">
+    <input type="hidden" value="<?php echo $loginBackgroundImageDisplay;?>" class="loginBackgroundImageDisplay">
+    <input type="hidden" value="<?php echo $siteVersionName;?>" class="siteVersionName">
 
     <div class="container">
         <div  class="login_custom_made">
-            <div class="company_custom_made">
-                <div>
-                    <img src="../../public/img/login/logo.png" class="company_logo">
-                </div>
-                <div>
-                    <span class="company_name">Duckchat</span>
-                </div>
-                <div class="company_slogan">
-                    拥有自己的聊天软件，安全可靠、私有部署、随意定制
-                    拥有自己的聊天软件，安全可靠、私有部署、随意定制
-                    拥有自己的聊天软件，安全可靠、私有部署、随意定制
-                    拥有自己的聊天软件，安全可靠、私有部署、随意定制
-                </div>
-                <div class="site_version">
-                    v1.0.13
-                </div>
-            </div>
+
         </div>
         <div  class="login_div">
             <div class="zaly_login zaly_login_by_pwd" >
                 <div class="login_input_div" >
-                    <div style="position: relative; height: 100%;">
-                        <div>
-                            <div class="mobile_logo_div">
-                                <img class="mobile_logo" src="../../public/img/login/mobile_logo.png">
-                            </div>
-                            <div class="d-flex flex-row justify-content-center login-header" style="text-align: center;">
-                                <span class="login_phone_tip_font" data-local-value="loginTip">登录</span>
-                            </div>
 
-                            <div class=" d-flex flex-row justify-content-left login_name_div" >
-                                <image src="../../public/img/login/loginName.png" class="img"/>
-                                <input type="text" class="input_login_site  login_input_loginName" datatype="s" autocapitalize="off"  data-local-placeholder="loginNamePlaceholder" placeholder="输入登录名" >
-                                <div class="clearLoginName" onclick="clearLoginName()"><image src="../../public/img/msg/btn-x.png" class="clearLoginName clear_img" /></div>
-                                <img src="../../public/img/msg/msg_failed.png" class="img-failed login_input_loginName_failed">
-                            </div>
-                            <div class="line"></div>
-
-                            <div class="login_name_div margin-top2">
-                                <image src="../../public/img/login/pwd.png" class="img"/>
-                                <input type="password" class="input_login_site phone_num  login_input_pwd" autocapitalize="off"  data-local-placeholder="enterPasswordPlaceholder"  onkeydown="loginPassportByKeyPress(event)"  placeholder="输入密码, 长度5到20个字符(无中文)" >
-                                <div class="pwd_div" onclick="changeImgByClickPwd()"><image src="../../public/img/login/hide_pwd.png" class="pwd" img_type="hide" /></div>
-                                <img src="../../public/img/msg/msg_failed.png" class="img-failed login_input_pwd_failed">
-                            </div>
-                            <div class="line"></div>
-
-
-                            <div class="d-flex flex-row justify-content-center ">
-                                <button type="button" class="btn login_button" ><span class="span_btn_tip" data-local-value="loginTip">登录</span></button>
-                            </div>
-
-                            <div class="d-flex flex-row register_span_div" >
-                                <span onclick="registerForPassportPassword()" style="color: RGBA(0, 0, 0, 0.2);" data-local-value="noAccountTip">还没有账户？</span> <span onclick="registerForPassportPassword()" data-local-value="registerContentTip">去注册</span>
-                            </div>
-                        </div>
-                        <div class="mobile_slogn_div" style="position: absolute;bottom:3rem;">
-                            拥有自己的聊天软件，安全可靠、私有部署、随意定制
-                            拥有自己的聊天软件，安全可靠、私有部署、随意定制
-                            拥有自己的聊天软件，安全可靠、私有部署、随意定制
-                            拥有自己的聊天软件，安全可靠、私有部署、随意定制
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -131,6 +82,11 @@
                 </div>
             </div>
         </div>
+
+    </div>
+
+    <div id="powered_by_duckchat" class="powered_by_duckchat">
+        Powered by &nbsp; <a class="duckchat_website" target="_blank" href="https://duckchat.akaxin.com" style="cursor: pointer;"> Duckchat</a>
     </div>
 </div>
 
@@ -145,6 +101,8 @@
 <script src="../../public/js/im/zalyBaseWs.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/login/login.js?_version=<?php echo $versionCode?>"></script>
 
+<script type="text/javascript">
 
+</script>
 </body>
 </html>
