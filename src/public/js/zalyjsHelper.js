@@ -94,3 +94,10 @@ function getLoadingCss()
 
 getLoadingCss();
 
+
+function cancelLoadingBySelf()
+{
+    setTimeout(function () {
+        hideLoading();
+    }, 1000);
+}

@@ -133,8 +133,5 @@
 <script src="../../public/js/im/zalyBaseWs.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/login/login.js?_version=<?php echo $versionCode?>"></script>
 
-<script type="text/javascript">
-
-</script>
 </body>
 </html>

@@ -62,6 +62,12 @@ isRegister=false;
 var errorUserNeedRegister = "error.user.needRegister";
 var errorInvitationCode = "error.invitation.code";
 
+try{
+    showLoading($(".site_login_div"));
+}catch (error) {
+
+}
+
 function setDocumentTitle(type)
 {
     switch (type)
@@ -202,6 +208,11 @@ function getLoginPage()
 }
 getLoginPage();
 
+try{
+   hideLoading();
+}catch (error) {
+
+}
 $(document).on("mouseover", "#powered_by_duckchat", function () {
     $(".duckchat_website")[0].style.textDecoration = "underline";
 });
@@ -422,6 +433,7 @@ function handlePassportPasswordReg(results)
 {
     isRegister = true;
     preSessionId = results.preSessionId;
+    cancelLoadingBySelf();
     zalyjsLoginSuccess(registerLoginName, preSessionId, isRegister, loginFailed);
 }
 
@@ -522,6 +534,7 @@ function handlePassportPasswordUpdateInvationCode(results)
 {
     isRegister = true;
     preSessionId = results.preSessionId;
+    cancelLoadingBySelf();
     zalyjsLoginSuccess(loginName, preSessionId, isRegister, failedCallBack);
 }
 
@@ -623,8 +636,8 @@ function apiPassportPasswordLogin(callback)
 
 function handleApiPassportPasswordLogin(results)
 {
-
     preSessionId = results.preSessionId;
+    cancelLoadingBySelf();
     zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailNeedRegister);
 }
 
@@ -636,6 +649,7 @@ function displayInvitationCode()
             return false;
         }
         isRegister = true;
+        cancelLoadingBySelf();
         zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailed);
     } else {
         $(".zaly_login_by_pwd")[0].style.display = "none";
@@ -757,3 +771,4 @@ function registerForPassportPassword()
     $(".zaly_site_register-name")[0].style.display = "block";
     $(".zaly_login_by_pwd")[0].style.display = "none";
 }
+
