@@ -32,7 +32,12 @@ function zalyjsCallbackHelperConstruct() {
     //
     this.callback = function(param) {
         try {
-            param = atob(param);
+           try{
+               param = decodeURIComponent(escape(window.atob(param)));
+           }catch (error) {
+               param = window.atob(param);
+           }
+
             // js json for \n
             param = param.replace(/\n/g,"\\\\n");
 
@@ -40,8 +45,6 @@ function zalyjsCallbackHelperConstruct() {
             var id = paramObj[callbackIdParamName]
 
             var args = paramObj["args"]
-            console.log("result args===="+ JSON.stringify(args));
-
             var callbackFunc = thiz.dict["" + id]
             if (callbackFunc != undefined) {
                 // callback.apply(undefined, args)
