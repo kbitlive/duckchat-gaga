@@ -11,7 +11,7 @@ class Api_Group_CreateController extends Api_Group_BaseController
 {
     private $classNameForRequest = '\Zaly\Proto\Site\ApiGroupCreateRequest';
     private $classNameForResponse = '\Zaly\Proto\Site\ApiGroupCreateResponse';
-    private $permissionJoin = \Zaly\Proto\Core\GroupJoinPermissionType::GroupJoinPermissionAdmin;
+    private $permissionJoin = \Zaly\Proto\Core\GroupJoinPermissionType::GroupJoinPermissionMember;
     private $canGuestReadMsg = false;
     private $maxMembers = -1;
     private $groupNameLength = 20;
@@ -97,6 +97,7 @@ class Api_Group_CreateController extends Api_Group_BaseController
     private function insertGroup($groupName, $groupAvatar)
     {
         ////TODO  groupId 重复 怎么处理
+        /// groupId重复，重新生成
         $tag = __CLASS__ . '-' . __FUNCTION__;
         try {
             if ($this->groupIdLength > 16) {
