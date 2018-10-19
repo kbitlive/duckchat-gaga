@@ -198,6 +198,9 @@ function getLoginPage()
     hideLoading();
     var html = template("tpl-login-div", {
         loginNameAlias: loginNameAlias,
+        siteLogo:siteLogo,
+        siteName:siteName,
+        loginWelcomeText:loginWelcomeText,
     });
     html = handleHtmlLanguage(html);
     $('.login_for_size_div').html(html);

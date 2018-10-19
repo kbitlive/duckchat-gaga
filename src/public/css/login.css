@@ -472,6 +472,7 @@ input:active,
     .mobile_logo_div {
         display: flex;
         justify-content: center;
+
     }
     .back {
         display:none;
@@ -494,6 +495,8 @@ input:active,
     }
     .mobile_slogn_div {
         display: block;
+        width: 100%;
+        text-align: center;
     }
     .login_container {
         width: 100%;
