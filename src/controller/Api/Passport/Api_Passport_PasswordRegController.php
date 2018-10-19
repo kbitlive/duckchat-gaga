@@ -31,7 +31,7 @@ class Api_Passport_PasswordRegController extends BaseController
             $sitePubkPem = $request->getSitePubkPem();
             $invitationCode = $request->getInvitationCode();
 
-            if(!$loginName) {
+            if(!$loginName || mb_strlen($loginName)>24) {
                 $errorCode = $this->zalyError->errorLoginNameLength;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
                 $this->setRpcError($errorCode, $errorInfo);
