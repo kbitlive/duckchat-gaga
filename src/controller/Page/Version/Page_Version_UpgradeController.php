@@ -98,7 +98,7 @@ class Page_Version_UpgradeController extends Page_VersionController
     private function upgrade_10012_10013()
     {
         $dbType = $this->ctx->dbType;
-
+        $this->upgradeSitePluginFor10013();
         if ($dbType == "mysql") {
             $this->executeMysqlScript();
             return $this->upgrade_10012_10013_mysql();
@@ -222,6 +222,55 @@ class Page_Version_UpgradeController extends Page_VersionController
         $this->upgradeErrCode = "error";
         $this->upgradeErrInfo = var_export($prepare->errorInfo(), true);
         return false;
+    }
+
+    private function upgradeSitePluginFor10013()
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+
+        $data = [
+            'pluginId' => 105,
+            'name' => "账户密码管理",
+            'logo' => "",
+            'sort' => 105,
+            'landingPageUrl' => "index.php?action=miniProgram.passport.account",
+            'landingPageWithProxy' => 1,
+            'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageAccountSafe,
+            'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingNewPage,
+            'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
+            'authKey' => "",
+            'management' => "",
+        ];
+
+        try {
+            $where = [
+                "pluginId" => 105,
+            ];
+            $this->ctx->SitePluginTable->updateProfile($data, $where);
+        } catch (Exception $e) {
+            $this->logger->error($tag, "ignore insert 105:" . $e->getMessage());
+        }
+
+
+        try {
+            $data["pluginId"] = 105;
+            $this->ctx->SitePluginTable->insertMiniProgram($data);
+        } catch (Exception $e) {
+            $this->logger->error($tag, "ignore update 105:" . $e->getMessage());
+        }
+
+        //update miniProgram management
+        try {
+            $data2 = [
+                'management' => "index.php?action=miniProgram.admin.passwordLogin",
+            ];
+            $where2 = [
+                "pluginId" => 102,
+            ];
+            $this->ctx->SitePluginTable->updateProfile($data2, $where2);
+        } catch (Exception $e) {
+            $this->logger->error($tag, "update 102 :" . $e->getMessage());
+        }
     }
 
     private function addEnableAddFriendInGroupConfig()

@@ -36,7 +36,7 @@ class InstallDBController
     {
         $this->logger = $content->getLogger();
         $this->helper = new ZalyHelper();
-        $this->curl   = new ZalyCurl();
+        $this->curl = new ZalyCurl();
     }
 
     public function doIndex()
@@ -52,10 +52,10 @@ class InstallDBController
             $newConfig = require($configFileName);
             $dbType = $newConfig['dbType'];
             $sqliteName = $newConfig['sqlite']['sqliteDBName'];
-            if($dbType == "sqlite" && $sqliteName) {
+            if ($dbType == "sqlite" && $sqliteName) {
                 $sqliteName = $this->_dbPath . "/" . $sqliteName;
                 $fileExists = file_exists($sqliteName);
-                if($newConfig['dbType'] == "sqlite" && !$fileExists) {
+                if ($newConfig['dbType'] == "sqlite" && !$fileExists) {
                     echo "sqlite DB 文件不存在, 请删除config.php文件，初始化站点";
                     return;
                 }
@@ -73,7 +73,7 @@ class InstallDBController
         if ($method == 'POST') {
             //install site
             try {
-                if(isset($_GET['for']) && $_GET['for'] == "test_connect_mysql") {
+                if (isset($_GET['for']) && $_GET['for'] == "test_connect_mysql") {
                     echo $this->testConnectMysql();
                     return;
                 }
@@ -174,12 +174,12 @@ class InstallDBController
             }
         } else if ($method == "GET") {
             //check system
-            if(isset($_GET['for']) && $_GET['for'] == 'test_curl') {
+            if (isset($_GET['for']) && $_GET['for'] == 'test_curl') {
                 echo "success";
                 return;
             }
 
-            if(isset($_GET['for']) && $_GET['for'] == 'test_curl_result') {
+            if (isset($_GET['for']) && $_GET['for'] == 'test_curl_result') {
                 echo $this->isCanUserCurl();
                 return;
             }
@@ -195,36 +195,36 @@ class InstallDBController
                 $permissionDirectory = false;
             }
 
-            $testCanWriteFile =  (dirname(dirname(__FILE__)) . "/test_write.duckchat");
+            $testCanWriteFile = (dirname(dirname(__FILE__)) . "/test_write.duckchat");
             $flag = file_put_contents($testCanWriteFile, "duckchat");
-            if($flag === false) {
+            if ($flag === false) {
                 $permissionDirectory = false;
             }
             @unlink($testCanWriteFile);
 
             //防止自己配置nginx的时候，多写一个/
-            $requestUri = isset($_SERVER['REQUEST_URI']) ? str_replace(array("\\", "//"), array("/", "/"),  $_SERVER['REQUEST_URI']) : "";
+            $requestUri = isset($_SERVER['REQUEST_URI']) ? str_replace(array("\\", "//"), array("/", "/"), $_SERVER['REQUEST_URI']) : "";
             $requestUris = explode("/", $requestUri);
             $isInstallRootPath = true;
 
-            if(count($requestUris) > 2) {
+            if (count($requestUris) > 2) {
                 $isInstallRootPath = false;
             }
-            $sampleFile = require (dirname(dirname(__FILE__)) . "/config.sample.php");
+            $sampleFile = require(dirname(dirname(__FILE__)) . "/config.sample.php");
 
-            if($isInstallRootPath === false) {
+            if ($isInstallRootPath === false) {
                 echo $this->lang == 1 ? "目前只支持根目录运行" : "Currently only the root directory is supported.";
                 return;
             }
             $params = [
                 "isPhpVersionValid" => version_compare(PHP_VERSION, "5.6.0") >= 0,
-                "isLoadOpenssl"     => extension_loaded("openssl") && false != ZalyRsa::newRsaKeyPair(2048),
-                "isLoadPDOSqlite"   => extension_loaded("pdo_sqlite"),
-                "isLoadPDOMysql"    => extension_loaded("pdo_mysql"),
-                "isLoadCurl"        => extension_loaded("curl"),
+                "isLoadOpenssl" => extension_loaded("openssl") && false != ZalyRsa::newRsaKeyPair(2048),
+                "isLoadPDOSqlite" => extension_loaded("pdo_sqlite"),
+                "isLoadPDOMysql" => extension_loaded("pdo_mysql"),
+                "isLoadCurl" => extension_loaded("curl"),
                 "isWritePermission" => $permissionDirectory,
-                "siteVersion"       => isset($sampleFile['siteVersionName']) ? $sampleFile['siteVersionName'] : "",
-                "versionCode"       => $sampleFile['siteVersionCode'],
+                "siteVersion" => isset($sampleFile['siteVersionName']) ? $sampleFile['siteVersionName'] : "",
+                "versionCode" => $sampleFile['siteVersionCode'],
                 "isInstallRootPath" => $isInstallRootPath,
             ];
             //get db file
@@ -248,10 +248,10 @@ class InstallDBController
 
     private function isCanUserCurl()
     {
-        $sampleFile = require (dirname(dirname(__FILE__)) . "/config.sample.php");
+        $sampleFile = require(dirname(dirname(__FILE__)) . "/config.sample.php");
         $testCurlUrl = $sampleFile['test_curl'];
         $testCurlUrl = ZalyHelper::getFullReqUrl($testCurlUrl);
-        $curlResult  = $this->curl->request($testCurlUrl, 'get');
+        $curlResult = $this->curl->request($testCurlUrl, 'get');
         echo $curlResult;
     }
 
@@ -450,6 +450,7 @@ class InstallDBController
                 'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingNewPage,
                 'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
                 'authKey' => "",
+                'management' => "index.php?action=miniProgram.admin.passwordLogin",
             ],
             [
                 'pluginId' => 103,

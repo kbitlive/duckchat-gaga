@@ -51,6 +51,13 @@ class MiniProgram_Admin_UpdateLoginController extends MiniProgramController
         try {
             $key = $_POST["key"];
             $value = $_POST["value"];
+
+            if ($key == LoginConfig::LOGIN_PAGE_BACKGROUND_IMAGE) {
+                $fileId = $value;
+                $imageDir = WPF_LIB_DIR . "../public/site/image/";
+                $this->ctx->File_Manager->moveImage($fileId, $imageDir);
+            }
+
             $res = $this->ctx->Site_Custom->updateLoginConfig($key, $value, "", $this->userId);
             if ($res) {
                 $result["errCode"] = "success";
