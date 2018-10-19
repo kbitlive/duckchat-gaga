@@ -123,8 +123,6 @@ abstract class Page_VersionController extends UpgradeController
         $passwordFileName = dirname(__FILE__) . "/../../" . $fileName;
 
         $result = unlink($passwordFileName);
-
-        $this->logger->error("==================", "delete file=" . $passwordFileName . " result=" . $result);
     }
 
     /**
@@ -181,8 +179,6 @@ abstract class Page_VersionController extends UpgradeController
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         $mysqlScriptPath = dirname(__DIR__) . "/../model/database-sql/site_mysql.sql";
-
-        $this->logger->error("site.install.db", "mysql script=" . $mysqlScriptPath);
 
         $_sqlContent = file_get_contents($mysqlScriptPath);//写自己的.sql文件
         $_sqlArr = explode(';', $_sqlContent);
