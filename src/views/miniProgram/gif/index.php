@@ -85,7 +85,6 @@
 
 <script type="text/javascript">
     gifs  = '<?php echo $gifs;?>';
-    console.log("gifs ====");
     gifArr = JSON.parse(gifs);
     gifLength = gifArr.length ;
     var line = 0;

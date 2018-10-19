@@ -156,7 +156,7 @@
     function getOsType() {
         var clientType;
         var u = navigator.userAgent;
-        if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+        if (u.indexOf('Android') > -1) {
             clientType =  'Android';
         } else if (u.indexOf('iPhone') > -1) {
             clientType = 'IOS';

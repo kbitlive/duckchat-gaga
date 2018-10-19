@@ -59,8 +59,8 @@ var pathname = window.location.pathname;
 originDomain = protocol+"//"+host+pathname;
 isRegister=false;
 
-showLoading($(".zaly_container"));
-
+var errorUserNeedRegister = "error.user.needRegister";
+var errorInvitationCode = "error.invitation.code";
 
 function setDocumentTitle(type)
 {
@@ -149,7 +149,12 @@ function zalyLoginConfig(results) {
 function loginFailed(result)
 {
     hideLoading();
-    zalyjsAlert(result);
+    if(result.hasOwnProperty('errorInfo')) {
+        zalyjsAlert(result.errorInfo);
+    } else {
+        zalyjsAlert(result);
+    }
+
     if(isRegister == true && enableInvitationCode == 1) {
         $(".register_button").attr("is_type", updateInvitationCodeType);
         apiPassportPasswordLogin(failedApiPassportPasswordLogin);
@@ -170,12 +175,14 @@ var loginBackgroundImage = $(".loginBackgroundImage").val();
 var loginBackgroundImageDisplay = $(".loginBackgroundImageDisplay").val();
 var siteVersionName = $(".siteVersionName").val();
 
+
 function  getCompanyCustomMade() {
     var html = template("tpl-company-custom-made", {
         loginBackgroundColor:loginBackgroundColor,
         loginBackgroundImage:loginBackgroundImage,
         loginBackgroundImageDisplay:loginBackgroundImageDisplay,
         siteVersionName:siteVersionName,
+        loginWelcomeText:loginWelcomeText,
         siteLogo:siteLogo,
     });
     html = handleHtmlLanguage(html);
@@ -456,24 +463,36 @@ function registerAndLogin()
     invitationCode = $(".register_input_code").val();
 
     if(isType == updateInvitationCodeType) {
-        showLoading($(".zaly_container"));
+        showLoading($(".site_login_div"));
         updatePassportPasswordInvitationCode();
     } else {
         var flag = checkRegisterInfo();
         if(flag == false) {
             return false;
         }
-        showLoading($(".zaly_container"));
+        showLoading($(".site_login_div"));
         zalyjsWebCheckUserExists(loginNameNotExist, loginNameExist);
     }
 }
 
-///更新邀请码，并且登录site
-function failedCallBack(result) {
+function displayUpdateInvitationSite() {
     hideLoading();
-    zalyjsAlert(result);
     $(".register_button").attr("is_type", updateInvitationCodeType);
     apiPassportPasswordLogin(failedApiPassportPasswordLogin);
+}
+///更新邀请码，并且登录site
+function failedCallBack(result) {
+    try{
+        hideLoading();
+        if(result.hasOwnProperty("errorInfo")) {
+            zalyjsAlert(result.errorInfo);
+        }else {
+            zalyjsAlert(result);
+        }
+        displayUpdateInvitationSite();
+    }catch (error){
+        displayUpdateInvitationSite();
+    }
 }
 
 function failedApiPassportPasswordLogin(results) {
@@ -484,7 +503,7 @@ function failedApiPassportPasswordLogin(results) {
 
 $(document).on("click", ".update_code_btn", function () {
     invitationCode = $(".update_input_code").val();
-    showLoading($(".zaly_container"));
+    showLoading($(".site_login_div"));
     updatePassportPasswordInvitationCode();
 });
 
@@ -584,7 +603,7 @@ function loginPassport()
         zalyjsAlert("站点公钥获取失败");
         return false;
     }
-    showLoading($(".zaly_container"));
+    showLoading($(".site_login_div"));
     apiPassportPasswordLogin(handleApiPassportPasswordLogin);
 }
 
@@ -609,29 +628,35 @@ function handleApiPassportPasswordLogin(results)
     zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailNeedRegister);
 }
 
+function displayInvitationCode()
+{
+    hideLoading();
+    if(enableInvitationCode != "1") {
+        if(isRegister == true) {
+            return false;
+        }
+        isRegister = true;
+        zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailed);
+    } else {
+        $(".zaly_login_by_pwd")[0].style.display = "none";
+        $(".zaly_site_update-invitecode")[0].style.display = "block";
+    }
+}
+
 function loginFailNeedRegister(result)
 {
     try{
-        console.log("result ===="+ result)
-
-        if(result == undefined) {
-            hideLoading();
-            if(enableInvitationCode != "1") {
-                if(isRegister == true) {
-                    return false;
-                }
-                isRegister = true;
-                zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailed);
-            } else {
-                $(".zaly_login_by_pwd")[0].style.display = "none";
-                $(".zaly_site_update-invitecode")[0].style.display = "block";
-            }
+        if(result == undefined || result.errorCode == errorUserNeedRegister ) {
+            displayInvitationCode();
             return;
         }
     }catch (error) {
-
+        displayInvitationCode();
+        return;
     }
 }
+
+
 
 function showTime()
 {

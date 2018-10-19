@@ -40,6 +40,8 @@ function zalyjsCallbackHelperConstruct() {
             var id = paramObj[callbackIdParamName]
 
             var args = paramObj["args"]
+            console.log("result args===="+ JSON.stringify(args));
+
             var callbackFunc = thiz.dict["" + id]
             if (callbackFunc != undefined) {
                 // callback.apply(undefined, args)
@@ -62,7 +64,7 @@ getOsType();
 
 function getOsType() {
     var u = navigator.userAgent;
-    if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+    if (u.indexOf('Android') > -1) {
         clientType =  'Android';
     } else if (u.indexOf('iPhone') > -1) {
         clientType = 'IOS';

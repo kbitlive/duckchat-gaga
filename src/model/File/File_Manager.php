@@ -62,7 +62,6 @@ class File_Manager
         return file_get_contents($path);
     }
 
-
     public function contentType($fileId)
     {
         if (strlen($fileId) < 1) {

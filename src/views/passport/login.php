@@ -15,18 +15,37 @@
 
 
 </head>
+
 <body>
 <div class="site-warning"></div>
-    <div style="position: relative; width:100%;height:100%;">
+    <div style="position: relative; width:100%;height:100%;" class="site_login_div">
         <?php if ($loginBackgroundImage) { ?>
-            <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>')">
+
+        <?php if ($loginBackgroundImageDisplay == 0 ) { ?>
+<!--            ///默认-->
+            <div class="zaly_container" style="background: url('../../public/img/site/<?php echo $loginBackgroundImage;?>') no-repeat;background-size: 100% 100%;">
+
+        <?php } elseif ($loginBackgroundImageDisplay == 1 ) {?>
+<!--                ///填充-->
+                <?php echo $loginBackgroundImageDisplay;?>
+
+                <div class="zaly_container" style="background: url('../../public/img/site/<?php echo $loginBackgroundImage;?>');background-size: cover;">
+            <?php } else {?>
+<!--                ///平铺-->
+             <div class="zaly_container" style="background: url('../../public/img/site/<?php echo $loginBackgroundImage;?>') repeat;">
+        <?php } ?>
+
             <?php } else { ?>
             <div class="zaly_container">
                 <?php } ?>
             </div>
-        <div style="position: absolute;background: RGBA(0, 0, 0, 0.6);top:0rem; height: 100%;width: 100%;">
-
-        </div>
+        <?php if($loginBackgroundColor) { ?>
+            <div style="position: absolute;background-color: <?php echo $loginBackgroundColor; ?>;opacity:0.4;filter:alpha(opacity=40);top:0rem; height: 100%;width: 100%;">
+            </div>
+        <?php } else { ?>
+            <div style="position: absolute;background: RGBA(0, 0, 0, 0.6);top:0rem; height: 100%;width: 100%;">
+            </div>
+        <?php } ?>
         <div style="" class="login_div_container">
                 <div class="login_container">
                     <input type="hidden" value="<?php echo $loginNameAlias;?>" class="loginNameAlias">

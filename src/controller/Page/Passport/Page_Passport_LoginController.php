@@ -54,4 +54,5 @@ class Page_Passport_LoginController extends HttpBaseController
         echo $this->display("passport_login", $params);
         return;
     }
+
 }
