@@ -88,7 +88,7 @@ abstract class BaseController extends \Wpf_Controller
 
     public function getRpcError()
     {
-        return $this->headers[TransportDataHeaderKey::HeaderErrorCode];
+        return isset($this->headers[TransportDataHeaderKey::HeaderErrorCode]) ? $this->headers[TransportDataHeaderKey::HeaderErrorCode] : false;
     }
 
     public function getRequestAction()

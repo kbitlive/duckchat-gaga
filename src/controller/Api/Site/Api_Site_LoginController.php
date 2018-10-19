@@ -71,10 +71,14 @@ class Api_Site_LoginController extends \BaseController
             $this->setRpcError($this->defaultErrorCode, "");
             $this->rpcReturn($transportData->getAction(), $response);
         } catch (Exception $ex) {
-            $errorCode = $this->zalyError->errorSiteLogin;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
             $this->ctx->Wpf_Logger->error($tag, "error=" . $ex);
-            $this->setRpcError($errorCode, $errorInfo);
+
+            $errorCode = $this->getRpcError();
+            if(!$errorCode) {
+                $errorCode = $this->zalyError->errorSiteLogin;
+                $errorInfo = $this->zalyError->getErrorInfo($errorCode);
+                $this->setRpcError($errorCode, $errorInfo);
+            }
             $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
         }
 

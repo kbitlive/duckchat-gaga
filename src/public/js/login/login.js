@@ -403,7 +403,6 @@ function registerAndLoginByKeyDown(event)
 
 function registerAndLogin()
 {
-
     var isType = $(".register_button").attr("is_type");
     invitationCode = $(".register_input_code").val();
 
@@ -499,7 +498,6 @@ function loginPassportByKeyPress(event) {
 $(document).on("input porpertychange", ".login_input_loginName", function () {
     var length = $(".login_input_loginName").val().length;
     if(Number(length)>0) {
-        console.log("pppp ===" + $(".login_input_loginName").val().length)
         $(".clear_img")[0].style.display = "block";
         $(".clearLoginName")[0].style.display = "block";
     } else {
@@ -562,48 +560,28 @@ function handleApiPassportPasswordLogin(results)
     zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailNeedRegister);
 }
 
-function loginFailNeedRegister()
+function loginFailNeedRegister(result)
 {
-    hideLoading();
+    try{
+        console.log("result ===="+ result)
 
-    if(enableInvitationCode != "1") {
-        if(isRegister == true) {
-            return false;
+        if(result == undefined) {
+            hideLoading();
+            if(enableInvitationCode != "1") {
+                if(isRegister == true) {
+                    return false;
+                }
+                isRegister = true;
+                zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailed);
+            } else {
+                $(".zaly_login_by_pwd")[0].style.display = "none";
+                $(".zaly_site_update-invitecode")[0].style.display = "block";
+            }
+            return;
         }
-        isRegister = true;
-        zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailed);
-    } else {
-        $(".zaly_login_by_pwd")[0].style.display = "none";
-        $(".zaly_site_update-invitecode")[0].style.display = "block";
+    }catch (error) {
+
     }
-}
-
-function getVerifyCode()
-{
-    if(isSending == true) {
-        return;
-    }
-    var loginName = $(".forget_input_loginName").val();
-    if(loginName.length < 1) {
-        ////TODO 换成 页面漂浮报错
-        zalyjsAlert($.i18n.map["loginNameNotNullJsTip"]);
-        return false;
-    }
-    isSending = true;
-    showTime();
-
-    var action = "api.passport.passwordFindPassword";
-    var reqData = {
-        "loginName" : loginName,
-    };
-
-    handleClientSendRequest(action, reqData, handleVerifyCode);
-}
-
-function handleVerifyCode()
-{
-    $(".forget_input_repwd_div")[0].style.display = "block";
-    $(".forget_input_pwd_div")[0].style.display = "block";
 }
 
 function showTime()
@@ -704,5 +682,4 @@ function registerForPassportPassword()
     $(".zaly_site_register-name").html(html);
     $(".zaly_site_register-name")[0].style.display = "block";
     $(".zaly_login_by_pwd")[0].style.display = "none";
-    // $(".login_custom_made")[0].style.display = "none";
 }
