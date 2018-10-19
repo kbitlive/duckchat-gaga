@@ -203,23 +203,16 @@ $(".input_login_site").bind('input porpertychange',function(){
     }
 });
 
-function registerForPassportPassword()
-{
-    setDocumentTitle("register");
-    var html = template("tpl-register-div", {
-        enableInvitationCode : enableInvitationCode
-    });
-    html = handleHtmlLanguage(html);
-    $(".zaly_site_register-pwd").html(html);
-    $(".zaly_login_by_pwd")[0].style.display = "none";
-    $(".zaly_site_register-pwd")[0].style.display = "block";
-}
 
 
 function returnRegisterDiv() {
-    $(".zaly_site_register-pwd")[0].style.display = "none";
     $(".zaly_site_register-invitecode")[0].style.display = "none";
-    $(".zaly_site_register-repwd")[0].style.display = "none";
+    $(".zaly_site_update-invitecode")[0].style.display="none";
+    $(".zaly_site_register-name")[0].style.display = "block";
+}
+
+function  returnLoginDiv() {
+    $(".zaly_site_register-invitecode")[0].style.display = "none";
     $(".zaly_site_update-invitecode")[0].style.display="none";
     $(".zaly_login_by_pwd")[0].style.display = "block";
 }
@@ -256,7 +249,7 @@ function registerForLogin()
     setDocumentTitle("login");
     // $(".input_login_site").val("");
     $(".zaly_login_by_pwd")[0].style.display = "block";
-    $(".zaly_site_register-pwd")[0].style.display = "none";
+    $(".zaly_site_register-name")[0].style.display = "none";
 }
 
 $(document).on("click", ".register_code_button", function () {
@@ -264,8 +257,8 @@ $(document).on("click", ".register_code_button", function () {
     if(flag == false) {
         return false;
     }
+    $(".zaly_site_register-name")[0].style.display = "none";
     $(".zaly_site_register-invitecode")[0].style.display = "block";
-    $(".zaly_site_register-pwd")[0].style.display = "none";
 });
 
 function checkRegisterInfo()
@@ -681,17 +674,24 @@ $(document).on("click", ".reset_pwd_button", function () {
 function handleResetPwd()
 {
     $(".zaly_login_by_pwd")[0].style.display = "block";
-    $(".zaly_site_register-pwd")[0].style.display = "none";
     $(".zaly_site_register-repwd")[0].style.display = "none";
-}
-
-function returnLoginPage()
-{
-    $(".zaly_site_register-repwd")[0].style.display = "none";
-    $(".zaly_login_by_pwd")[0].style.display = "block";
 }
 
 function clearLoginName()
 {
     $(".login_input_loginName").val("");
+}
+
+
+
+function registerForPassportPassword()
+{
+    setDocumentTitle("register");
+    var html = template("tpl-register-div", {
+        enableInvitationCode : enableInvitationCode
+    });
+    html = handleHtmlLanguage(html);
+    $(".zaly_site_register-name").html(html);
+    $(".zaly_site_register-name")[0].style.display = "block";
+    $(".zaly_login_by_pwd")[0].style.display = "none";
 }
