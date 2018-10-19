@@ -80,7 +80,7 @@ getStopDockerContainerId () {
 }
 
 checkDockerContainerIdExist () {
-	containers=` docker ps -af "name=duckchat" | awk '{print \$1}'`
+	containers=` docker ps -af "name=$duckchatName" | awk '{print \$1}'`
 	OLD_IFS="$IFS"
 	IFS=" "
 	IFS="$OLD_IFS"
