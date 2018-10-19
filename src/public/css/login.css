@@ -151,11 +151,12 @@ body,html {
     word-break: break-all;
     margin-top: 4rem;
 }
-.company_slogan a {
+.company_slogan a,
+.mobile_slogn_div a{
     font-family:PingFangSC-Medium;
     font-weight:500;
-    color:rgba(255,255,255,1);
     cursor: pointer;
+    color: rgba(153,153,153,1);
 }
 .site_version {
     font-size:1.31rem;
