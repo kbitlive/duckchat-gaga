@@ -62,12 +62,6 @@ isRegister=false;
 var errorUserNeedRegister = "error.user.needRegister";
 var errorInvitationCode = "error.invitation.code";
 
-try{
-    showLoading($(".site_login_div"));
-}catch (error) {
-
-}
-
 function setDocumentTitle(type)
 {
     switch (type)

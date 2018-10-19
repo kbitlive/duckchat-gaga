@@ -2447,24 +2447,16 @@ function displayCurrentProfile()
                         $('.quit-group')[0].style.display = "none";
                         $('.delete-group')[0].style.display = "flex";
                         $('.permission-join')[0].style.display = "flex";
-                        $(".can-guest-read-message")[0].style.display = "flex";
-                        $('.remove_member')[0].style.display = "flex";
                         $(".mute-group")[0].style.display = "flex";
                         $(".group-introduce").attr("disabled", false);
-                        $(".save_group_introduce")[0].style.display = "flex";
-                        $(".mark-down-group")[0].style.display = "flex";
                         break;
                     case GroupMemberType.GroupMemberAdmin:
                         $('.invite_people')[0].style.display = "inline";
                         $('.quit-group')[0].style.display = "flex";
                         $('.delete-group')[0].style.display = "none";
-                        $('.remove_member')[0].style.display = "none";
                         $('.permission-join')[0].style.display = "flex";
-                        $(".can-guest-read-message")[0].style.display = "none";
                         $(".mute-group")[0].style.display = "flex";
                         $(".group-introduce").attr("disabled", "disabled");
-                        $(".save_group_introduce")[0].style.display = "none";
-                        $(".mark-down-group")[0].style.display = "none";
                         $('.permission-join')[0].style.display = "none";
                         break;
                     case GroupMemberType.GroupMemberNormal:
@@ -2478,28 +2470,19 @@ function displayCurrentProfile()
                         $('.permission-join')[0].style.display = "none";
                         $('.quit-group')[0].style.display = "flex";
                         $('.delete-group')[0].style.display = "none";
-                        $('.remove_member')[0].style.display = "none";
-                        $(".can-guest-read-message")[0].style.display = "none";
                         $(".mute-group")[0].style.display = "flex";
                         $(".group-introduce").attr("disabled", "disabled");
-                        $(".save_group_introduce")[0].style.display = "none";
-                        $(".mark-down-group")[0].style.display = "none";
                         break;
                     case GroupMemberType.GroupMemberGuest:
                         $('.quit-group')[0].style.display = "none";
                         $('.delete-group')[0].style.display = "none";
-                        $('.remove_member')[0].style.display = "none";
                         $('.permission-join')[0].style.display = "none";
-                        $(".can-guest-read-message")[0].style.display = "none";
                         $(".mute-group")[0].style.display = "none";
                         $(".group-introduce").attr("disabled", "disabled");
-                        $(".save_group_introduce")[0].style.display = "none";
-                        $(".mark-down-group")[0].style.display = "none";
                         break;
                 }
 
             } catch (error) {
-
             }
 
             if(mute == 1) {
