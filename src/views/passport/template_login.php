@@ -120,9 +120,7 @@
             </div>
         </div>
         <div class="mobile_slogn_div" style="position: absolute;bottom:3rem;">
-            {{if loginWelcomeText }}
-            {{loginWelcomeText}}
-            {{else}}
+            {{if loginWelcomeText }} {{loginWelcomeText}} {{else}}
             这是一个使用DuckChat系统搭建的聊天站点，此处的描述内容可以在管理后台进行修改配置。<br/>官网：<a target="_blank" href="https://duckchat.akaxin.com">https://duckchat.akaxin.com</a>
             {{/if}}
         </div>
@@ -146,9 +144,7 @@
             {{/if}}
         </div>
         <div class="company_slogan">
-            {{if loginWelcomeText }}
-                {{loginWelcomeText}}
-            {{else}}
+            {{if loginWelcomeText }} {{loginWelcomeText}} {{else}}
                 这是一个使用DuckChat系统搭建的聊天站点，此处的描述内容可以在管理后台进行修改配置。<br/>官网：<a target="_blank" href="https://duckchat.akaxin.com">https://duckchat.akaxin.com</a>
             {{/if}}
         </div>
@@ -156,4 +152,8 @@
             {{siteVersionName}}
         </div>
     </div>
+</script>
+
+<script type="text/html" id="tpl-string">
+    {{string}}
 </script>
