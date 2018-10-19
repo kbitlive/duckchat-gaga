@@ -19,6 +19,7 @@ body,html {
 .zaly_container {
     padding:0;
     height: 100%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -26,6 +27,32 @@ body,html {
     background: url("../img/login/login_bg.png");
     background-size: 100% 100%;
     position: relative;
+}
+.login_container {
+    padding:0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: 100% 100%;
+    position: relative;
+    z-index: 9999;
+}
+.login_div_container {
+    position: absolute;
+    top:0rem;
+    right:0rem;
+    left:0rem;
+    right:0rem;
+    margin:  auto 0 ;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    height: 100%;
+}
+.login_backgroup_color {
+    width: 100%;
+    height: 100%;
 }
 .powered_by_duckchat{
     font-size:1.69rem;
@@ -461,6 +488,9 @@ input:active,
     .mobile_slogn_div {
         display: block;
     }
+    .login_container {
+        width: 100%;
+    }
     .login_div {
         position:absolute;
         top:0rem;
@@ -468,5 +498,14 @@ input:active,
         height: 100%;
         width: 100%;
     }
+    .powered_by_duckchat {
+        display: none;
+    }
 
+}
+
+@media (max-height: 300px) {
+    .mobile_slogn_div {
+        display: none;
+    }
 }

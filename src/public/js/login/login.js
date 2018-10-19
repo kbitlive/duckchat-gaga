@@ -59,6 +59,9 @@ var pathname = window.location.pathname;
 originDomain = protocol+"//"+host+pathname;
 isRegister=false;
 
+showLoading($(".zaly_container"));
+
+
 function setDocumentTitle(type)
 {
     switch (type)
@@ -182,12 +185,13 @@ getCompanyCustomMade();
 
 function getLoginPage()
 {
+    hideLoading();
     var html = template("tpl-login-div", {
         loginNameAlias: loginNameAlias,
         passwordFindWay:passwordFindWay
     });
     html = handleHtmlLanguage(html);
-    $('.login_input_div').html(html);
+    $('.login_for_size_div').html(html);
 }
 getLoginPage();
 
@@ -300,6 +304,7 @@ $(document).on("click", ".register_code_button", function () {
     if(flag == false) {
         return false;
     }
+    $(".zaly_login_by_pwd")[0].style.display = "none";
     $(".zaly_site_register-name")[0].style.display = "none";
     $(".zaly_site_register-invitecode")[0].style.display = "block";
 });

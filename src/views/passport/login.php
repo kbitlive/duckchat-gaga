@@ -17,78 +17,91 @@
 </head>
 <body>
 <div class="site-warning"></div>
-<div class="zaly_container">
-    <input type="hidden" value="<?php echo $loginNameAlias;?>" class="loginNameAlias">
-    <input type="hidden" value="<?php echo $passwordFindWay;?>" class="passwordFindWay">
-    <input type="hidden" value="<?php echo $loginWelcomeText;?>" class="loginWelcomeText">
-    <input type="hidden" value="<?php echo $loginBackgroundColor;?>" class="loginBackgroundColor">
-    <input type="hidden" value="<?php echo $loginBackgroundImage;?>" class="loginBackgroundImage">
-    <input type="hidden" value="<?php echo $loginBackgroundImageDisplay;?>" class="loginBackgroundImageDisplay">
-    <input type="hidden" value="<?php echo $siteVersionName;?>" class="siteVersionName">
-
-    <div class="container">
-        <div  class="login_custom_made">
+    <div style="position: relative; width:100%;height:100%;">
+        <?php if ($loginBackgroundImage) { ?>
+            <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>')">
+            <?php } else { ?>
+            <div class="zaly_container">
+                <?php } ?>
+            </div>
+        <div style="position: absolute;background: RGBA(0, 0, 0, 0.6);top:0rem; height: 100%;width: 100%;">
 
         </div>
-        <div  class="login_div">
-            <div class="zaly_login zaly_login_by_pwd" >
-                <div class="login_input_div" >
+        <div style="" class="login_div_container">
+                <div class="login_container">
+                    <input type="hidden" value="<?php echo $loginNameAlias;?>" class="loginNameAlias">
+                    <input type="hidden" value="<?php echo $passwordFindWay;?>" class="passwordFindWay">
+                    <input type="hidden" value="<?php echo $loginWelcomeText;?>" class="loginWelcomeText">
+                    <input type="hidden" value="<?php echo $loginBackgroundColor;?>" class="loginBackgroundColor">
+                    <input type="hidden" value="<?php echo $loginBackgroundImage;?>" class="loginBackgroundImage">
+                    <input type="hidden" value="<?php echo $loginBackgroundImageDisplay;?>" class="loginBackgroundImageDisplay">
+                    <input type="hidden" value="<?php echo $siteVersionName;?>" class="siteVersionName">
 
+                    <div class="container">
+                        <div  class="login_custom_made">
+
+                        </div>
+                        <div  class="login_div">
+                            <div class="zaly_login zaly_login_by_pwd" >
+                                <div class="login_input_div login_for_size_div" >
+
+                                </div>
+                            </div>
+
+                            <div class="zaly_login zaly_site_register zaly_site_register-name" style="display: none;">
+
+                            </div>
+
+                            <div class="zaly_login zaly_site_register zaly_site_register-invitecode" style="display: none;">
+                                <div class="back">
+                                    <img src="../../public/img/back.png" style="margin-left: 2rem; width: 3rem;height:3rem; margin-top: 2rem;cursor: pointer;" onclick="returnRegisterDiv(); return false;"/>
+                                </div>
+                                <div class="login_input_div" >
+                                    <div class="d-flex flex-row justify-content-center login-header"style="text-align: center;margin-top: 8rem;margin-bottom: 1rem;">
+                                        <span class="login_phone_tip_font" data-local-value="registerInvitationCodeTip" >输入邀请码</span>
+                                    </div>
+
+                                    <div class="code_div login_name_div_mobile" style="margin-top: 8rem;">
+                                        <input type="text" class="input_login_site register_input_code" style="margin-left: 0rem;" data-local-placeholder="enterCodePlaceholder" autocapitalize="off"   placeholder="输入邀请码"  >
+                                        <div class="line" ></div>
+                                    </div>
+
+                                    <div class="d-flex flex-row justify-content-center " >
+                                        <button type="button" class="btn register_button"  style="margin-top: 7rem;"><span class="span_btn_tip" data-local-value="registerBtnTip">注册并登录</span></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="zaly_login zaly_site_register zaly_site_update-invitecode" style="display: none;">
+                                <div class="back">
+                                    <img src="../../public/img/back.png" style="margin-left: 2rem; width: 3rem;height:3rem; margin-top: 2rem;cursor: pointer;" onclick="returnLoginDiv(); return false;"/>
+                                </div>
+                                <div class="login_input_div" >
+                                    <div class="d-flex flex-row justify-content-center login-header "style="text-align: center;margin-top: 8rem;margin-bottom: 1rem;">
+                                        <span class="login_phone_tip_font" data-local-value="registerInvitationCodeTip" >输入邀请码</span>
+                                    </div>
+
+                                    <div class="code_div login_name_div_mobile" style="margin-top: 8rem;">
+                                        <input type="text" class="input_login_site update_input_code" autocapitalize="off" style="margin-left: 0rem;" data-local-placeholder="enterCodePlaceholder" onkeydown="registerAndLoginByKeyDown(event)" placeholder="输入邀请码"  >
+                                        <div class="line" ></div>
+                                    </div>
+
+                                    <div class="d-flex flex-row justify-content-center " >
+                                        <button type="button" class="btn update_code_btn"  style="margin-top: 7rem;"><span class="span_btn_tip" data-local-value="registerBtnTip">注册并登录</span></button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div id="powered_by_duckchat" class="powered_by_duckchat">
+                        Powered by &nbsp; <a class="duckchat_website" target="_blank" href="https://duckchat.akaxin.com" style="cursor: pointer;"> Duckchat</a>
+                    </div>
                 </div>
-            </div>
-
-            <div class="zaly_login zaly_site_register zaly_site_register-name" style="display: none;">
-
-            </div>
-
-            <div class="zaly_login zaly_site_register zaly_site_register-invitecode" style="display: none;">
-                <div class="back">
-                    <img src="../../public/img/back.png" style="margin-left: 2rem; width: 3rem;height:3rem; margin-top: 2rem;cursor: pointer;" onclick="returnRegisterDiv(); return false;"/>
-                </div>
-                <div class="login_input_div" >
-                    <div class="d-flex flex-row justify-content-center login-header"style="text-align: center;margin-top: 8rem;margin-bottom: 1rem;">
-                        <span class="login_phone_tip_font" data-local-value="registerInvitationCodeTip" >输入邀请码</span>
-                    </div>
-
-                    <div class="code_div login_name_div_mobile" style="margin-top: 8rem;">
-                        <input type="text" class="input_login_site register_input_code" style="margin-left: 0rem;" data-local-placeholder="enterCodePlaceholder" autocapitalize="off"   placeholder="输入邀请码"  >
-                        <div class="line" ></div>
-                    </div>
-
-                    <div class="d-flex flex-row justify-content-center " >
-                        <button type="button" class="btn register_button"  style="margin-top: 7rem;"><span class="span_btn_tip" data-local-value="registerBtnTip">注册并登录</span></button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="zaly_login zaly_site_register zaly_site_update-invitecode" style="display: none;">
-                <div class="back">
-                    <img src="../../public/img/back.png" style="margin-left: 2rem; width: 3rem;height:3rem; margin-top: 2rem;cursor: pointer;" onclick="returnLoginDiv(); return false;"/>
-                </div>
-                <div class="login_input_div" >
-                    <div class="d-flex flex-row justify-content-center login-header "style="text-align: center;margin-top: 8rem;margin-bottom: 1rem;">
-                        <span class="login_phone_tip_font" data-local-value="registerInvitationCodeTip" >输入邀请码</span>
-                    </div>
-
-                    <div class="code_div login_name_div_mobile" style="margin-top: 8rem;">
-                        <input type="text" class="input_login_site update_input_code" autocapitalize="off" style="margin-left: 0rem;" data-local-placeholder="enterCodePlaceholder" onkeydown="registerAndLoginByKeyDown(event)" placeholder="输入邀请码"  >
-                        <div class="line" ></div>
-                    </div>
-
-                    <div class="d-flex flex-row justify-content-center " >
-                        <button type="button" class="btn update_code_btn"  style="margin-top: 7rem;"><span class="span_btn_tip" data-local-value="registerBtnTip">注册并登录</span></button>
-                    </div>
-
-                </div>
-            </div>
         </div>
-
     </div>
-
-    <div id="powered_by_duckchat" class="powered_by_duckchat">
-        Powered by &nbsp; <a class="duckchat_website" target="_blank" href="https://duckchat.akaxin.com" style="cursor: pointer;"> Duckchat</a>
-    </div>
-</div>
 
 
 <?php include(dirname(__DIR__) . '/passport/template_login.php'); ?>
