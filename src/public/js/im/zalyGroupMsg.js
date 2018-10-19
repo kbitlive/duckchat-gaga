@@ -2178,12 +2178,20 @@ $(document).on("click", ".contact-row-u2-profile", function () {
     if(userId == undefined) {
         return false;
     }
+    sendFriendProfileReq(userId, handleGetFriendProfile);
+
     localStorage.setItem(chatSessionIdKey, userId);
     localStorage.setItem(userId, U2_MSG);
     $(".user-image-for-add").attr("class", "user-image-for-add");
     $(".user-image-for-add").attr("src", "../../public/img/msg/default_user.png");
-    sendFriendProfileReq(userId);
     insertU2Room($(this), userId);
+
+    var friendName = $('.profile_nickname_'+userId).html();
+    friendName = template("tpl-string", {
+        string : friendName
+    });
+    $(".chatsession-title").html(friendName);
+
 });
 
 function getFriendProfile(userId, isForceSend, callback)
@@ -2309,12 +2317,6 @@ function updateInfo(profileId, profileType)
     }catch (error) {
 
     }
-    var subName = name;
-    if(name!=undefined && name.length>10) {
-        subName = name.substr(0, 8) + "...";
-    }
-    $(".nickname_"+profileId).html(name);
-    $(".chatsession-row .nickname_"+profileId).html(subName);
 
     try{
         if(mute>0) {

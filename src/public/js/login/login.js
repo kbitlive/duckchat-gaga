@@ -370,16 +370,6 @@ function checkRegisterInfo()
         }
     }
 
-    if(registerEmail == "" || registerEmail == undefined || registerEmail.length<0) {
-        $(".register_input_email_failed")[0].style.display = "block";
-        if(isFocus == false) {
-            $("#register_input_email").focus();
-            $(".register_input_nickname_failed")[0].style.display = "none";
-            isFocus = true;
-        }
-    }
-
-
     if(isFocus == true) {
         return false;
     }
@@ -389,10 +379,7 @@ function checkRegisterInfo()
         zalyjsAlert($.i18n.map["passwordIsNotSameJsTip"]);
         return false;
     }
-    if(!validateEmail(registerEmail)) {
-        zalyjsAlert($.i18n.map["emailJsTip"]);
-        return false;
-    }
+
     loginName = registerLoginName;
     loginPassword = registerPassword;
     return true;
