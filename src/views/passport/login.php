@@ -23,16 +23,16 @@
 
         <?php if ($loginBackgroundImageDisplay == 0 ) { ?>
 <!--            ///默认-->
-            <div class="zaly_container" style="background: url('../../public/img/site/<?php echo $loginBackgroundImage;?>') no-repeat;background-size: 100% 100%;">
+            <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>') no-repeat;background-size: 100% 100%;">
 
         <?php } elseif ($loginBackgroundImageDisplay == 1 ) {?>
 <!--                ///填充-->
                 <?php echo $loginBackgroundImageDisplay;?>
 
-                <div class="zaly_container" style="background: url('../../public/img/site/<?php echo $loginBackgroundImage;?>');background-size: cover;">
+                <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>');background-size: cover;">
             <?php } else {?>
 <!--                ///平铺-->
-             <div class="zaly_container" style="background: url('../../public/img/site/<?php echo $loginBackgroundImage;?>') repeat;">
+             <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>') repeat;">
         <?php } ?>
 
             <?php } else { ?>
@@ -55,6 +55,8 @@
                     <input type="hidden" value="<?php echo $loginBackgroundImage;?>" class="loginBackgroundImage">
                     <input type="hidden" value="<?php echo $loginBackgroundImageDisplay;?>" class="loginBackgroundImageDisplay">
                     <input type="hidden" value="<?php echo $siteVersionName;?>" class="siteVersionName">
+                    <input type="hidden" value="<?php echo $siteName;?>" class="siteName">
+                    <input type="hidden" value="<?php echo $siteLogo;?>" class="siteLogo">
 
                     <div class="container">
                         <div  class="login_custom_made">

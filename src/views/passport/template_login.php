@@ -9,7 +9,7 @@
         <div class="d-flex flex-row justify-content-left login_name_div margin-top2 login_name_div_mobile" >
             <image src="../../public/img/login/loginName.png" class="img"/>
             {{if loginNameAlias }}
-            <input type="text" id="register_input_loginName"  datatype="s"  class="input_login_site  register_input_loginName"   autocapitalize="off"   placeholder="{{loginNameAlias}}以字母、数字、下划线，1-16个字符" >
+            <input type="text" id="register_input_loginName"  datatype="s"  class="input_login_site  register_input_loginName"   autocapitalize="off"   placeholder="{{loginNameAlias}}" >
             {{else}}
             <input type="text" id="register_input_loginName"  datatype="s"  class="input_login_site  register_input_loginName" data-local-placeholder="registerLoginNamePlaceholder"  autocapitalize="off"   placeholder="用户名以字母、数字、下划线，1-16个字符" >
             {{/if}}
@@ -130,14 +130,14 @@
     <div class="company_custom_made">
         <div>
             {{if siteLogo}}
-                {{siteLogo}}
+             <img src="{{siteLogo}}" class="company_logo">
             {{else }}
                 <img src="../../public/img/login/logo.png" class="company_logo">
             {{/if}}
         </div>
         <div>
-            {{if loginNameAlias }}
-            <span class="company_name">{{loginNameAlias}}</span>
+            {{if siteName }}
+            <span class="company_name">{{siteName}}</span>
             {{else}}
             <span class="company_name">Duckchat</span>
             {{/if}}

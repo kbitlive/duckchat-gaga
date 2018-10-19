@@ -40,6 +40,7 @@ invitationCode='';
 nickname="";
 allowShareRealname=0;
 siteLogo="";
+siteName="";
 preSessionId="";
 secondNum  = 120;
 isSending  = false;
@@ -141,7 +142,7 @@ function zalyLoginConfig(results) {
     enableInvitationCode = siteConfig.enableInvitationCode;
     enableRealName=siteConfig.enableRealName;
     sitePubkPem = siteConfig.sitePubkPem;
-    siteLogo = siteConfig.logo;
+
 }
 
 
@@ -174,7 +175,8 @@ var loginBackgroundColor = $(".loginBackgroundColor").val();
 var loginBackgroundImage = $(".loginBackgroundImage").val();
 var loginBackgroundImageDisplay = $(".loginBackgroundImageDisplay").val();
 var siteVersionName = $(".siteVersionName").val();
-
+var siteLogo =  $(".siteLogo").val();
+var siteName = $(".siteName").val();
 
 function  getCompanyCustomMade() {
     var html = template("tpl-company-custom-made", {
@@ -184,6 +186,7 @@ function  getCompanyCustomMade() {
         siteVersionName:siteVersionName,
         loginWelcomeText:loginWelcomeText,
         siteLogo:siteLogo,
+        siteName:siteName,
     });
     html = handleHtmlLanguage(html);
     $(".login_custom_made").html(html);
@@ -195,7 +198,6 @@ function getLoginPage()
     hideLoading();
     var html = template("tpl-login-div", {
         loginNameAlias: loginNameAlias,
-        passwordFindWay:passwordFindWay
     });
     html = handleHtmlLanguage(html);
     $('.login_for_size_div').html(html);
@@ -745,7 +747,9 @@ function registerForPassportPassword()
 {
     setDocumentTitle("register");
     var html = template("tpl-register-div", {
-        enableInvitationCode : enableInvitationCode
+        enableInvitationCode : enableInvitationCode,
+        loginNameAlias:loginNameAlias,
+        passwordFindWay:passwordFindWay
     });
     html = handleHtmlLanguage(html);
     $(".zaly_site_register-name").html(html);
