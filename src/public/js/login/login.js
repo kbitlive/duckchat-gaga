@@ -416,13 +416,6 @@ function checkRegisterInfo()
         isFocus = true;
     }
 
-    if(!isLoginName(registerLoginName) || registerLoginName.length>16) {
-        $("#register_input_loginName").focus();
-        $(".register_input_loginName_failed")[0].style.display = "block";
-        isFocus = true;
-    }
-
-
     if(registerPassword == "" || registerPassword == undefined || registerPassword.length<5 || registerPassword.length>20 || !isPassword(registerPassword)) {
         $(".register_input_pwd_failed")[0].style.display = "block";
         if (isFocus == false) {
