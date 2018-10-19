@@ -41,7 +41,6 @@ class MiniProgram_Admin_UpdateLoginController extends MiniProgramController
      */
     protected function doRequest()
     {
-        //update login config
 
         //response
         $result = [
@@ -49,11 +48,9 @@ class MiniProgram_Admin_UpdateLoginController extends MiniProgramController
 
         ];
 
-
         try {
             $key = $_POST["key"];
             $value = $_POST["value"];
-            $this->logger->error("==============", var_export($_POST, true));
             $res = $this->ctx->Site_Custom->updateLoginConfig($key, $value, "", $this->userId);
             if ($res) {
                 $result["errCode"] = "success";
