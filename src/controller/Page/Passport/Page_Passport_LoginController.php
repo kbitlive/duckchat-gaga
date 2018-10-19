@@ -18,6 +18,9 @@ class Page_Passport_LoginController extends HttpBaseController
             $isDuckchat = 1;
         }
 
+        $siteLogo = $this->siteConfig[SiteConfig::SITE_LOGO];
+        $siteName = $this->siteConfig[SiteConfig::SITE_NAME];
+
         $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
 
         $loginNameAliasConfig = $loginConfig[LoginConfig::LOGIN_NAME_ALIAS];
@@ -40,14 +43,16 @@ class Page_Passport_LoginController extends HttpBaseController
         $siteVersionName = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionNameKey);
 
         $params = [
+            'siteName' => $siteName,
+            'siteLogo' => $this->ctx->File_Manager->getCustomPathByFileId($siteLogo),
+            'siteVersionName' => $siteVersionName,
             'isDuckchat' => $isDuckchat,
             'loginNameAlias' => $loginNameAlias,
             'passwordFindWay' => $passwordFindWay,
             'loginWelcomeText' => $loginWelcomeText,
             'loginBackgroundColor' => $loginBackgroundColor,
-            'loginBackgroundImage' => $loginBackgroundImage,
+            'loginBackgroundImage' => $this->ctx->File_Manager->getCustomPathByFileId($loginBackgroundImage),
             'loginBackgroundImageDisplay' => $loginBackgroundImageDisplay,
-            'siteVersionName' => $siteVersionName,
         ];
 
         $this->logger->error("===============", var_export($params, true));

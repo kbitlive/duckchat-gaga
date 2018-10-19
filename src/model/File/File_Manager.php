@@ -411,6 +411,9 @@ class File_Manager
 
     public function getCustomPathByFileId($fileId)
     {
+        if (empty($fileId)) {
+            return '';
+        }
         $path = "../../public/site/image/$fileId";
         return $path;
     }

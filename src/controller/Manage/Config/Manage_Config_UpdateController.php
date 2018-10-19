@@ -41,6 +41,12 @@ class Manage_Config_UpdateController extends Manage_CommonController
                 }
             }
 
+            if ($configKey == SiteConfig::SITE_LOGO) {
+                $fileId = $configValue;
+                $imageDir = WPF_LIB_DIR . "../public/site/image/";
+                $this->ctx->File_Manager->moveImage($fileId, $imageDir);
+            }
+
             $result = $this->updateSiteConfig($configKey, $configValue);
             if ($result) {
                 $response["errCode"] = "success";
