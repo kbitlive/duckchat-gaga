@@ -88,8 +88,6 @@ class Api_Friend_SearchController extends BaseController
     {
         $user = $this->ctx->SiteUserTable->getUserByPhoneId($phoneId);
 
-        $this->ctx->Wpf_Logger->info("api.friend.search.phoneId", "user==========" . json_encode($user));
-
         return $this->getPublicProfileFromUser($user);
     }
 
@@ -98,8 +96,6 @@ class Api_Friend_SearchController extends BaseController
     {
         $loginNameLowercase = strtolower($loginName);
         $user = $this->ctx->SiteUserTable->getUserByLoginNameLowercase($loginNameLowercase);
-
-        $this->ctx->Wpf_Logger->info("api.friend.search.loginName", "user==========" . json_encode($user));
 
         return $this->getPublicProfileFromUser($user);
     }
@@ -130,7 +126,6 @@ class Api_Friend_SearchController extends BaseController
     private function getUserFriendInfo($userId, $friendUserId)
     {
         $friendInfo = $this->ctx->SiteUserFriendTable->queryUserFriend($userId, $friendUserId);
-        $this->ctx->Wpf_Logger->info("api.friend.search.loginName", "friend info==========" . json_encode($friendInfo));
         return $friendInfo;
     }
 
