@@ -55,8 +55,6 @@ class Page_Passport_LoginController extends HttpBaseController
             'loginBackgroundImageDisplay' => $loginBackgroundImageDisplay,
         ];
 
-        $this->logger->error("===============", var_export($params, true));
-
         echo $this->display("passport_login", $params);
         return;
     }

@@ -17,8 +17,6 @@ class Manage_Group_SearchController extends Manage_CommonController
 
         $value = $_POST['searchValue'];
 
-        $this->logger->error("===============", "search group value=" . $value);
-
         if (!isset($value)) {
             throw new Exception("search empty value");
         }
@@ -42,8 +40,6 @@ class Manage_Group_SearchController extends Manage_CommonController
             $pinyin = new \Overtrue\Pinyin\Pinyin();
             $nameInLatin = $pinyin->permalink($groupName, "");
             $groups = $this->ctx->SiteGroupTable->getGroupProfileByNameInLatin($nameInLatin);
-
-            $this->logger->error("============", "groups profile=" . var_export($groups, true));
 
             return $groups;
         } catch (Exception $e) {
