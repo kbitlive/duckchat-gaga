@@ -410,7 +410,7 @@ function checkRegisterInfo()
     registerEmail = $(".register_input_email").val();
     isFocus = false;
 
-    if(registerLoginName == "" || registerLoginName == undefined || registerLoginName.length<0 ) {
+    if(registerLoginName == "" || registerLoginName == undefined || registerLoginName.length<0 || registerLoginName.length>24 ) {
         $("#register_input_loginName").focus();
         $(".register_input_loginName_failed")[0].style.display = "block";
         isFocus = true;
