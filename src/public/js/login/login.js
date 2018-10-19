@@ -184,14 +184,82 @@ function  getCompanyCustomMade() {
         loginBackgroundImage:loginBackgroundImage,
         loginBackgroundImageDisplay:loginBackgroundImageDisplay,
         siteVersionName:siteVersionName,
-        loginWelcomeText:loginWelcomeText,
         siteLogo:siteLogo,
         siteName:siteName,
     });
+
     html = handleHtmlLanguage(html);
     $(".login_custom_made").html(html);
+   if(loginWelcomeText) {
+       var text = template("tpl-string", {
+           string:loginWelcomeText
+       })
+       var text = handleLinkContentText(text);
+       $(".company_slogan").html(text);
+   }
 }
 getCompanyCustomMade();
+
+
+//replace \n from html
+function trimHtmlContentBr(str)
+{
+    html = str.replace(/\\n/g,"<br/>");
+    return html;
+}
+
+function handleLinkContentText(str)
+{
+    str = trimHtmlContentBr(str);
+
+    var reg=/(blob:)?((http|ftp|https|duckchat|zaly):\/\/)?[\w\-_]+(\:[0-9]+)?(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
+    var arr = str.match(reg);
+    if(arr == null) {
+        return str;
+    }
+
+    var length = arr.length;
+    for(var i=0; i<length;i++) {
+        var urlLink = arr[i];
+        if(urlLink.indexOf("blob:") == -1 &&
+            ( IsURL (urlLink)
+                || urlLink.indexOf("http://") != -1
+                || urlLink.indexOf("https://") != -1
+                || urlLink.indexOf("ftp://") != -1
+                || urlLink.indexOf("zaly://") != -1
+                || urlLink.indexOf("duckchat://") != -1
+            )
+        ) {
+            var newUrlLink = urlLink;
+            if(urlLink.indexOf("://") == -1) {
+                newUrlLink = "http://"+urlLink;
+            }
+            var urlLinkHtml = "<a href='"+newUrlLink+"'target='_blank'>"+urlLink+"</a>";
+            str = str.replace(urlLink, urlLinkHtml);
+        }
+    }
+
+    return str;
+}
+
+function IsURL (url) {
+    var urls = url.split("?");
+    var urlAndSchemAndPort = urls.shift();
+    var urlAndPort = urlAndSchemAndPort.split("://").pop();
+    url = urlAndPort.split(":").shift();
+    var ipRegex = '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
+    var ipReg=new RegExp(ipRegex);
+    if(!ipReg.test(url)) {
+        var domainSuffix = url.split(".").pop();
+        var urlDomain = "com,cn,net,xyz,top,tech,org,gov,edu,ink,red,int,mil,pub,biz,CC,name,TV,mobi,travel,info,tv,pro,coop,aero,me,app,onlone,shop" +
+            ",club,store,life,global,live,museum,jobs,cat,tel,bid,pub,foo,site,";
+        if(urlDomain.indexOf(domainSuffix) != -1) {
+            return true;
+        }
+        return false;
+    }
+    return true;
+}
 
 function getLoginPage()
 {
@@ -200,10 +268,17 @@ function getLoginPage()
         loginNameAlias: loginNameAlias,
         siteLogo:siteLogo,
         siteName:siteName,
-        loginWelcomeText:loginWelcomeText,
     });
     html = handleHtmlLanguage(html);
     $('.login_for_size_div').html(html);
+
+    if(loginWelcomeText) {
+        var text = template("tpl-string", {
+            string:loginWelcomeText
+        })
+        var text = handleLinkContentText(text);
+        $(".mobile_slogn_div").html(text);
+    }
 }
 getLoginPage();
 

@@ -970,7 +970,7 @@ function trimMsgContentBr(html)
 function handleMsgContentText(str)
 {
     str = trimMsgContentBr(str);
-    var reg=/(blob:)?((http|ftp|https|duckchat):\/\/)?[\w\-_]+(\:[0-9]+)?(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
+    var reg=/(blob:)?((http|ftp|https|duckchat|zaly):\/\/)?[\w\-_]+(\:[0-9]+)?(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
     var arr = str.match(reg);
     if(arr == null) {
         return str;
@@ -984,6 +984,7 @@ function handleMsgContentText(str)
                 || urlLink.indexOf("http://") != -1
                 || urlLink.indexOf("https://") != -1
                 || urlLink.indexOf("ftp://") != -1
+                || urlLink.indexOf("zaly://") != -1
                 || urlLink.indexOf("duckchat://") != -1
             )
         ) {
