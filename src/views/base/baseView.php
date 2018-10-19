@@ -54,8 +54,8 @@
                             </div>
                             <div class="group-list-div" data-local-value="groupListTip">群聊列表</div>
                         </div>
-                        <div style="position: absolute;width: 100%;overflow-y: scroll;margin:0 auto;">
-                            <div class="group-list-contact-row" style="position: relative;">
+                        <div style="position: absolute;width: 100%;margin:0 auto;">
+                            <div class="group-list-contact-row" style="overflow-y: scroll;position: relative;">
                             </div>
                         </div>
                 </div>
@@ -79,7 +79,7 @@
                             </div>
                             <div class="friend-list-div" data-local-value="friendListTip">好友列表</div>
                     </div>
-                    <div style="width: 28.14rem;position: absolute;overflow-y: scroll;margin:0 auto;">
+                    <div style="width: 28.14rem;position: absolute;margin:0 auto;">
                         <div class="friend-list-contact-row" style="overflow-y: scroll;position: relative">
                         </div>
                     </div>

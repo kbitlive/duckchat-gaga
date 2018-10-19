@@ -662,8 +662,9 @@ function getMsgTimeByMsg(time)
 {
     time = Number(time);
     var date = new Date(time); //获取一个时间对象
+
     var minutes =  date.getMinutes()>=10 ? date.getMinutes():"0"+date.getMinutes();
-    var month = date.getMonth() >=10 ? date.getMonth() : "0"+date.getMonth();
+    var month = date.getMonth() >= 9 ? (date.getMonth()+1) : "0"+ (date.getMonth()+1);
 
     return date.getFullYear() + '-' + month + '-' +date.getDate() + " " + date.getHours()+":"+minutes;  // 获取完整的年份(4位,1970)
 }

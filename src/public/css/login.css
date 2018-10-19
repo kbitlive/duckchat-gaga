@@ -19,23 +19,160 @@ body,html {
 .zaly_container {
     padding:0;
     height: 100%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: rgba(76,59,177,1);
-    background-image: url("../img/login_bg.png");
+    background: url("../img/login/login_bg.png");
+    background-size: 100% 100%;
     position: relative;
 }
+.login_container {
+    padding:0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: 100% 100%;
+    position: relative;
+    z-index: 9999;
+}
+.login_div_container {
+    position: absolute;
+    top:0rem;
+    right:0rem;
+    left:0rem;
+    right:0rem;
+    margin:  auto 0 ;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    height: 100%;
+}
+.login_backgroup_color {
+    width: 100%;
+    height: 100%;
+}
+.powered_by_duckchat{
+    font-size:1.69rem;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(223,223,223,1);
+    position: absolute;
+    bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+.powered_by_duckchat a {
+    font-size:1.69rem;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(223,223,223,1);
+    text-decoration: none;
+}
+.powered_by_duckchat a:hover {
+    text-decoration: white;
+}
+
+.container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
 .zaly_login{
-    width:75rem;
-    height:47rem;
+    width:37.52rem;
+    height:48.78rem;
     background:rgba(255,255,255,1);
-    /*box-shadow:0rem 0.83rem 1.25rem 0.42rem rgba(74,56,180,1);*/
-    border-radius:0.83rem;
+    box-shadow:0rem 0.94rem 7.04rem 0.47rem rgba(0,0,0,0.2);
+    border-radius:0.94rem;
     position:relative;
     overflow: hidden;
 }
 
+.login_custom_made {
+    width:80.68rem;
+    height:43.15rem;
+    background:rgba(76,59,177,0.9);
+    border-radius:0.56rem;
+    margin:0 auto;
+}
+.login_div {
+    position:absolute;
+    top:-3rem;
+    right:3rem;
+    height: 100%;
+}
+.company_logo {
+    width: 8rem;
+    height:7rem;
+    margin-top:6rem ;
+}
+.mobile_logo {
+    margin-top: 3rem;
+    width: 6rem;
+    height:6rem;
+}
+.mobile_logo_div {
+    display: none;
+}
+.mobile_slogn_div {
+    font-size:1.31rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(153,153,153,1);
+    line-height:1.31rem;
+    word-break: break-all;
+    display: none;
+}
+.company_custom_made {
+    margin-left: 4rem;
+    width: 32rem;
+    position: relative;
+    height:100%;
+}
+.company_name {
+    height:3.1rem;
+    font-size:2.25rem;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(255,255,255,1);
+    line-height:3.1rem;
+    margin-top: 1rem;
+}
+.company_slogan {
+    font-size:1.31rem;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(255,255,255,1);
+    line-height:3rem;
+    width:31.52rem;
+    word-break: break-all;
+    margin-top: 4rem;
+}
+.company_slogan a {
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(255,255,255,1);
+    cursor: pointer;
+}
+.site_version {
+    font-size:1.31rem;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(255,255,255,1);
+    line-height:1.31rem;
+    margin-top: 7rem;
+    position: absolute;
+    bottom: 5rem;
+    left:0rem;
+    right:0rem;
+}
+
+.login-header {
+    margin-top: 7rem;
+}
 .login_input_div {
     width: 28rem;
     height:100%;
@@ -51,7 +188,7 @@ body,html {
     font-size:1.88rem;
     font-family:PingFangSC-Regular;
     color:rgba(20,16,48,1);
-    margin-top: 5rem;
+    margin-top: 6rem;
 }
 
 .margin-top4 {
@@ -101,10 +238,16 @@ body,html {
     cursor: pointer;
 }
 
+.clearLoginName {
+    display: none;
+    width: 2rem;
+    height:2rem;
+    cursor: pointer;
+}
 .register_span_div {
     display: flex;
     margin-top: 1rem;
-    justify-content: space-between;
+    justify-content: center;
     font-size:1.69rem;
     font-family:PingFangSC-Regular;
     color:rgba(76,59,177,1);
@@ -237,7 +380,7 @@ input:active,
 .login_button:hover,
 .login_button:focus,
 .login_button:active{
-    margin-top: 5rem;
+    margin-top: 7rem;
     width:28.14rem;
     height:4.69rem;
     background:rgba(76,59,177,1);
@@ -250,7 +393,7 @@ input:active,
 .register_next_btn:hover,
 .register_next_btn:focus,
 .register_next_btn:active{
-    margin-top: 6rem;
+    margin-top: 7rem;
     width:28.14rem;
     height:4.69rem;
     background:rgba(216,216,216,1);
@@ -284,7 +427,7 @@ input:active,
 
 .line {
     width:28.14rem;
-    height:0.1rem;
+    height:0.09rem;
     margin:0px auto;
     background:rgba(153,153,153,1);
     border-radius:0.42rem;
@@ -322,6 +465,14 @@ input:active,
         position: relative;
         overflow: hidden;
     }
+    .container {
+        height: 100%;
+        width: 100%;
+    }
+    .mobile_logo_div {
+        display: flex;
+        justify-content: center;
+    }
     .back {
         display:none;
     }
@@ -332,5 +483,36 @@ input:active,
     .login_name_div_mobile {
         margin-top:7rem;
     }
+    .login_custom_made {
+        display: none;
+    }
+    .login_name_div {
+        margin-top: 3rem;
+    }
+    .login_button {
+        margin-top: 5rem;
+    }
+    .mobile_slogn_div {
+        display: block;
+    }
+    .login_container {
+        width: 100%;
+    }
+    .login_div {
+        position:absolute;
+        top:0rem;
+        right:0rem;
+        height: 100%;
+        width: 100%;
+    }
+    .powered_by_duckchat {
+        display: none;
+    }
 
+}
+
+@media (max-height: 300px) {
+    .mobile_slogn_div {
+        display: none;
+    }
 }

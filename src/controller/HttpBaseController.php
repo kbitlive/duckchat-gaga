@@ -255,6 +255,11 @@ abstract class HttpBaseController extends \Wpf_Controller
 
     public function display($viewName, $params = [])
     {
+        try{
+            $siteName = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_NAME);
+        }catch (Exception $ex) {
+            $siteName = "";
+        }
         // 自己实现实现一下这个方法，加载view目录下的文件
         $params['session_id'] = $this->sessionId;
         $params['user_id'] = $this->userId;
@@ -269,7 +274,7 @@ abstract class HttpBaseController extends \Wpf_Controller
         $params['jumpRoomType'] = $this->jumpRoomType;
         $params['jumpRelation'] = $this->jumpRelation;
         $params['versionCode'] = ZalyConfig::getConfig("siteVersionCode");
-
+        $params['siteName'] = $siteName;
         return parent::display($viewName, $params);
     }
 

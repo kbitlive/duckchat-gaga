@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>login</title>
     <!-- Latest compiled and minified CSS -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -156,7 +156,7 @@
     function getOsType() {
         var clientType;
         var u = navigator.userAgent;
-        if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+        if (u.indexOf('Android') > -1) {
             clientType =  'Android';
         } else if (u.indexOf('iPhone') > -1) {
             clientType = 'IOS';

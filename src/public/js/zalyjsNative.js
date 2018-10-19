@@ -32,7 +32,12 @@ function zalyjsCallbackHelperConstruct() {
     //
     this.callback = function(param) {
         try {
-            param = atob(param);
+           try{
+               param = decodeURIComponent(escape(window.atob(param)));
+           }catch (error) {
+               param = window.atob(param);
+           }
+
             // js json for \n
             param = param.replace(/\n/g,"\\\\n");
 
@@ -62,7 +67,7 @@ getOsType();
 
 function getOsType() {
     var u = navigator.userAgent;
-    if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+    if (u.indexOf('Android') > -1) {
         clientType =  'Android';
     } else if (u.indexOf('iPhone') > -1) {
         clientType = 'IOS';
@@ -151,23 +156,36 @@ function loginPcClient(messageBody, callbackName)
     zalyjsSiteLoginMessageBody.refererUrl = refererUrl;
     zalyjsSiteLoginMessageBody.callbackName = callbackName;
 
+    if(!refererUrl) {
+        refererUrl = "./index.php";
+    }
+
     if(messageBody.isRegister == false)  {
-        var jsUrl = "./index.php?action=page.js&loginName="+messageBody.loginName+"&success_callback=zalyjsWebLoginSuccess&fail_callback="+callbackName;
+        if(refererUrl.indexOf("?") > -1) {
+            var jsUrl = refererUrl + "&action=page.js&loginName="+messageBody.loginName+"&success_callback=zalyjsWebLoginSuccess&fail_callback="+callbackName;
+        } else{
+            var jsUrl = refererUrl + "?action=page.js&loginName="+messageBody.loginName+"&success_callback=zalyjsWebLoginSuccess&fail_callback="+callbackName;
+        }
         addJsByDynamic(jsUrl);
         return;
     }
     zalyjsWebLoginSuccess();
 }
 
+
 ////登录成功后，web回调
 function zalyjsWebLoginSuccess()
 {
     var refererUrl = zalyjsSiteLoginMessageBody.refererUrl;
+    if(!refererUrl) {
+        refererUrl = "./index.php";
+    }
+
     if(refererUrl) {
         if(refererUrl.indexOf("?") > -1) {
-            var refererUrl = zalyjsSiteLoginMessageBody.refererUrl+"&preSessionId="+zalyjsSiteLoginMessageBody.sessionid+"&isRegister="+zalyjsSiteLoginMessageBody.isRegister;
+            var refererUrl = refererUrl+"&preSessionId="+zalyjsSiteLoginMessageBody.sessionid+"&isRegister="+zalyjsSiteLoginMessageBody.isRegister;
         } else {
-            var refererUrl = zalyjsSiteLoginMessageBody.refererUrl+"?preSessionId="+zalyjsSiteLoginMessageBody.sessionid+"&isRegister="+zalyjsSiteLoginMessageBody.isRegister;
+            var refererUrl = refererUrl+"?preSessionId="+zalyjsSiteLoginMessageBody.sessionid+"&isRegister="+zalyjsSiteLoginMessageBody.isRegister;
         }
         refererUrl = refererUrl + " &fail_callback="+zalyjsSiteLoginMessageBody.callbackName+"&&success_callback=zalyjsWebSuccessCallBack";
         addJsByDynamic(refererUrl);

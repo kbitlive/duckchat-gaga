@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title><?php echo $siteName;?></title>
     <link rel="stylesheet" href="../../public/css/zaly-action-row.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" href="../../public/css/zaly_contact.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" href="../../public/css/zaly_apply_friend_list.css?_version=<?php echo $versionCode?>" />
@@ -14,6 +14,7 @@
     <script src="../../public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
+    <script src="../../public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
 
     <link class="icon" rel="icon" href="favicon.ico?_version=<?php echo $versionCode?>" type="image/png" />
 

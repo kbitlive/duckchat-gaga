@@ -420,7 +420,7 @@
             <input type="text"    style="padding: 0rem;" class="loginName create_group_box_div_input"  value="{{loginName}}" disabled>
         </div>
 
-        <div style="text-align: center;margin:0 auto;width: 34rem; height:1px;background:rgba(223,223,223,1);" ></div>
+        <div style="text-align: center;margin:0.12rem auto;width: 34rem; height:1px;background:rgba(223,223,223,1);" ></div>
         <div class="d-flex flex-row justify-content-center">
             <div class="self-qrcode" id="logout" >
                 <span class="logout-span" id="logout-span" data-local-value="logoutTip" onclick="logout(event)">退出</span>

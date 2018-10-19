@@ -42,13 +42,6 @@ class Api_Group_ProfileController extends Api_Group_BaseController
             //get group profile
             $groupProfile = $this->getGroupProfile($groupId);
 
-            $canAddFriend = $groupProfile["canAddFriend"];
-
-            //get site config
-            $config = $this->siteConfig;
-            $enableAddFriendInGroup = $config[SiteConfig::SITE_ENABLE_ADD_FRIEND_IN_GROUP];
-            $groupProfile["canAddFriend"] = $canAddFriend && $enableAddFriendInGroup;
-
             $response = $this->buildApiGroupProfileResponse($groupProfile);
 
             $this->returnSuccessRPC($response);
@@ -64,6 +57,13 @@ class Api_Group_ProfileController extends Api_Group_BaseController
             $response = new \Zaly\Proto\Site\ApiGroupProfileResponse();
             return $response;
         }
+
+        $canAddFriend = $group["canAddFriend"];
+
+        //get site config
+        $config = $this->siteConfig;
+        $enableAddFriendInGroup = $config[SiteConfig::SITE_ENABLE_ADD_FRIEND_IN_GROUP];
+        $groupProfile["canAddFriend"] = $canAddFriend && $enableAddFriendInGroup;
 
         $memberType = !$group['memberType'] ? \Zaly\Proto\Core\GroupMemberType::GroupMemberGuest : $group['memberType'];
         $groupProfile = $this->getPublicGroupProfile($group);
