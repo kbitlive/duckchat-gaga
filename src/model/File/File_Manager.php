@@ -16,7 +16,7 @@ class File_Manager
         "video/mp4" => "mp4",
         'application/pdf' => "pdf",
         'application/x-rar-compressed' => "rar",
-        'application/zip'=> "zip",
+        'application/zip' => "zip",
         'application/msword' => "word",
         'application/xml' => "xml",
         'application/vnd.ms-powerpoint' => "ppt"
@@ -58,7 +58,7 @@ class File_Manager
         $dirName = $fileName[0];
         $fileId = $fileName[1];
 
-        $path = $this->getPath($dirName, $fileId,false);
+        $path = $this->getPath($dirName, $fileId, false);
         return file_get_contents($path);
     }
 
@@ -113,7 +113,7 @@ class File_Manager
         if (false == empty($ext)) {
             $fileName = $fileName . "." . $ext;
         }
-        $fileName = $fileName.$this->defaultSuffix;
+        $fileName = $fileName . $this->defaultSuffix;
         rename($path, $this->getPath($dateDir, $fileName));
         return $dateDir . "-" . $fileName;
     }
@@ -373,12 +373,47 @@ class File_Manager
      */
     public function judgeFileSize($fileSize, $maxFileSize)
     {
-        if($maxFileSize ) {
-            $maxFileSizeBytes = $maxFileSize*1024*1024;
-            if($maxFileSizeBytes < $fileSize) {
+        if ($maxFileSize) {
+            $maxFileSizeBytes = $maxFileSize * 1024 * 1024;
+            if ($maxFileSizeBytes < $fileSize) {
                 return false;
             }
         }
         return true;
     }
+
+    /**
+     * 通过file，把文件移动到指定目录
+     *
+     * @param $fileId
+     * @param $newDir
+     * @return string
+     */
+    public function moveImage($fileId, $newDir)
+    {
+
+        $fileContent = $this->readFile($fileId);
+
+
+        if (!is_dir($newDir)) {
+            mkdir($newDir, 0755, true);
+        }
+
+        $lastStr = substr($newDir, -1);
+        $path = $newDir . "/" . $fileId;
+        if ($lastStr == "/") {
+            $path = $newDir . $fileId;
+        }
+
+        file_put_contents($path, $fileContent);
+
+        return $path;
+    }
+
+    public function getCustomPathByFileId($fileId)
+    {
+        $path = "../../public/site/image/$fileId";
+        return $path;
+    }
+
 }
