@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>账户安全</title>
     <!-- Latest compiled and minified CSS -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="../../../public/css/login.css">
     <script type="text/javascript" src="../../../public/js/jquery.min.js"></script>

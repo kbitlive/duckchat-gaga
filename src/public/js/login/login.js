@@ -58,7 +58,6 @@ var pathname = window.location.pathname;
 originDomain = protocol+"//"+host+pathname;
 isRegister=false;
 
-
 function setDocumentTitle(type)
 {
     switch (type)
@@ -497,6 +496,17 @@ function loginPassportByKeyPress(event) {
 }
 
 
+$(document).on("input porpertychange", ".login_input_loginName", function () {
+    var length = $(".login_input_loginName").val().length;
+    if(Number(length)>0) {
+        console.log("pppp ===" + $(".login_input_loginName").val().length)
+        $(".clear_img")[0].style.display = "block";
+        $(".clearLoginName")[0].style.display = "block";
+    } else {
+        $(".clear_img")[0].style.display = "none";
+        $(".clearLoginName")[0].style.display = "none";
+    }
+});
 
 function loginPassport()
 {
@@ -680,9 +690,9 @@ function handleResetPwd()
 function clearLoginName()
 {
     $(".login_input_loginName").val("");
+    $(".clear_img")[0].style.display = "none";
+    $(".clearLoginName")[0].style.display = "none";
 }
-
-
 
 function registerForPassportPassword()
 {

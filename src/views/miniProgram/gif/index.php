@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>GIF小程序</title>
     <!-- Latest compiled and minified CSS -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <script type="text/javascript" src="../../../public/js/jquery.min.js"></script>
     <script src="../../../public/js/zalyjsNative.js"></script>

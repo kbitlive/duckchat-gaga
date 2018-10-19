@@ -27,6 +27,11 @@ body,html {
     background-size: 100% 100%;
     position: relative;
 }
+.container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
 .zaly_login{
     width:37.52rem;
     height:48.78rem;
@@ -35,6 +40,71 @@ body,html {
     border-radius:0.94rem;
     position:relative;
     overflow: hidden;
+}
+.login_custom_made {
+    width:80.68rem;
+    height:43.15rem;
+    background:rgba(76,59,177,0.9);
+    border-radius:0.56rem;
+    margin:0 auto;
+}
+.login_div {
+    position:absolute;
+    top:-3rem;
+    right:3rem;
+    height: 100%;
+}
+.company_logo {
+    width: 8rem;
+    height:7rem;
+    margin-top:6rem ;
+}
+.mobile_logo {
+    margin-top: 3rem;
+    width: 6rem;
+    height:6rem;
+}
+.mobile_logo_div {
+    display: none;
+}
+.mobile_slogn_div {
+    font-size:1.31rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(153,153,153,1);
+    line-height:1.31rem;
+    word-break: break-all;
+    display: none;
+}
+.company_custom_made {
+    margin-left: 4rem;
+}
+.company_name {
+    height:3.1rem;
+    font-size:2.25rem;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(255,255,255,1);
+    line-height:3.1rem;
+    margin-top: 1rem;
+}
+.company_slogan {
+    font-size:1.31rem;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(255,255,255,1);
+    line-height:3rem;
+    width:31.52rem;
+    word-break: break-all;
+    margin-top: 4rem;
+}
+.site_version {
+    font-size:1.31rem;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(255,255,255,1);
+    line-height:1.31rem;
+    margin-top: 7rem;
 }
 
 .login-header {
@@ -107,6 +177,9 @@ body,html {
 
 .clearLoginName {
     display: none;
+    width: 2rem;
+    height:2rem;
+    cursor: pointer;
 }
 .register_span_div {
     display: flex;
@@ -329,6 +402,14 @@ input:active,
         position: relative;
         overflow: hidden;
     }
+    .container {
+        height: 100%;
+        width: 100%;
+    }
+    .mobile_logo_div {
+        display: flex;
+        justify-content: center;
+    }
     .back {
         display:none;
     }
@@ -338,6 +419,25 @@ input:active,
 
     .login_name_div_mobile {
         margin-top:7rem;
+    }
+    .login_custom_made {
+        display: none;
+    }
+    .login_name_div {
+        margin-top: 3rem;
+    }
+    .login_button {
+        margin-top: 5rem;
+    }
+    .mobile_slogn_div {
+        display: block;
+    }
+    .login_div {
+        position:absolute;
+        top:0rem;
+        right:0rem;
+        height: 100%;
+        width: 100%;
     }
 
 }
