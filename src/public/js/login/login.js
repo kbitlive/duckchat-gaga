@@ -704,4 +704,5 @@ function registerForPassportPassword()
     $(".zaly_site_register-name").html(html);
     $(".zaly_site_register-name")[0].style.display = "block";
     $(".zaly_login_by_pwd")[0].style.display = "none";
+    // $(".login_custom_made")[0].style.display = "none";
 }
