@@ -52,6 +52,37 @@ function getLanguageName() {
 languageName = getLanguageName();
 languageNum = getLanguage();
 
+
+
+function isMobile(phoneNum)
+{
+    var reg = /^((1[3-8][0-9])+\d{8})$/;
+    return reg.test(phoneNum);
+}
+
+
+function showWindow(jqElement)
+{
+    jqElement.css("visibility", "visible");
+    $(".wrapper-mask").css("visibility", "visible").append(jqElement);
+}
+
+function removeWindow(jqElement)
+{
+    jqElement.remove();
+    $(".wrapper-mask").css("visibility", "hidden");
+    $("#all-templates").append(jqElement);
+}
+
+
+
+function addTemplate(jqElement)
+{
+    $("#all-templates").append(jqElement);
+}
+
+
+
 //点击触发一个对象的点击
 function uploadFile(obj)
 {
@@ -62,6 +93,16 @@ function uploadFile(obj)
 function showLoading(jeElement) {
     try{
         var html = "<div class=\"loader\" > <div class=\"circular_div\"> <svg class=\"circular\" viewBox=\"25 25 50 50\"> <circle class=\"path\" cx=\"50\" cy=\"50\" r=\"20\" fill=\"none\" stroke-width=\"2\" stroke-miterlimit=\"10\"/> </svg> </div> </div>";
+        jeElement.append(html);
+        $(".loader")[0].style.display = "flex";
+    }catch (error) {
+        console.log(error)
+    }
+}
+
+function showMiniLoading(jeElement) {
+    try{
+        var html = "<div class=\"loader\" > <div class=\"mini_circular_div\"> <svg class=\"mini_circular\" viewBox=\"25 25 50 50\"> <circle class=\"path\" cx=\"50\" cy=\"50\" r=\"20\" fill=\"none\" stroke-width=\"2\" stroke-miterlimit=\"10\"/> </svg> </div> </div>";
         jeElement.append(html);
         $(".loader")[0].style.display = "flex";
     }catch (error) {

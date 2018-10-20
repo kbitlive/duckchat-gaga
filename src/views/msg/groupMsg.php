@@ -15,7 +15,6 @@
     <script src="../../public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
-
     <link class="icon" rel="icon" href="favicon.ico?_version=<?php echo $versionCode?>" type="image/png" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -51,7 +50,6 @@
 <script src="../../public/js/im/zalyMsg.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/im/zalyGroupMsg.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
-<script src="../../public/js/im/zalyHelper.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/qrcode.js?_version=<?php echo $versionCode?>" ></script>
 <script src="../../public/js/utf.js?_version=<?php echo $versionCode?>" ></script>
 <script src="../../public/js/jquery.qrcode.js?_version=<?php echo $versionCode?>"></script>

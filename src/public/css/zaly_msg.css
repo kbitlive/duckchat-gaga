@@ -1645,6 +1645,9 @@ button:active{
     justify-content: space-between;
     cursor: pointer;
 }
+.create-group {
+    position: relative;
+}
 
 .search-user img,
 .create-group img,

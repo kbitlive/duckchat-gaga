@@ -1081,6 +1081,8 @@ $(document).on("click", ".group_cancle", function(){
 });
 
 $(document).on("click", ".create-group", function () {
+    showMiniLoading($(".create-group"));
+    cancelLoadingBySelf();
     requestSiteConfig(checkEnableCreateGroup);
 });
 
@@ -1111,6 +1113,7 @@ function checkEnableCreateGroup(results)
     });
     html = handleHtmlLanguage(html);
     $("#create-group").html(html);
+    hideLoading();
     showWindow($("#create-group"));
 }
 

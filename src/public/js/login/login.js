@@ -341,25 +341,25 @@ function  returnLoginDiv() {
     $(".zaly_login_by_pwd")[0].style.display = "block";
 }
 
-function handleHtmlLanguage(html)
-{
-    $(html).find("[data-local-placeholder]").each(function () {
-        var placeholderValue = $(this).attr("data-local-placeholder");
-        var placeholder = $(this).attr("placeholder");
-        var newPlaceholder = $.i18n.map[placeholderValue];
-        html = html.replace(placeholder, newPlaceholder);
-    });
-
-    $(html).find("[data-local-value]").each(function () {
-        var changeHtmlValue = $(this).attr("data-local-value");
-        var valueHtml = $(this).html();
-        var newValueHtml = $.i18n.map[changeHtmlValue];
-        // $(this).html(newValueHtml);
-        html = html.replace(valueHtml, newValueHtml);
-    });
-
-    return html;
-}
+// function handleHtmlLanguage(html)
+// {
+//     $(html).find("[data-local-placeholder]").each(function () {
+//         var placeholderValue = $(this).attr("data-local-placeholder");
+//         var placeholder = $(this).attr("placeholder");
+//         var newPlaceholder = $.i18n.map[placeholderValue];
+//         html = html.replace(placeholder, newPlaceholder);
+//     });
+//
+//     $(html).find("[data-local-value]").each(function () {
+//         var changeHtmlValue = $(this).attr("data-local-value");
+//         var valueHtml = $(this).html();
+//         var newValueHtml = $.i18n.map[changeHtmlValue];
+//         // $(this).html(newValueHtml);
+//         html = html.replace(valueHtml, newValueHtml);
+//     });
+//
+//     return html;
+// }
 
 
 function forgetPwdForPassportPassword()
