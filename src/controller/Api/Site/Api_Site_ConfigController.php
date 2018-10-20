@@ -187,8 +187,8 @@ class Api_Site_ConfigController extends \BaseController
                     $managersArray = explode(",", $managersValueStr);
                     $siteAdmins = array_merge($siteAdmins, $managersArray);
                     $siteAdmins = array_unique($siteAdmins);
+                    $siteAdmins = array_filter($siteAdmins);
                 }
-
                 $config->setMasters(json_encode($siteAdmins));
             }
 
