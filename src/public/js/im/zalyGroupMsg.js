@@ -2424,7 +2424,9 @@ function displayCurrentProfile()
                             descBody = $.i18n.map['defaultGroupDescTip'] != undefined ? $.i18n.map['defaultGroupDescTip'] : "点击填写群介绍，让大家更了解你的群～";
                         }
                         try{
-                            descBody = descBody.trim().substr(0, 70)+"......";
+                            if(descBody.trim().length > 70) {
+                                descBody = descBody.trim().substr(0, 70)+"......";
+                            }
                         }catch (error){
 
                         }
