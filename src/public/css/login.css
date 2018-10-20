@@ -23,8 +23,7 @@ body,html {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(76,59,177,1);
-    background: url("../img/login/login_bg.png");
+    background: url("../img/login/login_bg.jpg");
     background-size: 100% 100%;
     position: relative;
 }
@@ -393,6 +392,12 @@ input:active,
     border-radius:0.66rem;
     outline: none;
     cursor: pointer;
+}
+.register_code_button,
+.register_code_button:hover,
+.register_code_button:focus,
+.register_code_button:active {
+    margin-top:5rem;
 }
 
 .register_next_btn,
