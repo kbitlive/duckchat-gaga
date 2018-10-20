@@ -2353,6 +2353,7 @@ function displayCurrentProfile()
                 nickname = template("tpl-string", {
                     string : nickname
                 });
+                $(".nickname_"+chatSessionId).html(nickname);
                 $(".chatsession-title").html(nickname);
                 $(".user-desc-body").html(nickname);
             } else {
