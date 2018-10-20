@@ -166,8 +166,6 @@ getOsType();
 
 zalyjsLoginConfig(zalyLoginConfig);
 
-
-
 var loginNameAlias = $(".loginNameAlias").val();
 var passwordFindWay = $(".passwordFindWay").val();
 var loginWelcomeText = $(".loginWelcomeText").val();
@@ -178,27 +176,14 @@ var siteVersionName = $(".siteVersionName").val();
 var siteLogo =  $(".siteLogo").val();
 var siteName = $(".siteName").val();
 
-function  getCompanyCustomMade() {
-    var html = template("tpl-company-custom-made", {
-        loginBackgroundColor:loginBackgroundColor,
-        loginBackgroundImage:loginBackgroundImage,
-        loginBackgroundImageDisplay:loginBackgroundImageDisplay,
-        siteVersionName:siteVersionName,
-        siteLogo:siteLogo,
-        siteName:siteName,
-    });
-
-    html = handleHtmlLanguage(html);
-    $(".login_custom_made").html(html);
-   if(loginWelcomeText) {
-       var text = template("tpl-string", {
-           string:loginWelcomeText
-       })
-       var text = handleLinkContentText(text);
-       $(".company_slogan").html(text);
-   }
+if(loginWelcomeText) {
+    var text = template("tpl-string", {
+        string:loginWelcomeText
+    })
+    var text = handleLinkContentText(text);
+    $(".company_slogan").html(text);
 }
-getCompanyCustomMade();
+
 
 
 //replace \n from html
