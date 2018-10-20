@@ -149,11 +149,6 @@ function displayRoomListMsgUnReadNum()
     }
 }
 
-groupOffset = 0;
-getGroupList(initGroupList);
-
-friendOffset = 0;
-getFriendList(initFriendList);
 
 $(document).on("click", ".l-sb-item", function(){
     var currentActive = $(".left-sidebar").find(".l-sb-item-active");
@@ -185,7 +180,8 @@ $(document).on("click", ".l-sb-item", function(){
             $(".group-lists")[0].style.display = "block";
             $(".chatsession-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
-
+            groupOffset = 0;
+            getGroupList(initGroupList);
             break;
         case "chatSession" :
             getRoomList();
@@ -197,7 +193,8 @@ $(document).on("click", ".l-sb-item", function(){
             $(".friend-lists")[0].style.display = "block";
             $(".chatsession-lists")[0].style.display = "none";
             $(".group-lists")[0].style.display = "none";
-
+            friendOffset = 0;
+            getFriendList(initFriendList);
             break;
         case "more":
             displayDownloadApp();

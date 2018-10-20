@@ -56,7 +56,7 @@
                     <input type="text" class="input_login_site register_input_email" autocapitalize="off"  id="register_input_email" data-local-placeholder="enterEmailPlaceholder" onkeydown="registerAndLoginByKeyDown(event)" placeholder="输入邮箱" >
                 {{/if}}
             {{/if}}
-            <img src="../../public/img/msg/msg_failed.png" class="img-failed register_input_email_failed" style="display: inline;">
+            <img src="../../public/img/msg/msg_failed.png" class="img-failed register_input_email_failed">
             <div class="line"></div>
         </div>
         <div style="font-size:1.31rem;font-family:PingFangSC-Regular;font-weight:400;color:rgba(153,153,153,1);"data-local-value="findPasswordTip" >通过此信息联系管理员找回密码。</div>
