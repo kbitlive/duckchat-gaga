@@ -638,7 +638,9 @@ function clearRoomUnreadMsgNum(chatSessionId)
     var roomListUnreadNum = localStorage.getItem(roomListMsgUnReadNum);
     roomListUnreadNum =  (roomListUnreadNum-unReadNum) >0 ? (roomListUnreadNum-unReadNum) : 0;
     roomListUnreadNum =  (roomListUnreadNum-unReadNum) >99 ? "99+": roomListUnreadNum;
-
+    if(roomListUnreadNum == 0) {
+        localStorage.setItem(newSiteTipKey, "clear");
+    }
     localStorage.setItem(roomListMsgUnReadNum,roomListUnreadNum);
     localStorage.removeItem(unreadKey);
 
@@ -646,7 +648,6 @@ function clearRoomUnreadMsgNum(chatSessionId)
         $(".room-chatsession-unread_"+chatSessionId)[0].style.display = "none";
         $(".room-chatsession-mute-num_"+chatSessionId+"")[0].style.display = "none";
     }
-    localStorage.setItem(newSiteTipKey, "clear");
     setDocumentTitle();
 }
 

@@ -60,6 +60,32 @@
 
                     <div class="container">
                         <div  class="login_custom_made">
+                            <div class="company_custom_made">
+                                <div>
+                                    <?php if($siteLogo) { ?>
+                                    <img src="<?php echo $siteLogo; ?>" class="company_logo">
+                                    <?php } else { ?>
+                                    <img src="../../public/img/login/logo.png" class="company_logo">
+                                    <?php } ?>
+                                </div>
+                                <div>
+                                    <?php if($siteName) { ?>
+                                    <span class="company_name"><?php echo $siteName; ?></span>
+                                    <?php } else { ?>
+                                    <span class="company_name">Duckchat</span>
+                                    <?php } ?>
+                                </div>
+                                <div class="company_slogan">
+                                    <?php if($loginWelcomeText) { ?>
+                                        <?php echo $loginWelcomeText; ?>
+                                    <?php } else { ?>
+                                    这是一个使用DuckChat系统搭建的聊天站点，此处的描述内容可以在管理后台进行修改配置。<br/>官网：<a target="_blank" href="https://duckchat.akaxin.com">https://duckchat.akaxin.com</a>
+                                    <?php } ?>
+                                </div>
+                                <div class="site_version">
+                                    V<?php echo $siteVersionName; ?>
+                                </div>
+                            </div>
 
                         </div>
                         <div  class="login_div">

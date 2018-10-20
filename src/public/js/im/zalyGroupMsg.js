@@ -149,6 +149,12 @@ function displayRoomListMsgUnReadNum()
     }
 }
 
+groupOffset = 0;
+getGroupList(initGroupList);
+
+friendOffset = 0;
+getFriendList(initFriendList);
+
 $(document).on("click", ".l-sb-item", function(){
     var currentActive = $(".left-sidebar").find(".l-sb-item-active");
     $(currentActive).removeClass("l-sb-item-active");
@@ -179,8 +185,7 @@ $(document).on("click", ".l-sb-item", function(){
             $(".group-lists")[0].style.display = "block";
             $(".chatsession-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
-            groupOffset = 0;
-            getGroupList(initGroupList);
+
             break;
         case "chatSession" :
             getRoomList();
@@ -192,8 +197,7 @@ $(document).on("click", ".l-sb-item", function(){
             $(".friend-lists")[0].style.display = "block";
             $(".chatsession-lists")[0].style.display = "none";
             $(".group-lists")[0].style.display = "none";
-            friendOffset = 0;
-            getFriendList(initFriendList);
+
             break;
         case "more":
             displayDownloadApp();
@@ -2353,6 +2357,7 @@ function displayCurrentProfile()
                 nickname = template("tpl-string", {
                     string : nickname
                 });
+                $(".nickname_"+chatSessionId).html(nickname);
                 $(".chatsession-title").html(nickname);
                 $(".user-desc-body").html(nickname);
             } else {
@@ -2424,7 +2429,9 @@ function displayCurrentProfile()
                             descBody = $.i18n.map['defaultGroupDescTip'] != undefined ? $.i18n.map['defaultGroupDescTip'] : "点击填写群介绍，让大家更了解你的群～";
                         }
                         try{
-                            descBody = descBody.trim().substr(0, 70)+"......";
+                            if(descBody.trim().length > 70) {
+                                descBody = descBody.trim().substr(0, 70)+"......";
+                            }
                         }catch (error){
 
                         }
