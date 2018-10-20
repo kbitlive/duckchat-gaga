@@ -2432,7 +2432,6 @@ function displayCurrentProfile()
                         }catch (error){
 
                         }
-                        console.log("descBody.length + " + descBody.length);
                         descBody = template("tpl-string", {
                             string:descBody
                         });

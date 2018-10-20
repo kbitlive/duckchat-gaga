@@ -971,22 +971,21 @@ function trimMsgContentBr(html)
 function handleMsgContentText(str)
 {
     str = trimMsgContentBr(str);
-    var reg=/(blob:)?((http|ftp|https|duckchat|zaly):\/\/)?[\w\-_]+(\:[0-9]+)?(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
+    var reg=/(blob:)?((http|https|ftp|zaly|duckchat):\/\/)?[@\w\-_]+(\:[0-9]+)?(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
     var arr = str.match(reg);
     if(arr == null) {
         return str;
     }
-
     var length = arr.length;
     for(var i=0; i<length;i++) {
         var urlLink = arr[i];
         if(urlLink.indexOf("blob:") == -1 &&
-            ( IsURL (urlLink)
-                || urlLink.indexOf("http://") != -1
+            (urlLink.indexOf("http://") != -1
                 || urlLink.indexOf("https://") != -1
                 || urlLink.indexOf("ftp://") != -1
                 || urlLink.indexOf("zaly://") != -1
                 || urlLink.indexOf("duckchat://") != -1
+                ||  IsURL (urlLink)
             )
         ) {
             var newUrlLink = urlLink;
@@ -1009,8 +1008,10 @@ function IsURL (url) {
     var ipReg=new RegExp(ipRegex);
     if(!ipReg.test(url)) {
         var domainSuffix = url.split(".").pop();
-        var urlDomain = "com,cn,net,xyz,top,tech,org,gov,edu,ink,red,int,mil,pub,biz,CC,name,TV,mobi,travel,info,tv,pro,coop,aero,me,app,onlone,shop" +
-            ",club,store,life,global,live,museum,jobs,cat,tel,bid,pub,foo,site,";
+        domainSuffix = domainSuffix.toLowerCase();
+        console.log("domainSuffix ==" + domainSuffix);
+        var urlDomain = "com,cn,net,xyz,top,tech,org,gov,edu,ink,red,int,mil,pub,biz,cc,name,mobi,travel,info,tv,pro,coop,aero,me,app,onlone,shop" +
+            ",club,store,life,global,live,museum,jobs,cat,tel,bid,pub,foo,site";
         if(urlDomain.indexOf(domainSuffix) != -1) {
             return true;
         }
