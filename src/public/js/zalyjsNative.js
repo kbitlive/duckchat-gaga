@@ -6,7 +6,10 @@ var callbackIdParamName = "zalyjsCallbackId";
 //localStorage, prevent page flush, and the referrer is lost
 var refererUrl = document.referrer;
 var refererUrlKey = "documentReferer";
-if(refererUrl.length>0) {
+
+refererUrlKeyVal = localStorage.getItem(refererUrlKey);
+
+if(refererUrl.length>0 && (!refererUrlKeyVal)) {
     localStorage.setItem(refererUrlKey, refererUrl);
     refererUrlKeyVal = localStorage.getItem(refererUrlKey);
 }
@@ -32,11 +35,11 @@ function zalyjsCallbackHelperConstruct() {
     //
     this.callback = function(param) {
         try {
-           try{
-               param = decodeURIComponent(escape(window.atob(param)));
-           }catch (error) {
-               param = window.atob(param);
-           }
+            try{
+                param = decodeURIComponent(escape(window.atob(param)));
+            }catch (error) {
+                param = window.atob(param);
+            }
 
             // js json for \n
             param = param.replace(/\n/g,"\\\\n");
@@ -98,7 +101,9 @@ function addJsByDynamic(url)
     script.type = "text/javascript";
     //Firefox, Opera, Chrome, Safari 3+
     script.src = url;
-    $(".zaly_container")[0].appendChild(script);
+
+    var head = document.getElementsByTagName('head')[0].appendChild(script);
+
 }
 
 //
@@ -187,7 +192,7 @@ function zalyjsWebLoginSuccess()
         } else {
             var refererUrl = refererUrl+"?preSessionId="+zalyjsSiteLoginMessageBody.sessionid+"&isRegister="+zalyjsSiteLoginMessageBody.isRegister;
         }
-        refererUrl = refererUrl + " &fail_callback="+zalyjsSiteLoginMessageBody.callbackName+"&&success_callback=zalyjsWebSuccessCallBack";
+        refererUrl = refererUrl + " &fail_callback="+zalyjsSiteLoginMessageBody.callbackName+"&success_callback=zalyjsWebSuccessCallBack";
         addJsByDynamic(refererUrl);
     }
 }
