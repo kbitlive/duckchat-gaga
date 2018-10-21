@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title><?php echo $miniProgramName ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
     <link rel="stylesheet" href="../../public/jquery/weui.min.css"/>
     <link rel="stylesheet" href="../../public/jquery/jquery-weui.min.css"/>
@@ -67,24 +67,48 @@
 
             <div class="item-row">
                 <div class="item-body">
-                    <div class="item-body-display passwordFindWay" onclick="showPasswordFindWay()">
+                    <div class="item-body-display passwordResetWay" onclick="showPasswordResetWay()">
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">密码找回方式</div>
+                            <div class="item-body-desc">密码找回别称</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Password Recovery Way</div>
+                            <div class="item-body-desc">Password Recovery Alias</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <div class="item-body-value" id="passwordFindWayId"> <?php echo $passwordFindWay; ?></div>
+                            <div class="item-body-value" id="passwordResetWayId"> <?php echo $passwordResetWay; ?></div>
                             <div class="item-body-value">
                                 <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+            <div class="item-row">
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">密码找回必填</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Password Recovery Required</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <?php if ($passwordResetRequired == 1) { ?>
+                                <input id="passwordResetRequiredSwitch" class="weui_switch" type="checkbox" checked>
+                            <?php } else { ?>
+                                <input id="passwordResetRequiredSwitch" class="weui_switch" type="checkbox">
+                            <?php } ?>
                         </div>
                     </div>
 
                 </div>
             </div>
             <div class="division-line"></div>
+
 
             <div class="item-row">
                 <div class="item-body">
@@ -162,15 +186,15 @@
         $("#updatePopupButton").attr("key-value", "loginNameAlias");
     }
 
-    function showPasswordFindWay() {
-        var title = $(".passwordFindWay").find(".item-body-desc").html();
-        var inputBody = $("#passwordFindWayId").html();
+    function showPasswordResetWay() {
+        var title = $(".passwordResetWay").find(".item-body-desc").html();
+        var inputBody = $("#passwordResetWayId").html();
 
         showWindow($(".config-hidden"));
 
         $(".popup-group-title").html(title);
         $(".popup-group-input").val(inputBody);
-        $("#updatePopupButton").attr("key-value", "passwordFindWay");
+        $("#updatePopupButton").attr("key-value", "passwordResetWay");
     }
 
     function showWindow(jqElement) {
@@ -211,7 +235,7 @@
 
         var key = $("#updatePopupButton").attr("key-value");
 
-        var url = "index.php?action=miniProgram.admin.updateLogin&key=" + key;
+        var url = "index.php?action=miniProgram.admin.updateLogin";
 
         var value = $.trim($(".popup-group-input").val());
 
@@ -235,6 +259,19 @@
         }
     }
 
+    $("#passwordResetRequiredSwitch").change(function () {
+        var isChecked = $(this).is(':checked');
+
+        var url = "index.php?action=miniProgram.admin.updateLogin";
+
+        var data = {
+            'key': 'passwordResetRequired',
+            'value': isChecked ? 1 : 0,
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, enableSwitchResponse);
+    });
+
     //update uic
     $("#enableUicSwitch").change(function () {
         var isChecked = $(this).is(':checked');
@@ -245,17 +282,19 @@
             'value': isChecked ? 1 : 0,
         };
 
-        zalyjsCommonAjaxPostJson(url, data, enableUicResponse);
+        zalyjsCommonAjaxPostJson(url, data, enableSwitchResponse);
 
     });
 
-    function enableUicResponse(url, data, result) {
+    function enableSwitchResponse(url, data, result) {
         if (result) {
 
             var res = JSON.parse(result);
 
-            if (!"success" == res.errCode) {
-                alert(getLanguage() == 1 ? "操作失败" : "update error");
+            if ("success" != res.errCode) {
+                var errInfo = res.errInfo;
+                var errMsg = (getLanguage() == 1 ? "操作失败,原因：" : "update error, cause:") + errInfo;
+                alert(errMsg);
             }
 
         } else {

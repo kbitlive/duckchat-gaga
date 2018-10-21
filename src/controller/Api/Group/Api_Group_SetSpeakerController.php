@@ -37,16 +37,16 @@ class Api_Group_SetSpeakerController extends Api_Group_BaseController
             $this->logger->error($this->action, "request=" . $request->serializeToString());
 
             if (empty($groupId)) {
-                $this->throwZalyException(ZalyError::$errorGroupEmptyId);
+                $this->throwZalyException(ZalyError::ErrorGroupEmptyId);
             }
 
             //group admin can set speaker
             if (!$this->isGroupAdmin($groupId)) {
-                $this->throwZalyException(ZalyError::$errorGroupPermission);
+                $this->throwZalyException(ZalyError::ErrorGroupPermission);
             }
 
             $groupInfo = $this->getGroupInfo($groupId);
-            if($groupInfo === false) {
+            if ($groupInfo === false) {
                 return;
             }
 

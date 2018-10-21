@@ -53,11 +53,13 @@ class MiniProgram_Admin_PasswordLoginController extends MiniProgramController
 
             //2.loginConfig
             $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
-            
+
             $loginNameAliasConfig = $loginConfig[LoginConfig::LOGIN_NAME_ALIAS];
             $loginNameAlias = $loginNameAliasConfig["configValue"];
-            $passwordFindWayConfig = $loginConfig[LoginConfig::PASSWORD_FIND_WAY];
-            $passwordFindWay = $passwordFindWayConfig["configValue"];
+            $passwordResetConfig = $loginConfig[LoginConfig::PASSWORD_RESET_WAY];
+            $passwordResetWay = $passwordResetConfig["configValue"];
+            $passwordResetRequiredConfig = $loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED];
+            $passwordResetRequired = $passwordResetRequiredConfig["configValue"];
 
             //3.miniProgramName
             $miniProgramName = $this->getMiniProgramName($loginMiniProgramId);
@@ -66,7 +68,8 @@ class MiniProgram_Admin_PasswordLoginController extends MiniProgramController
                 "lang" => $this->language,
                 "loginPluginId" => $loginMiniProgramId,
                 "loginNameAlias" => $loginNameAlias,
-                "passwordFindWay" => $passwordFindWay,
+                "passwordResetWay" => $passwordResetWay,
+                "passwordResetRequired" => $passwordResetRequired,
                 "miniProgramName" => $miniProgramName . "后台",
                 "enableInvitationCode" => $enableInvitationCode,
             ];

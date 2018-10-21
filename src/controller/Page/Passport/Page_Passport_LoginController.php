@@ -25,8 +25,11 @@ class Page_Passport_LoginController extends HttpBaseController
 
         $loginNameAliasConfig = $loginConfig[LoginConfig::LOGIN_NAME_ALIAS];
         $loginNameAlias = $loginNameAliasConfig["configValue"];
-        $passwordFindWayConfig = $loginConfig[LoginConfig::PASSWORD_FIND_WAY];
-        $passwordFindWay = $passwordFindWayConfig["configValue"];
+        $passwordResetWayConfig = $loginConfig[LoginConfig::PASSWORD_RESET_WAY];
+        $passwordRestWay = $passwordResetWayConfig["configValue"];
+
+        $passwordResetRequiredConfig = $loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED];
+        $passwordResetRequired = $passwordResetRequiredConfig["configValue"];
 
         $loginWelcomeTextConfig = $loginConfig[LoginConfig::LOGIN_PAGE_WELCOME_TEXT];
         $loginWelcomeText = $loginWelcomeTextConfig["configValue"];
@@ -48,7 +51,9 @@ class Page_Passport_LoginController extends HttpBaseController
             'siteVersionName' => $siteVersionName,
             'isDuckchat' => $isDuckchat,
             'loginNameAlias' => $loginNameAlias,
-            'passwordFindWay' => $passwordFindWay,
+            'passwordFindWay' => $passwordRestWay,
+            'passwordResetWay' => $passwordRestWay,
+            'passwordResetRequired' => $passwordResetRequired,
             'loginWelcomeText' => $loginWelcomeText,
             'loginBackgroundColor' => $loginBackgroundColor,
             'loginBackgroundImage' => $this->ctx->File_Manager->getCustomPathByFileId($loginBackgroundImage),

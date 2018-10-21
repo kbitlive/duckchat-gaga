@@ -142,9 +142,9 @@
                 <div class="item-body">
                     <div class="item-body-display">
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">允许群组中加好友</div>
+                            <div class="item-body-desc">允许在群里互加好友</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Enable Add Friend In Group</div>
+                            <div class="item-body-desc">Enable friend-request from group</div>
                         <?php } ?>
 
                         <div class="item-body-tail">

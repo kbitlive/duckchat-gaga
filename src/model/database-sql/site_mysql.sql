@@ -143,14 +143,13 @@ ALTER TABLE siteGroupMessage MODIFY COLUMN content TEXT CHARACTER SET utf8mb4 CO
 CREATE TABLE IF NOT EXISTS passportPassword(
                 id INTEGER PRIMARY KEY AUTO_INCREMENT,
                 userId VARCHAR(100) NOT NULL,
-                email VARCHAR(100) NOT NULL,
-                password VARCHAR(100) NOT NULL,
-                nickname VARCHAR(100) NOT NULL,
                 loginName VARCHAR(100) NOT NULL,
+                nickname VARCHAR(100) NOT NULL,
+                password VARCHAR(100) NOT NULL,
+                email VARCHAR(100) NOT NULL,
                 invitationCode VARCHAR(100),
                 timeReg BIGINT,
                 unique(userId),
-                unique(email),
                 unique(loginName))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE passportPassword CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
