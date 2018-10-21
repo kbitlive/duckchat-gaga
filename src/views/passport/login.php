@@ -37,7 +37,6 @@
 
                 <?php } elseif ($loginBackgroundImageDisplay == 1 ) {?>
         <!--                ///填充-->
-                        <?php echo $loginBackgroundImageDisplay;?>
 
                 <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>');background-size: cover;">
             <?php } else {?>
