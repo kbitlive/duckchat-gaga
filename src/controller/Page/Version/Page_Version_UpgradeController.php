@@ -118,7 +118,7 @@ class Page_Version_UpgradeController extends Page_VersionController
 
         $errCode = $prepare->errorCode();
 
-        if ($flag && $errCode == "00000") {
+        if (($flag && $errCode == "00000") || "42S21" == $errCode) {
             $this->upgradeErrCode = "success";
             return true;
         }
@@ -133,8 +133,7 @@ class Page_Version_UpgradeController extends Page_VersionController
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
 
-        $sql = "drop table sitePlugin_temp_10011";
-        $this->ctx->db->exec($sql);
+        $this->dropDBTable('sitePlugin_temp_10011');
 
         $sql = "alter table sitePlugin rename to sitePlugin_temp_10011";
         $result = $this->ctx->db->exec($sql);
@@ -153,6 +152,7 @@ class Page_Version_UpgradeController extends Page_VersionController
 
         if ($flag && $errCode == "00000") {
             $this->upgradeErrCode = "success";
+            $this->dropDBTable('sitePlugin_temp_10011');
             return true;
         }
 
@@ -174,10 +174,12 @@ class Page_Version_UpgradeController extends Page_VersionController
         $prepare = $this->ctx->db->prepare($sql);
         $flag = $prepare->execute();
 
+        $dbErrCode = $prepare->errorCode();
+        $flag = (($flag && "00000" == $dbErrCode) || "42S21" == $dbErrCode);
 
-        $flag = $flag && $this->upgradePasswordTableFrom10012_10013();
+        $flag = $flag && $this->upgradePasswordTableFrom10012_10013("mysql");
 
-        if ($flag && $prepare->errorCode() == "00000") {
+        if ($flag) {
             $this->upgradeErrCode = "success";
             return true;
         }
@@ -193,11 +195,24 @@ class Page_Version_UpgradeController extends Page_VersionController
         //config add enableAddFriendInGroup = true;
         $this->addEnableAddFriendInGroupConfig();
 
+        //upgrade siteGroup table
+        $flag = $this->upgradeSiteGroupTableFrom10012_10013();
+        //upgrade passportPassword table
+        $flag = $flag && $this->upgradePasswordTableFrom10012_10013("sqlite");
 
-        //add siteGroup canAddFriend column
-        //drop temp table
-        $sql = "drop table siteGroup_temp_10012";
-        $this->ctx->db->exec($sql);
+        if ($flag) {
+            $this->upgradeErrCode = "success";
+            return true;
+        }
+
+        return false;
+    }
+
+    private function upgradeSiteGroupTableFrom10012_10013()
+    {
+        $tag = __CLASS__ . '->' . __FUNCTION__;
+
+        $this->dropDBTable("siteGroup_temp_10012");
 
         //rename table
         $sql = "alter table siteGroup rename to siteGroup_temp_10012";
@@ -216,39 +231,35 @@ class Page_Version_UpgradeController extends Page_VersionController
         $prepare = $this->ctx->db->prepare($sql);
         $flag = $prepare->execute();
 
-        if (!$flag && $prepare->errorCode() != "00000") {
-            $this->upgradeErrCode = "error";
-            $this->upgradeErrInfo = var_export($prepare->errorInfo(), true);
-            return false;
-        }
-
-
-        //upgrade passportPassword table
-        $flag = $flag && $this->upgradePasswordTableFrom10012_10013();
-
-        if ($flag) {
+        if ($flag && $prepare->errorCode() == "00000") {
             $this->upgradeErrCode = "success";
+            $this->dropDBTable("siteGroup_temp_10012");
             return true;
         }
 
         $this->upgradeErrCode = "error";
         $this->upgradeErrInfo = var_export($prepare->errorInfo(), true);
         return false;
+
     }
 
-    private function upgradePasswordTableFrom10012_10013()
+    private function upgradePasswordTableFrom10012_10013($dbType)
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
-        $sql = "drop table passportPassword_temp_10012";
-        $this->ctx->db->exec($sql);
+
+        $this->dropDBTable('passportPassword_temp_10012');
 
         //rename table
         $sql = "alter table passportPassword rename to passportPassword_temp_10012";
         $result = $this->ctx->db->exec($sql);
         $this->logger->error($tag, "rename table passportPassword to passportPassword_temp_10012 result=" . $result);
 
-        //execute all table
-        $this->executeSqliteScript();
+        if ("mysql" == $dbType) {
+            $this->executeMysqlScript();
+        } else {
+            //execute all table
+            $this->executeSqliteScript();
+        }
 
 
         //migrate data to new table
@@ -262,6 +273,7 @@ class Page_Version_UpgradeController extends Page_VersionController
 
         if ($flag && $prepare->errorCode() == "00000") {
             $this->upgradeErrCode = "success";
+            $this->dropDBTable('passportPassword_temp_10012');
             return true;
         }
 

@@ -227,4 +227,10 @@ abstract class Page_VersionController extends UpgradeController
 
         ZalyConfig::updateConfigFile($siteConfig);
     }
+
+    protected function dropDBTable($tableName)
+    {
+        $sql = "drop table $tableName";
+        $this->ctx->db->exec($sql);
+    }
 }
