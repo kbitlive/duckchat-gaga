@@ -177,8 +177,6 @@ var siteLogo =  $(".siteLogo").val();
 var siteName = $(".siteName").val();
 var passwordResetRequired = $(".passwordResetRequired").val();
 
-console.log("passwordResetRequired====="+passwordResetRequired);
-
 if(loginWelcomeText) {
     var text = template("tpl-string", {
         string:loginWelcomeText

@@ -369,10 +369,6 @@ input:active,
 .reset_pwd_button:hover,
 .reset_pwd_button:focus,
 .reset_pwd_button:active,
-.register_button,
-.register_button:hover,
-.register_button:focus,
-.register_button:active,
 .update_code_btn,
 .update_code_btn:hover,
 .update_code_btn:focus,
@@ -393,11 +389,18 @@ input:active,
     outline: none;
     cursor: pointer;
 }
-.register_code_button,
-.register_code_button:hover,
-.register_code_button:focus,
-.register_code_button:active {
+
+.register_button,
+.register_button:hover,
+.register_button:focus,
+.register_button:active {
     margin-top:5rem;
+    width:28.14rem;
+    height:4.69rem;
+    background:rgba(76,59,177,1);
+    border-radius:0.66rem;
+    outline: none;
+    cursor: pointer;
 }
 
 .register_next_btn,
