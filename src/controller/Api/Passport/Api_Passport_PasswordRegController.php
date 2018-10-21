@@ -31,15 +31,8 @@ class Api_Passport_PasswordRegController extends BaseController
             $sitePubkPem = $request->getSitePubkPem();
             $invitationCode = $request->getInvitationCode();
 
-            if(!$loginName || strlen($loginName) > 16 ) {
+            if(!$loginName || mb_strlen($loginName)>24) {
                 $errorCode = $this->zalyError->errorLoginNameLength;
-                $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("loginName  is  not exists");
-            }
-            $isLoginName = ZalyHelper::isLoginName($loginName);
-            if(!$isLoginName) {
-                $errorCode = $this->zalyError->errorInvalidLoginName;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
                 $this->setRpcError($errorCode, $errorInfo);
                 throw new Exception("loginName  is  not exists");
@@ -67,7 +60,6 @@ class Api_Passport_PasswordRegController extends BaseController
             }
 
             $this->checkLoginName($loginName);
-            $this->checkEmail($email);
             $preSessionId = $this->registerUserForPassport($loginName, $email, $password, $nickname, $invitationCode, $sitePubkPem);
             $response = new \Zaly\Proto\Site\ApiPassportPasswordRegResponse();
             $response->setPreSessionId($preSessionId);
@@ -76,24 +68,6 @@ class Api_Passport_PasswordRegController extends BaseController
         } catch (Exception $ex) {
             $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $ex->getMessage());
             $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
-        }
-    }
-
-    private  function checkEmail($email)
-    {
-        $isEmail = ZalyHelper::isEmail($email);
-        if(!$isEmail) {
-            $errorCode = $this->zalyError->errorInvalidEmail;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            $this->setRpcError($errorCode, $errorInfo);
-            throw new Exception("email is useless");
-        }
-        $user = $this->ctx->PassportPasswordTable->getUserByEmail($email);
-        if($user){
-            $errorCode = $this->zalyError->errorExistEmail;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            $this->setRpcError($errorCode, $errorInfo);
-            throw new Exception("email is exists");
         }
     }
 

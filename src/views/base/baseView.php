@@ -43,7 +43,6 @@
             <div class="left-body-container">
                 <div class="left-body-chatsession chatsession-lists" style="position: relative;">
                 </div>
-<!---->
                 <div class="left-body-groups group-lists "  style="display: none;position: relative;">
                         <div style="width: 100%;" class="group-tools">
                             <div class="pw-contact-row create-group" >

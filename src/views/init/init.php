@@ -35,7 +35,10 @@
 
         </div>
     </div>
-<input type="hidden" value="<?php echo $siteVersion?>" class="site_version">
+<input type="hidden" value="<?php echo $versionCode;?>" class="site_version_code">
+    <input type="hidden" value="<?php echo $siteVersion;?>" class="site_version_name">
+
+
 
     <input type="hidden" value="<?php echo $isPhpVersionValid;?>" class="isPhpVersionValid">
     <input type="hidden" value="<?php echo $isLoadOpenssl;?>" class="isLoadOpenssl">
@@ -125,11 +128,11 @@
     }
     initProtocol();
     $(document).on("click", ".zaly_protocol_sure",function () {
-        var siteVersion = $(".site_version").val();
+        var siteVersion = $(".site_version_code").val();
         if(Number(latestVersion) > Number(siteVersion)) {
             $(".zaly_window")[0].style.display = "flex";
             var upgradeHtml = template("tpl-upgrade-tip", {
-                siteVersion:$(".site_version").val(),
+                siteVersion:$(".site_version_name").val(),
             });
             upgradeHtml = handleHtmlLanguage(upgradeHtml)
             $(".zaly_window").html(upgradeHtml);
@@ -481,7 +484,6 @@
 
     function testCurl()
     {
-        console.log("lll");
         $.ajax({
             method: "GET",
             url: "./index.php?action=installDB&for=test_curl_result",

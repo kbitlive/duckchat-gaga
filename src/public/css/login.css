@@ -23,8 +23,7 @@ body,html {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(76,59,177,1);
-    background: url("../img/login/login_bg.png");
+    background: url("../img/login/login_bg.jpg");
     background-size: 100% 100%;
     position: relative;
 }
@@ -154,8 +153,14 @@ body,html {
 .company_slogan a {
     font-family:PingFangSC-Medium;
     font-weight:500;
-    color:rgba(255,255,255,1);
     cursor: pointer;
+    color:rgba(255,255,255,1);
+}
+.mobile_slogn_div a{
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    cursor: pointer;
+    color: rgba(153,153,153,1);
 }
 .site_version {
     font-size:1.31rem;
@@ -388,6 +393,12 @@ input:active,
     outline: none;
     cursor: pointer;
 }
+.register_code_button,
+.register_code_button:hover,
+.register_code_button:focus,
+.register_code_button:active {
+    margin-top:5rem;
+}
 
 .register_next_btn,
 .register_next_btn:hover,
@@ -472,6 +483,7 @@ input:active,
     .mobile_logo_div {
         display: flex;
         justify-content: center;
+
     }
     .back {
         display:none;
@@ -494,6 +506,8 @@ input:active,
     }
     .mobile_slogn_div {
         display: block;
+        width: 100%;
+        text-align: center;
     }
     .login_container {
         width: 100%;

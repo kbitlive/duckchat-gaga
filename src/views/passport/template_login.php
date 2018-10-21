@@ -9,7 +9,7 @@
         <div class="d-flex flex-row justify-content-left login_name_div margin-top2 login_name_div_mobile" >
             <image src="../../public/img/login/loginName.png" class="img"/>
             {{if loginNameAlias }}
-            <input type="text" id="register_input_loginName"  datatype="s"  class="input_login_site  register_input_loginName"   autocapitalize="off"   placeholder="{{loginNameAlias}}以字母、数字、下划线，1-16个字符" >
+            <input type="text" id="register_input_loginName"  datatype="s"  class="input_login_site  register_input_loginName"   autocapitalize="off"   placeholder="{{loginNameAlias}}" >
             {{else}}
             <input type="text" id="register_input_loginName"  datatype="s"  class="input_login_site  register_input_loginName" data-local-placeholder="registerLoginNamePlaceholder"  autocapitalize="off"   placeholder="用户名以字母、数字、下划线，1-16个字符" >
             {{/if}}
@@ -59,6 +59,8 @@
             <img src="../../public/img/msg/msg_failed.png" class="img-failed register_input_email_failed">
             <div class="line"></div>
         </div>
+        <div style="font-size:1.31rem;font-family:PingFangSC-Regular;font-weight:400;color:rgba(153,153,153,1);"data-local-value="findPasswordTip" >通过此信息联系管理员找回密码。</div>
+
 
         <div class="d-flex flex-row justify-content-center ">
             {{if enableInvitationCode == 1}}
@@ -80,7 +82,11 @@
     <div style="position: relative; height: 100%;">
         <div>
             <div class="mobile_logo_div">
+                {{if siteLogo}}
+                <img class="mobile_logo" src="{{siteLogo}}">
+                {{else}}
                 <img class="mobile_logo" src="../../public/img/login/mobile_logo.png">
+                {{/if}}
             </div>
             <div class="d-flex flex-row justify-content-center login-header" style="text-align: center;">
                 <span class="login_phone_tip_font" data-local-value="loginTip">登录</span>
@@ -90,10 +96,8 @@
                 <image src="../../public/img/login/loginName.png" class="img"/>
                 {{if loginNameAlias }}
                  <input type="text" class="input_login_site  login_input_loginName" datatype="s" autocapitalize="off"  placeholder="{{loginNameAlias}}" >
-
                 {{else}}
                     <input type="text" class="input_login_site  login_input_loginName" datatype="s" autocapitalize="off"  data-local-placeholder="loginNamePlaceholder" placeholder="输入登录名" >
-
                 {{/if}}
                 <div class="clearLoginName" onclick="clearLoginName()"><image src="../../public/img/msg/btn-x.png" class="clearLoginName clear_img" /></div>
                 <img src="../../public/img/msg/msg_failed.png" class="img-failed login_input_loginName_failed">
@@ -118,10 +122,9 @@
             </div>
         </div>
         <div class="mobile_slogn_div" style="position: absolute;bottom:3rem;">
-            拥有自己的聊天软件，安全可靠、私有部署、随意定制
-            拥有自己的聊天软件，安全可靠、私有部署、随意定制
-            拥有自己的聊天软件，安全可靠、私有部署、随意定制
-            拥有自己的聊天软件，安全可靠、私有部署、随意定制
+            {{if loginWelcomeText }} {{loginWelcomeText}} {{else}}
+            这是一个使用DuckChat系统搭建的聊天站点，此处的描述内容可以在管理后台进行修改配置。<br/>官网：<a target="_blank" href="https://duckchat.akaxin.com">https://duckchat.akaxin.com</a>
+            {{/if}}
         </div>
     </div>
 </script>
@@ -130,28 +133,29 @@
     <div class="company_custom_made">
         <div>
             {{if siteLogo}}
-                {{siteLogo}}
+             <img src="{{siteLogo}}" class="company_logo">
             {{else }}
                 <img src="../../public/img/login/logo.png" class="company_logo">
             {{/if}}
         </div>
         <div>
-            {{if loginNameAlias }}
-            <span class="company_name">{{loginNameAlias}}</span>
+            {{if siteName }}
+            <span class="company_name">{{siteName}}</span>
             {{else}}
             <span class="company_name">Duckchat</span>
             {{/if}}
         </div>
         <div class="company_slogan">
-            {{if loginWelcomeText }}
-                {{loginWelcomeText}}
-            {{else}}
+            {{if loginWelcomeText }} {{loginWelcomeText}} {{else}}
                 这是一个使用DuckChat系统搭建的聊天站点，此处的描述内容可以在管理后台进行修改配置。<br/>官网：<a target="_blank" href="https://duckchat.akaxin.com">https://duckchat.akaxin.com</a>
             {{/if}}
-
         </div>
         <div class="site_version">
             {{siteVersionName}}
         </div>
     </div>
+</script>
+
+<script type="text/html" id="tpl-string">
+    {{string}}
 </script>

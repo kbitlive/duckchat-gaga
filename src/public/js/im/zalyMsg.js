@@ -638,7 +638,9 @@ function clearRoomUnreadMsgNum(chatSessionId)
     var roomListUnreadNum = localStorage.getItem(roomListMsgUnReadNum);
     roomListUnreadNum =  (roomListUnreadNum-unReadNum) >0 ? (roomListUnreadNum-unReadNum) : 0;
     roomListUnreadNum =  (roomListUnreadNum-unReadNum) >99 ? "99+": roomListUnreadNum;
-
+    if(roomListUnreadNum == 0) {
+        localStorage.setItem(newSiteTipKey, "clear");
+    }
     localStorage.setItem(roomListMsgUnReadNum,roomListUnreadNum);
     localStorage.removeItem(unreadKey);
 
@@ -646,7 +648,6 @@ function clearRoomUnreadMsgNum(chatSessionId)
         $(".room-chatsession-unread_"+chatSessionId)[0].style.display = "none";
         $(".room-chatsession-mute-num_"+chatSessionId+"")[0].style.display = "none";
     }
-    localStorage.setItem(newSiteTipKey, "clear");
     setDocumentTitle();
 }
 
@@ -970,7 +971,7 @@ function trimMsgContentBr(html)
 function handleMsgContentText(str)
 {
     str = trimMsgContentBr(str);
-    var reg=/(blob:)?((http|ftp|https|duckchat):\/\/)?[\w\-_]+(\:[0-9]+)?(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
+    var reg=/(blob:)?((http|ftp|https|duckchat|zaly):\/\/)?[\w\-_]+(\:[0-9]+)?(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
     var arr = str.match(reg);
     if(arr == null) {
         return str;
@@ -984,6 +985,7 @@ function handleMsgContentText(str)
                 || urlLink.indexOf("http://") != -1
                 || urlLink.indexOf("https://") != -1
                 || urlLink.indexOf("ftp://") != -1
+                || urlLink.indexOf("zaly://") != -1
                 || urlLink.indexOf("duckchat://") != -1
             )
         ) {

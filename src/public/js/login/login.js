@@ -40,6 +40,7 @@ invitationCode='';
 nickname="";
 allowShareRealname=0;
 siteLogo="";
+siteName="";
 preSessionId="";
 secondNum  = 120;
 isSending  = false;
@@ -141,7 +142,7 @@ function zalyLoginConfig(results) {
     enableInvitationCode = siteConfig.enableInvitationCode;
     enableRealName=siteConfig.enableRealName;
     sitePubkPem = siteConfig.sitePubkPem;
-    siteLogo = siteConfig.logo;
+
 }
 
 
@@ -165,8 +166,6 @@ getOsType();
 
 zalyjsLoginConfig(zalyLoginConfig);
 
-
-
 var loginNameAlias = $(".loginNameAlias").val();
 var passwordFindWay = $(".passwordFindWay").val();
 var loginWelcomeText = $(".loginWelcomeText").val();
@@ -174,31 +173,97 @@ var loginBackgroundColor = $(".loginBackgroundColor").val();
 var loginBackgroundImage = $(".loginBackgroundImage").val();
 var loginBackgroundImageDisplay = $(".loginBackgroundImageDisplay").val();
 var siteVersionName = $(".siteVersionName").val();
+var siteLogo =  $(".siteLogo").val();
+var siteName = $(".siteName").val();
 
-
-function  getCompanyCustomMade() {
-    var html = template("tpl-company-custom-made", {
-        loginBackgroundColor:loginBackgroundColor,
-        loginBackgroundImage:loginBackgroundImage,
-        loginBackgroundImageDisplay:loginBackgroundImageDisplay,
-        siteVersionName:siteVersionName,
-        loginWelcomeText:loginWelcomeText,
-        siteLogo:siteLogo,
-    });
-    html = handleHtmlLanguage(html);
-    $(".login_custom_made").html(html);
+if(loginWelcomeText) {
+    var text = template("tpl-string", {
+        string:loginWelcomeText
+    })
+    var text = handleLinkContentText(text);
+    $(".company_slogan").html(text);
 }
-getCompanyCustomMade();
+
+
+
+//replace \n from html
+function trimHtmlContentBr(str)
+{
+    html = str.replace(/\\n/g,"<br/>");
+    return html;
+}
+
+function handleLinkContentText(str)
+{
+    str = trimHtmlContentBr(str);
+
+    var reg=/(blob:)?((http|ftp|https|duckchat|zaly):\/\/)?[\w\-_]+(\:[0-9]+)?(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
+    var arr = str.match(reg);
+    if(arr == null) {
+        return str;
+    }
+
+    var length = arr.length;
+    for(var i=0; i<length;i++) {
+        var urlLink = arr[i];
+        if(urlLink.indexOf("blob:") == -1 &&
+            ( IsURL (urlLink)
+                || urlLink.indexOf("http://") != -1
+                || urlLink.indexOf("https://") != -1
+                || urlLink.indexOf("ftp://") != -1
+                || urlLink.indexOf("zaly://") != -1
+                || urlLink.indexOf("duckchat://") != -1
+            )
+        ) {
+            var newUrlLink = urlLink;
+            if(urlLink.indexOf("://") == -1) {
+                newUrlLink = "http://"+urlLink;
+            }
+            var urlLinkHtml = "<a href='"+newUrlLink+"'target='_blank'>"+urlLink+"</a>";
+            str = str.replace(urlLink, urlLinkHtml);
+        }
+    }
+
+    return str;
+}
+
+function IsURL (url) {
+    var urls = url.split("?");
+    var urlAndSchemAndPort = urls.shift();
+    var urlAndPort = urlAndSchemAndPort.split("://").pop();
+    url = urlAndPort.split(":").shift();
+    var ipRegex = '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
+    var ipReg=new RegExp(ipRegex);
+    if(!ipReg.test(url)) {
+        var domainSuffix = url.split(".").pop();
+        var urlDomain = "com,cn,net,xyz,top,tech,org,gov,edu,ink,red,int,mil,pub,biz,CC,name,TV,mobi,travel,info,tv,pro,coop,aero,me,app,onlone,shop" +
+            ",club,store,life,global,live,museum,jobs,cat,tel,bid,pub,foo,site,";
+        if(urlDomain.indexOf(domainSuffix) != -1) {
+            return true;
+        }
+        return false;
+    }
+    return true;
+}
 
 function getLoginPage()
 {
     hideLoading();
     var html = template("tpl-login-div", {
         loginNameAlias: loginNameAlias,
-        passwordFindWay:passwordFindWay
+        siteLogo:siteLogo,
+        siteName:siteName,
     });
     html = handleHtmlLanguage(html);
     $('.login_for_size_div').html(html);
+
+    if(loginWelcomeText) {
+        var text = template("tpl-string", {
+            string:loginWelcomeText
+        })
+        var text = handleLinkContentText(text);
+        $(".mobile_slogn_div").html(text);
+    }
 }
 getLoginPage();
 
@@ -330,18 +395,11 @@ function checkRegisterInfo()
     registerEmail = $(".register_input_email").val();
     isFocus = false;
 
-    if(registerLoginName == "" || registerLoginName == undefined || registerLoginName.length<0 ) {
+    if(registerLoginName == "" || registerLoginName == undefined || registerLoginName.length<0 || registerLoginName.length>24 ) {
         $("#register_input_loginName").focus();
         $(".register_input_loginName_failed")[0].style.display = "block";
         isFocus = true;
     }
-
-    if(!isLoginName(registerLoginName) || registerLoginName.length>16) {
-        $("#register_input_loginName").focus();
-        $(".register_input_loginName_failed")[0].style.display = "block";
-        isFocus = true;
-    }
-
 
     if(registerPassword == "" || registerPassword == undefined || registerPassword.length<5 || registerPassword.length>20 || !isPassword(registerPassword)) {
         $(".register_input_pwd_failed")[0].style.display = "block";
@@ -370,16 +428,6 @@ function checkRegisterInfo()
         }
     }
 
-    if(registerEmail == "" || registerEmail == undefined || registerEmail.length<0) {
-        $(".register_input_email_failed")[0].style.display = "block";
-        if(isFocus == false) {
-            $("#register_input_email").focus();
-            $(".register_input_nickname_failed")[0].style.display = "none";
-            isFocus = true;
-        }
-    }
-
-
     if(isFocus == true) {
         return false;
     }
@@ -389,10 +437,7 @@ function checkRegisterInfo()
         zalyjsAlert($.i18n.map["passwordIsNotSameJsTip"]);
         return false;
     }
-    if(!validateEmail(registerEmail)) {
-        zalyjsAlert($.i18n.map["emailJsTip"]);
-        return false;
-    }
+
     loginName = registerLoginName;
     loginPassword = registerPassword;
     return true;
@@ -758,7 +803,9 @@ function registerForPassportPassword()
 {
     setDocumentTitle("register");
     var html = template("tpl-register-div", {
-        enableInvitationCode : enableInvitationCode
+        enableInvitationCode : enableInvitationCode,
+        loginNameAlias:loginNameAlias,
+        passwordFindWay:passwordFindWay
     });
     html = handleHtmlLanguage(html);
     $(".zaly_site_register-name").html(html);

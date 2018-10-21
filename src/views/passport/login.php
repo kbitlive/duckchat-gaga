@@ -19,26 +19,7 @@
 <body>
 <div class="site-warning"></div>
     <div style="position: relative; width:100%;height:100%;" class="site_login_div">
-        <?php if ($loginBackgroundImage) { ?>
 
-        <?php if ($loginBackgroundImageDisplay == 0 ) { ?>
-<!--            ///默认-->
-            <div class="zaly_container" style="background: url('../../public/img/site/<?php echo $loginBackgroundImage;?>') no-repeat;background-size: 100% 100%;">
-
-        <?php } elseif ($loginBackgroundImageDisplay == 1 ) {?>
-<!--                ///填充-->
-                <?php echo $loginBackgroundImageDisplay;?>
-
-                <div class="zaly_container" style="background: url('../../public/img/site/<?php echo $loginBackgroundImage;?>');background-size: cover;">
-            <?php } else {?>
-<!--                ///平铺-->
-             <div class="zaly_container" style="background: url('../../public/img/site/<?php echo $loginBackgroundImage;?>') repeat;">
-        <?php } ?>
-
-            <?php } else { ?>
-            <div class="zaly_container">
-                <?php } ?>
-            </div>
         <?php if($loginBackgroundColor) { ?>
             <div style="position: absolute;background-color: <?php echo $loginBackgroundColor; ?>;opacity:0.4;filter:alpha(opacity=40);top:0rem; height: 100%;width: 100%;">
             </div>
@@ -46,6 +27,29 @@
             <div style="position: absolute;background: RGBA(0, 0, 0, 0.6);top:0rem; height: 100%;width: 100%;">
             </div>
         <?php } ?>
+
+
+        <?php if ($loginBackgroundImage) { ?>
+
+                <?php if ($loginBackgroundImageDisplay == 0 ) { ?>
+        <!--            ///默认-->
+                    <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>') no-repeat;background-size: 100% 100%;">
+
+                <?php } elseif ($loginBackgroundImageDisplay == 1 ) {?>
+        <!--                ///填充-->
+                        <?php echo $loginBackgroundImageDisplay;?>
+
+                <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>');background-size: cover;">
+            <?php } else {?>
+<!--                ///平铺-->
+             <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>') repeat;">
+        <?php } ?>
+
+            <?php } else { ?>
+            <div class="zaly_container">
+                <?php } ?>
+            </div>
+
         <div style="" class="login_div_container">
                 <div class="login_container">
                     <input type="hidden" value="<?php echo $loginNameAlias;?>" class="loginNameAlias">
@@ -55,9 +59,37 @@
                     <input type="hidden" value="<?php echo $loginBackgroundImage;?>" class="loginBackgroundImage">
                     <input type="hidden" value="<?php echo $loginBackgroundImageDisplay;?>" class="loginBackgroundImageDisplay">
                     <input type="hidden" value="<?php echo $siteVersionName;?>" class="siteVersionName">
+                    <input type="hidden" value="<?php echo $siteName;?>" class="siteName">
+                    <input type="hidden" value="<?php echo $siteLogo;?>" class="siteLogo">
 
                     <div class="container">
                         <div  class="login_custom_made">
+                            <div class="company_custom_made">
+                                <div>
+                                    <?php if($siteLogo) { ?>
+                                    <img src="<?php echo $siteLogo; ?>" class="company_logo">
+                                    <?php } else { ?>
+                                    <img src="../../public/img/login/logo.png" class="company_logo">
+                                    <?php } ?>
+                                </div>
+                                <div>
+                                    <?php if($siteName) { ?>
+                                    <span class="company_name"><?php echo $siteName; ?></span>
+                                    <?php } else { ?>
+                                    <span class="company_name">Duckchat</span>
+                                    <?php } ?>
+                                </div>
+                                <div class="company_slogan">
+                                    <?php if($loginWelcomeText) { ?>
+                                        <?php echo $loginWelcomeText; ?>
+                                    <?php } else { ?>
+                                    这是一个使用DuckChat系统搭建的聊天站点，此处的描述内容可以在管理后台进行修改配置。<br/>官网：<a target="_blank" href="https://duckchat.akaxin.com">https://duckchat.akaxin.com</a>
+                                    <?php } ?>
+                                </div>
+                                <div class="site_version">
+                                    V<?php echo $siteVersionName; ?>
+                                </div>
+                            </div>
 
                         </div>
                         <div  class="login_div">

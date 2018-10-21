@@ -335,6 +335,7 @@ class InstallDBController
     }
 
 
+
     private function initSiteWithSqlite($sqliteName, $siteName, $siteHost, $Port)
     {
         $dbInfo = $this->_dbPath . "/" . $sqliteName;
