@@ -23,25 +23,26 @@ class Page_Passport_LoginController extends HttpBaseController
 
         $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
 
-        $loginNameAliasConfig = $loginConfig[LoginConfig::LOGIN_NAME_ALIAS];
-        $loginNameAlias = $loginNameAliasConfig["configValue"];
-        $passwordResetWayConfig = $loginConfig[LoginConfig::PASSWORD_RESET_WAY];
-        $passwordRestWay = $passwordResetWayConfig["configValue"];
+        $loginNameAliasConfig = isset($loginConfig[LoginConfig::LOGIN_NAME_ALIAS]) ? $loginConfig[LoginConfig::LOGIN_NAME_ALIAS] : "";
+        $loginNameAlias = isset( $loginNameAliasConfig["configValue"]) ?  $loginNameAliasConfig["configValue"] : "";
+        $passwordResetWayConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_WAY]) ?  $loginConfig[LoginConfig::PASSWORD_RESET_WAY] : "";
+        $passwordRestWay = isset($passwordResetWayConfig["configValue"]) ? $passwordResetWayConfig["configValue"] : "";
 
-        $passwordResetRequiredConfig = $loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED];
-        $passwordResetRequired = $passwordResetRequiredConfig["configValue"];
+        $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
+        $passwordResetRequiredConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED]) ? $loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED] : "";
+        $passwordResetRequired = isset($passwordResetRequiredConfig["configValue"]) ? $passwordResetRequiredConfig["configValue"] : "";
 
-        $loginWelcomeTextConfig = $loginConfig[LoginConfig::LOGIN_PAGE_WELCOME_TEXT];
-        $loginWelcomeText = $loginWelcomeTextConfig["configValue"];
+        $loginWelcomeTextConfig = isset($loginConfig[LoginConfig::LOGIN_PAGE_WELCOME_TEXT]) ? $loginConfig[LoginConfig::LOGIN_PAGE_WELCOME_TEXT] : "";
+        $loginWelcomeText = isset($loginWelcomeTextConfig["configValue"]) ? $loginWelcomeTextConfig["configValue"] : "";
 
-        $loginBackgroundColorConfig = $loginConfig[LoginConfig::LOGIN_PAGE_BACKGROUND_COLOR];
-        $loginBackgroundColor = $loginBackgroundColorConfig["configValue"];
+        $loginBackgroundColorConfig = isset($loginConfig[LoginConfig::LOGIN_PAGE_BACKGROUND_COLOR]) ? $loginConfig[LoginConfig::LOGIN_PAGE_BACKGROUND_COLOR] : "";
+        $loginBackgroundColor = isset($loginBackgroundColorConfig["configValue"]) ? $loginBackgroundColorConfig["configValue"] : "";
 
-        $loginBackgroundImageConfig = $loginConfig[LoginConfig::LOGIN_PAGE_BACKGROUND_IMAGE];
-        $loginBackgroundImage = $loginBackgroundImageConfig["configValue"];
+        $loginBackgroundImageConfig = isset($loginConfig[LoginConfig::LOGIN_PAGE_BACKGROUND_IMAGE]) ? $loginConfig[LoginConfig::LOGIN_PAGE_BACKGROUND_IMAGE] : "";
+        $loginBackgroundImage = isset($loginBackgroundImageConfig["configValue"]) ? $loginBackgroundImageConfig["configValue"] : "";
 
-        $loginBackgroundImageDisplayConfig = $loginConfig[LoginConfig::LOGIN_PAGE_BACKGROUND_IMAGE_DISPLAY];
-        $loginBackgroundImageDisplay = $loginBackgroundImageDisplayConfig["configValue"];
+        $loginBackgroundImageDisplayConfig = isset($loginConfig[LoginConfig::LOGIN_PAGE_BACKGROUND_IMAGE_DISPLAY]) ? $loginConfig[LoginConfig::LOGIN_PAGE_BACKGROUND_IMAGE_DISPLAY] : "";
+        $loginBackgroundImageDisplay = isset($loginBackgroundImageDisplayConfig["configValue"]) ? $loginBackgroundImageDisplayConfig["configValue"] : "";
 
         $siteVersionName = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionNameKey);
 

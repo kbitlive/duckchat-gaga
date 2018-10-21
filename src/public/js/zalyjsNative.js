@@ -35,14 +35,16 @@ function zalyjsCallbackHelperConstruct() {
     //
     this.callback = function(param) {
         try {
+            // alert("enter =====" + param);
+            var paramBase64Decode;
             try{
-                param = decodeURIComponent(escape(window.atob(param)));
+                paramBase64Decode = decodeURIComponent(escape(window.atob(param)));
             }catch (error) {
-                param = window.atob(param);
+                paramBase64Decode = window.atob(param);
             }
 
             // js json for \n
-            param = param.replace(/\n/g,"\\\\n");
+            param = paramBase64Decode.replace(/\n/g,"\\\\n");
 
             var paramObj = JSON.parse(param)
             var id = paramObj[callbackIdParamName]

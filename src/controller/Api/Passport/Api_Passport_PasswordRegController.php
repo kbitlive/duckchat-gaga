@@ -59,6 +59,19 @@ class Api_Passport_PasswordRegController extends BaseController
                 throw new Exception("sitePubkPem  is  not exists");
             }
 
+            $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
+            $passwordResetRequiredConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED]) ? $loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED] : "";
+            $passwordResetRequired = isset($passwordResetRequiredConfig["configValue"]) ? $passwordResetRequiredConfig["configValue"] : "";
+            $passwordResetWayConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_WAY]) ? $loginConfig[LoginConfig::PASSWORD_RESET_WAY] : "";
+            $passwordRestWay = isset($passwordResetWayConfig["configValue"]) ? $passwordResetWayConfig["configValue"] : "email ";
+
+            if($passwordResetRequired == 1 && mb_strlen(trim($email))<1) {
+                $tip = ZalyText::getText("text.param.void", $this->language);
+                $errorInfo = $passwordRestWay." " .$tip;
+                $this->setRpcError("error.alert", $errorInfo);
+                throw new Exception("$errorInfo  is  not exists");
+            }
+
             $this->checkLoginName($loginName);
             $preSessionId = $this->registerUserForPassport($loginName, $email, $password, $nickname, $invitationCode, $sitePubkPem);
             $response = new \Zaly\Proto\Site\ApiPassportPasswordRegResponse();

@@ -19,6 +19,7 @@ class ZalyText
         "upload.file.size" => ["file exceeds maximum limit", "文件超过最大限制"],
         "text.open.web" => ["web is not allowed", "该站点没有开起web版本"],
         "text.group.admin.invite" => ["only allow the group admin or owner", "只允许群主或者管理员邀请好友入群"],
+        'text.param.void' => ["mast not null", "不能为空"],
     ];
 
     public static $keyGroupCreate = "{key.group.create}";

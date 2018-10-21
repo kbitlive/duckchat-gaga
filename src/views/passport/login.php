@@ -34,18 +34,24 @@
                 <?php if ($loginBackgroundImageDisplay == 0 ) { ?>
         <!--            ///默认-->
                     <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>') no-repeat;background-size: 100% 100%;">
-
                 <?php } elseif ($loginBackgroundImageDisplay == 1 ) {?>
         <!--                ///填充-->
-
-                <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>');background-size: cover;">
-            <?php } else {?>
+                    <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>');background-size: cover;">
+                <?php } else {?>
 <!--                ///平铺-->
-             <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>') repeat;">
-        <?php } ?>
-
+                    <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>') repeat;">
+                <?php } ?>
             <?php } else { ?>
-            <div class="zaly_container">
+                    <?php if ($loginBackgroundImageDisplay == 0 ) { ?>
+                    <!--            ///默认-->
+                            <div class="zaly_container" style="background: url('../../public/img/login/login_bg.jpg') no-repeat;background-size: 100% 100%;">
+                    <?php } elseif ($loginBackgroundImageDisplay == 1 ) {?>
+                        <!--                ///填充-->
+                                <div class="zaly_container" style="background: url('../../public/img/login/login_bg.jpg');background-size: cover;">
+                    <?php } else {?>
+                            <!--                ///平铺-->
+                            <div class="zaly_container" style="background: url('../../public/img/login/login_bg.jpg') repeat;">
+                    <?php } ?>
                 <?php } ?>
             </div>
 
@@ -60,6 +66,7 @@
                     <input type="hidden" value="<?php echo $siteVersionName;?>" class="siteVersionName">
                     <input type="hidden" value="<?php echo $siteName;?>" class="siteName">
                     <input type="hidden" value="<?php echo $siteLogo;?>" class="siteLogo">
+                    <input type="hidden" value="<?php echo $passwordResetRequired;?>" class="passwordResetRequired">
 
                     <div class="container">
                         <div  class="login_custom_made">

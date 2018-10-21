@@ -175,6 +175,9 @@ var loginBackgroundImageDisplay = $(".loginBackgroundImageDisplay").val();
 var siteVersionName = $(".siteVersionName").val();
 var siteLogo =  $(".siteLogo").val();
 var siteName = $(".siteName").val();
+var passwordResetRequired = $(".passwordResetRequired").val();
+
+console.log("passwordResetRequired====="+passwordResetRequired);
 
 if(loginWelcomeText) {
     var text = template("tpl-string", {
@@ -328,7 +331,6 @@ $(".input_login_site").bind('input porpertychange',function(){
 });
 
 
-
 function returnRegisterDiv() {
     $(".zaly_site_register-invitecode")[0].style.display = "none";
     $(".zaly_site_update-invitecode")[0].style.display="none";
@@ -340,26 +342,6 @@ function  returnLoginDiv() {
     $(".zaly_site_update-invitecode")[0].style.display="none";
     $(".zaly_login_by_pwd")[0].style.display = "block";
 }
-
-// function handleHtmlLanguage(html)
-// {
-//     $(html).find("[data-local-placeholder]").each(function () {
-//         var placeholderValue = $(this).attr("data-local-placeholder");
-//         var placeholder = $(this).attr("placeholder");
-//         var newPlaceholder = $.i18n.map[placeholderValue];
-//         html = html.replace(placeholder, newPlaceholder);
-//     });
-//
-//     $(html).find("[data-local-value]").each(function () {
-//         var changeHtmlValue = $(this).attr("data-local-value");
-//         var valueHtml = $(this).html();
-//         var newValueHtml = $.i18n.map[changeHtmlValue];
-//         // $(this).html(newValueHtml);
-//         html = html.replace(valueHtml, newValueHtml);
-//     });
-//
-//     return html;
-// }
 
 
 function forgetPwdForPassportPassword()
@@ -428,9 +410,19 @@ function checkRegisterInfo()
         }
     }
 
+    if(passwordResetRequired == 1 && (registerEmail == "" || registerEmail == undefined || registerEmail.length<0)) {
+        $(".register_input_email_failed")[0].style.display = "block";
+        if(isFocus == false) {
+            $("#register_input_email").focus();
+            $(".register_input_nickname_failed")[0].style.display = "none";
+            isFocus = true;
+        }
+    }
+
     if(isFocus == true) {
         return false;
     }
+    $(".register_input_nickname_failed")[0].style.display = "none";
     $(".register_input_email_failed")[0].style.display = "none";
 
     if(registerPassword != repassword) {
