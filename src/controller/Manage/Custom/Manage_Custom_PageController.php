@@ -34,10 +34,13 @@ class Manage_Custom_PageController extends Manage_CommonController
         $params['loginWelcomeText'] = $loginWelcomeText;
         $params['loginBackgroundColor'] = $loginBackgroundColor;
         $params['loginBackgroundImage'] = $loginBackgroundImage;
-        $params['loginBackgroundImageDisplay'] = $loginBackgroundImageDisplay;
 
-        $this->logger->error("=================", var_export($params, true));
-
+        if (isset($loginBackgroundImageDisplay)) {
+            $params['loginBackgroundImageDisplay'] = $loginBackgroundImageDisplay;
+        } else {
+            $params['loginBackgroundImageDisplay'] = 0;
+        }
+        
         echo $this->display("manage_custom_index", $params);
 
         return;

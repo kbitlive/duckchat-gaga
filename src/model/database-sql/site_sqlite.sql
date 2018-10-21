@@ -129,14 +129,13 @@ CREATE INDEX IF NOT EXISTS indexSiteGroupMessageGroupId ON siteGroupMessage(grou
 CREATE TABLE IF NOT EXISTS passportPassword(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 userId VARCHAR(100) NOT NULL,
-                email VARCHAR(100) NOT NULL,
-                password VARCHAR(100) NOT NULL,
-                nickname VARCHAR(100) NOT NULL,
                 loginName VARCHAR(100) NOT NULL,
+                nickname VARCHAR(100) NOT NULL,
+                password VARCHAR(100) NOT NULL,
+                email VARCHAR(100),
                 invitationCode VARCHAR(100),
                 timeReg BIGINT,
                 unique(userId),
-                unique(email),
                 unique(loginName)
             );
 

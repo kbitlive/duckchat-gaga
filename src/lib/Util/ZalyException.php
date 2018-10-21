@@ -1,9 +1,9 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: childeYin<尹少爷>
- * Date: 18/07/2018
- * Time: 8:45 AM
+ * custom exception by errCode && errInfo
+ * User: anguoyue
+ * Date: 21/10/2018
+ * Time: 12:16 PM
  */
 
 class ZalyException extends Exception
@@ -20,4 +20,13 @@ class ZalyException extends Exception
     }
 
 
+    public function getErrCode()
+    {
+        return $this->errCode;
+    }
+
+    public function getErrInfo()
+    {
+        return $this->errInfo;
+    }
 }

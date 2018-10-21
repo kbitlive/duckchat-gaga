@@ -172,8 +172,10 @@ class Page_Version_UpgradeController extends Page_VersionController
         //add siteGroup canAddFriend column
         $sql = "alter table siteGroup add column canAddFriend BOOLEAN default true";
         $prepare = $this->ctx->db->prepare($sql);
-
         $flag = $prepare->execute();
+
+
+        $flag = $flag && $this->upgradePasswordTableFrom10012_10013();
 
         if ($flag && $prepare->errorCode() == "00000") {
             $this->upgradeErrCode = "success";
@@ -211,6 +213,50 @@ class Page_Version_UpgradeController extends Page_VersionController
                 select 
                   id,groupId,name,nameInLatin,owner,avatar,description,descriptionType,permissionJoin,canGuestReadMessage,1 as canAddFriend,speakers,maxMembers,status,isWidget,timeCreate
                 from siteGroup_temp_10012";
+        $prepare = $this->ctx->db->prepare($sql);
+        $flag = $prepare->execute();
+
+        if (!$flag && $prepare->errorCode() != "00000") {
+            $this->upgradeErrCode = "error";
+            $this->upgradeErrInfo = var_export($prepare->errorInfo(), true);
+            return false;
+        }
+
+
+        //upgrade passportPassword table
+        $flag = $flag && $this->upgradePasswordTableFrom10012_10013();
+
+        if ($flag) {
+            $this->upgradeErrCode = "success";
+            return true;
+        }
+
+        $this->upgradeErrCode = "error";
+        $this->upgradeErrInfo = var_export($prepare->errorInfo(), true);
+        return false;
+    }
+
+    private function upgradePasswordTableFrom10012_10013()
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $sql = "drop table passportPassword_temp_10012";
+        $this->ctx->db->exec($sql);
+
+        //rename table
+        $sql = "alter table passportPassword rename to passportPassword_temp_10012";
+        $result = $this->ctx->db->exec($sql);
+        $this->logger->error($tag, "rename table passportPassword to passportPassword_temp_10012 result=" . $result);
+
+        //execute all table
+        $this->executeSqliteScript();
+
+
+        //migrate data to new table
+        $sql = "insert into 
+                  passportPassword(id ,userId ,loginName ,nickname ,password ,email ,invitationCode ,timeReg) 
+                select 
+                  id ,userId ,loginName ,nickname ,password,email ,invitationCode ,timeReg
+                from passportPassword_temp_10012";
         $prepare = $this->ctx->db->prepare($sql);
         $flag = $prepare->execute();
 
