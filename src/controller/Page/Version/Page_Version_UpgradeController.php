@@ -253,9 +253,9 @@ class Page_Version_UpgradeController extends Page_VersionController
 
         //migrate data to new table
         $sql = "insert into 
-                  passportPassword(id ,userId ,loginName ,nickname VARCHAR(100) ,password VARCHAR(100) ,email ,invitationCode ,timeReg) 
+                  passportPassword(id ,userId ,loginName ,nickname ,password ,email ,invitationCode ,timeReg) 
                 select 
-                  id ,userId ,loginName ,nickname VARCHAR(100) ,password VARCHAR(100) ,email ,invitationCode ,timeReg
+                  id ,userId ,loginName ,nickname ,password,email ,invitationCode ,timeReg
                 from passportPassword_temp_10012";
         $prepare = $this->ctx->db->prepare($sql);
         $flag = $prepare->execute();
