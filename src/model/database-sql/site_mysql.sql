@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS passportPassword(
                 loginName VARCHAR(100) NOT NULL,
                 nickname VARCHAR(100) NOT NULL,
                 password VARCHAR(100) NOT NULL,
-                email VARCHAR(100) NOT NULL,
+                email VARCHAR(100),
                 invitationCode VARCHAR(100),
                 timeReg BIGINT,
                 unique(userId),
