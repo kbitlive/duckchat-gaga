@@ -155,10 +155,9 @@ function loginFailed(result)
     } else {
         zalyjsAlert(result);
     }
-
     if(isRegister == true && enableInvitationCode == 1) {
         $(".register_button").attr("is_type", updateInvitationCodeType);
-        apiPassportPasswordLogin(failedApiPassportPasswordLogin);
+        // apiPassportPasswordLogin(failedApiPassportPasswordLogin);
     }
 }
 
@@ -176,8 +175,6 @@ var siteVersionName = $(".siteVersionName").val();
 var siteLogo =  $(".siteLogo").val();
 var siteName = $(".siteName").val();
 var passwordResetRequired = $(".passwordResetRequired").val();
-
-console.log("passwordResetRequired====="+passwordResetRequired);
 
 if(loginWelcomeText) {
     var text = template("tpl-string", {
@@ -475,7 +472,6 @@ function loginNameNotExist()
         zalyjsAlert("站点公钥获取失败");
         return false;
     }
-
     var action = "api.passport.passwordReg";
     var reqData = {
         loginName:registerLoginName,
@@ -489,6 +485,9 @@ function loginNameNotExist()
 }
 
 $(document).on("click", ".register_button", function () {
+    if(isRegister == true && enableInvitationCode == 1) {
+        $(".register_button").attr("is_type", updateInvitationCodeType);
+    }
     registerAndLogin();
 });
 
@@ -507,7 +506,7 @@ function registerAndLogin()
 
     if(isType == updateInvitationCodeType) {
         showLoading($(".site_login_div"));
-        updatePassportPasswordInvitationCode();
+        apiPassportPasswordLogin(updatePassportPasswordInvitationCode);
     } else {
         var flag = checkRegisterInfo();
         if(flag == false) {
@@ -518,11 +517,6 @@ function registerAndLogin()
     }
 }
 
-function displayUpdateInvitationSite() {
-    hideLoading();
-    $(".register_button").attr("is_type", updateInvitationCodeType);
-    apiPassportPasswordLogin(failedApiPassportPasswordLogin);
-}
 ///更新邀请码，并且登录site
 function failedCallBack(result) {
     try{
@@ -532,26 +526,25 @@ function failedCallBack(result) {
         }else {
             zalyjsAlert(result);
         }
-        displayUpdateInvitationSite();
+        $(".register_button").attr("is_type", updateInvitationCodeType);
     }catch (error){
-        displayUpdateInvitationSite();
+        $(".register_button").attr("is_type", updateInvitationCodeType);
     }
-}
-
-function failedApiPassportPasswordLogin(results) {
-    hideLoading();
-    isRegister = false;
-    preSessionId = results.preSessionId;
 }
 
 $(document).on("click", ".update_code_btn", function () {
     invitationCode = $(".update_input_code").val();
     showLoading($(".site_login_div"));
-    updatePassportPasswordInvitationCode();
+    // updatePassportPasswordInvitationCode();
+    apiPassportPasswordLogin(updatePassportPasswordInvitationCode);
 });
 
-function updatePassportPasswordInvitationCode()
+function updatePassportPasswordInvitationCode(results)
 {
+    if(results != "" && results != undefined && results.hasOwnProperty("preSessionId")) {
+        preSessionId = results.preSessionId;
+        console.log("preSessionId");
+    }
     var action = "api.passport.passwordUpdateInvitationCode";
     var reqData = {
         sitePubkPem:sitePubkPem,
@@ -657,6 +650,8 @@ function apiPassportPasswordLogin(callback)
     var action = "api.passport.passwordLogin";
     var name = registerLoginName == undefined ? loginName : registerLoginName;
     var password = registerPassword == undefined ? loginPassword : registerPassword;
+
+
     var reqData = {
         loginName:name,
         password:password,
@@ -675,6 +670,7 @@ function handleApiPassportPasswordLogin(results)
 function displayInvitationCode()
 {
     hideLoading();
+    console.log("enableInvitationCode ==" + enableInvitationCode)
     if(enableInvitationCode != "1") {
         if(isRegister == true) {
             return false;
