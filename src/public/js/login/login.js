@@ -535,7 +535,6 @@ function failedCallBack(result) {
 $(document).on("click", ".update_code_btn", function () {
     invitationCode = $(".update_input_code").val();
     showLoading($(".site_login_div"));
-    // updatePassportPasswordInvitationCode();
     apiPassportPasswordLogin(updatePassportPasswordInvitationCode);
 });
 
@@ -543,7 +542,6 @@ function updatePassportPasswordInvitationCode(results)
 {
     if(results != "" && results != undefined && results.hasOwnProperty("preSessionId")) {
         preSessionId = results.preSessionId;
-        console.log("preSessionId");
     }
     var action = "api.passport.passwordUpdateInvitationCode";
     var reqData = {
@@ -670,7 +668,6 @@ function handleApiPassportPasswordLogin(results)
 function displayInvitationCode()
 {
     hideLoading();
-    console.log("enableInvitationCode ==" + enableInvitationCode)
     if(enableInvitationCode != "1") {
         if(isRegister == true) {
             return false;
@@ -684,17 +681,9 @@ function displayInvitationCode()
     }
 }
 
-function loginFailNeedRegister(result)
+function loginFailNeedRegister()
 {
-    try{
-        if(result == undefined || result.errorCode == errorUserNeedRegister ) {
-            displayInvitationCode();
-            return;
-        }
-    }catch (error) {
-        displayInvitationCode();
-        return;
-    }
+    displayInvitationCode();
 }
 
 
