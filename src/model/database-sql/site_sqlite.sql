@@ -69,11 +69,12 @@ CREATE TABLE  IF NOT EXISTS siteGroup (
                description TEXT,/*群描述*/
                descriptionType INTEGER default 0,/*descrption type， 0 text, 1 md*/
                permissionJoin INTEGER,/*加入方式*/
-               canGuestReadMessage BOOLEAN,/*游客是否允许读群消息*/
+               canGuestReadMessage BOOLEAN default true,/*游客是否允许读群消息*/
+               canAddFriend BOOLEAN default true,
                maxMembers INTEGER,/*群最大成员数*/
                speakers TEXT, /*发言人*/
-                status INTEGER default 1,/*表示群的状态， 1表示正常*/
-                isWidget INTEGER default 0, /*表示1是挂件，0不是挂件*/
+               status INTEGER default 1,/*表示群的状态， 1表示正常*/
+               isWidget INTEGER default 0, /*表示1是挂件，0不是挂件*/
                timeCreate BIGINT,
                UNIQUE(groupId)
         );
@@ -128,14 +129,13 @@ CREATE INDEX IF NOT EXISTS indexSiteGroupMessageGroupId ON siteGroupMessage(grou
 CREATE TABLE IF NOT EXISTS passportPassword(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 userId VARCHAR(100) NOT NULL,
-                email VARCHAR(100) NOT NULL,
-                password VARCHAR(100) NOT NULL,
-                nickname VARCHAR(100) NOT NULL,
                 loginName VARCHAR(100) NOT NULL,
+                nickname VARCHAR(100) NOT NULL,
+                password VARCHAR(100) NOT NULL,
+                email VARCHAR(100),
                 invitationCode VARCHAR(100),
                 timeReg BIGINT,
                 unique(userId),
-                unique(email),
                 unique(loginName)
             );
 
@@ -210,3 +210,11 @@ CREATE TABLE IF NOT EXISTS siteUserGif(
                       gifId VARCHAR(100) NOT NULL,
                       userId VARCHAR(100) NOT NULL,
                       addTime BIGINT);
+
+CREATE TABLE IF NOT EXISTS siteLoginCustom(
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      configKey VARCHAR(100) NOT NULL,
+                      configValue TEXT,
+                      configValueEN TEXT ,
+                      updateUserId VARCHAR(100),
+                      updateTime BIGINT);

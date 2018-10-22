@@ -39,10 +39,7 @@ abstract class  ZalyErrorBase
 
     public $errorGroupQuitOwner = "error.group.quitOwner";
     public $errorGroupQuit = "error.group.quit";
-
     public $errorGroupUpdate = "error.group.update";
-    public static $errorGroupEmptyId = "error.group.emptyId";
-    public static $errorGroupPermission = "error.group.permission";
 
     public $errorFriendApply = "error.friend.apply";
     public $errorFriendApplyFriendExists = "error.friend.apply.friendExist";

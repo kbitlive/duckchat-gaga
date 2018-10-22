@@ -22,6 +22,9 @@ body,html {
     width:100%;
     display: none;
 }
+.paddingTop {
+    padding-top: 14rem;
+}
 .zaly_container {
     padding:0;
     height: 100%;
@@ -550,5 +553,8 @@ button {
     }
     .initHeader {
         display: none;
+    }
+    .paddingTop {
+        padding-top: 0rem;
     }
 }

@@ -30,10 +30,10 @@ if(needUpgrade != 1) {
 
 var isCheckUpgradeToken = localStorage.getItem(isCheckUpgradeTokenKey);
 var isSureSiteBackup = localStorage.getItem(isSureSiteBackup, "yes");
-
-if(isCheckUpgradeToken == "yes" && isSureSiteBackup == 'yes') {
-    // displayUpgradeVersion();
-}
+//
+// if(isCheckUpgradeToken == "yes" && isSureSiteBackup == 'yes') {
+//     // displayUpgradeVersion();
+// }
 
 $(document).on("click",".zaly_site_backup_sure", function () {
     localStorage.setItem(isSureSiteBackup, "yes");
@@ -70,7 +70,7 @@ function checkUpgradeToken() {
         data: data,
         success: function (resp) {
             var data = JSON.parse(resp);
-
+            hideLoading();
             if (data.errCode == "error") {
                 alert("校验口令失败");
             } else {
@@ -86,11 +86,15 @@ function checkUpgradeToken() {
                 $(".zaly_window")[0].style.display = "flex";
                 localStorage.setItem(isCheckUpgradeTokenKey, "yes");
             }
+        },
+        fail:function () {
+            hideLoading();
         }
     });
 }
 
 $(".upgrade_next_btn").on("click", function () {
+    showLoading($(".container"));
     checkUpgradeToken();
 });
 
@@ -135,7 +139,7 @@ function upgradeSiteVersion() {
     var nextUpgradeVersionNum = Number(Number(upgradeVersionNum)+1);
     localStorage.setItem(currentUpgradeVersionKey, nextUpgradeVersionNum);
     var endUpgradeNum = localStorage.getItem(endUpgradeVersionKey);
-    if(nextUpgradeVersionNum > Number(endUpgradeNum)) {
+    if(nextUpgradeVersionNum >= Number(endUpgradeNum)) {
         if(isPhone()) {
             var html = "升级完成，关闭当前页面";
             $(".upgrade_staring_btn").attr("goto", "close_page");
@@ -240,6 +244,9 @@ $(document).on("click", ".upgrade_staring_btn", function () {
 
 
 function checkUpgradeResult() {
+    if(upgradeId == undefined) {
+        return ;
+    }
     $.ajax({
         method: "POST",
         url: "./index.php?action=page.version.check",
@@ -249,6 +256,7 @@ function checkUpgradeResult() {
                 return;
             }
             clearInterval(upgradeId);
+            upgradeId = undefined;
             if (data.upgradeErrCode == "success") {
                 upgradeSiteVersion();
             } else {

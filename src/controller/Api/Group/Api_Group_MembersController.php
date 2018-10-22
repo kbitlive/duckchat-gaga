@@ -37,6 +37,11 @@ class Api_Group_MembersController extends Api_Group_BaseController
                 throw new Exception($errorInfo);
             }
 
+            $isGroupExists = $this->getGroupInfo($groupId);
+            if($isGroupExists === false) {
+                return;
+            }
+
             //check permission , userId is groupMember
 
             if (!$this->isMemberOfGroup($this->userId, $groupId)) {

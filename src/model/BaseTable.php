@@ -182,7 +182,7 @@ class BaseTable
                 "error_info" => $this->db->errorInfo(),
             ];
             if ($this->db->errorCode() == 'HY000') {
-                $this->ctx->Wpf_Logger->error("===================table result ==", var_export($this->db->errorInfo(), true));
+                $this->ctx->Wpf_Logger->error("db.error", var_export($this->db->errorInfo(), true));
             }
             $this->ctx->Wpf_Logger->error($tag, json_encode($error));
             throw new Exception("execute prepare fail" . json_encode($error));

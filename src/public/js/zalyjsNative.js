@@ -6,7 +6,10 @@ var callbackIdParamName = "zalyjsCallbackId";
 //localStorage, prevent page flush, and the referrer is lost
 var refererUrl = document.referrer;
 var refererUrlKey = "documentReferer";
-if(refererUrl.length>0) {
+
+refererUrlKeyVal = localStorage.getItem(refererUrlKey);
+
+if(refererUrl.length>0 && (!refererUrlKeyVal)) {
     localStorage.setItem(refererUrlKey, refererUrl);
     refererUrlKeyVal = localStorage.getItem(refererUrlKey);
 }
@@ -32,9 +35,15 @@ function zalyjsCallbackHelperConstruct() {
     //
     this.callback = function(param) {
         try {
-            param = atob(param);
+            // alert("enter =====" + param);
+            var paramBase64Decode;
+            try{
+                paramBase64Decode = decodeURIComponent(escape(window.atob(param)));
+            }catch (error) {
+                paramBase64Decode = window.atob(param);
+            }
             // js json for \n
-            param = param.replace(/\n/g,"\\\\n");
+            param = paramBase64Decode.replace(/\n/g,"\\\\n");
 
             var paramObj = JSON.parse(param)
             var id = paramObj[callbackIdParamName]
@@ -62,7 +71,7 @@ getOsType();
 
 function getOsType() {
     var u = navigator.userAgent;
-    if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+    if (u.indexOf('Android') > -1) {
         clientType =  'Android';
     } else if (u.indexOf('iPhone') > -1) {
         clientType = 'IOS';
@@ -93,7 +102,9 @@ function addJsByDynamic(url)
     script.type = "text/javascript";
     //Firefox, Opera, Chrome, Safari 3+
     script.src = url;
-    $(".zaly_container")[0].appendChild(script);
+
+    var head = document.getElementsByTagName('head')[0].appendChild(script);
+
 }
 
 //
@@ -119,7 +130,7 @@ function zalyjsNavOpenPage(url) {
 }
 
 function zalyjsLoginSuccess(loginName, sessionid, isRegister, callback) {
-
+    console.log("zalyjsLoginSuccess loginName ==" + loginName + " clientType =="+clientType.toLowerCase());
     var callbackId = zalyjsCallbackHelper.register(callback)
     var messageBody = {}
     messageBody["loginName"] = loginName
@@ -151,25 +162,38 @@ function loginPcClient(messageBody, callbackName)
     zalyjsSiteLoginMessageBody.refererUrl = refererUrl;
     zalyjsSiteLoginMessageBody.callbackName = callbackName;
 
+    if(!refererUrl) {
+        refererUrl = "./index.php";
+    }
+
     if(messageBody.isRegister == false)  {
-        var jsUrl = "./index.php?action=page.js&loginName="+messageBody.loginName+"&success_callback=zalyjsWebLoginSuccess&fail_callback="+callbackName;
+        if(refererUrl.indexOf("?") > -1) {
+            var jsUrl = refererUrl + "&action=page.js&loginName="+messageBody.loginName+"&success_callback=zalyjsWebLoginSuccess&fail_callback="+callbackName;
+        } else{
+            var jsUrl = refererUrl + "?action=page.js&loginName="+messageBody.loginName+"&success_callback=zalyjsWebLoginSuccess&fail_callback="+callbackName;
+        }
         addJsByDynamic(jsUrl);
         return;
     }
     zalyjsWebLoginSuccess();
 }
 
+
 ////登录成功后，web回调
 function zalyjsWebLoginSuccess()
 {
     var refererUrl = zalyjsSiteLoginMessageBody.refererUrl;
+    if(!refererUrl) {
+        refererUrl = "./index.php";
+    }
+
     if(refererUrl) {
         if(refererUrl.indexOf("?") > -1) {
-            var refererUrl = zalyjsSiteLoginMessageBody.refererUrl+"&preSessionId="+zalyjsSiteLoginMessageBody.sessionid+"&isRegister="+zalyjsSiteLoginMessageBody.isRegister;
+            var refererUrl = refererUrl+"&preSessionId="+zalyjsSiteLoginMessageBody.sessionid+"&isRegister="+zalyjsSiteLoginMessageBody.isRegister;
         } else {
-            var refererUrl = zalyjsSiteLoginMessageBody.refererUrl+"?preSessionId="+zalyjsSiteLoginMessageBody.sessionid+"&isRegister="+zalyjsSiteLoginMessageBody.isRegister;
+            var refererUrl = refererUrl+"?preSessionId="+zalyjsSiteLoginMessageBody.sessionid+"&isRegister="+zalyjsSiteLoginMessageBody.isRegister;
         }
-        refererUrl = refererUrl + " &fail_callback="+zalyjsSiteLoginMessageBody.callbackName+"&&success_callback=zalyjsWebSuccessCallBack";
+        refererUrl = refererUrl + " &fail_callback="+zalyjsSiteLoginMessageBody.callbackName+"&success_callback=zalyjsWebSuccessCallBack";
         addJsByDynamic(refererUrl);
     }
 }

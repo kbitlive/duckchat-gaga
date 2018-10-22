@@ -165,7 +165,6 @@ class Site_Login
                 // #TODO exception
                 throw new Exception("insert user profile to db error");
             }
-
         }
 
         //这里

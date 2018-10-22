@@ -57,6 +57,7 @@ class Api_Plugin_ProxyController extends \BaseController
             $httpProxyResponse = $this->ctx->ZalyCurl->requestAndReturnHeaders($requestUrl, $method,  $body, $headers);
             $response = $this->buildApiPluginProxyResponse($httpProxyResponse["body"], $httpProxyResponse["httpCode"], $httpProxyResponse["header"]);
             $this->setRpcError($this->defaultErrorCode, "");
+
             $this->rpcReturn($transportData->getAction(), $response);
         } catch (Exception $ex) {
             $this->ctx->Wpf_Logger->error($tag, "error=" . $ex);

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>主页面</title>
+    <title><?php echo $siteName;?></title>
     <link rel="stylesheet" href="../../public/css/zaly-action-row.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" href="../../public/css/zaly_contact.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" href="../../public/css/zaly_apply_friend_list.css?_version=<?php echo $versionCode?>" />
@@ -14,7 +14,7 @@
     <script src="../../public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
-
+    <script src="../../public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
     <link class="icon" rel="icon" href="favicon.ico?_version=<?php echo $versionCode?>" type="image/png" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -50,16 +50,31 @@
 <script src="../../public/js/im/zalyMsg.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/im/zalyGroupMsg.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
-<script src="../../public/js/im/zalyHelper.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/qrcode.js?_version=<?php echo $versionCode?>" ></script>
 <script src="../../public/js/utf.js?_version=<?php echo $versionCode?>" ></script>
 <script src="../../public/js/jquery.qrcode.js?_version=<?php echo $versionCode?>"></script>
 
 <script type="text/javascript">
 
+    requestSiteConfig(ZalyIm);
 
     $(window).resize(function () {
         setFontSize();
+        try{
+            var friendsDivHeight = $(".left-body-friends")[0].clientHeight;
+            var friendToolsHeight = $(".friend-tools")[0].clientHeight;
+            $(".friend-list-contact-row")[0].style.height = Number(friendsDivHeight-friendToolsHeight)+"px";
+        }catch (error) {
+
+        }
+
+        try{
+            var groupsDivHeight = $(".left-body-groups")[0].clientHeight;
+            var groupToolsHeight = $(".group-tools")[0].clientHeight;
+            $(".group-list-contact-row")[0].style.height = Number(groupsDivHeight-groupToolsHeight)+"px";
+        }catch (error) {
+
+        }
     });
 
     setFontSize();
@@ -83,7 +98,6 @@
         return rem;
     }
 
-    requestSiteConfig(ZalyIm);
 
     localStorage.setItem(chatTypeKey, DefaultChat);
     getRoomList();

@@ -11,13 +11,13 @@ class Api_Group_CreateController extends Api_Group_BaseController
 {
     private $classNameForRequest = '\Zaly\Proto\Site\ApiGroupCreateRequest';
     private $classNameForResponse = '\Zaly\Proto\Site\ApiGroupCreateResponse';
-    private $permissionJoin = \Zaly\Proto\Core\GroupJoinPermissionType::GroupJoinPermissionAdmin;
+    private $permissionJoin = \Zaly\Proto\Core\GroupJoinPermissionType::GroupJoinPermissionMember;
     private $canGuestReadMsg = false;
     private $maxMembers = -1;
     private $groupNameLength = 20;
     private $startGroupCreateTime;
     private $createGroupTimeOut = 60; //1分钟超时
-    private $groupIdLength = 6;
+    private $groupIdLength = 10;
     private $pinyin;
 
     public function rpcRequestClassName()
@@ -33,7 +33,6 @@ class Api_Group_CreateController extends Api_Group_BaseController
         try {
             $this->isCanCreateGroup();
 
-            ///TODO 修改groupName 限制长度
             $groupName = trim($request->getGroupName());
 
             if (mb_strlen($groupName) > $this->groupNameLength || mb_strlen($groupName) < 1) {
@@ -62,29 +61,35 @@ class Api_Group_CreateController extends Api_Group_BaseController
 
             $this->finish_request();
 
-            ///TODO 创建成功了之后，代发消息，
+            // 创建成功了之后，代发消息，
             $groupId = $groupProfile['groupId'];
 
-            $noticeText = ZalyText::getText(ZalyText::$textGroupCreate, $this->language);
+            $noticeText = ZalyText::$keyGroupCreate;
 
             $this->ctx->Message_Client->proxyGroupNoticeMessage($this->userId, $groupId, $noticeText);
 
-        } catch (Exception $ex) {
-            $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $ex->getMessage());
-            $this->setRpcError("error.alert", $ex->getMessage());
+        } catch (ZalyException $ze) {
+            $this->ctx->Wpf_Logger->error($tag, $ze->getMessage());
             $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
+        } catch (Exception $ex) {
+            $this->ctx->Wpf_Logger->error($tag, $ex);
+            $this->returnErrorRPC(new $this->classNameForResponse(), $ex);
         }
     }
 
+    /**
+     * 1.站点是否允许创建群主
+     * 2.不是站点管理员
+     *
+     * @throws Exception
+     */
     private function isCanCreateGroup()
     {
-        $siteConfigObj = $this->ctx->SiteConfig;
-        $siteConfig = $this->ctx->SiteConfigTable->selectSiteConfig($siteConfigObj::SITE_ENABLE_CREATE_GROUP);
-        if (!$siteConfig[$siteConfigObj::SITE_ENABLE_CREATE_GROUP]) {
-            $errorCode = $this->zalyError->errorGroupCreatePermission;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            $this->setRpcError($errorCode, $errorInfo);
-            throw new Exception($errorInfo);
+        $enableCreateGroup = $this->siteConfig[SiteConfig::SITE_ENABLE_CREATE_GROUP];
+        $isSiteManager = $this->ctx->Site_Config->isManager($this->userId);
+        if (!$enableCreateGroup && !$isSiteManager) {
+            $error = ZalyError::ErrorGroupCreateForbid;
+            $this->throwZalyException($error);
         }
     }
 
@@ -96,12 +101,9 @@ class Api_Group_CreateController extends Api_Group_BaseController
 
     private function insertGroup($groupName, $groupAvatar)
     {
-        ////TODO  groupId 重复 怎么处理
         $tag = __CLASS__ . '-' . __FUNCTION__;
         try {
-            if ($this->groupIdLength > 16) {
-                $this->groupIdLength = 6;
-            }
+
             if (time() - $this->startGroupCreateTime > $this->createGroupTimeOut) {
                 $this->ctx->BaseCtx->db->rollBack();
                 $errorCode = $this->zalyError->errorGroupCreate;

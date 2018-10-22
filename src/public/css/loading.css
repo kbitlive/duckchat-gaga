@@ -1,0 +1,101 @@
+
+.loader {
+    position: absolute;
+    bottom:0;
+    top:0;
+    left: 0;
+    right: 0;
+    margin:0 auto;
+    width:100%;
+    height:100%;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+
+
+.loader:before {
+
+}
+
+.circular_div {
+    width:14.26rem;
+    height:14.26rem;
+    background:rgba(0,0,0,0.6);
+    border-radius:0.56rem;
+    display: flex;
+    justify-content: center;
+}
+
+
+.circular {
+    animation: rotate 2s linear infinite;
+    height: 4rem;
+    transform-origin: center center;
+    width: 4rem;
+    margin: auto;
+    bottom:0;
+}
+
+.path {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+    animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+    stroke-linecap: round;
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+@keyframes dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35px;
+    }
+    100% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124px;
+    }
+}
+@keyframes color {
+    100%, 0% {
+        stroke: white;
+    }
+    40% {
+        stroke: white;
+    }
+    66% {
+        stroke: white;
+    }
+    80%, 90% {
+        stroke: white;
+    }
+}
+
+
+.mini_circular_div {
+    width: 4rem;
+    height: 4rem;
+    background:rgba(0,0,0,0.6);
+    border-radius:0.56rem;
+    display: flex;
+    justify-content: center;
+}
+
+.mini_circular {
+    animation: rotate 2s linear infinite;
+    height: 2rem;
+    transform-origin: center center;
+    width: 2rem;
+    margin: auto;
+    bottom:0;
+}

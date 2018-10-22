@@ -10,20 +10,23 @@ class ZalyText
 {
     public static $textGroupNotExists = "text.group.notExists";
     public static $textGroupNotSpeaker = "text.group.notSpeaker";
-    public static $textGroupCreate = "text.group.create";
+    public static $textGroupAdminInvite = "text.group.admin.invite";
 
     //给发送者自己代发的消息，使用这种
     public static $texts = [
-        "text.group.notExists" => ["group is not exists", "当前群组不存在"],
+        "text.group.notExists" => ["the group has been dissolved", "此群已解散"],
         "text.group.notSpeaker" => ["only speakers and admin can speak,speakers are ", "当前只允许群管理以及发言者发言，发言人者："],
-        "text.group.create" => ["group created,invite your friends to join chat", "群组已创建成功,邀请你的好友加入群聊吧"],
         "upload.file.size" => ["file exceeds maximum limit", "文件超过最大限制"],
         "text.open.web" => ["web is not allowed", "该站点没有开起web版本"],
+        "text.group.admin.invite" => ["only allow the group admin or owner", "只允许群主或者管理员邀请好友入群"],
+        'text.param.void' => ["mast not null", "不能为空"],
     ];
 
+    public static $keyGroupCreate = "{key.group.create}";
     public static $keyGroupInvite = "{key.group.invite}";
     public static $keyGroupJoin = "{key.group.join}";
     public static $keyGroupNotMember = "{key.group.notMember}";
+    public static $keyGroupDelete = "{key.group.delete}";
 
     public static $keyDefaultFriendsText = "{key.defaultFriend.text}";
     public static $keyDefaultGroupsText = "{key.defaultGroup.text}";
@@ -39,9 +42,11 @@ class ZalyText
 
     //需要给对方未知的客户端代发多语言的，使用这里
     public static $templateKeys = [
+        "key.group.create" => ["group created,invite your friends to join chat", "群组已创建成功,邀请你的好友加入群聊吧"],
         "key.group.invite" => [" invite ", " 邀请了 "],
         "key.group.join" => [" join this group", " 加入了群聊"],
         "key.group.notMember" => ["you are not group member", "你不是当前群组成员"],
+        "key.group.delete" => ["the group has been dissolved.", "此群已解散"],
 
         "key.defaultFriend.text" => ["we are friends, just talk to me", "我们已经成为好友，开始聊天吧"],
         "key.defaultGroup.text" => ["new member", "新成员"],

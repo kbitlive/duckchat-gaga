@@ -327,48 +327,8 @@
         <div class="pw-contact-row-image">
             <img class="user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png"  userId="{{userId}}" />
         </div>
-        <div class="pw-contact-row-name nickname_{{userId}}">{{nickname}}</div>
+        <div class="pw-contact-row-name nickname_{{userId}} profile_nickname_{{userId}}">{{nickname}}</div>
     </div>
-</script>
-
-<script id="tpl-apply-friend-list" type="text/html">
-
-    <div>
-        <div class="pw-contact-row  search-user" >
-            <div class="pw-contact-row-image" style="position: relative;">
-                <img src="../../public/img/msg/search_add_friend.png" />
-            </div>
-            <div class="pw-contact-row-name" data-local-value="searchTip">添加好友</div>
-        </div>
-
-        <div class="pw-contact-row  apply-friend-list" >
-            <div class="pw-contact-row-image" style="position: relative;">
-                <img src="../../public/img/msg/apply_list.png" />
-                <div  class="apply-friend-list apply_friend_num" style="display: none;" ></div>
-            </div>
-            <div class="pw-contact-row-name new-friends-apply" data-local-value="newFriendsTip">新朋友</div>
-        </div>
-        <div class="friend-list-div" data-local-value="friendListTip">
-            好友列表
-        </div>
-    </div>
-</script>
-
-
-
-<script id="tpl-create-group" type="text/html">
-    <div>
-        <div class="pw-contact-row create-group" >
-            <div class="pw-contact-row-image" style="position: relative;">
-                <img src="../../public/img/msg/create_group.png" />
-            </div>
-            <div class="pw-contact-row-name" data-local-value="createGroupTip">创建群聊</div>
-        </div>
-        <div class="group-list-div" data-local-value="groupListTip">群聊列表</div>
-        <div class="group-list-contact-row">
-        </div>
-    </div>
-
 </script>
 
 <script id="tpl-room-no-data" type="text/html">
@@ -409,11 +369,12 @@
 
 <script id="tpl-group-user-menu" type="text/html">
     <div id="group-user-menu" userId="{{userId}}" >
-        {{if isFriend == 1}}
+        {{if isFriend == 1 }}
             <div class="item p-2" id="open-temp-chat" data-local-value="openChatTip">发起聊天</div>
-        {{else}}
+        {{else if(isCanAddFriend  || (!isCanAddFriend && isAdmin == 1))}}
             <div class="item p-2" id="add-friend" data-local-value="addFriendTip"> 添加好友</div>
         {{/if}}
+
         {{if isAdmin == 1}}
             {{if (isOwner == 1 && !memberIsAdmin)}}
                 <div class="item p-2" id="set-admin" data-local-value="setAdminTip">设为管理员</div>
@@ -427,7 +388,7 @@
                     <div class="item p-2" id="remove-speaker" data-local-value="removeSpeakerTip">移除发言人</div>
             {{/if}}
 
-            {{if (!memberIsOwner && !memberIsAdmin)}}
+            {{if (isOwner == 1 || (!memberIsAdmin && !memberIsOwner))}}
                 <div class="item p-2" id="remove-group-chat" data-local-value="removeGroupMemberTip">移除成员</div>
             {{/if}}
 
@@ -459,7 +420,7 @@
             <input type="text"    style="padding: 0rem;" class="loginName create_group_box_div_input"  value="{{loginName}}" disabled>
         </div>
 
-        <div style="text-align: center;margin:0 auto;width: 34rem; height:1px;background:rgba(223,223,223,1);" ></div>
+        <div style="text-align: center;margin:0.12rem auto;width: 34rem; height:1px;background:rgba(223,223,223,1);" ></div>
         <div class="d-flex flex-row justify-content-center">
             <div class="self-qrcode" id="logout" >
                 <span class="logout-span" id="logout-span" data-local-value="logoutTip" onclick="logout(event)">退出</span>
@@ -740,4 +701,59 @@
         </div>
 
         </div>
+</script>
+
+<script type="text/html" id="tpl-create-group-div">
+    <div>
+        <div class="close_div">
+            <img src="../../public/img/close.png" onclick="closeMaskDiv('#create-group');">
+        </div>
+        <div class="flex-container justify-content-center" >
+            <div class="header_tip_font align-items-center"  data-local-value="createGroupTip">创建群组</div>
+        </div>
+
+        <div class="d-flex flex-row justify-content-center">
+            <input type="text" class="form-control group_name create_group_box_div_input"  onkeydown="createGroupByKeyDown(event)"  data-local-placeholder="enterGroupNamePlaceholder" placeholder="请输入群组名称" >
+        </div>
+
+        <div class="line"></div>
+
+        <div  class="d-flex flex-row justify-content-center  data_tip" data-local-value="createGroupNameTip">
+            群组名称长度限制1-10
+        </div>
+        {{if enableCreateGroup }}
+            <div class="d-flex flex-row justify-content-center width-percent100 margin-top10" style="text-align:center; ">
+                <button type="button" class="btn create_button create_group_button" data-local-value="createTip">创建</button>
+            </div>
+        {{else}}
+            <div class="d-flex flex-row justify-content-center width-percent100 margin-top10" style="text-align:center; ">
+                <button type="button" class="btn create_button " onclick="enableCreateGroupTip()" data-local-value="createTip" style="background: rgba(201,201,201,1);">创建</button>
+            </div>
+        {{/if}}
+    </div>
+</script>
+
+
+<script type="text/html" id="tpl-desc-group-div">
+    <div class="group-desc-div">
+        <div class="group-desc-header" >
+            <span data-local-value="groupProfileDescTip">群介绍</span>
+            {{ if isAdmin }}
+            <button class="edit_group_desc" data-local-value="groupProfileEditTip" type="edit">编辑</button>
+            {{/if}}
+        </div>
+        <div class="group-desc-detail">
+            <div class="group-desc-area">
+                {{descBody}}
+            </div>
+        </div>
+        <div class="group-desc-footer">
+            <div class="group-desc-line"></div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/html" id="tpl-desc-group-textarea">
+    <textarea class="textarea_desc">{{descBody}}</textarea>
 </script>

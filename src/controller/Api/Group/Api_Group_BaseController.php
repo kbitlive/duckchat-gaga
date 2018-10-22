@@ -70,6 +70,26 @@ class Api_Group_BaseController extends BaseController
         return $user;
     }
 
+    //是否是群管理员
+    public function isGroupAdminMember($groupId, $userId)
+    {
+        $tag = __CLASS__ . '-' . __FUNCTION__;
+        try {
+            //管理员，或者群主
+            $ownerType = \Zaly\Proto\Core\GroupMemberType::GroupMemberOwner;
+            $adminType = \Zaly\Proto\Core\GroupMemberType::GroupMemberAdmin;
+
+            $user = $this->ctx->SiteGroupUserTable->getGroupAdmin($groupId, $userId, $adminType, $ownerType);
+            if ($user) {
+                return true;
+            }
+
+        } catch (Exception $e) {
+            $this->logger->error($tag . " " . $this->action, $e);
+        }
+        return false;
+    }
+
     //群信息
     public function getGroupInfo($groupId)
     {
@@ -77,10 +97,9 @@ class Api_Group_BaseController extends BaseController
         if (!$groupInfo) {
             $tag = __CLASS__ . '-' . __FUNCTION__;
             $this->ctx->Wpf_Logger->error($tag, " errorGroupExist group id = " . $groupId);
-            $errorCode = $this->zalyError->errorGroupExist;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            $this->setRpcError($errorCode, $errorInfo);
-            throw new Exception($errorInfo);
+            $exText = ZalyText::getText("text.group.notExists", $this->language);
+            $this->returnErrorCodeRPC("error.group.notExists", $exText);
+            return false;
         }
         return $groupInfo;
     }
@@ -121,6 +140,7 @@ class Api_Group_BaseController extends BaseController
         return $this->ctx->SiteGroupTable->getGroupProfile($groupId, $this->userId);
     }
 
+
     public function getGroupCount()
     {
         return $this->ctx->SiteGroupTable->getGroupCount($this->userId);
@@ -145,6 +165,7 @@ class Api_Group_BaseController extends BaseController
         $groupProfile->setPermissionJoin($group['permissionJoin']);
         $groupProfile->setCanGuestReadMessage($group['canGuestReadMessage']);
         $groupProfile->setTimeCreate($group['timeCreate']);
+        $groupProfile->setCanAddFriend($group["canAddFriend"]);
 
         $ownerUser = "";
         $adminUsers = [];
@@ -226,10 +247,6 @@ class Api_Group_BaseController extends BaseController
 
             $hasCount = count($avatars);
             $pageCount = $startCount - $hasCount;
-
-            $this->ctx->Wpf_Logger->info("Group-Avatar", "loopNum=" . $loopNum);
-            $this->ctx->Wpf_Logger->info("Group-Avatar", "hasCount=" . $hasCount);
-            $this->ctx->Wpf_Logger->info("Group-Avatar", "pageSize=" . $pageCount);
 
             $groupMembers = $this->getGroupUserList($groupId, $offset, $pageCount);
 

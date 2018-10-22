@@ -106,32 +106,6 @@
             </div>
             <div class="division-line"></div>
 
-            <!--            <div class="item-row">-->
-            <!--                <div class="item-body">-->
-            <!--                    <div class="item-body-display">-->
-            <!--                        --><?php //if ($lang == "1") { ?>
-            <!--                            <div class="item-body-desc">是否开启手机号</div>-->
-            <!--                        --><?php //} else { ?>
-            <!--                            <div class="item-body-desc">Enable Phone Number</div>-->
-            <!--                        --><?php //} ?>
-            <!---->
-            <!---->
-            <!--                        <div class="item-body-tail">-->
-            <!--                            <div class="item-body-value">-->
-            <!--                                --><?php //if ($enableRealName == 1) { ?>
-            <!--                                    <input id="enableRealNameSwitch" class="weui_switch" type="checkbox" checked>-->
-            <!--                                --><?php //} else { ?>
-            <!--                                    <input id="enableRealNameSwitch" class="weui_switch" type="checkbox">-->
-            <!--                                --><?php //} ?>
-            <!--                            </div>-->
-            <!--                        </div>-->
-            <!---->
-            <!--                    </div>-->
-            <!---->
-            <!--                </div>-->
-            <!--            </div>-->
-            <!--            <div class="division-line"></div>-->
-
             <div class="item-row">
                 <div class="item-body">
                     <div class="item-body-display">
@@ -190,9 +164,9 @@
                 <div class="item-body">
                     <div class="item-body-display">
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">允许群组中加好友</div>
+                            <div class="item-body-desc">允许在群里互加好友</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Enable Add Friend In Group</div>
+                            <div class="item-body-desc">Enable friend-request from group</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
@@ -962,36 +936,6 @@
         }
     }
 
-
-    //update uic
-    $("#enableUicSwitch").change(function () {
-        var isChecked = $(this).is(':checked');
-        var url = "index.php?action=manage.config.update&key=enableInvitationCode";
-
-        var data = {
-            'key': 'enableInvitationCode',
-            'value': isChecked ? 1 : 0,
-        };
-
-        zalyjsCommonAjaxPostJson(url, data, enableUicResponse);
-
-    });
-
-    function enableUicResponse(url, data, result) {
-        if (result) {
-
-            var res = JSON.parse(result);
-
-            if (!"success" == res.errCode) {
-                alert(getLanguage() == 1 ? "操作失败" : "update error");
-            }
-
-        } else {
-            alert(getLanguage() == 1 ? "操作失败" : "update error");
-        }
-    }
-
-
     //enable add friend
     $("#enableAddFriendSwitch").change(function () {
         var isChecked = $(this).is(':checked');
@@ -1332,6 +1276,36 @@
 
             if (!"success" == res.errCode) {
                 alert(getLanguage() == 1 ? "操作失败" : "update error");
+            }
+
+        } else {
+            alert(getLanguage() == 1 ? "操作失败" : "update error");
+        }
+    }
+
+    //update invitation code
+    $("#enableUicSwitch").change(function () {
+        var isChecked = $(this).is(':checked');
+        var url = "index.php?action=manage.config.update&key=enableInvitationCode";
+
+        var data = {
+            'key': 'enableInvitationCode',
+            'value': isChecked ? 1 : 0,
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, enableSwitchResponse);
+
+    });
+
+    function enableSwitchResponse(url, data, result) {
+        if (result) {
+
+            var res = JSON.parse(result);
+
+            if ("success" != res.errCode) {
+                var errInfo = res.errInfo;
+                var errMsg = (getLanguage() == 1 ? "操作失败,原因：" : "update error, cause:") + errInfo;
+                alert(errMsg);
             }
 
         } else {

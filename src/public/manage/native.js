@@ -103,7 +103,15 @@ function zalyjsCommonAjaxPostJson(url, jsonBody, callBack) {
  * @param url
  * @param target
  */
-function zalyjsCommonOpenPage(url, target = "_blank") {
-    // window.open(url, target);
+function zalyjsCommonOpenPage(url) {
     location.href = url;
+}
+
+function zalyjsCommonOpenNewPage(url) {
+    if (isMobile()) {
+        zalyjsNavOpenPage(url);
+    } else {
+        // window.open(url, target);
+        location.href = url;
+    }
 }

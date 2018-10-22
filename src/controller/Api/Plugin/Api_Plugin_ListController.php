@@ -109,7 +109,9 @@ class Api_Plugin_ListController extends \BaseController
             } else {
                 $pluginProfile->setOrder(100);
             }
+
             $pluginProfile->setLandingPageUrl($plugin['landingPageUrl']);
+            $pluginProfile->setAdminPageUrl($plugin['management']);
 
             if ($plugin['landingPageWithProxy'] == 1) {//1:true 0:false
                 $pluginProfile->setLandingPageWithProxy(true);

@@ -53,28 +53,16 @@ class PluginProfile extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string userSessionId = 10;</code>
      */
     private $userSessionId = '';
-
     /**
-     * Constructor.
+     *小程序管理url
      *
-     * @param array $data {
-     *     Optional. Data for populating the Message object.
-     *
-     *     @type int $id
-     *     @type string $name
-     *     @type string $logo
-     *     @type int $order
-     *     @type string $landingPageUrl
-     *     @type bool $landingPageWithProxy
-     *     @type int[]|\Google\Protobuf\Internal\RepeatedField $usageTypes
-     *     @type int $loadingType
-     *     @type int $permissionType
-     *     @type string $userSessionId
-     * }
+     * Generated from protobuf field <code>string adminPageUrl = 11;</code>
      */
-    public function __construct($data = NULL) {
+    private $adminPageUrl = '';
+
+    public function __construct() {
         \GPBMetadata\Core\Plugin::initOnce();
-        parent::__construct($data);
+        parent::__construct();
     }
 
     /**
@@ -293,6 +281,32 @@ class PluginProfile extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->userSessionId = $var;
+
+        return $this;
+    }
+
+    /**
+     *小程序管理url
+     *
+     * Generated from protobuf field <code>string adminPageUrl = 11;</code>
+     * @return string
+     */
+    public function getAdminPageUrl()
+    {
+        return $this->adminPageUrl;
+    }
+
+    /**
+     *小程序管理url
+     *
+     * Generated from protobuf field <code>string adminPageUrl = 11;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setAdminPageUrl($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->adminPageUrl = $var;
 
         return $this;
     }

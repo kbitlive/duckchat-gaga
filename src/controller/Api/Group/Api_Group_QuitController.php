@@ -34,6 +34,11 @@ class Api_Group_QuitController extends Api_Group_BaseController
                 throw new Exception($errorInfo);
             }
 
+            $groupInfo = $this->getGroupInfo($groupId);
+            if($groupInfo === false) {
+                return;
+            }
+
             $this->quitGroup($groupId);
 
             $this->updateGroupAvatar($groupId);

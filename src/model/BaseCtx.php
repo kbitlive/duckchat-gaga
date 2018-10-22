@@ -9,6 +9,7 @@
  * @property Site_Login Site_Login
  * @property SiteConfig SiteConfig
  * @property Site_Config Site_Config
+ * @property Site_Custom Site_Custom
  * @property Site_Default Site_Default
  *
  * @property SiteConfigTable SiteConfigTable
@@ -16,7 +17,7 @@
  * @property SiteUserTable SiteUserTable
  * @property PassportPasswordTable PassportPasswordTable
  * @property PassportPasswordTokenTable PassportPasswordTokenTable
- * @property  PassportPasswordPreSessionTable PassportPasswordPreSessionTable
+ * @property PassportPasswordPreSessionTable PassportPasswordPreSessionTable
  * @property SiteUserFriendTable SiteUserFriendTable
  * @property SiteFriendApplyTable SiteFriendApplyTable
  * @property SiteU2MessageTable SiteU2MessageTable
@@ -25,6 +26,7 @@
  * @property SiteGroupMessageTable SiteGroupMessageTable
  * @property SiteUicTable SiteUicTable
  * @property SitePluginTable SitePluginTable
+ * @property SiteLoginCustomTable SiteLoginCustomTable
  *
  * @property Message_Client Message_Client
  * @property Message_News Message_News

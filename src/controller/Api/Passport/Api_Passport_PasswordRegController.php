@@ -31,15 +31,8 @@ class Api_Passport_PasswordRegController extends BaseController
             $sitePubkPem = $request->getSitePubkPem();
             $invitationCode = $request->getInvitationCode();
 
-            if(!$loginName || strlen($loginName) > 16 ) {
+            if(!$loginName || mb_strlen($loginName)>24) {
                 $errorCode = $this->zalyError->errorLoginNameLength;
-                $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("loginName  is  not exists");
-            }
-            $isLoginName = ZalyHelper::isLoginName($loginName);
-            if(!$isLoginName) {
-                $errorCode = $this->zalyError->errorInvalidLoginName;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
                 $this->setRpcError($errorCode, $errorInfo);
                 throw new Exception("loginName  is  not exists");
@@ -66,8 +59,20 @@ class Api_Passport_PasswordRegController extends BaseController
                 throw new Exception("sitePubkPem  is  not exists");
             }
 
+            $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
+            $passwordResetRequiredConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED]) ? $loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED] : "";
+            $passwordResetRequired = isset($passwordResetRequiredConfig["configValue"]) ? $passwordResetRequiredConfig["configValue"] : "";
+            $passwordResetWayConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_WAY]) ? $loginConfig[LoginConfig::PASSWORD_RESET_WAY] : "";
+            $passwordRestWay = isset($passwordResetWayConfig["configValue"]) ? $passwordResetWayConfig["configValue"] : "email ";
+
+            if($passwordResetRequired == 1 && mb_strlen(trim($email))<1) {
+                $tip = ZalyText::getText("text.param.void", $this->language);
+                $errorInfo = $passwordRestWay." " .$tip;
+                $this->setRpcError("error.alert", $errorInfo);
+                throw new Exception("$errorInfo  is  not exists");
+            }
+
             $this->checkLoginName($loginName);
-            $this->checkEmail($email);
             $preSessionId = $this->registerUserForPassport($loginName, $email, $password, $nickname, $invitationCode, $sitePubkPem);
             $response = new \Zaly\Proto\Site\ApiPassportPasswordRegResponse();
             $response->setPreSessionId($preSessionId);
@@ -76,24 +81,6 @@ class Api_Passport_PasswordRegController extends BaseController
         } catch (Exception $ex) {
             $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $ex->getMessage());
             $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
-        }
-    }
-
-    private  function checkEmail($email)
-    {
-        $isEmail = ZalyHelper::isEmail($email);
-        if(!$isEmail) {
-            $errorCode = $this->zalyError->errorInvalidEmail;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            $this->setRpcError($errorCode, $errorInfo);
-            throw new Exception("email is useless");
-        }
-        $user = $this->ctx->PassportPasswordTable->getUserByEmail($email);
-        if($user){
-            $errorCode = $this->zalyError->errorExistEmail;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            $this->setRpcError($errorCode, $errorInfo);
-            throw new Exception("email is exists");
         }
     }
 

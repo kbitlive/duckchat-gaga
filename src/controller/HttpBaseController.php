@@ -42,6 +42,8 @@ abstract class HttpBaseController extends \Wpf_Controller
     public $siteCookieName = "zaly_site_user";
     public $language = "";
 
+    protected $siteConfig;
+
     protected $ctx;
 
     public function __construct(BaseCtx $context)
@@ -70,9 +72,11 @@ abstract class HttpBaseController extends \Wpf_Controller
             $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
             $action = isset($_GET['action']) ? $_GET['action'] : "";
             $this->getAndSetClientLang();
-            if(!in_array($action, $this->upgradeAction)) {
+            if (!in_array($action, $this->upgradeAction)) {
                 $this->checkIsNeedUpgrade();
             }
+
+            $this->siteConfig = $this->ctx->Site_Config->getAllConfig();
 
             if ($preSessionId) {
                 $this->handlePreSessionId();
@@ -93,19 +97,21 @@ abstract class HttpBaseController extends \Wpf_Controller
             $this->setLogout();
         }
     }
+
     //TODO check need upgrade
     protected function checkIsNeedUpgrade()
     {
-        $sampleFileName = dirname(__FILE__) . "/../config.sample.php" ;
+        $sampleFileName = dirname(__FILE__) . "/../config.sample.php";
         $sampleConfig = require($sampleFileName);
         $sampleVersionCode = isset($sampleConfig['siteVersionCode']) ? $sampleConfig['siteVersionCode'] : 0;
         $configVersionCode = ZalyConfig::getConfig('siteVersionCode');
-        if($sampleVersionCode > $configVersionCode) {
+        if ($sampleVersionCode > $configVersionCode) {
             $upgradeUrl = './index.php?action=page.version.check';
             header("Location:" . $upgradeUrl);
             exit;
         }
     }
+
     protected function getAndSetClientLang()
     {
         $headLang = isset($_GET['lang']) ? $_GET['lang'] : "";
@@ -249,6 +255,11 @@ abstract class HttpBaseController extends \Wpf_Controller
 
     public function display($viewName, $params = [])
     {
+        try{
+            $siteName = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_NAME);
+        }catch (Exception $ex) {
+            $siteName = "";
+        }
         // 自己实现实现一下这个方法，加载view目录下的文件
         $params['session_id'] = $this->sessionId;
         $params['user_id'] = $this->userId;
@@ -263,12 +274,14 @@ abstract class HttpBaseController extends \Wpf_Controller
         $params['jumpRoomType'] = $this->jumpRoomType;
         $params['jumpRelation'] = $this->jumpRelation;
         $params['versionCode'] = ZalyConfig::getConfig("siteVersionCode");
-
+        $params['siteName'] = $siteName;
         return parent::display($viewName, $params);
     }
 
     /**
      * 查库操作
+     * @param $columns
+     * @return array
      */
     public function getSiteConfigFromDB($columns)
     {

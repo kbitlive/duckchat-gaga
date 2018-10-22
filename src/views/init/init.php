@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>初始化站点</title>
+    <title>安装</title>
     <!-- Latest compiled and minified CSS -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="../../public/css/init.css?_version=<?php echo $versionCode?>">
     <script type="text/javascript" src="../../../public/js/jquery.min.js"></script>
@@ -23,7 +24,7 @@
     <div class="container">
 
         <div class="zaly_container">
-           <div style="padding-top: 14rem;">
+           <div  class="paddingTop">
                <div class="zaly_init">
 
                </div>
@@ -34,7 +35,10 @@
 
         </div>
     </div>
-<input type="hidden" value="<?php echo $siteVersion?>" class="site_version">
+<input type="hidden" value="<?php echo $versionCode;?>" class="site_version_code">
+    <input type="hidden" value="<?php echo $siteVersion;?>" class="site_version_name">
+
+
 
     <input type="hidden" value="<?php echo $isPhpVersionValid;?>" class="isPhpVersionValid">
     <input type="hidden" value="<?php echo $isLoadOpenssl;?>" class="isLoadOpenssl">
@@ -66,6 +70,10 @@
     var sqliteFileName = "";
     var dbType = "sqlite";
     var upgradeUrl='https://github.com/duckchat/gaga/releases';
+
+    if(languageName == "en") {
+        document.title = "Install";
+    }
 
     function testCanLoadPropertites()
     {
@@ -120,11 +128,11 @@
     }
     initProtocol();
     $(document).on("click", ".zaly_protocol_sure",function () {
-        var siteVersion = $(".site_version").val();
+        var siteVersion = $(".site_version_code").val();
         if(Number(latestVersion) > Number(siteVersion)) {
             $(".zaly_window")[0].style.display = "flex";
             var upgradeHtml = template("tpl-upgrade-tip", {
-                siteVersion:$(".site_version").val(),
+                siteVersion:$(".site_version_name").val(),
             });
             upgradeHtml = handleHtmlLanguage(upgradeHtml)
             $(".zaly_window").html(upgradeHtml);
@@ -400,7 +408,7 @@
                 return;
             }
             $(".dbPasswordFailed")[0].style.display = "none";
-
+            showLoading($(".container"));
             var data = {
                 pluginId: pluginId,
                 dbHost: dbHost,
@@ -436,11 +444,15 @@
                 if (resp == "success") {
                     window.location.href = "./index.php?action=page.logout";
                 } else {
+                    hideLoading();
                     var html = template("tpl-error-info", {
                         errorInfo:resp
                     })
                     $(".errorInfo").html(html);
                 }
+            },
+            fail:function () {
+                hideLoading();
             }
         });
     }
@@ -455,19 +467,23 @@
                 if (resp == "success") {
                     initSite(data);
                 } else {
+                    hideLoading();
+
                     var html = template("tpl-error-info", {
                         errorInfo:resp
                     })
 
                     $(".errorInfo").html(html);
                 }
+            },
+            fail : function () {
+                hideLoading();
             }
         });
     }
 
     function testCurl()
     {
-        console.log("lll");
         $.ajax({
             method: "GET",
             url: "./index.php?action=installDB&for=test_curl_result",

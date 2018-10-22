@@ -1,10 +1,10 @@
 
 <div class="right-head">
-    <div class="title chatsession-title">DuckChat<sup style="font-size: 0.8rem; color: red;">抢先体验版</sup></sup> <SMALL style="font-size: 1rem;">单聊、群聊、小程序、高扩展，支持iOS、Android、Web，进QQ群咨询详情！开源！免费！</SMALL></div>
+    <div class="title chatsession-title"></div>
     <div class="actions">
         <img src="../../public/img/msg/invite_people.png"  class="invite_people"/>
         <img src="../../public/img/msg/add_friend.png"  class="add_friend add-friend-btn"/>
-        <img src="../../public/img/msg/setting.png" class="see_group_profile" is_show_profile="1"/>
+        <img src="../../public/img/msg/setting.png" class="see_group_profile" is_show_profile="0"/>
     </div>
 </div>
 
@@ -130,25 +130,25 @@
 
         </div>
     </div>
-    <div class="right-body-sidebar">
-
-        <div class="right-body-sidebar-menu">
-            <img src="../../public/img/msg/btn-close.png"style="cursor: pointer;" onclick="$('.right-body-sidebar').hide()" />
-        </div>
+    <div class="right-body-sidebar" style="display: none;" >
 
         <div style="position: relative">
             <div class="group-profile-desc">
                 <div class="group-desc">
                     <div class="group-desc-title" style="position: relative" data-local-value="groupMemberTip">群成员</div>
                     <div class="group-member-body">
+
                     </div>
                     <div class="see_all_group_member" data-local-value="allGroupMemberTip">查看全部</div>
                 </div>
 
 
                 <div class="group-desc">
-                    <div class="group-desc-title" style="position: relative" data-local-value="groupProfileDescTip">群介绍</div>
-                    <button class="save_group_introduce" style=" margin-top: -2rem;" data-local-value="saveGroupDescTip">保存</button>
+                    <div class="group-desc-title" style="position: relative">
+                        <span  data-local-value="groupProfileDescTip">群介绍</span>
+                        <img src="../../public/img/msg/icon_disclosure.png" class="icon_discosure"/>
+
+                    </div>
 
                     <div class="group-desc-body">
                         <textarea class="group-introduce"></textarea>
@@ -159,10 +159,10 @@
 
                     <div class="action-row action-row-disclosure edit_group_name">
                         <div class="action-title" data-local-value="groupProfileNameTip">群名称</div>
-                        <div class="action-btn groupName" style="width: auto;">
+                        <div class="action-btn groupName" style="width: auto;cursor: pointer;">
 
                         </div>
-                        <img src="../../public/img/edit.png" style="width: 1rem; height:1rem; margin-right: 2rem;margin-top: 2rem;"/>
+                        <img src="../../public/img/edit.png" class="edit_img"/>
                     </div>
 
                     <div class="action-row mute-group">
@@ -179,7 +179,7 @@
                     <div class="action-row group_speakers" >
                         <div class="action-title" data-local-value="groupSpeakersTip">群发言人</div>
                         <div class="action-btn ">
-                            <img src="../../public/img/msg/icon_disclosure.png" />
+                            <img src="../../public/img/msg/icon_disclosure.png" class="icon_discosure"/>
                         </div>
                     </div>
 
@@ -207,7 +207,7 @@
                     <div class="action-row action-row-disclosure edit-remark">
                         <div class="action-title" data-local-value="editRemarkTip">修改备注</div>
                         <div class="action-btn ">
-                            <img src="../../public/img/msg/icon_disclosure.png" />
+                            <img src="../../public/img/msg/icon_disclosure.png" class="icon_discosure" />
                         </div>
                     </div>
 

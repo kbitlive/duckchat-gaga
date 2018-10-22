@@ -194,7 +194,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
             $(".chat_session_id_"+msg.chatSessionId).addClass("chatsession-row-active");
         }
         if(msg.fromUserId != token && showNotification) {
-            showWebNotification(msg, msgContent);
+            showMsgWebNotification(msg, msgContent);
         }
         return ;
     }
@@ -237,7 +237,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
         displayCurrentProfile();
     }
     if(msg.fromUserId != token && showNotification) {
-        showWebNotification(msg, msgContent);
+        showMsgWebNotification(msg, msgContent);
     }
 }
 ////防止两个浏览器开着，点击的时候消息列表的内容不是最新的
@@ -324,7 +324,6 @@ function handleSetItemError(error)
     }
 }
 enableWebsocketGw = localStorage.getItem(websocketGW);
-console.log("enableWebsocketGw==="+enableWebsocketGw)
 
 if(enableWebsocketGw == "false" || enableWebsocketGw == null) {
     ///1秒 sync
@@ -437,6 +436,7 @@ function handleSyncMsg(msg)
         return;
     }
     if(msg.type == MessageType.MessageEventFriendRequest) {
+        showOtherWebNotification();
         getFriendApplyList();
         return;
     };
@@ -463,6 +463,7 @@ function handleSyncMsg(msg)
     }
     appendOrInsertRoomList(msg, true, true);
 }
+
 
 function handleMsgStatusResult(msgId, msgStatus)
 {
@@ -637,7 +638,9 @@ function clearRoomUnreadMsgNum(chatSessionId)
     var roomListUnreadNum = localStorage.getItem(roomListMsgUnReadNum);
     roomListUnreadNum =  (roomListUnreadNum-unReadNum) >0 ? (roomListUnreadNum-unReadNum) : 0;
     roomListUnreadNum =  (roomListUnreadNum-unReadNum) >99 ? "99+": roomListUnreadNum;
-
+    if(roomListUnreadNum == 0) {
+        localStorage.setItem(newSiteTipKey, "clear");
+    }
     localStorage.setItem(roomListMsgUnReadNum,roomListUnreadNum);
     localStorage.removeItem(unreadKey);
 
@@ -645,7 +648,6 @@ function clearRoomUnreadMsgNum(chatSessionId)
         $(".room-chatsession-unread_"+chatSessionId)[0].style.display = "none";
         $(".room-chatsession-mute-num_"+chatSessionId+"")[0].style.display = "none";
     }
-    localStorage.setItem(newSiteTipKey, "clear");
     setDocumentTitle();
 }
 
@@ -661,8 +663,9 @@ function getMsgTimeByMsg(time)
 {
     time = Number(time);
     var date = new Date(time); //获取一个时间对象
+
     var minutes =  date.getMinutes()>=10 ? date.getMinutes():"0"+date.getMinutes();
-    var month = date.getMonth() >=10 ? date.getMonth() : "0"+date.getMonth();
+    var month = date.getMonth() >= 9 ? (date.getMonth()+1) : "0"+ (date.getMonth()+1);
 
     return date.getFullYear() + '-' + month + '-' +date.getDate() + " " + date.getHours()+":"+minutes;  // 获取完整的年份(4位,1970)
 }
@@ -968,7 +971,7 @@ function trimMsgContentBr(html)
 function handleMsgContentText(str)
 {
     str = trimMsgContentBr(str);
-    var reg=/(blob:)?((http|ftp|https):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
+    var reg=/(blob:)?((http|https|ftp|zaly|duckchat):\/\/)?[@\w\-_]+(\:[0-9]+)?(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
     var arr = str.match(reg);
     if(arr == null) {
         return str;
@@ -976,9 +979,17 @@ function handleMsgContentText(str)
     var length = arr.length;
     for(var i=0; i<length;i++) {
         var urlLink = arr[i];
-        if(urlLink.indexOf("blob:") == -1 && urlLink.indexOf("../..") != 0) {
+        if(urlLink.indexOf("blob:") == -1 &&
+            (urlLink.indexOf("http://") != -1
+                || urlLink.indexOf("https://") != -1
+                || urlLink.indexOf("ftp://") != -1
+                || urlLink.indexOf("zaly://") != -1
+                || urlLink.indexOf("duckchat://") != -1
+                ||  IsURL (urlLink)
+            )
+        ) {
             var newUrlLink = urlLink;
-            if(urlLink.indexOf("http://") == -1) {
+            if(urlLink.indexOf("://") == -1) {
                 newUrlLink = "http://"+urlLink;
             }
             var urlLinkHtml = "<a href='"+newUrlLink+"'target='_blank'>"+urlLink+"</a>";
@@ -986,6 +997,26 @@ function handleMsgContentText(str)
         }
     }
     return str;
+}
+
+function IsURL (url) {
+    var urls = url.split("?");
+    var urlAndSchemAndPort = urls.shift();
+    var urlAndPort = urlAndSchemAndPort.split("://").pop();
+    url = urlAndPort.split(":").shift();
+    var ipRegex = '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
+    var ipReg=new RegExp(ipRegex);
+    if(!ipReg.test(url)) {
+        var domainSuffix = url.split(".").pop();
+        domainSuffix = domainSuffix.toLowerCase();
+        var urlDomain = "com,cn,net,xyz,top,tech,org,gov,edu,ink,red,int,mil,pub,biz,cc,name,mobi,travel,info,tv,pro,coop,aero,me,app,onlone,shop" +
+            ",club,store,life,global,live,museum,jobs,cat,tel,bid,pub,foo,site";
+        if(urlDomain.indexOf(domainSuffix) != -1) {
+            return true;
+        }
+        return false;
+    }
+    return true;
 }
 
 //---------------------------------------------append msg html to chat dialog-------------------------------------------------
@@ -1006,6 +1037,7 @@ function appendMsgHtmlToChatDialog(msg)
         sendBySelf = true;
         msg.userAvatar = avatar;
     }
+
     var msgTime = getMsgTimeByMsg(msg.timeServer);
     var groupUserImageClassName = msg.roomType == GROUP_MSG ? "group-user-img group-user-img-"+msg.msgId : "";
     var msgStatus = msg.status ? msg.status : "";
@@ -1090,7 +1122,7 @@ function appendMsgHtmlToChatDialog(msg)
                 var webSize = getWebMessageSize(msg['web'].height, msg['web'].width, 300, 400);
                 html = template("tpl-send-msg-web", {
                     roomType: msg.roomType,
-                    nickname: msg.nickname,
+                    nickname: nickname,
                     webWidth:webSize.width,
                     webHeight:webSize.height,
                     msgId : msgId,
@@ -1174,7 +1206,7 @@ function appendMsgHtmlToChatDialog(msg)
                 var originName = msg['document'].name;
                 html = template("tpl-receive-msg-file", {
                     roomType: msg.roomType,
-                    nickname:nickname,
+                    nickname:msg.nickname,
                     msgId : msgId,
                     url:url,
                     msgTime : msgTime,
@@ -1222,7 +1254,7 @@ function appendMsgHtmlToChatDialog(msg)
                 var msgContent = "[当前版本不支持此信息，请尝试升级客户端版本] ";
                 html = template("tpl-receive-msg-default", {
                     roomType: msg.roomType,
-                    nickname:nickname,
+                    nickname:msg.nickname,
                     msgId : msgId,
                     msgTime : msgTime,
                     msgStatus:msgStatus,
@@ -1235,9 +1267,12 @@ function appendMsgHtmlToChatDialog(msg)
         }
     }
 
+
+
     if(msgType == MessageType.MessageText) {
         html = handleMsgContentText(html);
     }
+
     // html = "请前往客户端查看web消息";
     $(".right-chatbox").append(html);
     getNotMsgImg(msg.fromUserId,msg.userAvatar);

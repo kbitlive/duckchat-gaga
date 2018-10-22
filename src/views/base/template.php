@@ -65,26 +65,7 @@
     </div>
 
     <div id="create-group">
-        <div class="close_div">
-            <img src="../../public/img/close.png" onclick="closeMaskDiv('#create-group');">
-        </div>
-        <div class="flex-container justify-content-center" >
-            <div class="header_tip_font align-items-center"  data-local-value="createGroupTip">创建群组</div>
-        </div>
-
-        <div class="d-flex flex-row justify-content-center">
-            <input type="text" class="form-control group_name create_group_box_div_input"  onkeydown="createGroupByKeyDown(event)"  data-local-placeholder="enterGroupNamePlaceholder" placeholder="请输入群组名称" >
-        </div>
-
-        <div class="line"></div>
-
-        <div  class="d-flex flex-row justify-content-center  data_tip" data-local-value="createGroupNameTip">
-            群组名称长度限制1-10
-        </div>
-
-        <div class="d-flex flex-row justify-content-center width-percent100 margin-top10" style="text-align:center; ">
-            <button type="button" class="btn create_button create_group_button" data-local-value="createTip">创建</button>
-        </div>
+       
     </div>
 
     <div id="edit-remark">
@@ -159,6 +140,10 @@
 
     <div id="download-app-div">
         
+    </div>
+
+    <div id="group-desc-div">
+
     </div>
 </div>
 
