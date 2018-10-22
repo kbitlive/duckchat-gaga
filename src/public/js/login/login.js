@@ -515,6 +515,7 @@ function registerAndLogin()
         showLoading($(".site_login_div"));
         zalyjsWebCheckUserExists(loginNameNotExist, loginNameExist);
     }
+    cancelLoadingBySelf();
 }
 
 ///更新邀请码，并且登录site
@@ -535,6 +536,7 @@ function failedCallBack(result) {
 $(document).on("click", ".update_code_btn", function () {
     invitationCode = $(".update_input_code").val();
     showLoading($(".site_login_div"));
+    cancelLoadingBySelf();
     apiPassportPasswordLogin(updatePassportPasswordInvitationCode);
 });
 
@@ -639,6 +641,7 @@ function loginPassport()
         return false;
     }
     showLoading($(".site_login_div"));
+    cancelLoadingBySelf();
     apiPassportPasswordLogin(handleApiPassportPasswordLogin);
 }
 

@@ -1009,7 +1009,6 @@ function IsURL (url) {
     if(!ipReg.test(url)) {
         var domainSuffix = url.split(".").pop();
         domainSuffix = domainSuffix.toLowerCase();
-        console.log("domainSuffix ==" + domainSuffix);
         var urlDomain = "com,cn,net,xyz,top,tech,org,gov,edu,ink,red,int,mil,pub,biz,cc,name,mobi,travel,info,tv,pro,coop,aero,me,app,onlone,shop" +
             ",club,store,life,global,live,museum,jobs,cat,tel,bid,pub,foo,site";
         if(urlDomain.indexOf(domainSuffix) != -1) {

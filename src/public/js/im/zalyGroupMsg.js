@@ -481,7 +481,6 @@ $(document).on("click", ".see_group_profile", function () {
             sendFriendProfileReq(chatSessionId);
             $('.right-body-sidebar').show();
         } else if(chatSessionType == GROUP_MSG) {
-            $(this).attr("is_show_profile", 0);
             sendGroupProfileReq(chatSessionId, handleClickSeeGroupProfile);
         } else {
             $('.right-body-sidebar').hide();
@@ -494,6 +493,7 @@ function  handleClickSeeGroupProfile(results)
 
     try{
         if(results.hasOwnProperty("header") &&  results.header[HeaderErrorCode] == errorGroupNotExitsKey) {
+            $(this).attr("is_show_profile", 0);
             var tip = $.i18n.map['notInGroupTip'] != undefined ? $.i18n.map['errorGroupExitsTip'] : "此群已解散";
             alert(tip);
             return;
@@ -504,6 +504,7 @@ function  handleClickSeeGroupProfile(results)
 
     var groupProfile = results != undefined && results.hasOwnProperty("profile") ? results.profile : false;
     if(!groupProfile) {
+        $(this).attr("is_show_profile", 0);
         var tip = $.i18n.map['notInGroupTip'] != undefined ? $.i18n.map['notInGroupTip'] : "你已不在此群";
         alert(tip);
     } else {
@@ -1157,8 +1158,6 @@ function handleClickGroupUserImg(results)
     var groupProfile = results.profile;
 
     if(groupProfile) {
-        console.log("profile results===="+JSON.stringify(results));
-
         groupProfile.memberType = results.memberType ? results.memberType : GroupMemberType.GroupMemberGuest;
 
         var isOwner = groupProfile.memberType == GroupMemberType.GroupMemberOwner ? 1 : 0;
@@ -2299,6 +2298,7 @@ function insertU2Room(jqElement, userId)
 function displayProfile(profileId, profileType)
 {
     var chatSessionId   = localStorage.getItem(chatSessionIdKey);
+    console.log("profileID aaa===name ===="+JSON.stringify(profileType));
     if(profileId == chatSessionId) {
         displayCurrentProfile();
         return;
@@ -2313,11 +2313,20 @@ function updateInfo(profileId, profileType)
     if(profileType == U2_MSG) {
         var friendProfile = getFriendProfile(profileId, false, handleGetFriendProfile);
         name = friendProfile != false && friendProfile != null ? friendProfile.nickname : "";
-        getNotMsgImg(friendProfile.userId, friendProfile.avatar);
+        try{
+            getNotMsgImg(friendProfile.userId, friendProfile.avatar);
+        }catch (error) {
+
+        }
     } else {
         var groupProfile = getGroupProfile(profileId);
         var groupName = groupProfile != false && groupProfile != null ? groupProfile.name : "";
         name = groupName;
+        try{
+            getNotMsgImg(groupProfile.id, groupProfile.avatar);
+        }catch (error) {
+
+        }
     }
 
     var muteKey= msgMuteKey+profileId;
@@ -2331,7 +2340,8 @@ function updateInfo(profileId, profileType)
     }catch (error) {
 
     }
-    $(".nickname_"+profileId).val(name);
+
+    $(".nickname_"+profileId).html(name);
 
     try{
         if(mute>0) {
@@ -2340,6 +2350,7 @@ function updateInfo(profileId, profileType)
             $(".room-chatsession-mute_"+profileId)[0].style.display = "none";
         }
     }catch (error) {
+        console.log(error);
     }
 }
 
