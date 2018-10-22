@@ -2297,7 +2297,6 @@ function insertU2Room(jqElement, userId)
 function displayProfile(profileId, profileType)
 {
     var chatSessionId   = localStorage.getItem(chatSessionIdKey);
-    console.log("profileID aaa===name ===="+JSON.stringify(profileType));
     if(profileId == chatSessionId) {
         displayCurrentProfile();
         return;

@@ -14,7 +14,7 @@
             <input type="text" id="register_input_loginName"  datatype="s"  class="input_login_site  register_input_loginName" data-local-placeholder="registerLoginNamePlaceholder"  autocapitalize="off"   placeholder="用户名以字母、数字、下划线，1-16个字符" >
             {{/if}}
             <img src="../../public/img/msg/msg_failed.png" class="img-failed register_input_loginName_failed">
-            <div class="line"></div>
+            <div class="register_line"></div>
         </div>
 
         <div class="login_name_div" style="margin-top: 2rem;">
@@ -23,21 +23,21 @@
             <div class="pwd_div" onclick="changeImgByClickPwd()"><image src="../../public/img/login/hide_pwd.png" class="pwd" img_type="hide"/></div>
             <img src="../../public/img/msg/msg_failed.png" class="img-failed register_input_pwd_failed">
         </div>
-        <div class="line"></div>
+        <div class="register_line"></div>
 
         <div class="login_name_div" style="margin-top: 2rem;">
             <image src="../../public/img/login/pwd.png" class="img"/>
             <input type="password" class="input_login_site register_input_repwd" autocapitalize="off"   id="register_input_repwd" data-local-placeholder="enterRepasswordPlaceholder"  placeholder="再次输入密码"  >
             <div class="repwd_div" onclick="changeImgByClickRepwd()"><image src="../../public/img/login/hide_pwd.png" class="repwd" img_type="hide"/></div>
             <img src="../../public/img/msg/msg_failed.png" class="img-failed register_input_repwd_failed">
-            <div class="line" ></div>
+            <div class="register_line" ></div>
         </div>
 
         <div class="login_name_div" style="margin-top: 2rem;">
             <image src="../../public/img/login/nickname.png" class="img"/>
             <input type="text" class="input_login_site register_input_nickname"  autocapitalize="off"  id="register_input_nickname" data-local-placeholder="enterNicknamePlaceholder" placeholder="输入昵称,1-16个字符"  >
             <img src="../../public/img/msg/msg_failed.png" class="img-failed register_input_nickname_failed">
-            <div class="line"></div>
+            <div class="register_line"></div>
         </div>
 
         <div class="login_name_div" style="margin-top: 2rem;">
@@ -57,7 +57,7 @@
                 {{/if}}
             {{/if}}
             <img src="../../public/img/msg/msg_failed.png" class="img-failed register_input_email_failed">
-            <div class="line"></div>
+            <div class="register_line"></div>
         </div>
         <div style="font-size:1.31rem;font-family:PingFangSC-Regular;font-weight:400;color:rgba(153,153,153,1);"data-local-value="findPasswordTip" >通过此信息联系管理员找回密码。</div>
 
