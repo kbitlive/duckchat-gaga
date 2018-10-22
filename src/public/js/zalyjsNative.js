@@ -42,6 +42,7 @@ function zalyjsCallbackHelperConstruct() {
             }catch (error) {
                 paramBase64Decode = window.atob(param);
             }
+            console.log("zalyjs callback param ==" + JSON.stringify(paramBase64Decode));
 
             // js json for \n
             param = paramBase64Decode.replace(/\n/g,"\\\\n");
@@ -131,7 +132,7 @@ function zalyjsNavOpenPage(url) {
 }
 
 function zalyjsLoginSuccess(loginName, sessionid, isRegister, callback) {
-
+    console.log("zalyjsLoginSuccess loginName ==" + loginName + " clientType =="+clientType.toLowerCase());
     var callbackId = zalyjsCallbackHelper.register(callback)
     var messageBody = {}
     messageBody["loginName"] = loginName
