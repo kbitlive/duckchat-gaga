@@ -19,20 +19,21 @@
             border: 0px;
         }
 
-        /*拉伸*/
+        /*填充*/
         .login-background-image-0 {
-            margin: 5px 10px 5px 10px;
-            height: 200px;
-            background-position: 0 0;
-            background-size: 100% 100%;
-        }
-
-        .login-background-image-1 {
             margin: 5px 10px 5px 10px;
             height: 200px;
             /*background-color: #0bb20c;*/
             background-size: cover;
             background-attachment: fixed;
+        }
+
+        /*拉伸*/
+        .login-background-image-1 {
+            margin: 5px 10px 5px 10px;
+            height: 200px;
+            background-position: 0 0;
+            background-size: 100% 100%;
         }
 
         .login-background-image-2 {
@@ -145,9 +146,9 @@
                         <div class="item-body-tail">
                             <div class="item-body-value" id="image-display-type-text">
                                 <?php if ($loginBackgroundImageDisplay == "0") { ?>
-                                    <?php if ($lang == "1") { ?> 默认<?php } else { ?> Default <?php } ?>
+                                    <?php if ($lang == "1") { ?> 默认(填充)<?php } else { ?> Default(Cover) <?php } ?>
                                 <?php } else if ($loginBackgroundImageDisplay == "1") { ?>
-                                    <?php if ($lang == "1") { ?> 填充<?php } else { ?> Cover <?php } ?>
+                                    <?php if ($lang == "1") { ?> 拉伸<?php } else { ?>Fill<?php } ?>
                                 <?php } else if ($loginBackgroundImageDisplay == "2") { ?>
                                     <?php if ($lang == "1") { ?> 平铺<?php } else { ?> Repeat <?php } ?>
                                 <?php } ?>
@@ -383,7 +384,7 @@
                 console.log("close");
             },
             actions: [{
-                text: language == 0 ? "Default" : "默认",
+                text: language == 0 ? "Default(Cover)" : "默认(填充)",
                 className: "select-color-primary",
                 onClick: function () {
                     $("#image-display-type-text").html(language == 0 ? "Default" : "默认");
@@ -391,7 +392,7 @@
                     updateImageDisplayType(0);
                 }
             }, {
-                text: language == 0 ? "Cover" : "填充",
+                text: language == 0 ? "Fill" : "拉伸",
                 className: "select-color-primary",
                 onClick: function () {
                     $("#image-display-type-text").html(language == 0 ? "Cover" : "填充");
