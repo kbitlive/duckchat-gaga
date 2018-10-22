@@ -124,7 +124,7 @@ if(isPhoneFlag == false) {
     var isAvailabelBrowserFlag = isAvailableBrowser();
     if(!isAvailabelBrowserFlag) {
         $(".site-warning")[0].style.display='flex';
-        var tip = "";
+        var tip = "暂时不支持此浏览器, 请使用火狐,chrome,safari访问站点";
         if(languageName == "en") {
             tip = "This browser is not supported at this time. Please use the mobile client or Firefox, Chrome, Safari browser to visit the site!";
         }
