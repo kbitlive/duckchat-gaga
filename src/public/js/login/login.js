@@ -153,11 +153,12 @@ function loginFailed(result)
     if(result.hasOwnProperty('errorInfo')) {
         zalyjsAlert(result.errorInfo);
     } else {
-        zalyjsAlert(result);
+        if(result != undefined && result !='') {
+            zalyjsAlert(result);
+        }
     }
     if(isRegister == true && enableInvitationCode == 1) {
         $(".register_button").attr("is_type", updateInvitationCodeType);
-        // apiPassportPasswordLogin(failedApiPassportPasswordLogin);
     }
 }
 
@@ -525,7 +526,9 @@ function failedCallBack(result) {
         if(result.hasOwnProperty("errorInfo")) {
             zalyjsAlert(result.errorInfo);
         }else {
-            zalyjsAlert(result);
+            if(result != undefined && result !='') {
+                zalyjsAlert(result);
+            }
         }
         $(".register_button").attr("is_type", updateInvitationCodeType);
     }catch (error){
