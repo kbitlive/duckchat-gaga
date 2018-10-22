@@ -2312,10 +2312,20 @@ function updateInfo(profileId, profileType)
     if(profileType == U2_MSG) {
         var friendProfile = getFriendProfile(profileId, false, handleGetFriendProfile);
         name = friendProfile != false && friendProfile != null ? friendProfile.nickname : "";
-        getNotMsgImg(friendProfile.userId, friendProfile.avatar);
+        try{
+            getNotMsgImg(friendProfile.userId, friendProfile.avatar);
+        }catch (error) {
+
+        }
     } else {
         var groupProfile = getGroupProfile(profileId);
         var groupName = groupProfile != false && groupProfile != null ? groupProfile.name : "";
+       try{
+           getNotMsgImg(groupProfile.id, groupProfile.avatar);
+       }catch (error) {
+
+       }
+
         name = groupName;
     }
 
