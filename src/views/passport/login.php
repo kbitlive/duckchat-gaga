@@ -32,22 +32,25 @@
         <?php if ($loginBackgroundImage) { ?>
 
                 <?php if ($loginBackgroundImageDisplay == 0 ) { ?>
-        <!--            ///默认-->
-                    <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>') no-repeat;background-size: 100% 100%;">
+        <!--             ///填充-->
+        <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>');background-size: cover;">
+
                 <?php } elseif ($loginBackgroundImageDisplay == 1 ) {?>
-        <!--                ///填充-->
-                    <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>');background-size: cover;">
+            <!--            ///默认-->
+            <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>') no-repeat;background-size: 100% 100%;">
+
                 <?php } else {?>
 <!--                ///平铺-->
                     <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>') repeat;">
                 <?php } ?>
             <?php } else { ?>
                     <?php if ($loginBackgroundImageDisplay == 0 ) { ?>
-                    <!--            ///默认-->
-                            <div class="zaly_container" style="background: url('../../public/img/login/login_bg.jpg') no-repeat;background-size: 100% 100%;">
-                    <?php } elseif ($loginBackgroundImageDisplay == 1 ) {?>
-                        <!--                ///填充-->
+
+                                <!--                ///填充-->
                                 <div class="zaly_container" style="background: url('../../public/img/login/login_bg.jpg');background-size: cover;">
+                    <?php } elseif ($loginBackgroundImageDisplay == 1 ) {?>
+                                    <!--            ///默认-->
+                                    <div class="zaly_container" style="background: url('../../public/img/login/login_bg.jpg') no-repeat;background-size: 100% 100%;">
                     <?php } else {?>
                             <!--                ///平铺-->
                             <div class="zaly_container" style="background: url('../../public/img/login/login_bg.jpg') repeat;">
