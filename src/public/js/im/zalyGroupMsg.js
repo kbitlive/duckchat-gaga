@@ -2148,7 +2148,6 @@ $('.friend-list-contact-row').scroll(function(event){
     var ch  = pwLeft.clientHeight;
     var sh = pwLeft.scrollHeight;
     var st = $('.friend-list-contact-row').scrollTop();
-    console.log("st ===="+st);
 
     //文档的高度-视口的高度-滚动条的高度
     if((sh - ch - st) == 0){
@@ -2331,7 +2330,7 @@ function updateInfo(profileId, profileType)
     }catch (error) {
 
     }
-    $(".nickname_"+profileId).val(name);
+    $(".nickname_"+profileId).html(name);
 
     try{
         if(mute>0) {
