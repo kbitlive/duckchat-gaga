@@ -109,29 +109,6 @@
             </div>
             <div class="division-line"></div>
 
-
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">登陆开启邀请码</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Login By Invite Code</div>
-                        <?php } ?>
-
-                        <div class="item-body-tail">
-                            <?php if ($enableInvitationCode == 1) { ?>
-                                <input id="enableUicSwitch" class="weui_switch" type="checkbox" checked>
-                            <?php } else { ?>
-                                <input id="enableUicSwitch" class="weui_switch" type="checkbox">
-                            <?php } ?>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
         </div>
 
     </div>
