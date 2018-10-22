@@ -106,6 +106,28 @@
             </div>
             <div class="division-line"></div>
 
+            <div class="item-row">
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">登陆开启邀请码</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Login By Invite Code</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <?php if ($enableInvitationCode == 1) { ?>
+                                <input id="enableUicSwitch" class="weui_switch" type="checkbox" checked>
+                            <?php } else { ?>
+                                <input id="enableUicSwitch" class="weui_switch" type="checkbox">
+                            <?php } ?>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
         </div>
 
     </div>
@@ -1254,6 +1276,36 @@
 
             if (!"success" == res.errCode) {
                 alert(getLanguage() == 1 ? "操作失败" : "update error");
+            }
+
+        } else {
+            alert(getLanguage() == 1 ? "操作失败" : "update error");
+        }
+    }
+
+    //update invitation code
+    $("#enableUicSwitch").change(function () {
+        var isChecked = $(this).is(':checked');
+        var url = "index.php?action=manage.config.update&key=enableInvitationCode";
+
+        var data = {
+            'key': 'enableInvitationCode',
+            'value': isChecked ? 1 : 0,
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, enableSwitchResponse);
+
+    });
+
+    function enableSwitchResponse(url, data, result) {
+        if (result) {
+
+            var res = JSON.parse(result);
+
+            if ("success" != res.errCode) {
+                var errInfo = res.errInfo;
+                var errMsg = (getLanguage() == 1 ? "操作失败,原因：" : "update error, cause:") + errInfo;
+                alert(errMsg);
             }
 
         } else {
