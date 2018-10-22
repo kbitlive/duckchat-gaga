@@ -24,7 +24,7 @@
     <div class="container">
 
         <div class="zaly_container">
-           <div style="padding-top: 14rem;">
+           <div  class="paddingTop">
                <div class="zaly_init">
 
                </div>
