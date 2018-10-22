@@ -153,11 +153,11 @@ class Api_Group_SetSpeakerController extends Api_Group_BaseController
         return $this->ctx->SiteGroupTable->updateGroupInfo($where, $data);
     }
 
-    private function throwZalyException($errCode)
-    {
-        $errInfo = ZalyError::getErrorInfo2($errCode, $this->language);
-        throw new ZalyException($errCode, $errInfo);
-    }
+//    private function throwZalyException($errCode)
+//    {
+//        $errInfo = ZalyError::getErrorInfo2($errCode, $this->language);
+//        throw new ZalyException($errCode, $errInfo);
+//    }
 
 
     private function proxyGroupNotice($groupId, $groupAdminId, $speakeIds, $setType)
