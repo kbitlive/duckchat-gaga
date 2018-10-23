@@ -16,6 +16,8 @@
  * @property SiteSessionTable SiteSessionTable
  * @property SiteUserTable SiteUserTable
  * @property PassportPasswordTable PassportPasswordTable
+ * @property PassportPasswordLogTable PassportPasswordLogTable
+ * @property PassportPasswordCountLogTable PassportPasswordCountLogTable
  * @property PassportPasswordTokenTable PassportPasswordTokenTable
  * @property PassportPasswordPreSessionTable PassportPasswordPreSessionTable
  * @property SiteUserFriendTable SiteUserFriendTable

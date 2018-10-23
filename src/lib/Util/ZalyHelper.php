@@ -221,4 +221,16 @@ class ZalyHelper
     {
         return preg_match("/^[A-Za-z0-9_]+$/", $str);
     }
+
+    public static function getIp()
+    {
+        $ip = "";
+        if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }elseif(isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
+
+    }
 }

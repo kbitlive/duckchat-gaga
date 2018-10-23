@@ -9,6 +9,7 @@ class Api_Passport_PasswordLoginController extends BaseController
 {
     private $classNameForRequest = '\Zaly\Proto\Site\ApiPassportPasswordLoginRequest';
     private $classNameForResponse = '\Zaly\Proto\Site\ApiPassportPasswordLoginResponse';
+    private $maxErrorNum = 6;
 
     public function rpcRequestClassName()
     {
@@ -58,13 +59,59 @@ class Api_Passport_PasswordLoginController extends BaseController
                 $this->setRpcError($errorCode, $errorInfo);
                 throw new Exception("loginName is not exist");
         }
+
+        $operateDate = date("Y-m-d", time());
+        $count = $this->ctx->PassportPasswordCountLogTable->getCountLogByUserId($user['userId'], $operateDate);
+        if($count>$this->maxErrorNum) {
+            $errorInfo = ZalyText::getText("text.pwd.exceedNum", $this->language);
+            $this->setRpcError("error.alert", $errorInfo);
+            throw new Exception("loginName password is not match");
+        }
+
         if(!password_verify($password, $user['password'])) {
+            $this->insertPassportPasswordLog($user);
             $errorCode = $this->zalyError->errorMatchLogin;
             $errorInfo = $this->zalyError->getErrorInfo($errorCode);
             $this->setRpcError($errorCode, $errorInfo);
             throw new Exception("loginName password is not match");
         }
+        $this->ctx->PassportPasswordCountLogTable->deleteCountLogDataByUserId($user['userId'], $operateDate);
         return $user;
+    }
+
+    private function insertPassportPasswordLog($user)
+    {
+        $tag = __CLASS__.'->'.__FUNCTION__;
+        try{
+            $opreateDate = date("Y-m-d", time());
+            $opreateTime = ZalyHelper::getMsectime();
+            $userId = $user['userId'];
+            $loginName = $user['loginName'];
+
+            $countLogData = [
+                "userId" => $userId,
+                "num" => 1,
+                "operateDate" => $opreateDate,
+                "operateTime" => $opreateTime,
+            ];
+            $updateCountData = [
+                "userId" => $userId,
+                "operateDate" => $opreateDate,
+            ];
+            $logData = [
+                "userId"      => $userId,
+                "loginName"   => $loginName,
+                "operateDate" => $opreateDate,
+                "operation"   => 1,
+                "ip"          => ZalyHelper::getIp(),
+                "operateTime" => ZalyHelper::getMsectime(),
+            ];
+
+            $this->ctx->PassportPasswordCountLogTable->insertCountLogData($countLogData, $updateCountData, $logData);
+        }catch (Exception $ex) {
+            $this->logger->error($tag, $ex);
+        }
+
     }
 
     private function generatePreSessionId($user, $sitePubkPem)

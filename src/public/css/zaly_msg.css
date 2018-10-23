@@ -614,6 +614,7 @@ html, body{
     height:54rem;
     width: 39.4rem;
     overflow-y: scroll;
+    margin-top: 0.1rem;
 }
 .group-member-info {
     position: absolute;

@@ -218,3 +218,20 @@ CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       configValueEN TEXT ,
                       updateUserId VARCHAR(100),
                       updateTime BIGINT);
+
+CREATE TABLE IF NOT EXISTS passportPasswordCountLog(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId VARCHAR(100) NOT NULL,
+    num INTEGER ,--次数
+    operateDate DATE ,
+    operateTime  BIGINT,
+    UNIQUE (userId, operateDate));
+
+CREATE TABLE IF NOT EXISTS passportPasswordLog(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId VARCHAR(100) NOT NULL,
+    loginName VARCHAR(100) NOT NULL,
+    operation INTEGER ,--0:无效; 1:登录; 2:注册
+    ip VARCHAR(100),
+    operateDate DATE ,
+    operateTime  BIGINT);
