@@ -552,12 +552,17 @@ function checkGroupMemberAdminType(userId, groupProfile)
 ////check is group owner
 function checkGroupOwnerType(userId, groupProfile)
 {
-    var owner = groupProfile.owner;
-    ///检查是否为群主
-    if(owner.userId == userId) {
-        return true;
+    try{
+        var owner = groupProfile.owner;
+        ///检查是否为群主
+        if(owner.userId == userId) {
+            return true;
+        }
+        return false;
+    }catch (error) {
+        console.log(error)
+        return false;
     }
-    return false;
 }
 
 function checkGroupAdminContainOwner(userId, groupProfile)
@@ -613,10 +618,18 @@ function  getGroupOwner(groupProfile)
 
 function checkGroupCanAddFriend()
 {
-    var groupId = localStorage.getItem(chatSessionIdKey);
-    var groupProfile = localStorage.getItem("profile_"+groupId);
-    var isCanAddFriend =  groupProfile != null && groupProfile != undefined && groupProfile.hasOwnProperty("canAddFriend") ? groupProfile.canAddFriend : false;
-    return isCanAddFriend;
+    try{
+        var groupId = localStorage.getItem(chatSessionIdKey);
+        var groupProfileStr = localStorage.getItem("profile_"+groupId);
+        if(groupProfileStr) {
+            var groupProfile = JSON.parse(groupProfileStr);
+            var isCanAddFriend =  groupProfile != null && groupProfile != undefined && groupProfile.hasOwnProperty("canAddFriend") ? groupProfile.canAddFriend : false;
+            return isCanAddFriend;
+        }
+        return false;
+    }catch (error){
+        return false;
+    }
 }
 
 
@@ -1176,7 +1189,6 @@ function handleClickGroupUserImg(results)
         var memberIsOwner = checkGroupOwnerType(clickImgUserId, groupProfile);
         var isFriend = localStorage.getItem(friendRelationKey+clickImgUserId) == FriendRelation.FriendRelationFollow ? 1 : 0;
         var isCanAddFriend = groupProfile.canAddFriend == true ? true : false;
-
         var html = template("tpl-group-user-menu", {
             userId : clickImgUserId,
             isFriend : isFriend,
@@ -1317,6 +1329,13 @@ function handleGetGroupMemberInfo(result)
         var relation = profile.relation == undefined ? FriendRelation.FriendRelationInvalid : profile.relation;
         var isSelf = userProfile.userId == token ? true : false;
 
+        var groupId = localStorage.getItem(chatSessionIdKey);
+        var groupProfileStr = localStorage.getItem(profileKey+groupId);
+        var isAdmin = false;
+        if(groupProfileStr) {
+            var groupProfile = JSON.parse(groupProfileStr);
+            isAdmin = checkGroupAdminContainOwner(token, groupProfile);
+        }
         var isCanAddFriend = checkGroupCanAddFriend();
 
         var html = template("tpl-group-member-info", {
@@ -1325,7 +1344,8 @@ function handleGetGroupMemberInfo(result)
             loginName:userProfile.loginName,
             relation:relation,
             isSelf:isSelf,
-            isCanAddFriend:isCanAddFriend
+            isCanAddFriend:isCanAddFriend,
+            isAdmin:isAdmin,
         });
         html = handleHtmlLanguage(html);
         $(".group-member-info").html(html);
@@ -1347,6 +1367,13 @@ $(document).on("click", ".group-member", function (event) {
     var relation = localStorage.getItem(friendRelationKey+userId);
 
     var isCanAddFriend = checkGroupCanAddFriend();
+    var groupId = localStorage.getItem(chatSessionIdKey);
+    var groupProfileStr = localStorage.getItem(profileKey+groupId);
+    var isAdmin = false;
+    if(groupProfileStr) {
+        var groupProfile = JSON.parse(groupProfileStr);
+        isAdmin = checkGroupAdminContainOwner(token, groupProfile);
+    }
 
     var html = template("tpl-group-member-info", {
         userId : userId,
@@ -1354,7 +1381,8 @@ $(document).on("click", ".group-member", function (event) {
         relation:relation,
         avatar:$(".info-avatar-"+userId).attr("src"),
         isSelf:isSelf,
-        isCanAddFriend:isCanAddFriend
+        isCanAddFriend:isCanAddFriend,
+        isAdmin:isAdmin
     });
     html = handleHtmlLanguage(html);
     $(".group-member-info").html(html);
