@@ -10,6 +10,9 @@ $timeRequestStart = microtime(true);
 //$_SERVER['REQUEST_URI'] = "/User/100369-api.html
 ini_set("display_errors", "Off");
 ini_set("log_errors", "On");
+if(!ini_get("error_log")) {
+    ini_set("error_log","php_errors.log");
+}
 
 $_ENV['WPF_URL_PATH_SUFFIX'] = '/wpf';
 
