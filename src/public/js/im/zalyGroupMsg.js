@@ -660,7 +660,10 @@ function appendGroupListHtml(results) {
         return ;
     }
     var groupList = results.list;
+
     if(groupList) {
+        var groupCount = "("+results.totalCount+")";
+        $(".group-count").html(groupCount);
         groupOffset = Number(groupOffset + defaultCountKey);
         var groupLength = groupList.length;
         html = "";
@@ -2158,6 +2161,9 @@ function  appendFriendListHtml(results)
     }
     var u2List = results.friends;
     if(u2List) {
+        var friendCount = "("+results.totalCount+"人)";
+        $(".friend-count").html(friendCount);
+
         friendOffset = Number(friendOffset + defaultCountKey);
         var u2Length = u2List.length;
         for(i=0; i<u2Length; i++) {

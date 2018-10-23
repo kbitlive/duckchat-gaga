@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="pw-contact-row-name" data-local-value="createGroupTip">创建群聊</div>
                             </div>
-                            <div class="group-list-div" data-local-value="groupListTip">群聊列表</div>
+                            <div class="group-list-div"><span  data-local-value="groupListTip">群聊列表</span><span style="margin-left: 0.5rem;" class="group-count"></span></div>
                         </div>
                         <div style="position: absolute;width: 100%;margin:0 auto;">
                             <div class="group-list-contact-row" style="overflow-y: scroll;position: relative;">
@@ -76,7 +76,7 @@
                                 </div>
                                 <div class="pw-contact-row-name new-friends-apply" data-local-value="newFriendsTip">新朋友</div>
                             </div>
-                            <div class="friend-list-div" data-local-value="friendListTip">好友列表</div>
+                        <div class="friend-list-div" ><span data-local-value="friendListTip">好友列表</span><span style="margin-left: 0.5rem;" class="friend-count"><span></div>
                     </div>
                     <div style="width: 28.14rem;position: absolute;margin:0 auto;">
                         <div class="friend-list-contact-row" style="overflow-y: scroll;position: relative">
