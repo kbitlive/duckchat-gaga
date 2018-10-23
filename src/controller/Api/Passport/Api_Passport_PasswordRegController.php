@@ -31,7 +31,8 @@ class Api_Passport_PasswordRegController extends BaseController
             $sitePubkPem = $request->getSitePubkPem();
             $invitationCode = $request->getInvitationCode();
 
-            if(!$loginName || mb_strlen($loginName)>24) {
+            $loginName = trim($loginName);
+            if(!$loginName || mb_strlen($loginName)>24 ) {
                 $errorCode = $this->zalyError->errorLoginNameLength;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
                 $this->setRpcError($errorCode, $errorInfo);
@@ -45,6 +46,7 @@ class Api_Passport_PasswordRegController extends BaseController
                 throw new Exception("password  is  not exists");
             }
 
+            $nickname = trim($nickname);
             if(!$nickname || mb_strlen($nickname) > 16) {
                 $errorCode = $this->zalyError->errorNicknameLength;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
