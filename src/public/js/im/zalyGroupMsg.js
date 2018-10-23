@@ -465,7 +465,7 @@ function logout(event)
     }
 }
 
-//------------------------------------*********Group*********--------------------------------------------
+//------------------------------------*********Group function*********--------------------------------------------
 
 
 $(document).on("click", ".see_group_profile", function () {
@@ -609,6 +609,14 @@ function  getGroupOwner(groupProfile)
 {
     var owner = groupProfile.owner;
     return  owner.userId;
+}
+
+function checkGroupCanAddFriend()
+{
+    var groupId = localStorage.getItem(chatSessionIdKey);
+    var groupProfile = localStorage.getItem("profile_"+groupId);
+    var isCanAddFriend =  groupProfile != null && groupProfile != undefined && groupProfile.hasOwnProperty("canAddFriend") ? groupProfile.canAddFriend : false;
+    return isCanAddFriend;
 }
 
 
@@ -1296,6 +1304,7 @@ $(document).on("click", "#remove-group-chat", function () {
 
 //group operation - api.group.removeMember - click in group member list
 
+
 function handleGetGroupMemberInfo(result)
 {
     if(result == undefined) {
@@ -1308,12 +1317,15 @@ function handleGetGroupMemberInfo(result)
         var relation = profile.relation == undefined ? FriendRelation.FriendRelationInvalid : profile.relation;
         var isSelf = userProfile.userId == token ? true : false;
 
+        var isCanAddFriend = checkGroupCanAddFriend();
+
         var html = template("tpl-group-member-info", {
             userId : userProfile.userId,
             nickname:userProfile.nickname,
             loginName:userProfile.loginName,
             relation:relation,
-            isSelf:isSelf
+            isSelf:isSelf,
+            isCanAddFriend:isCanAddFriend
         });
         html = handleHtmlLanguage(html);
         $(".group-member-info").html(html);
@@ -1322,6 +1334,7 @@ function handleGetGroupMemberInfo(result)
     }
     handleGetFriendProfile(result);
 }
+
 
 $(document).on("click", ".group-member", function (event) {
     event.stopPropagation();
@@ -1332,12 +1345,16 @@ $(document).on("click", ".group-member", function (event) {
     var userId = $(this).attr("userId");
     var isSelf = userId == token ? true : false;
     var relation = localStorage.getItem(friendRelationKey+userId);
+
+    var isCanAddFriend = checkGroupCanAddFriend();
+
     var html = template("tpl-group-member-info", {
         userId : userId,
         nickname:$(this).attr("nickname"),
         relation:relation,
         avatar:$(".info-avatar-"+userId).attr("src"),
-        isSelf:isSelf
+        isSelf:isSelf,
+        isCanAddFriend:isCanAddFriend
     });
     html = handleHtmlLanguage(html);
     $(".group-member-info").html(html);
