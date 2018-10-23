@@ -366,6 +366,7 @@ $(document).on("click", ".register_code_button", function () {
     $(".zaly_site_register-invitecode")[0].style.display = "block";
 });
 
+
 function checkRegisterInfo()
 {
     registerLoginName = $(".register_input_loginName").val();
@@ -375,13 +376,22 @@ function checkRegisterInfo()
     registerEmail = $(".register_input_email").val();
     isFocus = false;
 
-    if(registerLoginName == "" || registerLoginName == undefined || registerLoginName.length<0 || registerLoginName.length>24 ) {
+    registerLoginName = trimString(registerLoginName);
+    if(registerLoginName == "" || registerLoginName == undefined
+        || registerLoginName.length<0 || registerLoginName.length>24
+        || checkIsEntities(registerLoginName)
+    ) {
         $("#register_input_loginName").focus();
         $(".register_input_loginName_failed")[0].style.display = "block";
         isFocus = true;
     }
+    registerPassword = trimString(registerPassword);
 
-    if(registerPassword == "" || registerPassword == undefined || registerPassword.length<5 || registerPassword.length>20 || !isPassword(registerPassword)) {
+    if(registerPassword == "" || registerPassword == undefined
+        || registerPassword.length<5 || registerPassword.length>20
+        || !isPassword(registerPassword)
+
+    ) {
         $(".register_input_pwd_failed")[0].style.display = "block";
         if (isFocus == false) {
             $("#register_input_pwd").focus();
@@ -390,7 +400,9 @@ function checkRegisterInfo()
         }
     }
 
-    if(repassword == "" || repassword == undefined || repassword.length<0) {
+    if(repassword == "" || repassword == undefined
+        || repassword.length<0 || (repassword != registerPassword)
+    ) {
         $(".register_input_repwd_failed")[0].style.display = "block";
         if(isFocus == false) {
             $("#register_input_repwd").focus();
@@ -399,7 +411,11 @@ function checkRegisterInfo()
         }
     }
 
-    if(registernNickname == "" || registernNickname == undefined || registernNickname.length<0 || registernNickname.length>16) {
+    registernNickname = trimString(registernNickname);
+    if(registernNickname == "" || registernNickname == undefined
+        || registernNickname.length<0 || registernNickname.length>16
+        || checkIsEntities(registernNickname)
+    ) {
         $(".register_input_nickname_failed")[0].style.display = "block";
         if(isFocus == false) {
             $(".register_input_repwd_failed")[0].style.display = "none";
@@ -408,7 +424,12 @@ function checkRegisterInfo()
         }
     }
 
-    if(passwordResetRequired == 1 && (registerEmail == "" || registerEmail == undefined || registerEmail.length<0)) {
+    registerEmail = trimString(registerEmail);
+    if(passwordResetRequired == 1
+        && (
+            registerEmail == "" || registerEmail == undefined
+            || registerEmail.length<0)
+    ) {
         $(".register_input_email_failed")[0].style.display = "block";
         if(isFocus == false) {
             $("#register_input_email").focus();
@@ -422,6 +443,9 @@ function checkRegisterInfo()
     }
     $(".register_input_nickname_failed")[0].style.display = "none";
     $(".register_input_email_failed")[0].style.display = "none";
+    $(".register_input_loginName_failed")[0].style.display = "none";
+    $(".register_input_pwd_failed")[0].style.display = "none";
+    $(".register_input_repwd_failed")[0].style.display = "none";
 
     if(registerPassword != repassword) {
         zalyjsAlert($.i18n.map["passwordIsNotSameJsTip"]);

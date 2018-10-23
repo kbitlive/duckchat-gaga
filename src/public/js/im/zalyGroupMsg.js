@@ -465,7 +465,7 @@ function logout(event)
     }
 }
 
-//------------------------------------*********Group*********--------------------------------------------
+//------------------------------------*********Group function*********--------------------------------------------
 
 
 $(document).on("click", ".see_group_profile", function () {
@@ -552,12 +552,17 @@ function checkGroupMemberAdminType(userId, groupProfile)
 ////check is group owner
 function checkGroupOwnerType(userId, groupProfile)
 {
-    var owner = groupProfile.owner;
-    ///检查是否为群主
-    if(owner.userId == userId) {
-        return true;
+    try{
+        var owner = groupProfile.owner;
+        ///检查是否为群主
+        if(owner.userId == userId) {
+            return true;
+        }
+        return false;
+    }catch (error) {
+        console.log(error)
+        return false;
     }
-    return false;
 }
 
 function checkGroupAdminContainOwner(userId, groupProfile)
@@ -609,6 +614,22 @@ function  getGroupOwner(groupProfile)
 {
     var owner = groupProfile.owner;
     return  owner.userId;
+}
+
+function checkGroupCanAddFriend()
+{
+    try{
+        var groupId = localStorage.getItem(chatSessionIdKey);
+        var groupProfileStr = localStorage.getItem("profile_"+groupId);
+        if(groupProfileStr) {
+            var groupProfile = JSON.parse(groupProfileStr);
+            var isCanAddFriend =  groupProfile != null && groupProfile != undefined && groupProfile.hasOwnProperty("canAddFriend") ? groupProfile.canAddFriend : false;
+            return isCanAddFriend;
+        }
+        return false;
+    }catch (error){
+        return false;
+    }
 }
 
 
@@ -1168,7 +1189,6 @@ function handleClickGroupUserImg(results)
         var memberIsOwner = checkGroupOwnerType(clickImgUserId, groupProfile);
         var isFriend = localStorage.getItem(friendRelationKey+clickImgUserId) == FriendRelation.FriendRelationFollow ? 1 : 0;
         var isCanAddFriend = groupProfile.canAddFriend == true ? true : false;
-
         var html = template("tpl-group-user-menu", {
             userId : clickImgUserId,
             isFriend : isFriend,
@@ -1296,6 +1316,7 @@ $(document).on("click", "#remove-group-chat", function () {
 
 //group operation - api.group.removeMember - click in group member list
 
+
 function handleGetGroupMemberInfo(result)
 {
     if(result == undefined) {
@@ -1308,12 +1329,23 @@ function handleGetGroupMemberInfo(result)
         var relation = profile.relation == undefined ? FriendRelation.FriendRelationInvalid : profile.relation;
         var isSelf = userProfile.userId == token ? true : false;
 
+        var groupId = localStorage.getItem(chatSessionIdKey);
+        var groupProfileStr = localStorage.getItem(profileKey+groupId);
+        var isAdmin = false;
+        if(groupProfileStr) {
+            var groupProfile = JSON.parse(groupProfileStr);
+            isAdmin = checkGroupAdminContainOwner(token, groupProfile);
+        }
+        var isCanAddFriend = checkGroupCanAddFriend();
+
         var html = template("tpl-group-member-info", {
             userId : userProfile.userId,
             nickname:userProfile.nickname,
             loginName:userProfile.loginName,
             relation:relation,
-            isSelf:isSelf
+            isSelf:isSelf,
+            isCanAddFriend:isCanAddFriend,
+            isAdmin:isAdmin,
         });
         html = handleHtmlLanguage(html);
         $(".group-member-info").html(html);
@@ -1322,6 +1354,7 @@ function handleGetGroupMemberInfo(result)
     }
     handleGetFriendProfile(result);
 }
+
 
 $(document).on("click", ".group-member", function (event) {
     event.stopPropagation();
@@ -1332,12 +1365,24 @@ $(document).on("click", ".group-member", function (event) {
     var userId = $(this).attr("userId");
     var isSelf = userId == token ? true : false;
     var relation = localStorage.getItem(friendRelationKey+userId);
+
+    var isCanAddFriend = checkGroupCanAddFriend();
+    var groupId = localStorage.getItem(chatSessionIdKey);
+    var groupProfileStr = localStorage.getItem(profileKey+groupId);
+    var isAdmin = false;
+    if(groupProfileStr) {
+        var groupProfile = JSON.parse(groupProfileStr);
+        isAdmin = checkGroupAdminContainOwner(token, groupProfile);
+    }
+
     var html = template("tpl-group-member-info", {
         userId : userId,
         nickname:$(this).attr("nickname"),
         relation:relation,
         avatar:$(".info-avatar-"+userId).attr("src"),
-        isSelf:isSelf
+        isSelf:isSelf,
+        isCanAddFriend:isCanAddFriend,
+        isAdmin:isAdmin
     });
     html = handleHtmlLanguage(html);
     $(".group-member-info").html(html);
