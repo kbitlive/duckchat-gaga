@@ -3275,8 +3275,11 @@ function checkOsVersion()
 $(document).on("click", ".clear_room_chat", function () {
     console.log("clear_room_chat");
     var roomId = localStorage.getItem(chatSessionIdKey);
-    $("right-chatbox").html("");
-    clearRoomMsgFromRoomList(roomId);
+    var tip = languageNum == UserClientLangZH ?  "将删除聊天记录，确认？" : "Sure?" ;
+    if(confirm(tip)) {
+        $("right-chatbox").html("");
+        clearRoomMsgFromRoomList(roomId);
+    }
 });
 
 
