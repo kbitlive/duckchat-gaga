@@ -135,7 +135,7 @@
         <div style="position: relative">
             <div class="group-profile-desc">
                 <div class="group-desc">
-                    <div class="group-desc-title" style="position: relative" data-local-value="groupMemberTip">群成员</div>
+                    <div class="group-desc-title" style="position: relative" ><span data-local-value="groupMemberTip">群成员</span><span style="margin-left: 0.5rem;" class="group-member-count"></span></div>
                     <div class="group-member-body">
 
                     </div>

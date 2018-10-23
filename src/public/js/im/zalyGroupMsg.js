@@ -943,6 +943,8 @@ function displayGroupMemberForGroupInfo(results)
     var list = results.list;
     $(".group-member-body").html("");
     if(list) {
+        var memberCount = "("+results.totalCount+")";
+        $(".group-member-count").html(memberCount);
         var length = list.length;
         var html = "";
         var bodyDivNum = undefined;
