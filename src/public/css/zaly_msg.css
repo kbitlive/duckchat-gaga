@@ -827,7 +827,7 @@ html, body{
 
 #selfInfo {
     width:38.37rem;
-    height:18.45rem;
+    height:25rem;
     background:rgba(255,255,255,1);
     box-shadow:0rem 0.19rem 1.41rem 0.09rem rgba(153,153,153,1);
     border-radius:0.56rem;
@@ -836,7 +836,7 @@ html, body{
     top:2rem;
     left:8rem;
 }
-.self-qrcode {
+.self_profile_item {
     text-align:left;
     height: 5rem;
     font-size:1.31rem;
@@ -845,10 +845,10 @@ html, body{
     line-height:5rem;
     cursor: pointer;
 }
-.self-qrcode span{
+.self_profile_item span{
     padding-left:2rem;
 }
-.self-qrcode:hover {
+.self_profile_item:hover {
     background:rgba(245,244,249,1);
 }
 
@@ -1917,4 +1917,7 @@ button:active{
     color:rgba(76,59,177,1);
     cursor: pointer;
     outline: none;
+}
+.clear_room_chat {
+    cursor: pointer;
 }

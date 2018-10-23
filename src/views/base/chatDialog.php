@@ -160,7 +160,6 @@
                     <div class="action-row action-row-disclosure edit_group_name">
                         <div class="action-title" data-local-value="groupProfileNameTip">群名称</div>
                         <div class="action-btn groupName" style="width: auto;cursor: pointer;">
-
                         </div>
                         <img src="../../public/img/edit.png" class="edit_img"/>
                     </div>
@@ -181,6 +180,10 @@
                         <div class="action-btn ">
                             <img src="../../public/img/msg/icon_disclosure.png" class="icon_discosure"/>
                         </div>
+                    </div>
+
+                    <div class="action-row clear_room_chat" >
+                        <div class="action-title" data-local-value="clearChatTip">清空聊天记录</div>
                     </div>
 
                     <div class="action-row quit-group" style="display: none;border-bottom: 1px solid rgba(223,223,223,1);" >
@@ -216,6 +219,10 @@
                         <div class="action-btn ">
                             <img src="../../public/img/msg/icon_switch_off.png" class="friend_mute" />
                         </div>
+                    </div>
+
+                    <div class="action-row clear_room_chat" >
+                        <div class="action-title" data-local-value="clearChatTip">清空聊天记录</div>
                     </div>
 
                     <div class="action-row delete-friend" style=" border-bottom: 1px solid rgba(223,223,223,1);">

@@ -2618,7 +2618,7 @@ $(document).mouseup(function(e){
     if(targetId != "selfAvatarUploadDiv" && targetId != "selfNickname" && targetId != "logout" && targetId != "logout-span"
         && targetId != "self-qrcode" && targetId != "user-image-upload" && targetId != "user-img-carmera"
         &&targetClassName != "nickNameDiv" && targetId !="selfQrcodeDiv" && targetId !="selfQrcodeCanvas" && targetId != "selfQrcode"
-        && targetClassName != "self-qrcode") {
+        && targetClassName != "self-qrcode" && targetId != "clear_all_chat" && targetClassName != "clear_all_chat") {
         $("#selfInfo").remove();
     }
 });
@@ -3263,6 +3263,28 @@ function checkOsVersion()
 }
 
 //---------------------------------------msg dialog-------------------------------------------------
+
+$(document).on("click", ".clear_room_chat", function () {
+    console.log("clear_room_chat");
+    var roomId = localStorage.getItem(chatSessionIdKey);
+    $("right-chatbox").html("");
+    clearRoomMsgFromRoomList(roomId);
+});
+
+
+$(document).on("click", "#clear_all_chat", function (event) {
+    console.log("clear_all");
+   clearSiteChatLogs(event);
+});
+
+function clearSiteChatLogs(event) {
+    event.stopPropagation();
+    var tip = languageNum == UserClientLangEN ? "清空站点聊天记录" : "Clear site chat logs";
+    if(confirm(tip)) {
+        $(".right-chatbox").html("");
+        clearRoomMsgFromRoomList(undefined);
+    }
+}
 
 function handleMsgRelation(jqElement, chatSessionId)
 {

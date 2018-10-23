@@ -76,7 +76,7 @@ function handleRoomListFromLocalStorage(roomMsg)
     }
 }
 
-function removeRoomFromRoomList(chatSessionId)
+function clearRoomMsgFromRoomList(chatSessionId)
 {
     var roomListStr = localStorage.getItem(roomListKey);
     var roomList;
@@ -85,15 +85,24 @@ function removeRoomFromRoomList(chatSessionId)
     } else {
         roomList = new Array();
     }
-    if(chatSessionId != undefined) {
-        var length = roomList.length;
-        var i;
-        for(i =0; i<length;  i++) {
-            var msg = roomList[i];
-            if(msg!=null && msg != false &&  msg.hasOwnProperty("chatSessionId") && msg.chatSessionId == chatSessionId) {
-                roomList.splice(i, 1);
+    var length = roomList.length;
+    var i;
+    for(i =0; i<length;  i++) {
+        var msg = roomList[i];
+        if(msg!=null && msg != false &&  msg.hasOwnProperty("chatSessionId")) {
+            if(chatSessionId == undefined) {
+                msg.type = MessageType.MessageText;
+                msg.text['body'] = "";
+                localStorage.removeItem(roomKey+msg.chatSessionId);
+                $(".chatsession-row-desc-"+msg.chatSessionId).html("");
+            } else if (msg.chatSessionId == chatSessionId){
+                msg.type = MessageType.MessageText;
+                msg.text['body'] = "";
+                localStorage.removeItem(roomKey+msg.chatSessionId)
+                $(".chatsession-row-desc-"+msg.chatSessionId).html("");
             }
         }
+        roomList[i] = msg;
     }
     roomList.sort(compare);
     localStorage.setItem(roomListKey, JSON.stringify(roomList));
