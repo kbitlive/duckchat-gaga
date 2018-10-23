@@ -149,8 +149,9 @@ function checkIsEntities(str){
         return true;
     }
     return false;
-
 }
+
+
 function trimString(str){
     return  str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
 }

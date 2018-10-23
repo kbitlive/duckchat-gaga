@@ -389,7 +389,7 @@ function checkRegisterInfo()
 
     if(registerPassword == "" || registerPassword == undefined
         || registerPassword.length<5 || registerPassword.length>20
-        || !isPassword(registerPassword) || checkIsEntities(registerPassword)
+        || !isPassword(registerPassword)
 
     ) {
         $(".register_input_pwd_failed")[0].style.display = "block";
@@ -402,7 +402,6 @@ function checkRegisterInfo()
 
     if(repassword == "" || repassword == undefined
         || repassword.length<0 || (repassword != registerPassword)
-        || checkIsEntities(repassword)
     ) {
         $(".register_input_repwd_failed")[0].style.display = "block";
         if(isFocus == false) {
@@ -429,7 +428,7 @@ function checkRegisterInfo()
     if(passwordResetRequired == 1
         && (
             registerEmail == "" || registerEmail == undefined
-            || registerEmail.length<0)  || checkIsEntities(registerEmail)
+            || registerEmail.length<0)
     ) {
         $(".register_input_email_failed")[0].style.display = "block";
         if(isFocus == false) {
