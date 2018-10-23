@@ -35,7 +35,7 @@ class Api_Group_ProfileController extends Api_Group_BaseController
                 throw new Exception($errorInfo);
             }
             $isGroupExists = $this->getGroupInfo($groupId);
-            if($isGroupExists === false) {
+            if ($isGroupExists === false) {
                 return;
             }
 
@@ -63,7 +63,7 @@ class Api_Group_ProfileController extends Api_Group_BaseController
         //get site config
         $config = $this->siteConfig;
         $enableAddFriendInGroup = $config[SiteConfig::SITE_ENABLE_ADD_FRIEND_IN_GROUP];
-        $groupProfile["canAddFriend"] = $canAddFriend && $enableAddFriendInGroup;
+        $group["canAddFriend"] = $canAddFriend && $enableAddFriendInGroup;
 
         $memberType = !$group['memberType'] ? \Zaly\Proto\Core\GroupMemberType::GroupMemberGuest : $group['memberType'];
         $groupProfile = $this->getPublicGroupProfile($group);
