@@ -3290,7 +3290,7 @@ $(document).on("click", "#clear_all_chat", function (event) {
 
 function clearSiteChatLogs(event) {
     event.stopPropagation();
-    var tip = languageNum == UserClientLangEN ? "清空站点聊天记录" : "Clear site chat logs";
+    var tip = languageNum == UserClientLangZH ? "此操作将删除本设备的聊天记录，确认？" : " Sure?";
     if(confirm(tip)) {
         $(".right-chatbox").html("");
         clearRoomMsgFromRoomList(undefined);
