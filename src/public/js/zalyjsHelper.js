@@ -142,3 +142,15 @@ function cancelLoadingBySelf()
         hideLoading();
     }, 1000);
 }
+function checkIsEntities(str){
+    var entitiesReg = /(&nbsp;|&#160;|&lt;|&#60;|&gt;|&#62;|&amp;|&#38;|&quot;|&#34;|&apos;|&#39;|&cent;|&#162;|&pound;|&#163;|&yen;|&#165;|&euro;|&#8364;|&sect;|&#167;|&copy;|&#169;|&reg;|&#174;|&times;|&#215;|&divide;|&#247;)/g;
+    var arrEntities = str.match(entitiesReg);
+    if(arrEntities != null) {
+        return true;
+    }
+    return false;
+
+}
+function trimString(str){
+    return  str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+}
