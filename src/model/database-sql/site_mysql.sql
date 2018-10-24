@@ -245,7 +245,7 @@ ALTER TABLE siteLoginCustom CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_gen
 CREATE TABLE IF NOT EXISTS passportPasswordCountLog(
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     userId VARCHAR(100) NOT NULL,
-    num INTEGER ,--次数
+    num INTEGER ,
     operateDate DATE ,
     operateTime  BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
