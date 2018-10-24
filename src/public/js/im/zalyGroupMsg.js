@@ -3040,12 +3040,14 @@ function searchUserByKeyDown(event)
         return;
     }
     isSearchUser = true;
+    setTimeout(function () {
+        isSearchUser = false;
+    }, 2000);
     searchUser();
 }
 
 function searchUserByOnBlur() {
     if(isSearchUser == true) {
-        isSearchUser = false;
         return;
     }
     searchUser();
@@ -3068,6 +3070,8 @@ function searchUser() {
 
 function handleSearchUser(results)
 {
+    isSearchUser = false;
+
     if(results.hasOwnProperty("friends")) {
         var friends = results.friends;
         var friendsLength = friends.length;

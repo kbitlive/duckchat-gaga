@@ -95,7 +95,6 @@
 
     </div>
 
-
     <div id="permission-join">
         <div class="close_div">
             <img src="../../public/img/close.png" onclick="closeMaskDiv('#permission-join');">

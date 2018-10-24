@@ -89,7 +89,7 @@ function clearRoomMsgFromRoomList(chatSessionId)
     var i;
     for(i =0; i<length;  i++) {
         var msg = roomList[i];
-        if(msg!=null && msg != false &&  msg.hasOwnProperty("chatSessionId")) {
+        if(msg!=null && msg != false && msg != undefined &&  msg.hasOwnProperty("chatSessionId")) {
             if(chatSessionId == undefined) {
                 msg.type = MessageType.MessageText;
                 msg.text['body'] = "";

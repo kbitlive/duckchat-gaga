@@ -231,7 +231,7 @@ CREATE TABLE IF NOT EXISTS passportPasswordLog(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     userId VARCHAR(100) NOT NULL,
     loginName VARCHAR(100) NOT NULL,
-    operation INTEGER ,--0:无效; 1:登录; 2:注册
+    operation INTEGER ,--0:无效 1:登录 2:注册
     ip VARCHAR(100),
     operateDate DATE ,
     operateTime  BIGINT);

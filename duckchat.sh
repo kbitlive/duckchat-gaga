@@ -205,6 +205,10 @@ case $operation in
 			fi
 
 			chmod -R 777 $originDirName/src
+			if [ -f $originDirName/.git/config ]; then
+			    sed -i  's/filemode = true/filemode = false/g'  $originDirName/.git/config
+			fi
+
 			echo "[DuckChat] 请稍后片刻"
 			sleep 9
 			echo "[DuckChat] 启动duckchat镜像成功"
