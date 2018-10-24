@@ -4,6 +4,8 @@ $(".right-chatbox").html("");
 
 
 
+
+
 function showMsgWebNotification(msg, msgContent)
 {
     var msgId = msg.msgId;
@@ -43,7 +45,10 @@ function showMsgWebNotification(msg, msgContent)
 
     if(document.hidden && (mute == 0)) {
         if(window.Notification && Notification.permission !== "denied"){
-            new Notification(notification, {"tag":siteConfig.serverAddressForApi, "icon":icon,  renotify: true});
+            var notification = new Notification(notification, {"tag":siteConfig.serverAddressForApi, "icon":icon,  renotify: true});
+            notification.onclick = function(event) {
+                window.focus();
+            }
         }
     }
 }
@@ -54,10 +59,13 @@ function showOtherWebNotification()
         var siteConfigStr = localStorage.getItem(siteConfigKey);
         var siteConfig = JSON.parse(siteConfigStr);
         var icon = siteConfig.logo == undefined ? "" : siteConfig.logo;
-        icon  =  downloadFileUrl + "&fileId="+icon+"&returnBase64=0&lang="+languageNum;
+        icon = downloadFileUrl + "&fileId=" + icon + "&returnBase64=0&lang=" + languageNum;
         var notification = languageNum == UserClientLangZH ? "新的好友请求" : "new friend apply request";
-        if(window.Notification && Notification.permission !== "denied"){
-            new Notification(notification, {"tag":siteConfig.serverAddressForApi, "icon":icon });
+        if (window.Notification && Notification.permission !== "denied") {
+            var notification = new Notification(notification, {"tag": siteConfig.serverAddressForApi, "icon": icon});
+            notification.onclick = function (event) {
+                window.focus();
+            }
         }
     }
 }

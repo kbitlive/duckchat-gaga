@@ -640,6 +640,9 @@
 
 <script id="tpl-add-friend-div" type="text/html">
 
+        <div class="close_div">
+            <img src="../../public/img/close.png" onclick="closeMaskDiv('#add-friend-div');">
+        </div>
         <div class="flex-container justify-content-center" >
             <div class="header_tip_font  align-items-center" style="margin-top: 6rem;" data-local-value="addFriendTip">添加好友</div>
         </div>

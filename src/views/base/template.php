@@ -105,25 +105,27 @@
             <div class="header_tip_line_right"></div>
         </div>
 
-        <div class="d-flex flex-row" style="margin-top: 5rem; margin-left:23rem;">
-            <div class="permission-join-operation join-by-admin">
-                <div class="d-flex flex-row" style="width: 50%"  data-local-value="groupAdminInvitationTip">管理员邀请</div>
-                <div  class="d-flex flex-row ">
-                    <img class="imgDiv" src="../../public/img/msg/member_unselect.png"  permissionJoin="GroupJoinPermissionAdmin">
+        <div class="d-flex flex-row" style="margin-top: 5rem;display: flex;justify-content: center;align-items: center;">
+            <div style="    width: 28rem;">
+                <div class="permission-join-operation join-by-admin">
+                    <div class="d-flex flex-row" style="width: 50%"  data-local-value="groupAdminInvitationTip">管理员邀请</div>
+                    <div  class="d-flex flex-row ">
+                        <img class="imgDiv" src="../../public/img/msg/member_unselect.png"  permissionJoin="GroupJoinPermissionAdmin">
+                    </div>
                 </div>
-            </div>
-            <div class="permission-join-operation join-by-member">
-                <div class="d-flex flex-row" style="width: 50%" data-local-value="groupMemberTip">
-                    Members Invitation
+                <div class="permission-join-operation join-by-member">
+                    <div class="d-flex flex-row" style="width: 50%" data-local-value="groupMemberTip">
+                        Members Invitation
+                    </div>
+                    <div class="d-flex flex-row ">
+                        <img class="imgDiv"src="../../public/img/msg/member_unselect.png" permissionJoin="GroupJoinPermissionMember">
+                    </div>
                 </div>
-                <div class="d-flex flex-row ">
-                    <img class="imgDiv"src="../../public/img/msg/member_unselect.png" permissionJoin="GroupJoinPermissionMember">
-                </div>
-            </div>
-            <div class="permission-join-operation join-by-public">
-                <div class="d-flex flex-row" style="width: 50%" data-local-value="groupPublicTip"> 公开</div>
-                <div class="d-flex flex-row ">
-                    <img class="imgDiv" src="../../public/img/msg/member_unselect.png" permissionJoin="GroupJoinPermissionPublic">
+                <div class="permission-join-operation join-by-public">
+                    <div class="d-flex flex-row" style="width: 50%" data-local-value="groupPublicTip"> 公开</div>
+                    <div class="d-flex flex-row ">
+                        <img class="imgDiv" src="../../public/img/msg/member_unselect.png" permissionJoin="GroupJoinPermissionPublic">
+                    </div>
                 </div>
             </div>
         </div>

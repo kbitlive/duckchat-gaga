@@ -24,6 +24,7 @@
      function handleLoginSiteConfig(params)
      {
          ZalyIm(params);
+         console.log("params ======" + JSON.stringify(params));
          var pluginLoginProfileJsonStr = localStorage.getItem(siteLoginPluginKey);
          var pluginLoginProfile = JSON.parse(pluginLoginProfileJsonStr);
          var landingPageUrl = pluginLoginProfile.landingPageUrl;

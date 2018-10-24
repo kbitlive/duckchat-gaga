@@ -439,23 +439,13 @@ input:active,
     outline: none;
 }
 
-.line {
+.line,.register_line {
     width:28.14rem;
     height:0.09rem;
     margin:0px auto;
     background:rgba(153,153,153,1);
     border-radius:0.42rem;
     overflow:hidden;
-}
-
-.register_line {
-    width:28.14rem;
-    height:0.1rem;
-    margin:0px auto;
-    background:rgba(153,153,153,1);
-    border-radius:0.42rem;
-    overflow:hidden;
-    margin-top: 0.06rem;
 }
 .outline{
     border:1px solid rgba(76,59,177,1);
