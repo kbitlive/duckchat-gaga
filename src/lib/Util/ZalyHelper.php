@@ -221,7 +221,6 @@ class ZalyHelper
     {
         return preg_match("/^[A-Za-z0-9_]+$/", $str);
     }
-
     public static function getIp()
     {
         $ip = "";
