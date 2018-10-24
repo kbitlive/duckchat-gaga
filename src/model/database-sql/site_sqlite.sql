@@ -224,8 +224,9 @@ CREATE TABLE IF NOT EXISTS passportPasswordCountLog(
     userId VARCHAR(100) NOT NULL,
     num INTEGER ,--次数
     operateDate DATE ,
-    operateTime  BIGINT,
-    UNIQUE (userId, operateDate));
+    operateTime  BIGINT);
+
+CREATE UNIQUE IF NOT EXISTS userIdAnfOperDate ON passportPasswordCountLog(userId, operateDate);
 
 CREATE TABLE IF NOT EXISTS passportPasswordLog(
     id INTEGER PRIMARY KEY AUTOINCREMENT,

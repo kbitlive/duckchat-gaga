@@ -91,14 +91,14 @@ function clearRoomMsgFromRoomList(chatSessionId)
         var msg = roomList[i];
         if(msg!=null && msg != false && msg != undefined &&  msg.hasOwnProperty("chatSessionId")) {
             if(chatSessionId == undefined) {
-                msg.type = MessageType.MessageText;
-                msg.text['body'] = "";
                 localStorage.removeItem(roomKey+msg.chatSessionId);
+                msg.type = MessageType.MessageText;
+                msg.text = {body:""};
                 $(".chatsession-row-desc-"+msg.chatSessionId).html("");
             } else if (msg.chatSessionId == chatSessionId){
-                msg.type = MessageType.MessageText;
-                msg.text['body'] = "";
                 localStorage.removeItem(roomKey+msg.chatSessionId)
+                msg.type = MessageType.MessageText;
+                msg.text = {body:""};
                 $(".chatsession-row-desc-"+msg.chatSessionId).html("");
             }
         }

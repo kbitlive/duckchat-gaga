@@ -9,7 +9,7 @@ class Api_Passport_PasswordLoginController extends BaseController
 {
     private $classNameForRequest = '\Zaly\Proto\Site\ApiPassportPasswordLoginRequest';
     private $classNameForResponse = '\Zaly\Proto\Site\ApiPassportPasswordLoginResponse';
-    private $maxErrorNum = 6;
+    private $maxErrorNum = 5;
 
     public function rpcRequestClassName()
     {
@@ -51,6 +51,7 @@ class Api_Passport_PasswordLoginController extends BaseController
 
     private function  verifyUserInfo($loginName, $password)
     {
+        $tag = __CLASS__.'->'.__FUNCTION__;
         $user = $this->ctx->PassportPasswordTable->getUserByLoginName($loginName);
 
         if(!$user) {
@@ -61,7 +62,13 @@ class Api_Passport_PasswordLoginController extends BaseController
         }
 
         $operateDate = date("Y-m-d", time());
-        $count = $this->ctx->PassportPasswordCountLogTable->getCountLogByUserId($user['userId'], $operateDate);
+        $count = 0;
+        try{
+            $count = $this->ctx->PassportPasswordCountLogTable->getCountLogByUserId($user['userId'], $operateDate);
+        }catch (Exception $ex) {
+            $this->logger->error($tag, $ex);
+        }
+
         if($count>$this->maxErrorNum) {
             $errorInfo = ZalyText::getText("text.pwd.exceedNum", $this->language);
             $this->setRpcError("error.alert", $errorInfo);
@@ -75,7 +82,11 @@ class Api_Passport_PasswordLoginController extends BaseController
             $this->setRpcError($errorCode, $errorInfo);
             throw new Exception("loginName password is not match");
         }
-        $this->ctx->PassportPasswordCountLogTable->deleteCountLogDataByUserId($user['userId'], $operateDate);
+        try{
+            $this->ctx->PassportPasswordCountLogTable->deleteCountLogDataByUserId($user['userId'], $operateDate);
+        }catch (Exception $ex) {
+            $this->logger->error($tag, $ex);
+        }
         return $user;
     }
 
