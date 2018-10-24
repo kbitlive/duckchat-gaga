@@ -1281,11 +1281,14 @@ function appendMsgHtmlToChatDialog(msg)
     if(msgType == MessageType.MessageText) {
         html = handleMsgContentText(html);
     }
+    var currentChatSessionId = localStorage.getItem(chatSessionIdKey);
+    if(msg.chatSessionId == currentChatSessionId) {
+        // html = "请前往客户端查看web消息";
+        $(".right-chatbox").append(html);
+        getNotMsgImg(msg.fromUserId,msg.userAvatar);
+        getMsgImgSrc(msg, msgId);
+    }
 
-    // html = "请前往客户端查看web消息";
-    $(".right-chatbox").append(html);
-    getNotMsgImg(msg.fromUserId,msg.userAvatar);
-    getMsgImgSrc(msg, msgId);
 }
 
 
