@@ -9,10 +9,9 @@
     <link rel="stylesheet" href="../../public/css/login.css?_version=<?php echo $versionCode?>">
     <script type="text/javascript" src="../../public/js/jquery.min.js"></script>
     <script src="../../public/js/jquery.i18n.properties.min.js"></script>
-        <script src="../../public/js/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
+    <script src="../../public/js/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/template-web.js"></script>
-    <script src="../../public/js/zalyjsHelper.js"></script>
-
+    <script src="../../public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
 
 </head>
 
@@ -28,7 +27,7 @@
             </div>
         <?php } ?>
 
-
+<?php if ($isDuckchat != 1) {?>
         <?php if ($loginBackgroundImage) { ?>
 
                 <?php if ($loginBackgroundImageDisplay == 0 ) { ?>
@@ -57,7 +56,7 @@
                     <?php } ?>
                 <?php } ?>
             </div>
-
+<?php } ?>
         <div style="" class="login_div_container">
                 <div class="login_container">
                     <input type="hidden" value="<?php echo $loginNameAlias;?>" class="loginNameAlias">
@@ -167,7 +166,6 @@
 <?php include(dirname(__DIR__) . '/passport/template_login.php'); ?>
 
 <input type="hidden" value="<?php echo $isDuckchat; ?>" class="isDuckchat">
-<script src="../../public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/im/zalyClient.js?_version=<?php echo $versionCode?>"></script>

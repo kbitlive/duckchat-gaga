@@ -150,7 +150,11 @@ function zalyjsLoginSuccess(loginName, sessionid, isRegister, callback) {
 
 function zalyjsWebSuccessCallBack(result) {
     localStorage.clear();
-    window.location.href = result;
+    var refererUrl = localStorage.getItem(refererUrlKey);
+    if(!refererUrl) {
+        refererUrl = "./index.php";
+    }
+    window.location.href = refererUrl;
 }
 
 ////登录pc, 暂时没有使用callbackId,

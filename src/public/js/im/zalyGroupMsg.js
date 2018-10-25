@@ -6,6 +6,13 @@ $(".right-chatbox").html("");
 
 
 
+
+function doSomething() {
+    // 执行任务
+    worker.postMessage('Work done!');
+    console.log("do something");
+}
+
 function showMsgWebNotification(msg, msgContent)
 {
     var msgId = msg.msgId;
@@ -2221,6 +2228,7 @@ $('.friend-list-contact-row').scroll(function(event){
 
 function getFriendProfileByClickChatSessionRow(jqElement)
 {
+
     var userId = jqElement.attr("chat-session-id");
     if(userId == undefined) {
         return false;
@@ -3217,11 +3225,15 @@ $(document).on("click", ".chatsession-row", function(){
     var roomType = $(this).attr("roomType");
     var chatSessionId = $(this).attr("chat-session-id");
     updateRoomChatSessionContent(chatSessionId);
+
     if(roomType == U2_MSG) {
         getFriendProfileByClickChatSessionRow($(this));
     } else if(roomType == GROUP_MSG) {
         getGroupProfileByClickChatSessionRow($(this));
     }
+
+    addActiveForRoomList($(this));
+
 });
 
 // click msg image , open a new window
@@ -3293,15 +3305,6 @@ $(document).on("click", ".clear_room_chat", function () {
     }
 });
 
-function clearSiteChatLogs(event) {
-    event.stopPropagation();
-    var tip = languageNum == UserClientLangZH ? "此操作将删除本设备的聊天记录，确认？" : " Sure?";
-    if(confirm(tip)) {
-        $(".right-chatbox").html("");
-        clearRoomMsgFromRoomList(undefined);
-    }
-}
-
 function handleMsgRelation(jqElement, chatSessionId)
 {
     if(jqElement != undefined) {
@@ -3354,8 +3357,6 @@ function displayRightPage(displayType)
     }
 }
 
-
-
 $(".input-box").on("click",function () {
     $(".msg_content").focus()
 });
@@ -3370,10 +3371,6 @@ function addActiveForPwContactRow(jqElement)
     }
     jqElement.addClass("chatsession-row-active");
 }
-
-$(document).on("click", ".chatsession-row", function (e) {
-    addActiveForRoomList($(this));
-});
 
 function addActiveForRoomList(jqElement)
 {
@@ -3393,6 +3390,8 @@ function addActiveForRoomList(jqElement)
 $(document).on("click", ".send_msg" , function(){
     sendMsgBySend();
 });
+
+
 
 //发送消息
 function sendMsgBySend()

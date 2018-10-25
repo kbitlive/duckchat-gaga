@@ -155,3 +155,22 @@ function checkIsEntities(str){
 function trimString(str){
     return  str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
 }
+
+
+function isWeixinBrowser(){
+    return /micromessenger/.test(navigator.userAgent.toLowerCase())
+}
+
+function getOsType() {
+    var clientType;
+    var u = navigator.userAgent;
+    if (u.indexOf('Android') > -1) {
+        clientType =  'Android';
+    } else if (u.indexOf('iPhone') > -1) {
+        clientType = 'IOS';
+    } else {
+        clientType = "PC";
+    }
+    return clientType;
+}
+
