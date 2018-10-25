@@ -263,6 +263,8 @@ function updateRoomChatSessionContent(chatSessionId)
         }
     }
 }
+
+
 //----------------------------------handle msg info --------------------------------------------------------------------------
 
 function handleMsgInfo(msg)
@@ -1282,7 +1284,7 @@ function appendMsgHtmlToChatDialog(msg)
 
     var currentChatsessionId = localStorage.getItem(chatSessionIdKey);
     if(currentChatsessionId == msg.chatSessionId) {
-        $(".right-chatbox").append(html);
+        $(".right-chatbox[chat-session-id="+msg.chatSessionId+"]").append(html);
         setTimeout(function () {
             getNotMsgImg(msg.fromUserId,msg.userAvatar);
             getMsgImgSrc(msg);

@@ -1912,6 +1912,7 @@ $(document).on("click", ".contact-row-group-profile", function () {
     }
     localStorage.setItem(chatSessionIdKey, groupId);
     localStorage.setItem(groupId, GROUP_MSG);
+    $(".right-chatbox").attr("chat-session-id", groupId);
 
     handleClickRowGroupProfile(groupId);
 });
@@ -2259,10 +2260,12 @@ $(document).on("click", ".contact-row-u2-profile", function () {
     if(userId == undefined) {
         return false;
     }
-    sendFriendProfileReq(userId, handleGetFriendProfile);
-
     localStorage.setItem(chatSessionIdKey, userId);
     localStorage.setItem(userId, U2_MSG);
+    $(".right-chatbox").attr("chat-session-id", userId);
+
+    sendFriendProfileReq(userId, handleGetFriendProfile);
+
     $(".user-image-for-add").attr("class", "user-image-for-add");
     $(".user-image-for-add").attr("src", "../../public/img/msg/default_user.png");
     insertU2Room($(this), userId);
@@ -3224,14 +3227,17 @@ $(document).on("click", ".agreed-apply", function () {
 $(document).on("click", ".chatsession-row", function(){
     var roomType = $(this).attr("roomType");
     var chatSessionId = $(this).attr("chat-session-id");
-    updateRoomChatSessionContent(chatSessionId);
+    localStorage.setItem(chatSessionIdKey, chatSessionId);
 
+    $(".right-chatbox").attr("chat-session-id", chatSessionId);
     if(roomType == U2_MSG) {
+        localStorage.setItem(chatSessionId, U2_MSG);
         getFriendProfileByClickChatSessionRow($(this));
     } else if(roomType == GROUP_MSG) {
+        localStorage.setItem(chatSessionId, U2_MSG);
         getGroupProfileByClickChatSessionRow($(this));
     }
-
+    updateRoomChatSessionContent(chatSessionId);
     addActiveForRoomList($(this));
 
 });

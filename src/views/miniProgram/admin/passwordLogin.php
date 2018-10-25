@@ -227,7 +227,7 @@
             var wrapperMask = document.getElementById("wrapper-mask");
             var length = wrapperMask.children.length;
             var i;
-            for (i = 0; i < length; i++) {
+            for (i = 0; i < lengsh; i++) {
                 var node = wrapperMask.children[i];
                 node.remove();
                 // addTemplate(node);
