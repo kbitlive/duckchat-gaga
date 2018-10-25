@@ -260,8 +260,9 @@ function zalyjsClosePage() {
 }
 
 //-public
-function zalyjsGoto(gotoUrl) {
-    //build url
+function zalyjsGoto(page, xarg) {
+
+    var gotoUrl = "duckchat://0.0.0.0/goto?page=" + page + "&x=" + xarg;
 
     if (isAndroid()) {
         window.Android.zalyjsGoto(gotoUrl);
