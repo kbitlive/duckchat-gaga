@@ -69,7 +69,11 @@ class Api_Passport_PasswordLoginController extends BaseController
             $this->logger->error($tag, $ex);
         }
 
-        if($count>$this->maxErrorNum) {
+        $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
+        $passwordErrorNumConfig = isset($loginConfig[LoginConfig::PASSWORD_ERROR_NUM]) ? $loginConfig[LoginConfig::PASSWORD_ERROR_NUM] : "";
+        $passwordErrorNum = isset($passwordErrorNumConfig["configValue"]) ? $passwordErrorNumConfig["configValue"] : $this->maxErrorNum;
+
+        if($count>=$passwordErrorNum) {
             $errorInfo = ZalyText::getText("text.pwd.exceedNum", $this->language);
             $this->setRpcError("error.alert", $errorInfo);
             throw new Exception("loginName password is not match");

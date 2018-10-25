@@ -58,6 +58,8 @@ class MiniProgram_Admin_PasswordLoginController extends MiniProgramController
             $loginNameAlias = $loginNameAliasConfig["configValue"];
             $passwordResetConfig = $loginConfig[LoginConfig::PASSWORD_RESET_WAY];
             $passwordResetWay = $passwordResetConfig["configValue"];
+            $passwordErrorNumConfig = $loginConfig[LoginConfig::PASSWORD_ERROR_NUM];
+            $passwordErrorNum = $passwordErrorNumConfig['configValue'];
             $passwordResetRequiredConfig = $loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED];
             $passwordResetRequired = $passwordResetRequiredConfig["configValue"];
 
@@ -72,6 +74,7 @@ class MiniProgram_Admin_PasswordLoginController extends MiniProgramController
                 "passwordResetRequired" => $passwordResetRequired,
                 "miniProgramName" => $miniProgramName . "后台",
                 "enableInvitationCode" => $enableInvitationCode,
+                "passwordErrorNum" => $passwordErrorNum,
             ];
 
             echo $this->display("miniProgram_admin_passwordLogin", $params);

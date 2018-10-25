@@ -89,6 +89,27 @@
 
             <div class="item-row">
                 <div class="item-body">
+                    <div class="item-body-display passwordErrorNum" onclick="showPasswordErrorNum()">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">用户每天密码错误上限</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Password error limit per day</div>
+                        <?php } ?>
+                        <div class="item-body-tail">
+                            <div class="item-body-value" id="passwordErrorNum"> <?php echo $passwordErrorNum; ?></div>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+            <div class="item-row">
+                <div class="item-body">
                     <div class="item-body-display">
                         <?php if ($lang == "1") { ?>
                             <div class="item-body-desc">密码找回必填</div>
@@ -161,6 +182,17 @@
         $(".popup-group-title").html(title);
         $(".popup-group-input").val(inputBody);
         $("#updatePopupButton").attr("key-value", "loginNameAlias");
+    }
+
+    function showPasswordErrorNum(){
+        var title = $(".passwordErrorNum").find(".item-body-desc").html();
+        var inputBody = $("#passwordErrorNum").html();
+
+        showWindow($(".config-hidden"));
+
+        $(".popup-group-title").html(title);
+        $(".popup-group-input").val(inputBody);
+        $("#updatePopupButton").attr("key-value", "passwordErrorNum");
     }
 
     function showPasswordResetWay() {
