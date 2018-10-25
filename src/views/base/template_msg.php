@@ -422,9 +422,6 @@
 
         <div style="text-align: center;margin:0.12rem auto;width: 34rem; height:1px;background:rgba(223,223,223,1);" ></div>
         <div class="d-flex flex-row justify-content-center">
-            <div class="self_profile_item clear_site_chat_logs " id="clear_all_chat" >
-                <span data-local-value="clearSiteChatTip" class="clear_all_chat" onclick="clearSiteChatLogs(event)">清空站点聊天记录</span>
-            </div>
             <div class="self_profile_item self-qrcode" id="logout" >
                 <span class="logout-span" id="logout-span" data-local-value="logoutTip" onclick="logout(event)">退出</span>
             </div>
