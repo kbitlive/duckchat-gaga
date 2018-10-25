@@ -176,11 +176,11 @@ function zalyjsLoginSuccess(loginName, sessionid, isRegister, callback) {
 
 // -private
 function zalyjsWebSuccessCallBack() {
-    localStorage.clear();
     var refererUrl = localStorage.getItem(refererUrlKey);
     if (!refererUrl) {
         refererUrl = "./index.php";
     }
+    localStorage.clear();
     window.location.href = refererUrl;
 }
 
