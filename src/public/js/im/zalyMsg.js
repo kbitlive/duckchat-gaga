@@ -1279,6 +1279,7 @@ function appendMsgHtmlToChatDialog(msg)
     if(msgType == MessageType.MessageText) {
         html = handleMsgContentText(html);
     }
+
     var currentChatsessionId = localStorage.getItem(chatSessionIdKey);
     if(currentChatsessionId == msg.chatSessionId) {
         $(".right-chatbox").append(html);
@@ -1287,6 +1288,7 @@ function appendMsgHtmlToChatDialog(msg)
             getMsgImgSrc(msg);
         }, 50);
     }
+
 }
 
 //---------------------------------------------upload file -------------------------------------------------
