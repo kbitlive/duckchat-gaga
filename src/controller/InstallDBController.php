@@ -335,7 +335,6 @@ class InstallDBController
     }
 
 
-
     private function initSiteWithSqlite($sqliteName, $siteName, $siteHost, $Port)
     {
         $dbInfo = $this->_dbPath . "/" . $sqliteName;
@@ -472,6 +471,19 @@ class InstallDBController
                 'landingPageUrl' => "index.php?action=miniProgram.passport.account",
                 'landingPageWithProxy' => 1, //1 表示走site代理
                 'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageAccountSafe,
+                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingNewPage,
+                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
+                'authKey' => "",
+            ],
+
+            [
+                'pluginId' => 106,
+                'name' => "开发工具",
+                'logo' => "",
+                'sort' => 106,
+                'landingPageUrl' => "index.php?action=miniProgram.test.tools",
+                'landingPageWithProxy' => 1, //1 表示走site代理
+                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageIndex,
                 'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingNewPage,
                 'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
                 'authKey' => "",
