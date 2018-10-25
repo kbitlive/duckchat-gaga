@@ -105,7 +105,7 @@ class Api_Group_CreateController extends Api_Group_BaseController
         try {
 
             if (time() - $this->startGroupCreateTime > $this->createGroupTimeOut) {
-                $this->ctx->BaseCtx->db->rollBack();
+                $this->ctx->BaseTable->db->rollBack();
                 $errorCode = $this->zalyError->errorGroupCreate;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
                 $this->setRpcError($errorCode, $errorInfo);

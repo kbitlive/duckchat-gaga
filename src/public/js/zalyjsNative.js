@@ -148,9 +148,13 @@ function zalyjsLoginSuccess(loginName, sessionid, isRegister, callback) {
     }
 }
 
-function zalyjsWebSuccessCallBack(result) {
+function zalyjsWebSuccessCallBack() {
+    var refererUrl = localStorage.getItem(refererUrlKey);
+    if(!refererUrl) {
+        refererUrl = "./index.php";
+    }
     localStorage.clear();
-    window.location.href = result;
+    window.location.href = refererUrl;
 }
 
 ////登录pc, 暂时没有使用callbackId,

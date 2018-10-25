@@ -22,5 +22,7 @@ class LoginConfig
     const LOGIN_PAGE_BACKGROUND_IMAGE = "loginBackgroundImage";//登陆页面背景图片
 
     const LOGIN_PAGE_BACKGROUND_IMAGE_DISPLAY = "loginBackgroundImageDisplay";//登陆页面背景图片展示方式
-    
+
+    const PASSWORD_ERROR_NUM = "passwordErrorNum";//错误次数
+
 }

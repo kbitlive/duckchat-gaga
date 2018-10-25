@@ -38,6 +38,10 @@ class Page_Version_UpgradeController extends Page_VersionController
                 $this->versionName = "1.0.13";
                 $result = $this->upgrade_10012_10013();
 
+            } elseif($currentVersionCode == 10013) {
+                $this->versionCode = 10014;
+                $this->versionName = "1.0.14";
+                $result = $this->upgrade_10013_10014();
                 //最新版本审计完成以后，删除升级文件
                 $this->deleteUpgradePasswordFile();
             }
@@ -104,6 +108,16 @@ class Page_Version_UpgradeController extends Page_VersionController
             return $this->upgrade_10012_10013_mysql();
         } else {
             return $this->upgrade_10012_10013_sqlite();
+        }
+    }
+
+    private function upgrade_10013_10014()
+    {
+        $dbType = $this->ctx->dbType;
+        if ($dbType == "mysql") {
+            return  $this->upgrade_10013_10014_mysql();
+        } else {
+            return $this->upgrade_10013_10014_sqlite();
         }
     }
 
@@ -347,4 +361,32 @@ class Page_Version_UpgradeController extends Page_VersionController
         throw new Exception(var_export($prepare->errorInfo(), true));
     }
 
+    private function upgrade_10013_10014_mysql()
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+
+        try{
+            $this->executeMysqlScript();
+            $this->upgradeErrCode = "success";
+            return true;
+        }catch (Exception $ex) {
+            $this->upgradeErrCode = "error";
+            $this->logger->error($tag, $ex);
+            throw new Exception(var_export($ex->getMessage(), true));
+        }
+    }
+
+    private function upgrade_10013_10014_sqlite()
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        try{
+            $this->executeSqliteScript();
+            $this->upgradeErrCode = "success";
+            return true;
+        }catch (Exception $ex) {
+            $this->upgradeErrCode = "error";
+            $this->logger->error($tag, $ex);
+            throw new Exception(var_export($ex->getMessage(), true));
+        }
+    }
 }

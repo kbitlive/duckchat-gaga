@@ -20,6 +20,7 @@ class ZalyText
         "text.open.web" => ["web is not allowed", "该站点没有开起web版本"],
         "text.group.admin.invite" => ["only allow the group admin or owner", "只允许群主或者管理员邀请好友入群"],
         'text.param.void' => ["mast not null", "不能为空"],
+        'text.pwd.exceedNum' => ["Failed, exceed the daily password error limit", "操作失败，超过每日密码错误上限"],
     ];
 
     public static $keyGroupCreate = "{key.group.create}";

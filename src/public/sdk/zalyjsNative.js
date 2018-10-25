@@ -111,8 +111,7 @@ function addJsByDynamic(url) {
     //Firefox, Opera, Chrome, Safari 3+
     script.src = url;
 
-    var head = document.getElementsByTagName('head')[0].appendChild(script);
-
+   document.getElementsByTagName('head')[0].appendChild(script);
 }
 
 //
@@ -176,9 +175,13 @@ function zalyjsLoginSuccess(loginName, sessionid, isRegister, callback) {
 }
 
 // -private
-function zalyjsWebSuccessCallBack(result) {
+function zalyjsWebSuccessCallBack() {
+    var refererUrl = localStorage.getItem(refererUrlKey);
+    if (!refererUrl) {
+        refererUrl = "./index.php";
+    }
     localStorage.clear();
-    window.location.href = result;
+    window.location.href = refererUrl;
 }
 
 // -private  登录pc, 暂时没有使用callbackId,
@@ -226,7 +229,15 @@ function zalyjsWebLoginSuccess() {
 
 //// -private web 检查用户是否已经被注册
 function zalyjsWebCheckUserExists(failedCallback, successCallback) {
-    var jsUrl = "./index.php?action=page.js&loginName=" + registerLoginName + "&success_callback=" + successCallback.name + "&fail_callback=" + failedCallback.name;
+    var refererUrl = localStorage.getItem(refererUrlKey);
+    if (!refererUrl) {
+        refererUrl = "./index.php";
+    }
+    if(refererUrl.indexOf("?") > -1) {
+        var jsUrl = refererUrl + "&action=page.js&loginName=" + registerLoginName + "&success_callback=" + successCallback.name + "&fail_callback=" + failedCallback.name;
+    } else {
+        var jsUrl = refererUrl + "?action=page.js&loginName=" + registerLoginName + "&success_callback=" + successCallback.name + "&fail_callback=" + failedCallback.name;
+    }
     addJsByDynamic(jsUrl);
 }
 
