@@ -261,6 +261,8 @@ function zalyjsClosePage() {
 
 //-public
 function zalyjsGoto(gotoUrl) {
+    //build url
+
     if (isAndroid()) {
         window.Android.zalyjsGoto(gotoUrl);
     } else if (isIOS()) {
@@ -268,3 +270,26 @@ function zalyjsGoto(gotoUrl) {
     }
 }
 
+//-public
+function zalyjsBackPage() {
+    if (isAndroid()) {
+        window.Android.zalyjsNavBack();
+    } else if (isIOS()) {
+        window.webkit.messageHandlers.zalyjsNavBack();
+    }
+}
+
+
+//-public
+function zalyjsImageUpload(callback) {
+    var callbackId = zalyjsCallbackHelper.register(callback);
+    var messageBody = {};
+    messageBody[callbackIdParamName] = callbackId;
+    messageBody = JSON.stringify(messageBody);
+
+    if (isAndroid()) {
+        window.Android.zalyjsImageUpload(messageBody);
+    } else if (isIOS()) {
+        window.webkit.messageHandlers.zalyjsImageUpload(messageBody);
+    }
+}
