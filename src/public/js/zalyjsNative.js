@@ -148,7 +148,7 @@ function zalyjsLoginSuccess(loginName, sessionid, isRegister, callback) {
     }
 }
 
-function zalyjsWebSuccessCallBack(result) {
+function zalyjsWebSuccessCallBack() {
     localStorage.clear();
     var refererUrl = localStorage.getItem(refererUrlKey);
     if(!refererUrl) {

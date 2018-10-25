@@ -207,8 +207,13 @@ case $operation in
 			chmod -R 777 $originDirName/src
 
 			if [ -f $originDirName/.git/config ]; then
-			    sed -i 'back' 's/ //g' $originDirName/.git/config
-			    sed -i 'config' 's/filemode=true/filemode=false/g'  $originDirName/.git/config
+                if [ "$sysOS" = "Linux"  ]; then
+                    sed -i  's/ //g' $originDirName/.git/config
+                    sed -i  's/filemode=true/filemode=false/g'  $originDirName/.git/config
+                elif [ "$sysOS" = "Darwin" ]; then
+                    sed -i 'back' 's/ //g' $originDirName/.git/config
+                    sed -i 'config' 's/filemode=true/filemode=false/g'  $originDirName/.git/config
+                fi
 			fi
 
 			echo "[DuckChat] 请稍后片刻"
