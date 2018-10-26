@@ -1,7 +1,5 @@
 <?php
 
-use Zaly\Proto\Core\TransportDataHeaderKey;
-
 /**
  *
  * DuckChat小程序开放接口SDK
