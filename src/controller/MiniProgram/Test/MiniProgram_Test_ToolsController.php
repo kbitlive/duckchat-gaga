@@ -30,13 +30,15 @@ class MiniProgram_Test_ToolsController extends MiniProgramController
     public function doRequest()
     {
         $tag = __CLASS__ . "-" . __FUNCTION__;
-        header('Access-Control-Allow-Origin: *');
+
+        $this->logger->error($tag, "==============");
 
         $params = [
             "myFriendProfile" => $this->getMyFriendProfile(),
             "notMyFriendProfile" => $this->getNotMyFriendProfile(),
             "myGroupProfile" => $this->getMyGroupProfile(),
             "notMyGroupProfile" => $this->getNotMyGroupProfile(),
+            "miniProgramId" => 100,
         ];
 
         echo $this->display("miniProgram_test_zalyjsTools", $params);
@@ -51,18 +53,24 @@ class MiniProgram_Test_ToolsController extends MiniProgramController
 
         $friendProfile = $this->ctx->SiteUserFriendTable->queryUserFriendByPage($this->userId, 0, 1);
 
-        return $friendProfile;
+        if ($friendProfile) {
+            return $friendProfile[0];
+        }
+
+        return false;
     }
 
     private function getNotMyFriendProfile()
     {
 
-        $notFriendProfile = null;
+        $notFriendProfile = false;
 
-        for ($i = 0; $i < 200; $i += 20) {
+        for ($i = 0; $i < 100; $i += 20) {
 
 
             $userList = $this->ctx->SiteUserTable->getSiteUserListWithRelation($this->userId, $i, $i + 20);
+
+            $this->ctx->Wpf_Logger->error("==============", json_encode($userList));
 
             if ($userList) {
 
@@ -73,7 +81,7 @@ class MiniProgram_Test_ToolsController extends MiniProgramController
 
                     $friendId = $user['friendId'];
 
-                    if (empty($user)) {
+                    if (empty($friendId)) {
                         $notFriendProfile = $user;
                         return $notFriendProfile;
                     }
@@ -107,7 +115,10 @@ class MiniProgram_Test_ToolsController extends MiniProgramController
     {
         $notMyGroupProfile = $this->ctx->SiteGroupUserTable->getNotUserGroup($this->userId, 0, 1);
 
-        return $notMyGroupProfile;
+        if ($notMyGroupProfile) {
+            return $notMyGroupProfile[0];
+        }
+        return false;
     }
 
 }
