@@ -233,12 +233,16 @@ abstract class HttpBaseController extends \Wpf_Controller
         $apiPageLogin = ZalyConfig::getConfig("apiPageLogin");
         if ($x) {
             if (strpos($apiPageLogin, "?")) {
-                header("Location:" . $apiPageLogin . "&x=" . $x);
+                header("Location:" . $apiPageLogin . "&from=duckchat&x=" . $x);
             } else {
-                header("Location:" . $apiPageLogin . "?x=" . $x);
+                header("Location:" . $apiPageLogin . "?from=duckchat&x=" . $x);
             }
         } else {
-            header("Location:" . $apiPageLogin);
+            if (strpos($apiPageLogin, "?")) {
+                header("Location:" . $apiPageLogin.'&from=duckchat');
+            } else {
+                header("Location:" . $apiPageLogin.'?from=duckchat');
+            }
         }
         exit();
     }

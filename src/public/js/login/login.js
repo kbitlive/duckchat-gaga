@@ -280,14 +280,6 @@ $(document).on("mouseover", "#powered_by_duckchat", function () {
 $(document).on("mouseout", "#powered_by_duckchat", function () {
     $(".duckchat_website")[0].style.textDecoration = "none";
 });
-function addJsByDynamic(url)
-{
-    var script = document.createElement("script")
-    script.type = "text/javascript";
-    //Firefox, Opera, Chrome, Safari 3+
-    script.src = url;
-    $(".zaly_container")[0].appendChild(script);
-}
 
 function changeImgByClickPwd() {
     var imgType = $(".pwd").attr("img_type");

@@ -16,6 +16,8 @@ function getRoomList()
 
     var length = roomList.length;
     var currentChatSessionId  = localStorage.getItem(chatSessionIdKey);
+    $(".right-chatbox").attr("chat-session-id", currentChatSessionId);
+
     getMsgFromRoom(currentChatSessionId);
 
     var i;

@@ -503,7 +503,10 @@ input:active,
     .login_name_div {
         margin-top: 3rem;
     }
-    .login_button {
+    .login_button,
+    .login_button:hover,
+    .login_button:focus,
+    .login_button.active{
         margin-top: 5rem;
     }
     .mobile_slogn_div {
