@@ -145,23 +145,23 @@
                 </div>
                 <div class="division-line"></div>
 
-                <div class="item-row">
-                    <div class="item-body">
-                        <div class="item-body-display">
-                            <?php if ($lang == "1") { ?>
-                                <div class="item-body-desc">是否开启站点代理</div>
-                            <?php } else { ?>
-                                <div class="item-body-desc">Open Site Proxy</div>
-                            <?php } ?>
-
-                            <div class="item-body-tail">
-                                <input id="openProxySwitch-id" class="weui_switch" type="checkbox">
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="division-line"></div>
+<!--                <div class="item-row">-->
+<!--                    <div class="item-body">-->
+<!--                        <div class="item-body-display">-->
+<!--                            --><?php //if ($lang == "1") { ?>
+<!--                                <div class="item-body-desc">是否开启站点代理</div>-->
+<!--                            --><?php //} else { ?>
+<!--                                <div class="item-body-desc">Open Site Proxy</div>-->
+<!--                            --><?php //} ?>
+<!---->
+<!--                            <div class="item-body-tail">-->
+<!--                                <input id="openProxySwitch-id" class="weui_switch" type="checkbox">-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!---->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="division-line"></div>-->
 
             </div>
 
@@ -576,7 +576,7 @@
             var imageFileId = $("#mini-program-fileid").attr("fileId");
 
             var landingPageUrl = $("#mini-program-landing-id").val();
-            var miniProgramProxySwitch = $("#openProxySwitch-id").is(':checked');
+            // var miniProgramProxySwitch = $("#openProxySwitch-id").is(':checked');
 
             var miniProgramUsage = $(".mini-program-usage").attr('data');
             var miniProgramOrder = $("#mini-program-order-input").val();
@@ -609,11 +609,12 @@
             data['name'] = miniProgramName;
             data['logo'] = imageFileId;
             data['landingPageUrl'] = landingPageUrl;
-            if (miniProgramProxySwitch) {
-                data['withProxy'] = 1;
-            } else {
-                data['withProxy'] = 0;
-            }
+            // if (miniProgramProxySwitch) {
+            //     data['withProxy'] = 1;
+            // } else {
+            //     data['withProxy'] = 0;
+            // }
+            data['withProxy'] = 0;
             data['usageType'] = miniProgramUsage;
             data['order'] = miniProgramOrder;
             data['loadingType'] = miniProgramDisplay;

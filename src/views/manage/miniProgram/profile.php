@@ -265,27 +265,27 @@
             </div>
             <div class="division-line"></div>
 
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">是否开启站点代理请求</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Open Site HTTP Proxy</div>
-                        <?php } ?>
-
-                        <div class="item-body-tail">
-                            <?php if ($landingPageWithProxy == "1") { ?>
-                                <input id="openProxySwitch-text" class="weui_switch" type="checkbox" checked>
-                            <?php } else { ?>
-                                <input id="openProxySwitch-text" class="weui_switch" type="checkbox">
-                            <?php } ?>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
+<!--            <div class="item-row">-->
+<!--                <div class="item-body">-->
+<!--                    <div class="item-body-display">-->
+<!--                        --><?php //if ($lang == "1") { ?>
+<!--                            <div class="item-body-desc">是否开启站点代理请求</div>-->
+<!--                        --><?php //} else { ?>
+<!--                            <div class="item-body-desc">Open Site HTTP Proxy</div>-->
+<!--                        --><?php //} ?>
+<!---->
+<!--                        <div class="item-body-tail">-->
+<!--                            --><?php //if ($landingPageWithProxy == "1") { ?>
+<!--                                <input id="openProxySwitch-text" class="weui_switch" type="checkbox" checked>-->
+<!--                            --><?php //} else { ?>
+<!--                                <input id="openProxySwitch-text" class="weui_switch" type="checkbox">-->
+<!--                            --><?php //} ?>
+<!--                        </div>-->
+<!--                    </div>-->
+<!---->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="division-line"></div>-->
 
         </div>
 
