@@ -417,24 +417,24 @@
 
             <!--            <div class="web-condition" style='-->
 
-            <div class="item-row" id="web-ws-port">
+            <div class="item-row" id="web-ws-address">
                 <div class="item-body">
                     <div class="item-body-display">
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">WebSocket端口</div>
+                            <div class="item-body-desc">WebSocket地址</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">WebSocket Port</div>
+                            <div class="item-body-desc">WebSocket Address</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <?php if (isset($wsPort) && $wsPort > 0) { ?>
-                                <div class="item-body-value"><?php echo $wsPort; ?></div>
+                            <?php if (isset($wsAddress)) { ?>
+                                <div class="item-body-value"><?php echo $wsAddress; ?></div>
                             <?php } else { ?>
                                 <div class="item-body-desc"><?php
                                     if ($lang == 1) {
-                                        echo "未设置端口表示未开启";
+                                        echo "未设置表示未开启";
                                     } else {
-                                        echo "disable with empty port";
+                                        echo "disable with empty address";
                                     }
                                     ?></div>
                             <?php } ?>
@@ -879,7 +879,7 @@
     }
 
 
-    $("#web-ws-port").click(function () {
+    $("#web-ws-address").click(function () {
         var title = $(this).find(".item-body-desc").html();
         var inputBody = $(this).find(".item-body-value").html();
 
@@ -887,7 +887,7 @@
 
         $(".popup-group-title").html(title);
         $(".popup-group-input").val(inputBody);
-        $("#updatePopupButton").attr("key-value", "wsPort");
+        $("#updatePopupButton").attr("key-value", "wsAddress");
     });
 
     $("#web-zaly-port").click(function () {
