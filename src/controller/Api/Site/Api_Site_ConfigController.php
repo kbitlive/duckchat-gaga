@@ -45,11 +45,6 @@ class Api_Site_ConfigController extends \BaseController
             if (empty($host)) {
                 throw new Exception("api.site.config with error url");
             }
-            $siteName = $host;
-
-            $this->ctx->Wpf_Logger->info("api.site.config", "siteName =" . $siteName);
-            $this->ctx->Wpf_Logger->info("api.site.config", "siteHost =" . $host);
-            $this->ctx->Wpf_Logger->info("api.site.config", "sitePort =" . $port);
 
             if (empty($host)) {
                 throw new Exception("request config with no host");
@@ -130,11 +125,9 @@ class Api_Site_ConfigController extends \BaseController
 
     private function buildRandomBase64($random, $siteIdPrikBase64)
     {
-//        $this->ctx->Wpf_Logger->info("config.random.sign", 'random=' . $random);
         try {
             $signatureRandom = $this->ctx->ZalyRsa->sign($random, $siteIdPrikBase64);
             $base64Value = base64_encode($signatureRandom);
-//            $this->ctx->Wpf_Logger->info("config.random.base64", 'randomBase64Value=' . $base64Value);
             return $base64Value;
         } catch (Exception $e) {
             # TODO 正式代码，这里 throw exception
@@ -194,9 +187,7 @@ class Api_Site_ConfigController extends \BaseController
 
             $zalyPort = $configData[SiteConfig::SITE_ZALY_PORT];
             $wsPort = $configData[SiteConfig::SITE_WS_PORT];
-
-            $this->ctx->Wpf_Logger->info("api.site.config", "zalyPort=" . $zalyPort . " wsPort=" . $wsPort);
-
+            $wsAddress = $configData[SiteConfig::SITE_WS_ADDRESS];
 
             $addressForAPi = "";
             $addressForIM = "";
@@ -204,7 +195,11 @@ class Api_Site_ConfigController extends \BaseController
                 //support zaly protocol
                 $addressForAPi = $this->buildAddress("zaly", $host, $zalyPort);
                 $addressForIM = $this->buildAddress("zaly", $host, $zalyPort);
-            } else if (isset($wsPort) && $wsPort > 0 && $wsPort < 65535) {
+            } elseif (isset($wsAddress)) {
+                $addressForAPi = $this->buildAddress($scheme, $host, $port);
+                $addressForIM = $wsAddress;
+            } elseif (isset($wsPort) && $wsPort > 0 && $wsPort < 65535) {
+                //兼容旧的设计模式，使用zalyPort自动组装
                 //support ws protocol
                 $addressForAPi = $this->buildAddress($scheme, $host, $port);
                 $addressForIM = $this->buildAddress("ws", $host, $wsPort);

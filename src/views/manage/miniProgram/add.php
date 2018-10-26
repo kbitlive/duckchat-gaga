@@ -145,23 +145,23 @@
                 </div>
                 <div class="division-line"></div>
 
-                <div class="item-row">
-                    <div class="item-body">
-                        <div class="item-body-display">
-                            <?php if ($lang == "1") { ?>
-                                <div class="item-body-desc">是否开启站点代理</div>
-                            <?php } else { ?>
-                                <div class="item-body-desc">Open Site Proxy</div>
-                            <?php } ?>
-
-                            <div class="item-body-tail">
-                                <input id="openProxySwitch-id" class="weui_switch" type="checkbox">
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="division-line"></div>
+<!--                <div class="item-row">-->
+<!--                    <div class="item-body">-->
+<!--                        <div class="item-body-display">-->
+<!--                            --><?php //if ($lang == "1") { ?>
+<!--                                <div class="item-body-desc">是否开启站点代理</div>-->
+<!--                            --><?php //} else { ?>
+<!--                                <div class="item-body-desc">Open Site Proxy</div>-->
+<!--                            --><?php //} ?>
+<!---->
+<!--                            <div class="item-body-tail">-->
+<!--                                <input id="openProxySwitch-id" class="weui_switch" type="checkbox">-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!---->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="division-line"></div>-->
 
             </div>
 
@@ -216,7 +216,7 @@
                         <div class="item-body-display mini-program-display" data="0"
                              onclick="selectMiniProgramDisplay()">
                             <?php if ($lang == "1") { ?>
-                                <div class="item-body-desc">展示方式</div>
+                                <div class="item-body-desc">打开方式</div>
                             <?php } else { ?>
                                 <div class="item-body-desc">Display Mode</div>
                             <?php } ?>
@@ -229,6 +229,31 @@
                                 <?php } ?>
 
                                 <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="division-line"></div>
+
+                <div class="item-row">
+                    <div class="item-body">
+                        <div class="item-body-display mini-program-permission" data="1"
+                             onclick="selectMiniProgramPermission();">
+                            <?php if ($lang == "1") { ?>
+                                <div class="item-body-desc">使用权限</div>
+                            <?php } else { ?>
+                                <div class="item-body-desc">Use Permission</div>
+                            <?php } ?>
+
+                            <div class="item-body-tail">
+
+                                <div id="mini-program-permission-text" style="margin-right: 4px">
+                                    <?php if ($lang == "1") { ?> 所有人可用<?php } else { ?> All Users Available<?php } ?>
+                                </div>
+
+                                <img class="more-img"
+                                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
                             </div>
                         </div>
 
@@ -453,37 +478,39 @@
                         $("#mini-program-usage-text").html(language == 0 ? "U2 Chat Mini Program" : "二人聊天小程序");
                         $(".mini-program-usage").attr("data", "3");
                     }
-                }, {
-                    text: language == 0 ? "Tmp Chat Mini Program" : "临时会话小程序",
-                    className: "select-color-primary",
-                    onClick: function () {
-
-                        $("#mini-program-usage-text").html(language == 0 ? "Tmp Chat Mini Program" : "临时会话小程序");
-                        $(".mini-program-usage").attr("data", "4");
-                    }
-                }, {
-                    text: language == 0 ? "Group Chat Mini Program" : "群组聊天小程序",
-                    className: "select-color-primary",
-                    onClick: function () {
-                        $("#mini-program-usage-text").html(language == 0 ? "Group Chat Mini Program" : "群组聊天小程序");
-                        $(".mini-program-usage").attr("data", "5");
-                    }
-                }, {
-                    text: language == 0 ? "Account Mini Program" : "账户安全小程序",
-                    className: "select-color-primary",
-                    onClick: function () {
-                        $("#mini-program-usage-text").html(language == 0 ? "Account Mini Program" : "账户安全小程序");
-                        $(".mini-program-usage").attr("data", "6");
-                    }
-                }, {
-                    text: language == 0 ? "Invalid Mini Program" : "无效小程序",
-                    className: "select-color-primary",
-                    onClick: function () {
-                        $("#mini-program-usage-text").html(language == 0 ? "Invalid Mini Program" : "无效小程序");
-                        $(".mini-program-usage").attr("data", "0");
-                        updateMiniProgramProfile("usageType", "0");
-                    }
-                }]
+                },
+                    // {
+                    //     text: language == 0 ? "Tmp Chat Mini Program" : "临时会话小程序",
+                    //     className: "select-color-primary",
+                    //     onClick: function () {
+                    //
+                    //         $("#mini-program-usage-text").html(language == 0 ? "Tmp Chat Mini Program" : "临时会话小程序");
+                    //         $(".mini-program-usage").attr("data", "4");
+                    //     }
+                    // },
+                    {
+                        text: language == 0 ? "Group Chat Mini Program" : "群组聊天小程序",
+                        className: "select-color-primary",
+                        onClick: function () {
+                            $("#mini-program-usage-text").html(language == 0 ? "Group Chat Mini Program" : "群组聊天小程序");
+                            $(".mini-program-usage").attr("data", "5");
+                        }
+                    }, {
+                        text: language == 0 ? "Account Mini Program" : "账户安全小程序",
+                        className: "select-color-primary",
+                        onClick: function () {
+                            $("#mini-program-usage-text").html(language == 0 ? "Account Mini Program" : "账户安全小程序");
+                            $(".mini-program-usage").attr("data", "6");
+                        }
+                    }, {
+                        text: language == 0 ? "Invalid Mini Program" : "无效小程序",
+                        className: "select-color-primary",
+                        onClick: function () {
+                            $("#mini-program-usage-text").html(language == 0 ? "Invalid Mini Program" : "无效小程序");
+                            $(".mini-program-usage").attr("data", "0");
+                            updateMiniProgramProfile("usageType", "0");
+                        }
+                    }]
             });
         }
 
@@ -513,28 +540,32 @@
                         $("#mini-program-display-text").html(language == 0 ? "Float Page" : "悬浮打开打开");
                         $(".mini-program-display").attr("data", "1");
                     }
-                }, {
-                    text: language == 0 ? "Mask Page" : "Mask打开",
-                    className: "select-color-primary",
-                    onClick: function () {
-                        $("#mini-program-display-text").html(language == 0 ? "Mask Page" : "Mask打开");
-                        $(".mini-program-display").attr("data", "2");
-                    }
-                }, {
-                    text: language == 0 ? "Chatbox Page" : "新页面打开",
-                    className: "select-color-primary",
-                    onClick: function () {
-                        $("#mini-program-display-text").html(language == 0 ? "Chatbox Page" : "新页面打开");
-                        $(".mini-program-display").attr("data", "3");
-                    }
-                }, {
-                    text: language == 0 ? "FullScreen" : "全屏打开",
-                    className: "select-color-primary",
-                    onClick: function () {
-                        $("#mini-program-display-text").html(language == 0 ? "FullScreen" : "全屏打开");
-                        $(".mini-program-display").attr("data", "4");
-                    }
-                }]
+                },
+                    // {
+                    //     text: language == 0 ? "Mask Page" : "Mask打开",
+                    //     className: "select-color-primary",
+                    //     onClick: function () {
+                    //         $("#mini-program-display-text").html(language == 0 ? "Mask Page" : "Mask打开");
+                    //         $(".mini-program-display").attr("data", "2");
+                    //     }
+                    // },
+                    {
+                        text: language == 0 ? "Chatbox Page" : "新页面打开",
+                        className: "select-color-primary",
+                        onClick: function () {
+                            $("#mini-program-display-text").html(language == 0 ? "Chatbox Page" : "新页面打开");
+                            $(".mini-program-display").attr("data", "3");
+                        }
+                    },
+                    // {
+                    //     text: language == 0 ? "FullScreen" : "全屏打开",
+                    //     className: "select-color-primary",
+                    //     onClick: function () {
+                    //         $("#mini-program-display-text").html(language == 0 ? "FullScreen" : "全屏打开");
+                    //         $(".mini-program-display").attr("data", "4");
+                    //     }
+                    // }
+                ]
             });
         }
 
@@ -545,7 +576,7 @@
             var imageFileId = $("#mini-program-fileid").attr("fileId");
 
             var landingPageUrl = $("#mini-program-landing-id").val();
-            var miniProgramProxySwitch = $("#openProxySwitch-id").is(':checked');
+            // var miniProgramProxySwitch = $("#openProxySwitch-id").is(':checked');
 
             var miniProgramUsage = $(".mini-program-usage").attr('data');
             var miniProgramOrder = $("#mini-program-order-input").val();
@@ -553,6 +584,8 @@
             var miniProgramSecretKey = $("#mini-program-secret-key-switch").is(':checked');
 
             var miniProgramManagement = $("#mini-program-management").val();
+
+            var miniProgramPermission = $("#mini-program-permission").attr('data');
 
             if (miniProgramName == null || miniProgramName == "") {
                 alert(getLanguage() == 1 ? "请输入小程序名称" : "please input mini program name");
@@ -576,15 +609,22 @@
             data['name'] = miniProgramName;
             data['logo'] = imageFileId;
             data['landingPageUrl'] = landingPageUrl;
-            if (miniProgramProxySwitch) {
-                data['withProxy'] = 1;
-            } else {
-                data['withProxy'] = 0;
-            }
+            // if (miniProgramProxySwitch) {
+            //     data['withProxy'] = 1;
+            // } else {
+            //     data['withProxy'] = 0;
+            // }
+            data['withProxy'] = 0;
             data['usageType'] = miniProgramUsage;
             data['order'] = miniProgramOrder;
             data['loadingType'] = miniProgramDisplay;
-            data['permissionType'] = 1;//all
+
+            if (miniProgramPermission) {
+                data['permissionType'] = miniProgramPermission;//all
+            } else {
+                data['permissionType'] = 0;//all
+            }
+
             if (miniProgramSecretKey) {
                 data['secretKey'] = 1;
             } else {
@@ -605,6 +645,7 @@
                 var errCode = resJson['errCode'];
 
                 if ("success" == errCode) {
+                    alert(getLanguage() == 1 ? "添加成功" : "Add Success");
                     window.location.reload();
                 } else {
                     var errInfo = resJson['errInfo'];
@@ -613,6 +654,45 @@
             } else {
                 alert("error");
             }
+        }
+
+        function selectMiniProgramPermission() {
+            var language = getLanguage();
+            // PluginPermissionAdminOnly   = 0;
+            // PluginPermissionAll     = 1;
+            // PluginPermissionGroupMaster = 2;
+
+            $.actions({
+                title: language == 0 ? "select mini program permission" : "请选择小程序权限",
+                onClose: function () {
+                    console.log("close");
+                },
+                actions: [{
+                    text: language == 0 ? "All User Available" : "所有人可用",
+                    className: "select-color-primary",
+                    onClick: function () {
+                        $("#mini-program-permission-text").html(language == 0 ? "All User Available" : "所有人可用");
+                        $(".mini-program-permission").attr("data", "1");
+                        updateMiniProgramProfile("permissionType", "1");
+                    }
+                }, {
+                    text: language == 0 ? "Group Master Available" : "群管理员可用",
+                    className: "select-color-primary",
+                    onClick: function () {
+                        $("#mini-program-permission-text").html(language == 0 ? "Group Master Available" : "群管理员可用");
+                        $(".mini-program-permission").attr("data", "2");
+                        updateMiniProgramProfile("permissionType", "2");
+                    }
+                }, {
+                    text: language == 0 ? "Site Managers Available" : "站点管理员可用",
+                    className: "select-color-primary",
+                    onClick: function () {
+                        $("#mini-program-permission-text").html(language == 0 ? "Site Managers Available" : "站点管理员可用");
+                        $(".mini-program-permission").attr("data", "0");
+                        updateMiniProgramProfile("permissionType", "0");
+                    }
+                }]
+            });
         }
 
     </script>

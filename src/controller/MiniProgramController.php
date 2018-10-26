@@ -28,7 +28,7 @@ abstract class MiniProgramController extends \Wpf_Controller
 
     protected $ctx;
 
-    protected $language = Zaly\Proto\Core\UserClientLangType::UserClientLangEN;
+    protected $language = Zaly\Proto\Core\UserClientLangType::UserClientLangZH;
     protected $requestData;
     protected $whiteAction = [
         "miniProgram.gif.info"
