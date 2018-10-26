@@ -9,7 +9,7 @@ var refererUrlKey = "documentReferer";
 
 refererUrlKeyVal = localStorage.getItem(refererUrlKey);
 
-if(refererUrl.length>0 && (!refererUrlKeyVal) && refererUrlKeyVal.indexOf("from=duckchat")) {
+if(refererUrl.length>0 && (!refererUrlKeyVal) && refererUrl.indexOf("from=duckchat")) {
     localStorage.setItem(refererUrlKey, refererUrl);
 }
 var zalyjsSiteLoginMessageBody = {};
