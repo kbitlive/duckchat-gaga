@@ -264,7 +264,7 @@ function zalyjsClosePage() {
     if (isAndroid()) {
         window.Android.zalyjsNavClose()
     } else if (isIOS()) {
-        window.webkit.messageHandlers.zalyjsNavClose.postMessage();
+        window.webkit.messageHandlers.zalyjsNavClose.postMessage("");
     } else {
         window.close();
     }
@@ -288,7 +288,7 @@ function zalyjsBackPage() {
         window.Android.zalyjsNavBack();
     } else if (isIOS()) {
         var messageBody = {};
-        window.webkit.messageHandlers.zalyjsNavBack.postMessage();
+        window.webkit.messageHandlers.zalyjsNavBack.postMessage("");
     }
 }
 
