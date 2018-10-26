@@ -62,6 +62,7 @@ isRegister=false;
 
 var errorUserNeedRegister = "error.user.needRegister";
 var errorInvitationCode = "error.invitation.code";
+var siteName = $(".siteName").val();
 
 function setDocumentTitle(type)
 {
@@ -70,16 +71,16 @@ function setDocumentTitle(type)
         case "login":
             document.title = "login";
             if(languageName == "zh") {
-                document.title = "登录";
+                document.title = "登录-"+siteName;
             } else {
-                document.title = "login";
+                document.title = "login-"+siteName;
             }
             break;
         case "register":
             if(languageName == "zh") {
-                document.title = "注册";
+                document.title = "注册-"+siteName;
             } else {
-                document.title = "Register";
+                document.title = "Register-"+siteName;
             }
             break;
     }
