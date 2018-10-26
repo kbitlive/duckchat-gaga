@@ -523,6 +523,7 @@ function registerAndLogin()
 
     if(isType == updateInvitationCodeType) {
         showLoading($(".site_login_div"));
+        cancelLoadingBySelf();
         apiPassportPasswordLogin(updatePassportPasswordInvitationCode);
     } else {
         var flag = checkRegisterInfo();
@@ -530,9 +531,9 @@ function registerAndLogin()
             return false;
         }
         showLoading($(".site_login_div"));
+        cancelLoadingBySelf();
         zalyjsWebCheckUserExists(loginNameNotExist, loginNameExist);
     }
-    cancelLoadingBySelf();
 }
 
 ///更新邀请码，并且登录site
@@ -695,7 +696,6 @@ function displayInvitationCode()
             return false;
         }
         isRegister = true;
-        cancelLoadingBySelf();
         zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailed);
     } else {
         $(".zaly_login_by_pwd")[0].style.display = "none";
