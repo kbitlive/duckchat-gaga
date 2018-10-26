@@ -15,14 +15,18 @@ use Zaly\Proto\Core\TransportDataHeaderKey;
 class DC_Open_Api
 {
 
-    private $zalyAes;
-    private $bodyFormat = "json";
+    private $miniProgramId;
+    private $secretKey;
+    private $serverAddress;
+    private $requestTimeOut;//默认超时时间3s
 
-    public function __construct()
+    public function __construct($serverAddress, $miniProgramId, $secretKey, $requestTimeOut = 3)
     {
-        $this->zalyAes = new DC_Zaly_AES();
+        $this->miniProgramId = $miniProgramId;
+        $this->secretKey = $secretKey;
+        $this->serverAddress = $serverAddress;
+        $this->requestTimeOut = $requestTimeOut;
     }
-
 
     public function getSessionProfile($duckchatSessionId)
     {
@@ -222,12 +226,12 @@ class DC_Open_Api
         $request = json_encode($request);
 
         //加密发送
-        $encryptedRequestData = $this->zalyAes->encrypt($request, DC_MINI_PROGRAM_SECRET_KEY);
+        $encryptedRequestData = $this->encrypt($request, DC_MINI_PROGRAM_SECRET_KEY);
 
         $encryptedResponse = $this->doCurlRequest($encryptedRequestData, $requestUrl, 'POST');
 
         //解密结果
-        $httpResponse = $this->zalyAes->decrypt($encryptedResponse, DC_MINI_PROGRAM_SECRET_KEY);
+        $httpResponse = $this->decrypt($encryptedResponse, DC_MINI_PROGRAM_SECRET_KEY);
 
         return $this->buildResponseData($action, $httpResponse);
     }
@@ -333,5 +337,49 @@ class DC_Open_Api
         }
 
         return $str;
+    }
+
+    /**
+     * AES加密方式，Electronic Codebook Book
+     */
+    CONST METHOD = "AES-128-ECB";
+    /**
+     * 如果不设置，OPENSSL_ZERO_PADDING， 默认将会按照PKCS#7填充
+     * OPENSSL_RAW_DATA 按照 raw data解析 ，不然默认是base64
+     */
+    //    //////CONST OPTION = OPENSSL_RAW_DATA|OPENSSL_ZERO_PADDING;
+    CONST OPTION = OPENSSL_RAW_DATA;
+
+    /**
+     * aes128ecb pkcs5加密数据
+     * mcrypt_encrypt 在php7.2以后弃用
+     *
+     * @author 尹少爷 2018.03.21
+     *
+     * @param string $key 加密key
+     * @param string $data 加密数据
+     *
+     * @return string base64
+     */
+    private function encrypt($data, $key)
+    {
+        return openssl_encrypt($data, self::METHOD, $key, self::OPTION);
+    }
+
+    /**
+     * aes128ecb pkcs5解密数据
+     * mcrypt_decrypt 在php7.2以后弃用
+     *
+     * @author 尹少爷 2018.03.21
+     *
+     * @param string $key 解密key
+     * @param string $data 解密数据
+     *
+     * @return string
+     */
+    private function decrypt($data, $key)
+    {
+        $data = openssl_decrypt($data, self::METHOD, $key, self::OPTION);
+        return $data;
     }
 }

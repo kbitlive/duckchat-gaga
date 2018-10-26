@@ -13,14 +13,17 @@ class DC_Demo_Controller
 
     function __construct()
     {
-        $this->dcApi = new DC_Open_Api();
+        $serverAddress = "http://192.168.3.4:8888"; //搭建的DuckChat服务器的地址
+        $miniProgramId = 100;   //小程序的Id
+        $secretKey = "XXXXXXXXX";   //小程序的密钥
+        $this->dcApi = new DC_Open_Api($serverAddress, $miniProgramId, $secretKey);
     }
 
     public function index()
     {
 
-        if (file_exists(DC_SDK_PATH . 'class.dc_demo_controller')) {
-            require_once WX_SDK_PATH . 'class.dc_demo_controller';
+        if (file_exists('/../class.dc_demo_controller')) {
+            require_once '/../class.dc_demo_controller';
         } else {
             $this->server_error("can't find sdk file");
         }
