@@ -5,8 +5,7 @@
  * Time: 12:27 PM
  */
 
-define('WX_SDK_PATH', __DIR__ . '/../sdk/');
-
+include_once 'config.php';
 
 include_once 'class.dc_demo_controller.php';
 

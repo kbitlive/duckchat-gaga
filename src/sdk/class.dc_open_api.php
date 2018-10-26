@@ -16,111 +16,222 @@ class DC_Open_Api
 {
 
     private $zalyAes;
-    private $bodyFormat = "pb";
+    private $bodyFormat = "json";
 
     public function __construct()
     {
-        $this->zalyAes = new DCZalyAES();
+        $this->zalyAes = new DC_Zaly_AES();
     }
 
-    /**
-     *
-     * check from site ,if sessionid is valid return user's profile
-     *
-     * @param $siteAddress
-     * @param $duckchatSessionId
-     * @param $miniProgramId
-     * @param $miniProgramAuthKey
-     * @return Zaly\Proto\Core\PublicUserProfile
-     * @throws Exception
-     */
-    public function checkDuckChatSessionProfile($siteAddress, $duckchatSessionId, $miniProgramId, $miniProgramAuthKey)
+
+    public function getSessionProfile($duckchatSessionId)
     {
-        $tag = __CLASS__ . "-" . __FUNCTION__;
-        try {
+        $requestAction = "duckchat.session.profile";
+        $requestData = array(
+            "action" => $requestAction,
+            "body" => array(
+                "@type" => "type.googleapis.com/plugin.DuckChatSessionProfileRequest",
+                "encryptedSessionId" => $duckchatSessionId
+            ),
+            "timeMillis" => $this->getTimeMillis(),
+        );
 
-            $requestData = new Zaly\Proto\Plugin\DuckChatSessionProfileRequest();
-            $requestData->setEncryptedSessionId($duckchatSessionId);
 
-            $response = $this->duckChatMiniProgramRequest($siteAddress,
-                $miniProgramId, $miniProgramAuthKey, "duckchat.session.profile", $requestData);
+        $response = $this->duckChatRequest($requestAction, $requestData);
 
-            $this->logger->info($tag, "session profile response=" . $response->serializeToJsonString());
-
-            if (empty($response)) {
-                throw new Exception("get empty response by duckchat_sessionid error");
-            }
-
-            $userProfile = $response->getProfile();
-            return $userProfile->getPublic();
-        } catch (Exception $ex) {
-            $this->logger->error($tag, "error msg =" . $ex);
-            throw $ex;
+        if (empty($response)) {
+            throw new Exception("get empty response by duckchat_sessionid error");
         }
+
+        //这里需要处理
+        $profile = $response;
+        return $profile;
+
     }
 
-
-    /**
-     *
-     * request site's MiniProgram Api
-     *
-     * @param $siteAddress http://192.168.3.4
-     * @param $miniProgramId
-     * @param $action
-     * @param $requestProtoData
-     * @param $miniProgramAuthKey
-     * @return \Google\Protobuf\Internal\Message
-     * @throws Exception
-     */
-    public function duckChatMiniProgramRequest($siteAddress, $miniProgramId,
-                                               $miniProgramAuthKey, $action, $requestProtoData)
+    public function getUserProfile($userId)
     {
-        $requestUrl = $siteAddress . "/?action=" . $action . "&body_format=" . $this->bodyFormat . "&miniProgramId=" . $miniProgramId;
+        $requestAction = "duckchat.user.profile";
 
-        $this->logger->info($action, "http request url =" . $requestUrl);
+        $requestData = array(
+            "action" => $requestAction,
+            "body" => array(
+                "@type" => "type.googleapis.com/plugin.DuckChatUserProfileRequest",
+                "userId" => $userId,
+            ),
+            "timeMillis" => $this->getTimeMillis(),
+        );
 
-        $requestTransportDataString = $this->buildRequestTransportData($action, $requestProtoData);
+        $response = $this->duckChatRequest($requestAction, $requestData);
+
+        return $response;
+    }
+
+    //get two user relation
+    public function getUserRelation($userId, $oppositeUserId)
+    {
+        $requestAction = "duckchat.user.relation";
+
+        $requestData = array(
+            "action" => $requestAction,
+            "body" => array(
+                "@type" => "type.googleapis.com/plugin.DuckChatUserRelationRequest",
+                "userId" => $userId,
+                "oppositeUserId" => $oppositeUserId,
+            ),
+            "timeMillis" => $this->getTimeMillis(),
+        );
+
+        $response = $this->duckChatRequest($requestAction, $requestData);
+
+        return $response;
+    }
+
+    //send proxy text message
+    public function sendTextMessage($isGroup, $fromUserId, $toId, $textBody)
+    {
+        $requestAction = "duckchat.message.send";
+
+        $requestData = array(
+            "action" => $requestAction,
+            "body" => array(
+                "@type" => "type.googleapis.com/plugin.DuckChatMessageSendRequest",
+                "message" => array(
+                    "msgId" => $this->buildMessageId($fromUserId),
+                    "fromUserId" => $fromUserId,
+                    "toUserId" => $isGroup ? "" : $toId,
+                    "toGroupId" => $isGroup ? $toId : "",
+                    "type" => "MessageText",
+                    "roomType" => $isGroup ? "MessageRoomGroup" : "MessageRoomU2",
+                    "text" => array(
+                        "body" => $textBody,
+                    ),
+                    "timeServer" => $this->getTimeMillis(),
+                ),
+            ),
+            "timeMillis" => $this->getTimeMillis(),
+        );
+
+        $response = $this->duckChatRequest($requestAction, $requestData);
+
+        return true;
+    }
+
+    //send notice message
+    public function sendNoticeMessage($isGroup, $fromUserId, $toId, $noticeBody)
+    {
+        $requestAction = "duckchat.message.send";
+
+        $requestData = array(
+            "action" => $requestAction,
+            "body" => array(
+                "@type" => "type.googleapis.com/plugin.DuckChatMessageSendRequest",
+                "message" => array(
+                    "msgId" => $this->buildMessageId($fromUserId),
+                    "fromUserId" => $fromUserId,
+                    "toUserId" => $isGroup ? "" : $toId,
+                    "toGroupId" => $isGroup ? $toId : "",
+                    "type" => "MessageNotice",
+                    "roomType" => $isGroup ? "MessageRoomGroup" : "MessageRoomU2",
+                    "notice" => array(
+                        "body" => $noticeBody,
+                    ),
+                    "timeServer" => $this->getTimeMillis(),
+                ),
+            ),
+            "timeMillis" => $this->getTimeMillis(),
+        );
+
+        $response = $this->duckChatRequest($requestAction, $requestData);
+
+        return true;
+    }
+
+    //send web message
+    public function sendWebMessage($isGroup, $fromUserId, $toId, $title, $webHtmlCode, $width, $height)
+    {
+        $requestAction = "duckchat.message.send";
+
+        $requestData = array(
+            "action" => $requestAction,
+            "body" => array(
+                "@type" => "type.googleapis.com/plugin.DuckChatMessageSendRequest",
+                "message" => array(
+                    "msgId" => $this->buildMessageId($fromUserId),
+                    "fromUserId" => $fromUserId,
+                    "toUserId" => $isGroup ? "" : $toId,
+                    "toGroupId" => $isGroup ? $toId : "",
+                    "type" => "MessageWeb",
+                    "roomType" => $isGroup ? "MessageRoomGroup" : "MessageRoomU2",
+                    "web" => array(
+                        "title" => $title,
+                        "code" => $webHtmlCode,
+                        "width" => $width,
+                        "height" => $height,
+                    ),
+                    "timeServer" => $this->getTimeMillis(),
+                ),
+            ),
+            "timeMillis" => $this->getTimeMillis(),
+        );
+
+        $response = $this->duckChatRequest($requestAction, $requestData);
+
+        return true;
+
+    }
+
+    //send web notice message
+    public function sendWebNoticeMessage($isGroup, $fromUserId, $toId, $title, $noticeHtmlCode, $height)
+    {
+        $requestAction = "duckchat.message.send";
+
+        $requestData = array(
+            "action" => $requestAction,
+            "body" => array(
+                "@type" => "type.googleapis.com/plugin.DuckChatMessageSendRequest",
+                "message" => array(
+                    "msgId" => $this->buildMessageId($isGroup, $fromUserId),
+                    "fromUserId" => $fromUserId,
+                    "toUserId" => $isGroup ? "" : $toId,
+                    "toGroupId" => $isGroup ? $toId : "",
+                    "type" => "MessageWebNotice",
+                    "roomType" => $isGroup ? "MessageRoomGroup" : "MessageRoomU2",
+                    "webNotice" => array(
+                        "title" => $title,
+                        "code" => $noticeHtmlCode,
+                        "height" => $height,
+                    ),
+                    "timeServer" => $this->getTimeMillis(),
+                ),
+            ),
+            "timeMillis" => $this->getTimeMillis(),
+        );
+
+        $response = $this->duckChatRequest($requestAction, $requestData);
+
+        return true;
+
+    }
+
+    protected function duckChatRequest($action, $request)
+    {
+        $requestUrl = DC_SERVER_ADDRESS . "/?action=" . $action . "&body_format=json&miniProgramId=" . DC_MINI_PROGRAM_ID;
+
+        //json_encode, turn array to string
+        $request = json_encode($request);
 
         //加密发送
-        $encryptedTransportData = $this->zalyAes->encrypt($requestTransportDataString, $miniProgramAuthKey);
+        $encryptedRequestData = $this->zalyAes->encrypt($request, DC_MINI_PROGRAM_SECRET_KEY);
 
-        $encryptedHttpTransportResponse = $this->doCurlSiteRequest($encryptedTransportData, $requestUrl, 'POST');
+        $encryptedResponse = $this->doCurlRequest($encryptedRequestData, $requestUrl, 'POST');
 
         //解密结果
-        $httpResponse = $this->zalyAes->decrypt($encryptedHttpTransportResponse, $miniProgramAuthKey);
+        $httpResponse = $this->zalyAes->decrypt($encryptedResponse, DC_MINI_PROGRAM_SECRET_KEY);
 
-        return $this->buildResponseTransportData($action, $httpResponse);
+        return $this->buildResponseData($action, $httpResponse);
     }
 
-    /**
-     * build request transportdata
-     * @param $action
-     * @param $requestBody
-     * @return string
-     * @throws Exception
-     */
-    private function buildRequestTransportData($action, $requestBody)
-    {
-        $anyBody = new \Google\Protobuf\Any();
-        $anyBody->pack($requestBody);
-
-        $transportData = new \Zaly\Proto\Core\TransportData();
-        $transportData->setAction($action);
-        $transportData->setBody($anyBody);
-        $transportData->setTimeMillis($this->getTimeMillis());
-
-        switch ($this->bodyFormat) {
-            case "json":
-                return $transportData->serializeToJsonString();
-            case "pb":
-                return $transportData->serializeToString();
-            case "base64pb":
-                $realData = base64_encode($transportData->serializeToString());
-                return $realData;
-            default:
-                throw new Exception("error http url body_format");
-        }
-    }
 
     /**
      * @param $action
@@ -128,42 +239,12 @@ class DC_Open_Api
      * @return \Google\Protobuf\Internal\Message
      * @throws Exception
      */
-    private function buildResponseTransportData($action, $httpResponse)
+    private function buildResponseData($action, $httpResponse)
     {
-        $responseTransportData = new Zaly\Proto\Core\TransportData();
-        switch ($this->bodyFormat) {
-            case "json":
-                $responseTransportData->mergeFromJsonString($httpResponse);
-                break;
-            case "pb":
-                $responseTransportData->mergeFromString($httpResponse);
-                break;
-            case "base64pb":
-                $realData = base64_decode($httpResponse);
-                $responseTransportData->mergeFromString($realData);
-                break;
-        }
 
-        if ($action != $responseTransportData->getAction()) {
-            throw new Exception("response with error action");
-        }
 
-        $responseHeader = $responseTransportData->getHeader();
-
-        if (empty($responseHeader)) {
-            throw new Exception("response with empty header");
-        }
-
-        $errCode = $this->getHeaderValue($responseHeader, TransportDataHeaderKey::HeaderErrorCode);
-
-        if ("success" == $errCode) {
-            $responseMessage = $responseTransportData->getBody()->unpack();
-            return $responseMessage;
-        } else {
-            $errInfo = $this->getHeaderValue($responseHeader, TransportDataHeaderKey::HeaderErrorInfo);
-            throw new Exception($errInfo);
-        }
-
+        //return reponse json string
+        return "";
     }
 
     private function getHeaderValue($header, $key)
@@ -175,38 +256,82 @@ class DC_Open_Api
     }
 
 
-    private function doCurlSiteRequest($params, $url, $method)
+    private function doCurlRequest($params, $url, $method)
     {
         $tag = __CLASS__ . '-' . __FUNCTION__;
         try {
             $_curlObj = curl_init();
-//            $this->_getRequestParams($params);
-//            $this->_setHeader($headers);
-//            $this->setRequestMethod($method);
+
             curl_setopt($_curlObj, CURLOPT_URL, $url);
-            curl_setopt($_curlObj, CURLOPT_TIMEOUT, 3);//3s timeout
+            curl_setopt($_curlObj, CURLOPT_TIMEOUT, DC_CURLOPT_TIMEOUT);//3s timeout
             curl_setopt($_curlObj, CURLOPT_NOBODY, false);
             curl_setopt($_curlObj, CURLOPT_POST, true);
             curl_setopt($_curlObj, CURLOPT_POSTFIELDS, $params);
             curl_setopt($_curlObj, CURLOPT_RETURNTRANSFER, true);
 
             if (($resp = curl_exec($_curlObj)) === false) {
-                $this->logger->error('when run Router, unexpected error :', curl_error($_curlObj));
                 throw new Exception(curl_error($_curlObj));
             }
             curl_close($_curlObj);
             return $resp;
         } catch (\Exception $e) {
-            $message = sprintf("msg:%s file:%s:%d", $e->getMessage(), $e->getFile(), $e->getLine());
-            $this->logger->error($tag, 'when run Router, unexpected error :', $message);
-            throw new Exception($e->getMessage());
+            $this->print_errorLog($tag, $e);
         }
     }
 
+
+    /******************** tools function ****************/
+
+    /**
+     * @param $isGroup 是否是群组消息
+     * @param $fromUserId 发送者的userId
+     * @return string
+     */
+    public function buildMessageId($isGroup, $fromUserId)
+    {
+        $messageId = "U2-";
+        if ($isGroup) {
+            $messageId = "GP-";
+        }
+
+        if (!empty($fromUserId)) {
+            $messageId .= substr($fromUserId, 0, 8);
+        } else {
+            $randomStr = $this->generateStrKey(8);
+            $messageId .= $randomStr;
+        }
+
+        $messageId .= "-" . $this->getTimeMillis();
+        return $messageId;
+    }
+
+    /**
+     * get current time (ms)
+     * @return float
+     */
     public function getTimeMillis()
     {
         list($msec, $sec) = explode(' ', microtime());
         $msectime = (float)sprintf('%.0f', (floatval($msec) + floatval($sec)) * 1000);
         return $msectime;
+    }
+
+    private function print_errorLog($tag, $e)
+    {
+        error_log($tag . " " . $e->getMessage() . " " . $e->getTraceAsString());
+    }
+
+    private function generateStrKey($length = 16, $strParams = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    {
+        if (!is_int($length) || $length < 0) {
+            $length = 16;
+        }
+
+        $str = '';
+        for ($i = $length; $i > 0; $i--) {
+            $str .= $strParams[mt_rand(0, strlen($strParams) - 1)];
+        }
+
+        return $str;
     }
 }
