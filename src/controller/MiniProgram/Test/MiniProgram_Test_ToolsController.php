@@ -70,8 +70,6 @@ class MiniProgram_Test_ToolsController extends MiniProgramController
 
             $userList = $this->ctx->SiteUserTable->getSiteUserListWithRelation($this->userId, $i, $i + 20);
 
-            $this->ctx->Wpf_Logger->error("==============", json_encode($userList));
-
             if ($userList) {
 
                 foreach ($userList as $user) {
