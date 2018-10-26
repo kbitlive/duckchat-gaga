@@ -137,8 +137,7 @@ class DC_Demo_Controller
         $toUserId = "";
 
         $title = "test title";
-        $webHtmlCode = "";
-        $width = 100;
+        $webHtmlCode = "";//这里是html代码
         $height = 200;
         $this->dcApi->sendWebNoticeMessage(false, $fromUserId, $toUserId, $title, $webHtmlCode, $height);
 
