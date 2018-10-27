@@ -94,6 +94,13 @@ $preAutoloadFiles = array(
 );
 $autoloader->registerClass($preAutoloadFiles);
 
+
+if(!ini_get("error_log")) {
+    $phpErrorLog = ZalyConfig::getConfig("error_log");
+    if($phpErrorLog) {
+        ini_set("error_log",$phpErrorLog);
+    }
+}
 //生成WEB程序管理器，开始执行逻辑
 $web = new Wpf_Web();
 $web->run();

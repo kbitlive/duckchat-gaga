@@ -530,7 +530,7 @@ input:active,
 
 }
 
-@media (max-height: 300px) {
+@media (max-height: 500px) {
     .mobile_slogn_div {
         display: none;
     }
