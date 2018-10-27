@@ -43,6 +43,17 @@ class DC_Demo_Controller
 
         $dcSessionId = $_COOKIE["duckchat_sessionid"];
 
+
+        //格式为gotoUrl格式
+        $dcPageUrl = $_COOKIE["duckchat_pageurl"];
+
+
+        if ($dcPageUrl == "u2Msg") {
+            //二人消息
+        } elseif ($dcPageUrl == "groupMsg") {
+            //群组消息
+        }
+
 //        call_user_func(array($this, $methodName));
 
         call_user_func($methodName, $dcSessionId);

@@ -218,18 +218,19 @@ class DC_Open_Api
 
     protected function duckChatRequest($action, $request)
     {
-        $requestUrl = DC_SERVER_ADDRESS . "/?action=" . $action . "&body_format=json&miniProgramId=" . DC_MINI_PROGRAM_ID;
+        $requestUrl = $this->serverAddress . "/?action=" . $action
+            . "&body_format=json&miniProgramId=" . $this->miniProgramId;
 
         //json_encode, turn array to string
         $request = json_encode($request);
 
         //加密发送
-        $encryptedRequestData = $this->encrypt($request, DC_MINI_PROGRAM_SECRET_KEY);
+        $encryptedRequestData = $this->encrypt($request, $this->secretKey);
 
         $encryptedResponse = $this->doCurlRequest($encryptedRequestData, $requestUrl, 'POST');
 
         //解密结果
-        $httpResponse = $this->decrypt($encryptedResponse, DC_MINI_PROGRAM_SECRET_KEY);
+        $httpResponse = $this->decrypt($encryptedResponse, $this->secretKey);
 
         return $this->buildResponseData($action, $httpResponse);
     }
