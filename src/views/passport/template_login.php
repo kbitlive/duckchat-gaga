@@ -14,8 +14,8 @@
             <input type="text" id="register_input_loginName"  datatype="s"  class="input_login_site  register_input_loginName" data-local-placeholder="registerLoginNamePlaceholder"  autocapitalize="off"   placeholder="用户名以字母、数字、下划线，1-16个字符" >
             {{/if}}
             <img src="../../public/img/msg/msg_failed.png" class="img-failed register_input_loginName_failed">
-            <div class="register_line"></div>
         </div>
+        <div class="register_line"></div>
 
         <div class="login_name_div" style="margin-top: 2rem;">
             <image src="../../public/img/login/pwd.png" class="img"/>
