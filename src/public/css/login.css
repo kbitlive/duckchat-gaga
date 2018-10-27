@@ -441,7 +441,7 @@ input:active,
 
 .line,.register_line {
     width:28.14rem;
-    height:0.09rem;
+    height:1px;
     margin:0px auto;
     background:rgba(153,153,153,1);
     border-radius:0.42rem;

@@ -60,8 +60,6 @@ var pathname = window.location.pathname;
 originDomain = protocol+"//"+host+pathname;
 isRegister=false;
 
-var errorUserNeedRegister = "error.user.needRegister";
-var errorInvitationCode = "error.invitation.code";
 var siteName = $(".siteName").val();
 
 function setDocumentTitle(type)
