@@ -5,8 +5,6 @@
  * Time: 12:27 PM
  */
 
-include_once 'config.php';
-
 include_once 'class.dc_demo_controller.php';
 
 
