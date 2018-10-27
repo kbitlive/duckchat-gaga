@@ -222,11 +222,20 @@ abstract class Page_VersionController extends UpgradeController
     protected function updateSiteConfigAsUpgrade($newVersionCode, $newVersionName)
     {
         $siteConfig = ZalyConfig::getAllConfig();
-
         $siteConfig["siteVersionCode"] = $newVersionCode;
         $siteConfig["siteVersionName"] = $newVersionName;
-
         ZalyConfig::updateConfigFile($siteConfig);
+    }
+
+    protected function updateSiteConfig($config)
+    {
+        if(!is_array($config)) {
+            return false;
+        }
+        $siteConfig = ZalyConfig::getAllConfig();
+        $siteConfig = array_merge($siteConfig, $config);
+        ZalyConfig::updateConfigFile($siteConfig);
+        ZalyConfig::getAllConfig();
     }
 
     protected function dropDBTable($tableName)
