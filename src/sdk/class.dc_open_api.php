@@ -99,10 +99,8 @@ class DC_Open_Api
             "body" => array(
                 "@type" => "type.googleapis.com/plugin.DuckChatMessageSendRequest",
                 "message" => array(
-                    "msgId" => $this->buildMessageId($fromUserId),
+                    "msgId" => $this->buildMessageId($isGroup, $fromUserId),
                     "fromUserId" => $fromUserId,
-                    "toUserId" => $isGroup ? "" : $toId,
-                    "toGroupId" => $isGroup ? $toId : "",
                     "type" => "MessageText",
                     "roomType" => $isGroup ? "MessageRoomGroup" : "MessageRoomU2",
                     "text" => array(
@@ -113,6 +111,12 @@ class DC_Open_Api
             ),
             "timeMillis" => $this->getTimeMillis(),
         );
+
+        if ($isGroup) {
+            $requestData['body']['message']['toGroupId'] = $toId;
+        } else {
+            $requestData['body']['message']['toUserId'] = $toId;
+        }
 
         $response = $this->duckChatRequest($requestAction, $requestData);
 
@@ -129,10 +133,8 @@ class DC_Open_Api
             "body" => array(
                 "@type" => "type.googleapis.com/plugin.DuckChatMessageSendRequest",
                 "message" => array(
-                    "msgId" => $this->buildMessageId($fromUserId),
+                    "msgId" => $this->buildMessageId($isGroup, $fromUserId),
                     "fromUserId" => $fromUserId,
-                    "toUserId" => $isGroup ? "" : $toId,
-                    "toGroupId" => $isGroup ? $toId : "",
                     "type" => "MessageNotice",
                     "roomType" => $isGroup ? "MessageRoomGroup" : "MessageRoomU2",
                     "notice" => array(
@@ -143,6 +145,12 @@ class DC_Open_Api
             ),
             "timeMillis" => $this->getTimeMillis(),
         );
+
+        if ($isGroup) {
+            $requestData['body']['message']['toGroupId'] = $toId;
+        } else {
+            $requestData['body']['message']['toUserId'] = $toId;
+        }
 
         $response = $this->duckChatRequest($requestAction, $requestData);
 
@@ -159,10 +167,8 @@ class DC_Open_Api
             "body" => array(
                 "@type" => "type.googleapis.com/plugin.DuckChatMessageSendRequest",
                 "message" => array(
-                    "msgId" => $this->buildMessageId($fromUserId),
+                    "msgId" => $this->buildMessageId($isGroup, $fromUserId),
                     "fromUserId" => $fromUserId,
-                    "toUserId" => $isGroup ? "" : $toId,
-                    "toGroupId" => $isGroup ? $toId : "",
                     "type" => "MessageWeb",
                     "roomType" => $isGroup ? "MessageRoomGroup" : "MessageRoomU2",
                     "web" => array(
@@ -176,6 +182,12 @@ class DC_Open_Api
             ),
             "timeMillis" => $this->getTimeMillis(),
         );
+
+        if ($isGroup) {
+            $requestData['body']['message']['toGroupId'] = $toId;
+        } else {
+            $requestData['body']['message']['toUserId'] = $toId;
+        }
 
         $response = $this->duckChatRequest($requestAction, $requestData);
 
@@ -195,8 +207,6 @@ class DC_Open_Api
                 "message" => array(
                     "msgId" => $this->buildMessageId($isGroup, $fromUserId),
                     "fromUserId" => $fromUserId,
-                    "toUserId" => $isGroup ? "" : $toId,
-                    "toGroupId" => $isGroup ? $toId : "",
                     "type" => "MessageWebNotice",
                     "roomType" => $isGroup ? "MessageRoomGroup" : "MessageRoomU2",
                     "webNotice" => array(
@@ -209,6 +219,12 @@ class DC_Open_Api
             ),
             "timeMillis" => $this->getTimeMillis(),
         );
+
+        if ($isGroup) {
+            $requestData['body']['message']['toGroupId'] = $toId;
+        } else {
+            $requestData['body']['message']['toUserId'] = $toId;
+        }
 
         $response = $this->duckChatRequest($requestAction, $requestData);
 
@@ -230,24 +246,9 @@ class DC_Open_Api
         $encryptedResponse = $this->doCurlRequest($encryptedRequestData, $requestUrl, 'POST');
 
         //解密结果
-        $httpResponse = $this->decrypt($encryptedResponse, $this->secretKey);
+        $httpResponseData = $this->decrypt($encryptedResponse, $this->secretKey);
 
-        return $this->buildResponseData($action, $httpResponse);
-    }
-
-
-    /**
-     * @param $action
-     * @param $httpResponse
-     * @return \Google\Protobuf\Internal\Message
-     * @throws Exception
-     */
-    private function buildResponseData($action, $httpResponse)
-    {
-
-
-        //return reponse json string
-        return "";
+        return $httpResponseData;
     }
 
     private function getHeaderValue($header, $key)

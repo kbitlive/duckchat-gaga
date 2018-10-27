@@ -52,7 +52,7 @@ class Manage_Config_UpdateController extends Manage_CommonController
                 $this->checkWsAddress($configValue);
 
                 //清理 sitePort && siteHost
-                $this->deleterSiteConfig([SiteConfig::SITE_WS_HOST, SiteConfig::SITE_WS_PORT]);
+                $this->deleteSiteConfig([SiteConfig::SITE_WS_HOST, SiteConfig::SITE_WS_PORT]);
             }
 
             $result = $this->updateSiteConfig($configKey, $configValue);
@@ -112,7 +112,7 @@ class Manage_Config_UpdateController extends Manage_CommonController
         return false;
     }
 
-    private function deleterSiteConfig(array $configKeys)
+    private function deleteSiteConfig(array $configKeys)
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         try {
@@ -130,7 +130,7 @@ class Manage_Config_UpdateController extends Manage_CommonController
     private function checkWsAddress($wsAddressUrl)
     {
         if (empty($wsAddressUrl)) {
-            throw new Exception($this->language == 1 ? "wsAddress格式错误" : "ws address formatting error");
+            return;
         }
 
         $wsAddress = parse_url($wsAddressUrl);

@@ -195,7 +195,7 @@ class Api_Site_ConfigController extends \BaseController
                 //support zaly protocol
                 $addressForAPi = $this->buildAddress("zaly", $host, $zalyPort);
                 $addressForIM = $this->buildAddress("zaly", $host, $zalyPort);
-            } elseif (isset($wsAddress)) {
+            } elseif (!empty($wsAddress)) {
                 $addressForAPi = $this->buildAddress($scheme, $host, $port);
                 $addressForIM = $wsAddress;
             } elseif (isset($wsPort) && $wsPort > 0 && $wsPort < 65535) {
