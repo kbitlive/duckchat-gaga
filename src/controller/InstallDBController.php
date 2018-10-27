@@ -146,6 +146,7 @@ class InstallDBController
 
                 $config['msectime'] = ZalyHelper::getMsectime();
                 $config['siteAddress'] = $siteAddress;
+                $config['error_log'] = ZalyHelper::generateStrKey('16').'_php_errors.log';
 
                 //write to file
                 $contents = var_export($config, true);

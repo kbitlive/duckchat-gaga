@@ -26,6 +26,9 @@ class ZalyConfig
         //write to file
         $contents = var_export($newConfig, true);
         file_put_contents($configFileName, "<?php\n return {$contents};\n ");
+        if (function_exists("opcache_reset")) {
+             opcache_reset();
+        }
         return true;
     }
 
