@@ -458,7 +458,7 @@ class Message_Client
             }
 
             $webNotice->setCode($code);
-//            $webNotice->setHrefURL($hrefUrl);
+            $webNotice->setHrefURL($hrefUrl);
             $webNotice->setHeight($height);
 
             $message = new Zaly\Proto\Core\Message();
