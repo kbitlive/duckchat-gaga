@@ -59,7 +59,6 @@ class Page_Passport_LoginController extends HttpBaseController
             'loginBackgroundColor' => $loginBackgroundColor,
             'loginBackgroundImage' => $this->ctx->File_Manager->getCustomPathByFileId($loginBackgroundImage),
             'loginBackgroundImageDisplay' => $loginBackgroundImageDisplay,
-            'redirect_url' => isset($_GET['redirect_url']) ? $_GET['redirect_url'] : ""
         ];
 
         echo $this->display("passport_login", $params);

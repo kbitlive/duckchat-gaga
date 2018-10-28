@@ -17,7 +17,6 @@
 <script src="../../public/js/im/zalyClient.js"></script>
 <script src="../../public/js/im/zalyBaseWs.js"></script>
 
-<input type="hidden" value="<?php echo $redirect_url; ?>" class="redirect_url">
 <script type="text/javascript">
 
      requestSiteConfig(handleLoginSiteConfig);
@@ -29,11 +28,10 @@
          var landingPageUrl = pluginLoginProfile.landingPageUrl;
 
          localStorage.clear();
-         var redirectUrl = $(".redirect_url").val();
          if(landingPageUrl.indexOf("?")) {
-             landingPageUrl +="&from=duckchat&redirect_url="+redirectUrl;
+             landingPageUrl +="&from=duckchat&redirect_url="+location.href;
          }else{
-             landingPageUrl +="?from=duckchat&redirect_url="+redirectUrl;
+             landingPageUrl +="?from=duckchat&redirect_url="+location.href;
          }
          landingPageUrl = encodeURI(landingPageUrl);
          window.location.href = landingPageUrl;

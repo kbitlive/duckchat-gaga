@@ -23,8 +23,7 @@ class Page_LoginController extends HttpBaseController
         } catch (Exception $ex) {
             $this->logger->error($tag, $ex);
         }
-        $apiPageLogin = ZalyConfig::getApiPageLoginUrl();
-        echo $this->display("login_login", ["redirect_url" => $apiPageLogin]);
+        echo $this->display("login_login");
         return;
     }
 }

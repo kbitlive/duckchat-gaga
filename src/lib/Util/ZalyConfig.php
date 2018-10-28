@@ -102,15 +102,6 @@ class ZalyConfig
         return $domain . $pageJumpUrl;
     }
 
-    public static function getApiPageLoginUrl()
-    {
-        $domain = self::getDomain();
-        $pageLoginUrl = self::$config['apiPageLogin'];
-        if (strpos($pageLoginUrl, "./") == 0) {
-            $pageLoginUrl = str_replace("./", "/", $pageLoginUrl);
-        }
-        return $domain . $pageLoginUrl;
-    }
 
     public static function getApiPageWidget()
     {
