@@ -7,9 +7,19 @@ var callbackIdParamName = "zalyjsCallbackId";
 var refererUrl = document.referrer;
 var refererUrlKey = "documentReferer";
 
-if(refererUrl.length>0 && refererUrl.indexOf("from=duckchat")) {
-    localStorage.setItem(refererUrlKey, refererUrl);
+function getUrlParam(key)
+{
+    var pathParams = window.location.search.substring(1).split('&');
+    var paramsLength = pathParams.length;
+    for(var i=0; i<paramsLength; i++) {
+        var param = pathParams[i].split('=');
+        if(param[0] == key) {
+            localStorage.setItem(refererUrlKey, param[1]);
+        }
+    }
 }
+
+getUrlParam("redirect_url");
 
 var zalyjsSiteLoginMessageBody = {};
 

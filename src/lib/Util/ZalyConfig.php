@@ -102,6 +102,7 @@ class ZalyConfig
         return $domain . $pageJumpUrl;
     }
 
+
     public static function getApiPageWidget()
     {
         $domain = self::getDomain();

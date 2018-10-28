@@ -7,7 +7,7 @@
  */
 
 
-class Api_Passport_PasswordModifyPasswordController extends BaseController
+class Api_Passport_PasswordModifyPasswordController extends Api_Passport_PasswordBase
 {
     private $classNameForRequest = '\Zaly\Proto\Site\ApiPassportPasswordModifyPasswordRequest';
     private $classNameForResponse = '\Zaly\Proto\Site\ApiPassportPasswordModifyPasswordResponse';
@@ -28,7 +28,6 @@ class Api_Passport_PasswordModifyPasswordController extends BaseController
             $newPassword = $request->getNewPassword();
             $password = $request->getPassword();
             $loginName = $request->getLoginName();
-            $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $request->serializeToJsonString());
             $this->checkOldPassword($loginName, $password);
             $this->updatePasswordByLoginName($loginName, $newPassword);
             $this->setRpcError($this->defaultErrorCode, "");
@@ -48,7 +47,10 @@ class Api_Passport_PasswordModifyPasswordController extends BaseController
             throw new Exception("user is not exists");
         }
 
+        $this->checkPasswordErrorNum($userInfo['userId']);
+
         if(!password_verify($password, $userInfo['password'])) {
+            $this->insertPassportPasswordLog($userInfo, 2);
             $errorCode = $this->zalyError->errorMatchLogin;
             $errorInfo = $this->zalyError->getErrorInfo($errorCode);
             $this->setRpcError($errorCode, $errorInfo);

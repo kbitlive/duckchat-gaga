@@ -20,7 +20,6 @@
 <script type="text/javascript">
 
      requestSiteConfig(handleLoginSiteConfig);
-
      function handleLoginSiteConfig(params)
      {
          ZalyIm(params);
@@ -29,6 +28,12 @@
          var landingPageUrl = pluginLoginProfile.landingPageUrl;
 
          localStorage.clear();
+         if(landingPageUrl.indexOf("?")) {
+             landingPageUrl +="&from=duckchat&redirect_url="+location.href;
+         }else{
+             landingPageUrl +="?from=duckchat&redirect_url="+location.href;
+         }
+         landingPageUrl = encodeURI(landingPageUrl);
          window.location.href = landingPageUrl;
      }
 
