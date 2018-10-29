@@ -96,7 +96,7 @@ $autoloader->registerClass($preAutoloadFiles);
 
 
 if(!ini_get("error_log")) {
-    $phpErrorLog = ZalyConfig::getConfig("error_log");
+    $phpErrorLog = ZalyConfig::getConfig("errorLog");
     if($phpErrorLog) {
         ini_set("error_log",$phpErrorLog);
     }

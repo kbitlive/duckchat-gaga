@@ -117,7 +117,7 @@ class Page_Version_UpgradeController extends Page_VersionController
         $dbType = $this->ctx->dbType;
         $phpErrorLog = ZalyHelper::generateStrKey(16) . '_php_errors.log';;
         $config = [
-            "error_log" => $phpErrorLog,
+            "errorLog" => $phpErrorLog,
         ];
         $this->updateSiteConfig($config);
 

@@ -2,17 +2,6 @@
 $(".left-body-chatsession").html("");
 $(".right-chatbox").html("");
 
-
-
-
-
-
-function doSomething() {
-    // 执行任务
-    worker.postMessage('Work done!');
-    console.log("do something");
-}
-
 function showMsgWebNotification(msg, msgContent)
 {
     var msgId = msg.msgId;

@@ -248,7 +248,7 @@ CREATE TABLE IF NOT EXISTS passportPasswordCountLog(
     num INTEGER ,
     operateDate DATE ,
     operateTime  BIGINT,
-    UNIQUE userIdAnfOperDate(userId, operateDate))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+    UNIQUE userIdAndOperDate(userId, operateDate))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS passportPasswordLog(
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
