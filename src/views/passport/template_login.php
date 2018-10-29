@@ -72,7 +72,7 @@
 
         <div class="d-flex flex-row register_span_div login_span_div" >
             <span style="color:rgba(153,153,153,1);" data-local-value="hasAccountTip">已有账号？</span>
-            <span onclick="registerForLogin()" data-local-value="loginTip">登录</span>
+            <span onclick="registerForLogin()" data-local-value="loginBtnTip">登录</span>
         </div>
     </div>
 </script>
@@ -113,7 +113,7 @@
             <div class="line"></div>
 
             <div class="d-flex flex-row justify-content-center ">
-                <button type="button" class="btn login_button" ><span class="span_btn_tip" data-local-value="loginTip">登录</span></button>
+                <button type="button" class="btn login_button" ><span class="span_btn_tip" data-local-value="loginBtnTip">登 录</span></button>
             </div>
 
             <div class="d-flex flex-row register_span_div" >
