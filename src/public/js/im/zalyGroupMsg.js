@@ -474,6 +474,12 @@ function logout(event)
             data: "",
             success:function (resp) {
                 localStorage.clear();
+                if(landingPageUrl.indexOf("?")) {
+                    landingPageUrl +="&from=duckchat&redirect_url="+location.href;
+                }else{
+                    landingPageUrl +="?from=duckchat&redirect_url="+location.href;
+                }
+                landingPageUrl = encodeURI(landingPageUrl);
                 window.location.href = landingPageUrl;
             }
         });

@@ -47,12 +47,6 @@ isSending  = false;
 updateInvitationCodeType = "update_invitation_code";
 registerLoginName=undefined
 registerPassword=undefined
-refererUrl = document.referrer;
-refererUrlKey = "documentReferer";
-if(refererUrl.length>0) {
-    localStorage.setItem(refererUrlKey, refererUrl);
-    refererUrlKeyVal = localStorage.getItem(refererUrlKey);
-}
 
 var protocol = window.location.protocol;
 var host = window.location.host;
