@@ -202,7 +202,7 @@
 
     function uploadFileToServer(formData, src) {
 
-        var url = "./index.php?action=http.file.uploadGif";
+        var url = "./index.php?action=api.file.upload";
 
         if (isMobile()) {
             url = "/_api_file_upload_/?fileType=1";  //fileType=1,表示文件
