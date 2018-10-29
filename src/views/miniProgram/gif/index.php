@@ -102,6 +102,7 @@
         for(var i=1; i<=gifLength ;i ++) {
             var num = i-1;
             var gif = gifArr[num];
+            console.log("git ===="+JSON.stringify(gif));
             var gifId = "";
             var gifUrl="";
             var isDefault=0;
@@ -125,6 +126,7 @@
             }
 
             if(i==1) {
+                console.log("iiiii");
                 html += "<div class='gif_content_div'><img src='../../../public/img/add.png' class='add_gif'>  " +
                     "<input id='gifFile' type='file' onchange='uploadFile(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
             }
@@ -145,7 +147,7 @@
             if((i-9)%10 == 0){
                 html += "</div>";
                 $(".zaly_container").append(html);
-            } else if(i == gifLength-1) {
+            } else if(i == gifLength) {
                 html += "</div>";
                 $(".zaly_container").append(html);
             }
@@ -202,11 +204,8 @@
 
     function uploadFileToServer(formData, src) {
 
-        var url = "./index.php?action=api.file.upload";
-
-        if (isMobile()) {
-            url = "/_api_file_upload_/?fileType=1";  //fileType=1,表示文件
-        }
+        var url = "/_api_file_upload_/?fileType=1";  //fileType=1,表示文件
+        console.log("upload image  url=========="+url)
         $.ajax({
             url: url,
             type: "post",
@@ -226,8 +225,8 @@
                 }
             },
             error: function (err) {
-                alert("update image error");
-                // return false;
+                console.log("upload image  url end ==========")
+                alert(getLanguage() == 1 ? "上传失败 " : "upload failed");
             }
         });
     }
