@@ -116,10 +116,10 @@
                 line = line+1;
                 html += "<div class='gif_div gif_div_0'  gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
             }
-            if((i-9)%10 == 1) {
+            if((i-9)%10 == 0) {
                 var html = '';
                 line = line+1;
-                var divNum = Math.ceil(((i-9)/10));
+                var divNum = Math.ceil(((i-8)/9));
                 html += "<div class='gif_div gif_div_hidden gif_div_"+divNum+"' gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
             }
 
@@ -135,13 +135,13 @@
                 isDefault:isDefault
             })
 
-            if(i==4) {
+            if(i==3) {
                 html +="</div><div class='gif_sub_div'>";
-            } else if (i>5 && (i-5)%5 == 4) {
+            } else if (i>4 && (i-4)%5 == 4) {
                 html +="</div><div class='gif_sub_div'>";
             }
 
-            if((i-9)%10 == 0){
+            if((i-8)%9 == 0){
                 html += "</div>";
                 $(".zaly_container").append(html);
             } else if(i == gifLength-1) {
@@ -201,7 +201,7 @@
 
     function uploadFileToServer(formData, src) {
 
-        var url = "./index.php?action=http.file.uploadGif";
+        var url = "./index.php?action=api.file.upload";
 
         if (isMobile()) {
             url = "/_api_file_upload_/?fileType=1";  //fileType=1,表示文件
@@ -327,14 +327,12 @@
         Y = moveEndY - startY;
 
         if ( Math.abs(X) > Math.abs(Y) && X > 10 ) {
-            ////右滑喜欢
             if(currentGifDivNum == 0) {
                 return;
             }
             rightSlide();
         }
         else if ( Math.abs(X) > Math.abs(Y) && X < -10 ) {
-            ////左滑不喜欢
             if(currentGifDivNum == (line-1)) {
                 return;
             }
