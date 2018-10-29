@@ -258,3 +258,18 @@ function zalyjsAlert(str)
 }
 
 
+
+//-public
+function zalyjsImageUpload(callback) {
+    var callbackId = zalyjsCallbackHelper.register(callback);
+    var messageBody = {};
+    messageBody[callbackIdParamName] = callbackId;
+    messageBody = JSON.stringify(messageBody);
+
+    if (isAndroid()) {
+        window.Android.zalyjsImageUpload(messageBody);
+    } else if (isIOS()) {
+        console.log("ios upload image" + callback);
+        window.webkit.messageHandlers.zalyjsImageUpload.postMessage(messageBody);
+    }
+}
