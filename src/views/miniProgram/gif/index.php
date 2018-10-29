@@ -99,8 +99,9 @@
     var languageNum = getLanguage();
 
     if(gifLength>0) {
-        for(var i=0; i<gifLength ;i ++) {
-            var gif = gifArr[i];
+        for(var i=1; i<=gifLength ;i ++) {
+            var num = i-1;
+            var gif = gifArr[num];
             var gifId = "";
             var gifUrl="";
             var isDefault=0;
@@ -111,19 +112,19 @@
             }catch (error) {
                 gifId="";
             }
-            if(i == 0) {
+            if(i == 1) {
                 var html = '';
                 line = line+1;
                 html += "<div class='gif_div gif_div_0'  gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
             }
-            if((i-9)%10 == 0) {
+            if((i-9)%10 == 1) {
                 var html = '';
                 line = line+1;
-                var divNum = Math.ceil(((i-8)/9));
+                var divNum = Math.ceil(((i-9)/10));
                 html += "<div class='gif_div gif_div_hidden gif_div_"+divNum+"' gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
             }
 
-            if(i==0) {
+            if(i==1) {
                 html += "<div class='gif_content_div'><img src='../../../public/img/add.png' class='add_gif'>  " +
                     "<input id='gifFile' type='file' onchange='uploadFile(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
             }
@@ -135,13 +136,13 @@
                 isDefault:isDefault
             })
 
-            if(i==3) {
+            if(i==4) {
                 html +="</div><div class='gif_sub_div'>";
-            } else if (i>4 && (i-4)%5 == 4) {
+            } else if (i>5 && (i-5)%5 == 4) {
                 html +="</div><div class='gif_sub_div'>";
             }
 
-            if((i-8)%9 == 0){
+            if((i-9)%10 == 0){
                 html += "</div>";
                 $(".zaly_container").append(html);
             } else if(i == gifLength-1) {
@@ -201,7 +202,7 @@
 
     function uploadFileToServer(formData, src) {
 
-        var url = "./index.php?action=api.file.upload";
+        var url = "./index.php?action=http.file.uploadGif";
 
         if (isMobile()) {
             url = "/_api_file_upload_/?fileType=1";  //fileType=1,表示文件
@@ -261,29 +262,29 @@
 
     var timeOutEvent=0;
     $(".gif").on({
-            touchstart: function(event){
-                event.preventDefault();
-                event.stopPropagation();
-                var gifId = $(this).attr("gifId");
-                var isDefault = $(this).attr("isDefault");
-                if(isDefault != "0") {
-                    timeOutEvent = setTimeout("longEnterPress('"+gifId+"')",500);
-                }
-            },
-            touchend: function(event){
-                event.preventDefault();
-                event.stopPropagation();
-                clearTimeout(timeOutEvent);
-                if(timeOutEvent !=0 ){
-                    var src = $(this).attr("src");
-                    getImgSize(src);
-                    var gifId = $(this).attr("gifId");
-                    sendGifMsg(gifId);
-                    setTimeout(function(){ flag = false; }, 100);
-                }
-                return false;
+        touchstart: function(event){
+            event.preventDefault();
+            event.stopPropagation();
+            var gifId = $(this).attr("gifId");
+            var isDefault = $(this).attr("isDefault");
+            if(isDefault != "0") {
+                timeOutEvent = setTimeout("longEnterPress('"+gifId+"')",500);
             }
-        });
+        },
+        touchend: function(event){
+            event.preventDefault();
+            event.stopPropagation();
+            clearTimeout(timeOutEvent);
+            if(timeOutEvent !=0 ){
+                var src = $(this).attr("src");
+                getImgSize(src);
+                var gifId = $(this).attr("gifId");
+                sendGifMsg(gifId);
+                setTimeout(function(){ flag = false; }, 100);
+            }
+            return false;
+        }
+    });
 
 
     $(".del_gif").on({
@@ -327,12 +328,14 @@
         Y = moveEndY - startY;
 
         if ( Math.abs(X) > Math.abs(Y) && X > 10 ) {
+            ////右滑喜欢
             if(currentGifDivNum == 0) {
                 return;
             }
             rightSlide();
         }
         else if ( Math.abs(X) > Math.abs(Y) && X < -10 ) {
+            ////左滑不喜欢
             if(currentGifDivNum == (line-1)) {
                 return;
             }
