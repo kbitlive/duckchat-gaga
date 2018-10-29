@@ -20,7 +20,7 @@ return array(
     'test_curl' => "./index.php?action=installDB&for=test_curl",
     'session_verify_106' => 'http://127.0.0.1:8081/plugin.php?id=duckchat&action=api.session.verify&body_format=base64pb',
     "siteAddress" => '',
-    'error_logs' => '',
+    'errorLog' => '',
     'passport_cookie_name' => "duckchat_passport_cookie",
     'mail' =>
         array(
