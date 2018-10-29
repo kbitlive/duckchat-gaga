@@ -15,7 +15,8 @@ function getUrlParam(key)
     for(var i=0; i<paramsLength; i++) {
         var param = pathParams[i].split('=');
         if(param[0] == key) {
-            localStorage.setItem(refererUrlKey, param[1]);
+            var url = decodeURIComponent(param[1]);
+            localStorage.setItem(refererUrlKey, url);
         }
     }
 }

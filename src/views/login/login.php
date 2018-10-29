@@ -29,11 +29,10 @@
 
          localStorage.clear();
          if(landingPageUrl.indexOf("?")) {
-             landingPageUrl +="&from=duckchat&redirect_url="+location.href;
+             landingPageUrl +="&from=duckchat&redirect_url="+encodeURIComponent(location.href);
          }else{
-             landingPageUrl +="?from=duckchat&redirect_url="+location.href;
+             landingPageUrl +="?from=duckchat&redirect_url="+encodeURIComponent(location.href);
          }
-         landingPageUrl = encodeURI(landingPageUrl);
          window.location.href = landingPageUrl;
      }
 
