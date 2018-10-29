@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../../public/manage/config.css"/>
 
     <style>
-        .site-image {
+        .site-group-avatar {
             width: 30px;
             height: 30px;
             margin-top: 12px;
@@ -92,8 +92,7 @@
                         <div class="item-body-tail" id="group-avatar-img-id" fileId="<?php echo $avatar ?>">
 
                             <div class="item-body-value">
-                                <img id="group-avatar-img" class="site-image"
-                                     onclick="uploadFile('group-avatar-img-input')"
+                                <img id="group-avatar-img" class="site-group-avatar"
                                      src="/_api_file_download_/?fileId=<?php echo $avatar ?>"
                                      onerror="src='./../public/img/msg/group_default_avatar.png'">
 
@@ -301,46 +300,6 @@
 <script type="text/javascript" src="../../public/js/jquery-confirm.js"></script>
 
 <script type="text/javascript" src="../../public/manage/native.js"></script>
-
-<script type="text/javascript">
-
-    $(function () {
-        var fileId = $("#group-avatar-img-id").attr("fileId");
-        showImage(fileId, 'group-avatar-img');
-    });
-
-    function uploadFile(obj) {
-        // $("#" + obj).val("");
-        // $("#" + obj).click();
-    }
-
-    downloadFileUrl = "./index.php?action=http.file.downloadFile";
-
-
-    function showImage(fileId, htmlImgId) {
-
-        var requestUrl = "./_api_file_download_/test?fileId=" + fileId;
-
-        if (!isMobile()) {
-            requestUrl = downloadFileUrl + "&fileId=" + fileId + "&returnBase64=0";
-        }
-
-        var xhttp = new XMLHttpRequest();
-
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && (this.status == 200 || this.status == 304)) {
-                var blob = this.response;
-                var src = window.URL.createObjectURL(blob);
-                $("#" + htmlImgId).attr("src", src);
-            }
-        };
-        xhttp.open("GET", requestUrl, true);
-        xhttp.responseType = "blob";
-        // xhttp.setRequestHeader('Cache-Control', "max-age=2592000, public");
-        xhttp.send();
-    }
-
-</script>
 
 <script type="text/javascript">
 

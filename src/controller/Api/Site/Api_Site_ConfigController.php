@@ -130,8 +130,8 @@ class Api_Site_ConfigController extends \BaseController
             $base64Value = base64_encode($signatureRandom);
             return $base64Value;
         } catch (Exception $e) {
-            # TODO 正式代码，这里 throw exception
             $this->ctx->Wpf_Logger->info("api.site.config", $e);
+            throw $e;
         }
         return '';
     }

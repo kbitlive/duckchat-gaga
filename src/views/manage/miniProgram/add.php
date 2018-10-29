@@ -145,23 +145,23 @@
                 </div>
                 <div class="division-line"></div>
 
-<!--                <div class="item-row">-->
-<!--                    <div class="item-body">-->
-<!--                        <div class="item-body-display">-->
-<!--                            --><?php //if ($lang == "1") { ?>
-<!--                                <div class="item-body-desc">是否开启站点代理</div>-->
-<!--                            --><?php //} else { ?>
-<!--                                <div class="item-body-desc">Open Site Proxy</div>-->
-<!--                            --><?php //} ?>
-<!---->
-<!--                            <div class="item-body-tail">-->
-<!--                                <input id="openProxySwitch-id" class="weui_switch" type="checkbox">-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!---->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="division-line"></div>-->
+                <!--                <div class="item-row">-->
+                <!--                    <div class="item-body">-->
+                <!--                        <div class="item-body-display">-->
+                <!--                            --><?php //if ($lang == "1") { ?>
+                <!--                                <div class="item-body-desc">是否开启站点代理</div>-->
+                <!--                            --><?php //} else { ?>
+                <!--                                <div class="item-body-desc">Open Site Proxy</div>-->
+                <!--                            --><?php //} ?>
+                <!---->
+                <!--                            <div class="item-body-tail">-->
+                <!--                                <input id="openProxySwitch-id" class="weui_switch" type="checkbox">-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!---->
+                <!--                    </div>-->
+                <!--                </div>-->
+                <!--                <div class="division-line"></div>-->
 
             </div>
 
@@ -360,11 +360,28 @@
     <script type="text/javascript" src="../../public/jquery/jquery-weui.min.js"></script>
     <script type="text/javascript" src="../../public/manage/native.js"></script>
 
+    <script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
+
     <script type="text/javascript">
 
         function uploadMiniProgramIcon(obj) {
-            $("#" + obj).val("");
-            $("#" + obj).click();
+
+            if (isAndroid()) {
+                zalyjsImageUpload(uploadImageResult);
+            } else {
+                $("#" + obj).val("");
+                $("#" + obj).click();
+            }
+
+        }
+
+        function uploadImageResult(result) {
+
+            var fileId = result.fileId;
+
+            var newSrc = "/_api_file_download_/?fileId=" + fileId;
+
+            $(".site-image").attr("src", newSrc);
         }
 
         downloadFileUrl = "./index.php?action=http.file.downloadFile";
@@ -410,7 +427,7 @@
                             var res = JSON.parse(imageFileIdResult);
                             fileId = res.fileId;
                         }
-                        updateServerImage(fileId);
+                        // updateServerImage(fileId);
                     } else {
                         alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");
                     }
