@@ -777,7 +777,7 @@
     function deleteMiniProgram() {
         var lang = getLanguage();
         $.modal({
-            title: lang == 1 ? '删除小程序' : 'Delte Mini Program',
+            title: lang == 1 ? '删除小程序' : 'Delete Mini Program',
             text: lang == 1 ? '确定删除？' : 'Confirm Delete?',
             buttons: [
                 {
