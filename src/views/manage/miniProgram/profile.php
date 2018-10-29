@@ -363,7 +363,7 @@
                         <?php if ($lang == "1") { ?>
                             <div class="item-body-desc">删除小程序</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Delte Mini Program</div>
+                            <div class="item-body-desc">Delete Mini Program</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
@@ -777,7 +777,7 @@
     function deleteMiniProgram() {
         var lang = getLanguage();
         $.modal({
-            title: lang == 1 ? '删除小程序' : 'Delte Mini Program',
+            title: lang == 1 ? '删除小程序' : 'Delete Mini Program',
             text: lang == 1 ? '确定删除？' : 'Confirm Delete?',
             buttons: [
                 {
