@@ -73,9 +73,7 @@ class Api_File_DownloadController extends \BaseController
             }
 
             $content = $this->ctx->File_Manager->readFile($fileId);
-            if(strlen($content)<1) {
-                throw new Exception("download img void");
-            }
+
             if ($returnBase64) {
                 $response->setFileBase64(base64_encode($content));
             } else {

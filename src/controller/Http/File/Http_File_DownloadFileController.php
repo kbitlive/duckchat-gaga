@@ -57,11 +57,6 @@ class Http_File_DownloadFileController extends \HttpBaseController
                 }
             }
             $fileContent = $this->ctx->File_Manager->readFile($fileId);
-
-            if(strlen($fileContent)<1) {
-                throw new Exception("load file void");
-            }
-
             header('Cache-Control: max-age=86400, public');
             header("Content-type:$mimeType");
             if($mimeType == $this->documentMimeType) {
