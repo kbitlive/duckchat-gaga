@@ -59,7 +59,7 @@ class MiniProgram_Admin_PasswordLoginController extends MiniProgramController
             $passwordResetConfig = $loginConfig[LoginConfig::PASSWORD_RESET_WAY];
             $passwordResetWay = $passwordResetConfig["configValue"];
             $passwordErrorNumConfig = $loginConfig[LoginConfig::PASSWORD_ERROR_NUM];
-            $passwordErrorNum = $passwordErrorNumConfig['configValue'];
+            $passwordErrorNum = isset($passwordErrorNumConfig['configValue']) ? $passwordErrorNumConfig['configValue'] : "5" ;
             $passwordResetRequiredConfig = $loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED];
             $passwordResetRequired = $passwordResetRequiredConfig["configValue"];
 
