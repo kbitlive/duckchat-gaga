@@ -56,6 +56,8 @@ class Api_Passport_PasswordModifyPasswordController extends Api_Passport_Passwor
             $this->setRpcError($errorCode, $errorInfo);
             throw new Exception("loginName password is not match");
         }
+        $operateDate = date("Y-m-d", time());
+        $this->ctx->PassportPasswordCountLogTable->deleteCountLogDataByUserId($userInfo['userId'], $operateDate);
     }
 
     private function updatePasswordByLoginName($loginName, $password)
