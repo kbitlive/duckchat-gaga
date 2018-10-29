@@ -125,7 +125,8 @@
             }
 
             if(i==1) {
-                html += "<div class='gif_content_div'><img onclick='uploadFile(this)'   src='../../../public/img/add.png' class='add_gif'> </div>";
+                html += "<div class='gif_content_div'><img src='../../../public/img/add.png' class='add_gif'>  " +
+                    "<input id='gifFile' type='file' onchange='uploadFile(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
             }
 
             html +=template("tpl-gif", {
@@ -152,7 +153,8 @@
     } else {
         var html = '';
         html += "<div class='gif_div gif_div_0'  gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
-        html += "<div class='gif_content_div'><img  onclick='uploadFile(this)' src='../../../public/img/add.png' class='add_gif'> </div>";
+        html += "<div class='gif_content_div'><img src='../../../public/img/add.png' class='add_gif'>  " +
+            "<input id='gifFile' type='file' onchange='uploadFile(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
         html += "</div>";
         $(".zaly_container").append(html);
     }
@@ -175,34 +177,19 @@
         };
     }
 
-    // function uploadFile(obj) {
-    //     if (obj) {
-    //         if (obj.files) {
-    //             var formData = new FormData();
-    //             formData.append("file", obj.files.item(0));
-    //             formData.append("fileType", "FileImage");
-    //             formData.append("isMessageAttachment", false);
-    //             var src = window.URL.createObjectURL(obj.files.item(0));
-    //             getImgSize(src);
-    //             uploadFileToServer(formData, src);
-    //         }
-    //         return obj.value;
-    //     }
-    // }
-
-
-
-    function uploadImageResult(result) {
-
-        var fileId = result.fileId;
-        //update site logo
-        alert("upload==="+fileId);
-
-        updateServerGif(fileId);
-    }
-
     function uploadFile(obj) {
-        zalyjsImageUpload(uploadImageResult)
+        if (obj) {
+            if (obj.files) {
+                var formData = new FormData();
+                formData.append("file", obj.files.item(0));
+                formData.append("fileType", "FileImage");
+                formData.append("isMessageAttachment", false);
+                var src = window.URL.createObjectURL(obj.files.item(0));
+                getImgSize(src);
+                uploadFileToServer(formData, src);
+            }
+            return obj.value;
+        }
     }
 
     function isMobile() {
@@ -212,37 +199,37 @@
         return false;
     }
 
-    //
-    // function uploadFileToServer(formData, src) {
-    //     var url = "./index.php?action=http.file.uploadWeb";
-    //
-    //     if (isMobile()) {
-    //         url = "/_api_file_upload_/?fileType=1";  //fileType=1,表示文件
-    //     }
-    //
-    //     $.ajax({
-    //         url: url,
-    //         type: "post",
-    //         data: formData,
-    //         contentType: false,
-    //         processData: false,
-    //         success: function (imageFileIdResult) {
-    //             if (imageFileIdResult) {
-    //                 var fileId = imageFileIdResult;
-    //                 if (isMobile()) {
-    //                     var res = JSON.parse(imageFileIdResult);
-    //                     fileId = res.fileId;
-    //                 }
-    //                 updateServerGif(fileId);
-    //             } else {
-    //                 alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");
-    //             }
-    //         },
-    //         error: function (err) {
-    //             alert(getLanguage() == 1 ? "上传失败 " : "upload failed");
-    //         }
-    //     });
-    // }
+
+    function uploadFileToServer(formData, src) {
+        var url = "./index.php?action=http.file.uploadWeb";
+
+        if (isMobile()) {
+            url = "/_api_file_upload_/?fileType=1";  //fileType=1,表示文件
+        }
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (imageFileIdResult) {
+                if (imageFileIdResult) {
+                    var fileId = imageFileIdResult;
+                    if (isMobile()) {
+                        var res = JSON.parse(imageFileIdResult);
+                        fileId = res.fileId;
+                    }
+                    updateServerGif(fileId);
+                } else {
+                    alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");
+                }
+            },
+            error: function (err) {
+                alert(getLanguage() == 1 ? "上传失败 " : "upload failed");
+            }
+        });
+    }
 
 
     $(".add_gif").on({
@@ -254,7 +241,8 @@
         touchend: function(event){
             event.preventDefault();
             event.stopPropagation();
-            $(".add_gif").click();
+            $("#gifFile").val("");
+            $("#gifFile").click();
             return false;
         }
     });
@@ -291,7 +279,7 @@
                 getImgSize(src);
                 var gifId = $(this).attr("gifId");
                 sendGifMsg(gifId);
-                setTimeout(function(){ flag = false; }, 500);
+                setTimeout(function(){ flag = false; }, 100);
             }
             return false;
         }
@@ -305,6 +293,7 @@
         },
         touchend: function(event){
             var gifId = $(this).attr("gifId");
+            console.log("del gifId =="+gifId);
             var reqData = {
                 gifId : gifId,
                 type:delGifType,
@@ -356,7 +345,6 @@
 
     function sendPostToServer(reqData, type)
     {
-        alert(JSON.stringify(reqData));
         $.ajax({
             method: "POST",
             url:"./index.php?action=miniProgram.gif.index&lang="+languageNum,
@@ -368,14 +356,11 @@
                     return false;
                 }
                 if(type == addGifType) {
-                    // window.location.reload();
+                    window.location.reload();
                 }
                 if(type == delGifType) {
-                    // window.location.reload();
+                    window.location.reload();
                 }
-            },
-            fail:function (error) {
-                alert(JSON.stringify(error));
             }
         });
     }
@@ -394,8 +379,8 @@
         var reqData = {
             gifId : fileId,
             type:addGifType,
-            // width:imgObject.width,
-            // height:imgObject.height
+            width:imgObject.width,
+            height:imgObject.height
         }
         sendPostToServer(reqData, addGifType);
     }
