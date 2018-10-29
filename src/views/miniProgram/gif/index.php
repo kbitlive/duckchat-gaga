@@ -98,8 +98,8 @@
 
     var languageNum = getLanguage();
 
-    if(gifLength>1) {
-        for(var i=1; i<gifLength ;i ++) {
+    if(gifLength>0) {
+        for(var i=0; i<gifLength ;i ++) {
             var gif = gifArr[i];
             var gifId = "";
             var gifUrl="";
@@ -111,7 +111,7 @@
             }catch (error) {
                 gifId="";
             }
-            if(i == 1) {
+            if(i == 0) {
                 var html = '';
                 line = line+1;
                 html += "<div class='gif_div gif_div_0'  gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
@@ -123,7 +123,7 @@
                 html += "<div class='gif_div gif_div_hidden gif_div_"+divNum+"' gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
             }
 
-            if(i==1) {
+            if(i==0) {
                 html += "<div class='gif_content_div'><img src='../../../public/img/add.png' class='add_gif'>  " +
                     "<input id='gifFile' type='file' onchange='uploadFile(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
             }
