@@ -191,14 +191,14 @@ class Api_Site_ConfigController extends \BaseController
 
             $addressForAPi = "";
             $addressForIM = "";
-            if (isset($zalyPort) && $zalyPort > 0 && $zalyPort < 65535) {
+            if (!empty($zalyPort) && is_numeric($zalyPort) && $zalyPort > 0 && $zalyPort < 65535) {
                 //support zaly protocol
                 $addressForAPi = $this->buildAddress("zaly", $host, $zalyPort);
                 $addressForIM = $this->buildAddress("zaly", $host, $zalyPort);
             } elseif (!empty($wsAddress)) {
                 $addressForAPi = $this->buildAddress($scheme, $host, $port);
                 $addressForIM = $wsAddress;
-            } elseif (isset($wsPort) && $wsPort > 0 && $wsPort < 65535) {
+            } elseif (!empty($wsPort) && is_numeric($wsPort) && $wsPort > 0 && $wsPort < 65535) {
                 //兼容旧的设计模式，使用zalyPort自动组装
                 //support ws protocol
                 $addressForAPi = $this->buildAddress($scheme, $host, $port);
