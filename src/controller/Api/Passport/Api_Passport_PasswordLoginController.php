@@ -5,7 +5,7 @@
  * Date: 23/08/2018
  * Time: 4:37 PM
  */
-class Api_Passport_PasswordLoginController extends BaseController
+class Api_Passport_PasswordLoginController extends Api_Passport_PasswordBase
 {
     private $classNameForRequest = '\Zaly\Proto\Site\ApiPassportPasswordLoginRequest';
     private $classNameForResponse = '\Zaly\Proto\Site\ApiPassportPasswordLoginResponse';
@@ -50,6 +50,7 @@ class Api_Passport_PasswordLoginController extends BaseController
 
     private function  verifyUserInfo($loginName, $password)
     {
+        $tag = __CLASS__.'->'.__FUNCTION__;
         $user = $this->ctx->PassportPasswordTable->getUserByLoginName($loginName);
 
         if(!$user) {
@@ -58,14 +59,21 @@ class Api_Passport_PasswordLoginController extends BaseController
                 $this->setRpcError($errorCode, $errorInfo);
                 throw new Exception("loginName is not exist");
         }
+
+        $this->checkPasswordErrorNum($user['userId']);
+
         if(!password_verify($password, $user['password'])) {
+            $this->insertPassportPasswordLog($user, 1);
             $errorCode = $this->zalyError->errorMatchLogin;
             $errorInfo = $this->zalyError->getErrorInfo($errorCode);
             $this->setRpcError($errorCode, $errorInfo);
             throw new Exception("loginName password is not match");
         }
+        $operateDate = date("Y-m-d", time());
+        $this->ctx->PassportPasswordCountLogTable->deleteCountLogDataByUserId($user['userId'], $operateDate);
         return $user;
     }
+
 
     private function generatePreSessionId($user, $sitePubkPem)
     {

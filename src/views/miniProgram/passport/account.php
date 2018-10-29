@@ -252,16 +252,20 @@
             url:"./index.php?action=miniProgram.passport.account&lang="+languageNum,
             data: {"loginName" : loginName},
             success:function (resp, status, request) {
-                var error = JSON.parse(resp);
-                if(error["errCode"].length>1 && error["errCode"] != "success") {
-                    zalyjsAlert(error['errCode']);
-                    return;
-                }
-                try{
-                    zalyjsNavClosePlugin();
-                }catch (error) {
+               try{
+                   var error = JSON.parse(resp);
+                   if(error["errCode"].length>1 && error["errCode"] != "success") {
+                       zalyjsAlert(error['errCode']);
+                       return;
+                   }
+                   try{
+                       zalyjsNavClosePlugin();
+                   }catch (error) {
 
-                }
+                   }
+               }catch (error) {
+                   zalyjsNavClosePlugin();
+               }
             },
             failed:function (error) {
                 console.log(error);

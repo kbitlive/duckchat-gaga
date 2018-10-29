@@ -2,8 +2,6 @@
 $(".left-body-chatsession").html("");
 $(".right-chatbox").html("");
 
-
-
 function showMsgWebNotification(msg, msgContent)
 {
     var msgId = msg.msgId;
@@ -43,7 +41,10 @@ function showMsgWebNotification(msg, msgContent)
 
     if(document.hidden && (mute == 0)) {
         if(window.Notification && Notification.permission !== "denied"){
-            new Notification(notification, {"tag":siteConfig.serverAddressForApi, "icon":icon,  renotify: true});
+            var notification = new Notification(notification, {"tag":siteConfig.serverAddressForApi, "icon":icon,  renotify: true});
+            notification.onclick = function(event) {
+                window.focus();
+            }
         }
     }
 }
@@ -54,10 +55,13 @@ function showOtherWebNotification()
         var siteConfigStr = localStorage.getItem(siteConfigKey);
         var siteConfig = JSON.parse(siteConfigStr);
         var icon = siteConfig.logo == undefined ? "" : siteConfig.logo;
-        icon  =  downloadFileUrl + "&fileId="+icon+"&returnBase64=0&lang="+languageNum;
+        icon = downloadFileUrl + "&fileId=" + icon + "&returnBase64=0&lang=" + languageNum;
         var notification = languageNum == UserClientLangZH ? "新的好友请求" : "new friend apply request";
-        if(window.Notification && Notification.permission !== "denied"){
-            new Notification(notification, {"tag":siteConfig.serverAddressForApi, "icon":icon });
+        if (window.Notification && Notification.permission !== "denied") {
+            var notification = new Notification(notification, {"tag": siteConfig.serverAddressForApi, "icon": icon});
+            notification.onclick = function (event) {
+                window.focus();
+            }
         }
     }
 }
@@ -453,15 +457,7 @@ function logout(event)
     event.stopPropagation();
     var tip = $.i18n.map['logoutJsTip'] != undefined ? $.i18n.map['logoutJsTip']: "退出账号，将会清空聊天记录";
     if(confirm(tip)) {
-        $.ajax({
-            method: "POST",
-            url:"./index.php?action=page.logout",
-            data: "",
-            success:function (resp) {
-                localStorage.clear();
-                window.location.href = landingPageUrl;
-            }
-        });
+        window.location.href = "./index.php?action=page.logout";
     }
 }
 
@@ -660,7 +656,10 @@ function appendGroupListHtml(results) {
         return ;
     }
     var groupList = results.list;
+
     if(groupList) {
+        var groupCount = "("+results.totalCount+")";
+        $(".group-count").html(groupCount);
         groupOffset = Number(groupOffset + defaultCountKey);
         var groupLength = groupList.length;
         html = "";
@@ -940,6 +939,8 @@ function displayGroupMemberForGroupInfo(results)
     var list = results.list;
     $(".group-member-body").html("");
     if(list) {
+        var memberCount = "("+results.totalCount+")";
+        $(".group-member-count").html(memberCount);
         var length = list.length;
         var html = "";
         var bodyDivNum = undefined;
@@ -1892,6 +1893,7 @@ $(document).on("click", ".contact-row-group-profile", function () {
     }
     localStorage.setItem(chatSessionIdKey, groupId);
     localStorage.setItem(groupId, GROUP_MSG);
+    $(".right-chatbox").attr("chat-session-id", groupId);
 
     handleClickRowGroupProfile(groupId);
 });
@@ -2158,6 +2160,9 @@ function  appendFriendListHtml(results)
     }
     var u2List = results.friends;
     if(u2List) {
+        var friendCount = "("+results.totalCount+"人)";
+        $(".friend-count").html(friendCount);
+
         friendOffset = Number(friendOffset + defaultCountKey);
         var u2Length = u2List.length;
         for(i=0; i<u2Length; i++) {
@@ -2205,6 +2210,7 @@ $('.friend-list-contact-row').scroll(function(event){
 
 function getFriendProfileByClickChatSessionRow(jqElement)
 {
+
     var userId = jqElement.attr("chat-session-id");
     if(userId == undefined) {
         return false;
@@ -2235,10 +2241,12 @@ $(document).on("click", ".contact-row-u2-profile", function () {
     if(userId == undefined) {
         return false;
     }
-    sendFriendProfileReq(userId, handleGetFriendProfile);
-
     localStorage.setItem(chatSessionIdKey, userId);
     localStorage.setItem(userId, U2_MSG);
+    $(".right-chatbox").attr("chat-session-id", userId);
+
+    sendFriendProfileReq(userId, handleGetFriendProfile);
+
     $(".user-image-for-add").attr("class", "user-image-for-add");
     $(".user-image-for-add").attr("src", "../../public/img/msg/default_user.png");
     insertU2Room($(this), userId);
@@ -2618,7 +2626,7 @@ $(document).mouseup(function(e){
     if(targetId != "selfAvatarUploadDiv" && targetId != "selfNickname" && targetId != "logout" && targetId != "logout-span"
         && targetId != "self-qrcode" && targetId != "user-image-upload" && targetId != "user-img-carmera"
         &&targetClassName != "nickNameDiv" && targetId !="selfQrcodeDiv" && targetId !="selfQrcodeCanvas" && targetId != "selfQrcode"
-        && targetClassName != "self-qrcode") {
+        && targetClassName != "self-qrcode" && targetId != "clear_all_chat" && targetClassName != "clear_all_chat") {
         $("#selfInfo").remove();
     }
 });
@@ -3032,12 +3040,14 @@ function searchUserByKeyDown(event)
         return;
     }
     isSearchUser = true;
+    setTimeout(function () {
+        isSearchUser = false;
+    }, 2000);
     searchUser();
 }
 
 function searchUserByOnBlur() {
     if(isSearchUser == true) {
-        isSearchUser = false;
         return;
     }
     searchUser();
@@ -3060,6 +3070,8 @@ function searchUser() {
 
 function handleSearchUser(results)
 {
+    isSearchUser = false;
+
     if(results.hasOwnProperty("friends")) {
         var friends = results.friends;
         var friendsLength = friends.length;
@@ -3196,12 +3208,19 @@ $(document).on("click", ".agreed-apply", function () {
 $(document).on("click", ".chatsession-row", function(){
     var roomType = $(this).attr("roomType");
     var chatSessionId = $(this).attr("chat-session-id");
-    updateRoomChatSessionContent(chatSessionId);
+    localStorage.setItem(chatSessionIdKey, chatSessionId);
+
+    $(".right-chatbox").attr("chat-session-id", chatSessionId);
     if(roomType == U2_MSG) {
+        localStorage.setItem(chatSessionId, U2_MSG);
         getFriendProfileByClickChatSessionRow($(this));
     } else if(roomType == GROUP_MSG) {
+        localStorage.setItem(chatSessionId, U2_MSG);
         getGroupProfileByClickChatSessionRow($(this));
     }
+    updateRoomChatSessionContent(chatSessionId);
+    addActiveForRoomList($(this));
+
 });
 
 // click msg image , open a new window
@@ -3264,6 +3283,15 @@ function checkOsVersion()
 
 //---------------------------------------msg dialog-------------------------------------------------
 
+$(document).on("click", ".clear_room_chat", function () {
+    var roomId = localStorage.getItem(chatSessionIdKey);
+    var tip = languageNum == UserClientLangZH ?  "将删除聊天记录，确认？" : "Sure?" ;
+    if(confirm(tip)) {
+        $(".right-chatbox").html("");
+        clearRoomMsgFromRoomList(roomId);
+    }
+});
+
 function handleMsgRelation(jqElement, chatSessionId)
 {
     if(jqElement != undefined) {
@@ -3316,8 +3344,6 @@ function displayRightPage(displayType)
     }
 }
 
-
-
 $(".input-box").on("click",function () {
     $(".msg_content").focus()
 });
@@ -3332,10 +3358,6 @@ function addActiveForPwContactRow(jqElement)
     }
     jqElement.addClass("chatsession-row-active");
 }
-
-$(document).on("click", ".chatsession-row", function (e) {
-    addActiveForRoomList($(this));
-});
 
 function addActiveForRoomList(jqElement)
 {
@@ -3356,6 +3378,8 @@ $(document).on("click", ".send_msg" , function(){
     sendMsgBySend();
 });
 
+
+
 //发送消息
 function sendMsgBySend()
 {
@@ -3368,6 +3392,8 @@ function sendMsgBySend()
     if(imgData) {
         uploadMsgImgFromCopy(imgData);
     }
+
+    msgContent = trimString(msgContent);
 
     if(msgContent.length < 1) {
         return false;

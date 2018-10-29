@@ -37,7 +37,7 @@
     <div class="zaly_protocol_operation">
         <button class="zaly_protocol_sure " data-local-value="agreeTip">同意并继续</button>
     </div>
-    <div class="zaly_protocol_cancel">不同意可直接关掉该浏览器</div>
+    <div class="zaly_protocol_cancel" data-local-value="unagreeProtocolTip">不同意可直接关掉该浏览器</div>
 </div>
 
 </script>

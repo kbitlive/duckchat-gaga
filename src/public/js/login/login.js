@@ -47,12 +47,6 @@ isSending  = false;
 updateInvitationCodeType = "update_invitation_code";
 registerLoginName=undefined
 registerPassword=undefined
-refererUrl = document.referrer;
-refererUrlKey = "documentReferer";
-if(refererUrl.length>0) {
-    localStorage.setItem(refererUrlKey, refererUrl);
-    refererUrlKeyVal = localStorage.getItem(refererUrlKey);
-}
 
 var protocol = window.location.protocol;
 var host = window.location.host;
@@ -60,8 +54,7 @@ var pathname = window.location.pathname;
 originDomain = protocol+"//"+host+pathname;
 isRegister=false;
 
-var errorUserNeedRegister = "error.user.needRegister";
-var errorInvitationCode = "error.invitation.code";
+var siteName = $(".siteName").val();
 
 function setDocumentTitle(type)
 {
@@ -70,16 +63,16 @@ function setDocumentTitle(type)
         case "login":
             document.title = "login";
             if(languageName == "zh") {
-                document.title = "登录";
+                document.title = "登录-"+siteName;
             } else {
-                document.title = "login";
+                document.title = "login-"+siteName;
             }
             break;
         case "register":
             if(languageName == "zh") {
-                document.title = "注册";
+                document.title = "注册-"+siteName;
             } else {
-                document.title = "Register";
+                document.title = "Register-"+siteName;
             }
             break;
     }
@@ -280,14 +273,6 @@ $(document).on("mouseover", "#powered_by_duckchat", function () {
 $(document).on("mouseout", "#powered_by_duckchat", function () {
     $(".duckchat_website")[0].style.textDecoration = "none";
 });
-function addJsByDynamic(url)
-{
-    var script = document.createElement("script")
-    script.type = "text/javascript";
-    //Firefox, Opera, Chrome, Safari 3+
-    script.src = url;
-    $(".zaly_container")[0].appendChild(script);
-}
 
 function changeImgByClickPwd() {
     var imgType = $(".pwd").attr("img_type");
@@ -531,6 +516,7 @@ function registerAndLogin()
 
     if(isType == updateInvitationCodeType) {
         showLoading($(".site_login_div"));
+        cancelLoadingBySelf();
         apiPassportPasswordLogin(updatePassportPasswordInvitationCode);
     } else {
         var flag = checkRegisterInfo();
@@ -538,9 +524,9 @@ function registerAndLogin()
             return false;
         }
         showLoading($(".site_login_div"));
+        cancelLoadingBySelf();
         zalyjsWebCheckUserExists(loginNameNotExist, loginNameExist);
     }
-    cancelLoadingBySelf();
 }
 
 ///更新邀请码，并且登录site
@@ -703,7 +689,6 @@ function displayInvitationCode()
             return false;
         }
         isRegister = true;
-        cancelLoadingBySelf();
         zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailed);
     } else {
         $(".zaly_login_by_pwd")[0].style.display = "none";

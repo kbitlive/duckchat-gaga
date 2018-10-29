@@ -408,6 +408,25 @@ class SiteGroupUserTable extends BaseTable
         }
     }
 
+    public function getNotUserGroup($userId, $offset, $limit)
+    {
+        $startTime = microtime(true);
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        try {
+            $sql = "select groupId from $this->table where userId!=:userId limit :offset,:limit;";
+            $prepare = $this->dbSlave->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->bindValue(":userId", $userId);
+            $prepare->bindValue(":offset", $offset);
+            $prepare->bindValue(":limit", $limit);
+            $prepare->execute();
+            $results = $prepare->fetchAll(\PDO::FETCH_ASSOC);
+            $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, " userId =" . $userId, $startTime);
+            return $results;
+        } finally {
+            $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, $userId, $startTime);
+        }
+    }
 
     /**
      * 判断userids是否在群中，返回在群中的userId

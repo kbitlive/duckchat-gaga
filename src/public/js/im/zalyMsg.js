@@ -16,6 +16,8 @@ function getRoomList()
 
     var length = roomList.length;
     var currentChatSessionId  = localStorage.getItem(chatSessionIdKey);
+    $(".right-chatbox").attr("chat-session-id", currentChatSessionId);
+
     getMsgFromRoom(currentChatSessionId);
 
     var i;
@@ -76,7 +78,7 @@ function handleRoomListFromLocalStorage(roomMsg)
     }
 }
 
-function removeRoomFromRoomList(chatSessionId)
+function clearRoomMsgFromRoomList(chatSessionId)
 {
     var roomListStr = localStorage.getItem(roomListKey);
     var roomList;
@@ -85,19 +87,26 @@ function removeRoomFromRoomList(chatSessionId)
     } else {
         roomList = new Array();
     }
-    if(chatSessionId != undefined) {
-        var length = roomList.length;
-        var i;
-        for(i =0; i<length;  i++) {
-            var msg = roomList[i];
-            if(msg!=null && msg != false &&  msg.hasOwnProperty("chatSessionId") && msg.chatSessionId == chatSessionId) {
-                roomList.splice(i, 1);
+    var length = roomList.length;
+    var i;
+    for(i =0; i<length;  i++) {
+        var msg = roomList[i];
+        if(msg!=null && msg != false && msg != undefined &&  msg.hasOwnProperty("chatSessionId")) {
+            if(chatSessionId == undefined) {
+                localStorage.removeItem(roomKey+msg.chatSessionId);
+                msg.type = MessageType.MessageText;
+                msg.text = {body:""};
+                $(".chatsession-row-desc-"+msg.chatSessionId).html("");
+            } else if (msg.chatSessionId == chatSessionId){
+                localStorage.removeItem(roomKey+msg.chatSessionId)
+                msg.type = MessageType.MessageText;
+                msg.text = {body:""};
+                $(".chatsession-row-desc-"+msg.chatSessionId).html("");
             }
         }
+        roomList[i] = msg;
     }
-    roomList.sort(compare);
     localStorage.setItem(roomListKey, JSON.stringify(roomList));
-    return roomList;
 }
 
 function getMsgContentForChatSession(msg)
@@ -141,7 +150,7 @@ function getMsgContentForChatSession(msg)
 
 //----------------------------------handle room list--------------------------------------------------------------------------
 
-function updateRoomChatSessionContentFoMsg(msg, nodes, msgContent) {
+function updateRoomChatSessionContentForMsg(msg, nodes, msgContent) {
 
     var msgTime = msg.msgTime != undefined ? msg.msgTime : msg.timeServer;
     msgTime = getRoomMsgTime(msgTime);
@@ -187,7 +196,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
 
     if(nodes.length) {
         if($(nodes).attr("msg_time") < msg.timeServer) {
-            updateRoomChatSessionContentFoMsg(msg, nodes, msgContent);
+            updateRoomChatSessionContentForMsg(msg, nodes, msgContent);
             sortRoomList($(nodes));
         }
         if(msg.chatSessionId == localStorage.getItem(chatSessionIdKey)) {
@@ -252,10 +261,12 @@ function updateRoomChatSessionContent(chatSessionId)
         if(msg.chatSessionId == chatSessionId) {
             msg = handleMsgInfo(msg);
             var msgContent = getMsgContentForChatSession(msg);
-            updateRoomChatSessionContentFoMsg(msg, nodes, msgContent);
+            updateRoomChatSessionContentForMsg(msg, nodes, msgContent);
         }
     }
 }
+
+
 //----------------------------------handle msg info --------------------------------------------------------------------------
 
 function handleMsgInfo(msg)
@@ -602,8 +613,8 @@ function updateMsgPointer(reqData)
 
 function getMsgFromRoom(chatSessionId)
 {
-    clearRoomUnreadMsgNum(chatSessionId);
 
+    clearRoomUnreadMsgNum(chatSessionId);
     var msgList = handleMsgForMsgRoom(chatSessionId, undefined);
 
     $(".right-chatbox").html("");
@@ -620,6 +631,7 @@ function getMsgFromRoom(chatSessionId)
             appendMsgHtmlToChatDialog(msg);
         }
     }
+
     var jqElement = $(".chat_session_id_"+chatSessionId);
     addActiveForRoomList(jqElement);
     msgBoxScrollToBottom();
@@ -835,7 +847,7 @@ function getWebMessageSize(imageNaturalHeight, imageNaturalWidth, h, w)
     return webObject;
 }
 
-function getMsgImgSrc(msg, msgId)
+function getMsgImgSrc(msg)
 {
     if(msg.hasOwnProperty("image")) {
         var imgId = msg['image'].url;
@@ -843,9 +855,9 @@ function getMsgImgSrc(msg, msgId)
         var src =  localStorage.getItem(imgUrlKey);
         if(!src) {
             var isGroupMessage = msg.roomType == GROUP_MSG ? 1 : 0;
-            getMsgImg(imgId, isGroupMessage, msgId);
+            getMsgImg(imgId, isGroupMessage, msg.msgId);
         } else {
-            $(".msg-img-"+msgId).attr("src", src);
+            $(".msg-img-"+msg.msgId).attr("src", src);
         }
         localStorage.removeItem(imgUrlKey);
     }
@@ -1019,8 +1031,9 @@ function IsURL (url) {
     return true;
 }
 
-//---------------------------------------------append msg html to chat dialog-------------------------------------------------
 
+//---------------------------------------------append msg html to chat dialog-------------------------------------------------
+expendTime=0;
 function appendMsgHtmlToChatDialog(msg)
 {
     if(msg == undefined) {
@@ -1267,19 +1280,20 @@ function appendMsgHtmlToChatDialog(msg)
         }
     }
 
-
-
     if(msgType == MessageType.MessageText) {
         html = handleMsgContentText(html);
     }
 
-    // html = "请前往客户端查看web消息";
-    $(".right-chatbox").append(html);
-    getNotMsgImg(msg.fromUserId,msg.userAvatar);
-    getMsgImgSrc(msg, msgId);
+    var currentChatsessionId = localStorage.getItem(chatSessionIdKey);
+    if(currentChatsessionId == msg.chatSessionId) {
+        $(".right-chatbox[chat-session-id="+msg.chatSessionId+"]").append(html);
+        setTimeout(function () {
+            getNotMsgImg(msg.fromUserId,msg.userAvatar);
+            getMsgImgSrc(msg);
+        }, 50);
+    }
+
 }
-
-
 
 //---------------------------------------------upload file -------------------------------------------------
 function uploadMsgFileFromInput(obj, fileType) {

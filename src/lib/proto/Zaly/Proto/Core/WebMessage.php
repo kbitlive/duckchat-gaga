@@ -26,8 +26,10 @@ class WebMessage extends \Google\Protobuf\Internal\Message
      */
     private $height = 0;
     /**
-     *string hrefURL  = 4;
-     *
+     * Generated from protobuf field <code>string hrefURL = 4;</code>
+     */
+    private $hrefURL = '';
+    /**
      * Generated from protobuf field <code>string title = 5;</code>
      */
     private $title = '';
@@ -112,8 +114,28 @@ class WebMessage extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *string hrefURL  = 4;
-     *
+     * Generated from protobuf field <code>string hrefURL = 4;</code>
+     * @return string
+     */
+    public function getHrefURL()
+    {
+        return $this->hrefURL;
+    }
+
+    /**
+     * Generated from protobuf field <code>string hrefURL = 4;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setHrefURL($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->hrefURL = $var;
+
+        return $this;
+    }
+
+    /**
      * Generated from protobuf field <code>string title = 5;</code>
      * @return string
      */
@@ -123,8 +145,6 @@ class WebMessage extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *string hrefURL  = 4;
-     *
      * Generated from protobuf field <code>string title = 5;</code>
      * @param string $var
      * @return $this

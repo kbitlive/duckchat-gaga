@@ -2,21 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>登录</title>
+    <title>登录-<?php echo $siteName;?></title>
     <!-- Latest compiled and minified CSS -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="../../public/css/login.css?_version=<?php echo $versionCode?>">
     <script type="text/javascript" src="../../public/js/jquery.min.js"></script>
     <script src="../../public/js/jquery.i18n.properties.min.js"></script>
-        <script src="../../public/js/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
+    <script src="../../public/js/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/template-web.js"></script>
-    <script src="../../public/js/zalyjsHelper.js"></script>
-
+    <script src="../../public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
 
 </head>
 
 <body>
+<input type="hidden" value="<?php echo $siteName;?>" class="siteName">
 <div class="site-warning"></div>
     <div style="position: relative; width:100%;height:100%;" class="site_login_div">
 
@@ -28,7 +28,7 @@
             </div>
         <?php } ?>
 
-
+<?php if ($isDuckchat != 1) {?>
         <?php if ($loginBackgroundImage) { ?>
 
                 <?php if ($loginBackgroundImageDisplay == 0 ) { ?>
@@ -57,7 +57,7 @@
                     <?php } ?>
                 <?php } ?>
             </div>
-
+<?php } ?>
         <div style="" class="login_div_container">
                 <div class="login_container">
                     <input type="hidden" value="<?php echo $loginNameAlias;?>" class="loginNameAlias">
@@ -167,7 +167,6 @@
 <?php include(dirname(__DIR__) . '/passport/template_login.php'); ?>
 
 <input type="hidden" value="<?php echo $isDuckchat; ?>" class="isDuckchat">
-<script src="../../public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/im/zalyClient.js?_version=<?php echo $versionCode?>"></script>

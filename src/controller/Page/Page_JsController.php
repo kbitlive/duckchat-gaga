@@ -35,6 +35,7 @@ class Page_JsController extends  HttpBaseController
                 echo "fail";
             }
         } else {
+            header("Content-Type:application/javascript; charset=utf-8");
             if($userInfo) {
                 echo "$callBackSuccess()";
             } else {

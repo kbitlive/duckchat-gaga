@@ -373,10 +373,6 @@ input:active,
 .update_code_btn:hover,
 .update_code_btn:focus,
 .update_code_btn:active,
-.register_code_button,
-.register_code_button:hover,
-.register_code_button:focus,
-.register_code_button:active,
 .login_button,
 .login_button:hover,
 .login_button:focus,
@@ -393,8 +389,12 @@ input:active,
 .register_button,
 .register_button:hover,
 .register_button:focus,
-.register_button:active {
-    margin-top:5rem;
+.register_button:active,
+.register_code_button,
+.register_code_button:hover,
+.register_code_button:focus,
+.register_code_button:active{
+    margin-top:4rem;
     width:28.14rem;
     height:4.69rem;
     background:rgba(76,59,177,1);
@@ -439,23 +439,13 @@ input:active,
     outline: none;
 }
 
-.line {
+.line,.register_line {
     width:28.14rem;
-    height:0.09rem;
+    height:1px;
     margin:0px auto;
     background:rgba(153,153,153,1);
     border-radius:0.42rem;
     overflow:hidden;
-}
-
-.register_line {
-    width:28.14rem;
-    height:0.1rem;
-    margin:0px auto;
-    background:rgba(153,153,153,1);
-    border-radius:0.42rem;
-    overflow:hidden;
-    margin-top: 0.06rem;
 }
 .outline{
     border:1px solid rgba(76,59,177,1);
@@ -513,7 +503,10 @@ input:active,
     .login_name_div {
         margin-top: 3rem;
     }
-    .login_button {
+    .login_button,
+    .login_button:hover,
+    .login_button:focus,
+    .login_button.active{
         margin-top: 5rem;
     }
     .mobile_slogn_div {
@@ -537,7 +530,7 @@ input:active,
 
 }
 
-@media (max-height: 300px) {
+@media (max-height: 500px) {
     .mobile_slogn_div {
         display: none;
     }

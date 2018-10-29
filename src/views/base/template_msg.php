@@ -422,7 +422,7 @@
 
         <div style="text-align: center;margin:0.12rem auto;width: 34rem; height:1px;background:rgba(223,223,223,1);" ></div>
         <div class="d-flex flex-row justify-content-center">
-            <div class="self-qrcode" id="logout" >
+            <div class="self_profile_item self-qrcode" id="logout" >
                 <span class="logout-span" id="logout-span" data-local-value="logoutTip" onclick="logout(event)">退出</span>
             </div>
         </div>
@@ -637,6 +637,9 @@
 
 <script id="tpl-add-friend-div" type="text/html">
 
+        <div class="close_div">
+            <img src="../../public/img/close.png" onclick="closeMaskDiv('#add-friend-div');">
+        </div>
         <div class="flex-container justify-content-center" >
             <div class="header_tip_font  align-items-center" style="margin-top: 6rem;" data-local-value="addFriendTip">添加好友</div>
         </div>

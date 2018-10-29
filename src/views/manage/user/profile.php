@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../../public/manage/config.css"/>
     <style>
 
-        .site-image {
+        .site-user-avatar {
             width: 30px;
             height: 30px;
             margin-top: 12px;
@@ -20,119 +20,10 @@
     </style>
 
     <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript">
+    <script type="text/javascript" src="../../public/manage/native.js"></script>
 
-        function isAndroid() {
+    <script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
 
-            var userAgent = window.navigator.userAgent.toLowerCase();
-            if (userAgent.indexOf("android") != -1) {
-                return true;
-            }
-
-            return false;
-        }
-
-        function isMobile() {
-            if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-                return true;
-            }
-            return false;
-        }
-
-        function getLanguage() {
-            var nl = navigator.language;
-            if ("zh-cn" == nl || "zh-CN" == nl) {
-                return 1;
-            }
-            return 0;
-        }
-
-
-        function zalyjsAjaxPostJSON(url, body, callback) {
-            zalyjsAjaxPost(url, jsonToQueryString(body), function (data) {
-                var json = JSON.parse(data)
-                callback(json)
-            })
-        }
-
-
-        function zalyjsNavOpenPage(url) {
-            var messageBody = {}
-            messageBody["url"] = url
-            messageBody = JSON.stringify(messageBody)
-
-            if (isAndroid()) {
-                window.Android.zalyjsNavOpenPage(messageBody)
-            } else {
-                window.webkit.messageHandlers.zalyjsNavOpenPage.postMessage(messageBody)
-            }
-        }
-
-        function zalyjsCommonAjaxGet(url, callBack) {
-            $.ajax({
-                url: url,
-                method: "GET",
-                success: function (result) {
-
-                    callBack(url, result);
-
-                },
-                error: function (err) {
-                    alert("error");
-                }
-            });
-
-        }
-
-
-        function zalyjsCommonAjaxPost(url, value, callBack) {
-            $.ajax({
-                url: url,
-                method: "POST",
-                data: value,
-                success: function (result) {
-                    callBack(url, value, result);
-                },
-                error: function (err) {
-                    alert("error");
-                }
-            });
-
-        }
-
-        function zalyjsCommonAjaxPostJson(url, jsonBody, callBack) {
-            $.ajax({
-                url: url,
-                method: "POST",
-                data: jsonBody,
-                success: function (result) {
-
-                    callBack(url, jsonBody, result);
-
-                },
-                error: function (err) {
-                    alert("error");
-                }
-            });
-
-        }
-
-        /**
-         * _blank    在新窗口中打开被链接文档。
-         * _self    默认。在相同的框架中打开被链接文档。
-         * _parent    在父框架集中打开被链接文档。
-         * _top    在整个窗口中打开被链接文档。
-         * framename    在指定的框架中打开被链接文档。
-         *
-         * @param url
-         * @param target
-         */
-        function zalyjsCommonOpenPage(url) {
-            // window.open(url, target);
-            location.href = url;
-        }
-
-    </script>
 </head>
 
 <body>
@@ -159,8 +50,7 @@
                                     echo $subUserId;
                                 }
                                 ?></div>
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
                         </div>
                     </div>
 
@@ -227,7 +117,7 @@
 
                         <div class="item-body-tail" id="user-avatar-img-id" fileId="<?php echo $avatar ?>">
                             <div class="item-body-value">
-                                <img id="user-avatar-img" class="site-image"
+                                <img id="user-avatar-img" class="site-user-avatar"
                                      onclick="uploadFile('user-avatar-img-input')"
                                      src="/_api_file_download_/?fileId=<?php echo $avatar ?>"
                                      onerror="src='../../public/img/msg/default_user.png'">
@@ -405,8 +295,26 @@
 <script type="text/javascript">
 
     function uploadFile(obj) {
-        $("#" + obj).val("");
-        $("#" + obj).click();
+
+        if (isAndroid()) {
+            zalyjsImageUpload(uploadAvatarImageResult);
+        } else {
+            $("#" + obj).val("");
+            $("#" + obj).click();
+        }
+    }
+
+
+    function uploadAvatarImageResult(result) {
+
+        var fileId = result.fileId;
+
+        //update server image
+        updateServerImage(fileId);
+
+        var newSrc = "/_api_file_download_/?fileId=" + fileId;
+
+        $(".site-user-avatar").attr("src", newSrc);
     }
 
     function uploadImageFile(obj) {

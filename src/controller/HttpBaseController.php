@@ -143,12 +143,14 @@ abstract class HttpBaseController extends \Wpf_Controller
                     $apiPageIndex . "?x=" . $x;
                 }
             }
+            header("Content-Type: application/javascript; charset=utf-8");
             $successCallBack = $_GET['success_callback'] ? $_GET['success_callback'] : "";
-            echo "$successCallBack('" . $apiPageIndex . "');";
+            echo "$successCallBack();";
             die();
         } catch (Exception $ex) {
             $errorInfo = $ex->getMessage();
             $failCallBack = $_GET['fail_callback'] ? $_GET['fail_callback'] : "";
+            header("Content-Type: application/javascript; charset=utf-8");
             echo "$failCallBack('" . $errorInfo . "');";
             die();
         }
@@ -236,7 +238,11 @@ abstract class HttpBaseController extends \Wpf_Controller
                 header("Location:" . $apiPageLogin . "?x=" . $x);
             }
         } else {
-            header("Location:" . $apiPageLogin);
+            if (strpos($apiPageLogin, "?")) {
+                header("Location:" . $apiPageLogin);
+            } else {
+                header("Location:" . $apiPageLogin);
+            }
         }
         exit();
     }

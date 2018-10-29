@@ -82,7 +82,7 @@ class Duckchat_Session_ProfileController extends Duckchat_MiniProgramController
         $publicProfile = new \Zaly\Proto\Core\PublicUserProfile();
         $publicProfile->setUserId($userProfile['userId']);
         $publicProfile->setAvatar(isset($userProfile['avatar']) ? $userProfile['avatar'] : "");
-        $publicProfile->setLoginname($userProfile['loginName']);
+        $publicProfile->setLoginName($userProfile['loginName']);
         $publicProfile->setNickname($userProfile['nickname']);
         $publicProfile->setNicknameInLatin($userProfile['nicknameInLatin']);
 

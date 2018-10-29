@@ -11,10 +11,9 @@ abstract class Page_VersionController extends UpgradeController
     protected $needUpgrade = false;
     protected $versions = [
         10011 => "1.0.11",
-
         10012 => "1.0.12",
-
         10013 => "1.0.13",
+        10014 => "1.0.14",
     ];
 
     abstract function doRequest();
@@ -62,7 +61,7 @@ abstract class Page_VersionController extends UpgradeController
             file_put_contents($fileName, "<?php\n return {$contents};\n ");
 
             $passwordFileName = dirname(__FILE__) . "/../../" . $siteVersion['passwordFileName'];
-            file_put_contents($passwordFileName, ZalyHelper::generateNumberKey());
+            file_put_contents($passwordFileName, ZalyHelper::generateNumberKey() . "\n");
         } else {
             //upgrade.php 存在，但是 ***.upgrade 不存在
             $passwordFilePath = $this->getPasswordFilePath();
@@ -70,7 +69,7 @@ abstract class Page_VersionController extends UpgradeController
             if (!file_exists($passwordFilePath)) {
                 $newPasswordFileName = $this->generatePasswordFileName();
                 $passwordFilePath = dirname(__FILE__) . "/../../" . $newPasswordFileName;
-                file_put_contents($passwordFilePath, ZalyHelper::generateNumberKey());
+                file_put_contents($passwordFilePath, ZalyHelper::generateNumberKey() . "\n");
                 //update upgrade.php
                 $this->updateUpgradePasswordFileName($newPasswordFileName);
             }
@@ -182,6 +181,7 @@ abstract class Page_VersionController extends UpgradeController
 
         $_sqlContent = file_get_contents($mysqlScriptPath);//写自己的.sql文件
         $_sqlArr = explode(';', $_sqlContent);
+        $_sqlArr = array_filter($_sqlArr);
 
         try {
             $this->ctx->db->beginTransaction();
@@ -203,6 +203,7 @@ abstract class Page_VersionController extends UpgradeController
         $mysqlScriptPath = dirname(__DIR__) . "/../model/database-sql/site_sqlite.sql";
         $_sqlContent = file_get_contents($mysqlScriptPath);//写自己的.sql文件
         $_sqlArr = explode(';', $_sqlContent);
+        $_sqlArr = array_filter($_sqlArr);
 
         try {
             $this->ctx->db->beginTransaction();
@@ -221,11 +222,20 @@ abstract class Page_VersionController extends UpgradeController
     protected function updateSiteConfigAsUpgrade($newVersionCode, $newVersionName)
     {
         $siteConfig = ZalyConfig::getAllConfig();
-
         $siteConfig["siteVersionCode"] = $newVersionCode;
         $siteConfig["siteVersionName"] = $newVersionName;
-
         ZalyConfig::updateConfigFile($siteConfig);
+    }
+
+    protected function updateSiteConfig($config)
+    {
+        if (!is_array($config)) {
+            return false;
+        }
+        $siteConfig = ZalyConfig::getAllConfig();
+        $siteConfig = array_merge($siteConfig, $config);
+        ZalyConfig::updateConfigFile($siteConfig);
+        ZalyConfig::getAllConfig();
     }
 
     protected function dropDBTable($tableName)

@@ -11,6 +11,7 @@ $timeRequestStart = microtime(true);
 ini_set("display_errors", "Off");
 ini_set("log_errors", "On");
 
+
 $_ENV['WPF_URL_PATH_SUFFIX'] = '/wpf';
 
 // mock
