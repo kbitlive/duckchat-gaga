@@ -363,7 +363,7 @@
                         <?php if ($lang == "1") { ?>
                             <div class="item-body-desc">删除小程序</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Delte Mini Program</div>
+                            <div class="item-body-desc">Delete Mini Program</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
