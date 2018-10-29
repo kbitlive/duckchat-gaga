@@ -3404,6 +3404,8 @@ function sendMsgBySend()
         uploadMsgImgFromCopy(imgData);
     }
 
+    msgContent = trimString(msgContent);
+
     if(msgContent.length < 1) {
         return false;
     }

@@ -102,7 +102,6 @@
         for(var i=1; i<=gifLength ;i ++) {
             var num = i-1;
             var gif = gifArr[num];
-            console.log("git ===="+JSON.stringify(gif));
             var gifId = "";
             var gifUrl="";
             var isDefault=0;
@@ -126,7 +125,6 @@
             }
 
             if(i==1) {
-                console.log("iiiii");
                 html += "<div class='gif_content_div'><img src='../../../public/img/add.png' class='add_gif'>  " +
                     "<input id='gifFile' type='file' onchange='uploadFile(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
             }
@@ -203,9 +201,12 @@
 
 
     function uploadFileToServer(formData, src) {
+        var url = "./index.php?action=http.file.uploadWeb";
 
-        var url = "/_api_file_upload_/?fileType=1";  //fileType=1,表示文件
-        console.log("upload image  url=========="+url)
+        if (isMobile()) {
+            url = "/_api_file_upload_/?fileType=1";  //fileType=1,表示文件
+        }
+
         $.ajax({
             url: url,
             type: "post",
