@@ -226,7 +226,6 @@
                 }
             },
             error: function (err) {
-                console.log("upload image  url end ==========")
                 alert(getLanguage() == 1 ? "上传失败 " : "upload failed");
             }
         });
