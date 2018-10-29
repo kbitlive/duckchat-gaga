@@ -54,34 +54,34 @@
                             <div class="item-body-desc">Site Logo</div>
                         <?php } ?>
 
+                        <!--                        <div class="item-body-tail">-->
+                        <!--                            <div class="item-body-value" id="site-logo-fileid">-->
+                        <!--                                <img class="site-logo-image" onclick="uploadLogoImage()"-->
+                        <!--                                     src="/_api_file_download_/?fileId=-->
+                        <?php //echo $logo ?><!--"-->
+                        <!--                                     onerror="src='../../public/img/manage/site_default.png'">-->
+                        <!---->
+                        <!--                            </div>-->
+                        <!--                            <div class="item-body-value">-->
+                        <!--                                <img class="more-img" src="../../public/img/manage/more.png"/>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+
+
                         <div class="item-body-tail">
                             <div class="item-body-value" id="site-logo-fileid">
-                                <img class="site-logo-image" onclick="uploadLogoImage()"
+                                <img class="site-logo-image" onclick="uploadFile('upload-site-logo')"
                                      src="/_api_file_download_/?fileId=<?php echo $logo ?>"
                                      onerror="src='../../public/img/manage/site_default.png'">
 
+                                <input id="upload-site-logo" type="file" onchange="uploadImageFile(this)"
+                                       accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
+                                       style="display: none;">
                             </div>
                             <div class="item-body-value">
                                 <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
                         </div>
-
-
-                        <!--                        <div class="item-body-tail">-->
-                        <!--                            <div class="item-body-value" id="site-logo-fileid">-->
-                        <!--                                <img class="site-logo-image" onclick="uploadFile('upload-site-logo')"-->
-                        <!--                                     src="/_api_file_download_/?fileId=-->
-                        <?php //echo $logo ?><!--"-->
-                        <!--                                     onerror="src='../../public/img/manage/site_default.png'">-->
-                        <!---->
-                        <!--                                <input id="upload-site-logo" type="file" onchange="uploadImageFile(this)"-->
-                        <!--                                       accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"-->
-                        <!--                                       style="display: none;">-->
-                        <!--                            </div>-->
-                        <!--                            <div class="item-body-value"><img class="more-img"-->
-                        <!--                                                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>-->
-                        <!--                            </div>-->
-                        <!--                        </div>-->
                     </div>
 
                 </div>
@@ -703,9 +703,13 @@
 
 <script type="text/javascript">
 
-
-    function uploadLogoImage() {
-        zalyjsImageUpload(uploadLogoImageResult);
+    function uploadFile(obj) {
+        if (isAndroid()) {
+            zalyjsImageUpload(uploadLogoImageResult);
+        } else {
+            $("#" + obj).val("");
+            $("#" + obj).click();
+        }
     }
 
     function uploadLogoImageResult(result) {
@@ -719,13 +723,6 @@
 
         $(".site-logo-image").attr("src", newSrc);
     }
-
-
-    function uploadFile(obj) {
-        $("#" + obj).val("");
-        $("#" + obj).click();
-    }
-
 
     function uploadImageFile(obj) {
 
