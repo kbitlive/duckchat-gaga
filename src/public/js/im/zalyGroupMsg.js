@@ -468,21 +468,7 @@ function logout(event)
     event.stopPropagation();
     var tip = $.i18n.map['logoutJsTip'] != undefined ? $.i18n.map['logoutJsTip']: "退出账号，将会清空聊天记录";
     if(confirm(tip)) {
-        $.ajax({
-            method: "POST",
-            url:"./index.php?action=page.logout",
-            data: "",
-            success:function (resp) {
-                localStorage.clear();
-                if(landingPageUrl.indexOf("?")) {
-                    landingPageUrl +="&from=duckchat&redirect_url="+location.href;
-                }else{
-                    landingPageUrl +="?from=duckchat&redirect_url="+location.href;
-                }
-                landingPageUrl = encodeURI(landingPageUrl);
-                window.location.href = landingPageUrl;
-            }
-        });
+        window.location.href = "./index.php?action=page.logout";
     }
 }
 
