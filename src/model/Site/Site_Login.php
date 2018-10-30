@@ -165,6 +165,8 @@ class Site_Login
                 // #TODO exception
                 throw new Exception("insert user profile to db error");
             }
+        } else {
+            $userProfile['avatar'] = $user['avatar'];
         }
 
         //这里
