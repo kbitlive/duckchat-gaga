@@ -29,7 +29,12 @@ class Manage_UserController extends Manage_CommonController
 
             $userList = $this->getUserListByOffset($offset, $length);
 
-            echo json_encode($userList);
+            if (!empty($userList)) {
+                $params['loading'] = count($userList) == $length ? true : false;
+                $params['data'] = $userList;
+            }
+
+            echo json_encode($params);
 
             return;
 
