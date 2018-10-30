@@ -14,6 +14,7 @@ abstract class Page_VersionController extends UpgradeController
         10012 => "1.0.12",
         10013 => "1.0.13",
         10014 => "1.0.14",
+        10015 => "1.0.15"
     ];
 
     abstract function doRequest();
@@ -236,6 +237,27 @@ abstract class Page_VersionController extends UpgradeController
         $siteConfig = array_merge($siteConfig, $config);
         ZalyConfig::updateConfigFile($siteConfig);
         ZalyConfig::getAllConfig();
+    }
+
+    protected function updateSiteConfigKey($keys)
+    {
+        if (!is_array($keys)) {
+            return false;
+        }
+        $siteConfig = ZalyConfig::getAllConfig();
+        foreach ($keys as $oKey => $nKey) {
+            foreach($siteConfig as $oldKey => $val) {
+                if($oldKey == $oKey || strpos($oldKey, $oKey) !== false) {
+                    $repKey = str_replace($oKey, $nKey, $oldKey);
+                    $siteConfig[$repKey] = $val;
+                    unset($siteConfig[$oldKey]);
+                }
+            }
+        }
+
+        ZalyConfig::updateConfigFile($siteConfig);
+        ZalyConfig::getAllConfig();
+
     }
 
     protected function dropDBTable($tableName)
