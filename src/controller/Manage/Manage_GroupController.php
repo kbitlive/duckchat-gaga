@@ -19,16 +19,16 @@ class Manage_GroupController extends Manage_CommonController
         if ($method == "POST") {
 
             //get user list by page
-            $offset = $_POST['offset'];
-            $length = $_POST['length'];
+            $offset = $_POST['pageNum'];
+            $length = $_POST['pageSize'];
 
             if (!$length) {
                 $length = $this->pageSize;
             }
 
-            if (!$offset) {
-                $offset = ($offset - 1) * $length;
-            }
+            $offset = ($offset - 1) * $length;
+
+            $this->logger->error("==============", "offset=" . $offset . " pageSize=" . $length);
 
             $groupList = $this->getGroupListByOffset($offset, $length);
 
