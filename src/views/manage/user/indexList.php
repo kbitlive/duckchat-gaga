@@ -122,6 +122,78 @@
 
 <script type="text/javascript">
 
+    var currentPageNum = 1;
+    var pageSize = 12;
+    var loading = true;
+
+    $(window).scroll(function () {
+        //判断是否滑动到页面底部
+        if ($(window).scrollTop() === $(document).height() - $(window).height()) {
+
+            if (!loading) {
+                return;
+            }
+
+            loadMoreUsers();
+        }
+    });
+
+    function loadMoreUsers() {
+
+        var data = {
+            'pageNum': ++currentPageNum,
+            'pageSize': pageSize,
+        };
+
+        var url = "index.php?action=manage.user";
+        zalyjsCommonAjaxPostJson(url, data, loadMoreResponse)
+    }
+
+    function loadMoreResponse(url, data, result) {
+        alert(result);
+        if (result) {
+            var res = JSON.parse(result);
+
+            var isloading = res['loading'];
+            loading = isloading;
+            var data = res['data'];
+
+            // alert(result);
+            if (data && data.length > 0) {
+                $.each(data, function (index, user) {
+                    var userHtml = '<div class="item-row" userId="' + user["userId"] + '" >'
+                        + '<div class="item-header">'
+                        + '<img class="user-avatar-image" src="/_api_file_download_/?fileId=' + user['avatar'] + '" onerror="this.src=\'../../public/img/msg/default_user.png\'" />'
+                        + '</div>'
+                        + '<div class="item-body">'
+                        + '<div class="item-body-display">'
+                        + '<div class="item-body-desc">' + user["nickname"] + '</div>'
+                        + '<div class="item-body-tail">';
+
+                    if (!user['isFollow']) {
+                        userHtml += '<button class="addButton applyButton" userId="' + user["userId"] + '" > 添加好友 </button>';
+                    } else {
+                        // userHtml += '<button class="chatButton" userId="' + user["userId"] + '" > 发起会话 </button>';
+                        userHtml += '<button class="chatButton" userId="' + user["userId"] + '" > 已添加 </button>';
+                    }
+
+
+                    userHtml += '</div></div></div></div>';
+                    userHtml += '<div class="division-line"></div>';
+
+                    // $(".list-item-center").append(userHtml);
+                    //
+                    // $(".applyButton").bind("click");
+                });
+            }
+
+        }
+
+    }
+</script>
+
+<script type="text/javascript">
+
     $(".search-input").on('input porpertychange', function () {
         var val = $(this).val();
         if (val == "") {
