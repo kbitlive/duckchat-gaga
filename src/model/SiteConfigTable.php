@@ -29,7 +29,7 @@ class SiteConfigTable extends BaseTable
     public function insertSiteConfig($configKey, $configValue)
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
-        $sqlStr = "('" . $configKey . "'," . $configValue . ")";
+        $sqlStr = "('" . $configKey . "','" . $configValue . "')";
         $sql = "insert into 
                         siteConfig(configKey, configValue) 
                     values 
@@ -50,7 +50,7 @@ class SiteConfigTable extends BaseTable
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         try {
-            $tag = __CLASS__ . "->" . __FUNCTION__;
+
             $sql = "update $this->table set configValue=:configValue where configKey=:configKey;";
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
@@ -105,5 +105,17 @@ class SiteConfigTable extends BaseTable
             $this->ctx->Wpf_Logger->error($tag, "error_msg ==" . $ex->getMessage());
             return [];
         }
+    }
+
+    public function deleteSiteConfig($configKey)
+    {
+        $tag = __CLASS__ . "_" . __FUNCTION__;
+        $sql = "delete from $this->table where configKey=:configKey;";
+        $prepare = $this->db->prepare($sql);
+        $this->handlePrepareError($tag, $prepare);
+        $prepare->bindValue(":configKey", $configKey);
+        $result = $prepare->execute();
+
+        return $this->handlerResult($result, $prepare, $tag);
     }
 }

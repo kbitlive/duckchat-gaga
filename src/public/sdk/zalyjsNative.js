@@ -7,12 +7,21 @@ var callbackIdParamName = "zalyjsCallbackId";
 var refererUrl = document.referrer;
 var refererUrlKey = "documentReferer";
 
-refererUrlKeyVal = localStorage.getItem(refererUrlKey);
-
-if (refererUrl.length > 0 && (!refererUrlKeyVal)) {
-    localStorage.setItem(refererUrlKey, refererUrl);
-    refererUrlKeyVal = localStorage.getItem(refererUrlKey);
+function getUrlParam(key)
+{
+    var pathParams = window.location.search.substring(1).split('&');
+    var paramsLength = pathParams.length;
+    for(var i=0; i<paramsLength; i++) {
+        var param = pathParams[i].split('=');
+        if(param[0] == key) {
+            var url = decodeURIComponent(param[1]);
+            localStorage.setItem(refererUrlKey, url);
+        }
+    }
 }
+
+getUrlParam("redirect_url");
+
 var zalyjsSiteLoginMessageBody = {};
 
 
@@ -111,7 +120,7 @@ function addJsByDynamic(url) {
     //Firefox, Opera, Chrome, Safari 3+
     script.src = url;
 
-   document.getElementsByTagName('head')[0].appendChild(script);
+    document.getElementsByTagName('head')[0].appendChild(script);
 }
 
 //
@@ -233,7 +242,7 @@ function zalyjsWebCheckUserExists(failedCallback, successCallback) {
     if (!refererUrl) {
         refererUrl = "./index.php";
     }
-    if(refererUrl.indexOf("?") > -1) {
+    if (refererUrl.indexOf("?") > -1) {
         var jsUrl = refererUrl + "&action=page.js&loginName=" + registerLoginName + "&success_callback=" + successCallback.name + "&fail_callback=" + failedCallback.name;
     } else {
         var jsUrl = refererUrl + "?action=page.js&loginName=" + registerLoginName + "&success_callback=" + successCallback.name + "&fail_callback=" + failedCallback.name;
@@ -264,7 +273,7 @@ function zalyjsClosePage() {
     if (isAndroid()) {
         window.Android.zalyjsNavClose()
     } else if (isIOS()) {
-        window.webkit.messageHandlers.zalyjsNavClose()
+        window.webkit.messageHandlers.zalyjsNavClose.postMessage("");
     } else {
         window.close();
     }
@@ -278,7 +287,7 @@ function zalyjsGoto(page, xarg) {
     if (isAndroid()) {
         window.Android.zalyjsGoto(gotoUrl);
     } else if (isIOS()) {
-        window.webkit.messageHandlers.zalyjsGoto(gotoUrl);
+        window.webkit.messageHandlers.zalyjsGoto.postMessage(gotoUrl);
     }
 }
 
@@ -287,7 +296,8 @@ function zalyjsBackPage() {
     if (isAndroid()) {
         window.Android.zalyjsNavBack();
     } else if (isIOS()) {
-        window.webkit.messageHandlers.zalyjsNavBack();
+        var messageBody = {};
+        window.webkit.messageHandlers.zalyjsNavBack.postMessage("");
     }
 }
 
@@ -302,6 +312,6 @@ function zalyjsImageUpload(callback) {
     if (isAndroid()) {
         window.Android.zalyjsImageUpload(messageBody);
     } else if (isIOS()) {
-        window.webkit.messageHandlers.zalyjsImageUpload(messageBody);
+        window.webkit.messageHandlers.zalyjsImageUpload.postMessage(messageBody);
     }
 }

@@ -140,7 +140,7 @@ function cancelLoadingBySelf()
 {
     setTimeout(function () {
         hideLoading();
-    }, 1000);
+    }, 5000);
 }
 function checkIsEntities(str){
     var entitiesReg = /(&nbsp;|&#160;|&lt;|&#60;|&gt;|&#62;|&amp;|&#38;|&quot;|&#34;|&apos;|&#39;|&cent;|&#162;|&pound;|&#163;|&yen;|&#165;|&euro;|&#8364;|&sect;|&#167;|&copy;|&#169;|&reg;|&#174;|&times;|&#215;|&divide;|&#247;|&)/g;

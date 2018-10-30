@@ -441,7 +441,7 @@ input:active,
 
 .line,.register_line {
     width:28.14rem;
-    height:0.09rem;
+    height:1px;
     margin:0px auto;
     background:rgba(153,153,153,1);
     border-radius:0.42rem;
@@ -503,7 +503,10 @@ input:active,
     .login_name_div {
         margin-top: 3rem;
     }
-    .login_button {
+    .login_button,
+    .login_button:hover,
+    .login_button:focus,
+    .login_button.active{
         margin-top: 5rem;
     }
     .mobile_slogn_div {
@@ -527,7 +530,7 @@ input:active,
 
 }
 
-@media (max-height: 300px) {
+@media (max-height: 500px) {
     .mobile_slogn_div {
         display: none;
     }

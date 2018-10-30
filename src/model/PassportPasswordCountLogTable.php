@@ -94,6 +94,6 @@ class PassportPasswordCountLogTable extends BaseTable
         if($result) {
             return $result['num'];
         }
-        return 0;
+        return false;
     }
 }

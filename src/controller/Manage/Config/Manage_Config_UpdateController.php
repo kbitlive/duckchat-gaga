@@ -18,7 +18,7 @@ class Manage_Config_UpdateController extends Manage_CommonController
             $config['lang'] = $this->language;
 
             $configKey = $_POST['key'];
-            $configValue = $_POST['value'];
+            $configValue = trim($_POST['value']);
 
             $this->ctx->Wpf_Logger->error("manage.config.update", "ke=" . $configKey . " value=" . $configValue);
 
@@ -28,7 +28,7 @@ class Manage_Config_UpdateController extends Manage_CommonController
 
             if (SiteConfig::SITE_PLUGIN_PLBLIC_KEY == $configKey) {
                 $configValue = $this->ctx->ZalyHelper->generateStrKey(32);
-            } elseif (SiteConfig::SITE_ZALY_PORT == $configKey || SiteConfig::SITE_WS_PORT == $configKey) {
+            } elseif (SiteConfig::SITE_ZALY_PORT == $configKey) {
                 if (empty($configValue)) {
                     $configValue = 0;
                 }
@@ -45,6 +45,14 @@ class Manage_Config_UpdateController extends Manage_CommonController
                 $fileId = $configValue;
                 $imageDir = WPF_LIB_DIR . "../public/site/image/";
                 $this->ctx->File_Manager->moveImage($fileId, $imageDir);
+            }
+
+            if ($configKey == SiteConfig::SITE_WS_ADDRESS) {
+
+                $this->checkWsAddress($configValue);
+
+                //清理 sitePort && siteHost
+                $this->deleteSiteConfig([SiteConfig::SITE_WS_HOST, SiteConfig::SITE_WS_PORT]);
             }
 
             $result = $this->updateSiteConfig($configKey, $configValue);
@@ -104,4 +112,45 @@ class Manage_Config_UpdateController extends Manage_CommonController
         return false;
     }
 
+    private function deleteSiteConfig(array $configKeys)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        try {
+            if (!empty($configKeys)) {
+
+                foreach ($configKeys as $configKey) {
+                    $this->ctx->SiteConfigTable->deleteSiteConfig($configKey);
+                }
+            }
+        } catch (Exception $e) {
+            $this->logger->error($tag, $e);
+        }
+    }
+
+    private function checkWsAddress($wsAddressUrl)
+    {
+        if (empty($wsAddressUrl)) {
+            return;
+        }
+
+        $wsAddress = parse_url($wsAddressUrl);
+
+        $schema = $wsAddress["scheme"];
+
+        if (empty($schema)) {
+            throw new Exception($this->language == 1 ? "wsAddress格式错误" : "ws address formatting error");
+        } else {
+            if ($schema != "ws" && $schema != "WS" && $schema != "wss" && $schema != "WSS") {
+                throw new Exception($this->language == 1 ? "wsAddress格式错误" : "ws address formatting error");
+            }
+        }
+
+        $host = $wsAddress["host"];
+        $port = $wsAddress["port"];
+        if (empty($host) || empty($port)) {
+            throw new Exception($this->language == 1 ? "wsAddress格式错误" : "ws address formatting error");
+        }
+
+        return;
+    }
 }

@@ -42,6 +42,12 @@
             cursor: pointer;
         }
 
+        .my-friend {
+
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
     </style>
 </head>
 
@@ -68,21 +74,104 @@
 
     <div style="margin-top: 20px">测试GotoClient工具 Goto：</div>
 
-    <button class="test-button" id="gotoHome" onclick="gotoTest('home','')">Goto首页</button>
+    <div>
+        <button class="test-button" id="gotoHome" onclick="gotoTest('home','')">Goto首页</button>
+    </div>
+
 
     <button class="test-button" id="gotoChats" onclick="gotoTest('chats','')">聊天列表</button>
 
-    <button class="test-button" id="gotoU2Profile" onclick="gotoTest('u2Profile','<?php echo $friendUserId ?>')">用户资料
-    </button>
+    <div class="my-friend">
+        <?php
 
-    <button class="test-button" id="gotoU2Msg" onclick="gotoTest('u2Msg','<?php echo $friendUserId ?>')">二人聊天页面</button>
+        if ($myFriendProfile) {
+            echo $myFriendProfile["userId"];
+        } else {
+            echo "测试【用户资料】【二人聊天页面】前，请添加你的好友";
+        }
 
-    <button class="test-button" id="gotoGroupProfile" onclick="gotoTest('groupProfile','<?php echo $groupId ?>')">
-        群组资料页
-    </button>
+        ?>
 
-    <button class="test-button" id="gotoGroupMsg" onclick="gotoTest('groupMsg','<?php echo $groupId ?>')">群组聊天界面
-    </button>
+        <button class="test-button" id="gotoU2Profile"
+                onclick="gotoTest('u2Profile','<?php echo $myFriendProfile["userId"] ?>')">
+            好友用户资料
+        </button>
+
+        <button class="test-button" id="gotoU2Msg"
+                onclick="gotoTest('u2Msg','<?php echo $myFriendProfile["userId"] ?>')">好友二人聊天页面
+        </button>
+    </div>
+
+
+    <div class="my-friend">
+        <?php
+
+        if ($notMyFriendProfile) {
+            echo $notMyFriendProfile["userId"];
+        } else {
+            echo "请添加注册一个非好友的新用户";
+        }
+
+        ?>
+
+        <button class="test-button" id="gotoU2Profile"
+                onclick="gotoTest('u2Profile','<?php echo $notMyFriendProfile["userId"] ?>')">
+            非好友用户资料
+        </button>
+
+        <button class="test-button" id="gotoU2Msg"
+                onclick="gotoTest('u2Msg','<?php echo $notMyFriendProfile["userId"] ?>')">
+            非好友二人聊天页面
+        </button>
+    </div>
+
+
+    <div class="my-friend">
+
+        <?php
+
+        if ($myGroupProfile) {
+            echo $myGroupProfile["groupId"];
+        } else {
+            echo "请创建一个我的群组";
+        }
+
+        ?>
+
+        <button class="test-button" id="gotoGroupProfile"
+                onclick="gotoTest('groupProfile',' <?php echo $myGroupProfile["groupId"] ?>')">
+            我的群组资料页
+        </button>
+
+        <button class="test-button" id="gotoGroupMsg"
+                onclick="gotoTest('groupMsg','<?php echo $myGroupProfile["groupId"] ?>')">
+            我的群组聊天界面
+        </button>
+    </div>
+
+    <div class="my-friend">
+
+        <?php
+
+        if ($notMyGroupProfile) {
+            echo $notMyGroupProfile["groupId"];
+        } else {
+            echo "请创建一个非我的群组";
+        }
+
+        ?>
+
+        <button class="test-button" id="gotoGroupProfile"
+                onclick="gotoTest('groupProfile',' <?php echo $notMyGroupProfile["groupId"] ?>')">
+            非我的群组资料页
+        </button>
+
+        <button class="test-button" id="gotoGroupMsg"
+                onclick="gotoTest('groupMsg','<?php echo $notMyGroupProfile["groupId"] ?>')">
+            非群组聊天界面
+        </button>
+
+    </div>
 
     <button class="test-button" id="gotoContracts" onclick="gotoTest('contracts','')">通讯录列表</button>
 
@@ -91,16 +180,60 @@
     <button class="test-button" id="gotoGroups" onclick="gotoTest('groups','')">群组列表</button>
 
 
-    <button class="test-button" id="gotoAddFriend" onclick="gotoTest('addFriend','<?php echo $applyUserId ?>')">申请添加好友
-    </button>
+    <div class="my-friend">
+
+        <?php
+
+        echo "userId=";
+
+        ?>
+
+        <br>
+        <button class="test-button" id="gotoAddFriend"
+                onclick="gotoTest('addFriend','')">
+            申请添加好友(userId为空)
+        </button>
+        <br>
+
+        <?php
+
+        echo $myFriendProfile["userId"];
+
+        ?>
+
+        <br>
+        <button class="test-button" id="gotoAddFriend"
+                onclick="gotoTest('addFriend','<?php echo $myFriendProfile["userId"] ?>')">
+            申请添加好友(已经是好友)
+        </button>
+        <br>
+
+        <?php
+
+        if ($notMyFriendProfile["userId"]) {
+            echo $notMyFriendProfile["userId"];
+        } else {
+            echo "请创建一个非好友的用户";
+        }
+
+        ?>
+
+        <br>
+        <button class="test-button" id="gotoAddFriend"
+                onclick="gotoTest('addFriend','<?php echo $notMyFriendProfile["userId"] ?>')">
+            申请添加好友（userId不为空）
+        </button>
+    </div>
 
     <button class="test-button" id="gotoMe" onclick="gotoTest('me','')">个人帧</button>
 
-    <button class="test-button" id="gotoMiniProgram" onclick="gotoTest('miniProgram','<?php echo $applyUserId ?>')">
+    <button class="test-button" id="gotoMiniProgram" onclick="gotoTest('miniProgram','<?php echo $miniProgramId ?>')">
         跳转到小程序首页
     </button>
 
-    <button class="test-button" id="gotoMiniProgramAdmin" onclick="gotoTest('miniProgramAdmin','')">跳转到小程序管理页</button>
+    <button class="test-button" id="gotoMiniProgramAdmin"
+            onclick="gotoTest('miniProgramAdmin','<?php echo $miniProgramId ?>')">跳转到小程序管理页
+    </button>
 
 
 </div>
@@ -108,7 +241,7 @@
 <script>
 
     function gotoPage() {
-        var url = "./index.php?action=miniProgram.test.tools";
+        var url = "https://duckchat.akaxin.com/";
         zalyjsOpenPage(url);
     }
 

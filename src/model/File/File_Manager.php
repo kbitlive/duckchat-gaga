@@ -62,6 +62,24 @@ class File_Manager
         return file_get_contents($path);
     }
 
+    public function getFileSize($fileId)
+    {
+        try{
+            if (strlen($fileId) < 1) {
+                return false;
+            }
+            // 需要hash目录，防止单目录文件过多
+            $fileName = explode("-", $fileId);
+            $dirName = $fileName[0];
+            $fileId = $fileName[1];
+
+            $path = $this->getPath($dirName, $fileId, false);
+            return getimagesize($path);
+        }catch (Exception $ex) {
+            return false;
+        }
+    }
+
     public function contentType($fileId)
     {
         if (strlen($fileId) < 1) {

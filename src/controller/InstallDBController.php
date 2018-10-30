@@ -146,6 +146,7 @@ class InstallDBController
 
                 $config['msectime'] = ZalyHelper::getMsectime();
                 $config['siteAddress'] = $siteAddress;
+                $config['errorLog'] = ZalyHelper::generateStrKey('16').'_php_errors.log';
 
                 //write to file
                 $contents = var_export($config, true);
@@ -475,19 +476,18 @@ class InstallDBController
                 'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
                 'authKey' => "",
             ],
-
-            [
-                'pluginId' => 106,
-                'name' => "开发工具",
-                'logo' => "",
-                'sort' => 106,
-                'landingPageUrl' => "index.php?action=miniProgram.test.tools",
-                'landingPageWithProxy' => 1, //1 表示走site代理
-                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageIndex,
-                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingNewPage,
-                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
-                'authKey' => "",
-            ],
+//            [
+//                'pluginId' => 106,
+//                'name' => "开发工具",
+//                'logo' => "",
+//                'sort' => 106,
+//                'landingPageUrl' => "index.php?action=miniProgram.test.tools",
+//                'landingPageWithProxy' => 1, //1 表示走site代理
+//                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageIndex,
+//                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingNewPage,
+//                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
+//                'authKey' => "",
+//            ],
             [
                 'pluginId' => 199,  //200+ for user
                 'name' => "用户广场",

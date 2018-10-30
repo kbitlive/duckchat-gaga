@@ -10,7 +10,7 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
 {
 
     private $gifMiniProgramId = 104;
-    private $action = "duckChat.message.send";
+    private $msgSendaction = "duckChat.message.send";
     private $groupType = "g";
     private $u2Type = "u";
     private $userRelationAction = "duckChat.user.relation";
@@ -184,7 +184,7 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
 
         $duckchatReqData = new \Zaly\Proto\Plugin\DuckChatMessageSendRequest();
         $duckchatReqData->setMessage($message);
-        $this->requestDuckChatInnerApi($this->gifMiniProgramId, $this->action, $duckchatReqData);
+        $this->requestDuckChatInnerApi($this->gifMiniProgramId, $this->msgSendaction, $duckchatReqData);
     }
 
     public function addGif($data)

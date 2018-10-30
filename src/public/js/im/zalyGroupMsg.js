@@ -2,17 +2,6 @@
 $(".left-body-chatsession").html("");
 $(".right-chatbox").html("");
 
-
-
-
-
-
-function doSomething() {
-    // 执行任务
-    worker.postMessage('Work done!');
-    console.log("do something");
-}
-
 function showMsgWebNotification(msg, msgContent)
 {
     var msgId = msg.msgId;
@@ -468,15 +457,7 @@ function logout(event)
     event.stopPropagation();
     var tip = $.i18n.map['logoutJsTip'] != undefined ? $.i18n.map['logoutJsTip']: "退出账号，将会清空聊天记录";
     if(confirm(tip)) {
-        $.ajax({
-            method: "POST",
-            url:"./index.php?action=page.logout",
-            data: "",
-            success:function (resp) {
-                localStorage.clear();
-                window.location.href = landingPageUrl;
-            }
-        });
+        window.location.href = "./index.php?action=page.logout";
     }
 }
 
@@ -3411,6 +3392,8 @@ function sendMsgBySend()
     if(imgData) {
         uploadMsgImgFromCopy(imgData);
     }
+
+    msgContent = trimString(msgContent);
 
     if(msgContent.length < 1) {
         return false;

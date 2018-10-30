@@ -238,7 +238,11 @@ abstract class HttpBaseController extends \Wpf_Controller
                 header("Location:" . $apiPageLogin . "?x=" . $x);
             }
         } else {
-            header("Location:" . $apiPageLogin);
+            if (strpos($apiPageLogin, "?")) {
+                header("Location:" . $apiPageLogin);
+            } else {
+                header("Location:" . $apiPageLogin);
+            }
         }
         exit();
     }

@@ -14,8 +14,8 @@
             <input type="text" id="register_input_loginName"  datatype="s"  class="input_login_site  register_input_loginName" data-local-placeholder="registerLoginNamePlaceholder"  autocapitalize="off"   placeholder="用户名以字母、数字、下划线，1-16个字符" >
             {{/if}}
             <img src="../../public/img/msg/msg_failed.png" class="img-failed register_input_loginName_failed">
-            <div class="register_line"></div>
         </div>
+        <div class="register_line"></div>
 
         <div class="login_name_div" style="margin-top: 2rem;">
             <image src="../../public/img/login/pwd.png" class="img"/>
@@ -72,7 +72,7 @@
 
         <div class="d-flex flex-row register_span_div login_span_div" >
             <span style="color:rgba(153,153,153,1);" data-local-value="hasAccountTip">已有账号？</span>
-            <span onclick="registerForLogin()" data-local-value="loginTip">登录</span>
+            <span onclick="registerForLogin()" data-local-value="loginBtnTip">登录</span>
         </div>
     </div>
 </script>
@@ -113,7 +113,7 @@
             <div class="line"></div>
 
             <div class="d-flex flex-row justify-content-center ">
-                <button type="button" class="btn login_button" ><span class="span_btn_tip" data-local-value="loginTip">登录</span></button>
+                <button type="button" class="btn login_button" ><span class="span_btn_tip" data-local-value="loginBtnTip">登 录</span></button>
             </div>
 
             <div class="d-flex flex-row register_span_div" >

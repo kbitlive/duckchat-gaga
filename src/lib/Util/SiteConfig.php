@@ -33,6 +33,7 @@ class SiteConfig
     const SITE_OPEN_SSL = "openSSL";
     const SITE_OPEN_WEB_EDITION = "openWebEdition";
     const SITE_ENABLE_WEB_WIDGET = "enableWebWidget";
+    const SITE_WS_ADDRESS = "wsAddress";
     const SITE_WS_HOST = "wsHost";
     const SITE_WS_PORT = "wsPort";
     const SITE_ZALY_HOST = "zalyHost";
@@ -98,7 +99,8 @@ class SiteConfig
         self::SITE_OPEN_SSL,
         self::SITE_OPEN_WEB_EDITION,
         self::SITE_ENABLE_WEB_WIDGET,
-        self::SITE_WS_PORT,
+        self::SITE_WS_ADDRESS,
+//        self::SITE_WS_PORT,
         self::SITE_ZALY_PORT,
 
         self::SITE_MANAGERS,
@@ -149,10 +151,10 @@ class SiteConfig
         self::SITE_OPEN_SSL => 0,
         self::SITE_OPEN_WEB_EDITION => 1,
         self::SITE_ENABLE_WEB_WIDGET => 0,
-        self::SITE_WS_HOST => "",
-        self::SITE_WS_PORT => 0,
-        self::SITE_ZALY_HOST => "",
-        self::SITE_ZALY_PORT => 0,
+//        self::SITE_WS_HOST => "",
+//        self::SITE_WS_PORT => 0,
+//        self::SITE_ZALY_HOST => "",
+//        self::SITE_ZALY_PORT => 0,
 
         self::SITE_ID_PUBK_PEM => "",
         self::SITE_ID_PRIK_PEM => "",

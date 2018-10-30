@@ -7,14 +7,23 @@ var callbackIdParamName = "zalyjsCallbackId";
 var refererUrl = document.referrer;
 var refererUrlKey = "documentReferer";
 
-refererUrlKeyVal = localStorage.getItem(refererUrlKey);
 
-if(refererUrl.length>0 && (!refererUrlKeyVal)) {
-    localStorage.setItem(refererUrlKey, refererUrl);
-    refererUrlKeyVal = localStorage.getItem(refererUrlKey);
+function getUrlParam(key)
+{
+    var pathParams = window.location.search.substring(1).split('&');
+    var paramsLength = pathParams.length;
+    for(var i=0; i<paramsLength; i++) {
+        var param = pathParams[i].split('=');
+        if(param[0] == key) {
+            var url = decodeURIComponent(param[1]);
+            localStorage.setItem(refererUrlKey, url);
+        }
+    }
 }
-var zalyjsSiteLoginMessageBody={};
 
+getUrlParam("redirect_url");
+
+var zalyjsSiteLoginMessageBody={};
 
 function zalyjsCallbackHelperConstruct() {
 
@@ -249,3 +258,18 @@ function zalyjsAlert(str)
 }
 
 
+
+//-public
+function zalyjsImageUpload(callback) {
+    var callbackId = zalyjsCallbackHelper.register(callback);
+    var messageBody = {};
+    messageBody[callbackIdParamName] = callbackId;
+    messageBody = JSON.stringify(messageBody);
+
+    if (isAndroid()) {
+        window.Android.zalyjsImageUpload(messageBody);
+    } else if (isIOS()) {
+        console.log("ios upload image" + callback);
+        window.webkit.messageHandlers.zalyjsImageUpload.postMessage(messageBody);
+    }
+}

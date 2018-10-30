@@ -98,9 +98,10 @@
 
     var languageNum = getLanguage();
 
-    if(gifLength>1) {
-        for(var i=1; i<gifLength ;i ++) {
-            var gif = gifArr[i];
+    if(gifLength>0) {
+        for(var i=1; i<=gifLength ;i ++) {
+            var num = i-1;
+            var gif = gifArr[num];
             var gifId = "";
             var gifUrl="";
             var isDefault=0;
@@ -144,7 +145,7 @@
             if((i-9)%10 == 0){
                 html += "</div>";
                 $(".zaly_container").append(html);
-            } else if(i == gifLength-1) {
+            } else if(i == gifLength) {
                 html += "</div>";
                 $(".zaly_container").append(html);
             }
@@ -200,12 +201,12 @@
 
 
     function uploadFileToServer(formData, src) {
-
-        var url = "./index.php?action=http.file.uploadGif";
+        var url = "./index.php?action=http.file.uploadWeb";
 
         if (isMobile()) {
             url = "/_api_file_upload_/?fileType=1";  //fileType=1,表示文件
         }
+
         $.ajax({
             url: url,
             type: "post",
@@ -225,8 +226,7 @@
                 }
             },
             error: function (err) {
-                alert("update image error");
-                // return false;
+                alert(getLanguage() == 1 ? "上传失败 " : "upload failed");
             }
         });
     }
@@ -261,29 +261,29 @@
 
     var timeOutEvent=0;
     $(".gif").on({
-            touchstart: function(event){
-                event.preventDefault();
-                event.stopPropagation();
-                var gifId = $(this).attr("gifId");
-                var isDefault = $(this).attr("isDefault");
-                if(isDefault != "0") {
-                    timeOutEvent = setTimeout("longEnterPress('"+gifId+"')",500);
-                }
-            },
-            touchend: function(event){
-                event.preventDefault();
-                event.stopPropagation();
-                clearTimeout(timeOutEvent);
-                if(timeOutEvent !=0 ){
-                    var src = $(this).attr("src");
-                    getImgSize(src);
-                    var gifId = $(this).attr("gifId");
-                    sendGifMsg(gifId);
-                    setTimeout(function(){ flag = false; }, 100);
-                }
-                return false;
+        touchstart: function(event){
+            event.preventDefault();
+            event.stopPropagation();
+            var gifId = $(this).attr("gifId");
+            var isDefault = $(this).attr("isDefault");
+            if(isDefault != "0") {
+                timeOutEvent = setTimeout("longEnterPress('"+gifId+"')",500);
             }
-        });
+        },
+        touchend: function(event){
+            event.preventDefault();
+            event.stopPropagation();
+            clearTimeout(timeOutEvent);
+            if(timeOutEvent !=0 ){
+                var src = $(this).attr("src");
+                getImgSize(src);
+                var gifId = $(this).attr("gifId");
+                sendGifMsg(gifId);
+                setTimeout(function(){ flag = false; }, 100);
+            }
+            return false;
+        }
+    });
 
 
     $(".del_gif").on({
