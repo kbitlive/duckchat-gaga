@@ -28,8 +28,6 @@ class Manage_GroupController extends Manage_CommonController
 
             $offset = ($offset - 1) * $length;
 
-            $this->logger->error("==============", "offset=" . $offset . " pageSize=" . $length);
-
             $groupList = $this->getGroupListByOffset($offset, $length);
 
             if (!empty($groupList)) {
