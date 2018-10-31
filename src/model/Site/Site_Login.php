@@ -253,8 +253,13 @@ class Site_Login
         $sessionId = $this->ctx->ZalyHelper->generateStrId();
         $deviceId = sha1($devicePubkPem);
 
+        if (!empty($devicePubkPem)) {
+            //get session by deviceId
+            $this->ctx->SiteSessionTable->deleteSessionByDeviceId($deviceId);
+        }
+
         try {
-            ///TODO 需要替换
+            //add session
             $userId = $userProfile["userId"];
             $sessionInfo = [
                 "sessionId" => $sessionId,
@@ -271,17 +276,18 @@ class Site_Login
             ];
             $this->ctx->SiteSessionTable->insertSessionInfo($sessionInfo);
         } catch (Exception $ex) {
+            //update session
             $userId = $userProfile["userId"];
             $sessionInfo = [
                 "sessionId" => $sessionId,
                 "timeActive" => $this->ctx->ZalyHelper->getMsectime(),
                 "ipActive" => "",
+                "userId" => $userId,
 //                "userAgent" => "",
 //                "userAgentType" => "",
                 "clientSideType" => $clientSideType,
             ];
             $where = [
-                "userId" => $userId,
                 "deviceId" => $deviceId,
             ];
             $this->ctx->SiteSessionTable->updateSessionInfo($where, $sessionInfo);
