@@ -18,9 +18,18 @@ class ApiPlatformCheckResponse extends \Google\Protobuf\Internal\Message
      */
     private $needRegister = false;
 
-    public function __construct() {
+    /**
+     * Constructor.
+     *
+     * @param array $data {
+     *     Optional. Data for populating the Message object.
+     *
+     *     @type bool $needRegister
+     * }
+     */
+    public function __construct($data = NULL) {
         \GPBMetadata\Platform\ApiPlatformCheck::initOnce();
-        parent::__construct();
+        parent::__construct($data);
     }
 
     /**

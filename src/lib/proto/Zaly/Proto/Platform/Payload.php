@@ -54,9 +54,27 @@ class Payload extends \Google\Protobuf\Internal\Message
      */
     private $extra;
 
-    public function __construct() {
+    /**
+     * Constructor.
+     *
+     * @param array $data {
+     *     Optional. Data for populating the Message object.
+     *
+     *     @type int $type
+     *     @type string $token
+     *     @type string $title
+     *     @type string $subTitle
+     *     @type string $body
+     *     @type int $badge
+     *     @type string $sound
+     *     @type string $pushGoto
+     *     @type string $picUrl
+     *     @type array|\Google\Protobuf\Internal\MapField $extra
+     * }
+     */
+    public function __construct($data = NULL) {
         \GPBMetadata\Platform\Common::initOnce();
-        parent::__construct();
+        parent::__construct($data);
     }
 
     /**

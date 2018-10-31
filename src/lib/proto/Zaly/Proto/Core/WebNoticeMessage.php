@@ -22,10 +22,8 @@ class WebNoticeMessage extends \Google\Protobuf\Internal\Message
      */
     private $height = 0;
     /**
-     * Generated from protobuf field <code>string hrefURL = 3;</code>
-     */
-    private $hrefURL = '';
-    /**
+     * string hrefURL  = 3;
+     *
      * Generated from protobuf field <code>string title = 4;</code>
      */
     private $title = '';
@@ -38,9 +36,23 @@ class WebNoticeMessage extends \Google\Protobuf\Internal\Message
      */
     private $jumpPluginProfile = null;
 
-    public function __construct() {
+    /**
+     * Constructor.
+     *
+     * @param array $data {
+     *     Optional. Data for populating the Message object.
+     *
+     *     @type string $code
+     *     @type int $height
+     *     @type string $title
+     *           string hrefURL  = 3;
+     *     @type int $pluginId
+     *     @type \Zaly\Proto\Core\SimplePluginProfile $jumpPluginProfile
+     * }
+     */
+    public function __construct($data = NULL) {
         \GPBMetadata\Core\Message::initOnce();
-        parent::__construct();
+        parent::__construct($data);
     }
 
     /**
@@ -88,28 +100,8 @@ class WebNoticeMessage extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string hrefURL = 3;</code>
-     * @return string
-     */
-    public function getHrefURL()
-    {
-        return $this->hrefURL;
-    }
-
-    /**
-     * Generated from protobuf field <code>string hrefURL = 3;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setHrefURL($var)
-    {
-        GPBUtil::checkString($var, True);
-        $this->hrefURL = $var;
-
-        return $this;
-    }
-
-    /**
+     * string hrefURL  = 3;
+     *
      * Generated from protobuf field <code>string title = 4;</code>
      * @return string
      */
@@ -119,6 +111,8 @@ class WebNoticeMessage extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * string hrefURL  = 3;
+     *
      * Generated from protobuf field <code>string title = 4;</code>
      * @param string $var
      * @return $this

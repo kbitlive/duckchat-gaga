@@ -25,9 +25,19 @@ class ApiPushNotificationRequest extends \Google\Protobuf\Internal\Message
      */
     private $pushBody = null;
 
-    public function __construct() {
+    /**
+     * Constructor.
+     *
+     * @param array $data {
+     *     Optional. Data for populating the Message object.
+     *
+     *     @type \Zaly\Proto\Platform\PushHeader $pushHeader
+     *     @type \Zaly\Proto\Platform\PushBody $pushBody
+     * }
+     */
+    public function __construct($data = NULL) {
         \GPBMetadata\Platform\ApiPushNotification::initOnce();
-        parent::__construct();
+        parent::__construct($data);
     }
 
     /**

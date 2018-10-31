@@ -31,9 +31,20 @@ class ApiVerifyCodeRequest extends \Google\Protobuf\Internal\Message
      */
     private $type = 0;
 
-    public function __construct() {
+    /**
+     * Constructor.
+     *
+     * @param array $data {
+     *     Optional. Data for populating the Message object.
+     *
+     *     @type string $phoneCountryCode
+     *     @type string $phoneNumber
+     *     @type int $type
+     * }
+     */
+    public function __construct($data = NULL) {
         \GPBMetadata\Platform\ApiSmsVerifyCode::initOnce();
-        parent::__construct();
+        parent::__construct($data);
     }
 
     /**

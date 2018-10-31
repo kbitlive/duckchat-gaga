@@ -20,9 +20,19 @@ class ApiPushCheckResponse extends \Google\Protobuf\Internal\Message
      */
     private $pushMark = '';
 
-    public function __construct() {
+    /**
+     * Constructor.
+     *
+     * @param array $data {
+     *     Optional. Data for populating the Message object.
+     *
+     *     @type string $pushMark
+     *          push mark()
+     * }
+     */
+    public function __construct($data = NULL) {
         \GPBMetadata\Platform\ApiPushCheck::initOnce();
-        parent::__construct();
+        parent::__construct($data);
     }
 
     /**

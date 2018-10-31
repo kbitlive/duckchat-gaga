@@ -27,7 +27,8 @@ class SiteSessionTable extends BaseTable
         "userAgent",
         "userAgentType",
         "gatewayURL",
-        "gatewaySocketId"
+        "gatewaySocketId",
+        "loginPluginId",
     ];
     private $selectColumns;
 

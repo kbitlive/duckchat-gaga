@@ -38,9 +38,23 @@ class PushHeader extends \Google\Protobuf\Internal\Message
      */
     private $signTimestamp = '';
 
-    public function __construct() {
+    /**
+     * Constructor.
+     *
+     * @param array $data {
+     *     Optional. Data for populating the Message object.
+     *
+     *     @type string $siteAddress
+     *     @type string $siteName
+     *     @type string $sitePubkPemId
+     *     @type string $timestampSeconds
+     *           string(timestamp unit: seconds)
+     *     @type string $signTimestamp
+     * }
+     */
+    public function __construct($data = NULL) {
         \GPBMetadata\Platform\Common::initOnce();
-        parent::__construct();
+        parent::__construct($data);
     }
 
     /**
