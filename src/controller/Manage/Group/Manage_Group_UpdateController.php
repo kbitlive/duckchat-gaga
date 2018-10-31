@@ -15,10 +15,6 @@ class Manage_Group_UpdateController extends Manage_CommonController
         $updateKey = $_POST['key'];
         $updateValue = $_POST['value'];
 
-        $this->ctx->Wpf_Logger->info("-------------", "groupId=" . $groupId);
-        $this->ctx->Wpf_Logger->info("-------------", "key=" . $updateKey);
-        $this->ctx->Wpf_Logger->info("-------------", "value=" . $updateValue);
-
         $response = [
             'errCode' => "error"
         ];
@@ -70,48 +66,18 @@ class Manage_Group_UpdateController extends Manage_CommonController
 
                     break;
                 case "addDefaultGroup":
-                    // update config
-                    $config = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_DEFAULT_GROUPS);
-                    $defaultGroupStr = $config[SiteConfig::SITE_DEFAULT_GROUPS];
 
-                    $this->ctx->Wpf_Logger->info("manage-add-default-group----", $defaultGroupStr);
-
+                    $flag = true;
                     if ($updateValue == 1) {
-                        //add
-                        if (empty($defaultGroupStr)) {
-                            $defaultGroupStr = $groupId;
-                        } else {
-                            $defaultGroupList = explode(",", $defaultGroupStr);
-
-                            if (!in_array($groupId, $defaultGroupList)) {
-                                $defaultGroupList[] = $groupId;
-                            }
-
-                            $defaultGroupStr = implode(",", $defaultGroupList);
-                        }
-
+                        $flag = $this->ctx->Site_Config->addDefaultGroup($groupId);
                     } else {
-                        //remove
-                        if (!empty($defaultGroupStr)) {
-
-                            $defaultGroupList2 = explode(",", $defaultGroupStr);
-
-                            $this->ctx->Wpf_Logger->info("manage-add-default-list---- ", "result=" . in_array($groupId, $defaultGroupList2));
-
-                            if (in_array($groupId, $defaultGroupList2)) {
-                                $defaultGroupList2 = array_diff($defaultGroupList2, [$groupId]);
-                            }
-
-                            $defaultGroupStr = implode(",", $defaultGroupList2);
-                        }
-
+                        $flag = $this->ctx->Site_Config->removeDefaultGroup($groupId);
                     }
 
-                    $this->ctx->Wpf_Logger->info("manage-add-default-group----new ", $defaultGroupStr);
-                    //update site default group
-                    if ($this->updateSiteDefaultGroups($defaultGroupStr)) {
+                    if ($flag) {
                         $response['errCode'] = "success";
                     }
+
                     break;
                 default:
                     break;
@@ -153,8 +119,4 @@ class Manage_Group_UpdateController extends Manage_CommonController
         return $this->ctx->SiteGroupTable->updateGroupInfo($where, $data);
     }
 
-    private function updateSiteDefaultGroups($newDefaultGroups)
-    {
-        return $this->ctx->SiteConfigTable->updateSiteConfig(SiteConfig::SITE_DEFAULT_GROUPS, $newDefaultGroups);
-    }
 }

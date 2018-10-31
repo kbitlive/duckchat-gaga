@@ -30,9 +30,40 @@ class siteU2MessageTable extends BaseTable
      * @return bool
      * @throws Exception
      */
-    function insertMessage($u2Message)
+    public function insertMessage($u2Message)
     {
         return $this->insertData($this->table, $u2Message, $this->columns);
+    }
+
+    public function deleteMessage($userId)
+    {
+        $tag = __CLASS__ . '->' . __FUNCTION__;
+        $sql = "delete from $this->table where userId=:userId or fromUserId=:fromUserId;";
+
+        $prepare = $this->db->prepare($sql);
+        $prepare->bindValue(":userId", $userId);
+        $prepare->bindValue(":fromUserId", $userId);
+
+        $result = $prepare->execute();
+
+        $this->logger->writeSqlLog($tag, $sql, [$userId], $this->getCurrentTimeMills());
+
+        return $this->handlerResult($result, $prepare, $tag);
+    }
+
+    function deleteMessagePointer($userId)
+    {
+        $tag = __CLASS__ . '->' . __FUNCTION__;
+        $sql = "delete from $this->pointerTable where userId=:userId;";
+
+        $prepare = $this->db->prepare($sql);
+        $prepare->bindValue(":userId", $userId);
+
+        $result = $prepare->execute();
+
+        $this->logger->writeSqlLog($tag, $sql, [$userId], $this->getCurrentTimeMills());
+
+        return $this->handlerResult($result, $prepare, $tag);
     }
 
     /**
@@ -49,13 +80,16 @@ class siteU2MessageTable extends BaseTable
         $tag = __CLASS__ . "." . __FUNCTION__;
 
         $queryFields = implode(",", $this->columns);
-        $sql = "select $queryFields from $this->table where id>:offset and userId=:userId order by id limit :limitCount;";
+        $sql = "select $queryFields 
+                from $this->table 
+                where id>:offset and (userId=:userId or fromUserId=:fromUserId) order by id limit :limitCount;";
 
         try {
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
 
             $prepare->bindValue(":userId", $userId);
+            $prepare->bindValue(":fromUserId", $userId);
             $prepare->bindValue(":offset", $offset, PDO::PARAM_INT);
             $prepare->bindValue(":limitCount", $limitCount, PDO::PARAM_INT);
 

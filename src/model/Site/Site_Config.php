@@ -31,6 +31,11 @@ class Site_Config
         return $defaultValue;
     }
 
+    public function updateConfigValue($configKey, $configValue)
+    {
+        return $this->ctx->SiteConfigTable->updateSiteConfig($configKey, $configValue);
+    }
+
     public function getFileSizeConfig()
     {
         return $this->getConfigValue(SiteConfig::SITE_FILE_SIZE, 10);
@@ -113,6 +118,145 @@ class Site_Config
     public function getSiteDefaultFriendsAndGroups()
     {
         return $this->ctx->SiteConfigTable->selectSiteConfig([SiteConfig::SITE_DEFAULT_FRIENDS, SiteConfig::SITE_DEFAULT_GROUPS]);
+    }
+
+    public function getSiteManagerString($siteConfig = false)
+    {
+        if (!$siteConfig) {
+            $siteConfig = $this->getAllConfig();
+        }
+
+        return $siteConfig[SiteConfig::SITE_MANAGERS];
+    }
+
+    public function getSiteDefaultFriendString($siteConfig = false)
+    {
+        if (!$siteConfig) {
+            $siteConfig = $this->getAllConfig();
+        }
+
+        return $siteConfig[SiteConfig::SITE_DEFAULT_FRIENDS];
+    }
+
+    public function getSiteDefaultGroupString($siteConfig = false)
+    {
+
+        if (!$siteConfig) {
+            $siteConfig = $this->getAllConfig();
+        }
+
+        return $siteConfig[SiteConfig::SITE_DEFAULT_GROUPS];
+    }
+
+    public function addSiteManager($userId, $siteManagerString = false)
+    {
+        if (!$siteManagerString) {
+            $siteManagerString = $this->getSiteManagerString();
+        }
+
+        $siteManagerString = $this->buildAddDefaultString($userId, $siteManagerString);
+
+        return $this->updateConfigValue(SiteConfig::SITE_MANAGERS, $siteManagerString);
+    }
+
+    public function removeSiteManager($userId, $siteManagerString = false)
+    {
+        if (!$siteManagerString) {
+            $siteManagerString = $this->getSiteManagerString();
+        }
+
+        $siteManagerString = $this->buildRemoveDefaultString($userId, $siteManagerString);
+
+        if (empty($siteManagerString)) {
+            return true;
+        }
+
+        return $this->updateConfigValue(SiteConfig::SITE_MANAGERS, $siteManagerString);
+    }
+
+    public function removeDefaultFriend($userId, $siteDefaultFriendString = false)
+    {
+        if (!$siteDefaultFriendString) {
+            $siteDefaultFriendString = $this->getSiteDefaultFriendString();
+        }
+
+        $siteDefaultFriendString = $this->buildRemoveDefaultString($userId, $siteDefaultFriendString);
+
+        if (empty($siteDefaultFriendString)) {
+            return true;
+        }
+
+        return $this->updateConfigValue(SiteConfig::SITE_DEFAULT_FRIENDS, $siteDefaultFriendString);
+    }
+
+    public function addDefaultFriend($userId, $siteDefaultFriendString = false)
+    {
+        if (!$siteDefaultFriendString) {
+            $siteDefaultFriendString = $this->getSiteDefaultFriendString();
+        }
+
+        $siteDefaultFriendString = $this->buildAddDefaultString($userId, $siteDefaultFriendString);
+
+        return $this->updateConfigValue(SiteConfig::SITE_DEFAULT_FRIENDS, $siteDefaultFriendString);
+    }
+
+
+    public function addDefaultGroup($groupId, $siteManagerString = false)
+    {
+        if (!$siteManagerString) {
+            $siteManagerString = $this->getSiteManagerString();
+        }
+
+        $siteManagerString = $this->buildAddDefaultString($groupId, $siteManagerString);
+        return $this->updateConfigValue(SiteConfig::SITE_DEFAULT_GROUPS, $siteManagerString);
+    }
+
+    public function removeDefaultGroup($groupId, $siteManagerString = false)
+    {
+        if (!$siteManagerString) {
+            $siteManagerString = $this->getSiteManagerString();
+        }
+
+        $siteManagerString = $this->buildRemoveDefaultString($groupId, $siteManagerString);
+
+        if (empty($siteManagerString)) {
+            return true;
+        }
+
+        return $this->updateConfigValue(SiteConfig::SITE_DEFAULT_GROUPS, $siteManagerString);
+    }
+
+    private function buildAddDefaultString($addString, $defaultString)
+    {
+        if (empty($defaultString)) {
+            $defaultString = $addString;
+        } else {
+            $defaultList = explode(",", $defaultString);
+            if (!in_array($addString, $defaultList)) {
+                $defaultList[] = $addString;
+            }
+            $defaultString = implode(",", $defaultList);
+        }
+
+        return $defaultString;
+    }
+
+    private function buildRemoveDefaultString($removeString, $defaultString)
+    {
+        if (!empty($defaultString)) {
+            $defaultList = explode(",", $defaultString);
+
+            if (in_array($removeString, $defaultList)) {
+                $defaultList = array_diff($defaultList, [$removeString]);
+            }
+
+            $defaultString = implode(",", $defaultList);
+
+        } else {
+            $defaultString = "";
+        }
+
+        return $defaultString;
     }
 
 }

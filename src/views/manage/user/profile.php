@@ -564,7 +564,7 @@
         var url = "index.php?action=manage.user.delete&lang=" + getLanguage();
 
         var data = {
-            'userId': userId
+            'deleteUserId': userId
         };
 
         zalyjsCommonAjaxPostJson(url, data, removeUserResponse);
