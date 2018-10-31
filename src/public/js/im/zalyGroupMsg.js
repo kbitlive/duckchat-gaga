@@ -2179,7 +2179,6 @@ function  appendFriendListHtml(results)
                 nickname: u2.nickname ? u2.nickname : defaultUserName,
                 friendAvatarImg:friendAvatarImg
             });
-            console.log("html ===="+html);
             html = handleHtmlLanguage(html);
             $(".friend-list-contact-row").append(html);
         }
@@ -2372,10 +2371,19 @@ function updateInfo(profileId, profileType)
     if(profileType == U2_MSG) {
         var friendProfile = getFriendProfile(profileId, false, handleGetFriendProfile);
         name = friendProfile != false && friendProfile != null ? friendProfile.nickname : "";
+        if(friendProfile != false && friendProfile != null && friendProfile.avatar) {
+            var friendAvatarImg = getNotMsgImgUrl(friendProfile.avatar);
+            console.log(friendAvatarImg);
+            $(".info-avatar-"+friendProfile.userId).attr("src", friendAvatarImg);
+        }
     } else {
         var groupProfile = getGroupProfile(profileId);
         var groupName = groupProfile != false && groupProfile != null ? groupProfile.name : "";
         name = groupName;
+        if(groupProfile != false && groupProfile != null  && groupProfile.avatar) {
+            var groupProfileAvatarImg = getNotMsgImgUrl(groupProfile.avatar);
+            $(".info-avatar-"+groupProfile.id).attr("src", groupProfileAvatarImg);
+        }
     }
 
     var muteKey= msgMuteKey+profileId;

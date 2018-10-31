@@ -1058,7 +1058,6 @@ function appendMsgHtmlToChatDialog(msg)
     var groupUserImageClassName = msg.roomType == GROUP_MSG ? "group-user-img group-user-img-"+msg.msgId : "";
     var msgStatus = msg.status ? msg.status : "";
     var userAvatar =  getNotMsgImgUrl(msg.userAvatar);
-    console.log("--------------------"+JSON.stringify(msg));
 
     if(sendBySelf) {
         switch(msgType) {
