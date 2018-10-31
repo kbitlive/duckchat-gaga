@@ -87,7 +87,7 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
             ];
             $type = isset($_GET['type']) ? $_GET['type'] : "";
             if($type == "see_gif") {
-                $gifId = isset($_GET['gifId']) ? $_GET['gifId'] : 'LbdKkLxXXbcatS2t';
+                $gifId = isset($_GET['gifId']) ? $_GET['gifId'] : '';
                 $gif = $this->ctx->SiteUserGifTable->getGifInfo($this->userId, $gifId);
                 if(!$gif) {
                     echo $this->display("miniProgram_gif_info", []);

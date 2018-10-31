@@ -185,9 +185,9 @@ class Api_Site_ConfigController extends \BaseController
                 $config->setMasters(json_encode($siteAdmins));
             }
 
-            $zalyPort = $configData[SiteConfig::SITE_ZALY_PORT];
-            $wsPort = $configData[SiteConfig::SITE_WS_PORT];
-            $wsAddress = $configData[SiteConfig::SITE_WS_ADDRESS];
+            $zalyPort = isset($configData[SiteConfig::SITE_ZALY_PORT]) ? $configData[SiteConfig::SITE_ZALY_PORT] : "";
+            $wsPort = isset( $configData[SiteConfig::SITE_WS_PORT]) ?  $configData[SiteConfig::SITE_WS_PORT] :"";
+            $wsAddress = isset($configData[SiteConfig::SITE_WS_ADDRESS])? $configData[SiteConfig::SITE_WS_ADDRESS] : "";
 
             $addressForAPi = "";
             $addressForIM = "";
