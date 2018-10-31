@@ -80,8 +80,8 @@
                                 <div class="item-body-desc">
                                     <?php
                                     $length = mb_strlen($profile['name']);
-                                    if ($length > 10) {
-                                        echo mb_substr($profile['name'], 0, 10) . "...";
+                                    if ($length > 20) {
+                                        echo mb_substr($profile['name'], 0, 20) . "...";
                                     } else {
                                         echo $profile['name'];
                                     }

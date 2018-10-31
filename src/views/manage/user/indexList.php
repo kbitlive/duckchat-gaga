@@ -93,8 +93,8 @@
                                     }
 
                                     $length = mb_strlen($username);
-                                    if ($length > 16) {
-                                        echo mb_substr($username, 0, 16) . "...";
+                                    if ($length > 20) {
+                                        echo mb_substr($username, 0, 20) . "...";
                                     } else {
                                         echo $username;
                                     }
