@@ -22,8 +22,10 @@ class WebNoticeMessage extends \Google\Protobuf\Internal\Message
      */
     private $height = 0;
     /**
-     * string hrefURL  = 3;
-     *
+     * Generated from protobuf field <code>string hrefURL = 3;</code>
+     */
+    private $hrefURL = '';
+    /**
      * Generated from protobuf field <code>string title = 4;</code>
      */
     private $title = '';
@@ -44,8 +46,8 @@ class WebNoticeMessage extends \Google\Protobuf\Internal\Message
      *
      *     @type string $code
      *     @type int $height
+     *     @type string $hrefURL
      *     @type string $title
-     *           string hrefURL  = 3;
      *     @type int $pluginId
      *     @type \Zaly\Proto\Core\SimplePluginProfile $jumpPluginProfile
      * }
@@ -100,8 +102,28 @@ class WebNoticeMessage extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * string hrefURL  = 3;
-     *
+     * Generated from protobuf field <code>string hrefURL = 3;</code>
+     * @return string
+     */
+    public function getHrefURL()
+    {
+        return $this->hrefURL;
+    }
+
+    /**
+     * Generated from protobuf field <code>string hrefURL = 3;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setHrefURL($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->hrefURL = $var;
+
+        return $this;
+    }
+
+    /**
      * Generated from protobuf field <code>string title = 4;</code>
      * @return string
      */
@@ -111,8 +133,6 @@ class WebNoticeMessage extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * string hrefURL  = 3;
-     *
      * Generated from protobuf field <code>string title = 4;</code>
      * @param string $var
      * @return $this
