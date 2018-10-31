@@ -209,7 +209,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
     }
 
     var avatar = msg.roomType == GROUP_MSG ? msg.avatar : msg.userAvatar;
-    
+    avatar = getNotMsgImgUrl(avatar);
     try{
         name = name.trim();
     }catch (error) {
@@ -218,6 +218,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
     if(name !=undefined && name.length>10) {
         name = name.substr(0, 8) + "...";
     }
+
     var html = template("tpl-chatSession", {
         className:msg.roomType == U2_MSG ? "u2-profile" : "group-profile",
         isMute:msg.isMute,
@@ -238,8 +239,6 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
     } else {
         $(".chatsession-lists").html(html);
     }
-
-    msg.roomType == GROUP_MSG ? getNotMsgImg(msg.chatSessionId, msg.avatar) : getNotMsgImg(msg.chatSessionId, msg.userAvatar);
 
     if(msg.chatSessionId == localStorage.getItem(chatSessionIdKey)) {
         $(".chat_session_id_"+msg.chatSessionId).addClass("chatsession-row-active");
@@ -850,10 +849,11 @@ function getWebMessageSize(imageNaturalHeight, imageNaturalWidth, h, w)
 function getMsgImgSrc(msg)
 {
     if(msg.hasOwnProperty("image")) {
-        var imgId = msg['image'].url;
         var imgUrlKey = sendMsgImgUrlKey + imgId;
         var src =  localStorage.getItem(imgUrlKey);
         if(!src) {
+            var imgId = msg['image'].url;
+
             var isGroupMessage = msg.roomType == GROUP_MSG ? 1 : 0;
             getMsgImg(imgId, isGroupMessage, msg.msgId);
         } else {
@@ -902,6 +902,9 @@ function autoMsgImgSize(imgObject, h, w)
 {
     var image = new Image();
     image.src = imgObject.src;
+    image.onload = function() {
+
+    };
     var imageNaturalWidth  = image.naturalWidth;
     var imageNaturalHeight = image.naturalHeight;
 
@@ -1054,7 +1057,8 @@ function appendMsgHtmlToChatDialog(msg)
     var msgTime = getMsgTimeByMsg(msg.timeServer);
     var groupUserImageClassName = msg.roomType == GROUP_MSG ? "group-user-img group-user-img-"+msg.msgId : "";
     var msgStatus = msg.status ? msg.status : "";
-    var userAvatarSrc = sendBySelf ?  localStorage.getItem(selfInfoAvatar) : "";
+    var userAvatar =  getNotMsgImgUrl(msg.userAvatar);
+    console.log("--------------------"+JSON.stringify(msg));
 
     if(sendBySelf) {
         switch(msgType) {
@@ -1067,8 +1071,7 @@ function appendMsgHtmlToChatDialog(msg)
                     msgTime : msgTime,
                     msgContent:msgContent,
                     msgStatus:msgStatus,
-                    avatar:msg.userAvatar,
-                    userAvatarSrc:userAvatarSrc,
+                    avatar:userAvatar,
                     userId:msg.fromUserId,
                     timeServer:msg.timeServer
                 });
@@ -1085,8 +1088,7 @@ function appendMsgHtmlToChatDialog(msg)
                     url:url,
                     msgTime : msgTime,
                     msgStatus:msgStatus,
-                    avatar:msg.userAvatar,
-                    userAvatarSrc:userAvatarSrc,
+                    avatar:userAvatar,
                     userId:msg.fromUserId,
                     fileSize:size,
                     fileName:fileName,
@@ -1096,18 +1098,21 @@ function appendMsgHtmlToChatDialog(msg)
                 break;
             case MessageType.MessageImage :
                 var imgObject = getMsgSizeForDiv(msg);
+                var imgId = msg['image'].url;
+                var isGroupMessage = msg.roomType == GROUP_MSG ? 1 : 0;
+                var msgImgUrl = downloadFileUrl +  "&fileId="+imgId + "&returnBase64=0&isGroupMessage="+isGroupMessage+"&messageId="+msgId+"&lang="+languageNum;
                 html = template("tpl-send-msg-img", {
                     roomType: msg.roomType,
                     nickname:nickname,
                     msgId : msgId,
                     msgTime : msgTime,
                     msgStatus:msgStatus,
-                    avatar:msg.userAvatar,
+                    avatar:userAvatar,
                     width:imgObject.width,
                     height:imgObject.height,
-                    userAvatarSrc:userAvatarSrc,
                     userId:msg.fromUserId,
-                    timeServer:msg.timeServer
+                    timeServer:msg.timeServer,
+                    msgImgUrl:msgImgUrl
                 });
                 break;
             case MessageType.MessageAudio:
@@ -1117,8 +1122,7 @@ function appendMsgHtmlToChatDialog(msg)
                     msgId : msgId,
                     msgTime : msgTime,
                     msgStatus:msgStatus,
-                    avatar:msg.userAvatar,
-                    userAvatarSrc:userAvatarSrc,
+                    avatar:userAvatar,
                     userId:msg.fromUserId,
                     timeServer:msg.timeServer
                 });
@@ -1141,10 +1145,9 @@ function appendMsgHtmlToChatDialog(msg)
                     msgId : msgId,
                     msgTime : msgTime,
                     groupUserImg : groupUserImageClassName,
-                    avatar:msg.userAvatar,
+                    avatar:userAvatar,
                     hrefURL:hrefUrl,
                     linkUrl :linkUrl,
-                    userAvatarSrc:userAvatarSrc,
                     userId:msg.fromUserId,
                     timeServer:msg.timeServer,
                 });
@@ -1165,8 +1168,7 @@ function appendMsgHtmlToChatDialog(msg)
                     msgTime : msgTime,
                     msgStatus:msgStatus,
                     msgContent:msgContent,
-                    avatar:msg.userAvatar,
-                    userAvatarSrc:userAvatarSrc,
+                    avatar:userAvatar,
                     userId:msg.fromUserId,
                     timeServer:msg.timeServer
                 });
@@ -1184,11 +1186,15 @@ function appendMsgHtmlToChatDialog(msg)
                     msgTime : msgTime,
                     msgContent:msgContent,
                     groupUserImg : groupUserImageClassName,
-                    avatar:msg.userAvatar,
+                    avatar:userAvatar,
                 });
                 break;
             case MessageType.MessageImage :
                 var imgObject = getMsgSizeForDiv(msg);
+                var imgId = msg['image'].url;
+                var isGroupMessage = msg.roomType == GROUP_MSG ? 1 : 0;
+                var msgImgUrl = downloadFileUrl +  "&fileId="+imgId + "&returnBase64=0&isGroupMessage="+isGroupMessage+"&messageId="+msgId+"&lang="+languageNum;
+
                 html = template("tpl-receive-msg-img", {
                     roomType: msg.roomType,
                     nickname: msg.nickname,
@@ -1196,9 +1202,10 @@ function appendMsgHtmlToChatDialog(msg)
                     msgTime : msgTime,
                     userId :msg.fromUserId,
                     groupUserImg : groupUserImageClassName,
-                    avatar:msg.userAvatar,
+                    avatar:userAvatar,
                     width:imgObject.width,
                     height:imgObject.height,
+                    msgImgUrl:msgImgUrl,
                 });
                 break;
             case MessageType.MessageAudio:
@@ -1209,7 +1216,7 @@ function appendMsgHtmlToChatDialog(msg)
                     userId :msg.fromUserId,
                     msgTime : msgTime,
                     groupUserImg : groupUserImageClassName,
-                    avatar:msg.userAvatar,
+                    avatar:userAvatar,
                 });
                 break;
             case MessageType.MessageDocument:
@@ -1224,7 +1231,7 @@ function appendMsgHtmlToChatDialog(msg)
                     url:url,
                     msgTime : msgTime,
                     msgStatus:msgStatus,
-                    avatar:msg.userAvatar,
+                    avatar:userAvatar,
                     userId:msg.fromUserId,
                     fileSize:size,
                     fileName:fileName,
@@ -1252,7 +1259,7 @@ function appendMsgHtmlToChatDialog(msg)
                     leftWebWidth:Number(webSize.width+25),
                     userId :msg.fromUserId,
                     groupUserImg : groupUserImageClassName,
-                    avatar:msg.userAvatar,
+                    avatar:userAvatar,
                     hrefURL:hrefUrl,
                     linkUrl:linkUrl,
                 });
@@ -1272,7 +1279,7 @@ function appendMsgHtmlToChatDialog(msg)
                     msgTime : msgTime,
                     msgStatus:msgStatus,
                     msgContent:msgContent,
-                    avatar:msg.userAvatar,
+                    avatar:userAvatar,
                     userId :msg.fromUserId,
                     timeServer:msg.timeServer
                 });
@@ -1287,12 +1294,7 @@ function appendMsgHtmlToChatDialog(msg)
     var currentChatsessionId = localStorage.getItem(chatSessionIdKey);
     if(currentChatsessionId == msg.chatSessionId) {
         $(".right-chatbox[chat-session-id="+msg.chatSessionId+"]").append(html);
-        setTimeout(function () {
-            getNotMsgImg(msg.fromUserId,msg.userAvatar);
-            getMsgImgSrc(msg);
-        }, 50);
     }
-
 }
 
 //---------------------------------------------upload file -------------------------------------------------
