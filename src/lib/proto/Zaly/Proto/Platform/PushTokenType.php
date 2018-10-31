@@ -5,7 +5,7 @@
 namespace Zaly\Proto\Platform;
 
 /**
- * Protobuf enum <code>Platform\PushTokenType</code>
+ * Protobuf type <code>platform.PushTokenType</code>
  */
 class PushTokenType
 {

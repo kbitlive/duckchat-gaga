@@ -256,6 +256,15 @@ function checkIsEnterBack(event)
 }
 
 //--------------------------------------http.file.downloadFile----------------------------------------------
+
+
+function getNotMsgImgUrl(avatarImgId) {
+    if(avatarImgId) {
+        return  downloadFileUrl + "&fileId="+avatarImgId+"&returnBase64=0&lang="+languageNum;
+    }
+    return false;
+}
+
 function getNotMsgImg(userId, avatarImgId)
 {
     if(avatarImgId == undefined || avatarImgId == "" || avatarImgId.length<1) {
@@ -319,7 +328,7 @@ function getMsgImg(imgId, isGroupMessage, msgId)
     xhttp.send();
 }
 ///下载自己头像
-getNotMsgImg(token, avatar);
+// getNotMsgImg(token, avatar);
 
 //--------------------------------------site share---------------------------------------------
 
@@ -665,13 +674,14 @@ function appendGroupListHtml(results) {
         html = "";
         for(i=0; i<groupLength; i++) {
             var group = groupList[i];
+            var groupAvatarImg = getNotMsgImgUrl(group.avatar);
             html = template("tpl-group-contact", {
                 groupId : group.id,
                 groupName : group.name,
+                groupAvatarImg:groupAvatarImg
             });
             html = handleHtmlLanguage(html);
             $(".group-list-contact-row").append(html);
-            getNotMsgImg(group.id, group.avatar)
         }
         var groupsDivHeight = $(".left-body-groups")[0].clientHeight;
         var groupToolsHeight = $(".group-tools")[0].clientHeight;
@@ -739,13 +749,14 @@ function getUnselectMemberListHtml(results)
         var length = list.length;
         for(i=0; i<length ; i++) {
             var user = list[i];
+            var friendAvatarImg = getNotMsgImgUrl(user.avatar);
             html = template("tpl-invite-member", {
                 userId : user.userId,
-                nickname:user.nickname ?  user.nickname : defaultUserName
+                nickname:user.nickname ?  user.nickname : defaultUserName,
+                friendAvatarImg:friendAvatarImg
             });
             html = handleHtmlLanguage(html);
             $(".pw-left").append(html);
-            getNotMsgImg(user.userId, user.avatar);
         }
     }
 }
@@ -956,13 +967,14 @@ function displayGroupMemberForGroupInfo(results)
                 $(".group-member-body").append(html);
             }
             var user = list[i].profile;
+            var memberAvatarImg = getNotMsgImgUrl(user.avatar);
             html = template("tpl-group-member-body-detail", {
                 userId : user.userId,
-                nickname:user.nickname
+                nickname:user.nickname,
+                memberAvatarImg:memberAvatarImg
             });
             html = handleHtmlLanguage(html);
             $(".member_body_"+divNum).append(html);
-            getNotMsgImg(user.userId, user.avatar);
             bodyDivNum = newBodyNum;
         }
     }
@@ -1338,7 +1350,7 @@ function handleGetGroupMemberInfo(result)
             isAdmin = checkGroupAdminContainOwner(token, groupProfile);
         }
         var isCanAddFriend = checkGroupCanAddFriend();
-
+        var memberAvatarImg = getNotMsgImgUrl(userProfile.avatar);
         var html = template("tpl-group-member-info", {
             userId : userProfile.userId,
             nickname:userProfile.nickname,
@@ -1347,10 +1359,10 @@ function handleGetGroupMemberInfo(result)
             isSelf:isSelf,
             isCanAddFriend:isCanAddFriend,
             isAdmin:isAdmin,
+            memberAvatarImg:memberAvatarImg
         });
         html = handleHtmlLanguage(html);
         $(".group-member-info").html(html);
-        getNotMsgImg(userProfile.userId, userProfile.avatar);
         $(".group-member-info")[0].style.display='block';
     }
     handleGetFriendProfile(result);
@@ -1389,8 +1401,6 @@ $(document).on("click", ".group-member", function (event) {
     $(".group-member-info").html(html);
     getFriendProfile(userId, true, handleGetGroupMemberInfo);
 });
-
-
 
 function  reloadPage() {
     window.location.reload();
@@ -1432,7 +1442,6 @@ function handelGroupSpeakerList(result)
                 var speakerInfo = speakers[i];
                 var html =getSpeakerMemberHtml(speakerInfo,  true, "member", isSelfAdminRole);
                 $(".speaker-people-div").append(html);
-                getNotMsgImg(speakerInfo.userId, speakerInfo.avatar);
             }
         }
         // group operation -- group speakers from group profile - init member html
@@ -1488,7 +1497,6 @@ function initSpeakerGroupMemberList(results)
             }
             var html = getSpeakerMemberHtml(user,  false, "member", isSelfAdminRole);
             $(".speaker-group-member-div").append(html);
-            getNotMsgImg(userId, user.avatar);
         }
     }
 }
@@ -1593,7 +1601,6 @@ function handleAddSpeaker()
         $("."+speakerInfo.userId).remove();
         var html = getSpeakerMemberHtml(speakerInfo,  true, "member", isSelfAdminRole);
         $(".speaker-people-div").append(html);
-        getNotMsgImg(speakerInfo.userId, speakerInfo.avatar)
     }
     addSpeakerInfo=[];
     sendGroupProfileReq(groupId, handleGetGroupProfile);
@@ -1601,13 +1608,15 @@ function handleAddSpeaker()
 
 function getSpeakerMemberHtml(speakerInfo,  isSpeaker, isMemberType, isSelfAdminRole)
 {
+    var memberAvatarImg = getNotMsgImgUrl(speakerInfo.avatar);
     var html = template("tpl-speaker-member",{
         nickname:speakerInfo.nickname,
         userId:speakerInfo.userId,
         avatar:speakerInfo.avatar,
         isSpeaker:isSpeaker,
         isMemberType:isMemberType,
-        isSelfAdminRole:isSelfAdminRole
+        isSelfAdminRole:isSelfAdminRole,
+        memberAvatarImg:memberAvatarImg
     });
     return  handleHtmlLanguage(html);
 }
@@ -1646,7 +1655,6 @@ function handleRemoveSpeaker()
         $("."+speakerInfo.userId).remove();
         var html = getSpeakerMemberHtml(speakerInfo,  false, "member", isSelfAdminRole);
         $(".speaker-group-member-div").append(html);
-        getNotMsgImg(speakerInfo.userId, speakerInfo.avatar);
     }
     deleteSpeakerInfo=[];
     sendGroupProfileReq(groupId, handleGetGroupProfile);
@@ -1733,8 +1741,6 @@ $(document).on("click", ".share-group", function () {
     $("#share_group").html(html);
     showWindow($("#share_group"));
 
-    getNotMsgImg(chatSessionId, groupProfile.avatar);
-
     var src = $("#share_group").attr("src");
 
     if(src == "" || src == undefined) {
@@ -1776,16 +1782,16 @@ function addHtmlToGroupList(user, isType)
     var isGroupOwner = checkGroupOwnerType(token, groupProfile);
     var isGroupAdmin = checkGroupMemberAdminType(token, groupProfile);
     var isPermission = isGroupOwner || isGroupAdmin ? "admin" : "member";
-
+    var memberAvatarImg = getNotMsgImgUrl(user.avatar);
     var html = template("tpl-group-member-list", {
         userId : user.userId,
         nickname:user.nickname,
         isType:isType,
-        isPermission:isPermission
+        isPermission:isPermission,
+        memberAvatarImg:memberAvatarImg
     })
     html = handleHtmlLanguage(html);
     $(".group-member-content").append(html);
-    getNotMsgImg(user.userId, user.avatar);
 }
 
 function initGroupMemberForGroupMemberList(results)
@@ -2167,13 +2173,14 @@ function  appendFriendListHtml(results)
         var u2Length = u2List.length;
         for(i=0; i<u2Length; i++) {
             var u2 = u2List[i].profile;
+            var friendAvatarImg = getNotMsgImgUrl(u2.avatar);
             var html = template("tpl-friend-contact", {
                 userId : u2.userId,
                 nickname: u2.nickname ? u2.nickname : defaultUserName,
+                friendAvatarImg:friendAvatarImg
             });
             html = handleHtmlLanguage(html);
             $(".friend-list-contact-row").append(html);
-            getNotMsgImg(u2.userId, u2.avatar);
         }
         var friendsDivHeight = $(".left-body-friends")[0].clientHeight;
         var friendToolsHeight = $(".friend-tools")[0].clientHeight;
@@ -2364,25 +2371,18 @@ function updateInfo(profileId, profileType)
     if(profileType == U2_MSG) {
         var friendProfile = getFriendProfile(profileId, false, handleGetFriendProfile);
         name = friendProfile != false && friendProfile != null ? friendProfile.nickname : "";
-        try{
-            getNotMsgImg(friendProfile.userId, friendProfile.avatar);
-        }catch (error) {
-
+        if(friendProfile != false && friendProfile != null && friendProfile.avatar) {
+            var friendAvatarImg = getNotMsgImgUrl(friendProfile.avatar);
+            console.log(friendAvatarImg);
+            $(".info-avatar-"+friendProfile.userId).attr("src", friendAvatarImg);
         }
     } else {
         var groupProfile = getGroupProfile(profileId);
         var groupName = groupProfile != false && groupProfile != null ? groupProfile.name : "";
-       try{
-           getNotMsgImg(groupProfile.id, groupProfile.avatar);
-       }catch (error) {
-
-       }
-
         name = groupName;
-        try{
-            getNotMsgImg(groupProfile.id, groupProfile.avatar);
-        }catch (error) {
-
+        if(groupProfile != false && groupProfile != null  && groupProfile.avatar) {
+            var groupProfileAvatarImg = getNotMsgImgUrl(groupProfile.avatar);
+            $(".info-avatar-"+groupProfile.id).attr("src", groupProfileAvatarImg);
         }
     }
 
@@ -2458,8 +2458,6 @@ function displayCurrentProfile()
                 $(".add_friend")[0].style.display = "inline";
             }
 
-            getNotMsgImg(friendProfile.userId, friendProfile.avatar);
-
             if(mute == 1) {
                 $(".friend_mute").attr("src", "../../public/img/msg/icon_switch_on.png");
                 $(".friend_mute").attr("is_on", "on");
@@ -2476,7 +2474,6 @@ function displayCurrentProfile()
             $(".add_friend")[0].style.display = "none";
 
             var groupProfile = getGroupProfile(chatSessionId);
-            getNotMsgImg(groupProfile.id, groupProfile.avatar);
 
             if(groupProfile != false && groupProfile != null) {
                 var groupName = groupProfile.name
@@ -2825,6 +2822,7 @@ function getApplyFriendListHtml(results)
 
 function handleHtmlLanguage(html)
 {
+    console.log(html);
     $(html).find("[data-local-value]").each(function () {
         var changeHtmlValue = $(this).attr("data-local-value");
         var valueHtml = $(this).html();

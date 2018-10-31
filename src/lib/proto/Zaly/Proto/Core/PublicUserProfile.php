@@ -43,10 +43,31 @@ class PublicUserProfile extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string realNickname = 7;</code>
      */
     private $realNickname = '';
+    /**
+     * Generated from protobuf field <code>string loginPluginId = 8;</code>
+     */
+    private $loginPluginId = '';
 
-    public function __construct() {
+    /**
+     * Constructor.
+     *
+     * @param array $data {
+     *     Optional. Data for populating the Message object.
+     *
+     *     @type string $userId
+     *     @type string $loginName
+     *     @type string $nickname
+     *           nickname or alias nickname
+     *     @type string $nicknameInLatin
+     *     @type string $avatar
+     *     @type int $availableType
+     *     @type string $realNickname
+     *     @type string $loginPluginId
+     * }
+     */
+    public function __construct($data = NULL) {
         \GPBMetadata\Core\User::initOnce();
-        parent::__construct();
+        parent::__construct($data);
     }
 
     /**
@@ -203,6 +224,28 @@ class PublicUserProfile extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->realNickname = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string loginPluginId = 8;</code>
+     * @return string
+     */
+    public function getLoginPluginId()
+    {
+        return $this->loginPluginId;
+    }
+
+    /**
+     * Generated from protobuf field <code>string loginPluginId = 8;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setLoginPluginId($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->loginPluginId = $var;
 
         return $this;
     }

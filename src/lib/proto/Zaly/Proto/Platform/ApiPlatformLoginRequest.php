@@ -40,9 +40,22 @@ class ApiPlatformLoginRequest extends \Google\Protobuf\Internal\Message
      */
     private $loginNameForRegister = '';
 
-    public function __construct() {
+    /**
+     * Constructor.
+     *
+     * @param array $data {
+     *     Optional. Data for populating the Message object.
+     *
+     *     @type string $phoneCountryCode
+     *     @type string $phoneNumber
+     *     @type string $verifyCode
+     *     @type string $sitePubkPem
+     *     @type string $loginNameForRegister
+     * }
+     */
+    public function __construct($data = NULL) {
         \GPBMetadata\Platform\ApiPlatformLogin::initOnce();
-        parent::__construct();
+        parent::__construct($data);
     }
 
     /**

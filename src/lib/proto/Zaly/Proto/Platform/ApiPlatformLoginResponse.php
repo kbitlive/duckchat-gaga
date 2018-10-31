@@ -22,9 +22,19 @@ class ApiPlatformLoginResponse extends \Google\Protobuf\Internal\Message
      */
     private $loginName = '';
 
-    public function __construct() {
+    /**
+     * Constructor.
+     *
+     * @param array $data {
+     *     Optional. Data for populating the Message object.
+     *
+     *     @type string $preSessionId
+     *     @type string $loginName
+     * }
+     */
+    public function __construct($data = NULL) {
         \GPBMetadata\Platform\ApiPlatformLogin::initOnce();
-        parent::__construct();
+        parent::__construct($data);
     }
 
     /**

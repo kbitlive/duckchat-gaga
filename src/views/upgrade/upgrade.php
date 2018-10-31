@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../../../public/js/jquery.min.js"></script>
     <script src="../../public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
-    <script src="../../public/js/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
+    <script src="../../public/sdk/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
 </head>
 <body>

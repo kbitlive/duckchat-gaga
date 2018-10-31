@@ -33,9 +33,21 @@ class ApiPushCancelRequest extends \Google\Protobuf\Internal\Message
      */
     private $signTimestamp = '';
 
-    public function __construct() {
+    /**
+     * Constructor.
+     *
+     * @param array $data {
+     *     Optional. Data for populating the Message object.
+     *
+     *     @type string $sitePubkPem
+     *     @type string $devicePubkPem
+     *     @type string $timestampSeconds
+     *     @type string $signTimestamp
+     * }
+     */
+    public function __construct($data = NULL) {
         \GPBMetadata\Platform\ApiPushCancel::initOnce();
-        parent::__construct();
+        parent::__construct($data);
     }
 
     /**

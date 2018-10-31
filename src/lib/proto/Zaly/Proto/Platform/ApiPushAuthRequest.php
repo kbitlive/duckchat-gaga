@@ -65,9 +65,31 @@ class ApiPushAuthRequest extends \Google\Protobuf\Internal\Message
      */
     private $siteUserId = '';
 
-    public function __construct() {
+    /**
+     * Constructor.
+     *
+     * @param array $data {
+     *     Optional. Data for populating the Message object.
+     *
+     *     @type string $sitePubkPem
+     *     @type string $siteAddressApi
+     *     @type string $siteName
+     *     @type string $pushToken
+     *     @type int $pushTokenType
+     *     @type string $devicePubkPem
+     *     @type string $timestampSeconds
+     *           = string(timestamp unit: seconds)
+     *     @type string $signTimestampBase64
+     *           sign(timestampSeconds)
+     *     @type string $signSitePubkPemBase64
+     *           sign(sitePubkPem)
+     *     @type string $siteUserId
+     *           site userId
+     * }
+     */
+    public function __construct($data = NULL) {
         \GPBMetadata\Platform\ApiPushAuth::initOnce();
-        parent::__construct();
+        parent::__construct($data);
     }
 
     /**

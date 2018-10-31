@@ -35,9 +35,22 @@ class ApiSiteRegisterRequest extends \Google\Protobuf\Internal\Message
      */
     private $sitePubkPem = '';
 
-    public function __construct() {
+    /**
+     * Constructor.
+     *
+     * @param array $data {
+     *     Optional. Data for populating the Message object.
+     *
+     *     @type string $nickname
+     *     @type string $invitationCode
+     *     @type bool $allowShareRealname
+     *          does the user allow the platform to share his realname with the site that he is on. 
+     *     @type string $sitePubkPem
+     * }
+     */
+    public function __construct($data = NULL) {
         \GPBMetadata\Platform\ApiSiteRegister::initOnce();
-        parent::__construct();
+        parent::__construct($data);
     }
 
     /**

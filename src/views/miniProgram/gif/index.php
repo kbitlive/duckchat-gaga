@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <script type="text/javascript" src="../../../public/js/jquery.min.js"></script>
-    <script src="../../../public/js/zalyjsNative.js"></script>
+    <script src="../../../public/sdk/zalyjsNative.js"></script>
     <script src="../../../public/js/template-web.js"></script>
     <style>
         body, html {
@@ -249,7 +249,6 @@
 
     function longEnterPress(gifId){
         timeOutEvent = 0;
-        console.log(gifId);
         var delGifObj = $(".del_gif");
         var delGifLength = $(".del_gif").length;
         for(i=0; i<delGifLength; i++) {
@@ -293,7 +292,6 @@
         },
         touchend: function(event){
             var gifId = $(this).attr("gifId");
-            console.log("del gifId =="+gifId);
             var reqData = {
                 gifId : gifId,
                 type:delGifType,

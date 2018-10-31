@@ -442,6 +442,8 @@
 
     downloadFileUrl = "./index.php?action=http.file.downloadFile";
 
+
+
     function uploadImageFile(obj) {
         if (obj) {
             if (obj.files) {
