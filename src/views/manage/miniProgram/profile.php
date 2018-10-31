@@ -606,7 +606,7 @@
                     text: language == 0 ? "Group Chat Mini Program" : "群组聊天小程序",
                     className: "select-color-primary",
                     onClick: function () {
-                        $("#mini-program-usage-text").html(language == 0 ? "Chat Page Bottom" : "聊天界面底部");
+                        $("#mini-program-usage-text").html(language == 0 ? "Chat Page Bottom" : "群组聊天小程序");
                         $(".mini-program-usage").attr("data", "5");
                         updateMiniProgramProfile("usageType", "5");
                     }
