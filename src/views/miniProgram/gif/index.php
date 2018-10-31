@@ -249,7 +249,6 @@
 
     function longEnterPress(gifId){
         timeOutEvent = 0;
-        console.log(gifId);
         var delGifObj = $(".del_gif");
         var delGifLength = $(".del_gif").length;
         for(i=0; i<delGifLength; i++) {
@@ -293,7 +292,6 @@
         },
         touchend: function(event){
             var gifId = $(this).attr("gifId");
-            console.log("del gifId =="+gifId);
             var reqData = {
                 gifId : gifId,
                 type:delGifType,

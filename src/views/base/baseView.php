@@ -5,7 +5,11 @@
         <div class="left-sidebar" style="position: relative;">
                 <div style="position: relative;height: 100%;">
                     <div class="l-sb-item" style="border: none;" >
-                        <img class="useravatar selfInfo info-avatar-<?php echo $user_id;?>"  src="../../public/img/msg/default_user.png" style="background-color: #c9c9c9;" />
+                        <?php if($avatar) { ?>
+                            <img class="useravatar selfInfo info-avatar-<?php echo $user_id;?>"  src="./index.php?action=http.file.downloadFile&fileId=<?php echo $avatar;?>&returnBase64=0" style="background-color: #c9c9c9;" />
+                        <?php } else { ?>
+                            <img class="useravatar selfInfo info-avatar-<?php echo $user_id;?>"  src="../../public/img/msg/default_user.png" style="background-color: #c9c9c9;" />
+                        <?php } ?>
                     </div>
                     <div class="hint--right" style="width: 7.5rem;" aria-label="消息" data-local="aria-label:chatSessionTip">
                         <div class="l-sb-item l-sb-item-active" data="chatSession" >
