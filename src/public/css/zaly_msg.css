@@ -209,7 +209,7 @@ html, body{
     box-shadow: 0rem -0.09rem 0.38rem 0rem rgba(223,223,223,1);
 }
 
-.left-body-chatsession, .left-body-groups, .left-body-friends{
+.left-body-home,.left-body-chatsession, .left-body-groups, .left-body-friends{
     flex-grow: 1;
     flex-shrink : 1;
     width: 100%;

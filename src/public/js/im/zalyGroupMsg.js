@@ -190,7 +190,14 @@ $(document).on("click", ".l-sb-item", function(){
     }
 
     switch (dataType){
+        case "home":
+            $(".home-page")[0].style.display = "block";
+            $(".group-lists")[0].style.display = "none";
+            $(".chatsession-lists")[0].style.display = "none";
+            $(".friend-lists")[0].style.display = "none";
+            break;
         case "group":
+            $(".home-page")[0].style.display = "none";
             $(".group-lists")[0].style.display = "block";
             $(".chatsession-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
@@ -199,11 +206,13 @@ $(document).on("click", ".l-sb-item", function(){
             break;
         case "chatSession" :
             getRoomList();
+            $(".home-page")[0].style.display = "none";
             $(".chatsession-lists")[0].style.display = "block";
             $(".group-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
             break;
         case "friend":
+            $(".home-page")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "block";
             $(".chatsession-lists")[0].style.display = "none";
             $(".group-lists")[0].style.display = "none";

@@ -11,6 +11,15 @@
                             <img class="useravatar selfInfo info-avatar-<?php echo $user_id;?>"  src="../../public/img/msg/default_user.png" style="background-color: #c9c9c9;" />
                         <?php } ?>
                     </div>
+                    <!--     home     -->
+                    <div class="hint--right" style="width: 7.5rem;" aria-label="主页" data-local="aria-label:homeTip">
+                        <div class="l-sb-item " data="home">
+                            <img src="../../public/img/msg/home_icon.png" data="unselect" class="home-unselect item-img"/>
+                            <img src="../../public/img/msg/home_icon_select.png" data="select" class="home-select item-img"
+                                 style="display: none;"/>
+                        </div>
+                    </div>
+                    <!--     chats     -->
                     <div class="hint--right" style="width: 7.5rem;" aria-label="消息" data-local="aria-label:chatSessionTip">
                         <div class="l-sb-item l-sb-item-active" data="chatSession" >
                             <img src="../../public/img/msg/chatsession.png" data="select" class="chatSession-select item-img "/>
@@ -19,13 +28,14 @@
                             <div style="display: none"  class="room-list-msg-unread-mute unread-num-mute"></div>
                         </div>
                     </div>
-
+                    <!--     groups     -->
                     <div class=" hint--right" style="width: 7.5rem;" aria-label="群聊" data-local="aria-label:groupTip">
                         <div class="l-sb-item "  data="group" >
                             <img src="../../public/img/msg/group_chat_unselect.png" data="unselect" class="group-unselect item-img" />
                             <img src="../../public/img/msg/group_chat.png" data="select" class="group-select item-img" style="display: none;"/>
                         </div>
                     </div>
+                    <!--     friends     -->
                     <div class=" hint--right" style="width: 7.5rem;" aria-label="好友" data-local="aria-label:friendTip">
                         <div class="l-sb-item"  data="friend" >
                             <img src="../../public/img/msg/friend_unselect.png" data="unselect" class="friend-unselect item-img" />
@@ -33,7 +43,7 @@
                             <div style="display: none" class="apply-friend-list apply_friend_list_num" style="display: none;"></div>
                         </div>
                     </div>
-
+                    <!--     more     -->
                     <div class=" hint--right" style="width: 7.5rem;bottom: 1rem;position: absolute;display: block;left:0rem;right:0rem;" aria-label="更多" data-local="aria-label:moreTip">
                         <div class="l-sb-item"  data="more" >
                             <img src="../../public/img/msg/more_unselect.png" data="unselect" class="more-unselect item-img" />
@@ -44,9 +54,48 @@
         </div>
 
         <div class="left-body">
+
             <div class="left-body-container">
+
+                <!-- home -->
+                <div class="left-body-home home-page" style="position: relative;display: none;">
+                    <div style="width: 100%;" class="home-tools">
+                        <div class="" style="font-size: 14px;color: #666666; margin: 14px 0 6px 20px">
+                            <span data-local-value="miniProgramTip">小程序列表</span>
+                        </div>
+                    </div>
+
+                    <div style="position: absolute;width: 100%;margin:0 auto;">
+                        <div class="mini-program-row" style="overflow-y: scroll;position: relative;">
+                            <div class="pw-home-row mini-program">
+                                <div class="pw-home-row-image" style="position: relative;">
+                                    <img src="../../public/img/manage/home_config.png"/>
+                                </div>
+                                <div class="pw-home-row-name" data-local-value="miniProgramTip">用户广场</div>
+                            </div>
+
+                            <div class="pw-home-row mini-program">
+                                <div class="pw-home-row-image" style="position: relative;">
+                                    <img src="../../public/img/manage/home_miniProgram.png"/>
+                                </div>
+                                <div class="pw-home-row-name" data-local-value="miniProgramTip">用户广场</div>
+                            </div>
+
+                            <div class="pw-home-row mini-program">
+                                <div class="pw-home-row-image" style="position: relative;">
+                                    <img src="../../public/img/manage/home_user.png"/>
+                                </div>
+                                <div class="pw-home-row-name" data-local-value="miniProgramTip">用户广场</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- chats -->
                 <div class="left-body-chatsession chatsession-lists" style="position: relative;">
                 </div>
+
+                <!-- groups -->
                 <div class="left-body-groups group-lists "  style="display: none;position: relative;">
                         <div style="width: 100%;" class="group-tools">
                             <div class="pw-contact-row create-group" >
@@ -63,8 +112,7 @@
                         </div>
                 </div>
 
-
-
+                <!-- friends -->
                 <div class="left-body-friends friend-lists"  style="display: none;">
                     <div style="width: 100%;" class="friend-tools">
                             <div class="pw-contact-row  search-user" >
