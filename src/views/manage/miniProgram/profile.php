@@ -686,15 +686,15 @@
                         updateMiniProgramProfile("loadingType", "3");
                     }
                 },
-                {
-                    text: language == 0 ? "FullScreen" : "全屏打开",
-                    className: "select-color-primary",
-                    onClick: function () {
-                        $("#mini-program-display-text").html(language == 0 ? "FullScreen" : "全屏打开");
-                        $(".mini-program-display").attr("data", "4");
-                        updateMiniProgramProfile("loadingType", "4");
-                    }
-                }
+                // {
+                //     text: language == 0 ? "FullScreen" : "全屏打开",
+                //     className: "select-color-primary",
+                //     onClick: function () {
+                //         $("#mini-program-display-text").html(language == 0 ? "FullScreen" : "全屏打开");
+                //         $(".mini-program-display").attr("data", "4");
+                //         updateMiniProgramProfile("loadingType", "4");
+                //     }
+                // }
             ]
         });
     }
