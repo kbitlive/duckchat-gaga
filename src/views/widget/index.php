@@ -192,7 +192,7 @@
 <script src="../../public/js/im/zalyIm.js"></script>
 <script src="../public/js/im/zalyGroupMsg.js"></script>
 <script src="../../public/js/im/zalyMsg.js"></script>
-<script src="../../public/js/im/zalyjsNative.js"></script>
+<script src="../../public/sdk/zalyjsNative.js"></script>
 <script src="../../public/js/im/zalyHelper.js"></script>
 
 <script type="text/javascript">

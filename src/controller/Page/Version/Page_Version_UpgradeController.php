@@ -42,6 +42,11 @@ class Page_Version_UpgradeController extends Page_VersionController
                 $this->versionCode = 10014;
                 $this->versionName = "1.0.14";
                 $result = $this->upgrade_10013_10014();
+
+            } elseif($currentVersionCode == 10014) {
+                $this->versionCode = 10015;
+                $this->versionName = "1.0.15";
+                $result = $this->upgrade_10014_10015();
                 //最新版本审计完成以后，删除升级文件
                 $this->deleteUpgradePasswordFile();
             }
@@ -389,6 +394,64 @@ class Page_Version_UpgradeController extends Page_VersionController
         try {
             $this->executeSqliteScript();
             $this->upgradeErrCode = "success";
+            return true;
+        } catch (Exception $ex) {
+            $this->upgradeErrCode = "error";
+            $this->logger->error($tag, $ex);
+            throw new Exception(var_export($ex->getMessage(), true));
+        }
+    }
+
+    public function upgrade_10014_10015()
+    {
+        $key = [
+            "test_curl" => "testCurl",
+            "session_verify_" => "sessionVerify",
+        ];
+        $this->updateSiteConfigKey($key);
+        $this->upgrade_10014_10015_siteSession();
+        $this->upgradeErrCode = "success";
+        return true;
+    }
+
+
+    private function upgrade_10014_10015_siteSession()
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+
+        try {
+            $dbType = $this->ctx->dbType;
+
+            $this->dropDBTable("siteSession_temp_10014");
+
+            //rename table
+            $sql = "alter table siteSession rename to siteSession_temp_10014";
+            $result = $this->ctx->db->exec($sql);
+            $this->logger->error($tag, "rename table siteSession to siteSession_temp_10014 result=" . $result);
+
+
+            if ("mysql" == $dbType) {
+                $this->executeMysqlScript();
+            } else {
+                //execute all table
+                $this->executeSqliteScript();
+            }
+            //migrate data to new table
+            $sql = "insert into 
+                  siteSession(id ,sessionId ,userId ,deviceId ,devicePubkPem ,clientSideType ,timeWhenCreated ,timeActive, ipActive, userAgent
+                  ,userAgentType,gatewayURL,gatewaySocketId) 
+                select 
+                  id ,sessionId ,userId ,deviceId ,devicePubkPem ,clientSideType ,timeWhenCreated ,timeActive, ipActive, userAgent
+                  ,userAgentType,gatewayURL,gatewaySocketId
+                from siteSession_temp_10014";
+            $prepare = $this->ctx->db->prepare($sql);
+            $flag = $prepare->execute();
+
+            if ($flag && $prepare->errorCode() == "00000") {
+                $this->upgradeErrCode = "success";
+                $this->dropDBTable('siteSession_temp_10014');
+                return true;
+            }
             return true;
         } catch (Exception $ex) {
             $this->upgradeErrCode = "error";

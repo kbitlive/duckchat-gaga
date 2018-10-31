@@ -7,8 +7,8 @@
  */
 
 return array(
-    'siteVersionName' => '1.0.14',
-    'siteVersionCode' => '10014',
+    'siteVersionName' => '1.0.15',
+    'siteVersionCode' => '10015',
     'apiPageIndex' => './index.php?action=page.index',
     'apiPageLogin' => './index.php?action=page.login',
     'apiPageLogout' => './index.php?action=page.logout',
@@ -16,12 +16,9 @@ return array(
     'loginPluginId' => '102',
     'apiPageWidget' => './index.php?action=page.widget',
     'apiPageSiteInit' => "./index.php?action=installDB",
-    'session_verify_102' => './index.php?action=api.session.verify&body_format=base64pb',
-    'test_curl' => "./index.php?action=installDB&for=test_curl",
-    'session_verify_106' => 'http://127.0.0.1:8081/plugin.php?id=duckchat&action=api.session.verify&body_format=base64pb',
-    "siteAddress" => '',
+    'sessionVerify102' => './index.php?action=api.session.verify&body_format=base64pb',
+    'testCurl' => "./index.php?action=installDB&for=test_curl",
     'errorLog' => '',
-    'passport_cookie_name' => "duckchat_passport_cookie",
     'mail' =>
         array(
             'host' => 'smtp.126.com',

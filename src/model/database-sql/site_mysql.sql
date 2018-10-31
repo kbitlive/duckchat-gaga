@@ -61,6 +61,7 @@ create table IF NOT EXISTS siteSession(
                 userAgentType INTEGER,
                 gatewayURL VARCHAR(100),
                 gatewaySocketId VARCHAR(100),
+                loginPluginId  VARCHAR(100),
                 UNIQUE(sessionId,userId),
                 UNIQUE(userId,deviceId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 

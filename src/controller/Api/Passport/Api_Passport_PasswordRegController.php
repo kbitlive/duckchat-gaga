@@ -81,7 +81,8 @@ class Api_Passport_PasswordRegController extends BaseController
             $this->setRpcError($this->defaultErrorCode, "");
             $this->rpcReturn($transportData->getAction(), $response);
         } catch (Exception $ex) {
-            $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $ex->getMessage());
+            $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $ex);
+            $this->setRpcError("error.alert", $ex->getMessage());
             $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
         }
     }
@@ -100,6 +101,8 @@ class Api_Passport_PasswordRegController extends BaseController
     private function registerUserForPassport($loginName, $email, $password, $nickname, $invitationCode, $sitePubkPem)
     {
        try{
+           $tag = __CLASS__ . '-' . __FUNCTION__;
+
            $this->ctx->BaseTable->db->beginTransaction();
            $userId   = ZalyHelper::generateStrId();
            $userInfo = [
@@ -124,10 +127,10 @@ class Api_Passport_PasswordRegController extends BaseController
            $this->ctx->BaseTable->db->commit();
            return $preSessionId;
        }catch (Exception $ex) {
+           $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $ex);
            $this->ctx->BaseTable->db->rollback();
+           throw new Exception($ex);
        }
     }
-
-
 
 }
