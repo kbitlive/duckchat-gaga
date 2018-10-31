@@ -492,7 +492,7 @@
         var res = JSON.parse(result);
 
         if (res.errCode != "success") {
-            alert(getLanguage() == 1 ? "更新成功" : "update name error");
+            alert(getLanguage() == 1 ? "更新失败" : "update name error");
         }
 
         location.reload();
@@ -520,8 +520,9 @@
         var res = JSON.parse(result);
 
         if (res.errCode != "success") {
-            alert(getLanguage() == 1 ? "更新成功" : "update error");
+            alert(getLanguage() == 1 ? "更新失败" : "update error");
         }
+
     }
 
 
@@ -545,7 +546,7 @@
         var res = JSON.parse(result);
 
         if (res.errCode != "success") {
-            alert(getLanguage() == 1 ? "更新成功" : "update error");
+            alert(getLanguage() == 1 ? "更新失败" : "update error");
         }
     }
 

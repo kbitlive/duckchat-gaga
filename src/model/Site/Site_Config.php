@@ -201,29 +201,29 @@ class Site_Config
     }
 
 
-    public function addDefaultGroup($groupId, $siteManagerString = false)
+    public function addDefaultGroup($groupId, $siteGroupString = false)
     {
-        if (!$siteManagerString) {
-            $siteManagerString = $this->getSiteManagerString();
+        if (!$siteGroupString) {
+            $siteGroupString = $this->getSiteDefaultGroupString();
         }
 
-        $siteManagerString = $this->buildAddDefaultString($groupId, $siteManagerString);
-        return $this->updateConfigValue(SiteConfig::SITE_DEFAULT_GROUPS, $siteManagerString);
+        $siteGroupString = $this->buildAddDefaultString($groupId, $siteGroupString);
+        return $this->updateConfigValue(SiteConfig::SITE_DEFAULT_GROUPS, $siteGroupString);
     }
 
-    public function removeDefaultGroup($groupId, $siteManagerString = false)
+    public function removeDefaultGroup($groupId, $siteGroupString = false)
     {
-        if (!$siteManagerString) {
-            $siteManagerString = $this->getSiteManagerString();
+        if (!$siteGroupString) {
+            $siteGroupString = $this->getSiteDefaultGroupString();
         }
 
-        $siteManagerString = $this->buildRemoveDefaultString($groupId, $siteManagerString);
+        $siteGroupString = $this->buildRemoveDefaultString($groupId, $siteGroupString);
 
-        if (empty($siteManagerString)) {
+        if (empty($siteGroupString)) {
             return true;
         }
 
-        return $this->updateConfigValue(SiteConfig::SITE_DEFAULT_GROUPS, $siteManagerString);
+        return $this->updateConfigValue(SiteConfig::SITE_DEFAULT_GROUPS, $siteGroupString);
     }
 
     private function buildAddDefaultString($addString, $defaultString)

@@ -126,18 +126,18 @@ class Manage_User_UpdateController extends Manage_CommonController
     private function updateSiteManagers($userId, $updateValue)
     {
         if ($updateValue == 1) {
-            $this->ctx->Site_Config->addSiteManager($userId);
+            return $this->ctx->Site_Config->addSiteManager($userId);
         } else {
-            $this->ctx->Site_Config->removeSiteManager($userId);
+            return $this->ctx->Site_Config->removeSiteManager($userId);
         }
     }
 
     private function updateSiteDefaultFriends($userId, $updateValue)
     {
         if ($updateValue == 1) {
-            $this->ctx->Site_Config->addDefaultFriend($userId);
+            return $this->ctx->Site_Config->addDefaultFriend($userId);
         } else {
-            $this->ctx->Site_Config->removeDefaultFriend($userId);
+            return $this->ctx->Site_Config->removeDefaultFriend($userId);
         }
     }
 
