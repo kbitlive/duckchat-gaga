@@ -165,6 +165,29 @@ class SiteSessionTable extends BaseTable
         return false;
     }
 
+    public function deleteSessionByUserIdAndDeviceId($userId, $deviceId)
+    {
+
+        $tag = __CLASS__ . '-' . __FUNCTION__;
+        $startTime = $this->getCurrentTimeMills();
+
+        $sql = "delete from $this->table where userId=:userId and deviceId=:deviceId;";
+        try {
+            $prepare = $this->db->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->bindValue(":userId", $userId);
+            $prepare->bindValue(":deviceId", $deviceId);
+            $flag = $prepare->execute();
+            return $flag;
+        } catch (Exception $e) {
+            $this->logger->error($tag, $e);
+        } finally {
+            $this->logger->writeSqlLog($tag, $sql, [$userId, $deviceId], $startTime);
+        }
+
+        return false;
+    }
+
     public function getUserLatestDeviceId($userId, $clientSideType, $limit = 1)
     {
         $tag = __CLASS__ . '-' . __FUNCTION__;
