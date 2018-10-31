@@ -719,10 +719,6 @@ function addMsgToChatDialog(chatSessionId, msg)
 {
     msg.status = MessageStatus.MessageStatusSending;
 
-    appendMsgHtmlToChatDialog(msg);
-
-    var node = $(".chat_dession_id_"+chatSessionId);
-    sortRoomList(node);
 
     setTimeout(function () {
         var msgLoadings = $("[is-display='yes']");
@@ -738,6 +734,11 @@ function addMsgToChatDialog(chatSessionId, msg)
             }
         }
     }, 10000);///10秒执行
+    appendMsgHtmlToChatDialog(msg);
+
+    var node = $(".chat_dession_id_"+chatSessionId);
+    sortRoomList(node);
+
     ///在上部分查看消息的时候不滚动
     msgBoxScrollToBottom();
 }
@@ -1098,8 +1099,7 @@ function appendMsgHtmlToChatDialog(msg)
             case MessageType.MessageImage :
                 var imgObject = getMsgSizeForDiv(msg);
                 var imgId = msg['image'].url;
-                var isGroupMessage = msg.roomType == GROUP_MSG ? 1 : 0;
-                var msgImgUrl = downloadFileUrl +  "&fileId="+imgId + "&returnBase64=0&isGroupMessage="+isGroupMessage+"&messageId="+msgId+"&lang="+languageNum;
+                var msgImgUrl = downloadFileUrl +  "&fileId="+imgId + "&returnBase64=0&lang="+languageNum;
                 html = template("tpl-send-msg-img", {
                     roomType: msg.roomType,
                     nickname:nickname,
