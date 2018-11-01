@@ -171,6 +171,25 @@ class SitePluginTable extends BaseTable
         }
     }
 
+    public function getPluginsById($pluginId)
+    {
+        $tag = __CLASS__ . "_" . __FUNCTION__;
+        try {
+            $startTime = microtime(true);
+            $sql = "select $this->queryColumns from $this->tableName where pluginId=:pluginId;";
+            $prepare = $this->dbSlave->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->bindValue(":pluginId", $pluginId);
+            $prepare->execute();
+            $results = $prepare->fetchAll(\PDO::FETCH_ASSOC);
+            $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, $pluginId, $startTime);
+            return $results;
+        } catch (Exception $ex) {
+            $this->ctx->Wpf_Logger->error($tag, " error_msg = " . $ex->getMessage());
+            return [];
+        }
+    }
+
     /**
      * get plugin list by usageType
      *

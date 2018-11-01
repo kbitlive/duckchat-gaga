@@ -27,8 +27,21 @@
         .select-color-primary {
             color: #4C3BB1;
         }
-        .item-row,.weui-actionsheet__cell {
+
+        .item-row, .weui-actionsheet__cell {
             cursor: pointer;
+        }
+
+        .usage-select {
+            width: 100%;
+            height: 30px;
+            font-size: 14px;
+            border-width: 0;
+            size: 14px;
+        }
+
+        .usage-select-option {
+            font-size: 14px;
         }
 
     </style>
@@ -104,7 +117,7 @@
                             <div class="item-body-value" id="mini-program-img-id" fileId="<?php echo $logo ?>">
                                 <img id="mini-program-img" class="site-image"
                                      onclick="uploadFile('mini-program-img-input')"
-                                     avatar="<?php echo $logo?>"
+                                     avatar="<?php echo $logo ?>"
                                      src=""
                                      onerror="src='../../public/img/manage/plugin_default.png'">
 
@@ -214,6 +227,47 @@
                             </div>
                             <img class="more-img"
                                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+            <div class="item-row">
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">小程序使用类别</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Mini Program Usage</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <select class="usage-select mini-program-usage-select" multiple="multiple" size="2">
+                                <option class="usage-select-option" value="1" <?php if ($usageType_1 == "1") {
+                                    echo 'selected';
+                                } ?> ><?php if ($lang == "1") { ?> 首页小程序<?php } else { ?> Home Mini Program <?php } ?></option>
+                                <option value="2" <?php if ($usageType_2 == "2") {
+                                    echo 'selected';
+                                } ?> ><?php if ($lang == "1") { ?> 登陆小程序<?php } else { ?>  "Login Mini Program" <?php } ?></option>
+                                <option value="3" <?php if ($usageType_3 == "3") {
+                                    echo 'selected';
+                                } ?> ><?php if ($lang == "1") { ?> 二人聊天小程序<?php } else { ?> U2 Chat Mini Program <?php } ?></option>
+                                <option value="4" <?php if ($usageType_4 == "4") {
+                                    echo 'selected';
+                                } ?> ><?php if ($lang == "1") { ?> 临时会话小程序<?php } else { ?> Tmp Chat Mini Program <?php } ?></option>
+                                <option value="5" <?php if ($usageType_5 == "5") {
+                                    echo 'selected';
+                                } ?> ><?php if ($lang == "1") { ?>群组聊天小程序<?php } else { ?> Group Chat Mini Program <?php } ?></option>
+                                <option value="6" <?php if ($usageType_6 == "6") {
+                                    echo 'selected';
+                                } ?> >
+                                    <?php if ($lang == "1") { ?>账户安全小程序<?php } else { ?> Account Mini Program <?php } ?>
+                                </option>
+                                <option value="7" <?php if ($usageType_7 == "7") {
+                                    echo 'selected';
+                                } ?> ><?php if ($lang == "1") { ?>无效小程序<?php } else { ?> Invalid Mini Program <?php } ?></option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -447,12 +501,11 @@
     downloadFileUrl = "./index.php?action=http.file.downloadFile";
 
 
-
     $("#mini-program-img").each(function () {
         var avatar = $(this).attr("avatar");
-        var src =  " /_api_file_download_/?fileId="+avatar;
-        if(!isMobile()) {
-            src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
+        var src = " /_api_file_download_/?fileId=" + avatar;
+        if (!isMobile()) {
+            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
         }
         $(this).attr("src", src);
     });
@@ -574,82 +627,20 @@
     });
 
 
-    function selectMiniProgramUsage() {
-        // PluginUsageIndex = 0; 禁用
-        // PluginUsageIndex = 1;
-        // PluginUsageLogin = 2;
-        //
-        // PluginUsageU2Message = 3;
-        // PluginUsageTmpMessage = 4;
-        // PluginUsageGroupMessage = 5;
-        var language = getLanguage();
-        var url = "index.php?action=manage.miniProgram.update&type=usageType&lang=" + language;
-        $.actions({
-            title: language == 0 ? "select mini program type" : "请选择小程序类别",
-            onClose: function () {
-                console.log("close");
-            },
-            actions: [{
-                text: language == 0 ? "Home Mini Program" : "首页小程序",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-usage-text").html(language == 0 ? "Home Page" : "首页小程序");
-                    $(".mini-program-usage").attr("data", "1");
-                    updateMiniProgramProfile("usageType", "1");
-                }
-            }, {
-                text: language == 0 ? "U2 Chat Mini Program" : "二人聊天小程序",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-usage-text").html(language == 0 ? "U2 Chat Mini Program" : "二人聊天小程序");
-                    $(".mini-program-usage").attr("data", "3");
-                    updateMiniProgramProfile("usageType", "3");
-                }
-            },
-                // {
-                //     text: language == 0 ? "Tmp Chat Mini Program" : "临时会话小程序",
-                //     className: "select-color-primary",
-                //     onClick: function () {
-                //         $("#mini-program-usage-text").html(language == 0 ? "Tmp Chat Mini Program" : "临时会话小程序");
-                //         $(".mini-program-usage").attr("data", "4");
-                //         updateMiniProgramProfile("usageType", "4");
-                //     }
-                // },
-                {
-                    text: language == 0 ? "Group Chat Mini Program" : "群组聊天小程序",
-                    className: "select-color-primary",
-                    onClick: function () {
-                        $("#mini-program-usage-text").html(language == 0 ? "Group Chat Mini Program" : "群组聊天小程序");
-                        $(".mini-program-usage").attr("data", "5");
-                        updateMiniProgramProfile("usageType", "5");
-                    }
-                }, {
-                    text: language == 0 ? "Login Mini Program" : "登陆小程序",
-                    className: "select-color-primary",
-                    onClick: function () {
-                        $("#mini-program-usage-text").html(language == 0 ? "Login Mini Program" : "登陆小程序");
-                        $(".mini-program-usage").attr("data", "2");
-                        updateMiniProgramProfile("usageType", "2");
-                    }
-                }, {
-                    text: language == 0 ? "Account Mini Program" : "账户安全小程序",
-                    className: "select-color-primary",
-                    onClick: function () {
-                        $("#mini-program-usage-text").html(language == 0 ? "Account Mini Program" : "账户安全小程序");
-                        $(".mini-program-usage").attr("data", "6");
-                        updateMiniProgramProfile("usageType", "6");
-                    }
-                }, {
-                    text: language == 0 ? "Invalid Mini Program" : "无效小程序",
-                    className: "select-color-primary",
-                    onClick: function () {
-                        $("#mini-program-usage-text").html(language == 0 ? "Invalid Mini Program" : "无效小程序");
-                        $(".mini-program-usage").attr("data", "0");
-                        updateMiniProgramProfile("usageType", "0");
-                    }
-                }]
+    $(".mini-program-usage-select").change(function () {
+
+        var selectValues = [];
+
+        $(".mini-program-usage-select option:selected").each(function () {
+            // selectValues.add($(this).val());
+            selectValues.push($(this).val());
         });
-    }
+
+        var values = selectValues.join(",");
+
+        updateMiniProgramProfile("usageType", values);
+    });
+
 
     function selectMiniProgramDisplay() {
         var language = getLanguage();

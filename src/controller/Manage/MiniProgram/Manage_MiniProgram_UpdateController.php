@@ -33,7 +33,24 @@ class Manage_MiniProgram_UpdateController extends Manage_CommonController
                 return;
             }
 
-            $isOk = $this->updateMiniProgramProfile($pluginId, $name, $value);
+            $isOk = false;
+            if ($name == "usageType") {
+
+                if (!empty($value)) {
+                    $value = explode(",", $value);
+
+                    if (in_array(7, $value)) {
+                        $value = [7];
+                    }
+
+                    $isOk = $this->updateMiniProgramUsageTypes($pluginId, $value);
+                }
+
+            } else {
+                //update useType
+                $isOk = $this->updateMiniProgramProfile($pluginId, $name, $value);
+            }
+
 
             if ($isOk) {
                 $result['errCode'] = "success";
@@ -48,6 +65,22 @@ class Manage_MiniProgram_UpdateController extends Manage_CommonController
 
         echo json_encode($result);
         return;
+    }
+
+    private function updateMiniProgramUsageTypes($pluginId, array $usageTypes)
+    {
+        $pluginProfile = $this->ctx->SitePluginTable->getPluginById($pluginId);
+
+        //delete all
+        $this->ctx->SitePluginTable->deletePlugin($pluginId);
+
+        foreach ($usageTypes as $usageType) {
+            $pluginProfile["usageType"] = $usageType;
+
+            $result = $this->ctx->SitePluginTable->insertMiniProgram($pluginProfile);
+        }
+
+        return true;
     }
 
     private function updateMiniProgramProfile($pluginId, $name, $value)
