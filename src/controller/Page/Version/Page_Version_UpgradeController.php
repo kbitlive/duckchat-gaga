@@ -410,8 +410,28 @@ class Page_Version_UpgradeController extends Page_VersionController
         ];
         $this->updateSiteConfigKey($key);
         $result = $this->upgrade_10014_10100_siteSession();
+
+        $this->upgrade_10014_10100_plugin();
         $this->upgradeErrCode = "success";
         return $result;
+    }
+
+    private function upgrade_10014_10100_plugin()
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+
+        //update miniProgram management
+        try {
+            $data2 = [
+                'landingPageUrl' => " https://duckchat.akaxin.com/wiki/",
+            ];
+            $where2 = [
+                "pluginId" => 103,
+            ];
+            $this->ctx->SitePluginTable->updateProfile($data2, $where2);
+        } catch (Exception $e) {
+            $this->logger->error($tag, "update 103 :" . $e);
+        }
     }
 
 

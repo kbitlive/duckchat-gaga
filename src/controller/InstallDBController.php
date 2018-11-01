@@ -458,7 +458,7 @@ class InstallDBController
                 'name' => "DC文档",
                 'logo' => "",
                 'sort' => 1, //order = 2
-                'landingPageUrl' => "http://duckchat.akaxin.com/wiki/",
+                'landingPageUrl' => "https://duckchat.akaxin.com/wiki/",
                 'landingPageWithProxy' => 0, //1 表示走site代理
                 'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageIndex,
                 'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingNewPage,
