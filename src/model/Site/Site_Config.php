@@ -156,8 +156,7 @@ class Site_Config
         $managersValue = $this->getConfigValue(SiteConfig::SITE_MANAGERS);
 
         if (!empty($managersValue)) {
-            $managersValueStr = isset($managersValue['managers']) ? $managersValue['managers'] : "";
-            $managersArray = explode(",", $managersValueStr);
+            $managersArray = explode(",", $managersValue);
             if (!empty($managersArray)) {
                 $managers = array_merge($managers, $managersArray);
             }
