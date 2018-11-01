@@ -390,7 +390,7 @@
             success:function (data) {
                 data = JSON.parse(data);
                 if(data.errorCode == 'error.alert') {
-                    zalyjsAlert(data.errorInfo);
+                    alert(data.errorInfo);
                     return false;
                 }
                 if(type == addGifType) {

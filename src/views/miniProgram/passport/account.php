@@ -233,7 +233,7 @@
         $(".forget_input_repwd_failed")[0].style.display = "none";
 
         if(repassword != newPassword) {
-            zalyjsAlert($.i18n.map['passwordIsNotSameJsTip']);
+            alert($.i18n.map['passwordIsNotSameJsTip']);
             return;
         }
 
@@ -256,16 +256,16 @@
                try{
                    var error = JSON.parse(resp);
                    if(error["errCode"].length>1 && error["errCode"] != "success") {
-                       zalyjsAlert(error['errCode']);
+                       alert(error['errCode']);
                        return;
                    }
                    try{
-                       zalyjsNavClosePlugin();
+                       zalyjsClosePage();
                    }catch (error) {
 
                    }
                }catch (error) {
-                   zalyjsNavClosePlugin();
+                   zalyjsClosePage();
                }
             },
             failed:function (error) {

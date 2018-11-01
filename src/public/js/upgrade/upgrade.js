@@ -228,7 +228,7 @@ $(document).on("click", ".upgrade_staring_btn", function () {
         window.location.href="./index.php";
         return;
     } else if(goto == "close_page") {
-        zalyjsNavClosePlugin();
+        zalyjsClosePage();
         return;
     }
     var html = "正在升级...";

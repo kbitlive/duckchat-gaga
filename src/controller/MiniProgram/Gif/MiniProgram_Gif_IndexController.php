@@ -63,7 +63,9 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
                 $type = isset($_POST['type']) ? $_POST['type'] :"send_msg";
                 switch ($type) {
                     case "send_msg" :
-                        $this->sendWebMessage($_POST);
+                        if($this->toId) {
+                            $this->sendWebMessage($_POST);
+                        }
                         break;
                     case "add_gif":
                         $this->addGif($_POST);
