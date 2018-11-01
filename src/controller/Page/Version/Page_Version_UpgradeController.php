@@ -43,11 +43,11 @@ class Page_Version_UpgradeController extends Page_VersionController
                 $this->versionName = "1.0.14";
                 $result = $this->upgrade_10013_10014();
 
-            } elseif($currentVersionCode == 10014) {
-                $this->versionCode = 10015;
-                $this->versionName = "1.0.15";
-                $result = $this->upgrade_10014_10015();
-                //最新版本审计完成以后，删除升级文件
+            } elseif ($currentVersionCode >= 10014 && $currentVersionCode < 10100) {
+                $this->versionCode = 10100;
+                $this->versionName = "1.1.0";
+                $result = $this->upgrade_10014_10100();
+                //最新版本审计完成以后，删除密码存储文件，准备下次更新新密码
                 $this->deleteUpgradePasswordFile();
             }
 
@@ -402,20 +402,20 @@ class Page_Version_UpgradeController extends Page_VersionController
         }
     }
 
-    public function upgrade_10014_10015()
+    public function upgrade_10014_10100()
     {
         $key = [
             "test_curl" => "testCurl",
             "session_verify_" => "sessionVerify",
         ];
         $this->updateSiteConfigKey($key);
-        $this->upgrade_10014_10015_siteSession();
+        $result = $this->upgrade_10014_10100_siteSession();
         $this->upgradeErrCode = "success";
-        return true;
+        return $result;
     }
 
 
-    private function upgrade_10014_10015_siteSession()
+    private function upgrade_10014_10100_siteSession()
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
 
