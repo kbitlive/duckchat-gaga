@@ -1,4 +1,4 @@
-.friend-right-body {
+.friend-right-body, .plugin-right-body {
     flex-grow: 1;
     height: 90%;
     position: relative;

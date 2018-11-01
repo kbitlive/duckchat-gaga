@@ -48,6 +48,8 @@ var ZalyAction = {
     im_stc_news :"im.stc.news",
     im_stc_message_key :"im.stc.message",
 
+    api_plugin_list:"site.ApiPluginListRequest",
+
     getReqeustName : function (action) {
         var action = action.split(".").join("_");
         return ZalyAction[action];

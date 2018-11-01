@@ -195,6 +195,8 @@ $(document).on("click", ".l-sb-item", function(){
             $(".group-lists")[0].style.display = "none";
             $(".chatsession-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
+            pluginOffset = 0;
+            getPluginList(PluginUsageType.PluginUsageIndex, initPluginList);
             break;
         case "group":
             $(".home-page")[0].style.display = "none";
@@ -264,8 +266,71 @@ function checkIsEnterBack(event)
     return true;
 }
 
-//--------------------------------------http.file.downloadFile----------------------------------------------
+//-------------------------------------------api.plugin.list------------------------------------------------
+/// plugin operation - api.plugin.list
+function getPluginList(type, callback)
+{
+    var action = "api.plugin.list";
+    var reqData = {
+        "offset" : pluginOffset,
+        "count"  : defaultCountKey,
+        "usageType":type
+    }
+    handleClientSendRequest(action, reqData, callback);
+}
 
+function handlePluginListHtml(results)
+{
+    if(results.hasOwnProperty("list") && results.list) {
+        var list = results.list;
+        var listLength = list.length;
+        for(var i=0;i<listLength;i++) {
+            var plugin = list[i];
+            var logo = false;
+            if(plugin.hasOwnProperty("logo")){
+                logo = getNotMsgImgUrl(plugin.logo);
+            }
+            var loadingType = PluginLoadingType.PluginLoadingNewPage;
+            if(plugin.hasOwnProperty("loadingType")) {
+                loadingType = plugin.loadingType
+            }
+            var html = template("tpl-plugin-item", {
+                id:plugin.id,
+                name:plugin.name,
+                landingPageUrl:plugin.landingPageUrl,
+                duckchatSessionId:plugin.userSessionId,
+                logo:logo,
+                loadingType:loadingType,
+            });
+            $(".mini-program-row").append(html);
+        }
+    }
+}
+
+function initPluginList(results)
+{
+    $(".mini-program-row").html("");
+    console.log(JSON.stringify(results));
+    handlePluginListHtml(results);
+}
+
+$(document).on("click", ".plugin-info", function () {
+    var landingPageUrl = $(this).attr("plugin-landingPageUrl");
+    var name = $(this).attr("plugin-name");
+    var duckchatSessionId = $(this).attr("plugin-duckchatSessionId");
+    addActiveForPwContactRow($(this));
+    displayRightPage(DISPLAY_HOME);
+    $(".title").html(name);
+    $(".plugin-src").attr("src", landingPageUrl);
+    setCookie("duckchat_sessionid",duckchatSessionId, 1 );
+    if(landingPageUrl.indexOf("http") >-1 || landingPageUrl.indexOf("https") >-1) {
+        $(".plugin-iframe")[0].style.width="100%";
+    }else {
+        $(".plugin-iframe")[0].style.width="40%";
+    }
+});
+
+//--------------------------------------http.file.downloadFile----------------------------------------------
 
 function getNotMsgImgUrl(avatarImgId) {
     if(avatarImgId) {
@@ -2803,7 +2868,6 @@ function handleApplyFriendList(results)
         displayRightPage(DISPLAY_APPLY_FRIEND_LIST);
     }
     displayRoomListMsgUnReadNum();
-
 }
 
 function getApplyFriendListHtml(results)
@@ -3326,11 +3390,9 @@ function displayRightPage(displayType)
     try{
         switch (displayType){
             case DISPLAY_HOME:
-
-                $(".msg-chat-dialog")[0].style.display = "block ";
+                $(".plugin-list-dialog")[0].style.display = "block";
                 $(".msg-chat-dialog")[0].style.display = "none";
                 $(".friend-apply-dialog")[0].style.display = "none";
-
                 break;
             case DISPLAY_CHAT:
                 var chatSessionId  = localStorage.getItem(chatSessionIdKey);

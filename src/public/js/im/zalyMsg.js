@@ -986,33 +986,41 @@ function trimMsgContentBr(html)
 
 function handleMsgContentText(str)
 {
-    str = trimMsgContentBr(str);
-    var reg=/(blob:)?((http|https|ftp|zaly|duckchat):\/\/)?[@\w\-_]+(\:[0-9]+)?(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
-    var arr = str.match(reg);
-    if(arr == null) {
-        return str;
-    }
-    var length = arr.length;
-    for(var i=0; i<length;i++) {
-        var urlLink = arr[i];
-        if(urlLink.indexOf("blob:") == -1 &&
-            (urlLink.indexOf("http://") != -1
-                || urlLink.indexOf("https://") != -1
-                || urlLink.indexOf("ftp://") != -1
-                || urlLink.indexOf("zaly://") != -1
-                || urlLink.indexOf("duckchat://") != -1
-                ||  IsURL (urlLink)
-            )
-        ) {
-            var newUrlLink = urlLink;
-            if(urlLink.indexOf("://") == -1) {
-                newUrlLink = "http://"+urlLink;
-            }
-            var urlLinkHtml = "<a href='"+newUrlLink+"'target='_blank'>"+urlLink+"</a>";
-            str = str.replace(urlLink, urlLinkHtml);
+    html = trimMsgContentBr(str);
+
+    $(html).find("[msg_content_for_handle]").each(function () {
+        var str = $(this).html();
+        if(str == undefined) {
+            return html;
         }
-    }
-    return str;
+        var reg=/(blob:)?((http|https|ftp|zaly|duckchat):\/\/)?[@\w\-_]+(\:[0-9]+)?(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
+        var arr = str.match(reg);
+        if(arr == null) {
+            return str;
+        }
+        var length = arr.length;
+        for(var i=0; i<length;i++) {
+            var urlLink = arr[i];
+            if(urlLink.indexOf("blob:") == -1 &&
+                (urlLink.indexOf("http://") != -1
+                    || urlLink.indexOf("https://") != -1
+                    || urlLink.indexOf("ftp://") != -1
+                    || urlLink.indexOf("zaly://") != -1
+                    || urlLink.indexOf("duckchat://") != -1
+                    ||  IsURL (urlLink)
+                )
+            ) {
+                var newUrlLink = urlLink;
+                if(urlLink.indexOf("://") == -1) {
+                    newUrlLink = "http://"+urlLink;
+                }
+                var urlLinkHtml = "<a href='"+newUrlLink+"'target='_blank'>"+urlLink+"</a>";
+                html = html.replace(urlLink, urlLinkHtml);
+            }
+        }
+    });
+
+    return html;
 }
 
 function IsURL (url) {

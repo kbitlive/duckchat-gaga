@@ -810,3 +810,17 @@
 <script type="text/html" id="tpl-desc-group-textarea">
     <textarea class="textarea_desc">{{descBody}}</textarea>
 </script>
+
+
+<script type="text/html" id="tpl-plugin-item">
+    <div class="pw-home-row mini-program plugin-info pw-contact-row" plugin-name="{{name}}" plugin-id="{{id}}" plugin-landingPageUrl="{{landingPageUrl}}" plugin-duckchatSessionId="{{duckchatSessionId}}" plugin-loadingType="{{loadingType}}">
+        <div class="pw-home-row-image" style="position: relative;">
+            {{if logo}}
+                <img src="{{logo}}"/>
+            {{else}}
+                <img src="../../public/img/plugin/default.png"/>
+            {{/if}}
+        </div>
+        <div class="pw-home-row-name" data-local-value="miniProgramTip">{{name}}</div>
+    </div>
+</script>
