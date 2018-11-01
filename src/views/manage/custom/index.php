@@ -43,10 +43,10 @@
             background-repeat: repeat;
         }
 
-    .item-row,.weui-actionsheet__cell,.create_button {
-        cursor: pointer;
-        outline-color: none;
-    }
+        .item-row,.create_button {
+            cursor: pointer;
+            outline: none;
+        }
 
     </style>
 
@@ -194,11 +194,11 @@
 
         <div class="" style="text-align:center;">
             <?php if ($lang == "1") { ?>
-                <button id="updatePopupButton" type="button" class="create_button" key-value=""
+                <button id="updatePopupButton" type="button" class="create_button" style="cursor: pointer;outline: none"key-value=""
                         onclick="updateDataValue();">确认
                 </button>
             <?php } else { ?>
-                <button id="updatePopupButton" type="button" class="create_button" key-value=""
+                <button id="updatePopupButton" type="button" class="create_button"  style="cursor: pointer;outline: none" key-value=""
                         onclick="updateDataValue();">Confirm
                 </button>
             <?php } ?>

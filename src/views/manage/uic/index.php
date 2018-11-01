@@ -23,6 +23,10 @@
             overflow-x: hidden;
             /*overflow-y: hidden;*/
         }
+        .item-row,.weui-actionsheet__cell,.create_button {
+            cursor: pointer;
+            outline: none;
+        }
 
         /* mask and new window */
         .wrapper-mask {

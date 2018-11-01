@@ -328,7 +328,7 @@ $(document).on("click", ".plugin-info", function () {
     $(".plugin-src").attr("src", landingPageUrl);
     $(".open_new_page").attr("landingPageUrl", landingPageUrl);
     deleteCookie("duckchat_page_url");
-    setCookie("duckchat_sessionid",duckchatSessionId, 1 );
+    setCookie("duckchat_sessionid", duckchatSessionId, 1 );
     if(landingPageUrl.indexOf("http") >-1 || landingPageUrl.indexOf("https") >-1) {
         $(".plugin-iframe")[0].style.width="100%";
     }else {
