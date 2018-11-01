@@ -33,6 +33,8 @@ function getRoomList()
         }
         appendOrInsertRoomList(msg, false, false);
     }
+    var roomType = localStorage.getItem(currentChatSessionId);
+    getInitChatPlugin(roomType);
     displayCurrentProfile();
     msgBoxScrollToBottom();
 }

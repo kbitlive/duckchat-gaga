@@ -137,7 +137,6 @@ function upgradeSiteVersion(currentVersionCode) {
     updateUpgradeProgress("done", currentVersionCode, "");
 
     var endUpgradeNum = localStorage.getItem(endUpgradeVersionKey);
-    console.log("currentVersionCode====="+currentVersionCode);
     if(currentVersionCode >= Number(endUpgradeNum)) {
         if(isPhone()) {
             var html = "升级完成，关闭当前页面";
@@ -173,7 +172,6 @@ function updateSiteVersionFailed(resp)
 function updateUpgradeProgress(type,  upgradeVersionCode, info)
 {
     var upgradeVersionNum = localStorage.getItem(currentUpgradeVersionKey);
-    console.log("upgradeVersionCode =====" + upgradeVersionCode);
 
     try{
         if(type == "start"){
