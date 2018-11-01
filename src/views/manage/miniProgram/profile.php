@@ -101,7 +101,8 @@
                             <div class="item-body-value" id="mini-program-img-id" fileId="<?php echo $logo ?>">
                                 <img id="mini-program-img" class="site-image"
                                      onclick="uploadFile('mini-program-img-input')"
-                                     src="/_api_file_download_/?fileId=<?php echo $logo ?>"
+                                     avatar="<?php echo $logo?>"
+                                     src=""
                                      onerror="src='../../public/img/manage/plugin_default.png'">
 
                                 <input id="mini-program-img-input" type="file" onchange="uploadImageFile(this)"
@@ -444,13 +445,23 @@
 
 
 
+    $("#mini-program-img").each(function () {
+        var avatar = $(this).attr("avatar");
+        var src =  " /_api_file_download_/?fileId="+avatar;
+        if(!isMobile()) {
+            src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
+        }
+        $(this).attr("src", src);
+    });
+
+
     function uploadImageFile(obj) {
         if (obj) {
             if (obj.files) {
                 var formData = new FormData();
 
                 formData.append("file", obj.files.item(0));
-                formData.append("fileType", "FileImage");
+                formData.append("fileType", 1);
                 formData.append("isMessageAttachment", false);
 
                 var src = window.URL.createObjectURL(obj.files.item(0));
@@ -482,11 +493,8 @@
             success: function (imageFileIdResult) {
 
                 if (imageFileIdResult) {
-                    var fileId = imageFileIdResult;
-                    if (isMobile()) {
-                        var res = JSON.parse(imageFileIdResult);
-                        fileId = res.fileId;
-                    }
+                    var res = JSON.parse(imageFileIdResult);
+                    var fileId = res.fileId;
                     updateMiniProgramProfile("logo", fileId);
                 } else {
                     alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");

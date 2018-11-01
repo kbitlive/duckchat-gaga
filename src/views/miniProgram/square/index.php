@@ -245,7 +245,7 @@
                 <div class="item-row">
                     <div class="item-header">
                         <img class="user-avatar-image" avatar="<?php echo $user['avatar'] ?>"
-                             src="/_api_file_download_/?fileId=<?php echo $user['avatar'] ?>"
+                             src=""
                              onerror="this.src='../../public/img/msg/default_user.png'"/>
                     </div>
                     <div class="item-body">
@@ -568,13 +568,17 @@
         var url = "index.php?action=miniProgram.square.index";
         zalyjsCommonAjaxPostJson(url, data, loadMoreResponse)
     }
+
     $(".user-avatar-image").each(function () {
-       if(!isMobile()) {
-           var avatar = $(this).attr("avatar");
-           var src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
-           $(this).attr("src", src);
-       }
+        var avatar = $(this).attr("avatar");
+        var src =  " /_api_file_download_/?fileId="+avatar;
+        if(!isMobile()) {
+           src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
+        }
+        $(this).attr("src", src);
     });
+
+
     function loadMoreResponse(url, data, result) {
 
         if (result) {

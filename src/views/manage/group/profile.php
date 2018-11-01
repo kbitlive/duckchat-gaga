@@ -99,7 +99,7 @@
 
                             <div class="item-body-value">
                                 <img id="group-avatar-img" class="site-group-avatar" avatar="<?php echo $avatar ?>"
-                                     src="/_api_file_download_/?fileId=<?php echo $avatar ?>"
+                                     src=""
                                      onerror="src='./../public/img/msg/group_default_avatar.png'">
 
                                 <input id="group-avatar-img-input" type="file"
@@ -322,11 +322,12 @@
     }
 
     $(".site-group-avatar").each(function () {
+        var avatar = $(this).attr("avatar");
+        var src = " /_api_file_download_/?fileId="+avatar;
         if(!isMobile()) {
-            var avatar = $(this).attr("avatar");
-            var src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
-            $(this).attr("src", src);
+           src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
         }
+        $(this).attr("src", src);
     });
 
 

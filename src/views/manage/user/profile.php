@@ -126,7 +126,7 @@
                                 <img id="user-avatar-img" class="site-user-avatar"
                                      onclick="uploadFile('user-avatar-img-input')"
                                      avatar = "<?php echo $avatar ?>"
-                                     src="/_api_file_download_/?fileId=<?php echo $avatar ?>"
+                                     src=""
                                      onerror="src='../../public/img/msg/default_user.png'">
 
                                 <input id="user-avatar-img-input" type="file" onchange="uploadImageFile(this)"
@@ -319,7 +319,9 @@
         updateServerImage(fileId);
 
         var newSrc = "/_api_file_download_/?fileId=" + fileId;
-
+        if(!isMobile()) {
+            newSrc =  "./index.php?action=http.file.downloadFile&fileId="+ fileId+"&returnBase64=0";
+        }
         $(".site-user-avatar").attr("src", newSrc);
     }
 
@@ -345,11 +347,12 @@
     }
 
     $(".site-user-avatar").each(function () {
+        var avatar = $(this).attr("avatar");
+        var src =  " /_api_file_download_/?fileId="+avatar;
         if(!isMobile()) {
-            var avatar = $(this).attr("avatar");
-            var src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
-            $(this).attr("src", src);
+            src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
         }
+        $(this).attr("src", src);
     });
 
 
