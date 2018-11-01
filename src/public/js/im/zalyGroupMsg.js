@@ -329,11 +329,6 @@ $(document).on("click", ".plugin-info", function () {
     $(".open_new_page").attr("landingPageUrl", landingPageUrl);
     deleteCookie("duckchat_page_url");
     setCookie("duckchat_sessionid", duckchatSessionId, 1 );
-    if(landingPageUrl.indexOf("http") >-1 || landingPageUrl.indexOf("https") >-1) {
-        $(".plugin-iframe")[0].style.width="100%";
-    }else {
-        $(".plugin-iframe")[0].style.width="40%";
-    }
 });
 
 $(document).on("click", ".open_new_page", function () {
