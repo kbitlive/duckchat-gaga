@@ -155,6 +155,8 @@ roomListMsgUnReadNum = "room_list_msg_unread_num";
 roomListKey = "room_list";
 MaxStorageStore=3;
 
+
+DISPLAY_HOME = "home";
 DISPLAY_CHAT = "chat";
 DISPLAY_APPLY_FRIEND_LIST = "apply_friend_list";
 

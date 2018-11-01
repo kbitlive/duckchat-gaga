@@ -3326,6 +3326,13 @@ function displayRightPage(displayType)
     }
     try{
         switch (displayType){
+            case DISPLAY_HOME:
+
+                $(".msg-chat-dialog")[0].style.display = "block ";
+                $(".msg-chat-dialog")[0].style.display = "none";
+                $(".friend-apply-dialog")[0].style.display = "none";
+
+                break;
             case DISPLAY_CHAT:
                 var chatSessionId  = localStorage.getItem(chatSessionIdKey);
                 var chatSessionRowLength = $(".chatsession-row").length;
