@@ -21,6 +21,7 @@
         .gif {
             width:5rem;
             height:5rem;
+            cursor: pointer;
         }
         .gif_sub_div{
             display: flex;
@@ -79,7 +80,7 @@
 <script id="tpl-gif" type="text/html">
     <div class='gif_content_div'>
         <img id="gifId_{{num}}" src='{{gifUrl}}' class='gif' gifId='{{gifId}}' isDefault='{{isDefault}}'>
-        <img src='../../public/img/msg/btn-x.png' class='del_gif  {{gifId}}' gifId="{{gifId}}">
+        <img src='../../public/img/gif/gif-delete.png' class='del_gif  {{gifId}}' gifId="{{gifId}}">
     </div>
 </script>
 
@@ -98,66 +99,79 @@
 
     var languageNum = getLanguage();
 
-    if(gifLength>0) {
-        for(var i=1; i<=gifLength ;i ++) {
-            var num = i-1;
-            var gif = gifArr[num];
-            var gifId = "";
-            var gifUrl="";
-            var isDefault=0;
-            try{
-                gifId=gif.gifId;
-                gifUrl=gif.gifUrl;
-                isDefault=gif.isDefault;
-            }catch (error) {
-                gifId="";
-            }
-            if(i == 1) {
-                var html = '';
-                line = line+1;
-                html += "<div class='gif_div gif_div_0'  gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
-            }
-            if((i-9)%10 == 1) {
-                var html = '';
-                line = line+1;
-                var divNum = Math.ceil(((i-9)/10));
-                html += "<div class='gif_div gif_div_hidden gif_div_"+divNum+"' gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
-            }
-
-            if(i==1) {
-                html += "<div class='gif_content_div'><img onclick=\"uploadFile('gifFile')\" src='../../../public/img/add.png' class='add_gif'>  " +
-                    "<input id='gifFile' type='file' onchange='uploadForGif(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
-            }
-
-            html +=template("tpl-gif", {
-                num:i,
-                gifUrl:gifUrl,
-                gifId:gifId,
-                isDefault:isDefault
-            })
-
-            if(i==4) {
-                html +="</div><div class='gif_sub_div'>";
-            } else if (i>5 && (i-5)%5 == 4) {
-                html +="</div><div class='gif_sub_div'>";
-            }
-
-            if((i-9)%10 == 0){
-                html += "</div>";
-                $(".zaly_container").append(html);
-            } else if(i == gifLength) {
-                html += "</div>";
-                $(".zaly_container").append(html);
-            }
+    function isMobile() {
+        if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+            return true;
         }
-    } else {
-        var html = '';
-        html += "<div class='gif_div gif_div_0'  gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
-        html += "<div class='gif_content_div'><img onclick=\"uploadFile('gifFile')\" src='../../../public/img/add.png' class='add_gif'>  " +
-            "<input id='gifFile' type='file' onchange='uploadForGif(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
-        html += "</div>";
-        $(".zaly_container").append(html);
+        return false;
     }
+
+        if(gifLength>0) {
+            for(var i=1; i<=gifLength ;i ++) {
+                var num = i-1;
+                var gif = gifArr[num];
+                var gifId = "";
+                var gifUrl="";
+                var isDefault=0;
+                try{
+                    gifId=gif.gifId;
+                    gifUrl=gif.gifUrl;
+                    isDefault=gif.isDefault;
+                }catch (error) {
+                    gifId="";
+                }
+                if(i == 1) {
+                    var html = '';
+                    line = line+1;
+                    html += "<div class='gif_div gif_div_0'  gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
+                }
+                if((i-9)%10 == 1) {
+                    var html = '';
+                    line = line+1;
+                    var divNum = Math.ceil(((i-9)/10));
+                    if(isMobile()) {
+                        html += "<div class='gif_div gif_div_hidden gif_div_" + divNum + "' gif-div='" + (line - 1) + "'><div class='gif_sub_div'>";
+                    } else {
+                        html += "<div class='gif_div  gif_div_" + divNum + "' gif-div='" + (line - 1) + "'><div class='gif_sub_div'>";
+                    }
+                }
+
+                if(i==1) {
+                    html += "<div class='gif_content_div'><img onclick=\"uploadFile('gifFile')\" src='../../../public/img/gif/add.png' class='add_gif'>  " +
+                        "<input id='gifFile' type='file' onchange='uploadForGif(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
+                }
+
+                html +=template("tpl-gif", {
+                    num:i,
+                    gifUrl:gifUrl,
+                    gifId:gifId,
+                    isDefault:isDefault
+                })
+
+                if(i==4) {
+                    html +="</div><div class='gif_sub_div'>";
+                } else if (i>5 && (i-5)%5 == 4) {
+                    html +="</div><div class='gif_sub_div'>";
+                }
+
+                if((i-9)%10 == 0){
+                    html += "</div>";
+                    $(".zaly_container").append(html);
+                } else if(i == gifLength) {
+                    html += "</div>";
+                    $(".zaly_container").append(html);
+                }
+            }
+        } else {
+            var html = '';
+            html += "<div class='gif_div gif_div_0'  gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
+            html += "<div class='gif_content_div'><img onclick=\"uploadFile('gifFile')\" src='../../../public/img/gif/add.png' class='add_gif'>  " +
+                "<input id='gifFile' type='file' onchange='uploadForGif(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
+            html += "</div>";
+            $(".zaly_container").append(html);
+        }
+
+
     var slideHtml = "";
     for(var i=0; i<line; i++){
         slideHtml += "<img src='../../../public/gif/sliding_unselect.png' select_gif_div= '"+i+"' class='sliding sliding_img sliding_uncheck sliding_uncheck_"+i+"'/>";
@@ -196,12 +210,6 @@
         }
     }
 
-    function isMobile() {
-        if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-            return true;
-        }
-        return false;
-    }
 
 
     function uploadFileToServer(formData, src) {
@@ -261,87 +269,117 @@
     }
 
     var timeOutEvent=0;
-    $(".gif").on({
-        touchstart: function(event){
-            event.preventDefault();
-            event.stopPropagation();
-            var gifId = $(this).attr("gifId");
-            var isDefault = $(this).attr("isDefault");
-            if(isDefault != "0") {
-                timeOutEvent = setTimeout("longEnterPress('"+gifId+"')",500);
-            }
-        },
-        touchend: function(event){
-            event.preventDefault();
-            event.stopPropagation();
-            clearTimeout(timeOutEvent);
-            if(timeOutEvent !=0 ){
-                var src = $(this).attr("src");
-                getImgSize(src);
+    if(isMobile()) {
+        $(".gif").on({
+            touchstart: function(event){
+                event.preventDefault();
+                event.stopPropagation();
                 var gifId = $(this).attr("gifId");
-                sendGifMsg(gifId);
-                setTimeout(function(){ flag = false; }, 100);
+                var isDefault = $(this).attr("isDefault");
+                if(isDefault != "0") {
+                    timeOutEvent = setTimeout("longEnterPress('"+gifId+"')",500);
+                }
+            },
+            touchend: function(event){
+                event.preventDefault();
+                event.stopPropagation();
+                clearTimeout(timeOutEvent);
+                if(timeOutEvent !=0 ){
+                    var src = $(this).attr("src");
+                    getImgSize(src);
+                    var gifId = $(this).attr("gifId");
+                    sendGifMsg(gifId);
+                    setTimeout(function(){ flag = false; }, 100);
+                }
+                return false;
+            }
+        });
+
+
+        $(".del_gif").on({
+            touchstart: function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            },
+            touchend: function(event){
+                var gifId = $(this).attr("gifId");
+                var reqData = {
+                    gifId : gifId,
+                    type:delGifType,
+                }
+                sendPostToServer(reqData, delGifType);
+                return false;
+            }
+        });
+
+        $(".zaly_container").on("touchstart", function(e) {
+            e.preventDefault();
+            startX = e.originalEvent.changedTouches[0].pageX,
+                startY = e.originalEvent.changedTouches[0].pageY;
+
+        });
+
+        $(".zaly_container").on("touchend", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            moveEndX = e.originalEvent.changedTouches[0].pageX;
+            moveEndY = e.originalEvent.changedTouches[0].pageY;
+            if(startX == undefined) {
+                startX = moveEndX;
+            }
+            if(startY == undefined) {
+                startY = moveEndY;
+            }
+            X = moveEndX - startX;
+            Y = moveEndY - startY;
+
+            if ( Math.abs(X) > Math.abs(Y) && X > 10 ) {
+                ////右滑喜欢
+                if(currentGifDivNum == 0) {
+                    return;
+                }
+                rightSlide();
+            }
+            else if ( Math.abs(X) > Math.abs(Y) && X < -10 ) {
+                ////左滑不喜欢
+                if(currentGifDivNum == (line-1)) {
+                    return;
+                }
+                leftSlide();
             }
             return false;
+        });
+
+        function leftSlide()
+        {
+            var oldGifDivNum = currentGifDivNum;
+            $(".gif_div_"+currentGifDivNum)[0].style.display = "none";
+            currentGifDivNum = currentGifDivNum + 1;
+            $(".gif_div_"+currentGifDivNum)[0].style.display = "block";
+            changeSlideImg(oldGifDivNum);
         }
-    });
 
+        function rightSlide()
+        {
+            var oldGifDivNum = currentGifDivNum;
+            $(".gif_div_"+currentGifDivNum)[0].style.display = "none";
 
-    $(".del_gif").on({
-        touchstart: function(event){
-            event.preventDefault();
-            event.stopPropagation();
-        },
-        touchend: function(event){
+            currentGifDivNum = currentGifDivNum -1;
+            $(".gif_div_"+currentGifDivNum)[0].style.display = "block";
+            changeSlideImg(oldGifDivNum);
+        }
+
+    } else {
+        $(document).on("click", ".gif", function () {
+            var src = $(this).attr("src");
+            getImgSize(src);
             var gifId = $(this).attr("gifId");
-            var reqData = {
-                gifId : gifId,
-                type:delGifType,
-            }
-            sendPostToServer(reqData, delGifType);
-            return false;
-        }
-    });
+            sendGifMsg(gifId);
+        });
+    }
 
 
-    $(".zaly_container").on("touchstart", function(e) {
-        e.preventDefault();
-        startX = e.originalEvent.changedTouches[0].pageX,
-            startY = e.originalEvent.changedTouches[0].pageY;
-
-    });
-
-    $(".zaly_container").on("touchend", function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        moveEndX = e.originalEvent.changedTouches[0].pageX;
-        moveEndY = e.originalEvent.changedTouches[0].pageY;
-        if(startX == undefined) {
-            startX = moveEndX;
-        }
-        if(startY == undefined) {
-            startY = moveEndY;
-        }
-        X = moveEndX - startX;
-        Y = moveEndY - startY;
-
-        if ( Math.abs(X) > Math.abs(Y) && X > 10 ) {
-            ////右滑喜欢
-            if(currentGifDivNum == 0) {
-                return;
-            }
-            rightSlide();
-        }
-        else if ( Math.abs(X) > Math.abs(Y) && X < -10 ) {
-            ////左滑不喜欢
-            if(currentGifDivNum == (line-1)) {
-                return;
-            }
-            leftSlide();
-        }
-        return false;
-    });
 
     function sendPostToServer(reqData, type)
     {
@@ -370,7 +408,6 @@
         var reqData = {
             "gifId" : gifId
         };
-
         sendPostToServer(reqData, "send_msg");
     }
 
@@ -385,24 +422,6 @@
         sendPostToServer(reqData, addGifType);
     }
 
-    function leftSlide()
-    {
-        var oldGifDivNum = currentGifDivNum;
-        $(".gif_div_"+currentGifDivNum)[0].style.display = "none";
-        currentGifDivNum = currentGifDivNum + 1;
-        $(".gif_div_"+currentGifDivNum)[0].style.display = "block";
-        changeSlideImg(oldGifDivNum);
-    }
-
-    function rightSlide()
-    {
-        var oldGifDivNum = currentGifDivNum;
-        $(".gif_div_"+currentGifDivNum)[0].style.display = "none";
-
-        currentGifDivNum = currentGifDivNum -1;
-        $(".gif_div_"+currentGifDivNum)[0].style.display = "block";
-        changeSlideImg(oldGifDivNum);
-    }
 
     function changeSlideImg(oldGifDivNum)
     {

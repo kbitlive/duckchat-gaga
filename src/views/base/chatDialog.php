@@ -108,6 +108,9 @@
                 <item  class="emotion-item">🐷</item>
             </div>
         </div>
+        <div id="chat_plugin" style="display: none; position: absolute; bottom: 11rem;">
+            <iframe class="chat_plugin_iframe" src=""> </iframe>
+        </div>
         <div class="right-input">
             <div class="input-tools">
                 <img src="../../public/img/msg/emotions.png" class="emotions"/>
@@ -115,6 +118,8 @@
                 <input type="file" id="file1" style="display:none" onchange="uploadMsgFileFromInput(this, FileType.FileImage)" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg">
                 <img src="../../public/img/msg/file.png" style="height: 2.06rem;" onclick="uploadFile('file3')" class="upload-img" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"/>
                 <input type="file" id="file3" style="display:none" onchange="uploadMsgFileFromInput(this, FileType.FileDocument)">
+                <div class="input-plugin-tools">
+                </div>
             </div>
 
             <div class="input-box">
