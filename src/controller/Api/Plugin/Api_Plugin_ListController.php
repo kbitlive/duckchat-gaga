@@ -38,9 +38,8 @@ class Api_Plugin_ListController extends \BaseController
                 Zaly\Proto\Core\PluginPermissionType::PluginPermissionGroupMaster,
             ];
 
-            $siteManagers = $this->ctx->Site_Config->getSiteManagers();
-
-            if (in_array($this->userId, $siteManagers)) {
+            $isManager = $this->ctx->Site_Config->isManager($this->userId);
+            if ($isManager) {
                 $permissionTypes[] = Zaly\Proto\Core\PluginPermissionType::PluginPermissionAdminOnly;
             }
 

@@ -31,8 +31,6 @@ class MiniProgram_Test_ToolsController extends MiniProgramController
     {
         $tag = __CLASS__ . "-" . __FUNCTION__;
 
-        $this->logger->error($tag, "==============");
-
         $params = [
             "myFriendProfile" => $this->getMyFriendProfile(),
             "notMyFriendProfile" => $this->getNotMyFriendProfile(),

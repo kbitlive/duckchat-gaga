@@ -71,8 +71,8 @@ class Site_Login
     private function getSiteConfigPriKeyFromDB()
     {
         try {
-            $results = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_ID_PRIK_PEM);
-            return $results[SiteConfig::SITE_ID_PRIK_PEM];
+            $prikKeyPem = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_ID_PRIK_PEM);
+            return $prikKeyPem;
         } catch (Exception $ex) {
             $tag = __CLASS__ . "-" . __FUNCTION__;
             $this->ctx->Wpf_Logger->error($tag, "errorMsg = " . $ex->getMessage());
@@ -310,13 +310,9 @@ class Site_Login
         if (empty($siteOwner)) {
             $this->ctx->Wpf_Logger->info("api.site.login", "uic info=" . json_encode($uicInfo));
             if ($uicInfo && $uicInfo['status'] == 100) {
-                //set site owner
-                $this->ctx->SiteConfigTable->updateSiteConfig(SiteConfig::SITE_OWNER, $userId);
-
-                //update config realName = false
-                $this->ctx->SiteConfigTable->updateSiteConfig(SiteConfig::SITE_ENABLE_INVITATION_CODE, 0);
+                $this->ctx->Site_Config->updateConfigValue(SiteConfig::SITE_OWNER, $userId);
+                $this->ctx->Site_Config->updateConfigValue(SiteConfig::SITE_ENABLE_INVITATION_CODE, 0);
             }
-
         }
     }
 }

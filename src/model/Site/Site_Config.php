@@ -120,11 +120,8 @@ class Site_Config
      */
     public function getSiteOwner()
     {
-        $adminValue = $this->getConfigValue(SiteConfig::SITE_OWNER);
-        if (isset($adminValue)) {
-            return $adminValue[SiteConfig::SITE_OWNER];
-        }
-        return null;
+        $siteOwner = $this->getConfigValue(SiteConfig::SITE_OWNER);
+        return $siteOwner;
     }
 
 
@@ -150,15 +147,15 @@ class Site_Config
     {
         $managers = [];
 
-        $admin = $this->getSiteOwner();
+        $owner = $this->getSiteOwner();
 
-        if (isset($admin)) {
-            $managers[] = $admin;
+        if (isset($owner)) {
+            $managers[] = $owner;
         }
 
         $managersValue = $this->getConfigValue(SiteConfig::SITE_MANAGERS);
 
-        if ($managersValue) {
+        if (!empty($managersValue)) {
             $managersValueStr = isset($managersValue['managers']) ? $managersValue['managers'] : "";
             $managersArray = explode(",", $managersValueStr);
             if (!empty($managersArray)) {
@@ -185,12 +182,13 @@ class Site_Config
     public function getSiteDefaultFriendsAndGroups()
     {
 
-        $siteDefaultFriendList = $this->getConfigValue(SiteConfig::SITE_DEFAULT_FRIENDS);
-        $siteDefaultGroupsList = $this->getConfigValue(SiteConfig::SITE_DEFAULT_GROUPS);
+        $siteDefaultFriendString = $this->getConfigValue(SiteConfig::SITE_DEFAULT_FRIENDS);
+        $siteDefaultGroupsString = $this->getConfigValue(SiteConfig::SITE_DEFAULT_GROUPS);
 
-        $defaultList = array_merge($siteDefaultFriendList, $siteDefaultGroupsList);
-
-        return $defaultList;
+        return [
+            SiteConfig::SITE_DEFAULT_FRIENDS => $siteDefaultFriendString,
+            SiteConfig::SITE_DEFAULT_GROUPS => $siteDefaultGroupsString,
+        ];
     }
 
     public function getSiteManagerString($siteConfig = false)
