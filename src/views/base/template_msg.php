@@ -824,3 +824,10 @@
         <div class="pw-home-row-name" data-local-value="miniProgramTip">{{name}}</div>
     </div>
 </script>
+
+<script type="text/html" id="tpl-input-tools-item">
+    <img src="{{logo}}" class="chat_plugin" plugin-id="{{id}}" plugin-name="{{name}}"
+         plugin-duckchatSessionId="{{duckchatSessionId}}"
+         plugin-loadingType="{{loadingType}}"
+         plugin-landingPageUrl="{{landingPageUrl}}" onerror="this.src='../../public/img/plugin/default.png'">
+</script>
