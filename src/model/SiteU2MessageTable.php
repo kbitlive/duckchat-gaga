@@ -312,12 +312,13 @@ class siteU2MessageTable extends BaseTable
     {
         $startTime = microtime(true);
         $tag = __CLASS__ . "." . __FUNCTION__;
-        $sql = "select max(id) as pointer from $this->table where userId=:userId";
+        $sql = "select max(id) as pointer from $this->table where userId=:userId or fromUserId=:fromUserId;";
         try {
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
 
             $prepare->bindValue(":userId", $userId);
+            $prepare->bindValue(":fromUserId", $userId);
             $prepare->execute();
             $pointerInfo = $prepare->fetch(PDO::FETCH_ASSOC);
 
