@@ -27,6 +27,9 @@
         .select-color-primary {
             color: #4C3BB1;
         }
+        .item-row,.weui-actionsheet__cell {
+            cursor: pointer;
+        }
 
     </style>
 

@@ -24,6 +24,9 @@
         #search-group-div {
             text-align: center;
         }
+        .item-row {
+            cursor: pointer;
+        }
     </style>
 
 </head>
