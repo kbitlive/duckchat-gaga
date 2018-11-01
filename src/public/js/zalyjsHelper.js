@@ -54,10 +54,11 @@ languageNum = getLanguage();
 
 
 
-function isMobile(phoneNum)
-{
-    var reg = /^((1[3-8][0-9])+\d{8})$/;
-    return reg.test(phoneNum);
+function isMobile() {
+    if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+        return true;
+    }
+    return false;
 }
 
 
@@ -172,5 +173,12 @@ function getOsType() {
         clientType = "PC";
     }
     return clientType;
+}
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie =  cname + "=" + cvalue + ";" + expires + ";";
 }
 

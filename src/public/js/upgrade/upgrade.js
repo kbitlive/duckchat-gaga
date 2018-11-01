@@ -133,13 +133,12 @@ function isPhone(){
     return false;
 }
 
-function upgradeSiteVersion() {
-    var upgradeVersionNum = localStorage.getItem(currentUpgradeVersionKey);
-    updateUpgradeProgress("done", "");
-    var nextUpgradeVersionNum = Number(Number(upgradeVersionNum)+1);
-    localStorage.setItem(currentUpgradeVersionKey, nextUpgradeVersionNum);
+function upgradeSiteVersion(currentVersionCode) {
+    updateUpgradeProgress("done", currentVersionCode, "");
+
     var endUpgradeNum = localStorage.getItem(endUpgradeVersionKey);
-    if(nextUpgradeVersionNum >= Number(endUpgradeNum)) {
+    console.log("currentVersionCode====="+currentVersionCode);
+    if(currentVersionCode >= Number(endUpgradeNum)) {
         if(isPhone()) {
             var html = "升级完成，关闭当前页面";
             $(".upgrade_staring_btn").attr("goto", "close_page");
@@ -151,7 +150,10 @@ function upgradeSiteVersion() {
         $(".upgrade_staring_btn").attr("disabled", false);
         return;
     };
-    updateUpgradeProgress("start", "");
+    // var nextUpgradeVersionNum = Number(Number(currentVersionCode)+1);
+    localStorage.setItem(currentUpgradeVersionKey, currentVersionCode);
+
+    updateUpgradeProgress("start",  currentVersionCode, "");
     sendUpgrade();
 }
 
@@ -162,15 +164,16 @@ function updateSiteVersionFailed(resp)
     } else {
         var info = resp;
     }
-    updateUpgradeProgress("fail", resp);
+    updateUpgradeProgress("fail", resp.versionCode, resp);
     $(".upgrade_staring_btn").html("升级失败");
 }
 
 //-------------------------------------page.version.upgrade-------------------------------------
 
-function updateUpgradeProgress(type, info)
+function updateUpgradeProgress(type,  upgradeVersionCode, info)
 {
     var upgradeVersionNum = localStorage.getItem(currentUpgradeVersionKey);
+    console.log("upgradeVersionCode =====" + upgradeVersionCode);
 
     try{
         if(type == "start"){
@@ -189,22 +192,20 @@ function updateUpgradeProgress(type, info)
 
         } else if(type=="done") {
             $("#v_line_"+upgradeVersionNum).attr("src", "../../public/img/upgrade/success_line.png");
-            var nextUpgradeVersionNum = Number(Number(upgradeVersionNum)+1);
-            $("#v_"+nextUpgradeVersionNum).attr("src", "../../public/img/upgrade/success.png");
-            $(".text_"+nextUpgradeVersionNum)[0].style.color="rgba(76,59,177,1)";
-            var versionCode = $("#v_"+nextUpgradeVersionNum).attr("version");
-            var versionName = $("#v_"+nextUpgradeVersionNum).attr("versionName");
+            $("#v_"+upgradeVersionCode).attr("src", "../../public/img/upgrade/success.png");
+            $(".text_"+upgradeVersionCode)[0].style.color="rgba(76,59,177,1)";
+            var versionCode = $("#v_"+upgradeVersionCode).attr("version");
+            var versionName = $("#v_"+upgradeVersionCode).attr("versionName");
             $(".version_"+versionCode)[0].style.color="RGBA(20, 16, 48, 1)";
             var html = versionName+"版本升级完成";
             $(".version_"+versionCode).html(html);
 
         } else if (type== "fail") {
-            var nextUpgradeVersionNum = Number(Number(upgradeVersionNum)+1);
-            $("#v_"+nextUpgradeVersionNum).attr("src", "../../public/img/upgrade/fail.png");
-            $(".text_"+nextUpgradeVersionNum)[0].style.color = "RGBA(244, 67, 54, 1)";
+            $("#v_"+upgradeVersionCode).attr("src", "../../public/img/upgrade/fail.png");
+            $(".text_"+upgradeVersionCode)[0].style.color = "RGBA(244, 67, 54, 1)";
 
-            var versionCode = $("#v_"+nextUpgradeVersionNum).attr("version");
-            var versionName = $("#v_"+nextUpgradeVersionNum).attr("versionName");
+            var versionCode = $("#v_"+upgradeVersionCode).attr("version");
+            var versionName = $("#v_"+upgradeVersionCode).attr("versionName");
             $(".version_"+versionCode)[0].style.color="rgba(244,67,54,1)";
             var html = versionName+"版本升级失败，失败原因如下";
             $(".version_"+versionCode).html(html);
@@ -235,7 +236,7 @@ $(document).on("click", ".upgrade_staring_btn", function () {
     var html = "正在升级...";
     $(this).html(html);
     $(this).attr("disabled", "disabled");
-    updateUpgradeProgress("start", "");
+    updateUpgradeProgress("start", "", "");
     sendUpgrade();
 });
 
@@ -258,7 +259,7 @@ function checkUpgradeResult() {
             clearInterval(upgradeId);
             upgradeId = undefined;
             if (data.upgradeErrCode == "success") {
-                upgradeSiteVersion();
+                upgradeSiteVersion(data.versionCode);
             } else {
                 updateSiteVersionFailed(resp);
             }

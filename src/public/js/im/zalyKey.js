@@ -101,6 +101,26 @@ ApiFriendUpdateType =  {
 }
 
 
+PluginUsageType = {
+    PluginUsageNone:"PluginUsageNone",
+    PluginUsageIndex:"PluginUsageIndex",
+    PluginUsageLogin:"PluginUsageLogin",
+    PluginUsageU2Message:"PluginUsageU2Message",
+    PluginUsageTmpMessage:"PluginUsageTmpMessage",
+    PluginUsageGroupMessage:"PluginUsageGroupMessage",
+    PluginUsageAccountSafe:"PluginUsageAccountSafe",
+}
+
+
+PluginLoadingType = {
+    PluginLoadingNewPage:"PluginLoadingNewPage",
+    PluginLoadingFloat:"PluginLoadingFloat",
+    PluginLoadingMask:"PluginLoadingMask",
+    PluginLoadingChatbox:"PluginLoadingChatbox",
+    PluginLoadingFullScreen:"PluginLoadingFullScreen"
+
+};
+
 KeepSocket  = "KeepSocket";
 websocketGW = "enable_websocket_gw";
 websocketGWUrl = "websocket_gw_url";

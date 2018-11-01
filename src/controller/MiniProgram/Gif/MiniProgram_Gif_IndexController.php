@@ -11,8 +11,8 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
 
     private $gifMiniProgramId = 104;
     private $msgSendaction = "duckChat.message.send";
-    private $groupType = "g";
-    private $u2Type = "u";
+    private $groupType = "groupMsg";
+    private $u2Type = "u2Msg";
     private $userRelationAction = "duckChat.user.relation";
     private $limit=30;
     private $title = "GIF";
@@ -44,8 +44,9 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
         $pageUrl = $_COOKIE['duckchat_page_url'];
         $pageUrl = parse_url($pageUrl);
         parse_str($pageUrl['query'], $queries);
-        $x = $queries['x'];
-        list($type, $this->toId) = explode("-", $x);
+
+        $type = isset($queries['page']) ? $queries['page'] : "";
+        $this->toId = isset($queries['x']) ? $queries['x'] : "";
         if($this->toId == $this->userId) {
             return;
         }

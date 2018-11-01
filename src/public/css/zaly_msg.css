@@ -1923,3 +1923,13 @@ button:active{
 .clear_room_chat {
     cursor: pointer;
 }
+.plugin-iframe {
+    height: 100%;
+    width: 40%;
+    overflow: scroll;
+    outline: none;
+    border: none;
+}
+.open_new_page, .close_plugin {
+    cursor: pointer;
+}

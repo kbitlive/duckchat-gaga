@@ -21,6 +21,9 @@
             background: rgba(245, 245, 245, 1);
             border-width: 0px;
         }
+        textarea {
+            resize: none;
+        }
     </style>
 
 </head>

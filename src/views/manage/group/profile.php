@@ -20,6 +20,12 @@
             border-radius: 50%;
             cursor: pointer;
         }
+        .item-row {
+            cursor: pointer;
+        }
+        .weui_switch {
+            cursor: pointer;
+        }
 
     </style>
 
@@ -92,7 +98,7 @@
                         <div class="item-body-tail" id="group-avatar-img-id" fileId="<?php echo $avatar ?>">
 
                             <div class="item-body-value">
-                                <img id="group-avatar-img" class="site-group-avatar"
+                                <img id="group-avatar-img" class="site-group-avatar" avatar="<?php echo $avatar ?>"
                                      src="/_api_file_download_/?fileId=<?php echo $avatar ?>"
                                      onerror="src='./../public/img/msg/group_default_avatar.png'">
 
@@ -306,6 +312,22 @@
         jqElement.css("visibility", "visible");
         $(".wrapper-mask").css("visibility", "visible").append(jqElement);
     }
+
+
+    function isMobile() {
+        if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+            return true;
+        }
+        return false;
+    }
+
+    $(".site-group-avatar").each(function () {
+        if(!isMobile()) {
+            var avatar = $(this).attr("avatar");
+            var src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
+            $(this).attr("src", src);
+        }
+    });
 
 
     function removeWindow(jqElement) {

@@ -67,26 +67,8 @@
 
                     <div style="position: absolute;width: 100%;margin:0 auto;">
                         <div class="mini-program-row" style="overflow-y: scroll;position: relative;">
-                            <div class="pw-home-row mini-program">
-                                <div class="pw-home-row-image" style="position: relative;">
-                                    <img src="../../public/img/manage/home_config.png"/>
-                                </div>
-                                <div class="pw-home-row-name" data-local-value="miniProgramTip">用户广场</div>
-                            </div>
 
-                            <div class="pw-home-row mini-program">
-                                <div class="pw-home-row-image" style="position: relative;">
-                                    <img src="../../public/img/manage/home_miniProgram.png"/>
-                                </div>
-                                <div class="pw-home-row-name" data-local-value="miniProgramTip">用户广场</div>
-                            </div>
 
-                            <div class="pw-home-row mini-program">
-                                <div class="pw-home-row-image" style="position: relative;">
-                                    <img src="../../public/img/manage/home_user.png"/>
-                                </div>
-                                <div class="pw-home-row-name" data-local-value="miniProgramTip">用户广场</div>
-                            </div>
                         </div>
                     </div>
                 </div>

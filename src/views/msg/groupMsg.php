@@ -39,6 +39,12 @@
     <div class="layout-right friend-apply-dialog" style="display: none;">
           <?php include(dirname(__DIR__) . '/base/friendApplyList.php'); ?>
     </div>
+
+
+    <div class="layout-right plugin-list-dialog" style="display: none;">
+        <?php include(dirname(__DIR__) . '/base/pluginList.php'); ?>
+    </div>
+
 </div>
 
 <?php include(dirname(__DIR__) . '/base/template.php'); ?>

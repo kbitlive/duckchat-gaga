@@ -16,7 +16,9 @@
             border-radius: 50%;
             cursor: pointer;
         }
-
+        .item-row,.weui_switch {
+            cursor: pointer;
+        }
     </style>
 
     <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
@@ -123,6 +125,7 @@
                             <div class="item-body-value">
                                 <img id="user-avatar-img" class="site-user-avatar"
                                      onclick="uploadFile('user-avatar-img-input')"
+                                     avatar = "<?php echo $avatar ?>"
                                      src="/_api_file_download_/?fileId=<?php echo $avatar ?>"
                                      onerror="src='../../public/img/msg/default_user.png'">
 
@@ -326,7 +329,7 @@
                 var formData = new FormData();
 
                 formData.append("file", obj.files.item(0));
-                formData.append("fileType", "FileImage");
+                formData.append("fileType", 1);
                 formData.append("isMessageAttachment", false);
 
                 var src = window.URL.createObjectURL(obj.files.item(0));
@@ -340,6 +343,15 @@
         }
 
     }
+
+    $(".site-user-avatar").each(function () {
+        if(!isMobile()) {
+            var avatar = $(this).attr("avatar");
+            var src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
+            $(this).attr("src", src);
+        }
+    });
+
 
     function uploadFileToServer(formData, src) {
         var url = "./index.php?action=http.file.uploadWeb";
@@ -356,11 +368,8 @@
             processData: false,
             success: function (imageFileIdResult) {
                 if (imageFileIdResult) {
-                    var fileId = imageFileIdResult;
-                    if (isMobile()) {
-                        var res = JSON.parse(imageFileIdResult);
-                        fileId = res.fileId;
-                    }
+                    var res = JSON.parse(imageFileIdResult);
+                    var fileId = res.fileId;
                     updateServerImage(fileId);
                 } else {
                     alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");
