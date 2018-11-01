@@ -195,6 +195,7 @@ DefaultChat = "default_chat";
 MobileChat = "mobile_chat";
 speakerUserIdsKey="speaker_userIds_";
 newSiteTipKey = "site_tip";
+defaultPluginDisplay="display_plugin";
 
 DefaultTitle = "DuckChat 聊天室";
 

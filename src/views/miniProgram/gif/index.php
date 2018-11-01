@@ -79,7 +79,7 @@
 
 <script id="tpl-gif" type="text/html">
     <div class='gif_content_div'>
-        <img id="gifId_{{num}}" src='{{gifUrl}}' class='gif' gifId='{{gifId}}' isDefault='{{isDefault}}'>
+        <img id="gifId_{{num}}" style="background: url({{gifUrl}}) no-repeat ;background-size:contain" class='gif' gifId='{{gifId}}' isDefault='{{isDefault}}'>
         <img src='../../public/img/gif/gif-delete.png' class='del_gif  {{gifId}}' gifId="{{gifId}}">
     </div>
 </script>

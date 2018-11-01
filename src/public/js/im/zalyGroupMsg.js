@@ -284,9 +284,13 @@ function handlePluginListHtml(results)
     if(results.hasOwnProperty("list") && results.list) {
         var list = results.list;
         var listLength = list.length;
+        var displayPlugin = localStorage.getItem(defaultPluginDisplay);
         for(var i=0;i<listLength;i++) {
             var plugin = list[i];
             var logo = false;
+            if(!displayPlugin || displayPlugin == null) {
+                localStorage.setItem(defaultPluginDisplay,plugin.id);
+            }
             if(plugin.hasOwnProperty("logo")){
                 logo = getNotMsgImgUrl(plugin.logo);
             }
@@ -311,6 +315,13 @@ function initPluginList(results)
 {
     $(".mini-program-row").html("");
     handlePluginListHtml(results);
+    displayPlugin();
+}
+
+function displayPlugin()
+{
+    var pluginId =  localStorage.getItem(defaultPluginDisplay);
+    $(".plugin-info[plugin-id='"+pluginId+"']").click();
 }
 
 $(document).on("click", ".plugin-info", function () {
@@ -324,16 +335,13 @@ $(document).on("click", ".plugin-info", function () {
     } else {
         landingPageUrl = landingPageUrl+"?duckchat_sessionid="+duckchatSessionId;
     }
+    var pluginId = $(this).attr("plugin-id");
+    localStorage.setItem(defaultPluginDisplay, pluginId);
     $(".title").html(name);
     $(".plugin-src").attr("src", landingPageUrl);
     $(".open_new_page").attr("landingPageUrl", landingPageUrl);
     deleteCookie("duckchat_page_url");
     setCookie("duckchat_sessionid", duckchatSessionId, 1 );
-    if(landingPageUrl.indexOf("http") >-1 || landingPageUrl.indexOf("https") >-1) {
-        $(".plugin-iframe")[0].style.width="100%";
-    }else {
-        $(".plugin-iframe")[0].style.width="40%";
-    }
 });
 
 $(document).on("click", ".open_new_page", function () {
@@ -3533,7 +3541,7 @@ function displayRightPage(displayType)
 }
 
 $(".input-box").on("click",function () {
-    $(".msg_content").focus()
+    $(".msg_content").focus();
 });
 
 function addActiveForPwContactRow(jqElement)
