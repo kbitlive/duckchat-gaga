@@ -12,11 +12,12 @@
     <link rel="stylesheet" href="../../public/manage/config.css"/>
 
     <style>
-
         .color-picker {
             width: 30px;
             height: 30px;
             border: 0px;
+            outline: none;
+            cursor: pointer;
         }
 
         /*填充*/
@@ -42,6 +43,10 @@
             background-repeat: repeat;
         }
 
+    .item-row,.weui-actionsheet__cell,.create_button {
+        cursor: pointer;
+        outline-color: none;
+    }
 
     </style>
 
@@ -127,8 +132,8 @@
                 </div>
             </div>
 
-            <div class="login-background-image-<?php echo $loginBackgroundImageDisplay ?>"
-                 style="background-image: url('/_api_file_download_/?fileId=<?php echo $loginBackgroundImage ?>');">
+            <div class="login-background-image-<?php echo $loginBackgroundImageDisplay ?> image-bg"
+                 style="background-image: url('/_api_file_download_/?fileId=<?php echo $loginBackgroundImage ?>');" bgImgId="<?php echo $loginBackgroundImage ?>">
                 <input id="upload-background-image" type="file" onchange="uploadImageFile(this)"
                        accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
                        style="display: none;">
@@ -224,7 +229,7 @@
                 var formData = new FormData();
 
                 formData.append("file", obj.files.item(0));
-                formData.append("fileType", "FileImage");
+                formData.append("fileType", 1);
                 formData.append("isMessageAttachment", false);
 
                 var src = window.URL.createObjectURL(obj.files.item(0));
@@ -238,6 +243,15 @@
         }
 
     }
+
+    $(".image-bg").each(function () {
+        if(!isMobile()) {
+            var imgId = $(this).attr("bgImgId");
+            var src =  "./index.php?action=http.file.downloadFile&fileId="+ imgId+"&returnBase64=0";
+            $(".image-bg")[0].style.backgroundImage = " url('"+src+"')";
+        }
+    });
+
 
     function uploadFileToServer(formData, src) {
 
@@ -256,11 +270,8 @@
             success: function (imageFileIdResult) {
 
                 if (imageFileIdResult) {
-                    var fileId = imageFileIdResult;
-                    if (isMobile()) {
-                        var res = JSON.parse(imageFileIdResult);
-                        fileId = res.fileId;
-                    }
+                    var res = JSON.parse(imageFileIdResult);
+                    var fileId = res.fileId;
                     updateLoginBackgroundImage(fileId);
                 } else {
                     alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");

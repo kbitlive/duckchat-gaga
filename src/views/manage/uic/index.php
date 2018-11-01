@@ -255,8 +255,12 @@
             font-size: 14px;
             color: rgba(255, 255, 255, 1);
             line-height: 2px;
+            cursor: pointer;
+            outline: none;
         }
-
+        .item-body {
+            cursor: pointer;
+        }
         .select-color-primary {
             color: #4C3BB1;
         }

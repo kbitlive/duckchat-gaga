@@ -125,8 +125,8 @@
             }
 
             if(i==1) {
-                html += "<div class='gif_content_div'><img src='../../../public/img/add.png' class='add_gif'>  " +
-                    "<input id='gifFile' type='file' onchange='uploadFile(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
+                html += "<div class='gif_content_div'><img onclick=\"uploadFile('gifFile')\" src='../../../public/img/add.png' class='add_gif'>  " +
+                    "<input id='gifFile' type='file' onchange='uploadForGif(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
             }
 
             html +=template("tpl-gif", {
@@ -153,8 +153,8 @@
     } else {
         var html = '';
         html += "<div class='gif_div gif_div_0'  gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
-        html += "<div class='gif_content_div'><img src='../../../public/img/add.png' class='add_gif'>  " +
-            "<input id='gifFile' type='file' onchange='uploadFile(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
+        html += "<div class='gif_content_div'><img onclick=\"uploadFile('gifFile')\" src='../../../public/img/add.png' class='add_gif'>  " +
+            "<input id='gifFile' type='file' onchange='uploadForGif(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
         html += "</div>";
         $(".zaly_container").append(html);
     }
@@ -177,12 +177,16 @@
         };
     }
 
-    function uploadFile(obj) {
+    function uploadFile(id) {
+        $("#"+id).val("");
+        $("#"+id).click();
+    }
+    function uploadForGif(obj) {
         if (obj) {
             if (obj.files) {
                 var formData = new FormData();
                 formData.append("file", obj.files.item(0));
-                formData.append("fileType", "FileImage");
+                formData.append("fileType", 1);
                 formData.append("isMessageAttachment", false);
                 var src = window.URL.createObjectURL(obj.files.item(0));
                 getImgSize(src);
@@ -214,12 +218,10 @@
             contentType: false,
             processData: false,
             success: function (imageFileIdResult) {
+                console.log("imageFileIdResult==="+imageFileIdResult)
                 if (imageFileIdResult) {
-                    var fileId = imageFileIdResult;
-                    if (isMobile()) {
-                        var res = JSON.parse(imageFileIdResult);
-                        fileId = res.fileId;
-                    }
+                    var res = JSON.parse(imageFileIdResult);
+                    var fileId = res.fileId;
                     updateServerGif(fileId);
                 } else {
                     alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");

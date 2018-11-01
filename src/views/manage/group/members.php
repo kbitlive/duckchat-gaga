@@ -59,6 +59,7 @@
             flex-direction: row;
             text-align: center;
             height: 44px;
+            cursor: pointer;
         }
 
         /*.item-row:hover{*/
@@ -242,6 +243,8 @@
             font-size: 16px;
             color: rgba(255, 255, 255, 1);
             line-height: 1.67rem;
+            cursor: pointer;
+            outline: none;
         }
 
         .weui_switch {

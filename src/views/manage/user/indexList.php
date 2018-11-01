@@ -20,7 +20,9 @@
             line-height: 20px;
             margin: 17px 0px 7px 10px;
         }
-
+        .item-row {
+            cursor: pointer;
+        }
         #search-user-div {
             text-align: center;
         }

@@ -129,6 +129,8 @@
             font-family: PingFangSC-Regular;
             font-weight: 400;
             color: rgba(255, 255, 255, 1);
+            cursor: pointer;
+            outline: none;
         }
 
         .chatButton {
@@ -140,6 +142,8 @@
             font-size: 14px;
             font-family: PingFangSC-Regular;
             font-weight: 400;
+            cursor: pointer;
+            outline: none;
         }
 
         /* mask and new window */
@@ -204,6 +208,8 @@
             border-radius: 7px;
             font-size: 16px;
             color: rgba(255, 255, 255, 1);
+            cursor: pointer;
+            outline: none;
         }
 
         .line {
@@ -238,7 +244,7 @@
             <?php foreach ($userList as $i => $user) { ?>
                 <div class="item-row">
                     <div class="item-header">
-                        <img class="user-avatar-image"
+                        <img class="user-avatar-image" avatar="<?php echo $user['avatar'] ?>"
                              src="/_api_file_download_/?fileId=<?php echo $user['avatar'] ?>"
                              onerror="this.src='../../public/img/msg/default_user.png'"/>
                     </div>
@@ -562,7 +568,13 @@
         var url = "index.php?action=miniProgram.square.index";
         zalyjsCommonAjaxPostJson(url, data, loadMoreResponse)
     }
-
+    $(".user-avatar-image").each(function () {
+       if(!isMobile()) {
+           var avatar = $(this).attr("avatar");
+           var src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
+           $(this).attr("src", src);
+       }
+    });
     function loadMoreResponse(url, data, result) {
 
         if (result) {
@@ -574,10 +586,17 @@
 
             // alert(result);
             if (data && data.length > 0) {
+                var isMobile = isMobile();
+
                 $.each(data, function (index, user) {
+                    var src =  "./index.php?action=http.file.downloadFile&fileId="+ user['avatar']+"&returnBase64=0&lang="+languageNum;
+
+                    if(isMobile){
+                        src = '/_api_file_download_/?fileId=' + user['avatar'] ;
+                    }
                     var userHtml = '<div class="item-row" userId="' + user["userId"] + '" >'
                         + '<div class="item-header">'
-                        + '<img class="user-avatar-image" src="/_api_file_download_/?fileId=' + user['avatar'] + '" onerror="this.src=\'../../public/img/msg/default_user.png\'" />'
+                        + '<img class="user-avatar-image" src="'+src+'" onerror="this.src=\'../../public/img/msg/default_user.png\'" />'
                         + '</div>'
                         + '<div class="item-body">'
                         + '<div class="item-body-display">'

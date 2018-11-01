@@ -42,12 +42,11 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
         $tag = __CLASS__ ."-".__FUNCTION__;
 
         $pageUrl = $_COOKIE['duckchat_page_url'];
-        error_log("-----------------".$pageUrl);
         $pageUrl = parse_url($pageUrl);
         parse_str($pageUrl['query'], $queries);
 
-        $type = $queries['page'];
-        $this->toId = $queries['x'];
+        $type = isset($queries['page']) ? $queries['page'] : "";
+        $this->toId = isset($queries['x']) ? $queries['x'] : "";
         if($this->toId == $this->userId) {
             return;
         }

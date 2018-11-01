@@ -1930,3 +1930,6 @@ button:active{
     outline: none;
     border: none;
 }
+.open_new_page, .close_plugin {
+    cursor: pointer;
+}

@@ -54,10 +54,11 @@ languageNum = getLanguage();
 
 
 
-function isMobile(phoneNum)
-{
-    var reg = /^((1[3-8][0-9])+\d{8})$/;
-    return reg.test(phoneNum);
+function isMobile() {
+    if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+        return true;
+    }
+    return false;
 }
 
 

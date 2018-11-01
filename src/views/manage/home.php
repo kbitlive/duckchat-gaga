@@ -43,6 +43,7 @@
             flex-direction: row;
             text-align: center;
             height: 50px;
+            cursor: pointer;
             /*margin-bottom: 2rem;*/
         }
 

@@ -320,14 +320,26 @@ $(document).on("click", ".plugin-info", function () {
     var duckchatSessionId = $(this).attr("plugin-duckchatSessionId");
     addActiveForPwContactRow($(this));
     displayRightPage(DISPLAY_HOME);
+    if(landingPageUrl.indexOf("?") > -1) {
+        landingPageUrl = landingPageUrl+"&duckchat_sessionid="+duckchatSessionId;
+    } else {
+        landingPageUrl = landingPageUrl+"?duckchat_sessionid="+duckchatSessionId;
+    }
     $(".title").html(name);
     $(".plugin-src").attr("src", landingPageUrl);
+    $(".open_new_page").attr("landingPageUrl", landingPageUrl);
+
     setCookie("duckchat_sessionid",duckchatSessionId, 1 );
     if(landingPageUrl.indexOf("http") >-1 || landingPageUrl.indexOf("https") >-1) {
         $(".plugin-iframe")[0].style.width="100%";
     }else {
         $(".plugin-iframe")[0].style.width="40%";
     }
+});
+
+$(document).on("click", ".open_new_page", function () {
+    var landingPageUrl = $(this).attr("landingPageUrl");
+    window.open(landingPageUrl, "_blank");
 });
 
 //--------------------------------------http.file.downloadFile----------------------------------------------
@@ -3407,11 +3419,14 @@ function displayRightPage(displayType)
                 }
                 $(".msg_content").focus()
                 $(".friend-apply-dialog")[0].style.display = "none";
+                $(".plugin-list-dialog")[0].style.display = "none";
                 checkOsVersion();
                 break;
             case DISPLAY_APPLY_FRIEND_LIST:
                 $(".msg-chat-dialog")[0].style.display = "none";
                 $(".friend-apply-dialog")[0].style.display = "block";
+                $(".plugin-list-dialog")[0].style.display = "none";
+
                 break;
         }
     }catch (error) {
