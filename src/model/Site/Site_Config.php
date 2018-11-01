@@ -75,9 +75,37 @@ class Site_Config
     public function updateConfigValue($configKey, $configValue)
     {
         $result = $this->ctx->SiteConfigTable->updateSiteConfig($configKey, $configValue);
+        if (!$result) {
+            //update config -> save config
+            $result = $this->ctx->SiteConfigTable->insertSiteConfig($configKey, $configValue);
+        }
+
         if ($result) {
             $this->updateSiteConfigCache();
         }
+        return $result;
+    }
+
+    public function deleteConfig($configKeys)
+    {
+        if (empty($configKeys)) {
+            return false;
+        }
+
+        $result = false;
+
+        if (is_array($configKeys)) {
+
+            foreach ($configKeys as $configKey) {
+                $result = $this->ctx->SiteConfigTable->deleteSiteConfig($configKey) && $result;
+            }
+
+        } else {
+            $result = $this->ctx->SiteConfigTable->deleteSiteConfig($configKeys);
+        }
+
+        $this->updateSiteConfigCache();
+
         return $result;
     }
 
