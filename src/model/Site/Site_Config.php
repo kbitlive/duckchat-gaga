@@ -8,14 +8,44 @@
 
 class Site_Config
 {
+    //写入缓存文件
+    private static $siteConfigCache;
 
+    private $cacheFile;
     private $ctx;
 
     public function __construct(BaseCtx $ctx)
     {
         $this->ctx = $ctx;
+        $this->cacheFile = dirname(__FILE__) . "/../../siteConfigCache.php";
     }
 
+    private function updateSiteConfigCache()
+    {
+        self::$siteConfigCache = $this->ctx->SiteConfigTable->selectSiteConfig();
+        unset(self::$siteConfigCache[SiteConfig::SITE_ID_PRIK_PEM]);
+        $contents = var_export(self::$siteConfigCache, true);
+        file_put_contents($this->cacheFile, "<?php\n return {$contents};\n ");
+        if (function_exists("opcache_reset")) {
+            opcache_reset();
+        }
+        return true;
+    }
+
+    public function getAllConfig()
+    {
+        if (file_exists($this->cacheFile)) {
+            if (empty(self::$siteConfigCache)) {
+                self::$siteConfigCache = require($this->cacheFile);
+                return self::$siteConfigCache;
+            } else {
+                return self::$siteConfigCache;
+            }
+        } else {
+            $this->updateSiteConfigCache();
+        }
+        return $this->ctx->SiteConfigTable->selectSiteConfig();
+    }
 
     /**
      * @param $configKey
@@ -24,26 +54,30 @@ class Site_Config
      */
     public function getConfigValue($configKey, $defaultValue = null)
     {
-        $configValues = $this->ctx->SiteConfigTable->selectSiteConfig($configKey);
-        if ($configValues) {
-            return $configValues[$configKey];
+        if (empty(self::$siteConfigCache)) {
+            $this->getAllConfig();
+        }
+
+        $value = self::$siteConfigCache[$configKey];
+
+        if (isset($value)) {
+            return $value;
         }
         return $defaultValue;
     }
 
     public function updateConfigValue($configKey, $configValue)
     {
-        return $this->ctx->SiteConfigTable->updateSiteConfig($configKey, $configValue);
+        $result = $this->ctx->SiteConfigTable->updateSiteConfig($configKey, $configValue);
+        if ($result) {
+            $this->updateSiteConfigCache();
+        }
+        return $result;
     }
 
     public function getFileSizeConfig()
     {
         return $this->getConfigValue(SiteConfig::SITE_FILE_SIZE, 10);
-    }
-
-    public function getAllConfig()
-    {
-        return $this->ctx->SiteConfigTable->selectSiteConfig();
     }
 
     /**
@@ -52,12 +86,10 @@ class Site_Config
      */
     public function getSiteOwner()
     {
-        $adminValue = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_OWNER);
-
+        $adminValue = $this->getConfigValue(SiteConfig::SITE_OWNER);
         if (isset($adminValue)) {
             return $adminValue[SiteConfig::SITE_OWNER];
         }
-
         return null;
     }
 
@@ -72,6 +104,7 @@ class Site_Config
         if ($userId == $siteOwner) {
             return true;
         }
+        return false;
     }
 
     /**
@@ -89,7 +122,7 @@ class Site_Config
             $managers[] = $admin;
         }
 
-        $managersValue = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_MANAGERS);
+        $managersValue = $this->getConfigValue(SiteConfig::SITE_MANAGERS);
 
         if ($managersValue) {
             $managersValueStr = isset($managersValue['managers']) ? $managersValue['managers'] : "";
@@ -117,7 +150,13 @@ class Site_Config
 
     public function getSiteDefaultFriendsAndGroups()
     {
-        return $this->ctx->SiteConfigTable->selectSiteConfig([SiteConfig::SITE_DEFAULT_FRIENDS, SiteConfig::SITE_DEFAULT_GROUPS]);
+
+        $siteDefaultFriendList = $this->getConfigValue(SiteConfig::SITE_DEFAULT_FRIENDS);
+        $siteDefaultGroupsList = $this->getConfigValue(SiteConfig::SITE_DEFAULT_GROUPS);
+
+        $defaultList = array_merge($siteDefaultFriendList, $siteDefaultGroupsList);
+
+        return $defaultList;
     }
 
     public function getSiteManagerString($siteConfig = false)
