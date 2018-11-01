@@ -2831,7 +2831,6 @@ function getApplyFriendListHtml(results)
 
 function handleHtmlLanguage(html)
 {
-    console.log(html);
     $(html).find("[data-local-value]").each(function () {
         var changeHtmlValue = $(this).attr("data-local-value");
         var valueHtml = $(this).html();
