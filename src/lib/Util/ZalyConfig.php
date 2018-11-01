@@ -16,6 +16,13 @@ class ZalyConfig
     public static $config;
     public static $sampleConfig;
 
+    public static function updateConfig($key, $value)
+    {
+        $siteConfig = self::getAllConfig();
+        $siteConfig[$key] = $value;
+        self::updateConfigFile($siteConfig);
+    }
+
     public static function updateConfigFile($newConfig)
     {
         if (!$newConfig) {
@@ -27,7 +34,7 @@ class ZalyConfig
         $contents = var_export($newConfig, true);
         file_put_contents($configFileName, "<?php\n return {$contents};\n ");
         if (function_exists("opcache_reset")) {
-             opcache_reset();
+            opcache_reset();
         }
         return true;
     }

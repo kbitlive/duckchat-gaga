@@ -17,13 +17,19 @@ class Site_Config
     public function __construct(BaseCtx $ctx)
     {
         $this->ctx = $ctx;
-        $this->cacheFile = dirname(__FILE__) . "/../../siteConfigCache.php";
+        $cacheKey = ZalyConfig::getConfig("cacheKey");
+
+        if (empty($cacheKey)) {
+            ZalyConfig::updateConfig("cacheKey", ZalyHelper::generateStrKey('16'));
+        }
+
+        $fileName = "cache-" . $cacheKey . ".php";
+        $this->cacheFile = dirname(__FILE__) . "/../../" . $fileName;
     }
 
     private function updateSiteConfigCache()
     {
         self::$siteConfigCache = $this->ctx->SiteConfigTable->selectSiteConfig();
-        unset(self::$siteConfigCache[SiteConfig::SITE_ID_PRIK_PEM]);
         $contents = var_export(self::$siteConfigCache, true);
         file_put_contents($this->cacheFile, "<?php\n return {$contents};\n ");
         if (function_exists("opcache_reset")) {

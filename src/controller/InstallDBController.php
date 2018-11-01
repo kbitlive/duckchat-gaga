@@ -144,9 +144,11 @@ class InstallDBController
 
                 $config['loginPluginId'] = in_array($loginPluginId, $this->loginPluginIds) ? $loginPluginId : 101;
 
-                $config['msectime'] = ZalyHelper::getMsectime();
                 $config['siteAddress'] = $siteAddress;
-                $config['errorLog'] = ZalyHelper::generateStrKey('16').'_php_errors.log';
+                $cacheKey = ZalyHelper::generateStrKey('16');
+                $config['errorLog'] = $cacheKey . '_php_errors.log';
+                $config['cacheKey'] = $cacheKey;
+                $config['msectime'] = ZalyHelper::getMsectime();
 
                 //write to file
                 $contents = var_export($config, true);
@@ -164,7 +166,6 @@ class InstallDBController
                 }
 
                 $result['errCode'] = "success";
-//                echo $result;
                 echo "success";
             } catch (Exception $ex) {
                 $this->logger->error("do install site", $ex);
