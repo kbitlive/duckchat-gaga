@@ -362,7 +362,6 @@ function getInitChatPlugin(roomType)
 
 function getChatPluginList(results)
 {
-    console.log(JSON.stringify(results));
     $(".input-plugin-tools").html('');
     if(results.hasOwnProperty("list") ) {
         var list = results.list;
@@ -415,6 +414,10 @@ $(document).on("click", ".chat_plugin", function () {
     }
 });
 
+
+$(document).on("click", ".plugin_back", function () {
+    $(".plugin-iframe")[0].contentWindow.history.go(-1); // back
+});
 
 //--------------------------------------http.file.downloadFile----------------------------------------------
 
@@ -3012,6 +3015,7 @@ function handleHtmlLanguage(html)
     $(html).find("[data-local-value]").each(function () {
         var changeHtmlValue = $(this).attr("data-local-value");
         var valueHtml = $(this).html();
+        console.log(valueHtml);
         var newValueHtml = $.i18n.map[changeHtmlValue];
         if(newValueHtml != undefined && newValueHtml != "" && newValueHtml != false) {
             html = html.replace(valueHtml, newValueHtml);

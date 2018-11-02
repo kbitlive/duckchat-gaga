@@ -669,18 +669,20 @@
 </script>
 
 <script id="tpl-download-app-div" type="text/html">
-    <div class="app_download_header" data-local-value="shareSiteTip" >分享站点</div>
-    <div class="app_download_subheader" data-local-value="shareSiteCommentTip">随时随地享受畅聊体验，同时还有语音聊天功能等你来哦！</div>
-    <div id="qrcodeCanvas"></div>
-    <div class="download_button_div" style="margin-left:26rem;margin-top:2rem">
-        <div class="ios_info">
-            <img src="../../public/img/msg/ios.png" style="width: 2.1rem;height:2.8rem;margin-right:1rem;">iOS
+   <div>
+       <div class="app_download_header" data-local-value="shareSiteTip" >下载APP，随时随地保持联系</div>
+       <div class="app_download_subheader" data-local-value="shareSiteCommentTip">扫描安装APP，在APP内访问站点收发消息，体验更多功能！</div>
+       <div id="qrcodeCanvas"></div>
+       <div class="download_button_div" style="margin-left:26rem;margin-top:2rem">
+           <div class="ios_info">
+               <img src="../../public/img/msg/ios.png" style="width: 2.1rem;height:2.8rem;margin-right:1rem;">iOS
 
-        </div>
-        <div class="android_info">
-            <img src="../../public/img/msg/android.png" style="width: 2.3rem;height:2.8rem;margin-right: 1rem;">Android
-        </div>
-    </div>
+           </div>
+           <div class="android_info">
+               <img src="../../public/img/msg/android.png" style="width: 2.3rem;height:2.8rem;margin-right: 1rem;">Android
+           </div>
+       </div>
+   </div>
 </script>
 
 <script id="tpl-add-friend-div" type="text/html">
@@ -816,9 +818,9 @@
     <div class="pw-home-row mini-program plugin-info pw-contact-row" plugin-name="{{name}}" plugin-id="{{id}}" plugin-landingPageUrl="{{landingPageUrl}}" plugin-duckchatSessionId="{{duckchatSessionId}}" plugin-loadingType="{{loadingType}}">
         <div class="pw-home-row-image" style="position: relative;">
             {{if logo}}
-                <img src="{{logo}}" onerror="this.src='../../public/img/plugin/default.png'"/>
+                <img class="plugin_logo" src="{{logo}}" onerror="this.src='../../public/img/plugin/default.png'"/>
             {{else}}
-                <img src="../../public/img/plugin/default.png"/>
+                <img class="plugin_logo" src="../../public/img/plugin/default.png"/>
             {{/if}}
         </div>
         <div class="pw-home-row-name" data-local-value="miniProgramTip">{{name}}</div>
@@ -826,7 +828,7 @@
 </script>
 
 <script type="text/html" id="tpl-input-tools-item">
-    <img src="{{logo}}" class="chat_plugin" plugin-id="{{id}}" plugin-name="{{name}}"
+    <img src="{{logo}}" class="chat_plugin plugin_logo" plugin-id="{{id}}" plugin-name="{{name}}"
          plugin-duckchatSessionId="{{duckchatSessionId}}"
          plugin-loadingType="{{loadingType}}"
          plugin-landingPageUrl="{{landingPageUrl}}" onerror="this.src='../../public/img/plugin/default.png'">

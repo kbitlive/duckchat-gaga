@@ -175,7 +175,7 @@ html, body{
 
 .l-sb-item .useravatar {
     width: 4rem;
-    border-radius: 50%;
+    border-radius: 10%;
     height: 4rem;
 }
 
@@ -343,14 +343,26 @@ html, body{
     left: 3.1rem;
     top: 1.88rem;
 }
+.right-head .plugin-title {
+    font-size:2.25rem;
+    color:rgba(20,16,48,1);
+    position: absolute;
+    left: 6.1rem;
+    top: 1.88rem;
+}
 
 .right-head .actions {
     position: absolute;
     right: 1.97rem;
     bottom: 0.56rem;
-
     height: 3.75rem;
     text-align: right;
+}
+
+.right-head .plugin_back {
+    position: absolute;
+    left: 2.1rem;
+    top: 1.88rem;
 }
 
 .right-head .actions img {
@@ -1200,7 +1212,7 @@ html, body{
 }
 
 .user-info-avatar {
-    border-radius: 50%;
+    border-radius: 10%;
     width:4.68rem;
     height:4.68rem;
 }
@@ -1933,6 +1945,11 @@ button:active{
 .open_new_page, .close_plugin,.chat_plugin {
     cursor: pointer;
 }
+.plugin_back {
+    cursor: pointer;
+    width: 3rem;
+    height:3rem;
+}
 
 #chat_plugin {
     width: 41rem;
@@ -1947,4 +1964,8 @@ button:active{
     border:none;
     outline: none;
     overflow-y: scroll;
+}
+
+.plugin_logo {
+    border-radius: 50%;
 }

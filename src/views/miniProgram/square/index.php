@@ -65,7 +65,7 @@
             margin-top: 8px;
             margin-bottom: 8px;
             margin-left: 10px;
-            border-radius: 50%;
+            border-radius: 10%;
         }
 
         .item-body {

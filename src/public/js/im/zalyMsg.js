@@ -428,7 +428,6 @@ function handleSyncMsgForRoom(results)
                     u2Pointer:u2UpdatePointer,
                     groupsPointer : groupUpdatePointer,
                 };
-                console.log("pointer ========"+JSON.stringify(updateMsgPointerData));
                 updateMsgPointer(updateMsgPointerData);
             }
         }
@@ -448,7 +447,6 @@ function handleSyncMsg(msg)
         handleMsgStatusResult(msgId, msgStatus);
         return;
     }
-    console.log("click msg. type ======"+msg.type);
     if(msg.type == MessageType.MessageEventFriendRequest) {
         showOtherWebNotification();
         getFriendApplyList();
