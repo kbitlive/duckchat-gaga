@@ -431,9 +431,9 @@
     <div id="triangle_left"></div>
     <div id="selfInfoDiv" class="selfInfoDiv" style="position: absolute;width: 100%;">
         <div id="selfAvatarUploadDiv" class="d-flex flex-row justify-content-center" style="margin-top: 3rem; text-align: center;position: relative" >
-            <img id="user-image-upload" class="user-image-upload info-avatar-{{userId}}" src="../../public/img/msg/default_user.png" style="width: 5rem; height: 5rem;" onclick="uploadFile('file2')" />
+            <img id="user-image-upload" class="user-image-upload info-avatar-{{userId}}" src="../../public/img/msg/default_user.png" style="width: 5rem; height: 5rem;" onclick="uploadFile('file2', 'user_avatar')" />
             <img id="user-img-carmera" class="user-img-carmera" src="../../public/img/camera.png" style="width: 5rem; height: 5rem; position: absolute;
-                     margin-left: -5rem;" onclick="uploadFile('file2')" />
+                     margin-left: -5rem;" onclick="uploadFile('file2', 'user_avatar')" />
             <input type="file" id="file2" style="display:none" onchange="uploadUserImgFromInput(this)" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg">
         </div>
         <div class="d-flex flex-row justify-content-center selfNickNameDiv"  >

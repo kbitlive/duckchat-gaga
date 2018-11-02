@@ -1208,7 +1208,7 @@ html, body{
 }
 
 .user-image-upload {
-    border-radius: 50%;
+    border-radius: 10%;
 }
 
 .user-info-avatar {
@@ -1271,8 +1271,8 @@ html, body{
 }
 
 .user-image-for-add {
-    width: 8rem;
-    height:8rem;
+    width:7rem;
+    height: 7rem;
     border-radius: 10%;
 }
 

@@ -69,8 +69,12 @@ function showOtherWebNotification()
 
 
 //点击触发一个对象的点击
-function uploadFile(obj)
+function uploadFile(obj, type)
 {
+    if(type == 'user_avatar') {
+        uploadSelfAvatar = true
+    }
+
     $("#"+obj).val("");
     $("#"+obj).click();
 }
@@ -3015,7 +3019,6 @@ function handleHtmlLanguage(html)
     $(html).find("[data-local-value]").each(function () {
         var changeHtmlValue = $(this).attr("data-local-value");
         var valueHtml = $(this).html();
-        console.log(valueHtml);
         var newValueHtml = $.i18n.map[changeHtmlValue];
         if(newValueHtml != undefined && newValueHtml != "" && newValueHtml != false) {
             html = html.replace(valueHtml, newValueHtml);
@@ -3121,6 +3124,12 @@ $(".selfInfo").mouseover(function(){
     displaySelfInfo();
 }).mouseout(function () {
 
+});
+uploadSelfAvatar = false;
+$(document).on("mouseleave","#selfInfo", function () {
+    if( uploadSelfAvatar == false) {
+        removeWindow($("#selfInfo"));
+    }
 });
 
 
