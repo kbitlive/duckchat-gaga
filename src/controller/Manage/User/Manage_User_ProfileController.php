@@ -16,8 +16,6 @@ class Manage_User_ProfileController extends Manage_CommonController
         $params = $this->getUserProfile($userId);
         $params['lang'] = $this->language;
 
-        $siteManagerStr = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_MANAGERS);
-
         $params['isSiteOwner'] = $this->ctx->Site_Config->isSiteOwner($userId);
         $params['isSiteManager'] = $this->ctx->Site_Config->isManager($userId);
 
