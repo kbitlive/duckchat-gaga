@@ -48,6 +48,7 @@
             position: absolute;
             margin-left: 4.5rem;
             display: none;
+            cursor: pointer;
         }
         .gif_content_div{
             position: relative;
@@ -241,9 +242,9 @@
         });
     }
 
+    var timeOutEvent=0;
 
     if(isMobile()) {
-        var timeOutEvent=0;
 
         $(".add_gif").on({
             touchstart: function(event){
@@ -286,16 +287,6 @@
         });
 
 
-        function longEnterPress(gifId){
-            timeOutEvent = 0;
-            var delGifObj = $(".del_gif");
-            var delGifLength = $(".del_gif").length;
-            for(i=0; i<delGifLength; i++) {
-                var item = delGifObj[i];
-                $(item)[0].style.display = "none";
-            }
-            $("."+gifId)[0].style.display="flex";
-        }
 
 
         $(".del_gif").on({
@@ -373,27 +364,54 @@
         }
 
     } else {
-        $(document).on("click", ".gif", function () {
-            var src = $(this).attr("src");
-            getImgSize(src);
+
+        $(".gif").on({
+            mouseup : function(event){
+                event.preventDefault();
+                event.stopPropagation();
+                clearTimeout(timeOutEvent);
+                if(timeOutEvent !=0 ){
+                    var src = $(this).attr("src");
+                    getImgSize(src);
+                    var gifId = $(this).attr("gifId");
+                    sendGifMsg(gifId);
+                    setTimeout(function(){ flag = false; }, 100);
+                }
+            },
+            mousedown: function(event){
+                event.preventDefault();
+                event.stopPropagation();
+
+                var gifId = $(this).attr("gifId");
+                var isDefault = $(this).attr("isDefault");
+                if(isDefault != "0") {
+                    timeOutEvent = setTimeout("longEnterPress('"+gifId+"')",500);
+                }
+                return false;
+            }
+        });
+        $(document).on("click", ".del_gif", function () {
             var gifId = $(this).attr("gifId");
-            sendGifMsg(gifId);
+            var reqData = {
+                gifId : gifId,
+                type:delGifType,
+            }
+            sendPostToServer(reqData, delGifType);
         });
 
-        var timeout ;
-
-        $(".gif").mousedown(function() {
-            timeout = setTimeout(function() {
-                $("#mydiv").text("in");
-            }, 1000);
-        });
-
-        $(".gif").mouseup(function() {
-            clearTimeout(timeout);
-        });
     }
 
 
+    function longEnterPress(gifId){
+        timeOutEvent = 0;
+        var delGifObj = $(".del_gif");
+        var delGifLength = $(".del_gif").length;
+        for(i=0; i<delGifLength; i++) {
+            var item = delGifObj[i];
+            $(item)[0].style.display = "none";
+        }
+        $("."+gifId)[0].style.display="flex";
+    }
 
     function sendPostToServer(reqData, type)
     {
