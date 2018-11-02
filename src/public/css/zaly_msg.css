@@ -292,10 +292,6 @@ html, body{
 }
 
 
-.chatsession-row-img img {
-    width: 4.68rem;
-}
-
 .chatsession-row-header {
     position: absolute;
     left: 7.5rem;
@@ -408,7 +404,9 @@ html, body{
 }
 
 .msg-avatar img {
-    width: 4.68rem;
+    width: 4rem;
+    height:4rem;
+    border-radius: 10%;
 }
 
 .msg-nickname {
@@ -1213,8 +1211,8 @@ html, body{
 
 .user-info-avatar {
     border-radius: 10%;
-    width:4.68rem;
-    height:4.68rem;
+    width:5rem;
+    height:5rem;
 }
 .unread-num {
     top:1.5rem;
