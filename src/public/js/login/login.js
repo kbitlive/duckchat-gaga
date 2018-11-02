@@ -179,7 +179,45 @@ if(loginWelcomeText) {
 }
 
 
+function isMobile() {
+    if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+        return true;
+    }
+    return false;
+}
+if(!isMobile()) {
+    if(loginBackgroundImage) {
+        loginBackgroundImageDisplay = Number(loginBackgroundImageDisplay);
+        switch (loginBackgroundImageDisplay) {
+            case 1:
+                $(".zaly_container")[0].style.background = "url('"+loginBackgroundImage+"') no-repeat";
+                $(".zaly_container")[0].style.backgroundSize = "100% 100%";
+                break;
+            case 2:
+                $(".zaly_container")[0].style.background = "url('"+loginBackgroundImage+"') repeat";
+                break;
+            default:
 
+                $(".zaly_container")[0].style.background = "url('"+loginBackgroundImage+"')";
+                $(".zaly_container")[0].style.backgroundSize = "cover";
+        }
+    } else {
+        switch (loginBackgroundImageDisplay) {
+            case 1:
+                $(".zaly_container")[0].style.background = "url('../../public/img/login/login_bg.jpg') no-repeat";
+                $(".zaly_container")[0].style.backgroundSize = "100% 100%";
+                break;
+            case 2:
+                $(".zaly_container")[0].style.background = "url('../../public/img/login/login_bg.jpg') repeat";
+                break;
+            default:
+                $(".zaly_container")[0].style.background = "url('../../public/img/login/login_bg.jpg')";
+                $(".zaly_container")[0].style.backgroundSize = "cover";
+        }
+    }
+    $(".zaly_container")[0].style.display="block";
+
+}
 //replace \n from html
 function trimHtmlContentBr(str)
 {
