@@ -459,13 +459,33 @@ class Page_Version_UpgradeController extends Page_VersionController
 
         //update miniProgram management
         try {
-            $data2 = [
+            $data = [
                 'landingPageUrl' => " https://duckchat.akaxin.com/wiki/",
             ];
-            $where2 = [
+            $where = [
                 "pluginId" => 103,
             ];
-            $this->ctx->SitePluginTable->updateProfile($data2, $where2);
+            $this->ctx->SitePluginTable->updateProfile($data, $where);
+
+            //site management default icon
+            $data = [
+                'logo' => $this->getPluginDefaultLogo("/public/img/manage/site_manage.png"),
+            ];
+            $where = [
+                "pluginId" => 100,
+            ];
+            $this->ctx->SitePluginTable->updateProfile($data, $where);
+
+
+            //site square default icon
+            $data = [
+                'logo' => $this->getPluginDefaultLogo("/public/img/manage/site_square.png"),
+            ];
+            $where = [
+                "pluginId" => 199,
+            ];
+            $this->ctx->SitePluginTable->updateProfile($data, $where);
+
         } catch (Exception $e) {
             $this->logger->error($tag, "update 103 :" . $e);
         }
@@ -516,4 +536,19 @@ class Page_Version_UpgradeController extends Page_VersionController
             throw new Exception(var_export($ex->getMessage(), true));
         }
     }
+
+    private function getPluginDefaultLogo($logoPath)
+    {
+        $defaultIcon = WPF_ROOT_DIR . $logoPath;
+        if (!file_exists($defaultIcon)) {
+            return "";
+        }
+
+        $defaultImage = file_get_contents($defaultIcon);
+        $fileManager = new File_Manager();
+        $fileId = $fileManager->saveFile($defaultImage, "20180201");
+
+        return $fileId;
+    }
+
 }

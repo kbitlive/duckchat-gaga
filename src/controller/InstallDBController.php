@@ -635,18 +635,14 @@ class InstallDBController
     private function getSiteManageIcon()
     {
         $defaultIcon = WPF_ROOT_DIR . "/public/img/manage/site_manage.png";
-        error_log("========== icon path=".$defaultIcon);
         if (!file_exists($defaultIcon)) {
             return "";
         }
-
-        error_log("========== icon path=".$defaultIcon);
 
         $defaultImage = file_get_contents($defaultIcon);
         $fileManager = new File_Manager();
         $fileId = $fileManager->saveFile($defaultImage, "20180201");
 
-        error_log("========== icon path=".$fileId);
         return $fileId;
     }
 
