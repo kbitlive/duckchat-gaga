@@ -1273,7 +1273,7 @@ html, body{
 .user-image-for-add {
     width: 8rem;
     height:8rem;
-    border-radius: 50%;
+    border-radius: 10%;
 }
 
 .l-sb-logout {
