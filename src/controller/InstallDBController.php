@@ -146,7 +146,7 @@ class InstallDBController
 
                 $config['siteAddress'] = $siteAddress;
                 $randomKey = ZalyHelper::generateStrKey('16');
-                $config['errorLog'] = $randomKey . '_php_errors.log';
+                $config['errorLog'] = 'php_errors' . $randomKey . '.log';
                 $config['randomKey'] = $randomKey;
                 $config['msectime'] = ZalyHelper::getMsectime();
 
