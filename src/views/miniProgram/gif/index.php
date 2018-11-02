@@ -242,34 +242,24 @@
     }
 
 
-    $(".add_gif").on({
-        touchstart: function(event){
-            event.preventDefault();
-            event.stopPropagation();
-        },
-
-        touchend: function(event){
-            event.preventDefault();
-            event.stopPropagation();
-            $("#gifFile").val("");
-            $("#gifFile").click();
-            return false;
-        }
-    });
-
-    function longEnterPress(gifId){
-        timeOutEvent = 0;
-        var delGifObj = $(".del_gif");
-        var delGifLength = $(".del_gif").length;
-        for(i=0; i<delGifLength; i++) {
-            var item = delGifObj[i];
-            $(item)[0].style.display = "none";
-        }
-        $("."+gifId)[0].style.display="flex";
-    }
-
-    var timeOutEvent=0;
     if(isMobile()) {
+        var timeOutEvent=0;
+
+        $(".add_gif").on({
+            touchstart: function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            },
+
+            touchend: function(event){
+                event.preventDefault();
+                event.stopPropagation();
+                $("#gifFile").val("");
+                $("#gifFile").click();
+                return false;
+            }
+        });
+
         $(".gif").on({
             touchstart: function(event){
                 event.preventDefault();
@@ -294,6 +284,18 @@
                 return false;
             }
         });
+
+
+        function longEnterPress(gifId){
+            timeOutEvent = 0;
+            var delGifObj = $(".del_gif");
+            var delGifLength = $(".del_gif").length;
+            for(i=0; i<delGifLength; i++) {
+                var item = delGifObj[i];
+                $(item)[0].style.display = "none";
+            }
+            $("."+gifId)[0].style.display="flex";
+        }
 
 
         $(".del_gif").on({
@@ -376,6 +378,18 @@
             getImgSize(src);
             var gifId = $(this).attr("gifId");
             sendGifMsg(gifId);
+        });
+
+        var timeout ;
+
+        $(".gif").mousedown(function() {
+            timeout = setTimeout(function() {
+                $("#mydiv").text("in");
+            }, 1000);
+        });
+
+        $(".gif").mouseup(function() {
+            clearTimeout(timeout);
         });
     }
 

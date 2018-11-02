@@ -669,18 +669,20 @@
 </script>
 
 <script id="tpl-download-app-div" type="text/html">
-    <div class="app_download_header" data-local-value="shareSiteTip" >分享站点</div>
-    <div class="app_download_subheader" data-local-value="shareSiteCommentTip">随时随地享受畅聊体验，同时还有语音聊天功能等你来哦！</div>
-    <div id="qrcodeCanvas"></div>
-    <div class="download_button_div" style="margin-left:26rem;margin-top:2rem">
-        <div class="ios_info">
-            <img src="../../public/img/msg/ios.png" style="width: 2.1rem;height:2.8rem;margin-right:1rem;">iOS
+   <div>
+       <div class="app_download_header" data-local-value="shareSiteTip" >下载APP，随时随地保持联系</div>
+       <div class="app_download_subheader" data-local-value="shareSiteCommentTip">扫描安装APP，在APP内访问站点收发消息，体验更多功能！</div>
+       <div id="qrcodeCanvas"></div>
+       <div class="download_button_div" style="margin-left:26rem;margin-top:2rem">
+           <div class="ios_info">
+               <img src="../../public/img/msg/ios.png" style="width: 2.1rem;height:2.8rem;margin-right:1rem;">iOS
 
-        </div>
-        <div class="android_info">
-            <img src="../../public/img/msg/android.png" style="width: 2.3rem;height:2.8rem;margin-right: 1rem;">Android
-        </div>
-    </div>
+           </div>
+           <div class="android_info">
+               <img src="../../public/img/msg/android.png" style="width: 2.3rem;height:2.8rem;margin-right: 1rem;">Android
+           </div>
+       </div>
+   </div>
 </script>
 
 <script id="tpl-add-friend-div" type="text/html">
