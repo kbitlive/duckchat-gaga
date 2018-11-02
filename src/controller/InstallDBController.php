@@ -145,9 +145,9 @@ class InstallDBController
                 $config['loginPluginId'] = in_array($loginPluginId, $this->loginPluginIds) ? $loginPluginId : 101;
 
                 $config['siteAddress'] = $siteAddress;
-                $cacheKey = ZalyHelper::generateStrKey('16');
-                $config['errorLog'] = $cacheKey . '_php_errors.log';
-                $config['cacheKey'] = $cacheKey;
+                $randomKey = ZalyHelper::generateStrKey('16');
+                $config['errorLog'] = $randomKey . '_php_errors.log';
+                $config['randomKey'] = $randomKey;
                 $config['msectime'] = ZalyHelper::getMsectime();
 
                 //write to file

@@ -17,21 +17,19 @@ class Site_Config
     public function __construct(BaseCtx $ctx)
     {
         $this->ctx = $ctx;
-        $cacheKey = ZalyConfig::getConfig("cacheKey");
 
-        if (empty($cacheKey)) {
-            ZalyConfig::updateConfig("cacheKey", ZalyHelper::generateStrKey('16'));
+        $dirName = dirname(__FILE__) . "/../../cache";
+        if (!is_dir($dirName)) {
+            mkdir($dirName, 0755, true);
         }
-
-        $fileName = "cache-" . $cacheKey . ".php";
-        $this->cacheFile = dirname(__FILE__) . "/../../" . $fileName;
+        $this->cacheFile = $dirName . "/site-config.php";
     }
 
     private function updateSiteConfigCache()
     {
         self::$siteConfigCache = $this->ctx->SiteConfigTable->selectSiteConfig();
         $contents = var_export(self::$siteConfigCache, true);
-        file_put_contents($this->cacheFile, "<?php\n return {$contents};\n ");
+        file_put_contents($this->cacheFile, " <?php\n return {$contents};\n ");
         if (function_exists("opcache_reset")) {
             opcache_reset();
         }

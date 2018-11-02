@@ -44,7 +44,7 @@ return array(
 //        ),
     ),
     'logPath' => '.',
-    'cacheKey' => '',
+    'randomKey' => '',
     "debugMode" => false,
     'msectime' => 1535945699185.0,
 );
