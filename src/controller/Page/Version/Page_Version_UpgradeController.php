@@ -48,7 +48,7 @@ class Page_Version_UpgradeController extends Page_VersionController
                 $this->versionName = "1.1.0";
                 $result = $this->upgrade_10014_10100();
                 //最新版本审计完成以后，删除密码存储文件，准备下次更新新密码
-                $this->deleteUpgradePasswordFile();
+                $this->deleteUpgradeFile();
             }
 
             //update cache if exists
@@ -75,14 +75,8 @@ class Page_Version_UpgradeController extends Page_VersionController
     {
         $upgradePassword = $_COOKIE['upgradePassword'];
 
-        $fileName = $this->getPasswordFileName();
-
-        $passwordFileName = dirname(__FILE__) . "/../../../" . $fileName;
-
-        $this->logger->error("page.version.upgrade", "fileName=" . $passwordFileName);
-
-        $passwordContent = file_get_contents($passwordFileName);
-        $serverPassword = trim($passwordContent);
+        $serverPassword = $this->getUpgradePassword();
+        $serverPassword = trim($serverPassword);
 
         if ($upgradePassword != sha1($serverPassword)) {
             throw new Exception("upgrade gaga-server by error password");
@@ -335,18 +329,18 @@ class Page_Version_UpgradeController extends Page_VersionController
         }
 
         $groupGif = [
-                'pluginId' => 104,
-                'name' => "gif小程序",
-                'logo' => "",
-                'sort' => 2, //order = 2
-                'landingPageUrl' => "index.php?action=miniProgram.gif.index",
-                'landingPageWithProxy' => 1, //1 表示走site代理
-                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageGroupMessage,
-                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
-                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
-                'authKey' => "",
-                "management" => "",
-                "addTime" => ZalyHelper::getMsectime()
+            'pluginId' => 104,
+            'name' => "gif小程序",
+            'logo' => "",
+            'sort' => 2, //order = 2
+            'landingPageUrl' => "index.php?action=miniProgram.gif.index",
+            'landingPageWithProxy' => 1, //1 表示走site代理
+            'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageGroupMessage,
+            'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
+            'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
+            'authKey' => "",
+            "management" => "",
+            "addTime" => ZalyHelper::getMsectime()
         ];
 
         try {
