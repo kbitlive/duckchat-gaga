@@ -17,11 +17,32 @@ class Site_Config
     public function __construct(BaseCtx $ctx)
     {
         $this->ctx = $ctx;
-        $dirName = dirname(__FILE__) . "/../../cache";
+
+        $siteId = $this->getSiteId();
+
+        $dirName = WPF_ROOT_DIR . "/cache";
         if (!is_dir($dirName)) {
             mkdir($dirName, 0755, true);
         }
-        $this->cacheFile = $dirName . "/site-config.php";
+        $this->cacheFile = $dirName . "/site-" . $siteId . ".php";
+    }
+
+    private function updateSiteId($siteId)
+    {
+        if (!empty($siteId)) {
+            return $siteId;
+        }
+
+        $siteId = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_ID);
+
+        if (empty($siteId)) {
+            $publicKeyPem = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_ID_PUBK_PEM);
+            $publicKeyPem = $publicKeyPem[SiteConfig::SITE_ID_PUBK_PEM];
+            $siteId = sha1($publicKeyPem);
+        }
+
+        ZalyConfig::updateConfig("siteId", $siteId);
+        return $siteId;
     }
 
     private function updateSiteConfigCache()
@@ -104,6 +125,15 @@ class Site_Config
         $this->updateSiteConfigCache();
 
         return $result;
+    }
+
+    public function getSiteId()
+    {
+        $siteId = ZalyConfig::getConfig("siteId");
+
+        $siteId = $this->updateSiteId($siteId);
+
+        return $siteId;
     }
 
     public function getFileSizeConfig()
