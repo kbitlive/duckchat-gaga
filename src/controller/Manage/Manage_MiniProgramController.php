@@ -13,10 +13,7 @@ class Manage_MiniProgramController extends Manage_CommonController
     {
         $params = ["lang" => $this->language];
 
-
-        $config = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_PLUGIN_PLBLIC_KEY);
-
-        $pluginPublicKey = $config[SiteConfig::SITE_PLUGIN_PLBLIC_KEY];
+        $pluginPublicKey = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_PLUGIN_PLBLIC_KEY);
 
         $params['miniProgramPublicKey'] = $pluginPublicKey;
 
