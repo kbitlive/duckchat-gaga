@@ -175,7 +175,7 @@ html, body{
 
 .l-sb-item .useravatar {
     width: 4rem;
-    border-radius: 50%;
+    border-radius: 10%;
     height: 4rem;
 }
 
@@ -1212,7 +1212,7 @@ html, body{
 }
 
 .user-info-avatar {
-    border-radius: 50%;
+    border-radius: 10%;
     width:4.68rem;
     height:4.68rem;
 }
@@ -1964,4 +1964,8 @@ button:active{
     border:none;
     outline: none;
     overflow-y: scroll;
+}
+
+.plugin_logo {
+    border-radius: 50%;
 }

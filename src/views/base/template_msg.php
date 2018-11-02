@@ -818,9 +818,9 @@
     <div class="pw-home-row mini-program plugin-info pw-contact-row" plugin-name="{{name}}" plugin-id="{{id}}" plugin-landingPageUrl="{{landingPageUrl}}" plugin-duckchatSessionId="{{duckchatSessionId}}" plugin-loadingType="{{loadingType}}">
         <div class="pw-home-row-image" style="position: relative;">
             {{if logo}}
-                <img src="{{logo}}" onerror="this.src='../../public/img/plugin/default.png'"/>
+                <img class="plugin_logo" src="{{logo}}" onerror="this.src='../../public/img/plugin/default.png'"/>
             {{else}}
-                <img src="../../public/img/plugin/default.png"/>
+                <img class="plugin_logo" src="../../public/img/plugin/default.png"/>
             {{/if}}
         </div>
         <div class="pw-home-row-name" data-local-value="miniProgramTip">{{name}}</div>
@@ -828,7 +828,7 @@
 </script>
 
 <script type="text/html" id="tpl-input-tools-item">
-    <img src="{{logo}}" class="chat_plugin" plugin-id="{{id}}" plugin-name="{{name}}"
+    <img src="{{logo}}" class="chat_plugin plugin_logo" plugin-id="{{id}}" plugin-name="{{name}}"
          plugin-duckchatSessionId="{{duckchatSessionId}}"
          plugin-loadingType="{{loadingType}}"
          plugin-landingPageUrl="{{landingPageUrl}}" onerror="this.src='../../public/img/plugin/default.png'">
