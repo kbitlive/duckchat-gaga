@@ -17,7 +17,6 @@ class Site_Config
     public function __construct(BaseCtx $ctx)
     {
         $this->ctx = $ctx;
-
         $dirName = dirname(__FILE__) . "/../../cache";
         if (!is_dir($dirName)) {
             mkdir($dirName, 0755, true);
@@ -29,7 +28,7 @@ class Site_Config
     {
         self::$siteConfigCache = $this->ctx->SiteConfigTable->selectSiteConfig();
         $contents = var_export(self::$siteConfigCache, true);
-        file_put_contents($this->cacheFile, " <?php\n return {$contents};\n ");
+        file_put_contents($this->cacheFile, "<?php\n return {$contents};\n ");
         if (function_exists("opcache_reset")) {
             opcache_reset();
         }
