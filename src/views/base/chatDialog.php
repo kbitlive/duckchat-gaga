@@ -204,7 +204,7 @@
             <div class="user-profile-desc" style="position:absolute; visibility:hidden;">
                 <div class="user-desc" >
                     <div style="text-align: center">
-                        <img class="user-image-for-add " src="../../public/img/msg/default_user.png" style="width:7rem; height: 7rem; border-radius: 50%;">
+                        <img class="user-image-for-add " src="../../public/img/msg/default_user.png">
                         <div class="user-desc-body">
                         </div>
                     </div>
