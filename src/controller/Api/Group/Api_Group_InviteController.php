@@ -50,7 +50,7 @@ class Api_Group_InviteController extends Api_Group_BaseController
 
             //获取群组资料信息
             $groupInfo = $this->getGroupInfo($groupId);
-            if($groupInfo === false) {
+            if ($groupInfo === false) {
                 return;
             }
 
@@ -81,9 +81,7 @@ class Api_Group_InviteController extends Api_Group_BaseController
 
             //default -1
             if ($siteMaxGroupMembers == $this->defaultMaxGroupMembers) {
-                $siteConfigObj = $this->ctx->SiteConfig;
-                $siteConfig = $this->ctx->SiteConfigTable->selectSiteConfig($siteConfigObj::SITE_MAX_GROUP_MEMBERS);
-                $siteMaxGroupMembers = $siteConfig[$siteConfigObj::SITE_MAX_GROUP_MEMBERS];
+                $siteMaxGroupMembers = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_MAX_GROUP_MEMBERS);
             }
 
             $newGroupUserCount = $groupUserCount + count($userIds);

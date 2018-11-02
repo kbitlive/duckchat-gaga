@@ -17,7 +17,6 @@ class Manage_Group_ProfileController extends Manage_CommonController
         $params['lang'] = $this->language;
 
         $config = $this->ctx->Site_Config->getAllConfig();
-//        $config = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_DEFAULT_GROUPS);
 
         $defaultGroupsStr = $config[SiteConfig::SITE_DEFAULT_GROUPS];
         $maxGroupMembers = $config[SiteConfig::SITE_MAX_GROUP_MEMBERS];

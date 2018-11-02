@@ -17,9 +17,7 @@ class Manage_Config_DefaultGroupsController extends Manage_CommonController
         try {
             $params['lang'] = $this->language;
 
-            $config = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_DEFAULT_GROUPS);
-
-            $defaultGroupStr = $config[SiteConfig::SITE_DEFAULT_GROUPS];
+            $defaultGroupStr = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_DEFAULT_GROUPS);
 
             $groupList = explode(",", $defaultGroupStr);
 

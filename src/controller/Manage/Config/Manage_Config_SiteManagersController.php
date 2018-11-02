@@ -17,9 +17,7 @@ class Manage_Config_SiteManagersController extends Manage_CommonController
         try {
             $params['lang'] = $this->language;
 
-            $config = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_MANAGERS);
-
-            $siteManagers = $config[SiteConfig::SITE_MANAGERS];
+            $siteManagers = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_MANAGERS);
 
             $managerList = explode(",", $siteManagers);
 

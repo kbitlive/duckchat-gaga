@@ -17,11 +17,7 @@ class Manage_Config_PubkController extends Manage_CommonController
         try {
             $params['lang'] = $this->language;
 
-            $config = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_ID_PUBK_PEM);
-
-            $params['pubkPem'] = $config[SiteConfig::SITE_ID_PUBK_PEM];
-
-            $this->ctx->Wpf_Logger->info("------------", $params['pubkPem']);
+            $params['pubkPem'] = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_ID_PUBK_PEM);
 
             echo $this->display("manage_config_sitePublicKey", $params);
             return;
