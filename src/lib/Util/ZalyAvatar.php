@@ -13,7 +13,14 @@ class ZalyAvatar
 
     private static function writeAvatars()
     {
-        $avatarFileName = dirname(__FILE__) . "/../../avatar.php";
+        $cacheDir = WPF_ROOT_DIR . "/cache";
+
+        if (!is_dir($cacheDir)) {
+            mkdir($cacheDir, 0755, true);
+        }
+
+        $avatarPhpName = $cacheDir . "/avatar.php";
+
         for ($i = 1; $i <= 74; $i++) {
             $defaultAva = dirname(__FILE__) . "/../../public/avatar/" . $i . "@3x.png";
             if (!file_exists($defaultAva)) {
@@ -31,12 +38,12 @@ class ZalyAvatar
         ];
 
         $contents = var_export($allAvatars, true);
-        file_put_contents($avatarFileName, "<?php\n return {$contents};\n ");
+        file_put_contents($avatarPhpName, "<?php\n return {$contents};\n ");
     }
 
     private static function getAvatars()
     {
-        $fileName = dirname(__FILE__) . "/../../avatar.php";
+        $fileName = WPF_ROOT_DIR . "/cache/avatar.php";
         if (!file_exists($fileName)) {
             return;
         }
