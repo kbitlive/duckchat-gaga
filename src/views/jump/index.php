@@ -19,7 +19,7 @@
             justify-content: center;
         }
         .zaly_jump {
-            width:35.18rem;
+            width:100%;
             text-align: center;
         }
         .zaly_header_tip {
@@ -119,7 +119,7 @@
         </div>
     </div>
     <div class="zaly_jump zaly_jump_browser" style="">
-        <img style="width:35rem; height:31rem;" src="../../public/img/app_download_bg.png">
+        <img style="width:100%; height:31rem;" src="../../public/img/app_download_bg.png">
         <img src="../../public/img/app_download.png" style="width:14rem; height:29rem;position: absolute; top:9rem;left:0;right:0;margin: 0 auto;">
         <button class="download_app">下载</button>
         <button class="open_app">打开</button>
