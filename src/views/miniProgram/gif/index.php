@@ -14,9 +14,10 @@
         body, html {
             font-size: 10.66px;
             width: 100%;
+            height: 100%;
         }
         .zaly_container {
-            height: 18rem;
+            height: 85%;
         }
         .gif {
             width:5rem;
@@ -34,7 +35,6 @@
             width:5px;
         }
         .slide_div {
-            margin-top: 3rem;
             text-align: center;
         }
         .add_gif{
