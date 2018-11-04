@@ -146,7 +146,7 @@ class InstallDBController
 
                 $config['siteAddress'] = $siteAddress;
                 $randomKey = ZalyHelper::generateStrKey('16');
-                $config['errorLog'] = 'php_errors' . $randomKey . '.log';
+                $config['errorLog'] = 'php_errors_' . $randomKey . '.log';
                 $config['randomKey'] = $randomKey;
                 $config['msectime'] = ZalyHelper::getMsectime();
 
@@ -431,7 +431,7 @@ class InstallDBController
             [
                 'pluginId' => 100,
                 'name' => "管理后台",
-                'logo' => "",
+                'logo' => $this->getSiteManageIcon(),
                 'sort' => 100,
                 'landingPageUrl' => "index.php?action=manage.index",
                 'landingPageWithProxy' => 1, //1 表示走site代理
@@ -517,7 +517,7 @@ class InstallDBController
             [
                 'pluginId' => 199,  //200+ for user
                 'name' => "用户广场",
-                'logo' => "",
+                'logo' => $this->getSiteSquareIcon(),
                 'sort' => 2, //order = 2
                 'landingPageUrl' => "index.php?action=miniProgram.square.index",
                 'landingPageWithProxy' => 1, //1 表示走site代理
@@ -631,4 +631,32 @@ class InstallDBController
         }
         return "success";
     }
+
+    private function getSiteManageIcon()
+    {
+        $defaultIcon = WPF_ROOT_DIR . "/public/img/manage/site_manage.png";
+        if (!file_exists($defaultIcon)) {
+            return "";
+        }
+
+        $defaultImage = file_get_contents($defaultIcon);
+        $fileManager = new File_Manager();
+        $fileId = $fileManager->saveFile($defaultImage, "20180201");
+
+        return $fileId;
+    }
+
+    private function getSiteSquareIcon()
+    {
+        $defaultIcon = WPF_ROOT_DIR . "/public/img/manage/site_square.png";
+        if (!file_exists($defaultIcon)) {
+            return "";
+        }
+
+        $defaultImage = file_get_contents($defaultIcon);
+        $fileManager = new File_Manager();
+        $fileId = $fileManager->saveFile($defaultImage, "20180201");
+        return $fileId;
+    }
+
 }
