@@ -307,48 +307,6 @@ class Page_Version_UpgradeController extends Page_VersionController
         $tag = __CLASS__ . "->" . __FUNCTION__;
 
 
-        $u2Gif = [
-            'pluginId' => 104,
-            'name' => "gif小程序",
-            'logo' => "",
-            'sort' => 2, //order = 2
-            'landingPageUrl' => "index.php?action=miniProgram.gif.index",
-            'landingPageWithProxy' => 1, //1 表示走site代理
-            'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageU2Message,
-            'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
-            'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
-            'authKey' => "",
-            "management" => "",
-            "addTime" => ZalyHelper::getMsectime()
-        ];
-
-        try {
-            $this->ctx->SitePluginTable->insertMiniProgram($u2Gif);
-        } catch (Exception $e) {
-            $this->logger->error($tag, "ignore insert u2 104:" . $e);
-        }
-
-        $groupGif = [
-            'pluginId' => 104,
-            'name' => "gif小程序",
-            'logo' => "",
-            'sort' => 2, //order = 2
-            'landingPageUrl' => "index.php?action=miniProgram.gif.index",
-            'landingPageWithProxy' => 1, //1 表示走site代理
-            'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageGroupMessage,
-            'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
-            'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
-            'authKey' => "",
-            "management" => "",
-            "addTime" => ZalyHelper::getMsectime()
-        ];
-
-        try {
-            $this->ctx->SitePluginTable->insertMiniProgram($groupGif);
-        } catch (Exception $e) {
-            $this->logger->error($tag, "ignore insert  group 104:" . $e);
-        }
-
         $data = [
             'pluginId' => 105,
             'name' => "账户密码管理",
@@ -457,6 +415,47 @@ class Page_Version_UpgradeController extends Page_VersionController
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
 
+        $u2Gif = [
+            'pluginId' => 104,
+            'name' => "gif小程序",
+            'logo' => "",
+            'sort' => 2, //order = 2
+            'landingPageUrl' => "index.php?action=miniProgram.gif.index",
+            'landingPageWithProxy' => 1, //1 表示走site代理
+            'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageU2Message,
+            'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
+            'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
+            'authKey' => "",
+            "management" => "",
+            "addTime" => ZalyHelper::getMsectime()
+        ];
+
+        try {
+            $this->ctx->SitePluginTable->insertMiniProgram($u2Gif);
+        } catch (Exception $e) {
+            $this->logger->error($tag, "ignore insert u2 104:" . $e);
+        }
+
+        $groupGif = [
+            'pluginId' => 104,
+            'name' => "gif小程序",
+            'logo' => "",
+            'sort' => 2, //order = 2
+            'landingPageUrl' => "index.php?action=miniProgram.gif.index",
+            'landingPageWithProxy' => 1, //1 表示走site代理
+            'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageGroupMessage,
+            'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
+            'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
+            'authKey' => "",
+            "management" => "",
+            "addTime" => ZalyHelper::getMsectime()
+        ];
+
+        try {
+            $this->ctx->SitePluginTable->insertMiniProgram($groupGif);
+        } catch (Exception $e) {
+            $this->logger->error($tag, "ignore insert  group 104:" . $e);
+        }
         //update miniProgram management
         try {
             $data = [
@@ -487,7 +486,7 @@ class Page_Version_UpgradeController extends Page_VersionController
             $this->ctx->SitePluginTable->updateProfile($data, $where);
 
         } catch (Exception $e) {
-            $this->logger->error($tag, "update 103 :" . $e);
+            $this->logger->error($tag, "update 199 :" . $e);
         }
     }
 
