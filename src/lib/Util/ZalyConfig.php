@@ -33,9 +33,15 @@ class ZalyConfig
         //write to file
         $contents = var_export($newConfig, true);
         file_put_contents($configFileName, "<?php\n return {$contents};\n ");
+
+        //update opcache
         if (function_exists("opcache_reset")) {
             opcache_reset();
         }
+
+        //update zalyConfig
+        self::loadConfigFile();
+
         return true;
     }
 
@@ -81,6 +87,9 @@ class ZalyConfig
 
     public static function getAllConfig()
     {
+        if (!empty(self::$config)) {
+            return self::$config;
+        }
         self::loadConfigFile();
         return self::$config;
     }

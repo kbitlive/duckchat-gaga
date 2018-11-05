@@ -204,6 +204,7 @@ abstract class Page_VersionController extends UpgradeController
 
     }
 
+    //升级config.php,只升级 siteVersionCode & siteVersionName
     protected function updateSiteConfigAsUpgrade($newVersionCode, $newVersionName)
     {
         $siteConfig = ZalyConfig::getAllConfig();
@@ -212,6 +213,7 @@ abstract class Page_VersionController extends UpgradeController
         ZalyConfig::updateConfigFile($siteConfig);
     }
 
+    //升级config.php，升级$config中所有数据
     protected function updateSiteConfig($config)
     {
         if (!is_array($config)) {
