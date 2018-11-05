@@ -17,7 +17,7 @@
 |体验站地址（含Web体验）|http://gaga.akaxin.com|
 |Android客户端|Android下载：https://duckchat.akaxin.com|
 |iOS客户端|iOS下载：[AppStore官方下载 ](https://itunes.apple.com/cn/app/duckchat/id1434153512?l=en&mt=8)|
-|官方QQ群|[`QQ5群：131465422`](https://jq.qq.com/?_wv=1027&k=5z7aEG7)|
+|官方QQ群|[`QQ6群：573625765`](https://jq.qq.com/?_wv=1027&k=5z7aEG7)|
 |官方网站|[DuckChat官方网站 https://duckchat.akaxin.com](https://duckchat.akaxin.com)|
 
 
