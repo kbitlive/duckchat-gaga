@@ -13,7 +13,7 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
     private $msgSendaction = "duckchat.message.send";
     private $groupType = "groupMsg";
     private $u2Type = "u2Msg";
-    private $userRelationAction = "duckChat.user.relation";
+    private $userRelationAction = "duckchat.user.relation";
     private $limit=30;
     private $title = "GIF";
     private $roomType="";
