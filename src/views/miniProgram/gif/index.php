@@ -138,8 +138,8 @@
                 }
 
                 if(i==1) {
-                    html += "<div class='gif_content_div'><img accept='image/gif' onclick=\"uploadFile('gifFile')\" src='../../../public/img/gif/add.png' class='add_gif'>  " +
-                        "<input id='gifFile' type='file' onchange='uploadForGif(this)' accept='image/gif' style='display: none;'></div>";
+                    html += "<div class='gif_content_div'><img accept='image/gif,image/jpeg,image/png,image/jpg' onclick=\"uploadFile('gifFile')\" src='../../../public/img/gif/add.png' class='add_gif'>  " +
+                        "<input id='gifFile' type='file' onchange='uploadForGif(this)' accept='image/gif,image/jpeg,image/png,image/jpg' style='display: none;'></div>";
                 }
 
                 html +=template("tpl-gif", {
@@ -166,8 +166,8 @@
         } else {
             var html = '';
             html += "<div class='gif_div gif_div_0'  gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
-            html += "<div class='gif_content_div'><img accept='image/gif' onclick=\"uploadFile('gifFile')\" src='../../../public/img/gif/add.png' class='add_gif'>  " +
-                "<input id='gifFile' type='file' onchange='uploadForGif(this)' accept='image/gif' style='display: none;'></div>";
+            html += "<div class='gif_content_div'><img accept='image/gif,image/jpeg,image/png,image/jpg' onclick=\"uploadFile('gifFile')\" src='../../../public/img/gif/add.png' class='add_gif'>  " +
+                "<input id='gifFile' type='file' onchange='uploadForGif(this)' accept='image/gif,image/jpeg,image/png,image/jpg' style='display: none;'></div>";
             html += "</div>";
             $(".zaly_container").append(html);
         }
