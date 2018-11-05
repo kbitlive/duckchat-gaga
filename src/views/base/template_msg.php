@@ -820,11 +820,7 @@
             {{if logo}}
                 <img class="plugin_logo" src="{{logo}}" onerror="this.src='../../public/img/plugin/default.png'"/>
             {{else}}
-                {{if id==104}}
-                    <img class="plugin_logo" src="../../public/img/plugin/gif.png"/>
-                {{else}}
                     <img class="plugin_logo" src="../../public/img/plugin/default.png"/>
-                {{/if}}
             {{/if}}
         </div>
         <div class="pw-home-row-name" data-local-value="miniProgramTip">{{name}}</div>
@@ -833,17 +829,9 @@
 
 <script type="text/html" id="tpl-input-tools-item">
 
-    {{if id==104}}
-        <img src="{{logo}}" class="chat_plugin plugin_logo" plugin-id="{{id}}" plugin-name="{{name}}"
-             plugin-duckchatSessionId="{{duckchatSessionId}}"
-             plugin-loadingType="{{loadingType}}"
-             plugin-landingPageUrl="{{landingPageUrl}}" onerror="this.src='../../public/img/plugin/gif.png'">
-
-    {{else}}
         <img src="{{logo}}" class="chat_plugin plugin_logo" plugin-id="{{id}}" plugin-name="{{name}}"
              plugin-duckchatSessionId="{{duckchatSessionId}}"
              plugin-loadingType="{{loadingType}}"
              plugin-landingPageUrl="{{landingPageUrl}}" onerror="this.src='../../public/img/plugin/default.png'">
-    {{/if}}
 
 </script>

@@ -418,7 +418,7 @@ class Page_Version_UpgradeController extends Page_VersionController
         $u2Gif = [
             'pluginId' => 104,
             'name' => "gif小程序",
-            'logo' => "",
+            'logo' => $this->getSiteGifIcon(),
             'sort' => 2, //order = 2
             'landingPageUrl' => "index.php?action=miniProgram.gif.index",
             'landingPageWithProxy' => 1, //1 表示走site代理
@@ -439,7 +439,7 @@ class Page_Version_UpgradeController extends Page_VersionController
         $groupGif = [
             'pluginId' => 104,
             'name' => "gif小程序",
-            'logo' => "",
+            'logo' => $this->getSiteGifIcon(),
             'sort' => 2, //order = 2
             'landingPageUrl' => "index.php?action=miniProgram.gif.index",
             'landingPageWithProxy' => 1, //1 表示走site代理
@@ -488,6 +488,19 @@ class Page_Version_UpgradeController extends Page_VersionController
         } catch (Exception $e) {
             $this->logger->error($tag, "update 199 :" . $e);
         }
+    }
+
+    private function getSiteGifIcon()
+    {
+        $defaultIcon = WPF_ROOT_DIR . "/public/img/plugin/gif.png";
+        if (!file_exists($defaultIcon)) {
+            return "";
+        }
+
+        $defaultImage = file_get_contents($defaultIcon);
+        $fileManager = new File_Manager();
+        $fileId = $fileManager->saveFile($defaultImage, "20180201");
+        return $fileId;
     }
 
 
