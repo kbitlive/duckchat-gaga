@@ -79,10 +79,16 @@ class siteU2MessageTable extends BaseTable
         $startTime = microtime(true);
         $tag = __CLASS__ . "." . __FUNCTION__;
 
+        $notice = Zaly\Proto\Core\MessageType::MessageNotice;
+        $webNotice = Zaly\Proto\Core\MessageType::MessageWebNotice;
         $queryFields = implode(",", $this->columns);
         $sql = "select $queryFields 
                 from $this->table 
-                where id>:offset and (userId=:userId or fromUserId=:fromUserId) order by id limit :limitCount;";
+                where 
+                  id>:offset 
+                  and 
+                  (userId=:userId or (fromUserId=:fromUserId and msgType not in ($notice,$webNotice))) 
+                order by id limit :limitCount;";
 
         try {
             $prepare = $this->db->prepare($sql);
