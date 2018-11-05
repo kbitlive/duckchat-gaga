@@ -77,7 +77,7 @@
     </div>
 </script>
 
-
+<!--登陆主板块-->
 <script type="text/html" id="tpl-login-div">
     <div style="position: relative; height: 100%;">
         <div>
@@ -119,7 +119,20 @@
             <div class="d-flex flex-row register_span_div" >
                 <span onclick="registerForPassportPassword()" style="color: RGBA(0, 0, 0, 0.2);" data-local-value="noAccountTip">还没有账户？</span> <span onclick="registerForPassportPassword()" data-local-value="registerContentTip">去注册</span>
             </div>
+
         </div>
+
+        <!--   third party landing      -->
+        <div class="login-others">
+            <div class="landing-third-title">使用以下账号直接登录</div>
+
+            <div class="landing-third-content">
+                <img class="landing-third-party" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1541429508429&di=9ec060276e75c9c2d72ec16966f2497c&imgtype=0&src=http%3A%2F%2Fpic.51yuansu.com%2Fpic3%2Fcover%2F00%2F68%2F08%2F58ab18fbd095e_610.jpg"/>
+                <img class="landing-third-party" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1541429549168&di=c9e7304f80e803f07dedfb763ad350c9&imgtype=0&src=http%3A%2F%2Fbpic.588ku.com%2Felement_origin_min_pic%2F01%2F31%2F52%2F65573b45671ae3b.jpg"/>
+            </div>
+        </div>
+
+        <!--  for   -->
         <div class="mobile_slogn_div" style="position: absolute;bottom:3rem;">
             {{if loginWelcomeText }} {{loginWelcomeText}} {{else}}
             这是一个使用DuckChat系统搭建的聊天站点，此处的描述内容可以在管理后台进行修改配置。<br/>官网：<a target="_blank" href="https://duckchat.akaxin.com">https://duckchat.akaxin.com</a>
