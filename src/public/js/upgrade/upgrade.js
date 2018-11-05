@@ -30,10 +30,6 @@ if(needUpgrade != 1) {
 
 var isCheckUpgradeToken = localStorage.getItem(isCheckUpgradeTokenKey);
 var isSureSiteBackup = localStorage.getItem(isSureSiteBackup, "yes");
-//
-// if(isCheckUpgradeToken == "yes" && isSureSiteBackup == 'yes') {
-//     // displayUpgradeVersion();
-// }
 
 $(document).on("click",".zaly_site_backup_sure", function () {
     localStorage.setItem(isSureSiteBackup, "yes");
@@ -168,15 +164,18 @@ function updateSiteVersionFailed(resp)
 }
 
 //-------------------------------------page.version.upgrade-------------------------------------
-
+var nextUpgradeVersionNumKey = 1;
 function updateUpgradeProgress(type,  upgradeVersionCode, info)
 {
     var upgradeVersionNum = localStorage.getItem(currentUpgradeVersionKey);
 
     try{
         if(type == "start"){
+            var versionStr = localStorage.getItem(versionsKey);
+            var versions  = JSON.parse(versionStr);
+            var nextUpgradeVersionNum = Object.keys(versions)[1];
+
             $("#v_line_"+upgradeVersionNum).attr("src", "../../public/img/upgrade/current_line.png");
-            var nextUpgradeVersionNum = Number(Number(upgradeVersionNum)+1);
             $("#v_"+nextUpgradeVersionNum).attr("src", "../../public/img/upgrade/current.png");
             $(".text_"+nextUpgradeVersionNum)[0].style.color = "RGBA(73, 205, 186, 1)";
             var versionCode = $("#v_"+nextUpgradeVersionNum).attr("version");
@@ -187,7 +186,7 @@ function updateUpgradeProgress(type,  upgradeVersionCode, info)
                 errorInfo:versionName+"版本正在升级中...."
             });
             $(".upgrade_info_msg").append(info);
-
+            nextUpgradeVersionNumKey = Number(nextUpgradeVersionNumKey+1);
         } else if(type=="done") {
             $("#v_line_"+upgradeVersionNum).attr("src", "../../public/img/upgrade/success_line.png");
             $("#v_"+upgradeVersionCode).attr("src", "../../public/img/upgrade/success.png");

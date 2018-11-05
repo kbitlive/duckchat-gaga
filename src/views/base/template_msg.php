@@ -821,9 +821,9 @@
                 <img class="plugin_logo" src="{{logo}}" onerror="this.src='../../public/img/plugin/default.png'"/>
             {{else}}
                 {{if id==104}}
-                    <img class="plugin_logo" src="../../public/img/plugin/default.png"/>
-                {{else}}
                     <img class="plugin_logo" src="../../public/img/plugin/gif.png"/>
+                {{else}}
+                    <img class="plugin_logo" src="../../public/img/plugin/default.png"/>
                 {{/if}}
             {{/if}}
         </div>

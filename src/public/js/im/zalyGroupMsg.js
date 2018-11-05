@@ -2092,6 +2092,7 @@ $(document).on("click", ".contact-row-group-profile", function () {
     localStorage.setItem(chatSessionIdKey, groupId);
     localStorage.setItem(groupId, GROUP_MSG);
     $(".right-chatbox").attr("chat-session-id", groupId);
+
     getInitChatPlugin(GROUP_MSG);
     handleClickRowGroupProfile(groupId);
 });
@@ -2932,8 +2933,12 @@ applyFriendListOffset = 0;
 
 $(document).on("click", ".apply-friend-list", function () {
     addActiveForPwContactRow($(this));
+    var tip = languageNum == $.i18n.map['newFriendsTip'] != undefined? $.i18n.map['newFriendsTip'] : "好友申请";
+    console.log("tiptiptip==="+tip);
+    $(".title").html(tip);
     applyFriendListOffset = 0;
     getFriendApplyList();
+
 });
 
 $(document).on("click", ".search-user", function () {
@@ -3526,6 +3531,10 @@ function displayRightPage(displayType)
                 $(".friend-apply-dialog")[0].style.display = "none";
                 break;
             case DISPLAY_CHAT:
+
+                $(".friend-apply-dialog")[0].style.display = "none";
+                $(".plugin-list-dialog")[0].style.display = "none";
+
                 var chatSessionId  = localStorage.getItem(chatSessionIdKey);
                 var chatSessionRowLength = $(".chatsession-row").length;
                 $(".msg-chat-dialog")[0].style.display = "block";
@@ -3537,8 +3546,7 @@ function displayRightPage(displayType)
                     $(".chat-dialog")[0].style.display = "none";
                 }
                 $(".msg_content").focus()
-                $(".friend-apply-dialog")[0].style.display = "none";
-                $(".plugin-list-dialog")[0].style.display = "none";
+
                 checkOsVersion();
                 break;
             case DISPLAY_APPLY_FRIEND_LIST:
