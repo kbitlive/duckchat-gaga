@@ -109,13 +109,12 @@ CREATE TABLE IF NOT EXISTS siteU2Message(
             msgType INTEGER,
             content TEXT,   -- 可能是一个json，可能是一个proto toString
             msgTime BIGINT,
-            INDEX(userId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+            INDEX(userId),
+            INDEX(fromUserId),)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteU2Message CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteU2Message MODIFY COLUMN content TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-
-
 
 CREATE TABLE IF NOT EXISTS siteU2MessagePointer(
             id INTEGER PRIMARY KEY AUTO_INCREMENT,
