@@ -138,8 +138,8 @@
                 }
 
                 if(i==1) {
-                    html += "<div class='gif_content_div'><img onclick=\"uploadFile('gifFile')\" src='../../../public/img/gif/add.png' class='add_gif'>  " +
-                        "<input id='gifFile' type='file' onchange='uploadForGif(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
+                    html += "<div class='gif_content_div'><img accept='image/gif' onclick=\"uploadFile('gifFile')\" src='../../../public/img/gif/add.png' class='add_gif'>  " +
+                        "<input id='gifFile' type='file' onchange='uploadForGif(this)' accept='image/gif' style='display: none;'></div>";
                 }
 
                 html +=template("tpl-gif", {
@@ -166,8 +166,8 @@
         } else {
             var html = '';
             html += "<div class='gif_div gif_div_0'  gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
-            html += "<div class='gif_content_div'><img onclick=\"uploadFile('gifFile')\" src='../../../public/img/gif/add.png' class='add_gif'>  " +
-                "<input id='gifFile' type='file' onchange='uploadForGif(this)' accept='image/gif;capture=camera' style='display: none;'></div>";
+            html += "<div class='gif_content_div'><img accept='image/gif' onclick=\"uploadFile('gifFile')\" src='../../../public/img/gif/add.png' class='add_gif'>  " +
+                "<input id='gifFile' type='file' onchange='uploadForGif(this)' accept='image/gif' style='display: none;'></div>";
             html += "</div>";
             $(".zaly_container").append(html);
         }
@@ -227,7 +227,6 @@
             contentType: false,
             processData: false,
             success: function (imageFileIdResult) {
-                console.log("imageFileIdResult==="+imageFileIdResult)
                 if (imageFileIdResult) {
                     var res = JSON.parse(imageFileIdResult);
                     var fileId = res.fileId;
