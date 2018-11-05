@@ -41,7 +41,12 @@ function showMsgWebNotification(msg, msgContent)
 
     if(document.hidden && (mute == 0)) {
         if(window.Notification && Notification.permission !== "denied"){
-            var notification = new Notification(notification, {"tag":siteConfig.serverAddressForApi, "icon":icon,  renotify: true});
+            var notification = new Notification(notification, {
+                "tag":siteConfig.serverAddressForApi,
+                "icon":icon,
+                "renotify": true,
+                "sound":"../../public/voice/msg.mp3"
+            });
             notification.onclick = function(event) {
                 window.focus();
             }
