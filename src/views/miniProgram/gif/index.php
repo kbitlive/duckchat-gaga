@@ -20,8 +20,8 @@
             height: 85%;
         }
         .gif {
-            width:5rem;
-            height:5rem;
+            width: 45px;
+            height: 45px;
             cursor: pointer;
         }
         .gif_sub_div{
@@ -31,32 +31,33 @@
             display: none;
         }
         .sliding {
-            margin-right: 1rem;
+            margin-right: 10px;
             width:5px;
         }
         .slide_div {
             text-align: center;
         }
         .add_gif{
-            height: 5rem;
+            height: 45px;
+            width:45px;
             cursor: pointer;
         }
         .del_gif{
-            width: 2rem;
-            height: 2rem;
-            margin-top: -1rem;
+            width: 20px;
+            height: 20px;
+            margin-top: -10px;
             position: absolute;
-            margin-left: 4.5rem;
+            margin-left: 45px;
             display: none;
             cursor: pointer;
         }
         .gif_content_div{
             position: relative;
-            width: 5rem;
-            height: 5rem;
+            width: 45px;
+            height: 45px;
             display: flex;
-            margin-left: 2rem;
-            margin-top: 3rem;
+            margin-left: 20px;
+            margin-top: 30px;
         }
     </style>
 </head>
