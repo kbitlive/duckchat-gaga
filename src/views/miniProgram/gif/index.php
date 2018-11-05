@@ -363,7 +363,7 @@
         }
 
     } else {
-
+        $(".slide_div")[0].style.display = "none";
         $(".gif").on({
             mouseup : function(event){
                 event.preventDefault();
