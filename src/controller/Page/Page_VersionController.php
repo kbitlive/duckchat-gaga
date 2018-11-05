@@ -242,11 +242,6 @@ abstract class Page_VersionController extends UpgradeController
             }
         }
         ZalyConfig::updateConfigFile($siteConfig);
-        $fileName = dirname(__FILE__)."/../../config.php";
-        $config = ZalyConfig::getAllConfig();
-
-        error_log("file -----after----------------------".json_encode($config));
-
     }
 
     protected function dropDBTable($tableName)
