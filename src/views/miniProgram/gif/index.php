@@ -47,7 +47,7 @@
             height: 20px;
             margin-top: -10px;
             position: absolute;
-            margin-left: 45px;
+            margin-left: 40px;
             display: none;
             cursor: pointer;
         }
