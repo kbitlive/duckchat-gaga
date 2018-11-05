@@ -8,6 +8,7 @@
 
 class Manage_UserController extends Manage_CommonController
 {
+    private $pageSize = 40;
 
     public function doRequest()
     {
@@ -17,9 +18,25 @@ class Manage_UserController extends Manage_CommonController
         if ($method == 'POST') {
 
             //get user list by page
-            $offset = $_POST['offset'];
-            $length = $_POST['length'];
+            $pageNum = $_POST['pageNum'];
+            $length = $_POST['pageSize'];
 
+            if (empty($length)) {
+                $length = $this->pageSize;
+            }
+
+            $offset = ($pageNum - 1) * $length;
+
+            $userList = $this->getUserListByOffset($offset, $length);
+
+            if (!empty($userList)) {
+                $params['loading'] = count($userList) == $length ? true : false;
+                $params['data'] = $userList;
+            }
+
+            echo json_encode($params);
+
+            return;
 
         } else {
             //get user list by page
@@ -31,7 +48,7 @@ class Manage_UserController extends Manage_CommonController
             }
 
             if (empty($length)) {
-                $length = 2000;
+                $length = $this->pageSize;
             }
 
 

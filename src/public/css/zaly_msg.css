@@ -175,7 +175,7 @@ html, body{
 
 .l-sb-item .useravatar {
     width: 4rem;
-    border-radius: 50%;
+    border-radius: 10%;
     height: 4rem;
 }
 
@@ -209,7 +209,7 @@ html, body{
     box-shadow: 0rem -0.09rem 0.38rem 0rem rgba(223,223,223,1);
 }
 
-.left-body-chatsession, .left-body-groups, .left-body-friends{
+.left-body-home,.left-body-chatsession, .left-body-groups, .left-body-friends{
     flex-grow: 1;
     flex-shrink : 1;
     width: 100%;
@@ -292,10 +292,6 @@ html, body{
 }
 
 
-.chatsession-row-img img {
-    width: 4.68rem;
-}
-
 .chatsession-row-header {
     position: absolute;
     left: 7.5rem;
@@ -343,14 +339,26 @@ html, body{
     left: 3.1rem;
     top: 1.88rem;
 }
+.right-head .plugin-title {
+    font-size:2.25rem;
+    color:rgba(20,16,48,1);
+    position: absolute;
+    left: 6.1rem;
+    top: 1.88rem;
+}
 
 .right-head .actions {
     position: absolute;
     right: 1.97rem;
     bottom: 0.56rem;
-
     height: 3.75rem;
     text-align: right;
+}
+
+.right-head .plugin_back {
+    position: absolute;
+    left: 2.1rem;
+    top: 1.88rem;
 }
 
 .right-head .actions img {
@@ -396,7 +404,9 @@ html, body{
 }
 
 .msg-avatar img {
-    width: 4.68rem;
+    width: 4rem;
+    height:4rem;
+    border-radius: 10%;
 }
 
 .msg-nickname {
@@ -1196,13 +1206,13 @@ html, body{
 }
 
 .user-image-upload {
-    border-radius: 50%;
+    border-radius: 10%;
 }
 
 .user-info-avatar {
-    border-radius: 50%;
-    width:4.68rem;
-    height:4.68rem;
+    border-radius: 10%;
+    width:5rem;
+    height:5rem;
 }
 .unread-num {
     top:1.5rem;
@@ -1259,9 +1269,9 @@ html, body{
 }
 
 .user-image-for-add {
-    width: 8rem;
-    height:8rem;
-    border-radius: 50%;
+    width:7rem;
+    height: 7rem;
+    border-radius: 10%;
 }
 
 .l-sb-logout {
@@ -1652,8 +1662,6 @@ button:active{
     position: relative;
 }
 
-.search-user img,
-.create-group img,
 .search-user-detail img{
     width:4rem;
     height:4rem;
@@ -1922,4 +1930,38 @@ button:active{
 }
 .clear_room_chat {
     cursor: pointer;
+}
+.plugin-iframe {
+    height: 100%;
+    width: 100%;
+    overflow: scroll;
+    outline: none;
+    border: none;
+}
+.open_new_page, .close_plugin,.chat_plugin {
+    cursor: pointer;
+}
+.plugin_back {
+    cursor: pointer;
+    width: 3rem;
+    height:3rem;
+}
+
+#chat_plugin {
+    width: 41rem;
+    height: 23.45rem;
+    background: rgba(255,255,255,1);
+    box-shadow: 0rem 0.09rem 0.56rem 0.09rem rgba(223,223,223,1);
+    margin: 1rem;
+}
+.chat_plugin_iframe {
+    width:100%;
+    height:90%;
+    border:none;
+    outline: none;
+    overflow-y: scroll;
+}
+
+.plugin_logo {
+    border-radius: 50%;
 }

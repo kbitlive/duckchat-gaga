@@ -56,6 +56,7 @@ create table IF NOT EXISTS siteSession(
                 userAgentType INTEGER,
                 gatewayURL VARCHAR(100),
                 gatewaySocketId VARCHAR(100),
+                loginPluginId  VARCHAR(100),
                 UNIQUE(sessionId,userId),
                 UNIQUE(userId,deviceId));
 
@@ -102,6 +103,7 @@ CREATE TABLE IF NOT EXISTS siteU2Message(
             );
 
 CREATE INDEX IF NOT EXISTS indexSiteU2MessageUserId ON siteU2Message(userId);
+CREATE INDEX IF NOT EXISTS indexSiteU2MessageFromUserId ON siteU2Message(fromUserId);
 
 CREATE TABLE IF NOT EXISTS siteU2MessagePointer(
             id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -101,6 +101,26 @@ ApiFriendUpdateType =  {
 }
 
 
+PluginUsageType = {
+    PluginUsageNone:"PluginUsageNone",
+    PluginUsageIndex:"PluginUsageIndex",
+    PluginUsageLogin:"PluginUsageLogin",
+    PluginUsageU2Message:"PluginUsageU2Message",
+    PluginUsageTmpMessage:"PluginUsageTmpMessage",
+    PluginUsageGroupMessage:"PluginUsageGroupMessage",
+    PluginUsageAccountSafe:"PluginUsageAccountSafe",
+}
+
+
+PluginLoadingType = {
+    PluginLoadingNewPage:"PluginLoadingNewPage",
+    PluginLoadingFloat:"PluginLoadingFloat",
+    PluginLoadingMask:"PluginLoadingMask",
+    PluginLoadingChatbox:"PluginLoadingChatbox",
+    PluginLoadingFullScreen:"PluginLoadingFullScreen"
+
+};
+
 KeepSocket  = "KeepSocket";
 websocketGW = "enable_websocket_gw";
 websocketGWUrl = "websocket_gw_url";
@@ -155,6 +175,8 @@ roomListMsgUnReadNum = "room_list_msg_unread_num";
 roomListKey = "room_list";
 MaxStorageStore=3;
 
+
+DISPLAY_HOME = "home";
 DISPLAY_CHAT = "chat";
 DISPLAY_APPLY_FRIEND_LIST = "apply_friend_list";
 
@@ -173,6 +195,7 @@ DefaultChat = "default_chat";
 MobileChat = "mobile_chat";
 speakerUserIdsKey="speaker_userIds_";
 newSiteTipKey = "site_tip";
+defaultPluginDisplay="display_plugin";
 
 DefaultTitle = "DuckChat 聊天室";
 

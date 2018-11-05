@@ -80,9 +80,41 @@ class PushBody extends \Google\Protobuf\Internal\Message
      */
     private $msgId = '';
 
-    public function __construct() {
+    /**
+     * Constructor.
+     *
+     * @param array $data {
+     *     Optional. Data for populating the Message object.
+     *
+     *     @type string $roomId
+     *           subTitle
+     *           if roomId != "" && roomName != "", show the subTitle
+     *     @type string $roomName
+     *     @type int $roomType
+     *     @type string $fromUserId
+     *           Sender Info
+     *           if fromUserId != "" && fromUserName != "", show the sender info
+     *     @type string $fromUserName
+     *     @type int $msgType
+     *           Content
+     *           if pushContent != "", use pushContent
+     *           else make the content from msgType.
+     *     @type string $pushContent
+     *     @type string $iconHref
+     *           icon
+     *           avatar must be prefix with "http://" or "https://" 
+     *     @type string $gotoUrl
+     *           GotoUrl
+     *           if gotoUrl == "", make the url from the infomation above.
+     *     @type string[]|\Google\Protobuf\Internal\RepeatedField $toDevicePubkPemIds
+     *           pemId = sha1(pem)，因为平台这边有pem，同时不需要做sign的verify，所以传递Ids，以减少请求包大小
+     *     @type string $msgId
+     *          push message id
+     * }
+     */
+    public function __construct($data = NULL) {
         \GPBMetadata\Platform\Common::initOnce();
-        parent::__construct();
+        parent::__construct($data);
     }
 
     /**

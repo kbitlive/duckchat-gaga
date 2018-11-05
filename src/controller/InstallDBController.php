@@ -144,9 +144,11 @@ class InstallDBController
 
                 $config['loginPluginId'] = in_array($loginPluginId, $this->loginPluginIds) ? $loginPluginId : 101;
 
-                $config['msectime'] = ZalyHelper::getMsectime();
                 $config['siteAddress'] = $siteAddress;
-                $config['errorLog'] = ZalyHelper::generateStrKey('16').'_php_errors.log';
+                $randomKey = ZalyHelper::generateStrKey('16');
+                $config['errorLog'] = 'php_errors_' . $randomKey . '.log';
+                $config['randomKey'] = $randomKey;
+                $config['msectime'] = ZalyHelper::getMsectime();
 
                 //write to file
                 $contents = var_export($config, true);
@@ -164,7 +166,6 @@ class InstallDBController
                 }
 
                 $result['errCode'] = "success";
-//                echo $result;
                 echo "success";
             } catch (Exception $ex) {
                 $this->logger->error("do install site", $ex);
@@ -250,7 +251,7 @@ class InstallDBController
     private function isCanUserCurl()
     {
         $sampleFile = require(dirname(dirname(__FILE__)) . "/config.sample.php");
-        $testCurlUrl = $sampleFile['test_curl'];
+        $testCurlUrl = $sampleFile['testCurl'];
         $testCurlUrl = ZalyHelper::getFullReqUrl($testCurlUrl);
         $curlResult = $this->curl->request($testCurlUrl, 'get');
         echo $curlResult;
@@ -430,7 +431,7 @@ class InstallDBController
             [
                 'pluginId' => 100,
                 'name' => "管理后台",
-                'logo' => "",
+                'logo' => $this->getSiteManageIcon(),
                 'sort' => 100,
                 'landingPageUrl' => "index.php?action=manage.index",
                 'landingPageWithProxy' => 1, //1 表示走site代理
@@ -457,10 +458,34 @@ class InstallDBController
                 'name' => "DC文档",
                 'logo' => "",
                 'sort' => 1, //order = 2
-                'landingPageUrl' => "http://duckchat.akaxin.com/wiki/",
+                'landingPageUrl' => "https://duckchat.akaxin.com/wiki/",
                 'landingPageWithProxy' => 0, //1 表示走site代理
                 'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageIndex,
                 'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingNewPage,
+                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
+                'authKey' => "",
+            ],
+            [
+                'pluginId' => 104,
+                'name' => "gif小程序",
+                'logo' => $this->getSiteGifIcon(),
+                'sort' => 2, //order = 2
+                'landingPageUrl' => "index.php?action=miniProgram.gif.index",
+                'landingPageWithProxy' => 1, //1 表示走site代理
+                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageU2Message,
+                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
+                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
+                'authKey' => "",
+            ],
+            [
+                'pluginId' => 104,
+                'name' => "gif小程序",
+                'logo' =>  $this->getSiteGifIcon(),
+                'sort' => 2, //order = 2
+                'landingPageUrl' => "index.php?action=miniProgram.gif.index",
+                'landingPageWithProxy' => 1, //1 表示走site代理
+                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageGroupMessage,
+                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
                 'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
                 'authKey' => "",
             ],
@@ -476,6 +501,7 @@ class InstallDBController
                 'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
                 'authKey' => "",
             ],
+
 //            [
 //                'pluginId' => 106,
 //                'name' => "开发工具",
@@ -491,7 +517,7 @@ class InstallDBController
             [
                 'pluginId' => 199,  //200+ for user
                 'name' => "用户广场",
-                'logo' => "",
+                'logo' => $this->getSiteSquareIcon(),
                 'sort' => 2, //order = 2
                 'landingPageUrl' => "index.php?action=miniProgram.square.index",
                 'landingPageWithProxy' => 1, //1 表示走site代理
@@ -604,5 +630,44 @@ class InstallDBController
             throw new Exception("connect mysql error");
         }
         return "success";
+    }
+
+    private function getSiteManageIcon()
+    {
+        $defaultIcon = WPF_ROOT_DIR . "/public/img/manage/site_manage.png";
+        if (!file_exists($defaultIcon)) {
+            return "";
+        }
+
+        $defaultImage = file_get_contents($defaultIcon);
+        $fileManager = new File_Manager();
+        $fileId = $fileManager->saveFile($defaultImage, "20180201");
+
+        return $fileId;
+    }
+
+    private function getSiteSquareIcon()
+    {
+        $defaultIcon = WPF_ROOT_DIR . "/public/img/manage/site_square.png";
+        if (!file_exists($defaultIcon)) {
+            return "";
+        }
+
+        $defaultImage = file_get_contents($defaultIcon);
+        $fileManager = new File_Manager();
+        $fileId = $fileManager->saveFile($defaultImage, "20180201");
+        return $fileId;
+    }
+    private function getSiteGifIcon()
+    {
+        $defaultIcon = WPF_ROOT_DIR . "/public/img/plugin/gif.png";
+        if (!file_exists($defaultIcon)) {
+            return "";
+        }
+
+        $defaultImage = file_get_contents($defaultIcon);
+        $fileManager = new File_Manager();
+        $fileId = $fileManager->saveFile($defaultImage, "20180201");
+        return $fileId;
     }
 }

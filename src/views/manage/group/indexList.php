@@ -20,7 +20,9 @@
             line-height: 20px;
             margin: 17px 0px 7px 10px;
         }
-
+        .item-row {
+            cursor: pointer;
+        }
         #search-group-div {
             text-align: center;
         }
@@ -71,34 +73,35 @@
 
             </div>
 
-            <?php foreach ($groupList as $key => $profile) { ?>
+            <div class="item-row-list">
+                <?php foreach ($groupList as $key => $profile) { ?>
 
-                <div class="item-row group-list">
-                    <div class="item-body" onclick="showGroupProfile('<?php echo($profile["groupId"]) ?>');">
-                        <div class="item-body-display">
-                            <div class="item-body-desc">
-                                <?php
-                                $length = mb_strlen($profile['name']);
-                                if ($length > 10) {
-                                    echo mb_substr($profile['name'], 0, 10) . "...";
-                                } else {
-                                    echo $profile['name'];
-                                }
-                                ?>
-                            </div>
+                    <div class="item-row group-list">
+                        <div class="item-body" onclick="showGroupProfile('<?php echo($profile["groupId"]) ?>');">
+                            <div class="item-body-display">
+                                <div class="item-body-desc">
+                                    <?php
+                                    $length = mb_strlen($profile['name']);
+                                    if ($length > 20) {
+                                        echo mb_substr($profile['name'], 0, 20) . "...";
+                                    } else {
+                                        echo $profile['name'];
+                                    }
+                                    ?>
+                                </div>
 
-                            <div class="item-body-tail">
-                                <div class="item-body-value">
-                                    <img class="more-img" src="../../public/img/manage/more.png"/>
+                                <div class="item-body-tail">
+                                    <div class="item-body-value">
+                                        <img class="more-img" src="../../public/img/manage/more.png"/>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
-
                     </div>
-                </div>
-                <div class="division-line"></div>
-            <?php } ?>
-
+                    <div class="division-line"></div>
+                <?php } ?>
+            </div>
         </div>
 
     </div>
@@ -106,6 +109,71 @@
 
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../public/manage/native.js"></script>
+
+
+<script type="text/javascript">
+
+    var currentPageNum = 1;
+    var loading = true;
+
+    $(window).scroll(function () {
+        //判断是否滑动到页面底部
+        if ($(window).scrollTop() === $(document).height() - $(window).height()) {
+
+            if (!loading) {
+                return;
+            }
+
+            loadMoreUsers();
+        }
+    });
+
+    function loadMoreUsers() {
+
+        var data = {
+            'pageNum': ++currentPageNum,
+        };
+
+        var url = "index.php?action=manage.group";
+        zalyjsCommonAjaxPostJson(url, data, loadMoreResponse)
+    }
+
+    function loadMoreResponse(url, data, result) {
+
+        if (result) {
+            var res = JSON.parse(result);
+
+            var isloading = res['loading'];
+            loading = isloading;
+            var data = res['data'];
+
+            // alert(result);
+            if (data && data.length > 0) {
+                $.each(data, function (index, group) {
+                    var userHtml = ' ' +
+                        '<div class="item-row">' +
+                        '<div class="item-body" onclick="showGroupProfile(\'' + group.groupId + '\')" id="user-list-id">' +
+                        '<div class="item-body-display" style="align-items: center">' +
+                        ' <div class="item-body-desc">' + group.name + '</div>' +
+                        '   <div class="item-body-tail">' +
+                        '   <div class="item-body-value">' +
+                        '   <img class="more-img" src="../../public/img/manage/more.png"/>' +
+                        '   </div>' +
+                        '   </div>' +
+                        '   </div>' +
+                        '   </div>' +
+                        '</div>';
+
+                    userHtml += '<div class="division-line"></div>';
+
+                    $(".item-row-list").append(userHtml);
+                });
+            }
+
+        }
+
+    }
+</script>
 
 <script type="text/javascript">
 

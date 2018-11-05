@@ -1,4 +1,4 @@
-.friend-right-body {
+.friend-right-body, .plugin-right-body {
     flex-grow: 1;
     height: 90%;
     position: relative;
@@ -58,18 +58,18 @@
 .apply-friend-img .useravatar {
     width: 4rem;
     height: 4rem;
-    border-radius: 50%;
+    border-radius: 10%;
 }
 
 .useravatar {
     width: 4.68rem;
     height: 4.68rem;
-    border-radius: 50%;
+    border-radius: 10%;
 }
 .group-member-avatar {
     width: 3rem;
     height:3rem;
-    border-radius: 50%;
+    border-radius: 10%;
     margin-left:1rem;
     margin-top: 1rem;
 }

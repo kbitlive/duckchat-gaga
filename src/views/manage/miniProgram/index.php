@@ -255,8 +255,12 @@
             font-size: 14px;
             color: rgba(255, 255, 255, 1);
             line-height: 2px;
+            cursor: pointer;
+            outline: none;
         }
-
+        .item-row {
+            cursor: pointer;
+        }
         .weui_switch {
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -484,8 +488,10 @@
     }
 
     function createKeyResponse(url, data, result) {
+        console.log("ppppppppppppppppppppp")
         window.location.reload();
     }
+
 
 </script>
 

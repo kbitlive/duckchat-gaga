@@ -171,7 +171,7 @@
             success:function (data) {
                 data = JSON.parse(data);
                 if(data.errorCode == 'error.alert') {
-                    zalyjsAlert(data.errorInfo);
+                    alert(data.errorInfo);
                     return false;
                 }
                 $(".save_gif").html("已收藏");

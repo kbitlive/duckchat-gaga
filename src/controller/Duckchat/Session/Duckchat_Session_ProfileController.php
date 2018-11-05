@@ -57,9 +57,10 @@ class Duckchat_Session_ProfileController extends Duckchat_MiniProgramController
 
 
             $userId = $sessionInfo['userId'];
-            $userProfile = $this->ctx->SiteUserTable->getUserByUserId($userId);
+            $loginPluginId = $sessionInfo['loginPluginId'];
+            $userProfile = $this->ctx->SiteUserTable->getUserByUserId($userId, $loginPluginId);
 
-            $response = $this->buildRequestResponse($userProfile);
+            $response = $this->buildRequestResponse($userProfile, $loginPluginId);
 
             $this->setRpcError($this->defaultErrorCode, "");
             $this->rpcReturn($this->requestAction, $response);
@@ -77,7 +78,7 @@ class Duckchat_Session_ProfileController extends Duckchat_MiniProgramController
         return $this->ctx->SitePluginTable->getPluginById($pluginId);
     }
 
-    private function buildRequestResponse($userProfile)
+    private function buildRequestResponse($userProfile, $loginPluginId)
     {
         $publicProfile = new \Zaly\Proto\Core\PublicUserProfile();
         $publicProfile->setUserId($userProfile['userId']);
@@ -85,7 +86,7 @@ class Duckchat_Session_ProfileController extends Duckchat_MiniProgramController
         $publicProfile->setLoginName($userProfile['loginName']);
         $publicProfile->setNickname($userProfile['nickname']);
         $publicProfile->setNicknameInLatin($userProfile['nicknameInLatin']);
-
+        $publicProfile->setLoginPluginId($loginPluginId);
         if (isset($userProfile['availableType'])) {
             $publicProfile->setAvailableType($userProfile['availableType']);
         } else {

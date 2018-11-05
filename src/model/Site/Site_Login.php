@@ -42,13 +42,16 @@ class Site_Login
             //get site config::publicKey
             $sitePriKeyPem = $this->getSiteConfigPriKeyFromDB();
 
+            $pluginIds = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_LOGIN_PLUGIN_ID);
+            $pluginId = $pluginIds[SiteConfig::SITE_LOGIN_PLUGIN_ID];
+
             //get userProfile from platform
-            $loginUserProfile = $this->getUserProfileFromPlatform($preSessionId, $sitePriKeyPem);
+            $loginUserProfile = $this->getUserProfileFromPlatform($preSessionId, $sitePriKeyPem, $pluginId);
 
             //get intivation first
             $uicInfo = $this->getIntivationCode($loginUserProfile->getInvitationCode());
 
-            $userProfile = $this->doSiteLoginAction($loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType);
+            $userProfile = $this->doSiteLoginAction($loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType, $pluginId);
 
             //set site owner
             $this->checkAndSetSiteOwner($userProfile['userId'], $uicInfo);
@@ -68,8 +71,8 @@ class Site_Login
     private function getSiteConfigPriKeyFromDB()
     {
         try {
-            $results = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_ID_PRIK_PEM);
-            return $results[SiteConfig::SITE_ID_PRIK_PEM];
+            $prikKeyPem = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_ID_PRIK_PEM);
+            return $prikKeyPem;
         } catch (Exception $ex) {
             $tag = __CLASS__ . "-" . __FUNCTION__;
             $this->ctx->Wpf_Logger->error($tag, "errorMsg = " . $ex->getMessage());
@@ -77,15 +80,13 @@ class Site_Login
         }
     }
 
-    private function getUserProfileFromPlatform($preSessionId, $sitePrikPem)
+    private function getUserProfileFromPlatform($preSessionId, $sitePrikPem, $pluginId)
     {
         $tag = __CLASS__ . '-' . __FUNCTION__;
         try {
             $sessionVerifyRequest = new \Zaly\Proto\Platform\ApiSessionVerifyRequest();
             $sessionVerifyRequest->setPreSessionId($preSessionId);
 
-            $pluginIds = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_LOGIN_PLUGIN_ID);
-            $pluginId = $pluginIds[SiteConfig::SITE_LOGIN_PLUGIN_ID];
             $sessionVerifyUrl = ZalyConfig::getSessionVerifyUrl($pluginId);
             $sessionVerifyUrl = ZalyHelper::getFullReqUrl($sessionVerifyUrl);
 
@@ -121,7 +122,7 @@ class Site_Login
      * @return array
      * @throws Exception
      */
-    private function doSiteLoginAction($loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType)
+    private function doSiteLoginAction($loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType, $pluginId)
     {
         if (!$loginUserProfile) {
             $errorCode = $this->zalyError->errorSession;
@@ -165,10 +166,12 @@ class Site_Login
                 // #TODO exception
                 throw new Exception("insert user profile to db error");
             }
+        } else {
+            $userProfile['avatar'] = $user['avatar'];
         }
 
         //这里
-        $sessionInfo = $this->insertOrUpdateUserSession($userProfile, $devicePubkPem, $clientSideType);
+        $sessionInfo = $this->insertOrUpdateUserSession($userProfile, $devicePubkPem, $clientSideType, $pluginId);
         $userProfile['sessionId'] = $sessionInfo['sessionId'];
         $userProfile['deviceId'] = $sessionInfo['deviceId'];
         return $userProfile;
@@ -246,37 +249,43 @@ class Site_Login
      * @param $clientSideType
      * @return string
      */
-    private function insertOrUpdateUserSession($userProfile, $devicePubkPem, $clientSideType)
+    private function insertOrUpdateUserSession($userProfile, $devicePubkPem, $clientSideType, $pluginId)
     {
         $sessionId = $this->ctx->ZalyHelper->generateStrId();
         $deviceId = sha1($devicePubkPem);
+        //add session
+        $userId = $userProfile["userId"];
+
+        if (!empty($devicePubkPem)) {
+            //get session by deviceId
+            $this->ctx->SiteSessionTable->deleteSessionByDeviceId($deviceId);
+        } else {
+            $this->ctx->SiteSessionTable->deleteSessionByUserIdAndDeviceId($userId, $deviceId);
+        }
 
         try {
-            ///TODO 需要替换
-            $userId = $userProfile["userId"];
             $sessionInfo = [
                 "sessionId" => $sessionId,
                 "userId" => $userId,
                 "deviceId" => $deviceId,
                 "devicePubkPem" => $devicePubkPem,
                 "timeWhenCreated" => $this->ctx->ZalyHelper->getMsectime(),
-                "ipWhenCreated" => "",
+                "ipActive" => ZalyHelper::getIp(),
                 "timeActive" => $this->ctx->ZalyHelper->getMsectime(),
-                "ipActive" => "",
-//                "userAgent" => "",
-//                "userAgentType" => "",
+                "ipActive" => ZalyHelper::getIp(),
                 "clientSideType" => $clientSideType,
+                "loginPluginId" => $pluginId,
             ];
             $this->ctx->SiteSessionTable->insertSessionInfo($sessionInfo);
         } catch (Exception $ex) {
+            //update session
             $userId = $userProfile["userId"];
             $sessionInfo = [
                 "sessionId" => $sessionId,
                 "timeActive" => $this->ctx->ZalyHelper->getMsectime(),
-                "ipActive" => "",
-//                "userAgent" => "",
-//                "userAgentType" => "",
+                "ipActive" => ZalyHelper::getIp(),
                 "clientSideType" => $clientSideType,
+                "loginPluginId" => $pluginId,
             ];
             $where = [
                 "userId" => $userId,
@@ -301,13 +310,9 @@ class Site_Login
         if (empty($siteOwner)) {
             $this->ctx->Wpf_Logger->info("api.site.login", "uic info=" . json_encode($uicInfo));
             if ($uicInfo && $uicInfo['status'] == 100) {
-                //set site owner
-                $this->ctx->SiteConfigTable->updateSiteConfig(SiteConfig::SITE_OWNER, $userId);
-
-                //update config realName = false
-                $this->ctx->SiteConfigTable->updateSiteConfig(SiteConfig::SITE_ENABLE_INVITATION_CODE, 0);
+                $this->ctx->Site_Config->updateConfigValue(SiteConfig::SITE_OWNER, $userId);
+                $this->ctx->Site_Config->updateConfigValue(SiteConfig::SITE_ENABLE_INVITATION_CODE, 0);
             }
-
         }
     }
 }

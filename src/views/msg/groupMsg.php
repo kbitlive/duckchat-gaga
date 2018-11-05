@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title><?php echo $siteName;?></title>
+    <link rel="stylesheet" href="../../public/css/zaly_home.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" href="../../public/css/zaly-action-row.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" href="../../public/css/zaly_contact.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" href="../../public/css/zaly_apply_friend_list.css?_version=<?php echo $versionCode?>" />
@@ -38,6 +39,12 @@
     <div class="layout-right friend-apply-dialog" style="display: none;">
           <?php include(dirname(__DIR__) . '/base/friendApplyList.php'); ?>
     </div>
+
+
+    <div class="layout-right plugin-list-dialog" style="display: none;">
+        <?php include(dirname(__DIR__) . '/base/pluginList.php'); ?>
+    </div>
+
 </div>
 
 <?php include(dirname(__DIR__) . '/base/template.php'); ?>
@@ -49,7 +56,8 @@
 <script src="../../public/js/im/zalyIm.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/im/zalyMsg.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/im/zalyGroupMsg.js?_version=<?php echo $versionCode?>"></script>
-<script src="../../public/js/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
+<script src="../../public/js/home/zalyMiniProgram.js?_version=<?php echo $versionCode?>"></script>
+<script src="../../public/sdk/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/qrcode.js?_version=<?php echo $versionCode?>" ></script>
 <script src="../../public/js/utf.js?_version=<?php echo $versionCode?>" ></script>
 <script src="../../public/js/jquery.qrcode.js?_version=<?php echo $versionCode?>"></script>

@@ -1,10 +1,11 @@
 <?php
 /**
  * WEB应用程序初始化
- * 
+ *
  * 应用程序必须自己预先在model文件夹定义一个BaseCtx的类
  */
 
+define("WPF_ROOT_DIR", dirname(__FILE__) . '/../../');
 define("WPF_START_TIME", microtime(true));
 define("WPF_LIB_DIR", dirname(__FILE__) . '/../');
 
@@ -97,8 +98,14 @@ $autoloader->registerClass($preAutoloadFiles);
 
 if(!ini_get("error_log")) {
     $phpErrorLog = ZalyConfig::getConfig("errorLog");
+
+    $logDirName = WPF_ROOT_DIR."/logs";
+    if(!is_dir($logDir)){
+        mkdir($logDirName, 0755, true);
+    }
+
     if($phpErrorLog) {
-        ini_set("error_log",$phpErrorLog);
+        ini_set("error_log", $logDirName . "/" . $phpErrorLog);
     }
 }
 //生成WEB程序管理器，开始执行逻辑

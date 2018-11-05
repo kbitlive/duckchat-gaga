@@ -34,14 +34,16 @@ class Site_Default
 
     }
 
-    private function addDefaultFriends($userId, $defaultFriends)
+    private function addDefaultFriends($userId, $defaultFriendString)
     {
-        if (empty($defaultFriends) || empty($userId)) {
+
+        if (empty($defaultFriendString) || empty($userId)) {
             return;
         }
 
-        $defaultFriends = explode(",", $defaultFriends);
-        foreach ($defaultFriends as $defaultFriend) {
+        $defaultFriendArray = explode(",", $defaultFriendString);
+
+        foreach ($defaultFriendArray as $defaultFriend) {
             try {
                 $result = $this->saveFriend($userId, $defaultFriend);
                 $this->ctx->SiteUserTable->updateNextFriendVersion($defaultFriend);
@@ -85,18 +87,12 @@ class Site_Default
         $tag = __CLASS__ . "->" . __FUNCTION__;
 
         $text = ZalyText::$keyDefaultFriendsText;
-        try {
-            $this->ctx->Message_Client->proxyU2TextMessage($defaultUserId, $userId, $defaultUserId, $text);
-        } catch (Exception $e) {
-            $this->ctx->Wpf_Logger->error($tag, $e);
-        }
 
         try {
             $this->ctx->Message_Client->proxyU2TextMessage($userId, $defaultUserId, $userId, $text);
         } catch (Exception $e) {
             $this->ctx->Wpf_Logger->error($tag, $e);
         }
-
     }
 
     private function addUserToGroup($userId, $groupId)

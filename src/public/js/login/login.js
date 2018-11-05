@@ -144,10 +144,10 @@ function loginFailed(result)
 {
     hideLoading();
     if(result.hasOwnProperty('errorInfo')) {
-        zalyjsAlert(result.errorInfo);
+        alert(result.errorInfo);
     } else {
         if(result != undefined && result !='') {
-            zalyjsAlert(result);
+            alert(result);
         }
     }
     if(isRegister == true && enableInvitationCode == 1) {
@@ -179,7 +179,45 @@ if(loginWelcomeText) {
 }
 
 
+function isMobile() {
+    if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+        return true;
+    }
+    return false;
+}
+if(!isMobile()) {
+    if(loginBackgroundImage) {
+        loginBackgroundImageDisplay = Number(loginBackgroundImageDisplay);
+        switch (loginBackgroundImageDisplay) {
+            case 1:
+                $(".zaly_container")[0].style.background = "url('"+loginBackgroundImage+"') no-repeat";
+                $(".zaly_container")[0].style.backgroundSize = "100% 100%";
+                break;
+            case 2:
+                $(".zaly_container")[0].style.background = "url('"+loginBackgroundImage+"') repeat";
+                break;
+            default:
 
+                $(".zaly_container")[0].style.background = "url('"+loginBackgroundImage+"')";
+                $(".zaly_container")[0].style.backgroundSize = "cover";
+        }
+    } else {
+        switch (loginBackgroundImageDisplay) {
+            case 1:
+                $(".zaly_container")[0].style.background = "url('../../public/img/login/login_bg.jpg') no-repeat";
+                $(".zaly_container")[0].style.backgroundSize = "100% 100%";
+                break;
+            case 2:
+                $(".zaly_container")[0].style.background = "url('../../public/img/login/login_bg.jpg') repeat";
+                break;
+            default:
+                $(".zaly_container")[0].style.background = "url('../../public/img/login/login_bg.jpg')";
+                $(".zaly_container")[0].style.backgroundSize = "cover";
+        }
+    }
+    $(".zaly_container")[0].style.display="block";
+
+}
 //replace \n from html
 function trimHtmlContentBr(str)
 {
@@ -433,7 +471,7 @@ function checkRegisterInfo()
     $(".register_input_repwd_failed")[0].style.display = "none";
 
     if(registerPassword != repassword) {
-        zalyjsAlert($.i18n.map["passwordIsNotSameJsTip"]);
+        alert($.i18n.map["passwordIsNotSameJsTip"]);
         return false;
     }
 
@@ -464,7 +502,7 @@ function isPassword(password) {
 function loginNameExist()
 {
     hideLoading();
-    zalyjsAlert("用户名已经在站点被注册");
+    alert("用户名已经在站点被注册");
 }
 
 function handlePassportPasswordReg(results)
@@ -479,7 +517,7 @@ function loginNameNotExist()
 {
     if(sitePubkPem.length<1) {
         hideLoading();
-        zalyjsAlert("站点公钥获取失败");
+        alert("站点公钥获取失败");
         return false;
     }
     var action = "api.passport.passwordReg";
@@ -534,10 +572,10 @@ function failedCallBack(result) {
     try{
         hideLoading();
         if(result.hasOwnProperty("errorInfo")) {
-            zalyjsAlert(result.errorInfo);
+            alert(result.errorInfo);
         }else {
             if(result != undefined && result !='') {
-                zalyjsAlert(result);
+                alert(result);
             }
         }
         $(".register_button").attr("is_type", updateInvitationCodeType);
@@ -650,7 +688,7 @@ function loginPassport()
     $(".login_input_pwd_failed")[0].style.display = "none";
 
     if(sitePubkPem.length<1) {
-        zalyjsAlert("站点公钥获取失败");
+        alert("站点公钥获取失败");
         return false;
     }
     showLoading($(".site_login_div"));
@@ -765,7 +803,7 @@ $(document).on("click", ".reset_pwd_button", function () {
     }
 
     if(repassword != password) {
-        zalyjsAlert($.i18n.map["passwordIsNotSameJsTip"]);
+        alert($.i18n.map["passwordIsNotSameJsTip"]);
         return;
     }
 

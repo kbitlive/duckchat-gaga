@@ -48,14 +48,14 @@ class Manage_Config_UpdateController extends Manage_CommonController
             }
 
             if ($configKey == SiteConfig::SITE_WS_ADDRESS) {
-
                 $this->checkWsAddress($configValue);
 
                 //清理 sitePort && siteHost
-                $this->deleteSiteConfig([SiteConfig::SITE_WS_HOST, SiteConfig::SITE_WS_PORT]);
+                $this->ctx->Site_Config->deleteConfig([SiteConfig::SITE_WS_HOST, SiteConfig::SITE_WS_PORT]);
             }
 
-            $result = $this->updateSiteConfig($configKey, $configValue);
+            $result = $this->ctx->Site_Config->updateConfigValue($configKey, $configValue);
+
             if ($result) {
                 $response["errCode"] = "success";
             } else {
@@ -70,61 +70,6 @@ class Manage_Config_UpdateController extends Manage_CommonController
 
         echo json_encode($response);
         return;
-    }
-
-
-    private function updateSiteConfig($configKey, $configValue)
-    {
-        $tag = __CLASS__ . "->" . __FUNCTION__;
-
-        try {
-            $result = $this->ctx->SiteConfigTable->updateSiteConfig($configKey, $configValue);
-            $this->ctx->Wpf_Logger->error("manage.config.update", "key=" . $configKey
-                . " configValue=" . $configValue . " result=" . $result);
-
-            if (!$result) {
-                return $this->saveSiteConfig($configKey, $configValue);
-            }
-
-            return true;
-        } catch (Exception $e) {
-            $this->ctx->Wpf_Logger->error($tag, $e);
-            return $this->saveSiteConfig($configKey, $configValue);
-        }
-
-
-        return false;
-    }
-
-    private function saveSiteConfig($configKey, $configValue)
-    {
-        $tag = __CLASS__ . "->" . __FUNCTION__;
-        try {
-            $result = $this->ctx->SiteConfigTable->insertSiteConfig($configKey, $configValue);
-
-            $this->ctx->Wpf_Logger->error("manage.config.save", "key=" . $configKey
-                . " configValue=" . $configValue . " result=" . $result);
-
-            return $result;
-        } catch (Exception $e) {
-            $this->ctx->Wpf_Logger->error($tag, $e);
-        }
-        return false;
-    }
-
-    private function deleteSiteConfig(array $configKeys)
-    {
-        $tag = __CLASS__ . "->" . __FUNCTION__;
-        try {
-            if (!empty($configKeys)) {
-
-                foreach ($configKeys as $configKey) {
-                    $this->ctx->SiteConfigTable->deleteSiteConfig($configKey);
-                }
-            }
-        } catch (Exception $e) {
-            $this->logger->error($tag, $e);
-        }
     }
 
     private function checkWsAddress($wsAddressUrl)

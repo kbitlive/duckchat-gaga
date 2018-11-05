@@ -140,7 +140,7 @@ class Im_Cts_MessageController extends Im_BaseController
         }
 
         $code = '<! DOCTYPE html ><html ><head ><meta charset = "UTF-8" ><meta charset = "UTF-8" ><meta name = "viewport" content = "width=device-width, initial-scale=1, maximum-scale=1" ></head ><body style = "background: #DFDFDF;margin:5px 0 0 0;padding:0" ><div style = "text-align: center;font-size: 14px" > <font color =#FFFFFF>' . $text . '</font><font color=#4C3BB1>好友申请</font></div></body></html>';
-        $hrefUrl = 'duckchat://0.0.0.0/goto?page=applyFriend&x=u-' . $toUserId;
+        $hrefUrl = 'duckchat://0.0.0.0/goto?page=addFriend&x=u-' . $toUserId;
 
         //代发一个web消息给from
         $this->ctx->Message_Client->proxyU2WebNoticeMessage($fromUserId, $toUserId, $fromUserId, $title, $code, $hrefUrl, $height);

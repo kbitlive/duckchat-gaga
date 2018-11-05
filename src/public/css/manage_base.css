@@ -1078,7 +1078,7 @@ html, body {
     display: block;
 }
 
-.friend-right-body {
+.friend-right-body{
     flex-grow: 1;
     height: 90%;
     position: relative;

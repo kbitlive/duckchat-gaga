@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../../public/css/login.css?_version=<?php echo $versionCode?>">
     <script type="text/javascript" src="../../public/js/jquery.min.js"></script>
     <script src="../../public/js/jquery.i18n.properties.min.js"></script>
-    <script src="../../public/js/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
+    <script src="../../public/sdk/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
     <script src="../../public/js/template-web.js"></script>
     <script src="../../public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
 
@@ -28,36 +28,8 @@
             </div>
         <?php } ?>
 
-<?php if ($isDuckchat != 1) {?>
-        <?php if ($loginBackgroundImage) { ?>
+        <div class="zaly_container" style="display: none"></div>
 
-                <?php if ($loginBackgroundImageDisplay == 0 ) { ?>
-        <!--             ///填充-->
-        <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>');background-size: cover;">
-
-                <?php } elseif ($loginBackgroundImageDisplay == 1 ) {?>
-            <!--            ///默认-->
-            <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>') no-repeat;background-size: 100% 100%;">
-
-                <?php } else {?>
-<!--                ///平铺-->
-                    <div class="zaly_container" style="background: url('<?php echo $loginBackgroundImage;?>') repeat;">
-                <?php } ?>
-            <?php } else { ?>
-                    <?php if ($loginBackgroundImageDisplay == 0 ) { ?>
-
-                                <!--                ///填充-->
-                                <div class="zaly_container" style="background: url('../../public/img/login/login_bg.jpg');background-size: cover;">
-                    <?php } elseif ($loginBackgroundImageDisplay == 1 ) {?>
-                                    <!--            ///默认-->
-                                    <div class="zaly_container" style="background: url('../../public/img/login/login_bg.jpg') no-repeat;background-size: 100% 100%;">
-                    <?php } else {?>
-                            <!--                ///平铺-->
-                            <div class="zaly_container" style="background: url('../../public/img/login/login_bg.jpg') repeat;">
-                    <?php } ?>
-                <?php } ?>
-            </div>
-<?php } ?>
         <div style="" class="login_div_container">
                 <div class="login_container">
                     <input type="hidden" value="<?php echo $loginNameAlias;?>" class="loginNameAlias">

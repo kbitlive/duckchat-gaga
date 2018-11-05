@@ -11,8 +11,8 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
 
     private $gifMiniProgramId = 104;
     private $msgSendaction = "duckChat.message.send";
-    private $groupType = "g";
-    private $u2Type = "u";
+    private $groupType = "groupMsg";
+    private $u2Type = "u2Msg";
     private $userRelationAction = "duckChat.user.relation";
     private $limit=30;
     private $title = "GIF";
@@ -44,8 +44,9 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
         $pageUrl = $_COOKIE['duckchat_page_url'];
         $pageUrl = parse_url($pageUrl);
         parse_str($pageUrl['query'], $queries);
-        $x = $queries['x'];
-        list($type, $this->toId) = explode("-", $x);
+
+        $type = isset($queries['page']) ? $queries['page'] : "";
+        $this->toId = isset($queries['x']) ? $queries['x'] : "";
         if($this->toId == $this->userId) {
             return;
         }
@@ -62,7 +63,9 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
                 $type = isset($_POST['type']) ? $_POST['type'] :"send_msg";
                 switch ($type) {
                     case "send_msg" :
-                        $this->sendWebMessage($_POST);
+                        if($this->toId) {
+                            $this->sendWebMessage($_POST);
+                        }
                         break;
                     case "add_gif":
                         $this->addGif($_POST);
@@ -87,7 +90,7 @@ class MiniProgram_Gif_IndexController extends  MiniProgramController
             ];
             $type = isset($_GET['type']) ? $_GET['type'] : "";
             if($type == "see_gif") {
-                $gifId = isset($_GET['gifId']) ? $_GET['gifId'] : 'LbdKkLxXXbcatS2t';
+                $gifId = isset($_GET['gifId']) ? $_GET['gifId'] : '';
                 $gif = $this->ctx->SiteUserGifTable->getGifInfo($this->userId, $gifId);
                 if(!$gif) {
                     echo $this->display("miniProgram_gif_info", []);

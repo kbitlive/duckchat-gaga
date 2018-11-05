@@ -8,43 +8,59 @@
 
 class Manage_GroupController extends Manage_CommonController
 {
+    private $pageSize = 40;
 
     public function doRequest()
     {
         $params = ["lang" => $this->language];
 
-        //get user list by page
-        $offset = $_POST['offset'];
-        $length = $_POST['length'];
+        $method = $_SERVER["REQUEST_METHOD"];
 
-        if (!$offset) {
-            $offset = 0;
-        }
+        if ($method == "POST") {
 
-        if (!$length) {
-            $length = 2000;
-        }
+            //get user list by page
+            $offset = $_POST['pageNum'];
+            $length = $_POST['pageSize'];
 
-        // totalGroupCount
-        $params['totalGroupCount'] = $this->getTotalGroupCount();
-
-        $groupList = $this->getGroupListByOffset($offset, $length);
-
-        if ($groupList) {
-            $groupProfiles = [];
-            foreach ($groupList as $group) {
-
-                $groupProfiles[] = [
-                    'groupId' => $group['groupId'],
-                    'name' => htmlspecialchars($group['name']),
-                ];
-
+            if (!$length) {
+                $length = $this->pageSize;
             }
-            $params['groupList'] = $groupProfiles;
+
+            $offset = ($offset - 1) * $length;
+
+            $groupList = $this->getGroupListByOffset($offset, $length);
+
+            if (!empty($groupList)) {
+                $params['loading'] = count($groupList) == $length ? true : false;
+                $params['data'] = $groupList;
+            }
+
+            echo json_encode($params);
+        } else {
+
+            $offset = 0;
+            $length = $this->pageSize;
+
+            // totalGroupCount
+            $params['totalGroupCount'] = $this->getTotalGroupCount();
+
+            $groupList = $this->getGroupListByOffset($offset, $length);
+
+            if ($groupList) {
+                $groupProfiles = [];
+                foreach ($groupList as $group) {
+
+                    $groupProfiles[] = [
+                        'groupId' => $group['groupId'],
+                        'name' => htmlspecialchars($group['name']),
+                    ];
+
+                }
+                $params['groupList'] = $groupProfiles;
+            }
+
+            echo $this->display("manage_group_indexList", $params);
         }
-
-        echo $this->display("manage_group_indexList", $params);
-
         return;
     }
 

@@ -11,6 +11,17 @@
 
     <link rel="stylesheet" href="../../public/manage/config.css"/>
 
+    <style>
+        .item-row,.create_button,.weui-actionsheet__cell{
+            cursor: pointer;
+            outline: none;
+        }
+        .weui_switch {
+            cursor: pointer;
+        }
+
+    </style>
+
 </head>
 
 <body>
@@ -71,6 +82,7 @@
                         <div class="item-body-tail">
                             <div class="item-body-value" id="site-logo-fileid">
                                 <img class="site-logo-image" onclick="uploadFile('upload-site-logo')"
+                                     avatar="<?php echo $logo ?>"
                                      src="/_api_file_download_/?fileId=<?php echo $logo ?>"
                                      onerror="src='../../public/img/manage/site_default.png'">
 
@@ -719,7 +731,12 @@
         //update site logo
         updateSiteLogo(fileId);
 
-        var newSrc = "/_api_file_download_/?fileId=" + fileId;
+
+        if(isMobile()) {
+           var newSrc = "/_api_file_download_/?fileId=" + fileId;
+       } else {
+            var newSrc =  "./index.php?action=http.file.downloadFile&fileId="+ fileId+"&returnBase64=0";
+       }
 
         $(".site-logo-image").attr("src", newSrc);
     }
@@ -731,7 +748,7 @@
                 var formData = new FormData();
 
                 formData.append("file", obj.files.item(0));
-                formData.append("fileType", "FileImage");
+                formData.append("fileType", 1);
                 formData.append("isMessageAttachment", false);
 
                 var src = window.URL.createObjectURL(obj.files.item(0));
@@ -745,6 +762,17 @@
         }
 
     }
+
+    $(".site-logo-image").each(function () {
+        console.log($(this).attr("avatar"));
+        if(!isMobile()) {
+            var avatar = $(this).attr("avatar");
+            var src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
+            $(this).attr("src", src);
+        }
+    });
+
+
 
     function uploadFileToServer(formData, src) {
 
@@ -763,11 +791,8 @@
             success: function (imageFileIdResult) {
 
                 if (imageFileIdResult) {
-                    var fileId = imageFileIdResult;
-                    if (isMobile()) {
-                        var res = JSON.parse(imageFileIdResult);
-                        fileId = res.fileId;
-                    }
+                    var res = JSON.parse(imageFileIdResult);
+                    var fileId = res.fileId;
                     updateSiteLogo(fileId);
                 } else {
                     alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");

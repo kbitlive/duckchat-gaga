@@ -16,7 +16,9 @@
             border-radius: 50%;
             cursor: pointer;
         }
-
+        .item-row,.weui_switch {
+            cursor: pointer;
+        }
     </style>
 
     <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
@@ -50,7 +52,9 @@
                                     echo $subUserId;
                                 }
                                 ?></div>
-                            <img class="more-img" src="../../public/img/manage/more.png"/>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
                         </div>
                     </div>
 
@@ -70,8 +74,9 @@
 
                         <div class="item-body-tail" id="user-nickname-text">
                             <div class="item-body-value"><?php echo $nickname; ?></div>
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
                         </div>
                     </div>
 
@@ -94,8 +99,9 @@
 
                         <div class="item-body-tail" id="user-nickname-text">
                             <div class="item-body-value"><?php echo $loginName; ?></div>
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
                         </div>
 
                     </div>
@@ -119,15 +125,17 @@
                             <div class="item-body-value">
                                 <img id="user-avatar-img" class="site-user-avatar"
                                      onclick="uploadFile('user-avatar-img-input')"
-                                     src="/_api_file_download_/?fileId=<?php echo $avatar ?>"
+                                     avatar = "<?php echo $avatar ?>"
+                                     src=""
                                      onerror="src='../../public/img/msg/default_user.png'">
 
                                 <input id="user-avatar-img-input" type="file" onchange="uploadImageFile(this)"
                                        accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
                                        style="display: none;">
                             </div>
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
                         </div>
                     </div>
 
@@ -214,8 +222,9 @@
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
                         </div>
                     </div>
 
@@ -227,34 +236,31 @@
 
 
     <!--   part 4  -->
-    <!--    <div class="layout-all-row">-->
-    <!---->
-    <!--        <div class="list-item-center">-->
-    <!--            <div class="item-row" id="remove-user">-->
-    <!--                <div class="item-body">-->
-    <!--                    <div class="item-body-display">-->
-    <!---->
-    <!--                        --><?php //if ($lang == "1") { ?>
-    <!--                            <div class="item-body-desc">删除用户账号</div>-->
-    <!--                        --><?php //} else { ?>
-    <!--                            <div class="item-body-desc">Remove User Account</div>-->
-    <!--                        --><?php //} ?>
-    <!---->
-    <!--                        <div class="item-body-tail">-->
-    <!--                            <img class="more-img"-->
-    <!--                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>-->
-    <!--                        </div>-->
-    <!--                    </div>-->
-    <!---->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--            <div class="division-line"></div>-->
-    <!---->
-    <!--            <div class="item-bottom">-->
-    <!---->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
+    <div class="layout-all-row">
+        <div class="list-item-center">
+            <div class="item-row" id="remove-user" onclick="deleteUserAccount()">
+                <div class="item-body">
+                    <div class="item-body-display">
+
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">删除用户账号</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Remove Account</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+        </div>
+    </div>
 
 </div>
 
@@ -313,7 +319,9 @@
         updateServerImage(fileId);
 
         var newSrc = "/_api_file_download_/?fileId=" + fileId;
-
+        if(!isMobile()) {
+            newSrc =  "./index.php?action=http.file.downloadFile&fileId="+ fileId+"&returnBase64=0";
+        }
         $(".site-user-avatar").attr("src", newSrc);
     }
 
@@ -323,7 +331,7 @@
                 var formData = new FormData();
 
                 formData.append("file", obj.files.item(0));
-                formData.append("fileType", "FileImage");
+                formData.append("fileType", 1);
                 formData.append("isMessageAttachment", false);
 
                 var src = window.URL.createObjectURL(obj.files.item(0));
@@ -337,6 +345,16 @@
         }
 
     }
+
+    $(".site-user-avatar").each(function () {
+        var avatar = $(this).attr("avatar");
+        var src =  " /_api_file_download_/?fileId="+avatar;
+        if(!isMobile()) {
+            src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
+        }
+        $(this).attr("src", src);
+    });
+
 
     function uploadFileToServer(formData, src) {
         var url = "./index.php?action=http.file.uploadWeb";
@@ -353,11 +371,8 @@
             processData: false,
             success: function (imageFileIdResult) {
                 if (imageFileIdResult) {
-                    var fileId = imageFileIdResult;
-                    if (isMobile()) {
-                        var res = JSON.parse(imageFileIdResult);
-                        fileId = res.fileId;
-                    }
+                    var res = JSON.parse(imageFileIdResult);
+                    var fileId = res.fileId;
                     updateServerImage(fileId);
                 } else {
                     alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");
@@ -489,7 +504,7 @@
         var res = JSON.parse(result);
 
         if (res.errCode != "success") {
-            alert(getLanguage() == 1 ? "更新成功" : "update name error");
+            alert(getLanguage() == 1 ? "更新失败" : "update name error");
         }
 
         location.reload();
@@ -517,8 +532,9 @@
         var res = JSON.parse(result);
 
         if (res.errCode != "success") {
-            alert(getLanguage() == 1 ? "更新成功" : "update error");
+            alert(getLanguage() == 1 ? "更新失败" : "update error");
         }
+
     }
 
 
@@ -542,7 +558,7 @@
         var res = JSON.parse(result);
 
         if (res.errCode != "success") {
-            alert(getLanguage() == 1 ? "更新成功" : "update error");
+            alert(getLanguage() == 1 ? "更新失败" : "update error");
         }
     }
 
@@ -555,18 +571,17 @@
         zalyjsCommonOpenPage(url);
     });
 
-
-    $("#remove-user").click(function () {
+    function deleteUserAccount() {
         var userId = $("#user-id").attr("data");
 
         var url = "index.php?action=manage.user.delete&lang=" + getLanguage();
 
         var data = {
-            'userId': userId
+            'deleteUserId': userId
         };
 
         zalyjsCommonAjaxPostJson(url, data, removeUserResponse);
-    });
+    }
 
     function removeUserResponse(url, data, result) {
         var res = JSON.parse(result);

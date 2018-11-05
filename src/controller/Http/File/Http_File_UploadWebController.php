@@ -42,7 +42,7 @@ class Http_File_UploadWebController extends \HttpBaseController
             $fileInfo = ["fileId" => $originFileName, "errorInfo" => ""];
             echo json_encode($fileInfo);
         }catch (Exception $ex) {
-            $this->ctx->Wpf_Logger->error($tag, "shaoye error msg =" . $ex->getMessage());
+            $this->ctx->Wpf_Logger->error($tag, "shaoye error msg =" . $ex);
             $fileInfo = ["fileId" => $originFileName, "errorInfo" => $ex->getMessage()];
             echo json_encode($fileInfo);
         }

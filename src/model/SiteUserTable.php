@@ -43,6 +43,23 @@ class SiteUserTable extends BaseTable
         return $this->insertData($this->table, $userInfo, $this->columns);
     }
 
+    public function deleteUserProfile($userId)
+    {
+        $tag = __CLASS__ . "-" . __FILE__;
+        $startTime = $this->getCurrentTimeMills();
+
+        $sql = "delete from $this->table where userId=:userId";
+        try {
+            $prepare = $this->db->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->bindValue(":userId", $userId);
+            $flag = $prepare->execute();
+            return $flag;
+        } finally {
+            $this->logger->writeSqlLog($tag, $sql, [$userId], $startTime);
+        }
+    }
+
     public function getUserByUserId($userId)
     {
         $tag = __CLASS__ . "-" . __FILE__;
@@ -263,8 +280,7 @@ class SiteUserTable extends BaseTable
         return false;
     }
 
-    public
-    function getUserListNotInGroup($groupId, $offset, $pageSize)
+    public function getUserListNotInGroup($groupId, $offset, $pageSize)
     {
         try {
             $startTime = microtime(true);
@@ -301,8 +317,7 @@ class SiteUserTable extends BaseTable
         }
     }
 
-    public
-    function getUserCount($groupId)
+    public function getUserCount($groupId)
     {
         try {
             $startTime = microtime(true);
@@ -346,8 +361,7 @@ class SiteUserTable extends BaseTable
         }
     }
 
-    public
-    function getUserByUserIds($userIds)
+    public function getUserByUserIds($userIds)
     {
         $tag = __CLASS__ . "-" . __FILE__;
         $startTime = microtime(true);
@@ -367,8 +381,7 @@ class SiteUserTable extends BaseTable
         }
     }
 
-    public
-    function getUserFriendVersion($userId)
+    public function getUserFriendVersion($userId)
     {
         $tag = __CLASS__ . "-" . __FILE__;
         $startTime = microtime(true);
@@ -389,14 +402,12 @@ class SiteUserTable extends BaseTable
         }
     }
 
-    public
-    function updateUserData($where, $data)
+    public function updateUserData($where, $data)
     {
         return $this->updateInfo($this->table, $where, $data, $this->columns);
     }
 
-    public
-    function updateUserFriendVersion($userId, $friendVersion)
+    public function updateUserFriendVersion($userId, $friendVersion)
     {
         $where = ['userId' => $userId];
         $data = ['friendVersion' => $friendVersion];
@@ -404,8 +415,7 @@ class SiteUserTable extends BaseTable
 
     }
 
-    public
-    function updateNextFriendVersion($userId)
+    public function updateNextFriendVersion($userId)
     {
         $version = $this->getUserFriendVersion($userId);
 

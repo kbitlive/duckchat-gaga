@@ -17,11 +17,9 @@ class Manage_Config_DefaultFriendsController extends Manage_CommonController
         try {
             $params['lang'] = $this->language;
 
-            $config = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_DEFAULT_FRIENDS);
+            $defaultFriendString = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_DEFAULT_FRIENDS);
 
-            $defaultFriends = $config[SiteConfig::SITE_DEFAULT_FRIENDS];
-
-            $defaultFriendList = explode(",", $defaultFriends);
+            $defaultFriendList = explode(",", $defaultFriendString);
 
             $params['userList'] = $this->getDefaultFriendProfileList($defaultFriendList);
 

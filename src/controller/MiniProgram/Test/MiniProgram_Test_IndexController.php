@@ -150,8 +150,7 @@ class MiniProgram_Test_IndexController extends  MiniProgramController
 
             if (empty($miniProgramProfile['authKey'])) {
                 if (empty($authKey)) {
-                    $config = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_PLUGIN_PLBLIC_KEY);
-                    $miniProgramProfile['authKey'] = $config[SiteConfig::SITE_PLUGIN_PLBLIC_KEY];
+                    $miniProgramProfile['authKey'] = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_PLUGIN_PLBLIC_KEY);
                 }
             }
 

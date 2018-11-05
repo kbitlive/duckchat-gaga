@@ -65,7 +65,7 @@
             margin-top: 8px;
             margin-bottom: 8px;
             margin-left: 10px;
-            border-radius: 50%;
+            border-radius: 10%;
         }
 
         .item-body {
@@ -129,6 +129,8 @@
             font-family: PingFangSC-Regular;
             font-weight: 400;
             color: rgba(255, 255, 255, 1);
+            cursor: pointer;
+            outline: none;
         }
 
         .chatButton {
@@ -140,6 +142,8 @@
             font-size: 14px;
             font-family: PingFangSC-Regular;
             font-weight: 400;
+            cursor: pointer;
+            outline: none;
         }
 
         /* mask and new window */
@@ -204,6 +208,8 @@
             border-radius: 7px;
             font-size: 16px;
             color: rgba(255, 255, 255, 1);
+            cursor: pointer;
+            outline: none;
         }
 
         .line {
@@ -238,8 +244,8 @@
             <?php foreach ($userList as $i => $user) { ?>
                 <div class="item-row">
                     <div class="item-header">
-                        <img class="user-avatar-image"
-                             src="/_api_file_download_/?fileId=<?php echo $user['avatar'] ?>"
+                        <img class="user-avatar-image" avatar="<?php echo $user['avatar'] ?>"
+                             src=""
                              onerror="this.src='../../public/img/msg/default_user.png'"/>
                     </div>
                     <div class="item-body">
@@ -263,7 +269,7 @@
                                     </button>
                                 <?php } else { ?>
                                     <button class="chatButton" userId="<?php echo $user['userId'] ?>">
-                                        已添加
+                                        发起会话
                                     </button>
                                 <?php } ?>
 
@@ -480,9 +486,9 @@
 
     $("#square-body").on("click", ".chatButton", function () {
         var friendId = $(this).attr("userId");
-        var url = "duckchat://0.0.0.0/goto?page=u2Profile&x=" + friendId;
+        var url = "duckchat://0.0.0.0/goto?page=u2Msg&x=" + friendId;
         try {
-            // zalyjsGotoPage(url);
+            zalyjsGotoPage(url);
         } catch (e) {
             alert(getLanguage() == 1 ? "客户端暂不支持，请升级客户端" : "Please upgrade the client version.");
         }
@@ -563,6 +569,16 @@
         zalyjsCommonAjaxPostJson(url, data, loadMoreResponse)
     }
 
+    $(".user-avatar-image").each(function () {
+        var avatar = $(this).attr("avatar");
+        var src = " /_api_file_download_/?fileId=" + avatar;
+        if (!isMobile()) {
+            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        }
+        $(this).attr("src", src);
+    });
+
+
     function loadMoreResponse(url, data, result) {
 
         if (result) {
@@ -574,10 +590,17 @@
 
             // alert(result);
             if (data && data.length > 0) {
+                var isMobile = isMobile();
+
                 $.each(data, function (index, user) {
+                    var src = "./index.php?action=http.file.downloadFile&fileId=" + user['avatar'] + "&returnBase64=0&lang=" + languageNum;
+
+                    if (isMobile) {
+                        src = '/_api_file_download_/?fileId=' + user['avatar'];
+                    }
                     var userHtml = '<div class="item-row" userId="' + user["userId"] + '" >'
                         + '<div class="item-header">'
-                        + '<img class="user-avatar-image" src="/_api_file_download_/?fileId=' + user['avatar'] + '" onerror="this.src=\'../../public/img/msg/default_user.png\'" />'
+                        + '<img class="user-avatar-image" src="' + src + '" onerror="this.src=\'../../public/img/msg/default_user.png\'" />'
                         + '</div>'
                         + '<div class="item-body">'
                         + '<div class="item-body-display">'
@@ -587,8 +610,8 @@
                     if (!user['isFollow']) {
                         userHtml += '<button class="addButton applyButton" userId="' + user["userId"] + '" > 添加好友 </button>';
                     } else {
-                        // userHtml += '<button class="chatButton" userId="' + user["userId"] + '" > 发起会话 </button>';
-                        userHtml += '<button class="chatButton" userId="' + user["userId"] + '" > 已添加 </button>';
+                        userHtml += '<button class="chatButton" userId="' + user["userId"] + '" > 发起会话 </button>';
+                        // userHtml += '<button class="chatButton" userId="' + user["userId"] + '" > 已添加 </button>';
                     }
 
 

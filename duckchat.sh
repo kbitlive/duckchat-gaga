@@ -208,11 +208,13 @@ case $operation in
 
 			if [ -f $originDirName/.git/config ]; then
                 if [ "$sysOS" = "Linux"  ]; then
-                    sed -i  's/ //g' $originDirName/.git/config
-                    sed -i  's/filemode=true/filemode=false/g'  $originDirName/.git/config
+                    sed -i  's/remote\"/remote \"/g'  $originDirName/.git/config
+                    sed -i  's/branch\"/branch \"/g'  $originDirName/.git/config
+                    sed -i  's/filemode = true/filemode = false/g'  $originDirName/.git/config
                 elif [ "$sysOS" = "Darwin" ]; then
-                    sed -i 'back' 's/ //g' $originDirName/.git/config
-                    sed -i 'config' 's/filemode=true/filemode=false/g'  $originDirName/.git/config
+                    sed -i 'config'  's/remote\"/remote \"/g'  $originDirName/.git/config
+                    sed -i 'config' 's/branch\"/branch \"/g'  $originDirName/.git/config
+                    sed -i 'config' 's/filemode = true/filemode = false/g'  $originDirName/.git/config
                 fi
 			fi
 

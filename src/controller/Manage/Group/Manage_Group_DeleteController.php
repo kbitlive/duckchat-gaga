@@ -19,6 +19,8 @@ class Manage_Group_DeleteController extends Manage_CommonController
 
         try {
 
+            $this->removeDefault($groupId);
+
             if ($this->deleteGroup($groupId)) {
                 $response['errCode'] = "success";
             }
@@ -30,6 +32,16 @@ class Manage_Group_DeleteController extends Manage_CommonController
 
         echo json_encode($response);
         return;
+    }
+
+    private function removeDefault($groupId)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        try {
+            $this->ctx->Site_Config->removeDefaultGroup($groupId);
+        } catch (Exception $e) {
+            $this->logger->error($tag, $e);
+        }
     }
 
     private function deleteGroup($groupId)

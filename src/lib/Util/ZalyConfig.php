@@ -8,13 +8,20 @@
 
 class ZalyConfig
 {
-    private static $verifySessionKey = "session_verify_";
+    private static $verifySessionKey = "sessionVerify";
 
     public static $configSiteVersionCodeKey = "siteVersionCode";
     public static $configSiteVersionNameKey = "siteVersionName";
 
     public static $config;
     public static $sampleConfig;
+
+    public static function updateConfig($key, $value)
+    {
+        $siteConfig = self::getAllConfig();
+        $siteConfig[$key] = $value;
+        self::updateConfigFile($siteConfig);
+    }
 
     public static function updateConfigFile($newConfig)
     {
@@ -27,7 +34,7 @@ class ZalyConfig
         $contents = var_export($newConfig, true);
         file_put_contents($configFileName, "<?php\n return {$contents};\n ");
         if (function_exists("opcache_reset")) {
-             opcache_reset();
+            opcache_reset();
         }
         return true;
     }
