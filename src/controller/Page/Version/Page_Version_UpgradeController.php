@@ -47,6 +47,10 @@ class Page_Version_UpgradeController extends Page_VersionController
                 $this->versionCode = 10100;
                 $this->versionName = "1.1.0";
                 $result = $this->upgrade_10014_10100();
+            } elseif ($currentVersionCode == 10100) {
+                $this->versionCode = 10101;
+                $this->versionName = "1.1.1";
+                $result = $this->upgrade_10100_10101();
                 //最新版本审计完成以后，删除密码存储文件，准备下次更新新密码
                 $this->deleteUpgradeFile();
             }
@@ -563,4 +567,18 @@ class Page_Version_UpgradeController extends Page_VersionController
         return $fileId;
     }
 
+
+    private function upgrade_10100_10101()
+    {
+        $dbType = $this->ctx->dbType;
+        if ($dbType == "mysql") {
+            $this->executeMysqlScript();
+            $this->upgradeErrCode = "success";
+            return true;
+        } else {
+            $this->executeSqliteScript();
+            $this->upgradeErrCode = "success";
+            return true;
+        }
+    }
 }
