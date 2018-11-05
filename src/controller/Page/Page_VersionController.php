@@ -230,6 +230,7 @@ abstract class Page_VersionController extends UpgradeController
         if (!is_array($keys)) {
             return false;
         }
+        $this->resetOpcache();
         $siteConfig = ZalyConfig::getAllConfig();
         foreach ($keys as $oKey => $nKey) {
             foreach ($siteConfig as $oldKey => $val) {
@@ -240,9 +241,11 @@ abstract class Page_VersionController extends UpgradeController
                 }
             }
         }
-
         ZalyConfig::updateConfigFile($siteConfig);
-        ZalyConfig::getAllConfig();
+        $fileName = dirname(__FILE__)."/../../config.php";
+        $config = ZalyConfig::getAllConfig();
+
+        error_log("file -----after----------------------".json_encode($config));
 
     }
 
