@@ -59,6 +59,7 @@ abstract class Page_VersionController extends UpgradeController
         if (!file_exists($this->upgradeFilePath)) {
             $contents = var_export($siteVersion, true);
             file_put_contents($this->upgradeFilePath, "<?php\n return {$contents};\n ");
+            $this->resetOpcache();
         } else {
 
             $password = $this->getUpgradePassword();
@@ -81,6 +82,8 @@ abstract class Page_VersionController extends UpgradeController
         $fileName = dirname(__FILE__) . "/../../upgrade.php";
         $contents = var_export($upgradeInfo, true);
         file_put_contents($fileName, "<?php\n return {$contents};\n ");
+
+        $this->resetOpcache();
     }
 
     private function updatePassword()
@@ -133,6 +136,8 @@ abstract class Page_VersionController extends UpgradeController
         $fileName = dirname(__FILE__) . "/../../upgrade.php";
         $contents = var_export($siteVersion, true);
         file_put_contents($fileName, "<?php\n return {$contents};\n ");
+
+        $this->resetOpcache();
     }
 
     protected function setUpgradeErrInfo($upgradeErrCode, $upgradeErrInfo)
@@ -150,6 +155,8 @@ abstract class Page_VersionController extends UpgradeController
         $fileName = dirname(__FILE__) . "/../../upgrade.php";
         $contents = var_export($siteVersion, true);
         file_put_contents($fileName, "<?php\n return {$contents};\n ");
+
+        $this->resetOpcache();
     }
 
     protected function executeMysqlScript()
@@ -197,6 +204,7 @@ abstract class Page_VersionController extends UpgradeController
 
     }
 
+    //升级config.php,只升级 siteVersionCode & siteVersionName
     protected function updateSiteConfigAsUpgrade($newVersionCode, $newVersionName)
     {
         $siteConfig = ZalyConfig::getAllConfig();
@@ -205,6 +213,7 @@ abstract class Page_VersionController extends UpgradeController
         ZalyConfig::updateConfigFile($siteConfig);
     }
 
+    //升级config.php，升级$config中所有数据
     protected function updateSiteConfig($config)
     {
         if (!is_array($config)) {
@@ -221,6 +230,7 @@ abstract class Page_VersionController extends UpgradeController
         if (!is_array($keys)) {
             return false;
         }
+        $this->resetOpcache();
         $siteConfig = ZalyConfig::getAllConfig();
         foreach ($keys as $oKey => $nKey) {
             foreach ($siteConfig as $oldKey => $val) {
@@ -231,10 +241,7 @@ abstract class Page_VersionController extends UpgradeController
                 }
             }
         }
-
         ZalyConfig::updateConfigFile($siteConfig);
-        ZalyConfig::getAllConfig();
-
     }
 
     protected function dropDBTable($tableName)
@@ -242,4 +249,12 @@ abstract class Page_VersionController extends UpgradeController
         $sql = "drop table $tableName";
         $this->ctx->db->exec($sql);
     }
+
+    private function resetOpcache()
+    {
+        if (function_exists("opcache_reset")) {
+            opcache_reset();
+        }
+    }
+
 }

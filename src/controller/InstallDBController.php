@@ -251,7 +251,7 @@ class InstallDBController
     private function isCanUserCurl()
     {
         $sampleFile = require(dirname(dirname(__FILE__)) . "/config.sample.php");
-        $testCurlUrl = $sampleFile['testCurl'];
+        $testCurlUrl = isset($sampleFile['testCurl'])?$sampleFile['testCurl'] : $sampleFile['test_curl'];
         $testCurlUrl = ZalyHelper::getFullReqUrl($testCurlUrl);
         $curlResult = $this->curl->request($testCurlUrl, 'get');
         echo $curlResult;

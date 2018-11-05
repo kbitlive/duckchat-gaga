@@ -100,7 +100,7 @@ if(!ini_get("error_log")) {
     $phpErrorLog = ZalyConfig::getConfig("errorLog");
 
     $logDirName = WPF_ROOT_DIR."/logs";
-    if(!is_dir($logDir)){
+    if(!is_dir($logDirName)){
         mkdir($logDirName, 0755, true);
     }
 

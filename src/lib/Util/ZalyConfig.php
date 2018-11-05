@@ -9,6 +9,7 @@
 class ZalyConfig
 {
     private static $verifySessionKey = "sessionVerify";
+    private static $verifySessionKeyBckUp = "session_verify_";
 
     public static $configSiteVersionCodeKey = "siteVersionCode";
     public static $configSiteVersionNameKey = "siteVersionName";
@@ -33,9 +34,15 @@ class ZalyConfig
         //write to file
         $contents = var_export($newConfig, true);
         file_put_contents($configFileName, "<?php\n return {$contents};\n ");
+
+        //update opcache
         if (function_exists("opcache_reset")) {
-            opcache_reset();
+             opcache_reset();
         }
+
+        //update zalyConfig
+        self::loadConfigFile();
+
         return true;
     }
 
@@ -81,6 +88,9 @@ class ZalyConfig
 
     public static function getAllConfig()
     {
+        if (!empty(self::$config)) {
+            return self::$config;
+        }
         self::loadConfigFile();
         return self::$config;
     }
@@ -90,7 +100,8 @@ class ZalyConfig
     {
         self::loadConfigFile();
         $key = self::$verifySessionKey . $pluginId;
-        return self::$config[$key];
+        $backUpKey = self::$verifySessionKeyBckUp.$pluginId;
+        return isset(self::$config[$key]) ? self::$config[$key] : self::$config[$backUpKey];
     }
 
     public static function getApiIndexUrl()
