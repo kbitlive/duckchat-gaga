@@ -173,7 +173,7 @@ function updateUpgradeProgress(type,  upgradeVersionCode, info)
         if(type == "start"){
             var versionStr = localStorage.getItem(versionsKey);
             var versions  = JSON.parse(versionStr);
-            var nextUpgradeVersionNum = Object.keys(versions)[1];
+            var nextUpgradeVersionNum = Object.keys(versions)[nextUpgradeVersionNumKey];
 
             $("#v_line_"+upgradeVersionNum).attr("src", "../../public/img/upgrade/current_line.png");
             $("#v_"+nextUpgradeVersionNum).attr("src", "../../public/img/upgrade/current.png");
