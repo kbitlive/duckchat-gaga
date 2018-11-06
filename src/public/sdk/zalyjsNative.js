@@ -280,14 +280,20 @@ function zalyjsClosePage() {
 }
 
 //-public
-function zalyjsGoto(page, xarg) {
+function zalyjsGoto(page, xarg, siteAddress) {
 
-    var gotoUrl = "duckchat://0.0.0.0/goto?page=" + page + "&x=" + xarg;
+    if(siteAddress == undefined) {
+        siteAddress = "duckchat://0.0.0.0";
+    }
+    var gotoUrl = siteAddress + "/goto?page=" + page + "&x=" + xarg;
 
     if (isAndroid()) {
         window.Android.zalyjsGoto(gotoUrl);
     } else if (isIOS()) {
         window.webkit.messageHandlers.zalyjsGoto.postMessage(gotoUrl);
+    } else {
+        var gotoUrl = siteAddress+"/index.php?page=" + page + "&x=" + xarg;
+        window.open(gotoUrl,"_blank");
     }
 }
 

@@ -89,27 +89,6 @@
 
             <div class="item-row">
                 <div class="item-body">
-                    <div class="item-body-display passwordErrorNum" onclick="showPasswordErrorNum()">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">用户每天密码错误上限</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Password error limit per day</div>
-                        <?php } ?>
-                        <div class="item-body-tail">
-                            <div class="item-body-value" id="passwordErrorNum"> <?php echo $passwordErrorNum; ?></div>
-                            <div class="item-body-value">
-                                <img class="more-img" src="../../public/img/manage/more.png"/>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-            <div class="item-row">
-                <div class="item-body">
                     <div class="item-body-display">
                         <?php if ($lang == "1") { ?>
                             <div class="item-body-desc">密码找回必填</div>
@@ -244,7 +223,7 @@
 
         var key = $("#updatePopupButton").attr("key-value");
 
-        var url = "index.php?action=miniProgram.admin.updateLogin";
+        var url = "index.php?action=manage.custom.register";
 
         var value = $.trim($(".popup-group-input").val());
 
@@ -271,7 +250,7 @@
     $("#passwordResetRequiredSwitch").change(function () {
         var isChecked = $(this).is(':checked');
 
-        var url = "index.php?action=miniProgram.admin.updateLogin";
+        var url = "index.php?action=manage.custom.register";
 
         var data = {
             'key': 'passwordResetRequired',

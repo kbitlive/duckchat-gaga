@@ -454,7 +454,6 @@
         sendPostToServer(reqData, addGifType);
     }
 
-
     function changeSlideImg(oldGifDivNum)
     {
         var selectImg = "../../public/gif/sliding_select.png";

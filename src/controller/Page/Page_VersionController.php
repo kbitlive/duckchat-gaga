@@ -17,6 +17,7 @@ abstract class Page_VersionController extends UpgradeController
         10014 => "1.0.14",
         10100 => "1.1.0",
         10101 => "1.1.1",
+        10102 => "1.1.2",
     ];
 
     abstract function doRequest();
