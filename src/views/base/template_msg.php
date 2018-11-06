@@ -431,16 +431,16 @@
     <div id="triangle_left"></div>
     <div id="selfInfoDiv" class="selfInfoDiv" style="position: absolute;width: 100%;">
         <div id="selfAvatarUploadDiv" class="d-flex flex-row justify-content-center" style="margin-top: 3rem; text-align: center;position: relative" >
-            <img id="user-image-upload" class="user-image-upload info-avatar-{{userId}}" src="../../public/img/msg/default_user.png" style="width: 5rem; height: 5rem;" onclick="uploadFile('file2', 'user_avatar')" />
-            <img id="user-img-carmera" class="user-img-carmera" src="../../public/img/camera.png" style="width: 5rem; height: 5rem; position: absolute;
+            <img id="user-image-upload" class="user-image-upload info-avatar-{{userId}} siteSelfInfo" src="../../public/img/msg/default_user.png" style="width: 5rem; height: 5rem;" onclick="uploadFile('file2', 'user_avatar')" />
+            <img id="user-img-carmera" class="user-img-carmera siteSelfInfo" src="../../public/img/camera.png" style="width: 5rem; height: 5rem; position: absolute;
                      margin-left: -5rem;" onclick="uploadFile('file2', 'user_avatar')" />
             <input type="file" id="file2" style="display:none" onchange="uploadUserImgFromInput(this)" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg">
         </div>
         <div class="d-flex flex-row justify-content-center selfNickNameDiv"  >
             {{if !nickname }}
-                <div style="margin-left: 1rem;" class="nickNameDiv"> <img src="../../public/img/edit.png" style="width: 1rem;height:1rem"/></div>
+                <div style="margin-left: 1rem;" class="nickNameDiv siteSelfInfo "> <img src="../../public/img/edit.png" class="siteSelfInfo" style="width: 1rem;height:1rem"/></div>
             {{else}}
-            <div style="margin-left: 1rem;" class="nickNameDiv">{{nickname}} <img src="../../public/img/edit.png" style="width: 1rem;height:1rem"/></div>
+            <div style="margin-left: 1rem;" class="nickNameDiv siteSelfInfo">{{nickname}} <img src="../../public/img/edit.png" style="width: 1rem;height:1rem"/></div>
             {{/if}}
         </div>
 
@@ -449,15 +449,18 @@
         </div>
 
         <div style="text-align: center;margin:0.12rem auto;width: 34rem; height:1px;background:rgba(223,223,223,1);" ></div>
+
         <div class="d-flex flex-row justify-content-center">
-            <div class="self_profile_item self-qrcode" id="logout" >
-                <span class="logout-span" id="logout-span" data-local-value="logoutTip" onclick="logout(event)">退出</span>
+            <div class="self_profile_item self-qrcode siteSelfInfo" id="newMsgSound" style="position: relative">
+                <span class="logout-span siteSelfInfo" id="logout-span" data-local-value="newMsgSoundTip" onclick="">消息通知声音</span>
+                <img src="../../public/img/msg/icon_switch_off.png" class="sound_mute siteSelfInfo" is_on="off"  >
             </div>
         </div>
+
+
         <div class="d-flex flex-row justify-content-center">
-            <div class="self_profile_item self-qrcode" id="newMsgSound" style="position: relative">
-                <span class="logout-span" id="logout-span" data-local-value="newMsgSoundTip" onclick="">消息通知声音</span>
-                <img src="../../public/img/msg/icon_switch_off.png" class="sound_mute" is_on="off"  >
+            <div class="self_profile_item self-qrcode siteSelfInfo" id="logout" >
+                <span class="logout-span siteSelfInfo" id="logout-span" data-local-value="logoutTip" onclick="logout(event)">退出</span>
             </div>
         </div>
     </div>
@@ -632,7 +635,7 @@
 </script>
 
 <script id="tpl-nickname-div" type="text/html">
-   <input type="text" id="selfNickname"  style="padding: 0rem;" class="nickname create_group_box_div_input"  value="{{nickname}}" onkeydown="updateSelfNickName(event);" />
+   <input type="text" id="selfNickname"  style="padding: 0rem;" class="nickname create_group_box_div_input siteSelfInfo"  value="{{nickname}}" onkeydown="updateSelfNickName(event);" />
 </script>
 
 <script id="tpl-group-name-div" type="text/html">
