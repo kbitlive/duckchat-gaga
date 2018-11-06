@@ -61,13 +61,15 @@ class Site_Config
         if (file_exists($this->cacheFile)) {
             if (empty(self::$siteConfigCache)) {
                 self::$siteConfigCache = require($this->cacheFile);
-                return self::$siteConfigCache;
-            } else {
-                return self::$siteConfigCache;
             }
         } else {
             $this->updateSiteConfigCache();
         }
+
+        if (!empty(self::$siteConfigCache)) {
+            return self::$siteConfigCache;
+        }
+        $this->updateSiteConfigCache();
         return $this->ctx->SiteConfigTable->selectSiteConfig();
     }
 
