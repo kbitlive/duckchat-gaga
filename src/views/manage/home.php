@@ -267,6 +267,48 @@
             </div>
             <div class="division-line"></div>
 
+            <div class="item-row" id="site-security">
+                <div class="item-header">
+                    <img class="site-manage-image" src="../../public/img/manage/home_page.png"/>
+                </div>
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <div class="item-body-desc">
+                            <?php if ($lang == "1") { ?>
+                                安全配置
+                            <?php } else { ?>
+                                Security configuration
+                            <?php } ?></div>
+
+                        <div class="item-body-tail">
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+            <div class="item-row" id="site-advanced">
+                <div class="item-header">
+                    <img class="site-manage-image" src="../../public/img/manage/home_page.png"/>
+                </div>
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <div class="item-body-desc">
+                            <?php if ($lang == "1") { ?>
+                                高级
+                            <?php } else { ?>
+                                Advanced
+                            <?php } ?></div>
+
+                        <div class="item-body-tail">
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="division-line"></div>
+
         </div>
 
     </div>
@@ -339,7 +381,17 @@
     });
 
     $("#site-custom-page").click(function () {
-        var url = "index.php?action=manage.custom.page&lang=" + getLanguage();
+        var url = "index.php?action=manage.custom&lang=" + getLanguage();
+        zalyjsCommonOpenNewPage(url);
+    });
+
+    $("#site-advanced").click(function () {
+        var url = "index.php?action=manage.advanced&lang=" + getLanguage();
+        zalyjsCommonOpenNewPage(url);
+    });
+
+    $("#site-security").on("click", function () {
+        var url = "index.php?action=manage.security&lang=" + getLanguage();
         zalyjsCommonOpenNewPage(url);
     });
 
@@ -348,7 +400,6 @@
         // alert("url=" + url);
         zalyjsCommonOpenNewPage(url);
     });
-
 
     function showPluginAdmin(url) {
         url += "&lang=" + getLanguage();

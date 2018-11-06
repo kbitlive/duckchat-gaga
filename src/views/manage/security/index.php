@@ -1,7 +1,339 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: zhangjun
- * Date: 06/11/2018
- * Time: 10:44 AM
- */
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title><?php if ($lang == "1") { ?>安全配置<?php } else { ?>Security configuration<?php } ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../public/jquery/weui.min.css"/>
+    <link rel="stylesheet" href="../../public/jquery/jquery-weui.min.css"/>
+
+    <link rel="stylesheet" href="../../public/manage/config.css"/>
+    <style>
+
+        html, body {
+            padding: 0px;
+            margin: 0px;
+            font-family: PingFangSC-Regular, "MicrosoftYaHei";
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            background: rgba(245, 245, 245, 1);
+            font-size: 14px;
+
+        }
+
+        .wrapper {
+            width: 100%;
+            display: flex;
+            align-items: stretch;
+        }
+
+        .layout-all-row {
+            width: 100%;
+            /*background: white;*/
+            background: rgba(245, 245, 245, 1);;
+            display: flex;
+            align-items: stretch;
+            overflow: hidden;
+            flex-shrink: 0;
+
+        }
+
+        .item-row {
+            background: rgba(255, 255, 255, 1);
+            display: flex;
+            flex-direction: row;
+            text-align: center;
+            height: 50px;
+            cursor: pointer;
+            /*margin-bottom: 2rem;*/
+        }
+
+        /*.item-row:hover{*/
+        /*background: rgba(255, 255, 255, 0.2);*/
+        /*}*/
+
+        .item-row:active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .item-header {
+            width: 50px;
+            height: 50px;
+        }
+
+        .site-manage-image {
+            width: 40px;
+            height: 40px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            margin-left: 16px;
+            border-radius: 50%;
+        }
+
+        .item-body {
+            width: 100%;
+            height: 50px;
+            margin-left: 1rem;
+            margin-top: 7px;
+            flex-direction: row;
+        }
+
+        .list-item-center {
+            width: 100%;
+            /*height: 11rem;*/
+            /*background: rgba(255, 255, 255, 1);*/
+            padding-bottom: 11px;
+            /*padding-left: 1rem;*/
+
+        }
+
+        .item-body-display {
+            display: flex;
+            justify-content: space-between;
+            /*margin-right: 7rem;*/
+            /*margin-bottom: 3rem;*/
+            line-height: 3rem;
+        }
+
+        .item-body-tail {
+            margin-right: 10px;
+        }
+
+        .item-body-desc {
+            height: 3rem;
+            font-size: 16px;
+            font-family: PingFangSC-Regular;
+            /*color: rgba(76, 59, 177, 1);*/
+            margin-left: 11px;
+            line-height: 3rem;
+        }
+
+        .more-img {
+            width: 8px;
+            height: 13px;
+            /*border-radius: 50%;*/
+        }
+
+        .division-line {
+            height: 1px;
+            background: rgba(243, 243, 243, 1);
+            margin-left: 40px;
+            overflow: hidden;
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+<div class="wrapper" id="wrapper">
+
+    <div class="layout-all-row">
+
+        <div class="list-item-center">
+
+
+
+            <div class="item-row" id="quick_configuration">
+                <div class="item-header">
+                    <img class="site-manage-image" src="../../public/img/manage/home_config.png"/>
+                </div>
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <div class="item-body-desc"><?php if ($lang == "1") { ?>
+                                快速配置
+                            <?php } else { ?>
+                                Quick configuration
+                            <?php } ?>
+                        </div>
+
+                        <div class="item-body-tail">
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+
+            <div class="item-row" id="security_configuration">
+                <div class="item-header">
+                    <img class="site-manage-image" src="../../public/img/manage/home_config.png"/>
+                </div>
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <div class="item-body-desc"><?php if ($lang == "1") { ?>
+                                用户名、密码策略
+                            <?php } else { ?>
+                                Username, password policy
+                            <?php } ?>
+                        </div>
+
+                        <div class="item-body-tail">
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+            <div class="item-row">
+                <div class="item-header">
+                    <img class="site-manage-image" src="../../public/img/manage/home_config.png"/>
+                </div>
+                <div class="item-body">
+                    <div class="item-body-display passwordErrorNum" onclick="showPasswordErrorNum()">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">用户每天密码错误上限</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Password error limit per day</div>
+                        <?php } ?>
+                        <div class="item-body-tail">
+                            <div class="item-body-value" id="passwordErrorNum"> <?php echo $passwordErrorNum; ?></div>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+        </div>
+
+    </div>
+
+    <div class="wrapper-mask" id="wrapper-mask" style="visibility: hidden;"></div>
+
+    <div class="popup-template" style="display:none;">
+
+        <div class="config-hidden" id="popup-group">
+
+            <div class="flex-container">
+                <div class="header_tip_font popup-group-title"></div>
+            </div>
+
+            <div class="" style="text-align: center">
+                <input type="text" class="popup-group-input" placeholder="please input">
+            </div>
+
+            <div class="line"></div>
+
+            <div class="" style="text-align:center;">
+                <?php if ($lang == "1") { ?>
+                    <button id="updatePopupButton" type="button" class="create_button" key-value=""
+                            onclick="updateDataValue();">确认
+                    </button>
+                <?php } else { ?>
+                    <button id="updatePopupButton" type="button" class="create_button" key-value=""
+                            onclick="updateDataValue();">Confirm
+                    </button>
+                <?php } ?>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="../../public/manage/native.js"></script>
+
+    <script type="text/javascript">
+
+        $("#quick_configuration").on("click", function () {
+            var url = "index.php?action=manage.security&page=quick&lang=" + getLanguage();
+            zalyjsCommonOpenNewPage(url);
+        });
+        $("#security_configuration").on("click", function () {
+            var url = "index.php?action=manage.security&page=normal&lang=" + getLanguage();
+            zalyjsCommonOpenNewPage(url);
+        });
+
+        function showPasswordErrorNum(){
+            var title = $(".passwordErrorNum").find(".item-body-desc").html();
+            var inputBody = $("#passwordErrorNum").html();
+
+            showWindow($(".config-hidden"));
+
+            $(".popup-group-title").html(title);
+            $(".popup-group-input").val(inputBody);
+            $("#updatePopupButton").attr("key-value", "passwordErrorNum");
+        }
+
+        function showWindow(jqElement) {
+            jqElement.css("visibility", "visible");
+            $(".wrapper-mask").css("visibility", "visible").append(jqElement);
+        }
+
+
+        function removeWindow(jqElement) {
+            jqElement.remove();
+            $(".popup-template").append(jqElement);
+            $(".wrapper-mask").css("visibility", "hidden");
+        }
+
+
+        $(".wrapper-mask").mouseup(function (e) {
+            var targetId = e.target.id;
+            var targetClassName = e.target.className;
+
+            if (targetId == "wrapper-mask") {
+                var wrapperMask = document.getElementById("wrapper-mask");
+                var length = wrapperMask.children.length;
+                var i;
+                for (i = 0; i < length; i++) {
+                    var node = wrapperMask.children[i];
+                    node.remove();
+                    // addTemplate(node);
+                    $(".popup-template").append(node);
+                    $(".popup-template").hide();
+                }
+                $(".popup-group-input").val("");
+                $("#updatePopupButton").attr("data", "");
+                wrapperMask.style.visibility = "hidden";
+            }
+        });
+
+        function updateDataValue() {
+
+            var key = $("#updatePopupButton").attr("key-value");
+
+            var url = "index.php?action=manage.security.update";
+
+            var value = $.trim($(".popup-group-input").val());
+
+            var data = {
+                'key': key,
+                'value': value,
+            };
+
+            zalyjsCommonAjaxPostJson(url, data, updateResponse);
+
+            // close
+            removeWindow($(".config-hidden"));
+        }
+
+        function updateResponse(url, data, result) {
+            var res = JSON.parse(result);
+            if ("success" == res.errCode) {
+                window.location.reload();
+            } else {
+                alert("error : " + res.errInfo);
+            }
+        }
+
+    </script>
+
+</body>
+</html>
+
+
+
+
