@@ -1452,6 +1452,7 @@ function openU2Chat(result)
         }
         localStorage.setItem(chatSessionIdKey, userId);
         localStorage.setItem(userId, U2_MSG);
+        $(".right-chatbox").attr("chat-session-id", userId);
         $(".user-desc-body").html(userId);
         insertU2Room(undefined, userId);
     }
@@ -3536,16 +3537,15 @@ function displayRightPage(displayType)
                 $(".friend-apply-dialog")[0].style.display = "none";
                 break;
             case DISPLAY_CHAT:
-
                 $(".friend-apply-dialog")[0].style.display = "none";
                 $(".plugin-list-dialog")[0].style.display = "none";
-
                 var chatSessionId  = localStorage.getItem(chatSessionIdKey);
                 var chatSessionRowLength = $(".chatsession-row").length;
                 $(".msg-chat-dialog")[0].style.display = "block";
                 if(chatSessionId && chatSessionRowLength>0) {
                     $(".chat-dialog")[0].style.display = "block";
                     $(".no-chat-dialog-div")[0].style.display = "none";
+                    $(".right-chatbox").attr("chat-session-id", chatSessionId);
                 } else {
                     $(".no-chat-dialog-div")[0].style.display = "block";
                     $(".chat-dialog")[0].style.display = "none";
