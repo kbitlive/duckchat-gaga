@@ -384,48 +384,48 @@
 
     $("#site-config-id").click(function () {
         var url = "/index.php?action=manage.config&lang=" + getLanguage();
-        zalyjsOpenNewPage(url);
+        zalyjsOpenPage(url);
     });
 
     $("#mini-program-id").click(function () {
         var url = "index.php?action=manage.miniProgram&lang=" + getLanguage();
-        zalyjsOpenNewPage(url);
+        zalyjsOpenPage(url);
     });
 
     $("#user-manage-id").click(function () {
         var url = "index.php?action=manage.user&lang=" + getLanguage();
-        zalyjsOpenNewPage(url);
+        zalyjsOpenPage(url);
     });
 
     $("#group-manage-id").click(function () {
         var url = "index.php?action=manage.group&lang=" + getLanguage();
-        zalyjsOpenNewPage(url);
+        zalyjsOpenPage(url);
     });
 
     $("#uic-manage-id").click(function () {
         var url = "index.php?action=manage.uic&page=index&lang=" + getLanguage();
-        zalyjsOpenNewPage(url);
+        zalyjsOpenPage(url);
     });
 
     $("#site-custom-page").click(function () {
         var url = "index.php?action=manage.custom.page&lang=" + getLanguage();
-        zalyjsOpenNewPage(url);
+        zalyjsOpenPage(url);
     });
 
     $("#site-clean-data").click(function () {
         var url = "index.php?action=manage.data.clean&lang=" + getLanguage();
-        zalyjsOpenNewPage(url);
+        zalyjsOpenPage(url);
     });
 
     $("#stie-data-report").click(function () {
         var url = "index.php?action=manage.data.report";
-        zalyjsOpenNewPage(url);
+        zalyjsOpenPage(url);
     });
 
 
     function showPluginAdmin(url) {
         url += "&lang=" + getLanguage();
-        zalyjsOpenNewPage(url);
+        zalyjsOpenPage(url);
     }
 
 </script>
