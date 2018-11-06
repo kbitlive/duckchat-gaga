@@ -451,7 +451,7 @@ class InstallDBController
                 'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingNewPage,
                 'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
                 'authKey' => "",
-                'management' => "index.php?action=miniProgram.admin.passwordLogin",
+                'management' => "",
             ],
             [
                 'pluginId' => 103,

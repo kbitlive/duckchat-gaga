@@ -138,9 +138,6 @@
 
 
             <div class="item-row" id="quick_configuration">
-                <div class="item-header">
-                    <img class="site-manage-image" src="../../public/img/manage/home_config.png"/>
-                </div>
                 <div class="item-body">
                     <div class="item-body-display">
                         <div class="item-body-desc"><?php if ($lang == "1") { ?>
@@ -161,9 +158,6 @@
 
 
             <div class="item-row" id="security_configuration">
-                <div class="item-header">
-                    <img class="site-manage-image" src="../../public/img/manage/home_config.png"/>
-                </div>
                 <div class="item-body">
                     <div class="item-body-display">
                         <div class="item-body-desc"><?php if ($lang == "1") { ?>
@@ -183,9 +177,6 @@
             <div class="division-line"></div>
 
             <div class="item-row">
-                <div class="item-header">
-                    <img class="site-manage-image" src="../../public/img/manage/home_config.png"/>
-                </div>
                 <div class="item-body">
                     <div class="item-body-display passwordErrorNum" onclick="showPasswordErrorNum()">
                         <?php if ($lang == "1") { ?>
