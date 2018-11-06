@@ -52,6 +52,11 @@ class Page_Version_UpgradeController extends Page_VersionController
                 $this->versionName = "1.1.1";
                 $result = $this->upgrade_10100_10101();
                 //最新版本审计完成以后，删除密码存储文件，准备下次更新新密码
+            } elseif ($currentVersionCode == 10101) {
+                $this->versionCode = 10102;
+                $this->versionName = "1.1.2";
+                $result = $this->upgrade_10101_10102();
+                //最新版本审计完成以后，删除密码存储文件，准备下次更新新密码
                 $this->deleteUpgradeFile();
             }
 
@@ -579,6 +584,26 @@ class Page_Version_UpgradeController extends Page_VersionController
             $this->executeSqliteScript();
             $this->upgradeErrCode = "success";
             return true;
+        }
+    }
+
+    private function upgrade_10101_10102()
+    {
+        $tag = __CLASS__.'->'.__FUNCTION__;
+        try {
+            $data = [
+                'management' => "",
+            ];
+            $where = [
+                "pluginId" => 102,
+            ];
+            $this->ctx->SitePluginTable->updateProfile($data, $where);
+            $this->upgradeErrCode = "success";
+            return true;
+        } catch (Exception $ex) {
+            $this->logger->error($tag, "update 102 :" . $ex);
+            $this->upgradeErrCode = "error";
+            throw new Exception(var_export($ex->getMessage(), true));
         }
     }
 }

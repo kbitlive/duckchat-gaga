@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?php if ($lang == "1") { ?>页面配置<?php } else { ?>Page Config<?php } ?></title>
+    <title><?php if ($lang == "1") { ?>高级<?php } else { ?>Advanced<?php } ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <style>
@@ -131,13 +131,13 @@
 
         <div class="list-item-center">
 
-            <div class="item-row" id="custom_login">
+            <div class="item-row" id="check_phpinfo">
                 <div class="item-body">
                     <div class="item-body-display">
                         <div class="item-body-desc"><?php if ($lang == "1") { ?>
-                                登录页
+                                查看PHPINFO
                             <?php } else { ?>
-                               Login Page
+                                Check PHPINFO
                             <?php } ?>
                         </div>
 
@@ -149,48 +149,23 @@
                 </div>
             </div>
             <div class="division-line"></div>
-
-            <div class="item-row" id="custom_register">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <div class="item-body-desc"><?php if ($lang == "1") { ?>
-                                注册页
-                            <?php } else { ?>
-                                Register Page
-                            <?php } ?>
-                        </div>
-
-                        <div class="item-body-tail">
-                            <img class="more-img" src="../../public/img/manage/more.png"/>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-        </div>
 
     </div>
 
-
-    <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="../../public/manage/native.js"></script>
-
-    <script type="text/javascript">
-
-        $("#custom_login").on("click", function () {
-            var url = "index.php?action=manage.custom.login&page=phpinfo&lang=" + getLanguage();
-            zalyjsCommonOpenNewPage(url);
-        });
+</div>
 
 
-        $("#custom_register").on("click", function () {
-            var url = "index.php?action=manage.custom.register&page=phpinfo&lang=" + getLanguage();
-            zalyjsCommonOpenNewPage(url);
-        });
+<script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../public/manage/native.js"></script>
 
-    </script>
+<script type="text/javascript">
+
+$("#check_phpinfo").on("click", function () {
+    var url = "index.php?action=manage.advanced&page=phpinfo&lang=" + getLanguage();
+    zalyjsCommonOpenNewPage(url);
+});
+
+</script>
 
 </body>
 </html>

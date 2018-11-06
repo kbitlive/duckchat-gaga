@@ -6,7 +6,7 @@
  * Time: 6:55 PM
  */
 
-class Manage_Custom_PageController extends Manage_CommonController
+class Manage_Custom_LoginController extends Manage_CommonController
 {
 
     /**
@@ -41,7 +41,7 @@ class Manage_Custom_PageController extends Manage_CommonController
             $params['loginBackgroundImageDisplay'] = 0;
         }
         
-        echo $this->display("manage_custom_index", $params);
+        echo $this->display("manage_custom_login", $params);
 
         return;
     }
