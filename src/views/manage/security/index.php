@@ -25,8 +25,6 @@
 
         .wrapper {
             width: 100%;
-            display: flex;
-            align-items: stretch;
         }
 
         .layout-all-row {
@@ -130,13 +128,9 @@
 
 
 <div class="wrapper" id="wrapper">
-
-    <div class="layout-all-row">
+    <div class="layout-all-row" style="margin-top:10px;">
 
         <div class="list-item-center">
-
-
-
             <div class="item-row" id="quick_configuration">
                 <div class="item-body">
                     <div class="item-body-display">
@@ -151,12 +145,13 @@
                             <img class="more-img" src="../../public/img/manage/more.png"/>
                         </div>
                     </div>
-
                 </div>
             </div>
             <div class="division-line"></div>
-
-
+        </div>
+    </div>
+    <div class="layout-all-row">
+        <div class="list-item-center">
             <div class="item-row" id="security_configuration">
                 <div class="item-body">
                     <div class="item-body-display">
@@ -175,7 +170,11 @@
                 </div>
             </div>
             <div class="division-line"></div>
+        </div>
+    </div>
+    <div class="layout-all-row">
 
+        <div class="list-item-center">
             <div class="item-row">
                 <div class="item-body">
                     <div class="item-body-display passwordErrorNum" onclick="showPasswordErrorNum()">
@@ -196,9 +195,8 @@
                 </div>
             </div>
             <div class="division-line"></div>
-
         </div>
-
+    </div>
     </div>
 
     <div class="wrapper-mask" id="wrapper-mask" style="visibility: hidden;"></div>

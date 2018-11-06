@@ -47,6 +47,11 @@ class Manage_SecurityController  extends Manage_CommonController
 
     private function toPageQuickConfig($params)
     {
+        $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
+
+        $pwdContainCharacterTypeConfig = $loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTER_TYPE];
+        $pwdContainCharacterType = isset($pwdContainCharacterTypeConfig['configValue']) ? $pwdContainCharacterTypeConfig['configValue'] : "pwd_default" ;
+        $params['pwdContainCharacterType'] = $pwdContainCharacterType;
         echo $this->display("manage_security_quick", $params);
     }
 

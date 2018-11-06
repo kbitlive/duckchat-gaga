@@ -2826,7 +2826,8 @@ $(document).mouseup(function(e){
     if(targetId != "selfAvatarUploadDiv" && targetId != "selfNickname" && targetId != "logout" && targetId != "logout-span"
         && targetId != "self-qrcode" && targetId != "user-image-upload" && targetId != "user-img-carmera"
         &&targetClassName != "nickNameDiv" && targetId !="selfQrcodeDiv" && targetId !="selfQrcodeCanvas" && targetId != "selfQrcode"
-        && targetClassName != "self-qrcode" && targetId != "clear_all_chat" && targetClassName != "clear_all_chat") {
+        && targetClassName != "self-qrcode" && targetId != "clear_all_chat" && targetClassName != "clear_all_chat"
+    && targetId != "newMsgSound" && targetClassName != "sound_mute") {
         $("#selfInfo").remove();
     }
 });
@@ -3137,11 +3138,11 @@ $(".selfInfo").mouseover(function(){
 
 });
 uploadSelfAvatar = false;
-$(document).on("mouseleave","#selfInfo", function () {
-    if( uploadSelfAvatar == false) {
-        removeWindow($("#selfInfo"));
-    }
-});
+// $(document).on("mouseleave","#selfInfo", function () {
+//     if( uploadSelfAvatar == false) {
+//         removeWindow($("#selfInfo"));
+//     }
+// });
 
 
 $(document).on("click", "#self-qrcode", function () {

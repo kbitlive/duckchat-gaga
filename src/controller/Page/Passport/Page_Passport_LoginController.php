@@ -46,18 +46,38 @@ class Page_Passport_LoginController extends HttpBaseController
 
         $siteVersionName = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionNameKey);
 
+        $loginNameMinLengthConfig = isset($loginConfig[LoginConfig::LOGINNAME_MINLENGTH]) ? $loginConfig[LoginConfig::LOGINNAME_MINLENGTH] : "";
+        $loginNameMinLength = isset($loginNameMinLengthConfig["configValue"]) ? $loginNameMinLengthConfig["configValue"] : "";
+
+        $loginNameMaxLengthConfig = isset($loginConfig[LoginConfig::LOGINNAME_MAXLENGTH]) ? $loginConfig[LoginConfig::LOGINNAME_MAXLENGTH] : "";
+        $loginNameMaxLength = isset($loginNameMaxLengthConfig["configValue"]) ? $loginNameMaxLengthConfig["configValue"] : "";
+
+        $pwdMaxLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MAXLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MAXLENGTH] : "";
+        $pwdMaxLength = isset($pwdMaxLengthConfig["configValue"]) ? $pwdMaxLengthConfig["configValue"] : "";
+
+        $pwdMinLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MINLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MINLENGTH] : "";
+        $pwdMinLength = isset($pwdMinLengthConfig["configValue"]) ? $pwdMinLengthConfig["configValue"] : "";
+
+        $pwdContainCharactersConfig = isset($loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS]) ? $loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS] : "";
+        $pwdContainCharacters = isset($pwdContainCharactersConfig["configValue"]) ? $pwdContainCharactersConfig["configValue"] : "";
+
         $params = [
-            'siteName' => $siteName,
-            'siteLogo' => $this->ctx->File_Manager->getCustomPathByFileId($siteLogo),
-            'siteVersionName' => $siteVersionName,
-            'isDuckchat' => $isDuckchat,
-            'loginNameAlias' => $loginNameAlias,
-            'passwordFindWay' => $passwordRestWay,
-            'passwordResetWay' => $passwordRestWay,
+            'siteName'          => $siteName,
+            'siteLogo'          => $this->ctx->File_Manager->getCustomPathByFileId($siteLogo),
+            'siteVersionName'   => $siteVersionName,
+            'isDuckchat'        => $isDuckchat,
+            'loginNameAlias'    => $loginNameAlias,
+            'passwordFindWay'   => $passwordRestWay,
+            'passwordResetWay'  => $passwordRestWay,
+            "pwdMaxLength"      => $pwdMaxLength,
+            "pwdMinLength"      => $pwdMinLength,
+            "loginNameMinLength"    => $loginNameMinLength,
+            "loginNameMaxLength"    => $loginNameMaxLength,
             'passwordResetRequired' => $passwordResetRequired,
-            'loginWelcomeText' => $loginWelcomeText,
-            'loginBackgroundColor' => $loginBackgroundColor,
-            'loginBackgroundImage' => $this->ctx->File_Manager->getCustomPathByFileId($loginBackgroundImage),
+            'loginWelcomeText'      => $loginWelcomeText,
+            "pwdContainCharaters"   => $pwdContainCharacters,
+            'loginBackgroundColor'  => $loginBackgroundColor,
+            'loginBackgroundImage'  => $this->ctx->File_Manager->getCustomPathByFileId($loginBackgroundImage),
             'loginBackgroundImageDisplay' => $loginBackgroundImageDisplay,
         ];
 

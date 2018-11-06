@@ -269,7 +269,7 @@
 
             <div class="item-row" id="site-security">
                 <div class="item-header">
-                    <img class="site-manage-image" src="../../public/img/manage/home_page.png"/>
+                    <img class="site-manage-image" src="../../public/img/manage/security.png"/>
                 </div>
                 <div class="item-body">
                     <div class="item-body-display">
@@ -290,7 +290,7 @@
 
             <div class="item-row" id="site-advanced">
                 <div class="item-header">
-                    <img class="site-manage-image" src="../../public/img/manage/home_page.png"/>
+                    <img class="site-manage-image" src="../../public/img/manage/advanced.png"/>
                 </div>
                 <div class="item-body">
                     <div class="item-body-display">

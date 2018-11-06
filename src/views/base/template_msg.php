@@ -454,10 +454,16 @@
                 <span class="logout-span" id="logout-span" data-local-value="logoutTip" onclick="logout(event)">退出</span>
             </div>
         </div>
+        <div class="d-flex flex-row justify-content-center">
+            <div class="self_profile_item self-qrcode" id="newMsgSound" style="position: relative">
+                <span class="logout-span" id="logout-span" data-local-value="newMsgSoundTip" onclick="">消息通知声音</span>
+                <img src="../../public/img/msg/icon_switch_off.png" class="sound_mute" is_on="off"  >
+            </div>
+        </div>
     </div>
     <div id="selfQrcodeDiv" class="selfQrcodeDiv"  style="position: absolute;display: none;">
         <div id="selfQrcodeCanvas">
-            kkkkkkkk
+
         </div>
     </div>
 </div>

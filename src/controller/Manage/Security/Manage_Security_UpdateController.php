@@ -20,8 +20,35 @@ class Manage_Security_UpdateController extends Manage_CommonController
         ];
 
         try {
-
             $key = $_POST['key'];
+            $pwdType = isset($_POST['pwd_type']) ? $_POST['pwd_type']: "pwd_default";
+            if($pwdType) {
+                $pwdMinLength = 6;
+                $pwdMaxLength = 32;
+                $pwdErrorNum = 5;
+                $pwdContainCharaters = "letter,number";
+                switch ($pwdType) {
+                    case "pwd_convenience":
+                        $pwdContainCharaters = "";
+                        $pwdErrorNum = 10;
+                        break;
+                    case "pwd_security":
+                        $pwdContainCharaters = "letter,number,special_characters";
+                        $pwdErrorNum = 3;
+                        break;
+                }
+                $resPwdMin = $this->ctx->Site_Custom->updateLoginConfig(LoginConfig::PASSWORD_MINLENGTH, $pwdMinLength, "", $this->userId);
+                $resPwdMax = $this->ctx->Site_Custom->updateLoginConfig(LoginConfig::PASSWORD_MAXLENGTH, $pwdMaxLength, "", $this->userId);
+                $resPwdErrorNum = $this->ctx->Site_Custom->updateLoginConfig(LoginConfig::PASSWORD_ERROR_NUM, $pwdErrorNum, "", $this->userId);
+                $resPwdContainCharaters = $this->ctx->Site_Custom->updateLoginConfig(LoginConfig::PASSWORD_CONTAIN_CHARACTERS, $pwdContainCharaters, "", $this->userId);
+                $resPwdContainCharatersType = $this->ctx->Site_Custom->updateLoginConfig(LoginConfig::PASSWORD_CONTAIN_CHARACTER_TYPE, $pwdType, "", $this->userId);
+
+                if($resPwdMin && $resPwdMax && $resPwdErrorNum && $resPwdContainCharaters && $resPwdContainCharatersType) {
+                    $result["errCode"] = "success";
+                }
+                echo json_encode($result);
+                return;
+            }
             $value = "";
             switch ($key) {
                 case LoginConfig::LOGINNAME_MINLENGTH:
@@ -54,7 +81,7 @@ class Manage_Security_UpdateController extends Manage_CommonController
             }
 
         } catch (Throwable $e) {
-            $this->logger->error("manage.miniprogram.delete", $e);
+            $this->logger->error("manage.security.update", $e);
             $result["errInfo"] = $e->getMessage();
         }
 

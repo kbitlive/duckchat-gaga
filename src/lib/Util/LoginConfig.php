@@ -35,4 +35,6 @@ class LoginConfig
 
     const LOGINNAME_MAXLENGTH = 'loginNameMaxLength';//用户名最大长度
 
+    const PASSWORD_CONTAIN_CHARACTER_TYPE = "passwodContainCharactersType";//密码快速配置 pwd_default, pwd_convinence, pwd_security
+
 }
