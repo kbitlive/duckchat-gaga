@@ -114,13 +114,7 @@
 
    function displayPasswordTip()
    {
-       var pwdTip = pwdContainCharacters+"; "+pwdMinLength+"-"+pwdMaxLength;
-
-       if(pwdContainCharacters.indexOf("special_characters") != -1) {
-           pwdTip = pwdContainCharacters+"(@&*$(){}!.~:,<>);"+pwdMinLength+"-"+pwdMaxLength;
-       } else {
-           pwdTip = "length between "+pwdMinLength+" and "+pwdMaxLength;
-       }
+       var pwdTip = pwdContainCharacters+"; length"+pwdMinLength+"-"+pwdMaxLength;
        $(".passwordTips").html(pwdTip);
    }
 

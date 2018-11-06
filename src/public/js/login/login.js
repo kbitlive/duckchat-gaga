@@ -854,14 +854,8 @@ function clearLoginName()
 function registerForPassportPassword()
 {
     setDocumentTitle("register");
-    var pwdTip = pwdContainCharacters+"; "+pwdMinLength+"-"+pwdMaxLength;
-    var loginNameTip = "length between "+loginNameMinLength+" and "+loginNameMaxLength;
-
-    if(pwdContainCharacters.indexOf("special_characters") != -1) {
-         pwdTip = pwdContainCharacters+"(@&*$(){}!.~:,<>);"+pwdMinLength+"-"+pwdMaxLength;
-    } else {
-        pwdTip = "length between "+pwdMinLength+" and "+pwdMaxLength;
-    }
+    var pwdTip = pwdContainCharacters+"; length"+pwdMinLength+"-"+pwdMaxLength;
+    var loginNameTip = "length  "+loginNameMinLength+"-"+loginNameMaxLength;
 
     var html = template("tpl-register-div", {
         enableInvitationCode : enableInvitationCode,
