@@ -30,38 +30,55 @@ class Api_Passport_PasswordRegController extends BaseController
             $nickname  = $request->getNickname();
             $sitePubkPem = $request->getSitePubkPem();
             $invitationCode = $request->getInvitationCode();
+            $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
+
+
+            $loginNameMinLengthConfig = isset($loginConfig[LoginConfig::LOGINNAME_MINLENGTH]) ? $loginConfig[LoginConfig::LOGINNAME_MINLENGTH] : "";
+            $loginNameMinLength = isset($loginNameMinLengthConfig["configValue"]) ? $loginNameMinLengthConfig["configValue"] : 1;
+
+            $loginNameMaxLengthConfig = isset($loginConfig[LoginConfig::LOGINNAME_MAXLENGTH]) ? $loginConfig[LoginConfig::LOGINNAME_MAXLENGTH] : "";
+            $loginNameMaxLength = isset($loginNameMaxLengthConfig["configValue"]) ? $loginNameMaxLengthConfig["configValue"] : 24;
+
+            $pwdMaxLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MAXLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MAXLENGTH] : "";
+            $pwdMaxLength = isset($pwdMaxLengthConfig["configValue"]) ? $pwdMaxLengthConfig["configValue"] : 32;
+
+            $pwdMinLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MINLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MINLENGTH] : "";
+            $pwdMinLength = isset($pwdMinLengthConfig["configValue"]) ? $pwdMinLengthConfig["configValue"] : 6;
+
+            $pwdContainCharactersConfig = isset($loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS]) ? $loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS] : "";
+            $pwdContainCharacters = isset($pwdContainCharactersConfig["configValue"]) ? $pwdContainCharactersConfig["configValue"] : "";
 
             $loginName = trim($loginName);
-            if(!$loginName || mb_strlen($loginName)>24 ) {
+            if(!$loginName || mb_strlen($loginName)>$loginNameMaxLength || mb_strlen($loginName) < $loginNameMinLength ) {
                 $errorCode = $this->zalyError->errorLoginNameLength;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("loginName  is  not exists");
+                throw new Exception($errorInfo);
             }
 
-            if(!$password) {
+            if(!$password || (strlen($password) > $pwdMaxLength) || (strlen($password) < $pwdMinLength)) {
                 $errorCode = $this->zalyError->errorPassowrdLength;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("password  is  not exists");
+                throw new Exception($errorInfo);
             }
 
+            $flag = ZalyHelper::isPassword($password, $pwdContainCharacters);
+            if(!$flag) {
+                $errorInfo = ZalyText::getText("text.pwd.type", $this->language);
+                throw new Exception($errorInfo);
+            }
             $nickname = trim($nickname);
-            if(!$nickname || mb_strlen($nickname) > 16) {
+            if(!$nickname) {
                 $errorCode = $this->zalyError->errorNicknameLength;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("nickname  is  not exists");
+                throw new Exception($errorInfo);
             }
 
             if(!$sitePubkPem || strlen($sitePubkPem) < 0) {
                 $errorCode = $this->zalyError->errorSitePubkPem;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("sitePubkPem  is  not exists");
+                throw new Exception($errorInfo);
             }
 
-            $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
             $passwordResetRequiredConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED]) ? $loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED] : "";
             $passwordResetRequired = isset($passwordResetRequiredConfig["configValue"]) ? $passwordResetRequiredConfig["configValue"] : "";
             $passwordResetWayConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_WAY]) ? $loginConfig[LoginConfig::PASSWORD_RESET_WAY] : "";
@@ -93,8 +110,7 @@ class Api_Passport_PasswordRegController extends BaseController
         if($user){
             $errorCode = $this->zalyError->errorExistLoginName;
             $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            $this->setRpcError($errorCode, $errorInfo);
-            throw new Exception("loginName is exists");
+            throw new Exception($errorInfo);
         }
     }
 

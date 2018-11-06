@@ -503,6 +503,7 @@ function isPassword(pwdContainCharaters, password) {
     if(pwdContainCharaters == "" || !pwdContainCharaters) {
         return true;
     }
+
     var flag = true;
 
     if(pwdContainCharaters.indexOf("letter") != -1) {
@@ -854,8 +855,11 @@ function registerForPassportPassword()
     setDocumentTitle("register");
     var pwdTip = pwdContainCharacters+"; "+pwdMinLength+"-"+pwdMaxLength;
     var loginNameTip = "length between "+loginNameMinLength+" and "+loginNameMaxLength;
+
     if(pwdContainCharacters.indexOf("special_characters") != -1) {
-        var pwdTip = pwdContainCharacters+"(@&*$(){}!.~:,<>);"+pwdMinLength+"-"+pwdMaxLength;
+         pwdTip = pwdContainCharacters+"(@&*$(){}!.~:,<>);"+pwdMinLength+"-"+pwdMaxLength;
+    } else {
+        pwdTip = "length between "+pwdMinLength+" and "+pwdMaxLength;
     }
 
     var html = template("tpl-register-div", {

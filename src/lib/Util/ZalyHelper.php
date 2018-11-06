@@ -167,6 +167,25 @@ class ZalyHelper
         return preg_match("/^1[3456789]{1}\d{9}$/", $phoneNumber);
     }
 
+    public static function isPassword($pwd, $pwdType)
+    {
+        if($pwdType == "") {
+            return true;
+        }
+        $flag = true;
+
+        if(strpos($pwdType, "letter") !== false) {
+            $flag = preg_match("/[a-zA-Z]/", $pwd, $matches);
+        }
+        if(strpos($pwdType, "number") !== false) {
+            $flag = preg_match("/\d/", $pwd, $matches);
+        }
+        if(strpos($pwdType, "special_characters") !== false) {
+            $flag = preg_match("/[@&*$\(\){}!\.~:,\<\>]/", $pwd, $matches);
+        }
+        return $flag;
+    }
+
     public static function getFullReqUrl($reqUrl)
     {
         try {
