@@ -503,28 +503,29 @@ function isPassword(pwdContainCharaters, password) {
     if(pwdContainCharaters == "" || !pwdContainCharaters) {
         return true;
     }
+    return true;
 
-    var flag = true;
-
+    var flagLetter = true;
+    var flagNumber = true;
+    var flagSpecialCharacters = true;
     if(pwdContainCharaters.indexOf("letter") != -1) {
         var reg = /[a-zA-Z]/g;
-        flag = reg.test(password);
-        console.log("contain letter ====="+flag);
+        flagLetter = reg.test(password);
     }
 
     if(pwdContainCharaters.indexOf("number") != -1) {
         var reg = /\d/g;
-        flag = reg.test(password);
-        console.log("contain num ====="+flag)
+        flagNumber = reg.test(password);
     }
 
     if(pwdContainCharaters.indexOf("special_characters") != -1) {
         var reg = /[@&*$\(\){}!\.~:,\<\>]/g;
-        flag = reg.test(password);
-        console.log("contain special_characters ====="+flag)
+        flagSpecialCharacters = reg.test(password);
     }
-
-    return flag;
+    if(flagLetter && flagNumber && flagSpecialCharacters) {
+        return  true;
+    }
+    return false;
 }
 
 function loginNameExist()

@@ -172,18 +172,23 @@ class ZalyHelper
         if($pwdType == "") {
             return true;
         }
-        $flag = true;
+        $flagLetter = true;
+        $flagNum = true;
+        $flagSpecialCharacters = true;
 
         if(strpos($pwdType, "letter") !== false) {
-            $flag = preg_match("/[a-zA-Z]/", $pwd, $matches);
+            $flagLetter = preg_match("/[a-zA-Z]/", $pwd, $matches);
         }
         if(strpos($pwdType, "number") !== false) {
-            $flag = preg_match("/\d/", $pwd, $matches);
+            $flagNum = preg_match("/\d/", $pwd, $matches);
         }
         if(strpos($pwdType, "special_characters") !== false) {
-            $flag = preg_match("/[@&*$\(\){}!\.~:,\<\>]/", $pwd, $matches);
+            $flagSpecialCharacters = preg_match("/[@&*$\(\){}!\.~:,\<\>]/", $pwd, $matches);
         }
-        return $flag;
+        if($flagLetter && $flagNum && $flagSpecialCharacters) {
+            return true;
+        }
+        return false;
     }
 
     public static function getFullReqUrl($reqUrl)

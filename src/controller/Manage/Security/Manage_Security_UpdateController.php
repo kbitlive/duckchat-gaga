@@ -23,7 +23,7 @@ class Manage_Security_UpdateController extends Manage_CommonController
         ];
 
         try {
-            $key = $_POST['key'];
+            $key = isset($_POST['key']) ? $_POST['key'] : "";
             $pwdType = isset($_POST['pwd_type']) ? $_POST['pwd_type']: "";
             if($pwdType) {
                 $pwdMinLength = 6;

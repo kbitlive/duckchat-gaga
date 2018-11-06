@@ -6,7 +6,7 @@
  * Time: 2:46 PM
  */
 
-class Api_Passport_PasswordRegController extends BaseController
+class Api_Passport_PasswordRegController  extends Api_Passport_PasswordBase
 {
     private $classNameForRequest = '\Zaly\Proto\Site\ApiPassportPasswordRegRequest';
     private $classNameForResponse = '\Zaly\Proto\Site\ApiPassportPasswordRegResponse';
@@ -30,38 +30,23 @@ class Api_Passport_PasswordRegController extends BaseController
             $nickname  = $request->getNickname();
             $sitePubkPem = $request->getSitePubkPem();
             $invitationCode = $request->getInvitationCode();
-            $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
 
-
-            $loginNameMinLengthConfig = isset($loginConfig[LoginConfig::LOGINNAME_MINLENGTH]) ? $loginConfig[LoginConfig::LOGINNAME_MINLENGTH] : "";
-            $loginNameMinLength = isset($loginNameMinLengthConfig["configValue"]) ? $loginNameMinLengthConfig["configValue"] : 1;
-
-            $loginNameMaxLengthConfig = isset($loginConfig[LoginConfig::LOGINNAME_MAXLENGTH]) ? $loginConfig[LoginConfig::LOGINNAME_MAXLENGTH] : "";
-            $loginNameMaxLength = isset($loginNameMaxLengthConfig["configValue"]) ? $loginNameMaxLengthConfig["configValue"] : 24;
-
-            $pwdMaxLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MAXLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MAXLENGTH] : "";
-            $pwdMaxLength = isset($pwdMaxLengthConfig["configValue"]) ? $pwdMaxLengthConfig["configValue"] : 32;
-
-            $pwdMinLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MINLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MINLENGTH] : "";
-            $pwdMinLength = isset($pwdMinLengthConfig["configValue"]) ? $pwdMinLengthConfig["configValue"] : 6;
-
-            $pwdContainCharactersConfig = isset($loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS]) ? $loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS] : "";
-            $pwdContainCharacters = isset($pwdContainCharactersConfig["configValue"]) ? $pwdContainCharactersConfig["configValue"] : "";
+            $this->getCustomLoginConfig();
 
             $loginName = trim($loginName);
-            if(!$loginName || mb_strlen($loginName)>$loginNameMaxLength || mb_strlen($loginName) < $loginNameMinLength ) {
+            if(!$loginName || mb_strlen($loginName)>$this->loginNameMaxLength || mb_strlen($loginName) < $this->loginNameMinLength ) {
                 $errorCode = $this->zalyError->errorLoginNameLength;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
                 throw new Exception($errorInfo);
             }
 
-            if(!$password || (strlen($password) > $pwdMaxLength) || (strlen($password) < $pwdMinLength)) {
+            if(!$password || (strlen($password) > $this->pwdMaxLength) || (strlen($password) < $this->pwdMinLength)) {
                 $errorCode = $this->zalyError->errorPassowrdLength;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
                 throw new Exception($errorInfo);
             }
 
-            $flag = ZalyHelper::isPassword($password, $pwdContainCharacters);
+            $flag = ZalyHelper::isPassword($password, $this->pwdContainCharacters);
             if(!$flag) {
                 $errorInfo = ZalyText::getText("text.pwd.type", $this->language);
                 throw new Exception($errorInfo);
@@ -79,14 +64,10 @@ class Api_Passport_PasswordRegController extends BaseController
                 throw new Exception($errorInfo);
             }
 
-            $passwordResetRequiredConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED]) ? $loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED] : "";
-            $passwordResetRequired = isset($passwordResetRequiredConfig["configValue"]) ? $passwordResetRequiredConfig["configValue"] : "";
-            $passwordResetWayConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_WAY]) ? $loginConfig[LoginConfig::PASSWORD_RESET_WAY] : "";
-            $passwordRestWay = isset($passwordResetWayConfig["configValue"]) ? $passwordResetWayConfig["configValue"] : "email ";
 
-            if($passwordResetRequired == 1 && mb_strlen(trim($email))<1) {
+            if($this->passwordResetRequired == 1 && mb_strlen(trim($email))<1) {
                 $tip = ZalyText::getText("text.param.void", $this->language);
-                $errorInfo = $passwordRestWay." " .$tip;
+                $errorInfo = $this->passwordRestWay." " .$tip;
                 $this->setRpcError("error.alert", $errorInfo);
                 throw new Exception("$errorInfo  is  not exists");
             }
