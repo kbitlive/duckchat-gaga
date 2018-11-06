@@ -124,6 +124,9 @@
             margin-left: 10px;
         }
 
+        .header_tip_font {
+            font-size: 18px;
+        }
     </style>
 </head>
 

@@ -11,8 +11,8 @@ class Manage_Security_UpdateController extends Manage_CommonController
     private $pwdMinLength = 6;
     private $pwdMaxLength = 32;
 
-    private $loginNameMinLength = 6;
-    private $loginNameMaxLength = 32;
+    private $loginNameMinLength = 1;
+    private $loginNameMaxLength = 24;
 
     public function doRequest()
     {
@@ -38,6 +38,7 @@ class Manage_Security_UpdateController extends Manage_CommonController
                     case "pwd_security":
                         $pwdContainCharaters = "letter,number,special_characters";
                         $pwdErrorNum = 3;
+                        $pwdMinLength = 8;
                         break;
                 }
                 $resPwdMin = $this->ctx->Site_Custom->updateLoginConfig(LoginConfig::PASSWORD_MINLENGTH, $pwdMinLength, "", $this->userId);
