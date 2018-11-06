@@ -308,4 +308,9 @@ abstract class MiniProgramController extends \Wpf_Controller
         fastcgi_finish_request();
     }
 
+    protected function getLanguageText($zhText, $enText)
+    {
+        return $this->language == Zaly\Proto\Core\UserClientLangType::UserClientLangZH ? $zhText : $enText;
+    }
+
 }

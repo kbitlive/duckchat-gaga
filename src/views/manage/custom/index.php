@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?php if ($lang == "1") { ?>站点设置<?php } else { ?>Site Config<?php } ?></title>
+    <title><?php if ($lang == "1") { ?>页面设置<?php } else { ?>Page Config<?php } ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="stylesheet" href="../../public/jquery/weui.min.css"/>
@@ -43,7 +43,7 @@
             background-repeat: repeat;
         }
 
-        .item-row,.create_button {
+        .item-row, .create_button {
             cursor: pointer;
             outline: none;
         }
@@ -133,7 +133,8 @@
             </div>
 
             <div class="login-background-image-<?php echo $loginBackgroundImageDisplay ?> image-bg"
-                 style="background-image: url('/_api_file_download_/?fileId=<?php echo $loginBackgroundImage ?>');" bgImgId="<?php echo $loginBackgroundImage ?>">
+                 style="background-image: url('/_api_file_download_/?fileId=<?php echo $loginBackgroundImage ?>');"
+                 bgImgId="<?php echo $loginBackgroundImage ?>">
                 <input id="upload-background-image" type="file" onchange="uploadImageFile(this)"
                        accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
                        style="display: none;">
@@ -194,11 +195,13 @@
 
         <div class="" style="text-align:center;">
             <?php if ($lang == "1") { ?>
-                <button id="updatePopupButton" type="button" class="create_button" style="cursor: pointer;outline: none"key-value=""
+                <button id="updatePopupButton" type="button" class="create_button" style="cursor: pointer;outline: none"
+                        key-value=""
                         onclick="updateDataValue();">确认
                 </button>
             <?php } else { ?>
-                <button id="updatePopupButton" type="button" class="create_button"  style="cursor: pointer;outline: none" key-value=""
+                <button id="updatePopupButton" type="button" class="create_button" style="cursor: pointer;outline: none"
+                        key-value=""
                         onclick="updateDataValue();">Confirm
                 </button>
             <?php } ?>
@@ -245,10 +248,10 @@
     }
 
     $(".image-bg").each(function () {
-        if(!isMobile()) {
+        if (!isMobile()) {
             var imgId = $(this).attr("bgImgId");
-            var src =  "./index.php?action=http.file.downloadFile&fileId="+ imgId+"&returnBase64=0";
-            $(".image-bg")[0].style.backgroundImage = " url('"+src+"')";
+            var src = "./index.php?action=http.file.downloadFile&fileId=" + imgId + "&returnBase64=0";
+            $(".image-bg")[0].style.backgroundImage = " url('" + src + "')";
         }
     });
 

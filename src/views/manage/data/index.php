@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <title>Site Manage</title>
 
+    <!--    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel=stylesheet href="../../../public/css/manage_base.css"/>
     <!--    <link rel="stylesheet" href="../../public/css/hint.min.css">-->
     <script src="../../../public/js/jquery.min.js"></script>
     <script src="../../../public/js/template-web.js"></script>
 
-    <!--    -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 </head>
 
 <body>
@@ -109,21 +109,21 @@
             <div class="division-line"></div>
 
             <div class="item-row">
-<!--                <div class="item-row-inner">-->
-                    <div class="item-header">
-                        <img class="site-manage-image" src="../../../public/img/manage/data_report.png"/>
-                    </div>
-                    <div class="item-body">
-                        <div class="item-body-display">
-                            <div class="item-body-desc">数据报表</div>
+                <!--                <div class="item-row-inner">-->
+                <div class="item-header">
+                    <img class="site-manage-image" src="../../../public/img/manage/data_report.png"/>
+                </div>
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <div class="item-body-desc">数据报表</div>
 
-                            <div class="item-body-tail">
-                                <img class="more-img" src="../../../public/img/manage/more@3x.png"/>
-                            </div>
+                        <div class="item-body-tail">
+                            <img class="more-img" src="../../../public/img/manage/more@3x.png"/>
                         </div>
-
                     </div>
-<!--                </div>-->
+
+                </div>
+                <!--                </div>-->
             </div>
             <div class="division-line"></div>
         </div>
