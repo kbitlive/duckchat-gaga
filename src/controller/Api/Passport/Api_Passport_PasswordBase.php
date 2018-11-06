@@ -8,8 +8,15 @@
 
 class Api_Passport_PasswordBase extends BaseController
 {
-    private $classNameForRequest;
-    private $maxErrorNum = 5;
+    private  $classNameForRequest;
+    protected  $maxErrorNum = 5;
+    protected  $loginNameMinLength=1;
+    protected  $loginNameMaxLength=24;
+    protected  $pwdMinLength=6;
+    protected  $pwdMaxLength=32;
+    protected  $pwdContainCharacters = "letter,number";
+    protected  $passwordResetRequired = "";
+    protected  $passwordRestWay = "email ";
 
     public function rpcRequestClassName()
     {
@@ -35,6 +42,35 @@ class Api_Passport_PasswordBase extends BaseController
             $this->setRpcError("error.alert", $errorInfo);
             throw new Exception("loginName password is not match");
         }
+    }
+
+    protected function getCustomLoginConfig()
+    {
+        $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
+
+        $loginNameMinLengthConfig = isset($loginConfig[LoginConfig::LOGINNAME_MINLENGTH]) ? $loginConfig[LoginConfig::LOGINNAME_MINLENGTH] : "";
+        $this->loginNameMinLength = isset($loginNameMinLengthConfig["configValue"]) ? $loginNameMinLengthConfig["configValue"] : $this->loginNameMinLength;
+
+        $loginNameMaxLengthConfig = isset($loginConfig[LoginConfig::LOGINNAME_MAXLENGTH]) ? $loginConfig[LoginConfig::LOGINNAME_MAXLENGTH] : "";
+        $this->loginNameMaxLength = isset($loginNameMaxLengthConfig["configValue"]) ? $loginNameMaxLengthConfig["configValue"] : $this->loginNameMaxLength;
+
+        $pwdMinLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MINLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MINLENGTH] : "";
+        $this->pwdMinLength = isset($pwdMinLengthConfig["configValue"]) ? $pwdMinLengthConfig["configValue"] : $this->pwdMinLength;
+
+
+        $pwdMaxLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MAXLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MAXLENGTH] : "";
+        $this->pwdMaxLength = isset($pwdMaxLengthConfig["configValue"]) ? $pwdMaxLengthConfig["configValue"] : $this->pwdMaxLength;
+
+
+        $pwdContainCharactersConfig = isset($loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS]) ? $loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS] : "";
+        $this->pwdContainCharacters = isset($pwdContainCharactersConfig["configValue"]) ? $pwdContainCharactersConfig["configValue"] : "";
+
+
+        $passwordResetRequiredConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED]) ? $loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED] : "";
+        $this->passwordResetRequired = isset($passwordResetRequiredConfig["configValue"]) ? $passwordResetRequiredConfig["configValue"] : "";
+
+        $passwordResetWayConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_WAY]) ? $loginConfig[LoginConfig::PASSWORD_RESET_WAY] : "";
+        $this->passwordRestWay = isset($passwordResetWayConfig["configValue"]) ? $passwordResetWayConfig["configValue"] : $this->passwordRestWay;
     }
 
     public function  insertPassportPasswordLog($user, $type)

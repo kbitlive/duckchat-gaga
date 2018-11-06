@@ -389,6 +389,11 @@ $(document).on("click", ".register_code_button", function () {
     $(".zaly_site_register-invitecode")[0].style.display = "block";
 });
 
+var pwdContainCharacters = $(".pwdContainCharacters").val();
+var loginNameMaxLength = $(".loginNameMaxLength").val();
+var loginNameMinLength = $(".loginNameMinLength").val();
+var pwdMaxLength = $(".pwdMaxLength").val();
+var pwdMinLength = $(".pwdMinLength").val();
 
 function checkRegisterInfo()
 {
@@ -401,7 +406,7 @@ function checkRegisterInfo()
 
     registerLoginName = trimString(registerLoginName);
     if(registerLoginName == "" || registerLoginName == undefined
-        || registerLoginName.length<0 || registerLoginName.length>24
+        || registerLoginName.length<loginNameMinLength || registerLoginName.length>loginNameMaxLength
         || checkIsEntities(registerLoginName)
     ) {
         $("#register_input_loginName").focus();
@@ -411,8 +416,8 @@ function checkRegisterInfo()
     registerPassword = trimString(registerPassword);
 
     if(registerPassword == "" || registerPassword == undefined
-        || registerPassword.length<5 || registerPassword.length>20
-        || !isPassword(registerPassword)
+        || registerPassword.length<pwdMinLength || registerPassword.length>pwdMaxLength
+        || !isPassword(pwdContainCharacters, registerPassword)
 
     ) {
         $(".register_input_pwd_failed")[0].style.display = "block";
@@ -494,9 +499,33 @@ function isLoginName(loginName)
  * 数字 字母下划线
  * @param password
  */
-function isPassword(password) {
-    var reg = /^[^\u4e00-\u9fa5]+$/;
-    return reg.test(password);
+function isPassword(pwdContainCharaters, password) {
+    if(pwdContainCharaters == "" || !pwdContainCharaters) {
+        return true;
+    }
+    return true;
+
+    var flagLetter = true;
+    var flagNumber = true;
+    var flagSpecialCharacters = true;
+    if(pwdContainCharaters.indexOf("letter") != -1) {
+        var reg = /[a-zA-Z]/g;
+        flagLetter = reg.test(password);
+    }
+
+    if(pwdContainCharaters.indexOf("number") != -1) {
+        var reg = /\d/g;
+        flagNumber = reg.test(password);
+    }
+
+    if(pwdContainCharaters.indexOf("special_characters") != -1) {
+        var reg = /[@&*$\(\){}!\.~:,\<\>]/g;
+        flagSpecialCharacters = reg.test(password);
+    }
+    if(flagLetter && flagNumber && flagSpecialCharacters) {
+        return  true;
+    }
+    return false;
 }
 
 function loginNameExist()
@@ -612,14 +641,6 @@ function handlePassportPasswordUpdateInvationCode(results)
     cancelLoadingBySelf();
     zalyjsLoginSuccess(loginName, preSessionId, isRegister, failedCallBack);
 }
-
-//验证邮箱
-function validateEmail(email)
-{
-    var re = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
-    return re.test(email);
-}
-
 
 $(document).on("click", ".login_button", function () {
     loginPassport();
@@ -829,13 +850,25 @@ function clearLoginName()
     $(".clearLoginName")[0].style.display = "none";
 }
 
+
 function registerForPassportPassword()
 {
     setDocumentTitle("register");
+    var pwdTip = pwdContainCharacters+"; "+pwdMinLength+"-"+pwdMaxLength;
+    var loginNameTip = "length between "+loginNameMinLength+" and "+loginNameMaxLength;
+
+    if(pwdContainCharacters.indexOf("special_characters") != -1) {
+         pwdTip = pwdContainCharacters+"(@&*$(){}!.~:,<>);"+pwdMinLength+"-"+pwdMaxLength;
+    } else {
+        pwdTip = "length between "+pwdMinLength+" and "+pwdMaxLength;
+    }
+
     var html = template("tpl-register-div", {
         enableInvitationCode : enableInvitationCode,
         loginNameAlias:loginNameAlias,
-        passwordFindWay:passwordFindWay
+        passwordFindWay:passwordFindWay,
+        pwdTip:pwdTip,
+        loginNameTip:loginNameTip
     });
     html = handleHtmlLanguage(html);
     $(".zaly_site_register-name").html(html);

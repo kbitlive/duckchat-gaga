@@ -837,7 +837,7 @@ html, body{
 
 #selfInfo {
     width:38.37rem;
-    height:20rem;
+    height:30rem;
     background:rgba(255,255,255,1);
     box-shadow:0rem 0.19rem 1.41rem 0.09rem rgba(153,153,153,1);
     border-radius:0.56rem;
@@ -1964,4 +1964,15 @@ button:active{
 
 .plugin_logo {
     border-radius: 50%;
+}
+
+.sound_mute {
+    width: 5rem;
+    height:3rem;
+    position: absolute;
+    right:3rem;
+    top:1rem;
+    bottom:1rem;
+    margin:auto;
+
 }

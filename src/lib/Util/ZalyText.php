@@ -23,8 +23,9 @@ class ZalyText
         'text.pwd.exceedNum' => ["Failed, exceed the daily password error limit", "操作失败，超过每日密码错误上限"],
         'text.loginName.MaxLengthLessThanMinLength' => ["The maximum length cannot be less than the minimum length", "用户名最大长度不能小于最小长度"],
         'text.pwd.MaxLengthLessThanMinLength' => ["The maximum length cannot be less than the minimum length", "密码最大长度不能小于最小长度"],
-        'text.pwd.minLength' => ["The maximum length is 6", "密码最小长度为6"],
-        'text.pwd.maxLength' => ["The maximum length is 32", "密码最大长度为32"],
+        'text.pwd.minLength' => ["The min mum length is 6", "密码最小长度为6"],
+        'text.pwd.maxLength' => ["The max num  length is 32", "密码最大长度为32"],
+        'text.pwd.type' => ["Password does not meet requirements", "密码不符合要求"],
 
     ];
 
