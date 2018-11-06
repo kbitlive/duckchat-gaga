@@ -167,7 +167,7 @@
         var date = new Date(dateTime);
         $.modal({
             title: lang == 1 ? '清理消息' : 'Clean Message',
-            text: lang == 1 ? '确定删除？' : 'Confirm Clean Message?',
+            text: lang == 1 ? '操作无法撤销，确认删除？' : 'Cannot be undo, Confirm?',
             buttons: [
                 {
                     text: lang == 1 ? "取消" : "cancel", className: "default", onClick: function () {
