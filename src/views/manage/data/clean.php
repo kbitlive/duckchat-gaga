@@ -79,16 +79,14 @@
     }
 
     $("#clean-u2-message").click(function () {
-        alert("二人");
         var url = "index.php?action=manage.data.clean&page=u2Message&lang=" + getLanguage();
-        zalyjsOpenNewPage(url);
+        zalyjsOpenPage(url);
     });
 
 
     $("#clean-group-message").click(function () {
-        alert("群组");
         var url = "index.php?action=manage.data.clean&page=groupMessage&lang=" + getLanguage()
-        zalyjsOpenNewPage(url);
+        zalyjsOpenPage(url);
     });
 
 </script>

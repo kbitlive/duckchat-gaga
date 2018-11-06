@@ -13,10 +13,55 @@
 
         .datetime-row {
             margin: 31pt 10pt 0 10pt;
+            text-align: center;
         }
 
         .datetime-picker {
             width: 100%;
+            height: 40px;
+            background: rgba(255, 255, 255, 1);
+            border-radius: 4px;
+            border: 1px solid;
+            border-color: #DFDFDF;
+        }
+
+        .datetime-label {
+            margin-top: 82px;
+            margin-bottom: 19px;
+            text-align: center;
+        }
+
+        .select-label {
+            font-size: 12px;
+            color: #999999;
+        }
+
+        .datetime-select-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 2px;
+            border: 1px solid;
+            border-color: #979797;
+            background: rgba(245, 245, 245, 1);
+        }
+
+        .item-body-datetime-select {
+            margin: 0 40px 64px 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .clean-button {
+            margin: 0 10px 0 10px;
+            margin-right: 50px;
+            width: 100%;
+            height: 44px;
+            background: rgba(76, 59, 177, 1);
+            border-radius: 4px;
+            font-size: 16px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 1);
         }
 
     </style>
@@ -30,46 +75,38 @@
 
         <div class="list-item-center">
 
-            <div class="item-row datetime-row">
+            <div class="datetime-row">
                 <input class="datetime-picker" id="datetime-test" type="datetime-local"/>
             </div>
 
-            <div class="item-row datetime-row">
-                <input class="datetime-picker" id="datetime-test" type="datetime-local"/>
+            <div class="datetime-label">
+                <label class="select-label">快速选择删除某一个时间之前的所有“二人”、“群组”消息</label>
             </div>
 
-            <div class="item-row datetime-row">
-                <input class="datetime-picker" id="datetime-test" type="datetime-local"/>
-            </div>
+            <div class="item-body-datetime-select">
 
+                <div class="">
+                    <input class="datetime-select-button" type="button" value="一天前"/>
+                </div>
 
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display">
+                <div class="">
+                    <input class="datetime-select-button" type="button" value="一周前"/>
+                </div>
 
-                        <div class="item-body-desc">
-                            <input class="" type="button" value="一天前">
-                        </div>
+                <div class="">
+                    <input class="datetime-select-button" type="button" value="一月前"/>
+                </div>
 
-                        <div class="item-body-desc">
-                            <input class="" type="button" value="一天前">
-                        </div>
-
-                        <div class="item-body-desc">
-                            <input class="" type="button" value="一天前">
-                        </div>
-
-                        <div class="item-body-tail">
-                            <input class="" type="button" value="一天前">
-                        </div>
-                    </div>
-
+                <div class="">
+                    <input class="datetime-select-button" type="button" value="所有的"/>
                 </div>
             </div>
-            <div class="division-line"></div>
+
+            <div class="" style="margin-right: 20px">
+                <button class="clean-button">删除消息</button>
+            </div>
 
         </div>
-
     </div>
 
 </div>
