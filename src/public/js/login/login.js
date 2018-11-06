@@ -854,8 +854,18 @@ function clearLoginName()
 function registerForPassportPassword()
 {
     setDocumentTitle("register");
-    var pwdTip = pwdContainCharacters+"; length"+pwdMinLength+"-"+pwdMaxLength;
-    var loginNameTip = "length  "+loginNameMinLength+"-"+loginNameMaxLength;
+
+    if(languageNum == UserClientLangZH) {
+        var pwdTip = pwdContainCharacters+"; length"+pwdMinLength+"-"+pwdMaxLength;
+        var pwdTip = pwdContainCharacters+"; 长度 "+pwdMinLength+"-"+pwdMaxLength;
+        pwdTip = pwdContainCharacters.replace("letter", "字母");
+        pwdTip = pwdContainCharacters.replace("number", "数字");
+        pwdTip = pwdContainCharacters.replace("special_characters", "特殊字符");
+        var loginNameTip = "长度 "+loginNameMinLength+"-"+loginNameMaxLength;
+    } else {
+        var pwdTip = pwdContainCharacters+"; length"+pwdMinLength+"-"+pwdMaxLength;
+        var loginNameTip = "length "+loginNameMinLength+"-"+loginNameMaxLength;
+    }
 
     var html = template("tpl-register-div", {
         enableInvitationCode : enableInvitationCode,

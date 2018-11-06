@@ -183,7 +183,7 @@ class ZalyHelper
             $flagNum = preg_match("/\d/", $pwd, $matches);
         }
         if(strpos($pwdType, "special_characters") !== false) {
-            $flagSpecialCharacters = preg_match("/[@&*$\(\){}!\.~:,\<\>]/", $pwd, $matches);
+            $flagSpecialCharacters = preg_match("/[\^%#`@&*$\(\){}!\.~:,\<\>_\-\+\=|;:\'\"]/", $pwd, $matches);
         }
         if($flagLetter && $flagNum && $flagSpecialCharacters) {
             return true;
