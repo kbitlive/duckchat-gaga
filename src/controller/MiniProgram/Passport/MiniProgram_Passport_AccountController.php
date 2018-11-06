@@ -12,6 +12,9 @@ class MiniProgram_Passport_AccountController extends MiniProgramController
     private $errorCode = "";
     private $sessionClear  = "duckchat.session.clear";
     private $resetPassword = "api.passport.passwordModifyPassword";
+    protected  $pwdMinLength=6;
+    protected  $pwdMaxLength=32;
+    protected  $pwdContainCharacters = "letter,number";
 
     public function getMiniProgramId()
     {
@@ -54,10 +57,8 @@ class MiniProgram_Passport_AccountController extends MiniProgramController
                 $pwdMinLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MINLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MINLENGTH] : "";
                 $pwdMinLength = isset($pwdMinLengthConfig["configValue"]) ? $pwdMinLengthConfig["configValue"] : $this->pwdMinLength;
 
-
                 $pwdMaxLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MAXLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MAXLENGTH] : "";
                 $pwdMaxLength = isset($pwdMaxLengthConfig["configValue"]) ? $pwdMaxLengthConfig["configValue"] : $this->pwdMaxLength;
-
 
                 $pwdContainCharactersConfig = isset($loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS]) ? $loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS] : "";
                 $pwdContainCharacters = isset($pwdContainCharactersConfig["configValue"]) ? $pwdContainCharactersConfig["configValue"] : "";

@@ -114,7 +114,7 @@
 
    function displayPasswordTip()
    {
-       var pwdTip = pwdContainCharacters+"; length"+pwdMinLength+"-"+pwdMaxLength;
+       var pwdTip = pwdContainCharacters+"; length "+pwdMinLength+"-"+pwdMaxLength;
        $(".passwordTips").html(pwdTip);
    }
 
