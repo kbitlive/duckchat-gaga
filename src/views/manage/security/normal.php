@@ -137,14 +137,14 @@
            <div class="list-item-center">
                <div class="item-row">
                    <div class="item-body">
-                       <div class="item-body-display passwordErrorNum" onclick="showPasswordErrorNum()">
+                       <div class="item-body-display loginNameMinLength" onclick="showLoginNameMinLength()">
                            <?php if ($lang == "1") { ?>
                                <div class="item-body-desc">最小长度</div>
                            <?php } else { ?>
                                <div class="item-body-desc"> Min length</div>
                            <?php } ?>
                            <div class="item-body-tail">
-                               <div class="item-body-value" id="passwordErrorNum"> <?php echo $passwordErrorNum; ?></div>
+                               <div class="item-body-value" id="loginNameMinLength"> <?php echo $loginNameMinLength; ?></div>
                                <div class="item-body-value">
                                    <img class="more-img" src="../../public/img/manage/more.png"/>
                                </div>
@@ -159,14 +159,14 @@
            <div class="list-item-center">
                <div class="item-row">
                    <div class="item-body">
-                       <div class="item-body-display passwordErrorNum" onclick="showPasswordErrorNum()">
+                       <div class="item-body-display loginNameMaxLength" onclick="showLoginNameMaxLength()">
                            <?php if ($lang == "1") { ?>
                                <div class="item-body-desc">最大长度</div>
                            <?php } else { ?>
                                <div class="item-body-desc"> Max length</div>
                            <?php } ?>
                            <div class="item-body-tail">
-                               <div class="item-body-value" id="passwordErrorNum"> <?php echo $passwordErrorNum; ?></div>
+                               <div class="item-body-value" id="loginNameMaxLength"> <?php echo $loginNameMaxLength; ?></div>
                                <div class="item-body-value">
                                    <img class="more-img" src="../../public/img/manage/more.png"/>
                                </div>
@@ -187,14 +187,14 @@
             <div class="list-item-center">
                 <div class="item-row">
                     <div class="item-body">
-                        <div class="item-body-display passwordErrorNum" onclick="showPasswordErrorNum()">
+                        <div class="item-body-display passwordMinLength" onclick="showPwdMinLength()">
                             <?php if ($lang == "1") { ?>
                                 <div class="item-body-desc">最小长度 (不能小于6)</div>
                             <?php } else { ?>
                                 <div class="item-body-desc"> Min length (Cannot be less than 6)</div>
                             <?php } ?>
                             <div class="item-body-tail">
-                                <div class="item-body-value" id="passwordErrorNum"> <?php echo $passwordErrorNum; ?></div>
+                                <div class="item-body-value" id="passwordMinLength"> <?php echo $passwordMinLength; ?></div>
                                 <div class="item-body-value">
                                     <img class="more-img" src="../../public/img/manage/more.png"/>
                                 </div>
@@ -209,21 +209,19 @@
             <div class="list-item-center">
                 <div class="item-row">
                     <div class="item-body">
-                        <div class="item-body-display passwordErrorNum" onclick="showPasswordErrorNum()">
+                        <div class="item-body-display passwordMaxLength" onclick="showPwdMaxLength()">
                             <?php if ($lang == "1") { ?>
                                 <div class="item-body-desc">最大长度 (不能大于32)</div>
                             <?php } else { ?>
                                 <div class="item-body-desc"> Max length (Cannot be greater than 32)</div>
                             <?php } ?>
                             <div class="item-body-tail">
-                                <div class="item-body-value" id="passwordErrorNum"> <?php echo $passwordErrorNum; ?></div>
+                                <div class="item-body-value" id="passwordMaxLength"> <?php echo $passwordMaxLength; ?></div>
                                 <div class="item-body-value">
                                     <img class="more-img" src="../../public/img/manage/more.png"/>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
                 <div class="division-line"></div>
@@ -239,8 +237,8 @@
                     <div class="item-body">
                         <div class="item-body-display">
                             <div class="item-body-tail">
-                                <?php if($pwdContainCharacterType == "pwd_letter") { ?>
-                                    <img class="check_img pwd_letter_img"  pwd_type="letter" src="../../public/img/manage/select.png"  default="1">
+                                <?php if(strpos($passwordContainCharacters, "letter")!== false ) { ?>
+                                    <img class="check_img pwd_letter_img"  pwd_type="letter" src="../../public/img/manage/selected.png"  default="1">
                                 <?php } else { ?>
                                     <img class="check_img pwd_letter_img"  pwd_type="letter" src="../../public/img/manage/unselect.png" default="0" >
                                 <?php } ?>
@@ -262,8 +260,8 @@
                     <div class="item-body">
                         <div class="item-body-display">
                             <div class="item-body-tail">
-                                <?php if($pwdContainCharacterType == "pwd_number") { ?>
-                                    <img class="check_img pwd_number_img"  pwd_type="number" src="../../public/img/manage/select.png"  default="1">
+                                <?php if(strpos($passwordContainCharacters, "number")!== false ) { ?>
+                                    <img class="check_img pwd_number_img"  pwd_type="number" src="../../public/img/manage/selected.png"  default="1">
                                 <?php } else { ?>
                                     <img class="check_img pwd_number_img"  pwd_type="number" src="../../public/img/manage/unselect.png"  default="0">
                                 <?php } ?>
@@ -284,8 +282,8 @@
                     <div class="item-body">
                         <div class="item-body-display">
                             <div class="item-body-tail">
-                                <?php if($pwdContainCharacterType == "pwd_special_characters") { ?>
-                                    <img class="check_img pwd_special_characters_img"  pwd_type="special_characters" src="../../public/img/manage/select.png" default="1">
+                                <?php if(strpos($passwordContainCharacters, "special_characters")!== false ) { ?>
+                                    <img class="check_img pwd_special_characters_img"  pwd_type="special_characters" src="../../public/img/manage/selected.png" default="1">
                                 <?php } else { ?>
                                     <img class="check_img pwd_special_characters_img"  pwd_type="special_characters" src="../../public/img/manage/unselect.png" default="0">
                                 <?php } ?>
@@ -307,6 +305,37 @@
 
 </div>
 
+<div class="wrapper-mask" id="wrapper-mask" style="visibility: hidden;"></div>
+
+<div class="popup-template" style="display:none;">
+
+    <div class="config-hidden" id="popup-group">
+
+        <div class="flex-container">
+            <div class="header_tip_font popup-group-title"></div>
+        </div>
+
+        <div class="" style="text-align: center">
+            <input type="text" class="popup-group-input" placeholder="please input">
+        </div>
+
+        <div class="line"></div>
+
+        <div class="" style="text-align:center;">
+            <?php if ($lang == "1") { ?>
+                <button id="updatePopupButton" type="button" class="create_button" key-value=""
+                        onclick="updateDataValue();">确认
+                </button>
+            <?php } else { ?>
+                <button id="updatePopupButton" type="button" class="create_button" key-value=""
+                        onclick="updateDataValue();">Confirm
+                </button>
+            <?php } ?>
+        </div>
+
+    </div>
+
+</div>
 
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../public/manage/native.js"></script>
@@ -356,7 +385,8 @@
             pwdContainCharater += $(containCharater).attr("pwd_type") +  "," ;
         }
         var data = {
-            "passwordContainCharacters" : pwdContainCharater
+            "key" : "passwordContainCharacters",
+            "value" : pwdContainCharater
         }
         var url = "index.php?action=manage.security.update";
 
@@ -366,11 +396,109 @@
     function updateResponse(url, data, result) {
         var res = JSON.parse(result);
         if ("success" == res.errCode) {
-            // window.location.reload();
+            window.location.reload();
         } else {
             alert("error : " + res.errInfo);
         }
     }
+
+    function showPwdMinLength(){
+        var title = $(".passwordMinLength").find(".item-body-desc").html();
+        var inputBody = $("#passwordMinLength").html();
+
+        showWindow($(".config-hidden"));
+
+        $(".popup-group-title").html(title);
+        $(".popup-group-input").val(inputBody);
+        $("#updatePopupButton").attr("key-value", "passwordMinLength");
+    }
+
+    function showPwdMaxLength(){
+        var title = $(".passwordMaxLength").find(".item-body-desc").html();
+        var inputBody = $("#passwordMaxLength").html();
+
+        showWindow($(".config-hidden"));
+
+        $(".popup-group-title").html(title);
+        $(".popup-group-input").val(inputBody);
+        $("#updatePopupButton").attr("key-value", "passwordMaxLength");
+    }
+
+    function showLoginNameMaxLength(){
+        var title = $(".loginNameMaxLength").find(".item-body-desc").html();
+        var inputBody = $("#loginNameMaxLength").html();
+
+        showWindow($(".config-hidden"));
+
+        $(".popup-group-title").html(title);
+        $(".popup-group-input").val(inputBody);
+        $("#updatePopupButton").attr("key-value", "loginNameMaxLength");
+    }
+
+    function showLoginNameMinLength(){
+        var title = $(".loginNameMinLength").find(".item-body-desc").html();
+        var inputBody = $("#loginNameMinLength").html();
+
+        showWindow($(".config-hidden"));
+
+        $(".popup-group-title").html(title);
+        $(".popup-group-input").val(inputBody);
+        $("#updatePopupButton").attr("key-value", "loginNameMinLength");
+    }
+
+    function showWindow(jqElement) {
+        jqElement.css("visibility", "visible");
+        $(".wrapper-mask").css("visibility", "visible").append(jqElement);
+    }
+
+
+    function removeWindow(jqElement) {
+        jqElement.remove();
+        $(".popup-template").append(jqElement);
+        $(".wrapper-mask").css("visibility", "hidden");
+    }
+
+
+    $(".wrapper-mask").mouseup(function (e) {
+        var targetId = e.target.id;
+        var targetClassName = e.target.className;
+
+        if (targetId == "wrapper-mask") {
+            var wrapperMask = document.getElementById("wrapper-mask");
+            var length = wrapperMask.children.length;
+            var i;
+            for (i = 0; i < length; i++) {
+                var node = wrapperMask.children[i];
+                node.remove();
+                // addTemplate(node);
+                $(".popup-template").append(node);
+                $(".popup-template").hide();
+            }
+            $(".popup-group-input").val("");
+            $("#updatePopupButton").attr("data", "");
+            wrapperMask.style.visibility = "hidden";
+        }
+    });
+
+    function updateDataValue() {
+
+        var key = $("#updatePopupButton").attr("key-value");
+
+        var url = "index.php?action=manage.security.update";
+
+        var value = $.trim($(".popup-group-input").val());
+
+        var data = {
+            'key': key,
+            'value': value,
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, updateResponse);
+
+        // close
+        removeWindow($(".config-hidden"));
+    }
+
 
 </script>
 
