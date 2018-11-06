@@ -24,8 +24,8 @@ class Page_Passport_LoginController extends HttpBaseController
         $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
 
         $loginNameAliasConfig = isset($loginConfig[LoginConfig::LOGIN_NAME_ALIAS]) ? $loginConfig[LoginConfig::LOGIN_NAME_ALIAS] : "";
-        $loginNameAlias = isset( $loginNameAliasConfig["configValue"]) ?  $loginNameAliasConfig["configValue"] : "";
-        $passwordResetWayConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_WAY]) ?  $loginConfig[LoginConfig::PASSWORD_RESET_WAY] : "";
+        $loginNameAlias = isset($loginNameAliasConfig["configValue"]) ? $loginNameAliasConfig["configValue"] : "";
+        $passwordResetWayConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_WAY]) ? $loginConfig[LoginConfig::PASSWORD_RESET_WAY] : "";
         $passwordRestWay = isset($passwordResetWayConfig["configValue"]) ? $passwordResetWayConfig["configValue"] : "";
 
         $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
@@ -51,14 +51,38 @@ class Page_Passport_LoginController extends HttpBaseController
             'siteLogo' => $this->ctx->File_Manager->getCustomPathByFileId($siteLogo),
             'siteVersionName' => $siteVersionName,
             'isDuckchat' => $isDuckchat,
-            'loginNameAlias' => $loginNameAlias,
-            'passwordFindWay' => $passwordRestWay,
-            'passwordResetWay' => $passwordRestWay,
-            'passwordResetRequired' => $passwordResetRequired,
             'loginWelcomeText' => $loginWelcomeText,
             'loginBackgroundColor' => $loginBackgroundColor,
             'loginBackgroundImage' => $this->ctx->File_Manager->getCustomPathByFileId($loginBackgroundImage),
             'loginBackgroundImageDisplay' => $loginBackgroundImageDisplay,
+
+            'loginNameAlias' => $loginNameAlias,
+            'passwordFindWay' => $passwordRestWay,
+            'passwordResetWay' => $passwordRestWay,
+            'passwordResetRequired' => $passwordResetRequired,
+            'customLoginItems' => [
+                //自定义的登陆项
+                [
+                    'email' => "邮箱",
+                    'icon' => "",
+                    'placeholder' => "",
+                    'isRequired' => $passwordResetRequired,
+                ],
+
+                [
+                    'phone' => "手机号",
+                    'icon' => "",
+                    'placeholder' => "",
+                    'isRequired' => $passwordResetRequired,
+                ],
+
+                [
+                    'name' => "姓名",
+                    'icon' => "",
+                    'placeholder' => "",
+                    'isRequired' => $passwordResetRequired,
+                ],
+            ],
         ];
 
         echo $this->display("passport_login", $params);
