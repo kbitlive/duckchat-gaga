@@ -3532,7 +3532,6 @@ function displayRightPage(displayType)
                 $(".friend-apply-dialog")[0].style.display = "none";
                 break;
             case DISPLAY_CHAT:
-
                 $(".friend-apply-dialog")[0].style.display = "none";
                 $(".plugin-list-dialog")[0].style.display = "none";
                 var chatSessionId  = localStorage.getItem(chatSessionIdKey);
