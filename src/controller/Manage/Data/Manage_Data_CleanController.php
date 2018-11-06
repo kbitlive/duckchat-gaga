@@ -24,12 +24,11 @@ class Manage_Data_CleanController extends Manage_ServletController
 
         if ($page == "u2Message") {
             $params['title'] = $this->getLanguageText("清理二人聊天消息", "Clean U2 Message");
-            $params['type'] = "u2";
-            error_log("==========".var_export($params,true));
+            $params['type'] = "u2Message";
             echo $this->display("manage_data_cleanMessage", $params);
         } elseif ($page == "groupMessage") {
             $params['title'] = $this->getLanguageText("清理群组聊天消息", "Clean Group Message");
-            $params['type'] = "group";
+            $params['type'] = "groupMessage";
             echo $this->display("manage_data_cleanMessage", $params);
         }
 
@@ -39,26 +38,26 @@ class Manage_Data_CleanController extends Manage_ServletController
     protected function doPost()
     {
 
-        $type = strtolower($_POST["type"]);
-        $dateTime = $_POST["dateTime"];
+        $type = $_POST["type"];
+        $beforeTime = $_POST["beforeTime"];
 
         $result = [
             "errCode" => "error",
         ];
 
-        if (empty($dateTime)) {
+        if (empty($beforeTime)) {
             $result["errInfo"] = $this->getLanguageText("待删除日期错误", "date time error");
             echo json_encode($result);
             return;
         }
 
         $res = false;
-        if ($type == "u2") {
+        if ($type == "u2Message") {
             //删除二人消息
-            $res = $this->deleteU2Message();
-        } elseif ($type == "group") {
+            $res = $this->deleteU2Message($beforeTime);
+        } elseif ($type == "groupMessage") {
             //删除群组消息
-            $res = $this->deleteGroupMessage();
+            $res = $this->deleteGroupMessage($beforeTime);
         }
 
         if ($res) {
@@ -83,9 +82,8 @@ class Manage_Data_CleanController extends Manage_ServletController
     private function deleteGroupMessage($msgTime)
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
-
         try {
-            return $this->ctx->SiteGroupMessageTable->deleteGroupMessage($msgTime);
+            return $this->ctx->SiteGroupMessageTable->deleteMessageByTime($msgTime);
         } catch (Exception $e) {
             $this->logger->error($tag, $e);
         }
