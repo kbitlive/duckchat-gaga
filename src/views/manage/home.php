@@ -407,11 +407,6 @@
         zalyjsOpenPage(url);
     });
 
-    $("#site-custom-page").click(function () {
-        var url = "index.php?action=manage.custom.page&lang=" + getLanguage();
-        zalyjsOpenPage(url);
-    });
-
     $("#site-clean-data").click(function () {
         var url = "index.php?action=manage.data.clean&lang=" + getLanguage();
         zalyjsOpenPage(url);
@@ -421,6 +416,22 @@
         var url = "index.php?action=manage.data.report";
         zalyjsOpenPage(url);
     });
+
+    $("#site-custom-page").click(function () {
+        var url = "index.php?action=manage.custom&lang=" + getLanguage();
+        zalyjsOpenPage(url);
+    });
+
+    $("#site-advanced").click(function () {
+        var url = "index.php?action=manage.advanced&lang=" + getLanguage();
+        zalyjsOpenPage(url);
+    });
+
+    $("#site-security").on("click", function () {
+        var url = "index.php?action=manage.security&lang=" + getLanguage();
+        zalyjsOpenPage(url);
+    });
+
 
 
     function showPluginAdmin(url) {
