@@ -15,6 +15,7 @@ class Manage_Security_QuickController extends Manage_CommonController
         $pwdContainCharacterTypeConfig = $loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTER_TYPE];
         $pwdContainCharacterType = isset($pwdContainCharacterTypeConfig['configValue']) ? $pwdContainCharacterTypeConfig['configValue'] : "pwd_default" ;
         $params['pwdContainCharacterType'] = $pwdContainCharacterType;
+        $params['lang'] = $this->language;
         echo $this->display("manage_security_quick", $params);
     }
 }

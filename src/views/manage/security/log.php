@@ -196,7 +196,7 @@
                         </div>
 
                         <div class="item-body-tail">
-                            <span onclick="truncateLogs()"><?php if ($lang == "1") { ?>删除所有记录} <?php } else { ?> Delete logs <?php } ?></span>
+                            <span onclick="truncateLogs()"><?php if ($lang == "1") { ?>删除所有记录 <?php } else { ?> Delete logs <?php } ?></span>
                         </div>
                     </div>
                 </div>

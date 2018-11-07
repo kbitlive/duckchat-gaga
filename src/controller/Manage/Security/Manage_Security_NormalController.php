@@ -33,6 +33,8 @@ class Manage_Security_NormalController extends Manage_CommonController
         $pwdContainCharacters = isset($pwdContainCharactersConfig['configValue']) ? $pwdContainCharactersConfig['configValue'] : "" ;
         $params['passwordContainCharacters'] = $pwdContainCharacters;
 
+        $params['lang'] = $this->language;
+
         echo $this->display("manage_security_normal", $params);
     }
 }
