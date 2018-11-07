@@ -419,7 +419,7 @@
                 dbName: dbName,
                 dbType: dbType,
                 adminLoginName:adminName,
-                adminPwd:adminPwd,
+                adminPassword:adminPwd,
             };
             testConnectMysql(data);
             return;
@@ -441,7 +441,7 @@
             dbType: dbType,
             sqliteDbFile: sqliteFileName,
             adminLoginName:adminName,
-            adminPwd:adminPwd,
+            adminPassword:adminPwd,
         };
         initSite(data);
     });
