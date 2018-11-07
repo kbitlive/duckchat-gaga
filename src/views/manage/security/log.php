@@ -166,12 +166,21 @@
             width:25%;
             justify-content: center;
         }
+        .item-body-tail span {
+            width:84px;
+            height:16px;
+            font-size:14px;
+            font-family:PingFangSC-Regular;
+            font-weight:400;
+            color:rgba(76,59,177,1);
+            line-height:16px;
+            cursor: pointer;
+        }
 
     </style>
 </head>
 
 <body>
-
 
 <div class="wrapper" id="wrapper">
     <div class="layout-all-row count-row" style="margin-top:10px;">
@@ -180,35 +189,42 @@
                 <div class="item-body">
                     <div class="item-body-display">
                         <div class="item-body-desc"><?php if ($lang == "1") { ?>
-                                总记录数
+                                总记录数 (<?php echo $count;?>)
                             <?php } else { ?>
-                                Total
-                            <?php } ?>
+                                Total (<?php echo $count;?>)
+                            <?php }?>
                         </div>
 
                         <div class="item-body-tail">
-                           <?php echo $count;?>
+                            <span onclick="truncateLogs()"><?php if ($lang == "1") { ?>删除所有记录} <?php } else { ?> Delete logs <?php } ?></span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="division-line"></div>
         </div>
     </div>
 
     <div class="layout-all-row error-log-div" style="margin-top:10px;">
         <div class="table">
             <div class="row" style="border-top: 1px solid #999999;">
-                <div class="row-head cell">账号</div>
-                <div class="row-head cell">操作</div>
+                <div class="row-head cell"><?php if ($lang == "1") { ?>账号 <?php } else { ?>Account <?php }?></div>
+                <div class="row-head cell"><?php if ($lang == "1") { ?>操作 <?php } else { ?> Operation     <?php }?></div>
                 <div class="row-head cell">IP</div>
-                <div class="data cell">时间</div>
+                <div class="data cell"><?php if ($lang == "1") { ?>时间 <?php } else { ?> Date <?php }?></div>
             </div>
 
             <?php foreach ($logs as $log) {?>
                 <div class="row log_id" log-id="<?php echo $log['id'];?>">
                     <div class="row-head cell"><?php echo $log['loginName']; ?></div>
-                    <div class="row-head cell"><?php if($log['operation'] == 1) {echo "登录";} else {echo "修改密码"; } ?></div>
+                    <div class="row-head cell">
+                        <?php if($log['operation'] == 1) {?>
+
+                            <?php if ($lang == "1") { ?>登录 <?php } else { ?>Login <?php }?>
+                        <?php } else { ?>
+                             <?php if ($lang == "1") { ?>修改密码 <?php } else { ?>Modify Password <?php }?>
+
+                        <? } ?>
+                    </div>
                     <div class="row-head cell"><?php echo $log['ip']; ?></div>
                     <div class="data cell"><?php echo date('Y-m-d H:i', $log['operateTime']/ 1000); ?></div>
                 </div>
@@ -225,6 +241,7 @@
 
 <script type="text/javascript">
 
+    var lang = getLanguage();
     var wrapperDivHeight = $(".wrapper")[0].clientHeight;
     var countRowHeight = $(".count-row")[0].clientHeight;
     $(".error-log-div")[0].style.height = Number(wrapperDivHeight-countRowHeight-20)+"px";
@@ -254,7 +271,7 @@
         var data = {
             "pwd_type" : pwdType
         }
-        var url = "index.php?action=manage.security.update";
+        var url = "index.php?action=manage.security.update&lang="+lang;
 
         zalyjsCommonAjaxPostJson(url, data, updateResponse);
     });
@@ -293,10 +310,28 @@
             'page': ++currentPageNum,
         };
 
-        var url = "index.php?action=manage.security.log&for=result";
+        var url = "index.php?action=manage.security.log&lang="+lang;
         zalyjsCommonAjaxPostJson(url, data, loadMoreResponse)
     }
+    function truncateLogResponse(url, results)
+    {
+        var results = JSON.parse(results);
+        if(results['errCode'] == true) {
+            window.location.reload();
+            return;
+        }
+        var tip = "failed";
+        if(lang == 1) {
+            tip = "删除失败";
+        }
+        alert(tip);
+    }
 
+    function truncateLogs()
+    {
+        var url = "index.php?action=manage.security.log&for=truncate&lang="+lang;
+        zalyjsCommonAjaxGet(url, truncateLogResponse)
+    }
 
     function getDateByTime(time)
     {
@@ -325,9 +360,17 @@
                 $.each(data, function (index, log) {
                     var html = '<div class="row log_id" log-id="'+log.id+'"> <div class="row-head cell">'+log.loginName+'</div> <div class="row-head cell">'
                     if(log.operation == 1) {
-                        html += "登录";
+                        if(lang == 1) {
+                            html += "登录";
+                        } else {
+                            html += "Login ";
+                        }
                     } else {
-                        html += "修改密码";
+                        if(lang == 1) {
+                            html += "修改密码";
+                        } else {
+                            html += "Modify Password ";
+                        }
                     }
                     html += '</div><div class="row-head cell">'+log.ip+'</div> <div class="data cell">'+getDateByTime(log.operateTime)+'</div> </div>'
                     $(".table").append(html);
