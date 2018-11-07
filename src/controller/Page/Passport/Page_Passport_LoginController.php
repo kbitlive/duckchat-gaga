@@ -11,6 +11,27 @@ class Page_Passport_LoginController extends HttpBaseController
 
     public function index()
     {
+        $tag = __CLASS__.'->'.__FUNCTION__;
+        try{
+            $this->checkUserCookie();
+            if($this->userId) {
+                $jumpPage = $this->getJumpUrlFromParams();
+                $apiPageIndex = ZalyConfig::getApiIndexUrl();
+                if($jumpPage) {
+                    if (strpos($apiPageIndex, "?")) {
+                        $apiPageIndex .= "&".$jumpPage;
+                    } else {
+                        header("Location:" . $apiPageIndex . "?".$jumpPage);
+                        $apiPageIndex .= "?".$jumpPage;
+                    }
+                }
+                header("Location:" . $apiPageIndex);
+                exit();
+            }
+        } catch (Exception $ex) {
+            $this->logger->error($tag, $ex);
+        }
+
         $cookieStr = isset($_SERVER['HTTP_COOKIE']) ? $_SERVER['HTTP_COOKIE'] : "";
         $isDuckchat = 0;
 

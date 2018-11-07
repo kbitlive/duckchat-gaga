@@ -43,7 +43,7 @@
     .apply-friend-reason {
         margin-top: 2rem;
     }
-    .apply-friend {
+    .create_button, .create_button:hover, .create_button:focus, .create_button:active {
         margin-top:2rem;
     }
 

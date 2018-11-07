@@ -34,8 +34,8 @@ abstract class HttpBaseController extends \Wpf_Controller
         'page.version.password',
         'page.version.upgrade',
     ];
-    private $groupType = "g";
-    private $u2Type = "u";
+    private $groupType = "groupMsg";
+    private $u2Type = "u2Msg";
     private $jumpRoomType = "";
     private $jumpRoomId = "";
     private $jumpRelation = "";
@@ -137,15 +137,6 @@ abstract class HttpBaseController extends \Wpf_Controller
                     $this->setCookie($userProfile["sessionId"], $this->siteCookieName);
                 }
             }
-            $x = isset($_GET['x']) ? $_GET['x'] : "";
-            $apiPageIndex = ZalyConfig::getApiIndexUrl();
-            if ($x) {
-                if (strpos($apiPageIndex, "?")) {
-                    $apiPageIndex . "&x=" . $x;
-                } else {
-                    $apiPageIndex . "?x=" . $x;
-                }
-            }
             header("Content-Type: application/javascript; charset=utf-8");
             $successCallBack = $_GET['success_callback'] ? $_GET['success_callback'] : "";
             echo "$successCallBack();";
@@ -165,23 +156,21 @@ abstract class HttpBaseController extends \Wpf_Controller
 
         try {
             $x = isset($_GET['x']) ? $_GET['x'] : "";
-            if (!$x) {
+            $page = isset($_GET['page']) ? $_GET['page'] : "";
+            if (!$page) {
                 return;
             }
-            list($type, $id) = explode("-", $x);
-            if ($id == $this->userId) {
+            if ($x == $this->userId) {
                 return;
             }
-            if ($type == $this->groupType) {
-                $this->jumpRoomType = "MessageRoomGroup";
-                $isInGroupFlag = $this->ctx->SiteGroupTable->getGroupProfile($id, $this->userId);
+            if ($page == $this->groupType) {
+                $isInGroupFlag = $this->ctx->SiteGroupTable->getGroupProfile($x, $this->userId);
                 $this->jumpRelation = $isInGroupFlag != false ? 1 : 0;
-            } elseif ($type == $this->u2Type) {
-                $this->jumpRoomType = "MessageRoomU2";
-                $isFriendFlag = $this->ctx->SiteUserFriendTable->isFollow($this->userId, $id);
-                $this->jumpRelation = $isFriendFlag > 0 ? 1 : 0;
+            } elseif ($page == $this->u2Type) {
+                $this->jumpRelation = 0;
             }
-            $this->jumpRoomId = $id;
+            $this->jumpRoomType = $page;
+            $this->jumpRoomId = $x;
         } catch (Exception $ex) {
             $this->ctx->Wpf_Logger->error($tag, "error msg =" . $ex->getMessage());
         }
@@ -231,14 +220,16 @@ abstract class HttpBaseController extends \Wpf_Controller
 
     public function setLogout()
     {
-        $x = isset($_GET['x']) ? $_GET['x'] : "";
+        $jumpPage = $this->getJumpUrlFromParams();
         setcookie($this->siteCookieName, "", time() - 3600, "/", "", false, true);
-        $apiPageLogin = ZalyConfig::getConfig("apiPageLogin");
-        if ($x) {
+//        $apiPageLogin = ZalyConfig::getConfig("apiPageLogin");
+        $apiPageLogin = "./index.php?action=page.passport.login";
+
+        if ($jumpPage) {
             if (strpos($apiPageLogin, "?")) {
-                header("Location:" . $apiPageLogin . "&x=" . $x);
+                header("Location:" . $apiPageLogin . "&".$jumpPage);
             } else {
-                header("Location:" . $apiPageLogin . "?x=" . $x);
+                header("Location:" . $apiPageLogin . "?".$jumpPage);
             }
         } else {
             if (strpos($apiPageLogin, "?")) {
@@ -248,6 +239,17 @@ abstract class HttpBaseController extends \Wpf_Controller
             }
         }
         exit();
+    }
+
+    public function getJumpUrlFromParams()
+    {
+        $x = isset($_GET['x']) ? $_GET['x'] : "";
+        $page = isset($_GET['page']) ? $_GET['page'] : "";
+        $jumpPage = "";
+        if($page) {
+            $jumpPage = "page=".$page."&x=" . $x;
+        }
+        return $jumpPage;
     }
 
     public function setTransDataHeaders($key, $val)
@@ -284,6 +286,7 @@ abstract class HttpBaseController extends \Wpf_Controller
         $params['jumpRelation'] = $this->jumpRelation;
         $params['versionCode'] = ZalyConfig::getConfig("siteVersionCode");
         $params['siteName'] = $siteName;
+
         return parent::display($viewName, $params);
     }
 

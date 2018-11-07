@@ -84,7 +84,6 @@
 
         }
     });
-
     setFontSize();
     function setFontSize()
     {

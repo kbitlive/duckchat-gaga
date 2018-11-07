@@ -38,13 +38,6 @@
         <div class="register_line" ></div>
 
         <div class="login_name_div" style="margin-top: 1rem;">
-            <image src="../../public/img/login/nickname.png" class="img"/>
-            <input type="text" class="input_login_site register_input_nickname"  autocapitalize="off"  id="register_input_nickname" data-local-placeholder="enterNicknamePlaceholder" placeholder="输入昵称,1-16个字符"  >
-            <img src="../../public/img/msg/msg_failed.png" class="img-failed register_input_nickname_failed">
-        </div>
-        <div class="register_line"></div>
-
-        <div class="login_name_div" style="margin-top: 1rem;">
             <image src="../../public/img/login/find_pwd.png" class="img"/>
 
             {{if enableInvitationCode == 1}}
