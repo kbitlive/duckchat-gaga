@@ -257,14 +257,14 @@ button {
 }
 .initHeader-admin-tip {
     margin-left: 31rem;
-    font-size: 1.01rem;
+    font-size: 1.01rem;sww34
     margin-top: 2rem;
     font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(153,153,153,1);
 }
 
-.initHeader-admin span{
+.initHeader-admin span {
     width:8.25rem;
     font-size:1.31rem;
     font-family:PingFangSC-Regular;
@@ -272,6 +272,17 @@ button {
     color:rgba(27,27,27,1);
     line-height: 2.14rem;
 }
+
+.sql-setting span {
+    width:8.25rem;
+    font-size:1.31rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(27,27,27,1);
+    line-height: 2.14rem;
+    margin-top: 1rem;
+}
+
 
 .initHeader-sql .radioDiv {
     margin-right:4rem;
@@ -305,7 +316,7 @@ button {
 }
 
 .sql-input {
-    width:28.14rem;
+    width:18.76rem;
     height:2.25rem;
     border-radius:0.38rem;
     border:0.09rem solid rgba(229,229,229,1);
@@ -313,6 +324,7 @@ button {
     margin-top: 1rem;
     color:rgba(20,16,48,1);
 }
+
 
 .admin-input {
     width:18.76rem;
@@ -407,6 +419,8 @@ button {
     position:relative;
     width: 100%;
     margin-left: 23rem;
+    justify-content: center;
+    align-items: center;
 }
 
 .failed_img {
@@ -417,7 +431,7 @@ button {
 }
 .admin_failed_img {
     position: absolute;
-    left:28rem;
+    left:29rem;
     display: none;
     top:0.5rem;
 }
