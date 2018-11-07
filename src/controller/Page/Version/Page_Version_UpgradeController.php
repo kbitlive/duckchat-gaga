@@ -598,6 +598,13 @@ class Page_Version_UpgradeController extends Page_VersionController
             ];
             $this->ctx->SitePluginTable->updateProfile($data, $where);
 
+
+            $newConfig = [
+                'apiPagePassportLogin' => "./index.php?action=page.passport.login"
+            ];
+
+            $this->updateSiteConfig($newConfig);
+
             //execute script
             $dbType = $this->ctx->dbType;
             if ($dbType == "mysql") {

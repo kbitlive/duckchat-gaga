@@ -37,7 +37,6 @@ enableInvitationCode=0;
 enableRealName=0;
 sitePubkPem="";
 invitationCode='';
-nickname="";
 allowShareRealname=0;
 siteLogo="";
 siteName="";
@@ -51,8 +50,8 @@ registerPassword=undefined
 var protocol = window.location.protocol;
 var host = window.location.host;
 var pathname = window.location.pathname;
-originDomain = protocol+"//"+host+pathname;
-isRegister=false;
+var originDomain = protocol+"//"+host+pathname;
+var isRegister=false;
 
 var siteName = $(".siteName").val();
 
@@ -139,7 +138,6 @@ function zalyLoginConfig(results) {
 }
 
 
-
 function loginFailed(result)
 {
     hideLoading();
@@ -169,6 +167,9 @@ var siteVersionName = $(".siteVersionName").val();
 var siteLogo =  $(".siteLogo").val();
 var siteName = $(".siteName").val();
 var passwordResetRequired = $(".passwordResetRequired").val();
+var x= $(".jumpRoomId").val();
+var page= $(".jumpRoomType").val();
+var refererUrlKey = "documentReferer";
 
 if(loginWelcomeText) {
     var text = template("tpl-string", {
@@ -177,6 +178,17 @@ if(loginWelcomeText) {
     var text = handleLinkContentText(text);
     $(".company_slogan").html(text);
 }
+
+var redirectUrl = location.href;
+if(page) {
+    if(redirectUrl.indexOf("?")) {
+        redirectUrl +="&page="+page+"&x="+x;
+    }else{
+        redirectUrl +="?page="+page+"&x="+x;
+    }
+}
+
+localStorage.setItem(refererUrlKey, redirectUrl);
 
 
 function isMobile() {
@@ -398,7 +410,6 @@ var pwdMinLength = $(".pwdMinLength").val();
 function checkRegisterInfo()
 {
     registerLoginName = $(".register_input_loginName").val();
-    registernNickname  = $(".register_input_nickname").val();
     registerPassword  = $(".register_input_pwd").val();
     repassword = $(".register_input_repwd").val();
     registerEmail = $(".register_input_email").val();
@@ -439,19 +450,6 @@ function checkRegisterInfo()
         }
     }
 
-    registernNickname = trimString(registernNickname);
-    if(registernNickname == "" || registernNickname == undefined
-        || registernNickname.length<0 || registernNickname.length>16
-        || checkIsEntities(registernNickname)
-    ) {
-        $(".register_input_nickname_failed")[0].style.display = "block";
-        if(isFocus == false) {
-            $(".register_input_repwd_failed")[0].style.display = "none";
-            $("#register_input_nickname").focus();
-            isFocus = true;
-        }
-    }
-
     registerEmail = trimString(registerEmail);
     if(passwordResetRequired == 1
         && (
@@ -461,7 +459,6 @@ function checkRegisterInfo()
         $(".register_input_email_failed")[0].style.display = "block";
         if(isFocus == false) {
             $("#register_input_email").focus();
-            $(".register_input_nickname_failed")[0].style.display = "none";
             isFocus = true;
         }
     }
@@ -469,7 +466,6 @@ function checkRegisterInfo()
     if(isFocus == true) {
         return false;
     }
-    $(".register_input_nickname_failed")[0].style.display = "none";
     $(".register_input_email_failed")[0].style.display = "none";
     $(".register_input_loginName_failed")[0].style.display = "none";
     $(".register_input_pwd_failed")[0].style.display = "none";
@@ -521,7 +517,6 @@ function loginNameNotExist()
         loginName:registerLoginName,
         password:registerPassword,
         email:registerEmail,
-        nickname:registernNickname,
         sitePubkPem:sitePubkPem,
         invitationCode:invitationCode,
     }

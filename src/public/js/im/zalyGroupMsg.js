@@ -98,25 +98,36 @@ jump();
 function jump()
 {
     //群，好友
+    // http://127.0.0.1/index.php?page=u2Msg&x=
+    // http://127.0.0.1/index.php?page=groupMsg&x=
     if(jumpRoomType != "" && jumpRoomId != "") {
-        if(jumpRoomType == GROUP_MSG) {
-            if(jumpRelation == 0) {
-                ///todo add group
-                var userIds = [];
-                userIds.push(token);
-                addMemberToGroup(userIds, jumpRoomId);
-            } else if(jumpRelation == 1) {
+        if(jumpRoomType == JUMP_GroupMsg) {
+            if(jumpRelation == 1) {
                 localStorage.setItem(chatSessionIdKey, jumpRoomId);
-                localStorage.setItem(jumpRoomId, jumpRoomType);
+                localStorage.setItem(jumpRoomId, GROUP_MSG);
                 handleClickRowGroupProfile(jumpRoomId);
             }
-        } else if(jumpRoomType == U2_MSG) {
+        } else if(jumpRoomType == JUMP_U2Msg) {
             localStorage.setItem(chatSessionIdKey, jumpRoomId);
-            localStorage.setItem(jumpRoomId, jumpRoomType);
-            sendFriendProfileReq(jumpRoomId);
-            insertU2Room(undefined, jumpRoomId);
+            localStorage.setItem(jumpRoomId, U2_MSG);
+            sendFriendProfileReq(jumpRoomId, handleGetJumpFriendProfile);
         }
     }
+}
+
+function handleGetJumpFriendProfile(results)
+{
+    handleGetFriendProfile(results);
+
+    if(results == undefined) {
+        return;
+    }
+    var profile = results.profile;
+
+    if(profile != undefined && profile["profile"]) {
+        insertU2Room(undefined, jumpRoomId);
+    }
+
 }
 
 //display unread msg
@@ -2099,18 +2110,31 @@ $(document).on("click", ".contact-row-group-profile", function () {
     handleClickRowGroupProfile(groupId);
 });
 
+
+function handleClickGroupProfile(results)
+{
+    try {
+        var groupProfile = results.profile;
+        if (groupProfile) {
+            insertGroupRoom(groupProfile.id, groupProfile.name);
+            handleMsgRelation($(this), groupProfile.id);
+        }
+    }catch (error) {
+
+    }
+    handleGetGroupProfile(results);
+
+}
+
 function handleClickRowGroupProfile(groupId)
 {
-    sendGroupProfileReq(groupId, handleGetGroupProfile);
+    sendGroupProfileReq(groupId, handleClickGroupProfile);
 
     var groupName = $('.nickname_'+groupId).html();
     groupName = template("tpl-string", {
         string : groupName
     });
     $(".chatsession-title").html(groupName);
-
-    insertGroupRoom(groupId, groupName);
-    handleMsgRelation($(this), groupId);
 }
 
 //---------------------------------------api.group.update-----------------------------------------------
@@ -3245,7 +3269,7 @@ function searchUserByKeyDown(event)
     isSearchUser = true;
     setTimeout(function () {
         isSearchUser = false;
-    }, 2000);
+    }, 5000);
     searchUser();
 }
 
@@ -3274,7 +3298,6 @@ function searchUser() {
 function handleSearchUser(results)
 {
     isSearchUser = false;
-
     if(results.hasOwnProperty("friends")) {
         var friends = results.friends;
         var friendsLength = friends.length;

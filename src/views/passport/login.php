@@ -145,6 +145,8 @@
         </div>
     </div>
 
+<input type="hidden" value="<?php echo $jumpRoomId;?>" class="jumpRoomId">
+<input type="hidden" value="<?php echo $jumpRoomType;?>" class="jumpRoomType">
 
 <?php include(dirname(__DIR__) . '/passport/template_login.php'); ?>
 
@@ -154,6 +156,7 @@
 <script src="../../public/js/im/zalyClient.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/im/zalyBaseWs.js?_version=<?php echo $versionCode?>"></script>
 <script src="../../public/js/login/login.js?_version=<?php echo $versionCode?>"></script>
+
 
 </body>
 </html>
