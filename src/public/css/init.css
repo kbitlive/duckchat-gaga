@@ -424,13 +424,13 @@ button {
 
 .failed_img {
     position: absolute;
-    left:29rem;
+    left:28rem;
     top:1.5rem;
     display: none;
 }
 .admin_failed_img {
     position: absolute;
-    left:29rem;
+    left:28rem;
     display: none;
     top:0.5rem;
 }
