@@ -16,6 +16,11 @@
 </head>
 <body>
 
+
+<input type="hidden" value="<?php echo $passwordContainCharacters;?>" class="passwordContainCharacters">
+<input type="hidden" value="<?php echo $passwordMaxLength;?>" class="pwdMaxLength">
+<input type="hidden" value="<?php echo $passwordMinLength;?>" class="pwdMinLength">
+
 <div class="zaly_container" >
     <div class="zaly_login zaly_site_register zaly_site_register-repwd" >
         <div class="login_input_div" >
@@ -36,18 +41,18 @@
                 <input type="password" class="input_login_site forget_input_oldPwd" autocapitalize="off"  data-local-placeholder="enterOldPasswordPlaceholder"  placeholder="输入旧密码" >
                 <div class="pwd_div" onclick="changeImgByClickOldPwd()"><image src="../../public/img/login/hide_pwd.png" class="oldPwd" img_type="hide"/></div>
                 <img src="../../../public/img/msg/msg_failed.png" class="img-failed forget_input_oldPwd_failed">
-
                 <div class="line"></div>
             </div>
 
             <div class="login_name_div forget_input_pwd_div margin-top2"  >
                 <image src="../../public/img/login/pwd.png" class="img"/>
-                <input type="password" class="input_login_site forget_input_pwd"  autocapitalize="off"  data-local-placeholder="enterPasswordPlaceholder"  placeholder="输入密码,长度5到20个字符" >
+                <input type="password" class="input_login_site forget_input_pwd"  autocapitalize="off"  data-local-placeholder="enterPasswordPlaceholder"  placeholder="输入密码" >
                 <div class="pwd_div" onclick="changeImgByClickPwd()"><image src="../../public/img/login/hide_pwd.png" class="pwd" img_type="hide"/></div>
                 <img src="../../../public/img/msg/msg_failed.png" class="img-failed forget_input_pwd_failed">
-
                 <div class="line"></div>
             </div>
+            <div style="font-size:1.31rem;font-family:PingFangSC-Regular;font-weight:400;color:rgba(153,153,153,1);" class="passwordTips"></div>
+
 
             <div class="login_name_div forget_input_repwd_div margin-top2" >
                 <image src="../../public/img/login/re_pwd.png" class="img"/>
@@ -103,6 +108,25 @@
 
     $(":input").attr("autocapitalize", "off");
 
+    var pwdContainCharacters = $(".passwordContainCharacters").val();
+    var pwdMaxLength = $(".pwdMaxLength").val();
+    var pwdMinLength = $(".pwdMinLength").val();
+
+   function displayPasswordTip()
+   {
+       if(languageNum == UserClientLangZH) {
+           var pwdTip = pwdContainCharacters+"; 长度 "+pwdMinLength+"-"+pwdMaxLength;
+           pwdTip = pwdTip.replace("letter", "字母");
+           pwdTip = pwdTip.replace("number", "数字");
+           pwdTip = pwdTip.replace("special_characters", "特殊字符");
+       } else {
+           var pwdTip = pwdContainCharacters+"; length"+pwdMinLength+"-"+pwdMaxLength;
+       }
+
+       $(".passwordTips").html(pwdTip);
+   }
+
+    displayPasswordTip();
 
     function changeImgByClickPwd() {
         var imgType = $(".pwd").attr("img_type");
@@ -150,34 +174,39 @@
         }
     }
 
-
-    function handleHtmlLanguage(html)
-    {
-        $(html).find("[data-local-placeholder]").each(function () {
-            var placeholderValue = $(this).attr("data-local-placeholder");
-            var placeholder = $(this).attr("placeholder");
-            var newPlaceholder = $.i18n.map[placeholderValue];
-            html = html.replace(placeholder, newPlaceholder);
-        });
-
-        $(html).find("[data-local-value]").each(function () {
-            var changeHtmlValue = $(this).attr("data-local-value");
-            var valueHtml = $(this).html();
-            var newValueHtml = $.i18n.map[changeHtmlValue];
-            // $(this).html(newValueHtml);
-            html = html.replace(valueHtml, newValueHtml);
-        });
-
-        return html;
-    }
     /**
      * 数字 字母下划线
      * @param password
      */
-    function isPassword(password) {
-        var reg = /^[^\u4e00-\u9fa5]+$/;
-        return reg.test(password);
+    function isPassword(pwdContainCharaters, password) {
+        if(pwdContainCharaters == "" || !pwdContainCharaters) {
+            return true;
+        }
+        return true;
+
+        var flagLetter = true;
+        var flagNumber = true;
+        var flagSpecialCharacters = true;
+        if(pwdContainCharaters.indexOf("letter") != -1) {
+            var reg = /[a-zA-Z]/g;
+            flagLetter = reg.test(password);
+        }
+
+        if(pwdContainCharaters.indexOf("number") != -1) {
+            var reg = /\d/g;
+            flagNumber = reg.test(password);
+        }
+
+        if(pwdContainCharaters.indexOf("special_characters") != -1) {
+            var reg = /[\^%#`@&*$\(\){}!\.~:,\<\>_\-\+\=|;:\'\"]/g;
+            flagSpecialCharacters = reg.test(password);
+        }
+        if(flagLetter && flagNumber && flagSpecialCharacters) {
+            return  true;
+        }
+        return false;
     }
+
 
     $(document).on("click", ".reset_pwd_button", function () {
         var isFoucs = false;
@@ -203,7 +232,7 @@
             }
         }
 
-        if(newPassword ==  "" || newPassword.length<5 || newPassword.length>20 || !isPassword(newPassword)) {
+        if(newPassword ==  "" || newPassword.length<pwdMinLength || newPassword.length>pwdMaxLength || !isPassword(pwdContainCharacters, newPassword)) {
             $(".forget_input_pwd_failed")[0].style.display = "block";
             if(isFocus == false) {
                 $(".forget_input_pwd").focus();

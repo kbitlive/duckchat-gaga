@@ -12,6 +12,9 @@ class MiniProgram_Passport_AccountController extends MiniProgramController
     private $errorCode = "";
     private $sessionClear  = "duckchat.session.clear";
     private $resetPassword = "api.passport.passwordModifyPassword";
+    protected  $pwdMinLength=6;
+    protected  $pwdMaxLength=32;
+    protected  $pwdContainCharacters = "letter,number";
 
     public function getMiniProgramId()
     {
@@ -49,8 +52,26 @@ class MiniProgram_Passport_AccountController extends MiniProgramController
                 echo json_encode(["errCode" => "success"]);
                 return;
             } else {
+                $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
+
+                $pwdMinLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MINLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MINLENGTH] : "";
+                $pwdMinLength = isset($pwdMinLengthConfig["configValue"]) ? $pwdMinLengthConfig["configValue"] : $this->pwdMinLength;
+
+                $pwdMaxLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MAXLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MAXLENGTH] : "";
+                $pwdMaxLength = isset($pwdMaxLengthConfig["configValue"]) ? $pwdMaxLengthConfig["configValue"] : $this->pwdMaxLength;
+
+                $pwdContainCharactersConfig = isset($loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS]) ? $loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS] : "";
+                $pwdContainCharacters = isset($pwdContainCharactersConfig["configValue"]) ? $pwdContainCharactersConfig["configValue"] : "";
+
+
                 $this->ctx->Wpf_Logger->error($tag, "duckchat.session.clear userUd == ".$this->userId);
-                echo $this->display("miniProgram_passport_account", ['passporAccountPluginId' => $this->passporAccountPluginId]);
+                echo $this->display("miniProgram_passport_account", [
+                        'passporAccountPluginId' => $this->passporAccountPluginId,
+                        'passwordMinLength' => $pwdMinLength,
+                        'passwordMaxLength' => $pwdMaxLength,
+                        'passwordContainCharacters' => $pwdContainCharacters
+                    ]
+                );
                 return;
             }
         }catch (Exception $ex) {

@@ -9,7 +9,10 @@
 class Manage_Security_UpdateController extends Manage_CommonController
 {
     private $pwdMinLength = 6;
-    private $pwdMaxLength = 6;
+    private $pwdMaxLength = 32;
+
+    private $loginNameMinLength = 1;
+    private $loginNameMaxLength = 24;
 
     public function doRequest()
     {
@@ -20,32 +23,64 @@ class Manage_Security_UpdateController extends Manage_CommonController
         ];
 
         try {
+            $key = isset($_POST['key']) ? $_POST['key'] : "";
+            $pwdType = isset($_POST['pwd_type']) ? $_POST['pwd_type']: "";
+            if($pwdType) {
+                $pwdMinLength = 6;
+                $pwdMaxLength = 32;
+                $pwdErrorNum = 5;
+                $pwdContainCharaters = "letter,number";
+                switch ($pwdType) {
+                    case "pwd_convenience":
+                        $pwdContainCharaters = "";
+                        $pwdErrorNum = 10;
+                        break;
+                    case "pwd_security":
+                        $pwdContainCharaters = "letter,number,special_characters";
+                        $pwdErrorNum = 3;
+                        $pwdMinLength = 8;
+                        break;
+                }
+                $resPwdMin = $this->ctx->Site_Custom->updateLoginConfig(LoginConfig::PASSWORD_MINLENGTH, $pwdMinLength, "", $this->userId);
+                $resPwdMax = $this->ctx->Site_Custom->updateLoginConfig(LoginConfig::PASSWORD_MAXLENGTH, $pwdMaxLength, "", $this->userId);
+                $resPwdErrorNum = $this->ctx->Site_Custom->updateLoginConfig(LoginConfig::PASSWORD_ERROR_NUM, $pwdErrorNum, "", $this->userId);
+                $resPwdContainCharaters = $this->ctx->Site_Custom->updateLoginConfig(LoginConfig::PASSWORD_CONTAIN_CHARACTERS, $pwdContainCharaters, "", $this->userId);
+                $resPwdContainCharatersType = $this->ctx->Site_Custom->updateLoginConfig(LoginConfig::PASSWORD_CONTAIN_CHARACTER_TYPE, $pwdType, "", $this->userId);
 
-            $key = $_POST['key'];
+                if($resPwdMin && $resPwdMax && $resPwdErrorNum && $resPwdContainCharaters && $resPwdContainCharatersType) {
+                    $result["errCode"] = "success";
+                }
+                echo json_encode($result);
+                return;
+            }
             $value = "";
+
             switch ($key) {
                 case LoginConfig::LOGINNAME_MINLENGTH:
-                    $loginNameMinLength = $_POST['login_name_min_length'];
+                    $loginNameMinLength = $_POST['value'];
                     $value = $loginNameMinLength;
-                    $this->checkLoginNameLength();
+                    $this->checkLoginNameLength("min");
                     break;
                 case LoginConfig::LOGINNAME_MAXLENGTH:
-                    $loginNameMaxLength = $_POST['login_name_max_length'];
+                    $loginNameMaxLength = $_POST['value'];
                     $value = $loginNameMaxLength;
-                    $this->checkLoginNameLength();
+                    $this->checkLoginNameLength("max");
                     break;
                 case LoginConfig::PASSWORD_MINLENGTH:
-                    $pwdMinLength = $_POST['pwd_min_length'];
+                    $pwdMinLength = $_POST['value'];
                     $value = $pwdMinLength;
-                    $this->checkPwdLength();
+                    $this->checkPwdLength("min");
                     break;
-                case LoginConfig::LOGINNAME_MAXLENGTH:
-                    $pwdMaxLength = $_POST['pwd_max_length'];
+                case LoginConfig::PASSWORD_MAXLENGTH:
+                    $pwdMaxLength = $_POST['value'];
                     $value = $pwdMaxLength;
-                    $this->checkPwdLength();
+                    $this->checkPwdLength("max");
                     break;
                 case LoginConfig::PASSWORD_ERROR_NUM:
                     $value = (int)$_POST['value'];
+                    break;
+                case LoginConfig::PASSWORD_CONTAIN_CHARACTERS:
+                    $value = trim( $_POST['value'], ",");
                     break;
             }
             $res = $this->ctx->Site_Custom->updateLoginConfig($key, $value, "", $this->userId);
@@ -54,7 +89,7 @@ class Manage_Security_UpdateController extends Manage_CommonController
             }
 
         } catch (Throwable $e) {
-            $this->logger->error("manage.miniprogram.delete", $e);
+            $this->logger->error("manage.security.update", $e);
             $result["errInfo"] = $e->getMessage();
         }
 
@@ -62,28 +97,51 @@ class Manage_Security_UpdateController extends Manage_CommonController
         return;
     }
 
-    private function checkLoginNameLength( )
+    private function checkLoginNameLength($type)
     {
-        $loginNameMinLength = $_POST['login_name_min_length'];
-        $loginNameMaxLength = $_POST['login_name_max_length'];
-        if($loginNameMaxLength<$loginNameMinLength) {
+        $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
+
+        if($type == "min") {
+            $loginNameMinLength = $_POST['value'];
+            $loginNameMaxLengthConfig = $loginConfig[LoginConfig::LOGINNAME_MAXLENGTH];
+            $loginNameMaxLength = isset($loginNameMaxLengthConfig['configValue']) ? $loginNameMaxLengthConfig['configValue'] : "32" ;
+        }else {
+            $loginNameMaxLength = $_POST['value'];
+            $loginNameMinLengthConfig = $loginConfig[LoginConfig::LOGINNAME_MINLENGTH];
+            $loginNameMinLength = isset($loginNameMinLengthConfig['configValue']) ? $loginNameMinLengthConfig['configValue'] : "6" ;
+        }
+//
+//        if($loginNameMinLength < $this->loginNameMinLength) {
+//            $info = ZalyText::getText('text.loginName.minLength', $this->language);
+//            throw new Exception($info);
+//        }
+        if($loginNameMaxLength < $loginNameMinLength) {
             $info = ZalyText::getText('text.loginName.MaxLengthLessThanMinLength', $this->language);
             throw new Exception($info);
         }
     }
 
-    private function checkPwdLength()
+    private function checkPwdLength($type)
     {
-        $pwdMinLength = $_POST['pwd_min_length'];
-        $pwdMaxLength = $_POST['pwd_max_length'];
-        if($pwdMinLength < $this->pwdMinLength) {
-            $info = ZalyText::getText('text.pwd.minLength', $this->language);
-            throw new Exception($info);
-        }
+        $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
+        if($type == "min") {
+            $pwdMinLength = $_POST['value'];
+            $pwdMaxLengthConfig = $loginConfig[LoginConfig::PASSWORD_MAXLENGTH];
+            $pwdMaxLength= isset($pwdMaxLengthConfig['configValue']) ? $pwdMaxLengthConfig['configValue'] : "32" ;
+            if($pwdMinLength < $this->pwdMinLength) {
+                $info = ZalyText::getText('text.pwd.minLength', $this->language);
+                throw new Exception($info);
+            }
 
-        if ($pwdMaxLength > $this->pwdMaxLength) {
-            $info = ZalyText::getText('text.pwd.maxLength', $this->language);
-            throw new Exception($info);
+        }else {
+            $pwdMaxLength = $_POST['value'];
+            $pwdMinLengthConfig = $loginConfig[LoginConfig::PASSWORD_MINLENGTH];
+            $pwdMinLength = isset($pwdMinLengthConfig['configValue']) ? $pwdMinLengthConfig['configValue'] : "6" ;
+
+            if ($pwdMaxLength > $this->pwdMaxLength) {
+                $info = ZalyText::getText('text.pwd.maxLength', $this->language);
+                throw new Exception($info);
+            }
         }
 
         if($pwdMaxLength<$pwdMinLength) {

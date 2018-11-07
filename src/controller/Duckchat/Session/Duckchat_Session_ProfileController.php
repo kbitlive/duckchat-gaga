@@ -52,9 +52,8 @@ class Duckchat_Session_ProfileController extends Duckchat_MiniProgramController
             $sessionInfo = $this->ctx->SiteSessionTable->getSessionInfoBySessionId($sessionId);
 
             if (empty($sessionInfo)) {
-                throw new Exception("check user sesssionId is empty");
+                throw new Exception("check user sesssionId is empty sessionId====".$sessionId.'========duckchat_sessionid======='.$duckchatSessionId);
             }
-
 
             $userId = $sessionInfo['userId'];
             $loginPluginId = $sessionInfo['loginPluginId'];

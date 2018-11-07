@@ -17,6 +17,23 @@
 
 <body>
 <input type="hidden" value="<?php echo $siteName;?>" class="siteName">
+<input type="hidden" value="<?php echo $loginNameAlias;?>" class="loginNameAlias">
+<input type="hidden" value="<?php echo $passwordFindWay;?>" class="passwordFindWay">
+<input type="hidden" value="<?php echo $loginWelcomeText;?>" class="loginWelcomeText">
+<input type="hidden" value="<?php echo $loginBackgroundColor;?>" class="loginBackgroundColor">
+<input type="hidden" value="<?php echo $loginBackgroundImage;?>" class="loginBackgroundImage">
+<input type="hidden" value="<?php echo $loginBackgroundImageDisplay;?>" class="loginBackgroundImageDisplay">
+<input type="hidden" value="<?php echo $siteVersionName;?>" class="siteVersionName">
+<input type="hidden" value="<?php echo $siteName;?>" class="siteName">
+<input type="hidden" value="<?php echo $siteLogo;?>" class="siteLogo">
+<input type="hidden" value="<?php echo $passwordResetRequired;?>" class="passwordResetRequired">
+
+<input type="hidden" value="<?php echo $pwdContainCharacters;?>" class="pwdContainCharacters">
+<input type="hidden" value="<?php echo $loginNameMaxLength;?>" class="loginNameMaxLength">
+<input type="hidden" value="<?php echo $loginNameMinLength;?>" class="loginNameMinLength">
+<input type="hidden" value="<?php echo $pwdMaxLength;?>" class="pwdMaxLength">
+<input type="hidden" value="<?php echo $pwdMinLength;?>" class="pwdMinLength">
+
 <div class="site-warning"></div>
     <div style="position: relative; width:100%;height:100%;" class="site_login_div">
 
@@ -32,16 +49,9 @@
 
         <div style="" class="login_div_container">
                 <div class="login_container">
-                    <input type="hidden" value="<?php echo $loginNameAlias;?>" class="loginNameAlias">
-                    <input type="hidden" value="<?php echo $passwordFindWay;?>" class="passwordFindWay">
-                    <input type="hidden" value="<?php echo $loginWelcomeText;?>" class="loginWelcomeText">
-                    <input type="hidden" value="<?php echo $loginBackgroundColor;?>" class="loginBackgroundColor">
-                    <input type="hidden" value="<?php echo $loginBackgroundImage;?>" class="loginBackgroundImage">
-                    <input type="hidden" value="<?php echo $loginBackgroundImageDisplay;?>" class="loginBackgroundImageDisplay">
-                    <input type="hidden" value="<?php echo $siteVersionName;?>" class="siteVersionName">
-                    <input type="hidden" value="<?php echo $siteName;?>" class="siteName">
-                    <input type="hidden" value="<?php echo $siteLogo;?>" class="siteLogo">
-                    <input type="hidden" value="<?php echo $passwordResetRequired;?>" class="passwordResetRequired">
+
+
+
 
                     <div class="container">
                         <div  class="login_custom_made">
