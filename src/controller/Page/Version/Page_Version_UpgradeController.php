@@ -51,7 +51,6 @@ class Page_Version_UpgradeController extends Page_VersionController
                 $this->versionCode = 10101;
                 $this->versionName = "1.1.1";
                 $result = $this->upgrade_10100_10101();
-                //最新版本审计完成以后，删除密码存储文件，准备下次更新新密码
             } elseif ($currentVersionCode == 10101) {
                 $this->versionCode = 10102;
                 $this->versionName = "1.1.2";
@@ -589,7 +588,7 @@ class Page_Version_UpgradeController extends Page_VersionController
 
     private function upgrade_10101_10102()
     {
-        $tag = __CLASS__.'->'.__FUNCTION__;
+        $tag = __CLASS__ . '->' . __FUNCTION__;
         try {
             $data = [
                 'management' => "",
@@ -598,12 +597,40 @@ class Page_Version_UpgradeController extends Page_VersionController
                 "pluginId" => 102,
             ];
             $this->ctx->SitePluginTable->updateProfile($data, $where);
+
+            //execute script
+            $dbType = $this->ctx->dbType;
+            if ($dbType == "mysql") {
+                $this->upgrade_10101_10102_mysql();
+            } else {
+                $this->upgrade_10101_10102_sqlite();
+            }
+
             $this->upgradeErrCode = "success";
             return true;
         } catch (Exception $ex) {
-            $this->logger->error($tag, "update 102 :" . $ex);
             $this->upgradeErrCode = "error";
+            $this->upgradeErrInfo = $ex->getMessage();
+            $this->logger->error($tag, "update 102 :" . $ex);
             throw new Exception(var_export($ex->getMessage(), true));
         }
     }
+
+    private function upgrade_10102_deleteLoginPlugins()
+    {
+
+    }
+
+    private function upgrade_10101_10102_sqlite()
+    {
+        $this->executeSqliteScript();
+        return true;
+    }
+
+    private function upgrade_10101_10102_mysql()
+    {
+        $this->executeMysqlScript();
+        return true;
+    }
+
 }

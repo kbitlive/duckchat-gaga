@@ -237,3 +237,26 @@ CREATE TABLE IF NOT EXISTS passportPasswordLog(
     ip VARCHAR(100),
     operateDate DATE ,
     operateTime  BIGINT);
+
+
+CREATE TABLE IF NOT EXISTS siteCustomKeys(
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      customKey varchar(50) not null,
+                      keyName varchar(100) not null,
+                      keyDesc TEXT,
+                      keyType int,
+                      keySort int,
+                      keyConstraint int,
+                      status int,
+                      tableName varchar(50),
+                      dataVerify varchar(50),
+                      addTime BIGINT);
+
+CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      userId varchar(100) unique not null,
+                      sourceKey varchar(50) not null,
+                      sourceUserId varchar(100) not null,
+                      loginTime BIGINT);
+
+CREATE INDEX IF NOT EXISTS indexSiteThirdPartyLoginSourceUserId on siteThirdPartyLogin(sourceUserId);

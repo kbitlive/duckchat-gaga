@@ -232,16 +232,6 @@ CREATE TABLE IF NOT EXISTS siteUserGif(
 
 ALTER TABLE siteUserGif CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-CREATE TABLE IF NOT EXISTS siteLoginCustom(
-                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                      configKey VARCHAR(100) NOT NULL,
-                      configValue TEXT,
-                      configValueEN TEXT ,
-                      updateUserId VARCHAR(100),
-                      updateTime BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
-
-ALTER TABLE siteLoginCustom CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-
 CREATE TABLE IF NOT EXISTS passportPasswordCountLog(
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     userId VARCHAR(100) NOT NULL,
@@ -258,3 +248,32 @@ CREATE TABLE IF NOT EXISTS passportPasswordLog(
     ip VARCHAR(100),
     operateDate DATE ,
     operateTime  BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS siteLoginCustom(
+                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                      configKey VARCHAR(100) NOT NULL,
+                      configValue TEXT,
+                      configValueEN TEXT ,
+                      updateUserId VARCHAR(100),
+                      updateTime BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS siteCustomKeys(
+                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                      customKey varchar(50) not null,
+                      keyName varchar(100) not null,
+                      keyDesc TEXT,
+                      keyType int,
+                      keySort int,
+                      keyConstraint int,
+                      status int,
+                      tableName varchar(50),
+                      dataVerify varchar(50),
+                      addTime BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
+                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                      userId varchar(100) unique not null,
+                      sourceKey varchar(50) not null,
+                      sourceUserId varchar(100) not null,
+                      loginTime BIGINT,
+                      INDEX(sourceUserId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
