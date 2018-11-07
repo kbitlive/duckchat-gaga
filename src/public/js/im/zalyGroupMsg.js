@@ -3267,13 +3267,18 @@ function searchUserByKeyDown(event)
         return;
     }
     isSearchUser = true;
-    setTimeout(function () {
-        isSearchUser = false;
-    }, 5000);
+    console.log("isSearchUser= searchUserByKeyDown="+isSearchUser);
+
     searchUser();
 }
+$(document).on("change", ".search-user-input", function () {
+    isSearchUser = false;
+    console.log("isSearchUser change=="+isSearchUser);
+});
 
 function searchUserByOnBlur() {
+    console.log("isSearchUser searchUserByOnBlur=="+isSearchUser);
+
     if(isSearchUser == true) {
         return;
     }
@@ -3297,7 +3302,6 @@ function searchUser() {
 
 function handleSearchUser(results)
 {
-    isSearchUser = false;
     if(results.hasOwnProperty("friends")) {
         var friends = results.friends;
         var friendsLength = friends.length;
