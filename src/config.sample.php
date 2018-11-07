@@ -19,6 +19,7 @@ return array(
     'apiPageSiteInit' => "./index.php?action=installDB",
     'sessionVerify102' => './index.php?action=api.session.verify&body_format=base64pb',
     'testCurl' => "./index.php?action=installDB&for=test_curl",
+    'apiPagePassportLogin' => "./index.php?action=page.passport.login",
     'errorLog' => '',
     'dbType' => 'sqlite',
     'dbVersion' => '2',

@@ -224,7 +224,6 @@ abstract class Page_VersionController extends UpgradeController
         $siteConfig = ZalyConfig::getAllConfig();
         $siteConfig = array_merge($siteConfig, $config);
         ZalyConfig::updateConfigFile($siteConfig);
-        ZalyConfig::getAllConfig();
     }
 
     protected function updateSiteConfigKey($keys)

@@ -27,7 +27,6 @@ class Api_Passport_PasswordRegController  extends Api_Passport_PasswordBase
             $loginName = $request->getLoginName();
             $email     = $request->getEmail();
             $password  = $request->getPassword();
-            $nickname  = $request->getNickname();
             $sitePubkPem = $request->getSitePubkPem();
             $invitationCode = $request->getInvitationCode();
 
@@ -51,19 +50,13 @@ class Api_Passport_PasswordRegController  extends Api_Passport_PasswordBase
                 $errorInfo = ZalyText::getText("text.pwd.type", $this->language);
                 throw new Exception($errorInfo);
             }
-            $nickname = trim($nickname);
-            if(!$nickname) {
-                $errorCode = $this->zalyError->errorNicknameLength;
-                $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-                throw new Exception($errorInfo);
-            }
+            $nickname = $loginName;
 
             if(!$sitePubkPem || strlen($sitePubkPem) < 0) {
                 $errorCode = $this->zalyError->errorSitePubkPem;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
                 throw new Exception($errorInfo);
             }
-
 
             if($this->passwordResetRequired == 1 && mb_strlen(trim($email))<1) {
                 $tip = ZalyText::getText("text.param.void", $this->language);

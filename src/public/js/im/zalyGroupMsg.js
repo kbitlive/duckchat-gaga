@@ -98,30 +98,36 @@ jump();
 function jump()
 {
     //群，好友
+    // http://127.0.0.1/index.php?page=u2Msg&x=
+    // http://127.0.0.1/index.php?page=groupMsg&x=
     if(jumpRoomType != "" && jumpRoomId != "") {
-        if(jumpRoomType == GROUP_MSG) {
-            if(jumpRelation == 0) {
-                ///todo add group
-                var userIds = [];
-                userIds.push(token);
-                addMemberToGroup(userIds, jumpRoomId);
-            } else if(jumpRelation == 1) {
+        if(jumpRoomType == JUMP_GroupMsg) {
+            if(jumpRelation == 1) {
                 localStorage.setItem(chatSessionIdKey, jumpRoomId);
-                localStorage.setItem(jumpRoomId, jumpRoomType);
+                localStorage.setItem(jumpRoomId, GROUP_MSG);
                 handleClickRowGroupProfile(jumpRoomId);
             }
-        } else if(jumpRoomType == U2_MSG) {
-            if(jumpRelation == 0) {
-                ///todo sendAddFriend
-                sendFriendApplyReq(jumpRoomId, "", handleSendFriendApplyReq);
-            } else if(jumpRelation == 1) {
-                localStorage.setItem(chatSessionIdKey, jumpRoomId);
-                localStorage.setItem(jumpRoomId, jumpRoomType);
-                sendFriendProfileReq(jumpRoomId);
-                insertU2Room(undefined, jumpRoomId);
-            }
+        } else if(jumpRoomType == JUMP_U2Msg) {
+            localStorage.setItem(chatSessionIdKey, jumpRoomId);
+            localStorage.setItem(jumpRoomId, U2_MSG);
+            sendFriendProfileReq(jumpRoomId, handleGetJumpFriendProfile);
         }
     }
+}
+
+function handleGetJumpFriendProfile(results)
+{
+    handleGetFriendProfile(results);
+
+    if(results == undefined) {
+        return;
+    }
+    var profile = results.profile;
+
+    if(profile != undefined && profile["profile"]) {
+        insertU2Room(undefined, jumpRoomId);
+    }
+
 }
 
 //display unread msg
@@ -624,6 +630,7 @@ intervalId = undefined
 function setDocumentTitle()
 {
     iconNum = 0;
+    intervalId = 0;
     if(document.hidden == true) {
         var siteTip = localStorage.getItem(newSiteTipKey);
         if(intervalId == undefined && siteTip != "clear") {
@@ -2103,18 +2110,31 @@ $(document).on("click", ".contact-row-group-profile", function () {
     handleClickRowGroupProfile(groupId);
 });
 
+
+function handleClickGroupProfile(results)
+{
+    try {
+        var groupProfile = results.profile;
+        if (groupProfile) {
+            insertGroupRoom(groupProfile.id, groupProfile.name);
+            handleMsgRelation($(this), groupProfile.id);
+        }
+    }catch (error) {
+
+    }
+    handleGetGroupProfile(results);
+
+}
+
 function handleClickRowGroupProfile(groupId)
 {
-    sendGroupProfileReq(groupId, handleGetGroupProfile);
+    sendGroupProfileReq(groupId, handleClickGroupProfile);
 
     var groupName = $('.nickname_'+groupId).html();
     groupName = template("tpl-string", {
         string : groupName
     });
     $(".chatsession-title").html(groupName);
-
-    insertGroupRoom(groupId, groupName);
-    handleMsgRelation($(this), groupId);
 }
 
 //---------------------------------------api.group.update-----------------------------------------------
@@ -2573,7 +2593,6 @@ function updateInfo(profileId, profileType)
         name = friendProfile != false && friendProfile != null ? friendProfile.nickname : "";
         if(friendProfile != false && friendProfile != null && friendProfile.avatar) {
             var friendAvatarImg = getNotMsgImgUrl(friendProfile.avatar);
-            console.log(friendAvatarImg);
             $(".info-avatar-"+friendProfile.userId).attr("src", friendAvatarImg);
         }
     } else {
@@ -2937,7 +2956,6 @@ applyFriendListOffset = 0;
 $(document).on("click", ".apply-friend-list", function () {
     addActiveForPwContactRow($(this));
     var tip = languageNum == $.i18n.map['newFriendsTip'] != undefined? $.i18n.map['newFriendsTip'] : "好友申请";
-    console.log("tiptiptip==="+tip);
     $(".title").html(tip);
     applyFriendListOffset = 0;
     getFriendApplyList();
@@ -3251,7 +3269,7 @@ function searchUserByKeyDown(event)
     isSearchUser = true;
     setTimeout(function () {
         isSearchUser = false;
-    }, 2000);
+    }, 5000);
     searchUser();
 }
 
@@ -3280,7 +3298,6 @@ function searchUser() {
 function handleSearchUser(results)
 {
     isSearchUser = false;
-
     if(results.hasOwnProperty("friends")) {
         var friends = results.friends;
         var friendsLength = friends.length;
