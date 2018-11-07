@@ -244,8 +244,7 @@
             </select>
         </div>
 
-        <div class="errorInfo">
-        </div>
+
 
         <div class="initHeader-setting">
             管理员账号
@@ -271,7 +270,8 @@
 
        </div>
 
-
+        <div class="errorInfo">
+        </div>
 
         <div class="d-flex flex-row justify-content-center init_data_btn" >
             <button type="button" class="btn login_button"><span class="span_btn_tip">初始化数据</span></button>
