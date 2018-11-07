@@ -90,36 +90,9 @@
             </div>
         </div>
 
-        <div class="init_check_info justify-content-left  ext_pdo_sqlite" isLoad="{{isLoadPDOSqlite}}">
-            <div class="init_check isLoadPDOSqlite">
-                3.是否安装PDO_Sqlite
-            </div>
-            <div class="init_check_result">
-                {{if isLoadPDOSqlite}}
-                <img src='../../public/img/init/check_success.png' />
-                {{else}}
-                <img src='../../public/img//init/check_failed.png'  />
-                {{/if}}
-            </div>
-        </div>
-
-
-        <div class="init_check_info justify-content-left ext_curl" isLoad="{{isLoadPDOMysql}}">
-            <div class="init_check isLoadPDOMysql">
-                4.是否安装PDO_Mysql
-            </div>
-            <div class="init_check_result">
-                {{if isLoadPDOMysql}}
-                <img src='../../public/img/init/check_success.png' />
-                {{else}}
-                <img src='../../public/img//init/check_failed.png'  />
-                {{/if}}
-            </div>
-        </div>
-
         <div class="init_check_info justify-content-left ext_curl" isLoad="{{isLoadCurl}}">
             <div class="init_check isLoadCurl">
-                5.是否安装Curl
+                3.是否安装Curl
             </div>
             <div class="init_check_result">
                 {{if isLoadCurl}}
@@ -132,7 +105,7 @@
 
         <div class="init_check_info justify-content-left ext_curl" isLoad="{{isCanUseCurl}}">
             <div class="init_check isCanUseCurl" style="color: #F44336;">
-                6.是否可以正确Curl请求
+                4.是否可以正确Curl请求
             </div>
             <div class="init_check_result">
                 {{if isCanUseCurl}}
@@ -145,7 +118,7 @@
 
         <div class="init_check_info justify-content-left  ext_is_write" isLoad="{{isWritePermission}}">
             <div class="init_check isWritePermission">
-                7.当前目录写权限
+                5.当前目录写权限
             </div>
             <div class="init_check_result">
                 {{if isWritePermission}}
@@ -158,7 +131,7 @@
 
         <div class="init_check_info justify-content-left  ext_is_write" isLoad="{{isLoadProperties}}">
             <div class="init_check isLoadProperties">
-                8.是否可以加载语言包
+                6.是否可以加载语言包
             </div>
             <div class="init_check_result">
                 {{if isLoadProperties}}
@@ -183,13 +156,6 @@
             数据初始化
         </div>
         <div class="initHeader-setting">
-            邀请码<span style="font-size: 1rem;color: #FF6500;">（注：第一个用户使用此邀请码则为管理员）</span>
-        </div>
-        <div class="initHeader-uic">
-            <input type="text" class="uic-input" placeholder="000000, 纯数字，6-20位">
-        </div>
-
-        <div class="initHeader-setting">
             请选择登录方式：
             <select id="verifyPluginId">
                 <option class="selectOption" pluginId="102">本地账户密码校验</option>
@@ -209,6 +175,33 @@
                             data="mysql" isSelected="0"></span></div>
         </div>
 
+
+        <div class="init_check_info justify-content-left  ext_pdo_sqlite" isLoad="{{isLoadPDOSqlite}}" style="display: none;">
+            <div class="init_check isLoadPDOSqlite">
+                是否安装PDO_Sqlite
+            </div>
+            <div class="init_check_result">
+                {{if isLoadPDOSqlite}}
+                <img src='../../public/img/init/check_success.png' />
+                {{else}}
+                <img src='../../public/img//init/check_failed.png'  />
+                {{/if}}
+            </div>
+        </div>
+
+
+        <div class="init_check_info justify-content-left ext_pdo_mysql"  isLoad="{{isLoadPDOMysql}}" >
+            <div class="init_check isLoadPDOMysql">
+                是否安装PDO_Mysql
+            </div>
+            <div class="init_check_result">
+                {{if isLoadPDOMysql}}
+                <img src='../../public/img/init/check_success.png' />
+                {{else}}
+                <img src='../../public/img//init/check_failed.png'  />
+                {{/if}}
+            </div>
+        </div>
 
         <div class="mysql-div">
             <!--       sql address         -->
@@ -238,7 +231,7 @@
             </div>
         </div>
         <div class="sqlite-div">
-            本地文件
+            <span style="width:6.57rem;height:1.31rem;font-size:1.31rem;font-family:PingFangSC-Regular;font-weight:400;color:rgba(102,102,102,1);line-height:1.31rem;margin-right: 1rem;">本地文件:</span>
             <select id="sqlite-file">
                 <option class="selectOption" fileName="">创建新Sqlite数据库</option>
                     {{each dbFiles file }}
@@ -249,6 +242,32 @@
 
         <div class="errorInfo">
         </div>
+
+        <div class="initHeader-setting">
+            管理员账号
+        </div>
+       <div>
+           <div class="initHeader-admin">
+               <span>用户名：</span><input type="text" class="admin-input admin_name">
+               <img src="../../public/img/init/failed.png" class="admin_failed_img admin_name_failed">
+           </div>
+           <div class="initHeader-admin-tip">包含字母，数字，长度5-24</div>
+
+           <div class="initHeader-admin">
+               <span>密码：</span><input type="text" class="admin-input admin_pwd">
+               <img src="../../public/img/init/failed.png" class="admin_failed_img admin_pwd_failed">
+           </div>
+           <div class="initHeader-admin-tip">包含字母，数字，长度8-32</div>
+
+           <div class="initHeader-admin">
+               <span>确认密码：</span><input type="text" class="admin-input admin_repwd">
+               <img src="../../public/img/init/failed.png" class="admin_failed_img admin_repwd_failed">
+           </div>
+
+
+       </div>
+
+
 
         <div class="d-flex flex-row justify-content-center init_data_btn" >
             <button type="button" class="btn login_button"><span class="span_btn_tip">初始化数据</span></button>

@@ -2823,11 +2823,7 @@ $(document).mouseup(function(e){
     if(targetClassName != "gif") {
         document.getElementById("chat_plugin").style.display = "none";
     }
-    if(targetId != "selfAvatarUploadDiv" && targetId != "selfNickname" && targetId != "logout" && targetId != "logout-span"
-        && targetId != "self-qrcode" && targetId != "user-image-upload" && targetId != "user-img-carmera"
-        &&targetClassName != "nickNameDiv" && targetId !="selfQrcodeDiv" && targetId !="selfQrcodeCanvas" && targetId != "selfQrcode"
-        && targetClassName != "self-qrcode" && targetId != "clear_all_chat" && targetClassName != "clear_all_chat"
-    && targetId != "newMsgSound" && targetClassName != "sound_mute") {
+    if(targetClassName.indexOf("siteSelfInfo") == -1) {
         $("#selfInfo").remove();
     }
 });
@@ -3201,6 +3197,10 @@ $(document).on("click", ".nickNameDiv",function () {
     });
     $(this)[0].parentNode.replaceChild($(html)[0], $(this)[0]);
 });
+
+function handleApiSiteMute() {
+
+}
 
 
 //------------------------------------api.friend.delete--------------------------------------------------------
