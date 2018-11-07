@@ -53,9 +53,6 @@ class Site_Login
 
             $userProfile = $this->doSiteLoginAction($loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType, $pluginId);
 
-            //set site owner
-            $this->checkAndSetSiteOwner($userProfile['userId'], $uicInfo);
-
             return $userProfile;
         } catch (Exception $ex) {
             $tag = __CLASS__ . "-" . __FUNCTION__;
@@ -299,20 +296,4 @@ class Site_Login
         return $sessionInfo;
     }
 
-    /**
-     * @param $userId
-     * @param $uicInfo
-     */
-    private function checkAndSetSiteOwner($userId, $uicInfo)
-    {
-        $siteOwner = $this->ctx->Site_Config->getSiteOwner();
-
-        if (empty($siteOwner)) {
-            $this->ctx->Wpf_Logger->info("api.site.login", "uic info=" . json_encode($uicInfo));
-            if ($uicInfo && $uicInfo['status'] == 100) {
-                $this->ctx->Site_Config->updateConfigValue(SiteConfig::SITE_OWNER, $userId);
-                $this->ctx->Site_Config->updateConfigValue(SiteConfig::SITE_ENABLE_INVITATION_CODE, 0);
-            }
-        }
-    }
 }
