@@ -818,20 +818,26 @@ function clearLoginName()
 }
 
 
-function registerForPassportPassword()
-{
+function registerForPassportPassword() {
     setDocumentTitle("register");
 
-    if(languageNum == UserClientLangZH) {
-        var pwdTip = pwdContainCharacters+"; length"+pwdMinLength+"-"+pwdMaxLength;
-        var pwdTip = pwdContainCharacters+"; 长度 "+pwdMinLength+"-"+pwdMaxLength;
-        pwdTip = pwdContainCharacters.replace("letter", "字母");
-        pwdTip = pwdContainCharacters.replace("number", "数字");
-        pwdTip = pwdContainCharacters.replace("special_characters", "特殊字符");
-        var loginNameTip = "长度 "+loginNameMinLength+"-"+loginNameMaxLength;
+    if (languageNum == UserClientLangZH) {
+        if (pwdContainCharacters) {
+            var pwdTip = pwdContainCharacters + "; 长度 " + pwdMinLength + "-" + pwdMaxLength;
+        } else {
+            var pwdTip = " 长度 " + pwdMinLength + "-" + pwdMaxLength;
+        }
+        pwdTip = pwdTip.replace("letter", "字母");
+        pwdTip = pwdTip.replace("number", "数字");
+        pwdTip = pwdTip.replace("special_characters", "特殊字符");
+        var loginNameTip = "长度 " + loginNameMinLength + "-" + loginNameMaxLength;
     } else {
-        var pwdTip = pwdContainCharacters+"; length"+pwdMinLength+"-"+pwdMaxLength;
-        var loginNameTip = "length "+loginNameMinLength+"-"+loginNameMaxLength;
+        if (pwdContainCharacters) {
+            var pwdTip = pwdContainCharacters + "; length " + pwdMinLength + "-" + pwdMaxLength;
+        } else {
+            var pwdTip = " length " + pwdMinLength + "-" + pwdMaxLength;
+        }
+        var loginNameTip = "length " + loginNameMinLength + "-" + loginNameMaxLength;
     }
 
     var html = template("tpl-register-div", {

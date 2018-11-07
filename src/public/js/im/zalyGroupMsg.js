@@ -2569,7 +2569,6 @@ function updateInfo(profileId, profileType)
         name = friendProfile != false && friendProfile != null ? friendProfile.nickname : "";
         if(friendProfile != false && friendProfile != null && friendProfile.avatar) {
             var friendAvatarImg = getNotMsgImgUrl(friendProfile.avatar);
-            console.log(friendAvatarImg);
             $(".info-avatar-"+friendProfile.userId).attr("src", friendAvatarImg);
         }
     } else {
@@ -2933,7 +2932,6 @@ applyFriendListOffset = 0;
 $(document).on("click", ".apply-friend-list", function () {
     addActiveForPwContactRow($(this));
     var tip = languageNum == $.i18n.map['newFriendsTip'] != undefined? $.i18n.map['newFriendsTip'] : "好友申请";
-    console.log("tiptiptip==="+tip);
     $(".title").html(tip);
     applyFriendListOffset = 0;
     getFriendApplyList();
