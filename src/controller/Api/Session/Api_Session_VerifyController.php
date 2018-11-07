@@ -65,7 +65,8 @@ class Api_Session_VerifyController extends BaseController
             $sitePubkPem = base64_decode($userInfo['sitePubkPem']);
             $nickname = $userInfo['nickname'];
 
-            $userId = sha1($userInfo['userId'] . "@" . $sitePubkPem);
+//            $userId = sha1($userInfo['userId'] . "@" . $sitePubkPem);
+            $userId = $userInfo['userId'];
             $userProfile = new \Zaly\Proto\Platform\LoginUserProfile();
             $userProfile->setUserId($userId);
             $userProfile->setLoginName($userInfo['loginName']);

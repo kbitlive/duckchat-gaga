@@ -53,13 +53,12 @@ class Site_SessionVerify
     {
         $tag = __CLASS__ . "-" . __FUNCTION__;
         try {
-            $sitePubkPem = base64_decode($userInfo['sitePubkPem']);
+            $loginName = $userInfo['loginName'];
             $nickname = $userInfo['nickname'];
-
-            $userId = sha1($userInfo['userId'] . "@" . $sitePubkPem);
+            $userId = $userInfo['userId'];
             $userProfile = new \Zaly\Proto\Platform\LoginUserProfile();
             $userProfile->setUserId($userId);
-            $userProfile->setLoginName($userInfo['loginName']);
+            $userProfile->setLoginName($loginName);
             $userProfile->setNickName($nickname);
             $userProfile->setInvitationCode($userInfo['invitationCode']);
 

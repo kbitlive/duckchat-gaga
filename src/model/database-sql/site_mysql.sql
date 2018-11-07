@@ -257,7 +257,7 @@ CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       updateUserId VARCHAR(100),
                       updateTime BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
-CREATE TABLE IF NOT EXISTS siteCustomKeys(
+CREATE TABLE IF NOT EXISTS siteCustomItem(
                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
                       customKey varchar(50) not null,
                       keyName varchar(100) not null,
@@ -268,12 +268,13 @@ CREATE TABLE IF NOT EXISTS siteCustomKeys(
                       status int,
                       tableName varchar(50),
                       dataVerify varchar(50),
-                      addTime BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                      addTime BIGINT,
+                      unique(customKey,keyType))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
                       userId varchar(100) unique not null,
-                      sourceKey varchar(50) not null,
-                      sourceUserId varchar(100) not null,
+                      loginKey varchar(50) not null,
+                      loginUserId varchar(100) not null,
                       loginTime BIGINT,
-                      INDEX(sourceUserId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                      INDEX(loginUserId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;

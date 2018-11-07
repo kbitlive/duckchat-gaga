@@ -30,6 +30,9 @@
  * @property SiteUicTable SiteUicTable
  * @property SitePluginTable SitePluginTable
  * @property SiteLoginCustomTable SiteLoginCustomTable
+ * @property SiteCustomItemTable SiteCustomItemTable
+ * @property SiteThirdPartyLoginTable SiteThirdPartyLoginTable
+ * @property SiteUserCustomTable SiteUserCustomTable
  *
  * @property Message_Client Message_Client
  * @property Message_News Message_News

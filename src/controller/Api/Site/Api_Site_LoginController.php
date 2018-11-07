@@ -60,11 +60,21 @@ class Api_Site_LoginController extends \BaseController
             $thirdPartyKey = $request->getThirdPartyKey();
             $userCustoms = $request->getUserCustoms();
 
+            $customData = [];
+            if (!empty($userCustoms)) {
+                new Zaly\Proto\Core\CustomUserProfile();
+                foreach ($userCustoms as $custom) {
+                    $key = $custom->getCustomKey();
+                    $value = $custom->getCustomValue();
+                    $customData[$key] = $value;
+                }
+            }
+
             //get user profile from platform clientSiteType=1:mobile client
             $clientType = Zaly\Proto\Core\UserClientType::UserClientMobileApp;
 
 
-            $userProfile = $this->ctx->Site_Login->doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $userCustoms);
+            $userProfile = $this->ctx->Site_Login->doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $customData);
 
 //            $userProfile = $this->ctx->Site_Login->checkPreSessionIdFromPlatform($preSessionId, $devicePubkPem, $clientType);
 
