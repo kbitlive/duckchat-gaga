@@ -260,3 +260,12 @@ CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
                       loginTime BIGINT);
 
 CREATE INDEX IF NOT EXISTS indexSiteThirdPartyLoginSourceUserId on siteThirdPartyLogin(sourceUserId);
+
+
+-- CREATE TABLE IF NOT EXISTS siteUserCustom(
+--                       id INTEGER PRIMARY KEY AUTOINCREMENT,
+--                       userId VARCHAR(100) NOT NULL,
+--                       phone varchar(50) not null,
+--                       name varchar(100) not null,
+--                       age int,
+--                       addTime BIGINT);
