@@ -332,7 +332,7 @@
                     html += '</div><div class="row-head cell">'+log.ip+'</div> <div class="data cell">'+getDateByTime(log.operateTime)+'</div> </div>'
                     $(".table").append(html);
                 });
-            } 
+            }
 
         }
 
