@@ -143,11 +143,43 @@ function cancelLoadingBySelf()
         hideLoading();
     }, 5000);
 }
+
 function checkIsEntities(str){
     var entitiesReg = /(&nbsp;|&#160;|&lt;|&#60;|&gt;|&#62;|&amp;|&#38;|&quot;|&#34;|&apos;|&#39;|&cent;|&#162;|&pound;|&#163;|&yen;|&#165;|&euro;|&#8364;|&sect;|&#167;|&copy;|&#169;|&reg;|&#174;|&times;|&#215;|&divide;|&#247;|&)/g;
     var arrEntities = str.match(entitiesReg);
     if(arrEntities != null) {
         return true;
+    }
+    return false;
+}
+
+/**
+ * 数字 字母下划线
+ * @param password
+ */
+function verifyChars(containCharaters, password) {
+    if(containCharaters == "" || !containCharaters) {
+        return true;
+    }
+    var flagLetter = true;
+    var flagNumber = true;
+    var flagSpecialCharacters = true;
+    if(containCharaters.indexOf("letter") != -1) {
+        var reg = /[a-zA-Z]/g;
+        flagLetter = reg.test(password);
+    }
+
+    if(containCharaters.indexOf("number") != -1) {
+        var reg = /\d/g;
+        flagNumber = reg.test(password);
+    }
+
+    if(containCharaters.indexOf("special_characters") != -1) {
+        var reg = /[@&*$\(\){}!\.~:,\<\>]/g;
+        flagSpecialCharacters = reg.test(password);
+    }
+    if(flagLetter && flagNumber && flagSpecialCharacters) {
+        return  true;
     }
     return false;
 }

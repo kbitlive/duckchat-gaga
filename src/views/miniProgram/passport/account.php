@@ -11,7 +11,7 @@
     <script src="../../../public/js/jquery.i18n.properties.min.js"></script>
     <script src="../../../public/js/template-web.js"></script>
     <script src="../../../public/sdk/zalyjsNative.js"></script>
-
+    <script src="../../../public/js/zalyjsHelper.js"></script>
 
 </head>
 <body>
@@ -174,40 +174,6 @@
         }
     }
 
-    /**
-     * 数字 字母下划线
-     * @param password
-     */
-    function isPassword(pwdContainCharaters, password) {
-        if(pwdContainCharaters == "" || !pwdContainCharaters) {
-            return true;
-        }
-        return true;
-
-        var flagLetter = true;
-        var flagNumber = true;
-        var flagSpecialCharacters = true;
-        if(pwdContainCharaters.indexOf("letter") != -1) {
-            var reg = /[a-zA-Z]/g;
-            flagLetter = reg.test(password);
-        }
-
-        if(pwdContainCharaters.indexOf("number") != -1) {
-            var reg = /\d/g;
-            flagNumber = reg.test(password);
-        }
-
-        if(pwdContainCharaters.indexOf("special_characters") != -1) {
-            var reg = /[\^%#`@&*$\(\){}!\.~:,\<\>_\-\+\=|;:\'\"]/g;
-            flagSpecialCharacters = reg.test(password);
-        }
-        if(flagLetter && flagNumber && flagSpecialCharacters) {
-            return  true;
-        }
-        return false;
-    }
-
-
     $(document).on("click", ".reset_pwd_button", function () {
         var isFoucs = false;
         var action = "api.passport.passwordResetPassword";
@@ -232,7 +198,7 @@
             }
         }
 
-        if(newPassword ==  "" || newPassword.length<pwdMinLength || newPassword.length>pwdMaxLength || !isPassword(pwdContainCharacters, newPassword)) {
+        if(newPassword ==  "" || newPassword.length<pwdMinLength || newPassword.length>pwdMaxLength || !verifyChars(pwdContainCharacters, newPassword)) {
             $(".forget_input_pwd_failed")[0].style.display = "block";
             if(isFocus == false) {
                 $(".forget_input_pwd").focus();

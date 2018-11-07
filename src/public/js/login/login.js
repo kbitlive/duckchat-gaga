@@ -417,7 +417,7 @@ function checkRegisterInfo()
 
     if(registerPassword == "" || registerPassword == undefined
         || registerPassword.length<pwdMinLength || registerPassword.length>pwdMaxLength
-        || !isPassword(pwdContainCharacters, registerPassword)
+        || !verifyChars(pwdContainCharacters, registerPassword)
 
     ) {
         $(".register_input_pwd_failed")[0].style.display = "block";
@@ -493,39 +493,6 @@ function isLoginName(loginName)
 {
     var reg = /^[A-Za-z0-9_]+$/;
     return reg.test(loginName);
-}
-
-/**
- * 数字 字母下划线
- * @param password
- */
-function isPassword(pwdContainCharaters, password) {
-    if(pwdContainCharaters == "" || !pwdContainCharaters) {
-        return true;
-    }
-    return true;
-
-    var flagLetter = true;
-    var flagNumber = true;
-    var flagSpecialCharacters = true;
-    if(pwdContainCharaters.indexOf("letter") != -1) {
-        var reg = /[a-zA-Z]/g;
-        flagLetter = reg.test(password);
-    }
-
-    if(pwdContainCharaters.indexOf("number") != -1) {
-        var reg = /\d/g;
-        flagNumber = reg.test(password);
-    }
-
-    if(pwdContainCharaters.indexOf("special_characters") != -1) {
-        var reg = /[@&*$\(\){}!\.~:,\<\>]/g;
-        flagSpecialCharacters = reg.test(password);
-    }
-    if(flagLetter && flagNumber && flagSpecialCharacters) {
-        return  true;
-    }
-    return false;
 }
 
 function loginNameExist()

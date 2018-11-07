@@ -49,7 +49,7 @@ class Api_Passport_PasswordResetPasswordController extends BaseController
             throw new Exception($errorInfo);
         }
 
-        $flag = ZalyHelper::isPassword($password, $this->pwdContainCharacters);
+        $flag = ZalyHelper::verifyChars($password, $this->pwdContainCharacters);
         if(!$flag) {
             $errorInfo = ZalyText::getText("text.pwd.type", $this->language);
             $this->setRpcError("error.alert", $errorInfo);
