@@ -48,26 +48,9 @@ class PublicUserProfile extends \Google\Protobuf\Internal\Message
      */
     private $loginPluginId = '';
 
-    /**
-     * Constructor.
-     *
-     * @param array $data {
-     *     Optional. Data for populating the Message object.
-     *
-     *     @type string $userId
-     *     @type string $loginName
-     *     @type string $nickname
-     *           nickname or alias nickname
-     *     @type string $nicknameInLatin
-     *     @type string $avatar
-     *     @type int $availableType
-     *     @type string $realNickname
-     *     @type string $loginPluginId
-     * }
-     */
-    public function __construct($data = NULL) {
+    public function __construct() {
         \GPBMetadata\Core\User::initOnce();
-        parent::__construct($data);
+        parent::__construct();
     }
 
     /**

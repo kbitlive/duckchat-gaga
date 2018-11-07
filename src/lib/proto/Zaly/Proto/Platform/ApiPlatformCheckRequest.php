@@ -25,19 +25,9 @@ class ApiPlatformCheckRequest extends \Google\Protobuf\Internal\Message
      */
     private $phoneNumber = '';
 
-    /**
-     * Constructor.
-     *
-     * @param array $data {
-     *     Optional. Data for populating the Message object.
-     *
-     *     @type string $phoneCountryCode
-     *     @type string $phoneNumber
-     * }
-     */
-    public function __construct($data = NULL) {
+    public function __construct() {
         \GPBMetadata\Platform\ApiPlatformCheck::initOnce();
-        parent::__construct($data);
+        parent::__construct();
     }
 
     /**

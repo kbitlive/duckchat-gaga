@@ -21,20 +21,14 @@ class ApiSiteLoginResponse extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>.core.AllUserProfile profile = 2;</code>
      */
     private $profile = null;
-
     /**
-     * Constructor.
-     *
-     * @param array $data {
-     *     Optional. Data for populating the Message object.
-     *
-     *     @type string $sessionId
-     *     @type \Zaly\Proto\Core\AllUserProfile $profile
-     * }
+     * Generated from protobuf field <code>repeated .core.CustomUserProfile custom = 3;</code>
      */
-    public function __construct($data = NULL) {
+    private $custom;
+
+    public function __construct() {
         \GPBMetadata\Site\ApiSiteLogin::initOnce();
-        parent::__construct($data);
+        parent::__construct();
     }
 
     /**
@@ -77,6 +71,28 @@ class ApiSiteLoginResponse extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkMessage($var, \Zaly\Proto\Core\AllUserProfile::class);
         $this->profile = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .core.CustomUserProfile custom = 3;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getCustom()
+    {
+        return $this->custom;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .core.CustomUserProfile custom = 3;</code>
+     * @param \Zaly\Proto\Core\CustomUserProfile[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setCustom($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Zaly\Proto\Core\CustomUserProfile::class);
+        $this->custom = $arr;
 
         return $this;
     }
