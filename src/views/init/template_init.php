@@ -206,27 +206,31 @@
         <div class="mysql-div">
             <!--       sql address         -->
             <div class="sql-setting mysql-setting">
+                <span>数据库地址：</span>
                 <input type="text" class="sql-input sql-dbHost" placeholder="数据库地址">
                 <img src="../../public/img/init/failed.png" class="failed_img dbHostFailed">
             </div>
             <!--       sql port         -->
             <div class="sql-setting mysql-setting">
+                <span>端口号：</span>
                 <input type="text" class="sql-input sql-dbPort" placeholder="数据库端口号,默认：3306">
                 <img src="../../public/img/init/failed.png" class="failed_img dbPortFailed">
             </div>
             <!--      sql name          -->
             <div class="sql-setting mysql-setting">
+                <span>数据库名称：</span>
                 <input type="text" class="sql-input sql-dbName" placeholder="数据库名称">
                 <img src="../../public/img/init/failed.png" class="failed_img dbNameFailed">
             </div>
             <!--      sql user          -->
             <div class="sql-setting mysql-setting">
-                <input type="text" class="sql-input sql-dbUserName" placeholder="用户名">
+                <span>用户名：</span>
+                <input type="text" class="sql-input sql-dbUserName" placeholder="数据库用户名">
                 <img src="../../public/img/init/failed.png" class="failed_img dbUserNameFailed">
             </div>
             <!--      sql password          -->
             <div class="sql-setting mysql-setting">
-                <input type="text" class="sql-input sql-dbPassword" placeholder="数据库密码">
+                <span>数据库密码：</span><input type="text" class="sql-input sql-dbPassword" placeholder="数据库密码">
                 <img src="../../public/img/init/failed.png" class="failed_img dbPasswordFailed">
             </div>
         </div>
