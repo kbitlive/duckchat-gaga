@@ -13,45 +13,83 @@ class Site_Login
     private $sessionVerifyAction = "api.session.verify";
     private $pinyin;
     private $timeOut = 10;
+    private $logger;
 
     public function __construct(BaseCtx $ctx)
     {
         $this->ctx = $ctx;
+        $this->logger = $ctx->getLogger();
         $this->zalyError = $this->ctx->ZalyErrorZh;
         $this->pinyin = new \Overtrue\Pinyin\Pinyin();
     }
 
     /**
-     * 站点登陆逻辑
-     *  1. presessionId(客户端提供)，站点通过presessionId调用平台，获取用户信息
-     *  2. 获取用户登陆信息，进行站点本地登陆逻辑
-     *  3. 构建Response返回
+     * @param $thirdPartyKey loginKey to choose loginWay
+     * @param $preSessionId
+     * @param $devicePubkPem
+     * @param $clientType
+     * @param $userCustomArray
+     * @return array|void
+     * @throws Exception
      */
+    public function doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $userCustomArray)
+    {
+
+        if (empty($thirdPartyKey)) {
+            //do site passport login
+            return $this->loginBySitePassport($preSessionId, $devicePubkPem, $clientType);
+        }
+
+        //get third login by thirdPartyKey
+        return $this->loginByThirdPary($preSessionId, $devicePubkPem, $clientType);
+    }
+
+    //site passport login【本地登陆】
+    private function loginBySitePassport($preSessionId, $devicePubkPem, $clientSideType = Zaly\Proto\Core\UserClientType::UserClientMobileApp)
+    {
+        //实现本地api.session.verify 逻辑
+        $loginUserProfile = $this->ctx->Site_SessionVerify->doVerify($preSessionId);
+
+        $this->logger->error("============", "loginUserProfile=" . $loginUserProfile->serializeToJsonString());
+
+        //get intivation first
+        $uicInfo = $this->getIntivationCode($loginUserProfile->getInvitationCode());
+
+        $this->logger->error("----------", "uicInfo=" . json_encode($uicInfo, true));
+
+        $userProfile = $this->doSiteLoginAction($loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType, "");
+
+        $this->logger->error("----------===-", "userProfile=" . var_export($userProfile, true));
+
+        return $userProfile;
+    }
 
     /**
+     * third party login【第三方登陆】
+     *
+     * @param $thirdPartyLoginKey
      * @param $preSessionId
      * @param string $devicePubkPem
      * @param int $clientSideType
      * @return array
      * @throws Exception
      */
-    public function checkPreSessionIdFromPlatform($preSessionId, $devicePubkPem = "", $clientSideType = Zaly\Proto\Core\UserClientType::UserClientMobileApp)
+    public function loginByThirdPary($thirdPartyLoginKey, $preSessionId, $devicePubkPem = "", $clientSideType = Zaly\Proto\Core\UserClientType::UserClientMobileApp)
     {
 
         try {
             //get site config::publicKey
             $sitePriKeyPem = $this->getSiteConfigPriKeyFromDB();
 
-            $pluginIds = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_LOGIN_PLUGIN_ID);
-            $pluginId = $pluginIds[SiteConfig::SITE_LOGIN_PLUGIN_ID];
+            $sessionVerifyUrl = ZalyLogin::getVerifyUrl($thirdPartyLoginKey);
 
             //get userProfile from platform
-            $loginUserProfile = $this->getUserProfileFromPlatform($preSessionId, $sitePriKeyPem, $pluginId);
+            $loginUserProfile = $this->getUserProfileFromThirdParty($preSessionId, $sitePriKeyPem, $sessionVerifyUrl);
 
             //get intivation first
             $uicInfo = $this->getIntivationCode($loginUserProfile->getInvitationCode());
 
-            $userProfile = $this->doSiteLoginAction($loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType, $pluginId);
+            $userProfile = $this->doSiteLoginAction($loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType, $thirdPartyLoginKey);
 
             return $userProfile;
         } catch (Exception $ex) {
@@ -77,14 +115,14 @@ class Site_Login
         }
     }
 
-    private function getUserProfileFromPlatform($preSessionId, $sitePrikPem, $pluginId)
+    private function getUserProfileFromThirdParty($preSessionId, $sitePrikPem, $sessionVerifyUrl)
     {
         $tag = __CLASS__ . '-' . __FUNCTION__;
         try {
             $sessionVerifyRequest = new \Zaly\Proto\Platform\ApiSessionVerifyRequest();
             $sessionVerifyRequest->setPreSessionId($preSessionId);
 
-            $sessionVerifyUrl = ZalyConfig::getSessionVerifyUrl($pluginId);
+//            $sessionVerifyUrl = ZalyConfig::getSessionVerifyUrl($pluginId);
             $sessionVerifyUrl = ZalyHelper::getFullReqUrl($sessionVerifyUrl);
 
             $response = $this->ctx->ZalyCurl->httpRequestByAction('POST', $sessionVerifyUrl, $sessionVerifyRequest, $this->timeOut);
@@ -116,10 +154,11 @@ class Site_Login
      * @param $devicePubkPem
      * @param $uicInfo
      * @param $clientSideType
+     * @param $loginKeyId
      * @return array
      * @throws Exception
      */
-    private function doSiteLoginAction($loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType, $pluginId)
+    private function doSiteLoginAction($loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType, $loginKeyId)
     {
         if (!$loginUserProfile) {
             $errorCode = $this->zalyError->errorSession;
@@ -168,7 +207,7 @@ class Site_Login
         }
 
         //这里
-        $sessionInfo = $this->insertOrUpdateUserSession($userProfile, $devicePubkPem, $clientSideType, $pluginId);
+        $sessionInfo = $this->insertOrUpdateUserSession($userProfile, $devicePubkPem, $clientSideType, $loginKeyId);
         $userProfile['sessionId'] = $sessionInfo['sessionId'];
         $userProfile['deviceId'] = $sessionInfo['deviceId'];
         return $userProfile;
@@ -244,9 +283,10 @@ class Site_Login
      * @param $userProfile
      * @param $devicePubkPem
      * @param $clientSideType
-     * @return string
+     * @param $loginKeyId
+     * @return array
      */
-    private function insertOrUpdateUserSession($userProfile, $devicePubkPem, $clientSideType, $pluginId)
+    private function insertOrUpdateUserSession($userProfile, $devicePubkPem, $clientSideType, $loginKeyId)
     {
         $sessionId = $this->ctx->ZalyHelper->generateStrId();
         $deviceId = sha1($devicePubkPem);
@@ -271,7 +311,7 @@ class Site_Login
                 "timeActive" => $this->ctx->ZalyHelper->getMsectime(),
                 "ipActive" => ZalyHelper::getIp(),
                 "clientSideType" => $clientSideType,
-                "loginPluginId" => $pluginId,
+                "loginPluginId" => $loginKeyId,//thirdParty key=loginKey=loginId, same meaning
             ];
             $this->ctx->SiteSessionTable->insertSessionInfo($sessionInfo);
         } catch (Exception $ex) {
@@ -282,7 +322,7 @@ class Site_Login
                 "timeActive" => $this->ctx->ZalyHelper->getMsectime(),
                 "ipActive" => ZalyHelper::getIp(),
                 "clientSideType" => $clientSideType,
-                "loginPluginId" => $pluginId,
+                "loginPluginId" => $loginKeyId,
             ];
             $where = [
                 "userId" => $userId,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * Site default friends ,groups
  * User: anguoyue
  * Date: 07/09/2018
  * Time: 8:24 PM

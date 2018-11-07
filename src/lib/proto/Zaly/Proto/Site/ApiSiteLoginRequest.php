@@ -38,6 +38,12 @@ class ApiSiteLoginRequest extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>repeated .core.CustomUserProfile userCustoms = 5;</code>
      */
     private $userCustoms;
+    /**
+     *thirdParty key for login
+     *
+     * Generated from protobuf field <code>string thirdPartyKey = 6;</code>
+     */
+    private $thirdPartyKey = '';
 
     public function __construct() {
         \GPBMetadata\Site\ApiSiteLogin::initOnce();
@@ -150,6 +156,32 @@ class ApiSiteLoginRequest extends \Google\Protobuf\Internal\Message
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Zaly\Proto\Core\CustomUserProfile::class);
         $this->userCustoms = $arr;
+
+        return $this;
+    }
+
+    /**
+     *thirdParty key for login
+     *
+     * Generated from protobuf field <code>string thirdPartyKey = 6;</code>
+     * @return string
+     */
+    public function getThirdPartyKey()
+    {
+        return $this->thirdPartyKey;
+    }
+
+    /**
+     *thirdParty key for login
+     *
+     * Generated from protobuf field <code>string thirdPartyKey = 6;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setThirdPartyKey($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->thirdPartyKey = $var;
 
         return $this;
     }

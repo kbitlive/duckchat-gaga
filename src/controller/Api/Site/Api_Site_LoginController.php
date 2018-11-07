@@ -56,9 +56,17 @@ class Api_Site_LoginController extends \BaseController
                 throw new Exception($errorInfo);
             }
 
+
+            $thirdPartyKey = $request->getThirdPartyKey();
+            $userCustoms = $request->getUserCustoms();
+
             //get user profile from platform clientSiteType=1:mobile client
             $clientType = Zaly\Proto\Core\UserClientType::UserClientMobileApp;
-            $userProfile = $this->ctx->Site_Login->checkPreSessionIdFromPlatform($preSessionId, $devicePubkPem, $clientType);
+
+
+            $userProfile = $this->ctx->Site_Login->doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $userCustoms);
+
+//            $userProfile = $this->ctx->Site_Login->checkPreSessionIdFromPlatform($preSessionId, $devicePubkPem, $clientType);
 
             $realSessionId = $userProfile['sessionId'];
             $response = $this->buildApiSiteLoginResponse($userProfile, $realSessionId);
@@ -72,9 +80,9 @@ class Api_Site_LoginController extends \BaseController
             $this->rpcReturn($transportData->getAction(), $response);
         } catch (Exception $ex) {
             $this->ctx->Wpf_Logger->error($tag, "error=" . $ex);
-             $errorCode = $this->zalyError->errorSiteLogin;
+            $errorCode = $this->zalyError->errorSiteLogin;
 //                $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-             $this->setRpcError($errorCode, $ex->getMessage());
+            $this->setRpcError($errorCode, $ex->getMessage());
             $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
         }
 

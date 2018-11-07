@@ -2,16 +2,16 @@
 return array(
     'weixin' =>
         array(
-            'name' => 'smtp.126.com',
+            'name' => '微信登陆',
             'logo' => true,
-            'loginUrl' => "http://",
+            'landingUrl' => "http://",
             'verifyUrl' => "http://localhost/verify",
         ),
     'discuz' =>
         array(
-            'name' => 'smtp.126.com',
-            'logo' => true,
-            'loginUrl' => "http://",
+            'name' => 'discuz',
+            'logo' => '',
+            'landingUrl' => "http://",
             'verifyUrl' => "http://localhost/verify",
         ),
 );

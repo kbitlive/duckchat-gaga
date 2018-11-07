@@ -7,6 +7,7 @@
  *
  * @property File_Manager File_Manager
  * @property Site_Login Site_Login
+ * @property Site_SessionVerify Site_SessionVerify
  * @property SiteConfig SiteConfig
  * @property Site_Config Site_Config
  * @property Site_Custom Site_Custom
