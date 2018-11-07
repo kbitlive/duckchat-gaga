@@ -173,7 +173,6 @@
         </div>
     </div>
     <div class="layout-all-row">
-
         <div class="list-item-center">
             <div class="item-row">
                 <div class="item-body">
@@ -197,7 +196,31 @@
             <div class="division-line"></div>
         </div>
     </div>
+
+    <div class="layout-all-row">
+        <div class="list-item-center">
+            <div class="item-row">
+                <div class="item-body">
+                    <div class="item-body-display" id="password_error_log">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">密码错误日志</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Password error log</div>
+                        <?php } ?>
+                        <div class="item-body-tail">
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+        </div>
     </div>
+
+
+</div>
 
     <div class="wrapper-mask" id="wrapper-mask" style="visibility: hidden;"></div>
 
@@ -237,11 +260,16 @@
     <script type="text/javascript">
 
         $("#quick_configuration").on("click", function () {
-            var url = "index.php?action=manage.security&page=quick&lang=" + getLanguage();
+            var url = "index.php?action=manage.security.quick&lang=" + getLanguage();
             zalyjsCommonOpenNewPage(url);
         });
         $("#security_configuration").on("click", function () {
-            var url = "index.php?action=manage.security&page=normal&lang=" + getLanguage();
+            var url = "index.php?action=manage.security.normal&lang=" + getLanguage();
+            zalyjsCommonOpenNewPage(url);
+        });
+
+        $("#password_error_log").on("click", function () {
+            var url = "index.php?action=manage.security.log&lang=" + getLanguage();
             zalyjsCommonOpenNewPage(url);
         });
 
