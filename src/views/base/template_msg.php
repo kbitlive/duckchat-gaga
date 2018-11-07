@@ -12,7 +12,7 @@
                  <div class="msg_status" style="margin-top: 1rem;">
                     <div class="msg-content-img justify-content-end hint--bottom" aria-label="{{msgTime}}">
                         <div class="text-align-left" style="width: {{width}}; height:{{height}}">
-                            <img class="msg_img msg-img-{{msgId}}" onload="autoMsgImgSize(this, 400, 300)" src="{{msgImgUrl}}" />
+                            <img class="msg_img msg-img-{{msgId}}" style="width: {{width}}; height:{{height}}"  src="{{msgImgUrl}}" />
                         </div>
                     </div>
                     {{ if msgStatus == "MessageStatusSending"}}
@@ -160,7 +160,7 @@
                  <div class="msg-content-img justify-content-end hint--bottom" aria-label="{{msgTime}}" style="margin-top:1rem;" >
              {{/if}}
                 <div class="text-align-right" style="width: {{width}}; height:{{height}}">
-                    <img class="msg_img msg-img-{{msgId}}" onload="autoMsgImgSize(this, 400, 300)" src="{{msgImgUrl}}"  />
+                    <img class="msg_img msg-img-{{msgId}}"  style="width: {{width}}; height:{{height}}" src="{{msgImgUrl}}"  />
                 </div>
             </div>
         </div>
