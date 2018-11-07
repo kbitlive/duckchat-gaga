@@ -48,10 +48,14 @@ body,html {
     background:rgba(243,243,243,1);
     border-radius:0.94rem;
 }
-
+.initDiv {
+    max-height: 60rem;
+    overflow-y: scroll;
+}
 .init_data_btn {
     text-align: center;
-    margin-bottom: 7rem;
+    margin-bottom: 4rem;
+    margin-top: 4rem;
 }
 .zaly_protocol {
     width:71.29rem;
@@ -241,23 +245,32 @@ button {
     width: 28.14rem;
 }
 
-.initHeader-uic {
+.initHeader-admin {
     margin-left: 23rem;
-    margin-top: 2rem;
+    margin-top: 1rem;
     height:1.31rem;
     display: flex;
     width: 28.14rem;
     display: flex;
     outline: none;
+    position: relative;
+}
+.initHeader-admin-tip {
+    margin-left: 31rem;
+    font-size: 1.01rem;
+    margin-top: 2rem;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(153,153,153,1);
 }
 
-.initHeader-uic span{
-    width: 6rem;
+.initHeader-admin span{
+    width:8.25rem;
     font-size:1.31rem;
     font-family:PingFangSC-Regular;
     font-weight:400;
-    color:rgba(102,102,102,1);
-    line-height:1.31rem;
+    color:rgba(27,27,27,1);
+    line-height: 2.14rem;
 }
 
 .initHeader-sql .radioDiv {
@@ -267,6 +280,7 @@ button {
 
 .mysql-div{
     display: none;
+    width: 28.14rem;
 }
 
 .sqlite-div {
@@ -296,24 +310,23 @@ button {
     border-radius:0.38rem;
     border:0.09rem solid rgba(229,229,229,1);
     outline: none;
-    margin-left: 23rem;
     margin-top: 1rem;
     color:rgba(20,16,48,1);
 }
 
-.uic-input {
-    width:28.14rem;
+.admin-input {
+    width:18.76rem;
     height:2.25rem;
     border-radius:0.38rem;
     border:0.09rem solid rgba(229,229,229,1);
     outline: none;
 }
 
-.uic-input::-webkit-input-placeholder,
+.admin-input::-webkit-input-placeholder,
 .sql-input::-webkit-input-placeholder {
     color:rgba(201,201,201,1);
 }
-.uic-input:focus,
+.admin-input:focus,
 .sql-input:focus {
     border:0.09rem solid rgba(76,59,177,1);
 }
@@ -392,13 +405,21 @@ button {
 .mysql-setting {
     display: flex;
     position:relative;
+    width: 100%;
+    margin-left: 23rem;
 }
 
 .failed_img {
     position: absolute;
-    left:49rem;
+    left:29rem;
     top:1.5rem;
     display: none;
+}
+.admin_failed_img {
+    position: absolute;
+    left:28rem;
+    display: none;
+    top:0.5rem;
 }
 @media (max-width: 500px) {
     body,html {
@@ -516,8 +537,8 @@ button {
     .initHeader-title,
     .initHeader-setting,
     .initHeader-sql,
-    .initHeader-uic,
-    initHeader-uic span,
+    .initHeader-admin,
+    initHeader-admin span,
     .sql-input,
     .sqlite-div {
         margin-left: 3rem;

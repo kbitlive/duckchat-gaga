@@ -167,23 +167,23 @@ class ZalyHelper
         return preg_match("/^1[3456789]{1}\d{9}$/", $phoneNumber);
     }
 
-    public static function isPassword($pwd, $pwdType)
+    public static function verifyChars($verifyChars, $containsChars)
     {
-        if($pwdType == "") {
+        if($containsChars == "") {
             return true;
         }
         $flagLetter = true;
         $flagNum = true;
         $flagSpecialCharacters = true;
 
-        if(strpos($pwdType, "letter") !== false) {
-            $flagLetter = preg_match("/[a-zA-Z]/", $pwd, $matches);
+        if(strpos($containsChars, "letter") !== false) {
+            $flagLetter = preg_match("/[a-zA-Z]/", $verifyChars, $matches);
         }
-        if(strpos($pwdType, "number") !== false) {
-            $flagNum = preg_match("/\d/", $pwd, $matches);
+        if(strpos($containsChars, "number") !== false) {
+            $flagNum = preg_match("/\d/", $verifyChars, $matches);
         }
-        if(strpos($pwdType, "special_characters") !== false) {
-            $flagSpecialCharacters = preg_match("/[\^%#`@&*$\(\){}!\.~:,\<\>_\-\+\=|;:\'\"]/", $pwd, $matches);
+        if(strpos($containsChars, "special_characters") !== false) {
+            $flagSpecialCharacters = preg_match("/[\^%#`@&*$\(\){}!\.~:,\<\>_\-\+\=|;:\'\"]/", $verifyChars, $matches);
         }
         if($flagLetter && $flagNum && $flagSpecialCharacters) {
             return true;

@@ -50,6 +50,8 @@ var ZalyAction = {
 
     api_plugin_list:"site.ApiPluginListRequest",
 
+    api_site_mute:"site.ApiSiteMuteRequest",
+
     getReqeustName : function (action) {
         var action = action.split(".").join("_");
         return ZalyAction[action];
