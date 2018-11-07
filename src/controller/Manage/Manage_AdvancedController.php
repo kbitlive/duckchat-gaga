@@ -32,7 +32,7 @@ class Manage_AdvancedController  extends Manage_CommonController
      */
     private function toPageIndex($params)
     {
-        echo $this->display("manage_advanced_index");
+        echo $this->display("manage_advanced_index", $params);
     }
 
     private function toPagePHPInfo()

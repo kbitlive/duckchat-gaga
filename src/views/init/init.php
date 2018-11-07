@@ -446,7 +446,6 @@
         initSite(data);
     });
 
-
     function checkAdminAccount(isFocus)
     {
         var adminName  = $(".admin_name").val();
