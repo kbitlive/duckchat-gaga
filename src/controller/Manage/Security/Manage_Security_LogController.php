@@ -17,9 +17,19 @@ class Manage_Security_LogController extends Manage_CommonController
             $offset = ($page -1 )*$this->defaultPageSize;
             echo $this->getResults($offset);
         }else {
-            $page =1;
-            $offset = ($page -1 )*$this->defaultPageSize;
-            echo $this->getLogPage($offset);
+           $for = isset($_GET['for']) ? $_GET['for'] : "page";
+           switch ($for) {
+               case "page":
+                   $page =1;
+                   $offset = ($page -1 )*$this->defaultPageSize;
+                   echo $this->getLogPage($offset);
+                   break;
+               case "truncate":
+                   echo $this->truncateLogs();
+                   break;
+           }
+
+
         }
         return;
     }
@@ -41,5 +51,11 @@ class Manage_Security_LogController extends Manage_CommonController
     {
         $results = $this->ctx->PassportPasswordLogTable->getLists($offset, $this->defaultPageSize);
         return json_encode(["data" => $results]);
+    }
+
+    private function truncateLogs()
+    {
+        $results = $this->ctx->PassportPasswordLogTable->deleteLogData();
+        return json_encode(["errCode" => $results]);
     }
 }

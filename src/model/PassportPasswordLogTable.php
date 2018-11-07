@@ -31,9 +31,14 @@ class PassportPasswordLogTable extends BaseTable
         return $this->insertData($this->table, $log, $this->columns);
     }
 
-    public function deleteLogDataByUserId($userId, $date)
+    public function deleteLogData()
     {
+        $tag = __CLASS__.'->'.__FUNCTION__;
 
+        $sql = "delete from $this->table ";
+        $prepare = $this->dbSlave->prepare($sql);
+        $this->handlePrepareError($tag, $prepare);
+        return $prepare->execute();
     }
 
     public function getLists($offset = 0, $limit = 200)
