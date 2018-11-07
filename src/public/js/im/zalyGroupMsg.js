@@ -111,15 +111,10 @@ function jump()
                 handleClickRowGroupProfile(jumpRoomId);
             }
         } else if(jumpRoomType == U2_MSG) {
-            if(jumpRelation == 0) {
-                ///todo sendAddFriend
-                sendFriendApplyReq(jumpRoomId, "", handleSendFriendApplyReq);
-            } else if(jumpRelation == 1) {
-                localStorage.setItem(chatSessionIdKey, jumpRoomId);
-                localStorage.setItem(jumpRoomId, jumpRoomType);
-                sendFriendProfileReq(jumpRoomId);
-                insertU2Room(undefined, jumpRoomId);
-            }
+            localStorage.setItem(chatSessionIdKey, jumpRoomId);
+            localStorage.setItem(jumpRoomId, jumpRoomType);
+            sendFriendProfileReq(jumpRoomId);
+            insertU2Room(undefined, jumpRoomId);
         }
     }
 }
@@ -624,6 +619,7 @@ intervalId = undefined
 function setDocumentTitle()
 {
     iconNum = 0;
+    intervalId = 0;
     if(document.hidden == true) {
         var siteTip = localStorage.getItem(newSiteTipKey);
         if(intervalId == undefined && siteTip != "clear") {

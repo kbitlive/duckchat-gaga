@@ -34,8 +34,8 @@ abstract class HttpBaseController extends \Wpf_Controller
         'page.version.password',
         'page.version.upgrade',
     ];
-    private $groupType = "g";
-    private $u2Type = "u";
+    private $groupType = "groupMsg";
+    private $u2Type = "u2Msg";
     private $jumpRoomType = "";
     private $jumpRoomId = "";
     private $jumpRelation = "";
@@ -135,12 +135,13 @@ abstract class HttpBaseController extends \Wpf_Controller
                 }
             }
             $x = isset($_GET['x']) ? $_GET['x'] : "";
+            $page = isset($_GET['page']) ? $_GET['page'] : "";
             $apiPageIndex = ZalyConfig::getApiIndexUrl();
-            if ($x) {
+            if ($page) {
                 if (strpos($apiPageIndex, "?")) {
-                    $apiPageIndex . "&x=" . $x;
+                    $apiPageIndex . "&page=".$page."&x=" . $x;
                 } else {
-                    $apiPageIndex . "?x=" . $x;
+                    $apiPageIndex . "?page=".$page."&x=" . $x;
                 }
             }
             header("Content-Type: application/javascript; charset=utf-8");
@@ -162,23 +163,23 @@ abstract class HttpBaseController extends \Wpf_Controller
 
         try {
             $x = isset($_GET['x']) ? $_GET['x'] : "";
-            if (!$x) {
+            $page = isset($_GET['page']) ? $_GET['page'] : "";
+            if (!$page) {
                 return;
             }
-            list($type, $id) = explode("-", $x);
-            if ($id == $this->userId) {
+            if ($x == $this->userId) {
                 return;
             }
-            if ($type == $this->groupType) {
+            if ($page == $this->groupType) {
                 $this->jumpRoomType = "MessageRoomGroup";
-                $isInGroupFlag = $this->ctx->SiteGroupTable->getGroupProfile($id, $this->userId);
+                $isInGroupFlag = $this->ctx->SiteGroupTable->getGroupProfile($x, $this->userId);
                 $this->jumpRelation = $isInGroupFlag != false ? 1 : 0;
-            } elseif ($type == $this->u2Type) {
+            } elseif ($page == $this->u2Type) {
                 $this->jumpRoomType = "MessageRoomU2";
-                $isFriendFlag = $this->ctx->SiteUserFriendTable->isFollow($this->userId, $id);
+                $isFriendFlag = $this->ctx->SiteUserFriendTable->isFollow($this->userId, $x);
                 $this->jumpRelation = $isFriendFlag > 0 ? 1 : 0;
             }
-            $this->jumpRoomId = $id;
+            $this->jumpRoomId = $x;
         } catch (Exception $ex) {
             $this->ctx->Wpf_Logger->error($tag, "error msg =" . $ex->getMessage());
         }
