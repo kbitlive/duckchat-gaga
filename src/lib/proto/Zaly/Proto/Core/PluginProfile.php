@@ -60,29 +60,9 @@ class PluginProfile extends \Google\Protobuf\Internal\Message
      */
     private $adminPageUrl = '';
 
-    /**
-     * Constructor.
-     *
-     * @param array $data {
-     *     Optional. Data for populating the Message object.
-     *
-     *     @type int $id
-     *     @type string $name
-     *     @type string $logo
-     *     @type int $order
-     *     @type string $landingPageUrl
-     *     @type bool $landingPageWithProxy
-     *     @type int[]|\Google\Protobuf\Internal\RepeatedField $usageTypes
-     *     @type int $loadingType
-     *     @type int $permissionType
-     *     @type string $userSessionId
-     *     @type string $adminPageUrl
-     *          小程序管理url
-     * }
-     */
-    public function __construct($data = NULL) {
+    public function __construct() {
         \GPBMetadata\Core\Plugin::initOnce();
-        parent::__construct($data);
+        parent::__construct();
     }
 
     /**

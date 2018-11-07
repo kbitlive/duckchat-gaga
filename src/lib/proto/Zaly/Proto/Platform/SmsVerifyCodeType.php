@@ -5,7 +5,7 @@
 namespace Zaly\Proto\Platform;
 
 /**
- * Protobuf type <code>platform.SmsVerifyCodeType</code>
+ * Protobuf enum <code>Platform\SmsVerifyCodeType</code>
  */
 class SmsVerifyCodeType
 {

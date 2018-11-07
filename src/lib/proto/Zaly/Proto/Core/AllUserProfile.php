@@ -21,20 +21,14 @@ class AllUserProfile extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>int64 timeReg = 2;</code>
      */
     private $timeReg = 0;
-
     /**
-     * Constructor.
-     *
-     * @param array $data {
-     *     Optional. Data for populating the Message object.
-     *
-     *     @type \Zaly\Proto\Core\PublicUserProfile $public
-     *     @type int|string $timeReg
-     * }
+     * Generated from protobuf field <code>repeated .core.CustomUserProfile custom = 3;</code>
      */
-    public function __construct($data = NULL) {
+    private $custom;
+
+    public function __construct() {
         \GPBMetadata\Core\User::initOnce();
-        parent::__construct($data);
+        parent::__construct();
     }
 
     /**
@@ -77,6 +71,28 @@ class AllUserProfile extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkInt64($var);
         $this->timeReg = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .core.CustomUserProfile custom = 3;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getCustom()
+    {
+        return $this->custom;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .core.CustomUserProfile custom = 3;</code>
+     * @param \Zaly\Proto\Core\CustomUserProfile[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setCustom($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Zaly\Proto\Core\CustomUserProfile::class);
+        $this->custom = $arr;
 
         return $this;
     }

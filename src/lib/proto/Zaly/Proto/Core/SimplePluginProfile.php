@@ -30,21 +30,9 @@ class SimplePluginProfile extends \Google\Protobuf\Internal\Message
      */
     private $landingPageWithProxy = false;
 
-    /**
-     * Constructor.
-     *
-     * @param array $data {
-     *     Optional. Data for populating the Message object.
-     *
-     *     @type int $id
-     *     @type string $landingPageUrl
-     *     @type int $loadingType
-     *     @type bool $landingPageWithProxy
-     * }
-     */
-    public function __construct($data = NULL) {
+    public function __construct() {
         \GPBMetadata\Core\Plugin::initOnce();
-        parent::__construct($data);
+        parent::__construct();
     }
 
     /**
