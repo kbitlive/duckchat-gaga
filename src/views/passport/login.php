@@ -33,6 +33,10 @@
 <input type="hidden" value="<?php echo $pwdMaxLength;?>" class="pwdMaxLength">
 <input type="hidden" value="<?php echo $pwdMinLength;?>" class="pwdMinLength">
 
+<input type="hidden" value='<?php echo $thirdPartyLoginOptions;?>' class="thirdPartyLoginOptions">
+
+
+
 <div class="site-warning"></div>
     <div style="position: relative; width:100%;height:100%;" class="site_login_div">
 

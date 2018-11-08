@@ -170,6 +170,7 @@ var passwordResetRequired = $(".passwordResetRequired").val();
 var x= $(".jumpRoomId").val();
 var page= $(".jumpRoomType").val();
 var refererUrlKey = "documentReferer";
+var thirdPartyLoginOptions = $(".thirdPartyLoginOptions").val();
 
 if(loginWelcomeText) {
     var text = template("tpl-string", {
@@ -293,10 +294,16 @@ function IsURL (url) {
 function getLoginPage()
 {
     hideLoading();
+    var thirdLoginOptions = new Array();
+    try{
+        thirdLoginOptions = JSON.parse(thirdPartyLoginOptions)
+    }catch (error) {
+    }
     var html = template("tpl-login-div", {
         loginNameAlias: loginNameAlias,
         siteLogo:siteLogo,
         siteName:siteName,
+        thirdLoginOptions:thirdLoginOptions
     });
     html = handleHtmlLanguage(html);
     $('.login_for_size_div').html(html);
@@ -848,3 +855,16 @@ function registerForPassportPassword() {
     $(".zaly_login_by_pwd")[0].style.display = "none";
 }
 
+$(document).on("click", ".third_login_logo", function () {
+    var name = $(this).attr("name");
+    var landingUrl = $(this).attr("landingUrl");
+    if(landingUrl.indexOf("?")) {
+        landingUrl +="&duckchat_third_login_name="+name;
+    } else {
+        landingUrl +="?duckchat_third_login_name="+name;
+    }
+    var html = template("tpl_third_login", function () {
+        landingUrl:landingUrl
+    });
+    $(".container").html(html);
+});

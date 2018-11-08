@@ -106,9 +106,8 @@ class Page_Passport_LoginController extends HttpBaseController
             'passwordFindWay' => $passwordRestWay,
             'passwordResetWay' => $passwordRestWay,
             'passwordResetRequired' => $passwordResetRequired,
-            'thirdPartyLoginOptions' => $thirdPartyLoginOptions,
+            'thirdPartyLoginOptions' => json_encode($thirdPartyLoginOptions),
         ];
-
         echo $this->display("passport_login", $params);
         return;
     }
