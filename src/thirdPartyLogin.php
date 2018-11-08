@@ -3,7 +3,7 @@ return array(
     'localLanding' => array(
         'name' => '192.168.3.6',
         'logo' => true,
-        'landingUrl' => "http://",
+        'landingUrl' => "http://192.168.3.6/index.php?action=page.passport.login",
         'verifyUrl' => "http://192.168.3.6/index.php?action=api.session.verify&body_format=base64pb",
     ),
     'weixin' =>
