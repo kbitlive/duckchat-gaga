@@ -373,7 +373,7 @@ class InstallDBController
 
     private function _insertSiteConfig($siteName, $loginPluginId)
     {
-        $siteConfig = SiteConfig::$siteConfig;
+        $siteConfig = SiteConfig::$initSiteConfig;
 
         $siteConfig[SiteConfig::SITE_NAME] = $siteName;
 

@@ -94,9 +94,9 @@ class PublicSiteConfig extends \Google\Protobuf\Internal\Message
     /**
      * 1:Home 2:Chats 3:Contacts 4:Me
      *
-     * Generated from protobuf field <code>int32 defaultFrontPage = 18;</code>
+     * Generated from protobuf field <code>.core.FrontPage frontPage = 18;</code>
      */
-    private $defaultFrontPage = 0;
+    private $frontPage = 0;
     /**
      *true:show home page ,false hidden home page
      *
@@ -502,25 +502,25 @@ class PublicSiteConfig extends \Google\Protobuf\Internal\Message
     /**
      * 1:Home 2:Chats 3:Contacts 4:Me
      *
-     * Generated from protobuf field <code>int32 defaultFrontPage = 18;</code>
+     * Generated from protobuf field <code>.core.FrontPage frontPage = 18;</code>
      * @return int
      */
-    public function getDefaultFrontPage()
+    public function getFrontPage()
     {
-        return $this->defaultFrontPage;
+        return $this->frontPage;
     }
 
     /**
      * 1:Home 2:Chats 3:Contacts 4:Me
      *
-     * Generated from protobuf field <code>int32 defaultFrontPage = 18;</code>
+     * Generated from protobuf field <code>.core.FrontPage frontPage = 18;</code>
      * @param int $var
      * @return $this
      */
-    public function setDefaultFrontPage($var)
+    public function setFrontPage($var)
     {
-        GPBUtil::checkInt32($var);
-        $this->defaultFrontPage = $var;
+        GPBUtil::checkEnum($var, \Zaly\Proto\Core\FrontPage::class);
+        $this->frontPage = $var;
 
         return $this;
     }

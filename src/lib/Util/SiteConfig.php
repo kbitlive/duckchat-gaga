@@ -64,6 +64,10 @@ class SiteConfig
 
     const SITE_FILE_SIZE = "maxFileSize";//文件支持的大小
 
+    const SITE_FRONT_PAGE = "frontPage";
+
+    const SITE_SHOW_HOME_PAGE = "showHomePage";
+
     public static function getPubkAndPrikPem()
     {
         $pair = ZalyRsa::newRsaKeyPair(2048);
@@ -120,6 +124,9 @@ class SiteConfig
         self::SITE_MOBILE_NUM,
         self::SITE_WEB_NUM,
         self::SITE_FILE_SIZE,
+
+        self::SITE_DEFAULT_FRONT_PAGE,
+        self::SITE_SHOW_HOME_PAGE,
     ];
 
     public static $numericKeys = [
@@ -131,7 +138,7 @@ class SiteConfig
         self::SITE_FILE_SIZE,
     ];
 
-    public static $siteConfig = [
+    public static $initSiteConfig = [
         self::SITE_NAME => "duckchat-site",
         self::SITE_LOGO => "",
 

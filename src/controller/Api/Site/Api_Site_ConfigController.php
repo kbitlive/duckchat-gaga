@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 客户端获取站点相关配置.
  * User: childeYin<尹少爷>
  * Date: 13/07/2018
  * Time: 11:20 AM
@@ -186,8 +186,8 @@ class Api_Site_ConfigController extends \BaseController
             }
 
             $zalyPort = isset($configData[SiteConfig::SITE_ZALY_PORT]) ? $configData[SiteConfig::SITE_ZALY_PORT] : "";
-            $wsPort = isset( $configData[SiteConfig::SITE_WS_PORT]) ?  $configData[SiteConfig::SITE_WS_PORT] :"";
-            $wsAddress = isset($configData[SiteConfig::SITE_WS_ADDRESS])? $configData[SiteConfig::SITE_WS_ADDRESS] : "";
+            $wsPort = isset($configData[SiteConfig::SITE_WS_PORT]) ? $configData[SiteConfig::SITE_WS_PORT] : "";
+            $wsAddress = isset($configData[SiteConfig::SITE_WS_ADDRESS]) ? $configData[SiteConfig::SITE_WS_ADDRESS] : "";
 
             $addressForAPi = "";
             $addressForIM = "";
@@ -225,7 +225,25 @@ class Api_Site_ConfigController extends \BaseController
             $config->setSiteIdPubkBase64($configData[SiteConfig::SITE_ID_PUBK_PEM]);
             $config->setAccountSafePluginId($configData[SiteConfig::SITE_PASSPORT_ACCOUNT_SAFE_PLUGIN_ID]);
 
+            if (isset($configData[SiteConfig::SITE_SHOW_HOME_PAGE])) {
+                $config->setShowHomePage($configData[SiteConfig::SITE_SHOW_HOME_PAGE]);
+            } else {
+                $config->setShowHomePage(true);
+            }
+
+            if ($config->getShowHomePage()) {
+                if (isset($configData[SiteConfig::SITE_FRONT_PAGE])) {
+                    $config->setFrontPage($configData[SiteConfig::SITE_FRONT_PAGE]);
+                } else {
+                    $config->setFrontPage(\Zaly\Proto\Core\FrontPage::FrontPageDefault);
+                }
+            } else {
+                $config->setFrontPage(\Zaly\Proto\Core\FrontPage::FrontPageChats);//不显示首页，一定显示第二页
+            }
+
             $config->setVersion($this->getSiteVersion());
+            $currentVersionCode = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionCodeKey);
+            $config->setVersionCode($currentVersionCode);
 
             $response->setConfig($config);
 
