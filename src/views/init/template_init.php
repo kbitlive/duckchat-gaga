@@ -57,7 +57,7 @@
 
 
 <script id="tpl-check-site-environment" type="text/html">
-    <div class="initDiv " style="margin-top:2rem;">
+    <div class="initDiv" >
         <div class="initHeader" style="">
             检测站点信息
         </div>
@@ -142,16 +142,18 @@
             </div>
         </div>
 
-        <div style="margin-top:4rem;margin-bottom: 5rem;">
+        <div style="margin-top:4rem;  text-align: center;">
             <button class="previte_init_protocol" data-local-value="prevStepTip">上一步</button>
             <button class="next_init_data" style="background:rgba(201,201,201,1);"  disabled data-local-value="nextStepTip">下一步</button>
+        </div>
+        <div style="text-align: center; margin-top:4rem;margin-bottom: 3rem;">
+            <a class="phpinfo" href="./{{phpinfo}}" target="_blank"  data-local-value="phpinfoTip">查看当前PHP环境</a>
         </div>
 </script>
 
 
 <script id="tpl-init-data" type="text/html">
     <div class="initDiv ">
-        <img style="width: 3rem;height: 3rem;margin-top:2rem;margin-left: 2rem;cursor: pointer;" onclick="newStepForCheckEnv('data_init')" src="../../public/img/back.png">
         <div class="initHeader" style="margin-top: 0rem;">
             数据初始化
         </div>
@@ -254,16 +256,16 @@
                <span>用户名：</span><input type="text" class="admin-input admin_name">
                <img src="../../public/img/init/failed.png" class="admin_failed_img admin_name_failed">
            </div>
-           <div class="initHeader-admin-tip">包含字母，数字，长度5-24</div>
+           <div class="initHeader-admin-tip">包含字母，长度5-24</div>
 
            <div class="initHeader-admin">
-               <span>密码：</span><input type="text" class="admin-input admin_pwd">
+               <span>密码：</span><input type="password" class="admin-input admin_pwd">
                <img src="../../public/img/init/failed.png" class="admin_failed_img admin_pwd_failed">
            </div>
-           <div class="initHeader-admin-tip">包含字母，数字，长度8-32</div>
+           <div class="initHeader-admin-tip">包含字母，长度8-32</div>
 
            <div class="initHeader-admin">
-               <span>确认密码：</span><input type="text" class="admin-input admin_repwd">
+               <span>确认密码：</span><input type="password" class="admin-input admin_repwd">
                <img src="../../public/img/init/failed.png" class="admin_failed_img admin_repwd_failed">
            </div>
 
@@ -274,7 +276,8 @@
         </div>
 
         <div class="d-flex flex-row justify-content-center init_data_btn" >
-            <button type="button" class="btn login_button"><span class="span_btn_tip">初始化数据</span></button>
+            <button class="previte_init_env" onclick="newStepForCheckEnv('data_init')" data-local-value="prevStepTip">Previous Step</button>
+            <button type="button" class="btn login_button"><span class="span_btn_tip" data-local-value="initSiteTip">初始化站点</span></button>
         </div>
     </div>
 </script>
