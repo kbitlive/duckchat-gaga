@@ -178,6 +178,17 @@ function displayRoomListMsgUnReadNum()
     }
 }
 
+function isJudgeSiteMasters(userId)
+{
+    var siteConfigJson = localStorage.getItem("site_config");
+    var siteConfig = JSON.parse(siteConfigJson);
+    var mastersStr = siteConfig.masters;
+    if(mastersStr.indexOf(userId) != -1) {
+        return true;
+    }
+    return false;
+}
+
 
 $(document).on("click", ".l-sb-item", function(){
     var currentActive = $(".left-sidebar").find(".l-sb-item-active");
@@ -432,6 +443,7 @@ $(document).on("click", ".chat_plugin", function () {
 
 $(document).on("click", ".plugin_back", function () {
     $(".plugin-iframe")[0].contentWindow.history.go(-1); // back
+    $(".plugin-iframe")[0].contentWindow.onload();
 });
 
 //--------------------------------------http.file.downloadFile----------------------------------------------
@@ -1460,7 +1472,6 @@ function openU2Chat(result)
         localStorage.setItem(chatSessionIdKey, userId);
         localStorage.setItem(userId, U2_MSG);
         $(".right-chatbox").attr("chat-session-id", userId);
-        $(".user-desc-body").html(userId);
         insertU2Room(undefined, userId);
     }
 }
@@ -2655,11 +2666,20 @@ function displayCurrentProfile()
                 });
                 $(".nickname_"+chatSessionId).html(nickname);
                 $(".chatsession-title").html(nickname);
-                $(".user-desc-body").html(nickname);
+                var isMaster = isJudgeSiteMasters(chatSessionId);
+                var html = template("tpl-friend-profile", {
+                    isMaster:isMaster,
+                    nickname:nickname,
+                    loginName:friendProfile.loginName
+                });
+                $(".user-desc-body").html(html);
             } else {
                 $(".chatsession-title").html("");
                 $(".user-desc-body").html("");
             }
+
+
+
             $(".chat_session_id_"+chatSessionId).addClass("chatsession-row-active");
             var relationKey = friendRelationKey + chatSessionId;
             var relation = localStorage.getItem(relationKey) ;
@@ -3129,13 +3149,17 @@ function editFriendRemark()
 
 
 //-------------------------------------self qrcode-------------------------------------------------------
+
+
 ////展示个人消息
 function displaySelfInfo()
 {
+    var isMaster = isJudgeSiteMasters(token);
     var html = template("tpl-self-info", {
         userId:token,
         nickname:nickname,
         loginName:loginName,
+        isMaster:isMaster
     });
     html = handleHtmlLanguage(html);
     $(".wrapper").append(html);
@@ -3654,31 +3678,35 @@ function sendMsgBySend()
 
 //粘贴图片
 document.getElementById("msg_content").addEventListener('paste', function(event) {
-    var imgFile = null;
-    var idx;
-    var items = event.clipboardData.items;
-    if(items == undefined) {
-        return;
-    }
-    for(var i=0,len=items.length; i<len; i++) {
-        var item = items[i];
-        if (item.kind == 'file' ||item.type.indexOf('image') > -1) {
-            var blob = item.getAsFile();
-            var reader = new FileReader();
-            reader.onload = function(event) {
-                var data = event.target.result;
-                var img = new Image();
-                img.src = data;
-                img.onload =  function (ev) {
-                    autoMsgImgSize(img, 400, 300);
-                };
-                document.getElementById("msgImage").style.display = "block";
-                document.getElementById("msgImage").appendChild(img);
-                return false;
-            }; // data url!
-            reader.readAsDataURL(blob);
-        }
-    }
+   try{
+       var imgFile = null;
+       var idx;
+       var items = event.clipboardData.items;
+       if(items == undefined) {
+           return;
+       }
+       for(var i=0,len=items.length; i<len; i++) {
+           var item = items[i];
+           if (item.kind == 'file' ||item.type.indexOf('image') > -1) {
+               var blob = item.getAsFile();
+               var reader = new FileReader();
+               reader.onload = function(event) {
+                   var data = event.target.result;
+                   var img = new Image();
+                   img.src = data;
+                   img.onload =  function (ev) {
+                       autoMsgImgSize(img, 400, 300);
+                   };
+                   document.getElementById("msgImage").style.display = "block";
+                   document.getElementById("msgImage").appendChild(img);
+                   return false;
+               }; // data url!
+               reader.readAsDataURL(blob);
+           }
+       }
+   }catch (error){
+
+   }
 });
 
 document.onkeydown=function(e){

@@ -47,6 +47,7 @@
     <input type="hidden" value="<?php echo $isLoadCurl;?>" class="isLoadCurl">
     <input type="hidden" value="<?php echo $isWritePermission;?>" class="isWritePermission">
     <input type="hidden" value='<?php echo $dbFiles;?>' class="dbFiles">
+    <input type="hidden" value='<?php echo $phpinfo;?>' class="phpinfo">
 
     <?php include (dirname(__DIR__) . '/init/template_init.php');?>
 
@@ -57,6 +58,7 @@
     var isLoadPDOMysql = $(".isLoadPDOMysql").val();
     var isLoadPDOSqlite = $(".isLoadPDOSqlite").val();
     var isWritePermission = $(".isWritePermission").val();
+    var phpinfo = $(".phpinfo").val();
     var isLoadCurl = $(".isLoadCurl").val();
     var isCanLoadPropertites = false;
     var dbFiles = $(".dbFiles").val();
@@ -174,6 +176,7 @@
             isLoadCurl:isLoadCurl,
             isWritePermission:isWritePermission,
             isLoadProperties:isCanLoadPropertites,
+            phpinfo:phpinfo
         });
         html = handleHtmlLanguage(html);
         $(".zaly_init").html(html);
@@ -420,6 +423,7 @@
                 dbType: dbType,
                 adminLoginName:adminName,
                 adminPassword:adminPwd,
+                phpinfo:phpinfo
             };
             testConnectMysql(data);
             return;
@@ -442,6 +446,7 @@
             sqliteDbFile: sqliteFileName,
             adminLoginName:adminName,
             adminPassword:adminPwd,
+            phpinfo:phpinfo
         };
         initSite(data);
     });
@@ -451,7 +456,7 @@
         var adminName  = $(".admin_name").val();
         var adminPwd   = $(".admin_pwd").val();
         var adminRepwd = $(".admin_repwd").val();
-        var containCharaters = "letter,number";
+        var containCharaters = "letter";
 
         if(checkIsEntities(adminName) || adminName.length<5 || adminName.length>24 || !verifyChars(containCharaters, adminName) ) {
             if(isFocus == false) {
