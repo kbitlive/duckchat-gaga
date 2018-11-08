@@ -125,7 +125,7 @@ class SiteConfig
         self::SITE_WEB_NUM,
         self::SITE_FILE_SIZE,
 
-        self::SITE_DEFAULT_FRONT_PAGE,
+        self::SITE_FRONT_PAGE,
         self::SITE_SHOW_HOME_PAGE,
     ];
 
