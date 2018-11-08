@@ -236,6 +236,19 @@ class ZalyHelper
         }
     }
 
+    public static function getRequestAddress()
+    {
+        $defaultScheme = "http";
+        if ((!empty($_SERVER['REQUEST_SCHEME']) && $_SERVER['REQUEST_SCHEME'] == 'https') ||
+            (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ||
+            (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443')) {
+            $defaultScheme = 'https';
+        }
+
+        $defaultHost = $_SERVER['HTTP_HOST'];
+        return $defaultScheme."://".$defaultHost;
+    }
+
     public static function isUicNumber($str)
     {
         return preg_match("/^[0-9]{6,20}$/", $str);

@@ -4,6 +4,8 @@
 UserClientLangZH = "1";
 UserClientLangEN = "0";
 
+siteAddress = $(".siteAddress").val();
+
 //语言国际化，替换文案
 function handleHtmlLanguage(html)
 {
@@ -128,7 +130,7 @@ function getLoadingCss()
         link.id   = cssId;
         link.rel  = 'stylesheet';
         link.type = 'text/css';
-        link.href = '../../public/css/loading.css';
+        link.href = siteAddress + '/public/css/loading.css';
         link.media = 'all';
         head.appendChild(link);
     }
