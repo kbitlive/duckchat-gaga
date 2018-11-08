@@ -17,8 +17,8 @@ return array(
         array(
             'name' => 'discuz',
             'logo' => '',
-            'landingUrl' => "http://",
-            'verifyUrl' => "http://localhost/verify",
+            'landingUrl' => "http://192.168.3.152:8034",
+            'verifyUrl' => "http://192.168.3.152:8034/plugin.php?id=duckchat&action=api.session.verify&body_format=base64pb",
         ),
     'oschina' =>
         array(

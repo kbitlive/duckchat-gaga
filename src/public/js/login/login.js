@@ -864,12 +864,13 @@ function registerForPassportPassword() {
 $(document).on("click", ".third_login_logo", function () {
     var name = $(this).attr("name");
     var landingUrl = $(this).attr("landingUrl");
-    if(landingUrl.indexOf("?")) {
-        landingUrl +="&duckchat_third_login_name="+name;
+    var siteAddressUrl = encodeURIComponent(siteAddress);
+    if(landingUrl.indexOf("?") != -1) {
+        landingUrl +="&duckchat_third_login_name="+name+"&redirect_url="+siteAddressUrl;
     } else {
-        landingUrl +="?duckchat_third_login_name="+name;
+        landingUrl +="?duckchat_third_login_name="+name+"&redirect_url="+siteAddressUrl;
     }
-    var html = template("tpl_third_login", function () {
+    var html = template("tpl_third_login", {
         landingUrl:landingUrl
     });
     $(".container").html(html);

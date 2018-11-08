@@ -6,6 +6,8 @@ var callbackIdParamName = "zalyjsCallbackId";
 //localStorage, prevent page flush, and the referrer is lost
 var refererUrl = document.referrer;
 var refererUrlKey = "documentReferer";
+var thirdLoginNameKey = "thirdLoginName";
+
 
 function getUrlParam(key)
 {
@@ -15,12 +17,21 @@ function getUrlParam(key)
         var param = pathParams[i].split('=');
         if(param[0] == key) {
             var url = decodeURIComponent(param[1]);
-            localStorage.setItem(refererUrlKey, url);
+            return url;
         }
     }
+    return false;
 }
 
-getUrlParam("redirect_url");
+var redirectUrl = getUrlParam("redirect_url");
+if(redirectUrl) {
+    localStorage.setItem(refererUrlKey, redirectUrl);
+}
+
+var thirdLoginName = getUrlParam("duckchat_third_login_name");
+if(thirdLoginName) {
+    localStorage.setItem(thirdLoginNameKey, thirdLoginName);
+}
 
 var zalyjsSiteLoginMessageBody = {};
 
@@ -167,10 +178,16 @@ function zalyjsOpenNewPage(url) {
 function zalyjsLoginSuccess(loginName, sessionid, isRegister, callback) {
 
     var callbackId = zalyjsCallbackHelper.register(callback)
+    var thirdLoginName = localStorage.getItem(thirdLoginNameKey);
+    if(thirdLoginName == null || thirdLoginName == undefined) {
+        thirdLoginName=""
+    }
+    console.log("thirdLoginName==="+thirdLoginName);
     var messageBody = {}
     messageBody["loginName"] = loginName
     messageBody["sessionid"] = sessionid
     messageBody["isRegister"] = (isRegister == true ? true : false)
+    messageBody['thirdPartyKey'] = thirdLoginName
     messageBody[callbackIdParamName] = callbackId
     messageBody = JSON.stringify(messageBody)
 
@@ -228,8 +245,14 @@ function zalyjsWebLoginSuccess() {
     if (refererUrl) {
         if (refererUrl.indexOf("?") > -1) {
             var refererUrl = refererUrl + "&preSessionId=" + zalyjsSiteLoginMessageBody.sessionid + "&isRegister=" + zalyjsSiteLoginMessageBody.isRegister;
+            if(zalyjsSiteLoginMessageBody.thirdPartyKey) {
+                 refererUrl = refererUrl + "&thirdPartyKey="+zalyjsSiteLoginMessageBody.thirdPartyKey;
+            }
         } else {
-            var refererUrl = refererUrl + "?preSessionId=" + zalyjsSiteLoginMessageBody.sessionid + "&isRegister=" + zalyjsSiteLoginMessageBody.isRegister;
+            var refererUrl = refererUrl + "?preSessionId=" + zalyjsSiteLoginMessageBody.sessionid + "&isRegister=" + zalyjsSiteLoginMessageBody.isRegister
+            if(zalyjsSiteLoginMessageBody.thirdPartyKey) {
+                refererUrl = refererUrl + "&thirdPartyKey="+zalyjsSiteLoginMessageBody.thirdPartyKey;
+            }
         }
         refererUrl = refererUrl + " &fail_callback=" + zalyjsSiteLoginMessageBody.callbackName + "&success_callback=zalyjsWebSuccessCallBack";
         addJsByDynamic(refererUrl);
