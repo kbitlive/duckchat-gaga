@@ -22,7 +22,8 @@ class Site_SessionVerify
         $this->logger = $ctx->getLogger();
     }
 
-    public function doVerify($preSessionId)
+    //本地passport登陆，校验preSession
+    public function doLocalVerify($preSessionId)
     {
         $preSessionId = trim($preSessionId);
 
@@ -40,7 +41,37 @@ class Site_SessionVerify
 
         $this->deletePreSession($preSessionId);
 
+        $this->logger->error("site.session.verify=========", 'VERIFY PROFILE=' . $loginProfile->serializeToJsonString());
         return $loginProfile;
+    }
+
+
+    //Api passport登陆，校验preSession，提供API对外接口中使用
+    //API的参数需要加密校验
+    public function doApiVerify($preSessionId)
+    {
+        $preSessionId = trim($preSessionId);
+
+        if (!$preSessionId) {
+            throw new Exception("preSessionId is 404 ");
+        }
+
+        $userInfo = $this->ctx->PassportPasswordPreSessionTable->getInfoByPreSessionId($preSessionId);
+
+        if (!$userInfo || !$userInfo['userId']) {
+            throw new Exception("user info is empty by preSessionId");
+        }
+
+        $sitePubkPem = base64_decode($userInfo['sitePubkPem']);
+        $loginProfile = $this->buildLoginUserProfile($userInfo);
+
+        $this->deletePreSession($preSessionId);
+
+        $this->logger->error("api.session.verify=========", 'VERIFY PROFILE=' . $loginProfile->serializeToJsonString());
+        return [
+            "loginProfile" => $loginProfile,
+            "sitePubkPem" => $sitePubkPem,
+        ];
     }
 
 

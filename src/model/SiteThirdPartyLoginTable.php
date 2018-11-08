@@ -49,7 +49,7 @@ class SiteThirdPartyLoginTable extends BaseTable
             $prepare->bindValue(":loginKey", $loginKey);
             $prepare->bindValue(":loginUserId", $loginUserId);
             $prepare->execute();
-            return $prepare->fetchAll(PDO::FETCH_ASSOC);
+            return $prepare->fetch(PDO::FETCH_ASSOC);
         } finally {
             $this->logger->writeSqlLog($tag, $sql, [$loginKey, $loginUserId], $startTime);
         }

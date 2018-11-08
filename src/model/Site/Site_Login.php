@@ -34,6 +34,7 @@ class Site_Login
      */
     public function doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $userCustomArray)
     {
+        $thirdPartyKey = "localLanding";
         $userProfile = false;
 
         if (empty($thirdPartyKey)) {
@@ -41,7 +42,7 @@ class Site_Login
             $userProfile = $this->loginBySitePassport($preSessionId, $devicePubkPem, $clientType);
         } else {
             //get third login by thirdPartyKey
-            $userProfile = $this->loginByThirdParty($preSessionId, $devicePubkPem, $clientType);
+            $userProfile = $this->loginByThirdParty($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType);
         }
 
         if ($userProfile && !empty($userCustomArray)) {
@@ -56,9 +57,7 @@ class Site_Login
     private function loginBySitePassport($preSessionId, $devicePubkPem, $clientSideType = Zaly\Proto\Core\UserClientType::UserClientMobileApp)
     {
         //实现本地api.session.verify 逻辑
-        $loginUserProfile = $this->ctx->Site_SessionVerify->doVerify($preSessionId);
-
-        $this->logger->error("============", "loginUserProfile=" . $loginUserProfile->serializeToJsonString());
+        $loginUserProfile = $this->ctx->Site_SessionVerify->doLocalVerify($preSessionId);
 
         //if loginUserProfile exist
         if (!$loginUserProfile || empty($loginUserProfile->getLoginName()) || empty($loginUserProfile->getLoginName())) {
@@ -68,11 +67,7 @@ class Site_Login
         //get intivation first
         $uicInfo = $this->getIntivationCode($loginUserProfile->getInvitationCode());
 
-        $this->logger->error("----------", "uicInfo=" . json_encode($uicInfo, true));
-
         $userProfile = $this->doSiteLoginAction(false, $loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType, "");
-
-        $this->logger->error("----------===-", "userProfile=" . var_export($userProfile, true));
 
         return $userProfile;
     }
@@ -106,11 +101,14 @@ class Site_Login
             $thirdPartyLoginUserId = $loginUserProfile->getUserId();
             $thirdPartyInfo = $this->getThirdPartyAccount($thirdPartyLoginKey, $thirdPartyLoginUserId);
 
+            $this->logger->error("-=-==========", "thirdPartyInfo=" . var_export($thirdPartyInfo, true));
             $siteUserId = false;
 
             if ($thirdPartyInfo) {
                 $siteUserId = $thirdPartyInfo['userId'];
             }
+
+            $this->logger->error("-=-==========", "siteUserId=" . $siteUserId);
 
             //get intivation first
             $uicInfo = $this->getIntivationCode($loginUserProfile->getInvitationCode());
@@ -160,6 +158,8 @@ class Site_Login
 
 //            $sessionVerifyUrl = ZalyConfig::getSessionVerifyUrl($pluginId);
             $sessionVerifyUrl = ZalyHelper::getFullReqUrl($sessionVerifyUrl);
+
+            $this->logger->error("==============request to api.session.verify Url=", $sessionVerifyUrl);
 
             $response = $this->ctx->ZalyCurl->httpRequestByAction('POST', $sessionVerifyUrl, $sessionVerifyRequest, $this->timeOut);
 
@@ -274,6 +274,7 @@ class Site_Login
             return false;
         }
 
+        $this->logger->error('bind thirdParty account', "siteUserId=========" . $siteUserId);
         if (!empty($siteUserId)) {
             //if go here means 1.already bind account 2.already save account
             return true;

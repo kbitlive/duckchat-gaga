@@ -311,7 +311,7 @@
 
             <div class="item-row" id="site-clean-data">
                 <div class="item-header">
-                    <img class="site-manage-image" src="../../public/img/manage/home_page.png"/>
+                    <img class="site-manage-image" src="../../public/img/manage/data_clean.png"/>
                 </div>
                 <div class="item-body">
                     <div class="item-body-display">
@@ -431,7 +431,6 @@
         var url = "index.php?action=manage.security&lang=" + getLanguage();
         zalyjsOpenPage(url);
     });
-
 
 
     function showPluginAdmin(url) {
