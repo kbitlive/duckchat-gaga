@@ -44,11 +44,12 @@ class Api_Plugin_ListController extends \BaseController
             }
 
             switch ($pluginUsageType) {
+                case Zaly\Proto\Core\PluginUsageType::PluginUsageNone:
                 case Zaly\Proto\Core\PluginUsageType::PluginUsageIndex:
                 case Zaly\Proto\Core\PluginUsageType::PluginUsageU2Message:
                 case Zaly\Proto\Core\PluginUsageType::PluginUsageTmpMessage:
                 case Zaly\Proto\Core\PluginUsageType::PluginUsageGroupMessage:
-                case \Zaly\Proto\Core\PluginUsageType::PluginUsageAccountSafe:
+                case Zaly\Proto\Core\PluginUsageType::PluginUsageAccountSafe:
                     break;
                 case Zaly\Proto\Core\PluginUsageType::PluginUsageLogin:
                 default:
