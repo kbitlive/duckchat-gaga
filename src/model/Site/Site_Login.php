@@ -34,7 +34,7 @@ class Site_Login
      */
     public function doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $userCustomArray)
     {
-        $thirdPartyKey = "localLanding";
+//        $thirdPartyKey = "localLanding";
         $userProfile = false;
 
         if (empty($thirdPartyKey)) {
