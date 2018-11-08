@@ -11,7 +11,6 @@
     <script src="<?php echo $siteAddress;?>/public/js/jquery.i18n.properties.min.js"></script>
     <script src="<?php echo $siteAddress;?>/public/sdk/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
     <script src="<?php echo $siteAddress;?>/public/js/template-web.js"></script>
-    <script src="<?php echo $siteAddress;?>/public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
 
 </head>
 
@@ -147,10 +146,12 @@
 
 <input type="hidden" value="<?php echo $jumpRoomId;?>" class="jumpRoomId">
 <input type="hidden" value="<?php echo $jumpRoomType;?>" class="jumpRoomType">
+<input type="hidden" value="<?php echo $siteAddress;?>" class="siteAddress">
+<input type="hidden" value="<?php echo $isDuckchat; ?>" class="isDuckchat">
 
 <?php include(dirname(__DIR__) . '/passport/template_login.php'); ?>
+<script src="<?php echo $siteAddress;?>/public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
 
-<input type="hidden" value="<?php echo $isDuckchat; ?>" class="isDuckchat">
 <script src="<?php echo $siteAddress;?>/public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
 <script src="<?php echo $siteAddress;?>/public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
 <script src="<?php echo $siteAddress;?>/public/js/im/zalyClient.js?_version=<?php echo $versionCode?>"></script>
