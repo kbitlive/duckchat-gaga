@@ -432,6 +432,7 @@ $(document).on("click", ".chat_plugin", function () {
 
 $(document).on("click", ".plugin_back", function () {
     $(".plugin-iframe")[0].contentWindow.history.go(-1); // back
+    $(".plugin-iframe")[0].contentWindow.onload();
 });
 
 //--------------------------------------http.file.downloadFile----------------------------------------------

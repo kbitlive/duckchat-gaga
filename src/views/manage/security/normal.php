@@ -127,6 +127,15 @@
         .header_tip_font {
             font-size: 18px;
         }
+        .tip{
+            height:17px;
+            font-size:12px;
+            font-family:PingFangSC-Regular;
+            font-weight:400;
+            color:rgba(157,155,159,1);
+            line-height:17px;
+            margin-left: 10px;
+        }
     </style>
 </head>
 
@@ -136,7 +145,13 @@
 <div class="wrapper" id="wrapper">
     <div class="layout-all-row" style="margin-top:10px;">
        <div style="width: 100%;">
-           <span class="tip">用户名配置</span>
+           <span class="tip">
+               <?php if ($lang == "1") { ?>
+                   用户名配置
+               <?php } else { ?>
+                   Username configuration
+               <?php } ?>
+           </span>
            <div class="list-item-center">
                <div class="item-row">
                    <div class="item-body">
@@ -164,7 +179,7 @@
                    <div class="item-body">
                        <div class="item-body-display loginNameMaxLength" onclick="showLoginNameMaxLength()">
                            <?php if ($lang == "1") { ?>
-                               <div class="item-body-desc">最大长度</div>
+                               <div class="item-body-desc ">最大长度</div>
                            <?php } else { ?>
                                <div class="item-body-desc"> Max length</div>
                            <?php } ?>
@@ -186,7 +201,13 @@
 
     <div class="layout-all-row" style="margin-top: 20px">
         <div style="width: 100%;">
-            <span class="tip">密码配置</span>
+            <span class="tip">
+                <?php if ($lang == "1") { ?>
+                    密码配置
+                <?php } else { ?>
+                    Password configuration
+                <?php } ?>
+            </span>
             <div class="list-item-center">
                 <div class="item-row">
                     <div class="item-body">
@@ -232,10 +253,33 @@
         </div>
     </div>
 
-    <div class="layout-all-row" style="margin-top: 20px">
+    <div class="layout-all-row" style="margin-top: 10px">
         <div style="width: 100%;">
-            <span class="tip">必须包含字符</span>
             <div class="list-item-center">
+                <div class="item-row">
+                    <div class="item-body">
+                        <div class="item-body-display passwordMinLength" onclick="showPwdMinLength()">
+                            <?php if ($lang == "1") { ?>
+                                <div class="item-body-desc tip">必须包含字符</div>
+                            <?php } else { ?>
+                                <div class="item-body-desc tip">Must contain characters</div>
+                            <?php } ?>
+                            <div class="item-body-tail">
+                                <div class="item-body-value" id="passwordMinLength"> <?php echo $passwordMinLength; ?></div>
+                                <div class="item-body-value">
+                                    <img class="more-img" src="../../public/img/manage/more.png"/>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="division-line"></div>
+            </div>
+
+
+            <div class="list-item-center" onclick="updatePwdType('letter')">
                 <div class="item-row" >
                     <div class="item-body">
                         <div class="item-body-display">
@@ -258,7 +302,7 @@
                 </div>
                 <div class="division-line"></div>
             </div>
-            <div class="list-item-center">
+            <div class="list-item-center" onclick="updatePwdType('number')">
                 <div class="item-row" >
                     <div class="item-body">
                         <div class="item-body-display">
@@ -280,7 +324,7 @@
                 </div>
                 <div class="division-line"></div>
             </div>
-            <div class="list-item-center">
+            <div class="list-item-center" onclick="updatePwdType('special_characters')">
                 <div class="item-row" >
                     <div class="item-body">
                         <div class="item-body-display">
@@ -304,6 +348,13 @@
             </div>
         </div>
     </div>
+    <span class="tip">
+        <?php if ($lang == "1") { ?>
+            备注：为空代表不限制
+        <?php } else { ?>
+            Remarks: Empty is not limited
+        <?php } ?>
+    </span>
 
 
 </div>
@@ -345,14 +396,15 @@
 
 <script type="text/javascript">
 
-    $(".check_img").on("click", function () {
-        var pwdType = $(this).attr("pwd_type");
+
+    function updatePwdType(pwdType) {
         var unselectSrc = "../../public/img/manage/unselect.png";
         var selectSrc = "../../public/img/manage/selected.png";
-        var defaultNum = $(this).attr("default");
 
         switch (pwdType) {
             case "letter":
+                var defaultNum = $(".pwd_letter_img").attr("default");
+
                 if(Number(defaultNum) == 0) {
                     $(".pwd_letter_img").attr("src", selectSrc);
                     $(".pwd_letter_img").attr("default", 1);
@@ -362,6 +414,8 @@
                 }
                 break;
             case "number":
+                var defaultNum = $(".pwd_number_img").attr("default");
+
                 if(Number(defaultNum) == 0) {
                     $(".pwd_number_img").attr("src", selectSrc);
                     $(".pwd_number_img").attr("default", 1);
@@ -371,6 +425,8 @@
                 }
                 break;
             case "special_characters":
+                var defaultNum = $(".pwd_special_characters_img").attr("default");
+
                 if(Number(defaultNum) == 0) {
                     $(".pwd_special_characters_img").attr("src", selectSrc);
                     $(".pwd_special_characters_img").attr("default", 1);
@@ -394,7 +450,7 @@
         var url = "index.php?action=manage.security.update";
 
         zalyjsCommonAjaxPostJson(url, data, updateResponse);
-    });
+    }
 
     function updateResponse(url, data, result) {
         var res = JSON.parse(result);
@@ -501,8 +557,7 @@
         // close
         removeWindow($(".config-hidden"));
     }
-
-
+    
 </script>
 
 </body>

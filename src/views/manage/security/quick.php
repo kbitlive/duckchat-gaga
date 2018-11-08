@@ -43,7 +43,7 @@
             display: flex;
             flex-direction: row;
             text-align: center;
-            height: 50px;
+            height: 100%;
             cursor: pointer;
             /*margin-bottom: 2rem;*/
         }
@@ -72,7 +72,7 @@
 
         .item-body {
             width: 100%;
-            height: 50px;
+            height: 100%;
             margin-left: 1rem;
             margin-top: 7px;
             flex-direction: row;
@@ -80,7 +80,7 @@
 
         .list-item-center {
             width: 100%;
-            height: 44px;
+            height: 110px;
             /*height: 11rem;*/
             /*background: rgba(255, 255, 255, 1);*/
             /*padding-left: 1rem;*/
@@ -89,10 +89,10 @@
 
         .item-body-display {
             display: flex;
+            height: 100%;
             justify-content: space-between;
-            /*margin-right: 7rem;*/
-            /*margin-bottom: 3rem;*/
-            line-height: 3rem;
+            line-height: 110px;
+            margin-top: 14px;
         }
 
         .item-body-tail {
@@ -101,7 +101,9 @@
 
         .item-body-desc {
             width: 100%;
+            height: 100%;
             text-align: left;
+            line-height: 18px;
         }
 
         .more-img {
@@ -127,9 +129,19 @@
             font-weight:400;
             color:rgba(102,102,102,1);
             line-height:12px;
-            margin-bottom: 20px;
             margin-left: 10px;
         }
+        .tip_div{
+            margin-left: 5px;
+            margin-top: 12px;
+        }
+        .item-body-tail {
+            height:110px;
+            display: flex;
+            justify-content: start;
+            align-items: start;
+        }
+
 
     </style>
 </head>
@@ -140,7 +152,7 @@
 <div class="wrapper" id="wrapper">
     <div class="layout-all-row" style="margin-top:10px;">
 
-        <div class="list-item-center">
+        <div class="list-item-center pwd_item" onclick="updatePwdType('pwd_convenience')">
             <div class="item-row">
                 <div class="item-body">
                     <div class="item-body-display">
@@ -156,18 +168,25 @@
                             <?php } else { ?>
                                 Convenience
                             <?php } ?>
+                            <div class="tip_div">
+                                <span class="tip" >密码长度6-32位</span>
+                                <span class="tip"><br/>不限制密码组成</span>
+                                <span class="tip"><br/>每日密码错误次数为10</span>
+                            </div>
                         </div>
 
                     </div>
+
                 </div>
             </div>
             <div class="division-line"></div>
+
         </div>
     </div>
-    <span class="tip">密码长度6-32位，不限制密码组成，每日密码错误次数为10</span>
+
 
     <div class="layout-all-row" style="margin-top: 20px">
-        <div class="list-item-center">
+        <div class="list-item-center pwd_item"  onclick="updatePwdType('pwd_default')">
             <div class="item-row" >
                 <div class="item-body">
                     <div class="item-body-display">
@@ -185,6 +204,12 @@
                             <?php } else { ?>
                                 Default
                             <?php } ?>
+
+                            <div class="tip_div">
+                                <span class="tip" >密码长度6-32位</span>
+                                <span class="tip"><br/>必须有字母、数字</span>
+                                <span class="tip"><br/>每日密码错误次数为5</span>
+                            </div>
                         </div>
                     </div>
 
@@ -193,10 +218,9 @@
             <div class="division-line"></div>
         </div>
     </div>
-    <span class="tip">密码长度6-32位，必须有字母、数字，每日密码错误次数为5</span>
 
     <div class="layout-all-row" style="margin-top: 20px">
-        <div class="list-item-center">
+        <div class="list-item-center pwd_item" onclick="updatePwdType('pwd_security')">
             <div class="item-row" >
                 <div class="item-body">
                     <div class="item-body-display">
@@ -213,6 +237,11 @@
                             <?php } else { ?>
                                 Security
                             <?php } ?>
+                            <div class="tip_div">
+                                <span class="tip" >密码长度8-32位</span>
+                                <span class="tip"><br/>必须有字母、特殊符号、数字</span>
+                                <span class="tip"><br/>每日密码错误次数为3</span>
+                            </div>
                         </div>
                     </div>
 
@@ -222,8 +251,6 @@
         </div>
 
     </div>
-    <span class="tip">密码长度8-32位，必须有字母、特殊符号、数字，每日密码错误次数为3</span>
-
 
 </div>
 
@@ -233,8 +260,8 @@
 
 <script type="text/javascript">
 
-    $(".check_img").on("click", function () {
-        var pwdType = $(this).attr("pwd_type");
+    function updatePwdType(pwdType)
+    {
         var uncheckSrc = "../../public/img/manage/uncheck.png";
         var checkSrc = "../../public/img/manage/checked.png";
         switch (pwdType) {
@@ -261,7 +288,7 @@
         var url = "index.php?action=manage.security.update";
 
         zalyjsCommonAjaxPostJson(url, data, updateResponse);
-    });
+    }
 
     function updateResponse(url, data, result) {
         var res = JSON.parse(result);
