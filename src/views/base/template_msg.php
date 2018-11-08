@@ -866,3 +866,18 @@
              plugin-landingPageUrl="{{landingPageUrl}}" onerror="this.src='../../public/img/plugin/default.png'">
 
 </script>
+
+<script type="text/html" id="tpl-friend-profile">
+<div>
+    <div style="width: 100%;text-align: center">{{nickname}}</div>
+    <div class="user-desc-loginName">    ID: {{loginName}}</div>
+    {{if isMaster}}
+    <div style="width: 100%;text-align: center;display: flex;justify-content: center;align-items: center;margin-top:0.5rem;">
+        <div class="master_tip" style="align-items: center;padding-bottom: 2px;">
+            站长
+        </div>
+    </div>
+    {{/if}}
+</div>
+
+</script>

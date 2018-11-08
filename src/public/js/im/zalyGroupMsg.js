@@ -178,6 +178,17 @@ function displayRoomListMsgUnReadNum()
     }
 }
 
+function isJudgeSiteMasters(userId)
+{
+    var siteConfigJson = localStorage.getItem("site_config");
+    var siteConfig = JSON.parse(siteConfigJson);
+    var mastersStr = siteConfig.masters;
+    if(mastersStr.indexOf(userId) != -1) {
+        return true;
+    }
+    return false;
+}
+
 
 $(document).on("click", ".l-sb-item", function(){
     var currentActive = $(".left-sidebar").find(".l-sb-item-active");
@@ -1461,7 +1472,6 @@ function openU2Chat(result)
         localStorage.setItem(chatSessionIdKey, userId);
         localStorage.setItem(userId, U2_MSG);
         $(".right-chatbox").attr("chat-session-id", userId);
-        $(".user-desc-body").html(userId);
         insertU2Room(undefined, userId);
     }
 }
@@ -2656,11 +2666,20 @@ function displayCurrentProfile()
                 });
                 $(".nickname_"+chatSessionId).html(nickname);
                 $(".chatsession-title").html(nickname);
-                $(".user-desc-body").html(nickname);
+                var isMaster = isJudgeSiteMasters(chatSessionId);
+                var html = template("tpl-friend-profile", {
+                    isMaster:isMaster,
+                    nickname:nickname,
+                    loginName:friendProfile.loginName
+                });
+                $(".user-desc-body").html(html);
             } else {
                 $(".chatsession-title").html("");
                 $(".user-desc-body").html("");
             }
+
+
+
             $(".chat_session_id_"+chatSessionId).addClass("chatsession-row-active");
             var relationKey = friendRelationKey + chatSessionId;
             var relation = localStorage.getItem(relationKey) ;
@@ -3131,16 +3150,7 @@ function editFriendRemark()
 
 //-------------------------------------self qrcode-------------------------------------------------------
 
-function isJudgeSiteMasters(userId)
-{
-    var siteConfigJson = localStorage.getItem("site_config");
-    var siteConfig = JSON.parse(siteConfigJson);
-    var mastersStr = siteConfig.masters;
-    if(mastersStr.indexOf(userId) != -1) {
-        return true;
-    }
-    return false;
- }
+
 ////展示个人消息
 function displaySelfInfo()
 {
