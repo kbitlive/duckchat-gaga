@@ -189,7 +189,11 @@ function isJudgeSiteMasters(userId)
     return false;
 }
 
+groupOffset = 0;
+getGroupList(initGroupList);
 
+friendOffset = 0;
+getFriendList(initFriendList);
 $(document).on("click", ".l-sb-item", function(){
     var currentActive = $(".left-sidebar").find(".l-sb-item-active");
     $(currentActive).removeClass("l-sb-item-active");
@@ -221,6 +225,7 @@ $(document).on("click", ".l-sb-item", function(){
             $(".group-lists")[0].style.display = "none";
             $(".chatsession-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
+            $(".home-page").attr("default", 1);
             pluginOffset = 0;
             getPluginList(pluginOffset, PluginUsageType.PluginUsageIndex, initPluginList);
             break;
@@ -229,8 +234,10 @@ $(document).on("click", ".l-sb-item", function(){
             $(".group-lists")[0].style.display = "block";
             $(".chatsession-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
-            groupOffset = 0;
-            getGroupList(initGroupList);
+            $(".group-lists").attr("default", 1);
+
+            // groupOffset = 0;
+            // getGroupList(initGroupList);
             break;
         case "chatSession" :
             getRoomList();
@@ -238,14 +245,17 @@ $(document).on("click", ".l-sb-item", function(){
             $(".chatsession-lists")[0].style.display = "block";
             $(".group-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
+            $(".chatsession-lists").attr("default", 1);
+
             break;
         case "friend":
             $(".home-page")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "block";
             $(".chatsession-lists")[0].style.display = "none";
             $(".group-lists")[0].style.display = "none";
-            friendOffset = 0;
-            getFriendList(initFriendList);
+            $(".friend-lists").attr("default", 1);
+            // friendOffset = 0;
+            // getFriendList(initFriendList);
             break;
         case "more":
             displayDownloadApp();
@@ -290,6 +300,53 @@ function checkIsEnterBack(event)
         return false;
     }
     return true;
+}
+
+function searchGroupAndFriendByKeyDown(event)
+{
+    if(!checkIsEnterBack(event)) {
+        return;
+    }
+    var searchVal = $(".search_for_group_friend").val();
+    console.log("searchVal===="+searchVal);
+    $(".search-list-contact-row").html("");
+
+
+    var friendListRow = $(".contact-row-u2-profile");
+    var friendListRowLength = friendListRow.length;
+    for(var i=0; i< friendListRowLength; i++) {
+        var friendRow = friendListRow[i];
+        var friendName = $(friendRow).attr("friend-name");
+        try{
+            if(friendName.indexOf(searchVal)!=-1) {
+                console.log("search friendName====="+friendName);
+
+                $(".search-list-contact-row").append($(friendRow));
+            }
+        }catch (error) {
+            
+        }
+    }
+
+    var groupListRow = $(".contact-row-group-profile");
+    var groupListRowLength = groupListRow.length;
+    for(var i=0; i< groupListRowLength; i++) {
+        var groupRow = groupListRow[i];
+        var groupName = $(groupRow).attr("group-name");
+
+        try{
+            if(groupName.indexOf(searchVal)!=-1) {
+                console.log("search groupName====="+groupName);
+
+                $(".search-list-contact-row").append($(groupRow));
+            }
+        }catch (error) {
+
+        }
+    }
+    $(".left-body-item[default=1]")[0].style.display = "none";
+    $(".search-friend-group-lists")[0].style.display = "block";
+
 }
 
 //-------------------------------------------api.plugin.list------------------------------------------------
@@ -866,6 +923,7 @@ function getGroupList(callback)
     }
     handleClientSendRequest(action, reqData, callback);
 }
+
 /// group operation - api.group.list - init html
 function initGroupList(results)
 {
@@ -902,23 +960,9 @@ function appendGroupListHtml(results) {
         var groupsDivHeight = $(".left-body-groups")[0].clientHeight;
         var groupToolsHeight = $(".group-tools")[0].clientHeight;
         $(".group-list-contact-row")[0].style.height = Number(groupsDivHeight-groupToolsHeight)+"px";
+        getGroupList(appendGroupListHtml);
     }
 }
-
-/// group operation - api.group.list - scroll append html
-$(function () {
-    ////加载群组列表
-    $('.group-lists').scroll(function(){
-        var pwLeft = $(".group-lists")[0];
-        var ch  = pwLeft.clientHeight;
-        var sh = pwLeft.scrollHeight;
-        var st = $('.group-lists').scrollTop();
-        ////文档的高度-视口的高度-滚动条的高度
-        if((sh - ch - st) == 0){
-            getGroupList(appendGroupListHtml);
-        }
-    });
-});
 
 //-------------------------------------------api.group.invitableFriends-------------------------------------------------
 unselectMemberOffset = 0;
@@ -2415,6 +2459,7 @@ function  appendFriendListHtml(results)
         var friendsDivHeight = $(".left-body-friends")[0].clientHeight;
         var friendToolsHeight = $(".friend-tools")[0].clientHeight;
         $(".friend-list-contact-row")[0].style.height = Number(friendsDivHeight-friendToolsHeight)+"px";
+        getFriendList(appendFriendListHtml);
     }
 }
 
@@ -2427,21 +2472,6 @@ function initFriendList(results)
     }
     displayApplyFriendNum();
 }
-
-// friend operation -- api.friend.list - scroll append html
-$('.friend-list-contact-row').scroll(function(event){
-    var pwLeft = $(".friend-list-contact-row")[0];
-    var ch  = pwLeft.clientHeight;
-    var sh = pwLeft.scrollHeight;
-    var st = $('.friend-list-contact-row').scrollTop();
-
-    //文档的高度-视口的高度-滚动条的高度
-    if((sh - ch - st) == 0){
-        getFriendList(appendFriendListHtml);
-    }
-});
-
-
 
 //---------------------------------------api.friend.profile----------------------------------------------
 

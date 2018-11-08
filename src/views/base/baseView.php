@@ -54,7 +54,10 @@
         </div>
 
         <div class="left-body">
-
+            <div class="search_group_friend">
+                <img src="<?php echo $siteAddress?>/public/img/msg/search_icon.png">
+                <input type="text" onkeydown="searchGroupAndFriendByKeyDown(event)" class="search_for_group_friend">
+            </div>
             <div class="left-body-container">
 
                 <!-- home -->
@@ -74,11 +77,11 @@
                 </div>
 
                 <!-- chats -->
-                <div class="left-body-chatsession chatsession-lists" style="position: relative;">
+                <div class="left-body-chatsession chatsession-lists left-body-item" style="position: relative;">
                 </div>
 
                 <!-- groups -->
-                <div class="left-body-groups group-lists "  style="display: none;position: relative;">
+                <div class="left-body-groups group-lists left-body-item"  style="display: none;position: relative;">
                         <div style="width: 100%;" class="group-tools">
                             <div class="pw-contact-row create-group" >
                                 <div class="pw-contact-row-image" style="position: relative;">
@@ -95,7 +98,7 @@
                 </div>
 
                 <!-- friends -->
-                <div class="left-body-friends friend-lists"  style="display: none;">
+                <div class="left-body-friends friend-lists left-body-item"  style="display: none;">
                     <div style="width: 100%;" class="friend-tools">
                             <div class="pw-contact-row  search-user" >
                                 <div class="pw-contact-row-image" style="position: relative;">
@@ -114,6 +117,15 @@
                     </div>
                     <div style="width: 28.14rem;position: absolute;margin:0 auto;">
                         <div class="friend-list-contact-row" style="overflow-y: scroll;position: relative">
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- search friends -->
+                <div class="left-body-search-list search-friend-group-lists left-body-item"  style="display: none;">
+                    <div style="width: 28.14rem;position: absolute;margin:0 auto;">
+                        <div class="search-list-contact-row" style="overflow-y: scroll;position: relative">
                         </div>
                     </div>
                 </div>
