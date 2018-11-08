@@ -295,15 +295,21 @@ function getLoginPage()
 {
     hideLoading();
     var thirdLoginOptions = new Array();
+    var thirdLoginOptionsCount = 0;
     try{
-        thirdLoginOptions = JSON.parse(thirdPartyLoginOptions)
+        thirdLoginOptions = JSON.parse(thirdPartyLoginOptions);
+        var thirdLoginOptionsCount = Object.keys(thirdLoginOptions).length ;
     }catch (error) {
+         thirdLoginOptions = new Array();
     }
+
+
     var html = template("tpl-login-div", {
         loginNameAlias: loginNameAlias,
         siteLogo:siteLogo,
         siteName:siteName,
-        thirdLoginOptions:thirdLoginOptions
+        thirdLoginOptions:thirdLoginOptions,
+        thirdLoginOptionsCount:thirdLoginOptionsCount
     });
     html = handleHtmlLanguage(html);
     $('.login_for_size_div').html(html);

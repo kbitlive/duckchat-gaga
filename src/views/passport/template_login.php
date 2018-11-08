@@ -120,6 +120,7 @@
         </div>
 
         <!--   third party landing      -->
+        {{if thirdLoginOptionsCount > 0  }}
         <div class="login-others">
             <div class="landing-third-title">使用以下账号直接登录</div>
 
@@ -131,6 +132,7 @@
 
             </div>
         </div>
+        {{/if}}
 
         <!--  for   -->
         <div class="mobile_slogn_div" style="position: absolute;bottom:3rem;">
