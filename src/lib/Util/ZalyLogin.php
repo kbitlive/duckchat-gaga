@@ -9,7 +9,7 @@
 class ZalyLogin
 {
 
-    public static $loginConfig;
+    private static $loginConfig;
 
     private static function loadLoginConfig()
     {
@@ -23,6 +23,24 @@ class ZalyLogin
         return self::$loginConfig;
     }
 
+    public static function getThirdPartyConfig()
+    {
+        self::loadLoginConfig();
+        return self::$loginConfig;
+    }
+
+    public static function getThirdPartyConfigWithoutVerifyUrl()
+    {
+        self::loadLoginConfig();
+        $config = [];
+        if (!empty(self::$loginConfig)) {
+            foreach (self::$loginConfig as $key => $value) {
+                unset($value['verifyUrl']);
+                $config[$key] = $value;
+            }
+        }
+        return $config;
+    }
 
     public static function getConfig($loginKey)
     {

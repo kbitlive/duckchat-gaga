@@ -8,7 +8,7 @@ return array(
     ),
     'weixin' =>
         array(
-            'name' => '微信登陆',
+            'name' => '微信',
             'logo' => true,
             'landingUrl' => "http://",
             'verifyUrl' => "http://localhost/verify",
@@ -19,5 +19,11 @@ return array(
             'logo' => '',
             'landingUrl' => "http://",
             'verifyUrl' => "http://localhost/verify",
+        ),
+    'oschina' =>
+        array(
+            'name' => "oschina",
+            'landingUrl' => "https://www.oschina.net/home/login?goto_page=https%3A%2F%2Fwww.oschina.net%2F",
+            'verify' => "https://www.oschina.net/home/login?goto_page=https%3A%2F%2Fwww.oschina.net%2F",
         ),
 );

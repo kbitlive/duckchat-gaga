@@ -1,12 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: zhangjun
- * Date: 23/08/2018
- * Time: 11:18 AM
+ * passport_register on local site
+ * User: anguoyue
+ * Date: 2018/11/8
+ * Time: 2:57 PM
  */
 
-class Page_Passport_LoginController extends HttpBaseController
+class Page_Passport_RegisterController extends HttpBaseController
 {
 
     public function index()
@@ -82,7 +82,7 @@ class Page_Passport_LoginController extends HttpBaseController
         $pwdContainCharactersConfig = isset($loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS]) ? $loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS] : "";
         $pwdContainCharacters = isset($pwdContainCharactersConfig["configValue"]) ? $pwdContainCharactersConfig["configValue"] : "";
 
-        $thirdPartyLoginOptions = ZalyLogin::getThirdPartyConfigWithoutVerifyUrl();
+        $thirdPartyLoginOptions = ZalyLogin::getThirdPartyConfig();
 
         $params = [
             'siteName' => $siteName,
@@ -106,10 +106,32 @@ class Page_Passport_LoginController extends HttpBaseController
             'passwordFindWay' => $passwordRestWay,
             'passwordResetWay' => $passwordRestWay,
             'passwordResetRequired' => $passwordResetRequired,
-            'thirdPartyLoginOptions' => $thirdPartyLoginOptions,
+            'customLoginItems' => [
+                //自定义的登陆项
+                [
+                    'email' => "邮箱",
+                    'icon' => "",
+                    'placeholder' => "",
+                    'isRequired' => $passwordResetRequired,
+                ],
+
+                [
+                    'phone' => "手机号",
+                    'icon' => "",
+                    'placeholder' => "",
+                    'isRequired' => $passwordResetRequired,
+                ],
+
+                [
+                    'name' => "姓名",
+                    'icon' => "",
+                    'placeholder' => "",
+                    'isRequired' => $passwordResetRequired,
+                ],
+            ],
         ];
 
-        echo $this->display("passport_login", $params);
+        echo $this->display("passport_register", $params);
         return;
     }
 
