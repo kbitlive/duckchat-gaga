@@ -557,7 +557,7 @@
         // close
         removeWindow($(".config-hidden"));
     }
-    
+
 </script>
 
 </body>

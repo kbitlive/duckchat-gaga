@@ -1004,8 +1004,7 @@ html, body{
     font-size:1.31rem;
     font-family:PingFangSC-Regular;
     font-weight:400;
-    /*color:rgba(255,255,255,1);*/
-    color: #FFAF5D;
+    color:rgba(255,255,255,1);
 }
 
 .text-align-right-text pre a,
@@ -1975,4 +1974,32 @@ button:active{
     bottom:1rem;
     margin:auto;
     cursor: pointer;
+}
+
+.master_tip{
+    width: 4rem;
+    height:1.3rem;
+    background:rgba(249,183,38,1);
+    border-radius:0.19rem;
+    text-align: center;
+    font-size:0.94rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(255,255,255,0.87);
+    line-height:1.3rem;
+}
+
+
+.chat_master_tip{
+    width:2.63rem;
+    height: 1rem;
+    background:rgba(249,183,38,1);
+    border-radius:0.19rem;
+    text-align: center;
+    font-size:0.94rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(255,255,255,0.87);
+    height: 1rem;
+    margin-right: 5px;
 }

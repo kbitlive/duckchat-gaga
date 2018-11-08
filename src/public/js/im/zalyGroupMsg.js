@@ -3130,13 +3130,26 @@ function editFriendRemark()
 
 
 //-------------------------------------self qrcode-------------------------------------------------------
+
+function isJudgeSiteMasters(userId)
+{
+    var siteConfigJson = localStorage.getItem("site_config");
+    var siteConfig = JSON.parse(siteConfigJson);
+    var mastersStr = siteConfig.masters;
+    if(mastersStr.indexOf(userId) != -1) {
+        return true;
+    }
+    return false;
+ }
 ////展示个人消息
 function displaySelfInfo()
 {
+    var isMaster = isJudgeSiteMasters(token);
     var html = template("tpl-self-info", {
         userId:token,
         nickname:nickname,
         loginName:loginName,
+        isMaster:isMaster
     });
     html = handleHtmlLanguage(html);
     $(".wrapper").append(html);
@@ -3655,31 +3668,35 @@ function sendMsgBySend()
 
 //粘贴图片
 document.getElementById("msg_content").addEventListener('paste', function(event) {
-    var imgFile = null;
-    var idx;
-    var items = event.clipboardData.items;
-    if(items == undefined) {
-        return;
-    }
-    for(var i=0,len=items.length; i<len; i++) {
-        var item = items[i];
-        if (item.kind == 'file' ||item.type.indexOf('image') > -1) {
-            var blob = item.getAsFile();
-            var reader = new FileReader();
-            reader.onload = function(event) {
-                var data = event.target.result;
-                var img = new Image();
-                img.src = data;
-                img.onload =  function (ev) {
-                    autoMsgImgSize(img, 400, 300);
-                };
-                document.getElementById("msgImage").style.display = "block";
-                document.getElementById("msgImage").appendChild(img);
-                return false;
-            }; // data url!
-            reader.readAsDataURL(blob);
-        }
-    }
+   try{
+       var imgFile = null;
+       var idx;
+       var items = event.clipboardData.items;
+       if(items == undefined) {
+           return;
+       }
+       for(var i=0,len=items.length; i<len; i++) {
+           var item = items[i];
+           if (item.kind == 'file' ||item.type.indexOf('image') > -1) {
+               var blob = item.getAsFile();
+               var reader = new FileReader();
+               reader.onload = function(event) {
+                   var data = event.target.result;
+                   var img = new Image();
+                   img.src = data;
+                   img.onload =  function (ev) {
+                       autoMsgImgSize(img, 400, 300);
+                   };
+                   document.getElementById("msgImage").style.display = "block";
+                   document.getElementById("msgImage").appendChild(img);
+                   return false;
+               }; // data url!
+               reader.readAsDataURL(blob);
+           }
+       }
+   }catch (error){
+
+   }
 });
 
 document.onkeydown=function(e){

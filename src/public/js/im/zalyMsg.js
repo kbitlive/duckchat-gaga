@@ -989,12 +989,13 @@ function trimMsgContentBr(html)
 function handleMsgContentText(str)
 {
     html = trimMsgContentBr(str);
-
     $(html).find("[msg_content_for_handle]").each(function () {
         var str = $(this).html();
         if(str == undefined) {
             return html;
         }
+        str = str.replace(new RegExp('&amp;','g'),"&");
+
         var reg=/(blob:)?((http|https|ftp|zaly|duckchat):\/\/)?[@\w\-_]+(\:[0-9]+)?(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g;
         var arr = str.match(reg);
         if(arr == null) {
@@ -1030,8 +1031,9 @@ function IsURL (url) {
     var urlAndSchemAndPort = urls.shift();
     var urlAndPort = urlAndSchemAndPort.split("://").pop();
     url = urlAndPort.split(":").shift();
-    var ipRegex = '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
+    var ipRegex = '^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
     var ipReg=new RegExp(ipRegex);
+
     if(!ipReg.test(url)) {
         var domainSuffix = url.split(".").pop();
         domainSuffix = domainSuffix.toLowerCase();
@@ -1184,6 +1186,7 @@ function appendMsgHtmlToChatDialog(msg)
                 break;
         }
     } else {
+        var isMaster = isJudgeSiteMasters(msg.fromUserId);
         switch(msgType) {
             case MessageType.MessageText:
                 var msgContent = msg['text'].body;
@@ -1196,6 +1199,7 @@ function appendMsgHtmlToChatDialog(msg)
                     msgContent:msgContent,
                     groupUserImg : groupUserImageClassName,
                     avatar:userAvatar,
+                    isMaster:isMaster
                 });
                 break;
             case MessageType.MessageImage :
@@ -1215,6 +1219,7 @@ function appendMsgHtmlToChatDialog(msg)
                     width:imgObject.width,
                     height:imgObject.height,
                     msgImgUrl:msgImgUrl,
+                    isMaster:isMaster
                 });
                 break;
             case MessageType.MessageAudio:
@@ -1226,6 +1231,7 @@ function appendMsgHtmlToChatDialog(msg)
                     msgTime : msgTime,
                     groupUserImg : groupUserImageClassName,
                     avatar:userAvatar,
+                    isMaster:isMaster
                 });
                 break;
             case MessageType.MessageDocument:
@@ -1245,7 +1251,8 @@ function appendMsgHtmlToChatDialog(msg)
                     fileSize:size,
                     fileName:fileName,
                     originName:originName,
-                    timeServer:msg.timeServer
+                    timeServer:msg.timeServer,
+                    isMaster:isMaster
                 });
                 break;
             case MessageType.MessageWebNotice :
@@ -1271,6 +1278,7 @@ function appendMsgHtmlToChatDialog(msg)
                     avatar:userAvatar,
                     hrefURL:hrefUrl,
                     linkUrl:linkUrl,
+                    isMaster:isMaster
                 });
                 break;
             case MessageType.MessageNotice:
