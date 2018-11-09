@@ -6,7 +6,7 @@
  * Time: 3:39 PM
  */
 
-class DuckChat_Message
+class DuckChat_Message extends DuckChat_Base
 {
 
     private $ctx;
@@ -30,6 +30,11 @@ class DuckChat_Message
         $fromUserId = $message->getFromUserId();
         $msgRoomType = $message->getRoomType();
         $msgId = $message->getMsgId();
+
+        if (empty($msgId)) {
+            $msgId = $this->buildMsgId($msgRoomType, $fromUserId);
+        }
+
         $msgType = $message->getType();
         $result = false;
         if (Zaly\Proto\Core\MessageRoomType::MessageRoomGroup == $msgRoomType) {
@@ -50,8 +55,6 @@ class DuckChat_Message
         } else if (Zaly\Proto\Core\MessageRoomType::MessageRoomU2 == $msgRoomType) {
             $this->isGroupRoom = false;
             $this->toId = $message->getToUserId();
-
-            $msgId = $this->buildU2MsgId($fromUserId);
             $result = $this->ctx->Message_Client->sendU2Message($msgId, $this->toId, $fromUserId, $this->toId, $msgType, $message);
             $this->ctx->Message_News->tellClientNews(false, $this->toId);
         }
