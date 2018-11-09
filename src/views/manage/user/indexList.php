@@ -263,7 +263,6 @@
 
     function showUserProfile(userId) {
         var url = "./index.php?action=manage.user.profile&lang=" + getLanguage() + "&userId=" + userId;
-        alert(url);
         zalyjsOpenPage(url);
     }
 
