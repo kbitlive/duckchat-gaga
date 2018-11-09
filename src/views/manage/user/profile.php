@@ -6,6 +6,8 @@
     <title><?php if ($lang == "1") { ?>用户资料<?php } else { ?>User Profile<?php } ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <link rel="stylesheet" href="../../public/jquery/weui.min.css"/>
+    <link rel="stylesheet" href="../../public/jquery/jquery-weui.min.css"/>
     <link rel="stylesheet" href="../../public/manage/config.css"/>
     <style>
 
@@ -21,11 +23,6 @@
             cursor: pointer;
         }
     </style>
-
-    <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="../../public/manage/native.js"></script>
-
-    <script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
 
 </head>
 
@@ -323,6 +320,14 @@
 
 </div>
 
+
+<script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../public/jquery/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../public/js/jquery-confirm.js"></script>
+
+<script type="text/javascript" src="../../public/manage/native.js"></script>
+
+<script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
 
 <script type="text/javascript">
 
