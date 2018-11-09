@@ -7,7 +7,7 @@
     <div class="apply-friend-item">
         <div class="apply-friend-row">
             <div class="apply-friend-img">
-                <img class="useravatar" src="../../public/img/msg/default_user.png" />
+                <img class="useravatar" src="<?php echo $siteAddress; ?>/public/img/msg/default_user.png" />
             </div>
             <div class="apply-body">
                 <div class="apply-friend-body">

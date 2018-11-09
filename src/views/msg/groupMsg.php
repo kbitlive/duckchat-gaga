@@ -32,7 +32,7 @@
             <?php include(dirname(__DIR__) . '/base/chatDialog.php'); ?>
         </div>
         <div  class="no-chat-dialog-div" style="display: none">
-            <img src="../../public/img/msg/no_chat_dialog.png" style=" " class="no-chat-dialog">
+            <img src="<?php echo $siteAddress?>/public/img/msg/no_chat_dialog.png" style=" " class="no-chat-dialog">
         </div>
     </div>
 
@@ -46,6 +46,12 @@
     </div>
 
 </div>
+
+
+    <audio id="msg_sound_tip" style="display: none" muted="muted">
+        <source src="<?php echo $siteAddress?>/public/voice/definite.mp3" type="audio/mpeg">
+    </audio>
+
 
 <?php include(dirname(__DIR__) . '/base/template.php'); ?>
 <?php include(dirname(__DIR__) . '/base/template_msg.php'); ?>
@@ -65,6 +71,7 @@
 
 <script type="text/javascript">
 
+    var siteAddress = $(".siteAddress").val();
     requestSiteConfig(ZalyIm);
 
     $(window).resize(function () {
@@ -153,7 +160,7 @@
 
     jQuery.i18n.properties({
         name: "lang",
-        path: '../../public/js/config/',
+        path: siteAddress + '/public/js/config/',
         mode: 'map',
         language: languageName,
         callback: function () {

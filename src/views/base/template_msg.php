@@ -445,7 +445,7 @@
 <script id="tpl-self-info" type="text/html">
 <div id="selfInfo" >
     <div id="triangle_left"></div>
-    <div id="selfInfoDiv" class="selfInfoDiv" style="position: absolute;width: 100%;">
+    <div id="selfInfoDiv" class="selfInfoDiv siteSelfInfo" style="position: absolute;width: 100%;">
         <div id="selfAvatarUploadDiv" class="d-flex flex-row justify-content-center" style="margin-top: 3rem; text-align: center;position: relative" >
             <img id="user-image-upload" class="user-image-upload info-avatar-{{userId}} siteSelfInfo" src="../../public/img/msg/default_user.png" style="width: 5rem; height: 5rem;" onclick="uploadFile('file2', 'user_avatar')" />
             <img id="user-img-carmera" class="user-img-carmera siteSelfInfo" src="../../public/img/camera.png" style="width: 5rem; height: 5rem; position: absolute;
@@ -475,7 +475,11 @@
         <div class="d-flex flex-row justify-content-center">
             <div class="self_profile_item self-qrcode siteSelfInfo" id="newMsgSound" style="position: relative">
                 <span class="logout-span siteSelfInfo" id="logout-span" data-local-value="newMsgSoundTip" onclick="">消息通知声音</span>
-                <img src="../../public/img/msg/icon_switch_off.png" class="sound_mute siteSelfInfo" is_on="off"  >
+                {{if soundNotification == "on"}}
+                <img src="{{siteAddress}}/public/img/msg/icon_switch_on.png" class="sound_mute siteSelfInfo" is_on="on"  >
+                {{else}}
+                <img src="{{siteAddress}}/public/img/msg/icon_switch_off.png" class="sound_mute siteSelfInfo" is_on="off"  >
+                {{/if}}
             </div>
         </div>
 
@@ -631,14 +635,14 @@
     <div class="pw-contact-row choose-member {{userId}} "  user-id="{{userId}}">
         <div class="pw-contact-row-image">
             {{if friendAvatarImg}}
-                <img  class="useravatar"  src="{{friendAvatarImg}}"  onerror="this.src='../../public/img/msg/default_user.png'"/>
+                <img  class="useravatar"  src="{{friendAvatarImg}}"  onerror="this.src='{{siteAddress}}/public/img/msg/default_user.png'"/>
             {{else}}
-                <img  class="useravatar"  src="../../public/img/msg/default_user.png" />
+                <img  class="useravatar"  src="{{siteAddress}}/public/img/msg/default_user.png" />
             {{/if}}
         </div>
         <div class="pw-contact-row-name">{{nickname}}</div>
         <div class="pw-contact-row-checkbox select_people">
-            <img src="../../public/img/msg/member_unselect.png" />
+            <img src="{{siteAddress}}/public/img/msg/member_unselect.png" />
         </div>
     </div>
 
@@ -649,7 +653,7 @@
     <div class="no_data">
         <div class="d-flex">
             <div class="p-2">
-                <img class="no_data_img" src="../../public/img/no_data.png"/>
+                <img class="no_data_img" src="{{siteAddress}}/public/img/no_data.png"/>
             </div>
             <div class="p-2 no_data_tip" data-local-value="noFriendDataTip">暂无好友</div>
         </div>
@@ -849,9 +853,9 @@
     <div class="pw-home-row mini-program plugin-info pw-contact-row" plugin-name="{{name}}" plugin-id="{{id}}" plugin-landingPageUrl="{{landingPageUrl}}" plugin-duckchatSessionId="{{duckchatSessionId}}" plugin-loadingType="{{loadingType}}">
         <div class="pw-home-row-image" style="position: relative;">
             {{if logo}}
-                <img class="plugin_logo" src="{{logo}}" onerror="this.src='../../public/img/plugin/default.png'"/>
+                <img class="plugin_logo" src="{{logo}}" onerror="this.src='{{siteAddress}}/public/img/plugin/default.png'"/>
             {{else}}
-                    <img class="plugin_logo" src="../../public/img/plugin/default.png"/>
+                    <img class="plugin_logo" src="{{siteAddress}}/public/img/plugin/default.png"/>
             {{/if}}
         </div>
         <div class="pw-home-row-name" data-local-value="miniProgramTip">{{name}}</div>
