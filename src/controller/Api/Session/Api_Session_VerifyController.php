@@ -29,32 +29,32 @@ class Api_Session_VerifyController extends BaseController
     public function rpc(\Google\Protobuf\Internal\Message $request, \Google\Protobuf\Internal\Message $transportData)
     {
         $tag = __CLASS__ . "-" . __FUNCTION__;
-        try {
-            $preSessionId = $request->getPreSessionId();
-            $preSessionId = trim($preSessionId);
-            $errorCode = $this->zalyError->errorPreSessionId;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-
-            if (!$preSessionId) {
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("401 ");
-            }
-
-            $verifyResult = $this->ctx->Site_SessionVerify->doApiVerify($preSessionId);
-
-            $loginProfile = $verifyResult["loginProfile"];
-            $sitePubkPem = $verifyResult["sitePubkPem"];
-
-            if (!$loginProfile || !$sitePubkPem) {
-                throw new Exception("session verify with error loginProfile or sitePubkPem.");
-            }
-
-            $response = $this->buildApiSessionVerifyResponse($sitePubkPem, $loginProfile);
-            $this->returnSuccessRPC($response);
-        } catch (Exception $ex) {
-            $this->ctx->Wpf_Logger->info($tag, $ex->getMessage() . "\n" . $ex->getTraceAsString());
-            $this->returnErrorRPC(new $this->classNameForResponse(), $ex);
-        }
+//        try {
+//            $preSessionId = $request->getPreSessionId();
+//            $preSessionId = trim($preSessionId);
+//            $errorCode = $this->zalyError->errorPreSessionId;
+//            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
+//
+//            if (!$preSessionId) {
+//                $this->setRpcError($errorCode, $errorInfo);
+//                throw new Exception("401 ");
+//            }
+//
+//            $verifyResult = $this->ctx->Site_SessionVerify->doApiVerify($preSessionId);
+//
+//            $loginProfile = $verifyResult["loginProfile"];
+//            $sitePubkPem = $verifyResult["sitePubkPem"];
+//
+//            if (!$loginProfile || !$sitePubkPem) {
+//                throw new Exception("session verify with error loginProfile or sitePubkPem.");
+//            }
+//
+//            $response = $this->buildApiSessionVerifyResponse($sitePubkPem, $loginProfile);
+//            $this->returnSuccessRPC($response);
+//        } catch (Exception $ex) {
+//            $this->ctx->Wpf_Logger->info($tag, $ex->getMessage() . "\n" . $ex->getTraceAsString());
+//            $this->returnErrorRPC(new $this->classNameForResponse(), $ex);
+//        }
         return;
     }
 
