@@ -280,7 +280,15 @@ class Api_Site_ConfigController extends \BaseController
     private function buildAddress($scheme, $host, $port)
     {
         if ("http" == $scheme && $port == 80) {
-            return $scheme . "://" . "$host";
+            $requestUri = isset($_SERVER['REQUEST_URI']) ? str_replace(array("\\", "//"), array("/", "/"), $_SERVER['REQUEST_URI']) : "";
+            $requestUris = explode("/", $requestUri);
+            array_pop($requestUris);
+            $requestUriPath = "";
+            if(count($requestUris)) {
+                $requestUriPath = implode("/", $requestUris);
+            }
+            error_log('------------------------'. $scheme . "://" . "$host".$requestUriPath);
+            return $scheme . "://" . "$host".$requestUriPath;
         } elseif ("https" == $scheme && $port == 443) {
             return $scheme . "://" . "$host";
         }

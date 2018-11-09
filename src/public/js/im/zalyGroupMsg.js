@@ -2,8 +2,10 @@
 $(".left-body-chatsession").html("");
 $(".right-chatbox").html("");
 
+var soundMuteNow = false;
 function showMsgWebNotification(msg, msgContent)
 {
+
     var msgId = msg.msgId;
     var nickname="";
     var name='';
@@ -39,13 +41,28 @@ function showMsgWebNotification(msg, msgContent)
         icon  =  downloadFileUrl + "&fileId="+msg.avatar+"&returnBase64=0&lang="+languageNum;
     }
 
+
     if(document.hidden && (mute == 0)) {
         if(window.Notification && Notification.permission !== "denied"){
+            var soundMute = localStorage.getItem(soundNotificationKey);
+            if(soundMute == "on" && !soundMuteNow) {
+                //浏览器支持 audio
+               try{
+                   var audio = document.getElementById("msg_sound_tip");
+                   audio.muted = false;
+                   audio.play();
+               }catch (error) {
+
+               }
+            }
+            soundMuteNow = true;
+            setTimeout(function () {
+                soundMuteNow = false;
+            }, 2000);
             var notification = new Notification(notification, {
                 "tag":siteConfig.serverAddressForApi,
                 "icon":icon,
                 "renotify": true,
-                "sound":"../../public/voice/definite.mp3"
             });
             notification.onclick = function(event) {
                 window.focus();
@@ -53,6 +70,10 @@ function showMsgWebNotification(msg, msgContent)
         }
     }
 }
+
+
+
+
 
 function showOtherWebNotification()
 {
@@ -72,10 +93,12 @@ function showOtherWebNotification()
 }
 
 
+uploadSelfAvatar = false;
 
 //点击触发一个对象的点击
 function uploadFile(obj, type)
 {
+
     if(type == 'user_avatar') {
         uploadSelfAvatar = true
     }
@@ -188,6 +211,7 @@ function isJudgeSiteMasters(userId)
     }
     return false;
 }
+
 
 groupOffset = 0;
 getGroupList(initGroupList);
@@ -479,6 +503,7 @@ function handlePluginListHtml(results)
                 duckchatSessionId:plugin.userSessionId,
                 logo:logo,
                 loadingType:loadingType,
+                siteAddress:siteAddress
             });
             $(".mini-program-row").append(html);
         }
@@ -834,6 +859,9 @@ function logout(event)
     }
 }
 
+
+
+
 //------------------------------------*********Group function*********--------------------------------------------
 
 
@@ -1082,7 +1110,9 @@ function initUnselectMemberList(results)
     if(list) {
         getUnselectMemberListHtml(results);
     } else {
-        html = template("tpl-invite-member-no-data", {});
+        html = template("tpl-invite-member-no-data", {
+            siteAddress:siteAddress
+        });
         html = handleHtmlLanguage(html);
         $(".pw-left").append(html);
     }
@@ -1105,7 +1135,8 @@ function getUnselectMemberListHtml(results)
             html = template("tpl-invite-member", {
                 userId : user.userId,
                 nickname:user.nickname ?  user.nickname : defaultUserName,
-                friendAvatarImg:friendAvatarImg
+                friendAvatarImg:friendAvatarImg,
+                siteAddress:siteAddress
             });
             html = handleHtmlLanguage(html);
             $(".pw-left").append(html);
@@ -3277,17 +3308,37 @@ function editFriendRemark()
 ////展示个人消息
 function displaySelfInfo()
 {
+    var soundNotification = localStorage.getItem(soundNotificationKey);
+
     var isMaster = isJudgeSiteMasters(token);
     var html = template("tpl-self-info", {
         userId:token,
         nickname:nickname,
         loginName:loginName,
-        isMaster:isMaster
+        isMaster:isMaster,
+        siteAddress:siteAddress,
+        soundNotification:soundNotification
     });
     html = handleHtmlLanguage(html);
     $(".wrapper").append(html);
     getNotMsgImg(token, avatar);
 }
+
+$(document).on("click", ".sound_mute", function () {
+    var type = $(this).attr("is_on");
+    var switchOnSrc = siteAddress+"/public/img/msg/icon_switch_on.png";
+    var switchOffSrc = siteAddress+"/public/img/msg/icon_switch_off.png";
+
+    if(type == "off") {
+        $(this).attr("src", switchOnSrc);
+        $(this).attr("is_on", 'on');
+        localStorage.setItem(soundNotificationKey, "on");
+    }else {
+        $(this).attr("src", switchOffSrc);
+        $(this).attr("is_on", 'off');
+        localStorage.setItem(soundNotificationKey, "off");
+    }
+});
 
 $(document).on("click", ".selfInfo", function () {
     displaySelfInfo();
@@ -3298,12 +3349,12 @@ $(".selfInfo").mouseover(function(){
 }).mouseout(function () {
 
 });
-uploadSelfAvatar = false;
-// $(document).on("mouseleave","#selfInfo", function () {
-//     if( uploadSelfAvatar == false) {
-//         removeWindow($("#selfInfo"));
-//     }
-// });
+
+$(document).on("mouseleave","#selfInfo", function () {
+    if( uploadSelfAvatar == false) {
+        removeWindow($("#selfInfo"));
+    }
+});
 
 
 $(document).on("click", "#self-qrcode", function () {

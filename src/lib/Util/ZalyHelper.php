@@ -236,7 +236,7 @@ class ZalyHelper
         }
     }
 
-    public static function getRequestAddress()
+    public static function getRequestAddressPath()
     {
         $defaultScheme = "http";
         if ((!empty($_SERVER['REQUEST_SCHEME']) && $_SERVER['REQUEST_SCHEME'] == 'https') ||
@@ -246,7 +246,14 @@ class ZalyHelper
         }
 
         $defaultHost = $_SERVER['HTTP_HOST'];
-        return $defaultScheme."://".$defaultHost;
+        $requestUri = isset($_SERVER['REQUEST_URI']) ? str_replace(array("\\", "//"), array("/", "/"), $_SERVER['REQUEST_URI']) : "";
+        $requestUris = explode("/", $requestUri);
+        array_pop($requestUris);
+        $requestUriPath = "";
+        if(count($requestUris)) {
+            $requestUriPath = implode("/", $requestUris);
+        }
+        return $defaultScheme."://".$defaultHost.$requestUriPath;
     }
 
     public static function isUicNumber($str)
