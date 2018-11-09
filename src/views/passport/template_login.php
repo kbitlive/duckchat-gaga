@@ -176,9 +176,6 @@
 
 <script type="text/html" id="tpl_third_login">
     <div style="width: 100%;height: 100%">
-        <div class="third_login_close">
-            <img width="20px" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1541749493505&di=9e1a264eccd6debe9330826ecf57bf10&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3Dc2437fd3c9fdfc03f175ebfbbc56ede1%2F9345d688d43f8794ae7dc103d81b0ef41bd53a18.jpg">
-        </div>
         <iframe src="{{landingUrl}}" class="third_login_iframe">
     </div>
 </script>
