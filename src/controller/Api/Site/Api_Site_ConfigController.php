@@ -238,7 +238,12 @@ class Api_Site_ConfigController extends \BaseController
                     $config->setFrontPage(\Zaly\Proto\Core\FrontPage::FrontPageDefault);
                 }
             } else {
-                $config->setFrontPage(\Zaly\Proto\Core\FrontPage::FrontPageChats);//不显示首页，一定显示第二页
+                $frontPageValue = $configData[SiteConfig::SITE_FRONT_PAGE];
+                if (isset($frontPageValue) && $frontPageValue != \Zaly\Proto\Core\FrontPage::FrontPageHome) {
+                    $config->setFrontPage($configData[SiteConfig::SITE_FRONT_PAGE]);//不显示首页，一定显示第二页
+                } else {
+                    $config->setFrontPage(\Zaly\Proto\Core\FrontPage::FrontPageChats);//不显示首页，一定显示第二页
+                }
             }
 
             $config->setVersion($this->getSiteVersion());
@@ -284,11 +289,11 @@ class Api_Site_ConfigController extends \BaseController
             $requestUris = explode("/", $requestUri);
             array_pop($requestUris);
             $requestUriPath = "";
-            if(count($requestUris)) {
+            if (count($requestUris)) {
                 $requestUriPath = implode("/", $requestUris);
             }
-            error_log('------------------------'. $scheme . "://" . "$host".$requestUriPath);
-            return $scheme . "://" . "$host".$requestUriPath;
+            error_log('------------------------' . $scheme . "://" . "$host" . $requestUriPath);
+            return $scheme . "://" . "$host" . $requestUriPath;
         } elseif ("https" == $scheme && $port == 443) {
             return $scheme . "://" . "$host";
         }

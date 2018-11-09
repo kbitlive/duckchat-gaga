@@ -177,7 +177,6 @@
                     onClick: function () {
                         $("#custom-front-page-text").html(language == 0 ? "Contacts" : "通讯录");
                         $("#custom-front-page").attr("data", "3");
-
                         updateFrontPage(3);
                     }
                 }, {
@@ -186,7 +185,6 @@
                     onClick: function () {
                         $("#custom-front-page-text").html(language == 0 ? "Me" : "我");
                         $("#custom-front-page").attr("data", "4");
-
                         updateFrontPage(4);
                     }
                 }]
