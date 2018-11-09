@@ -488,7 +488,7 @@
 
         var lang = getLanguage();
         $.modal({
-            title: lang == 1 ? '删除群组' : 'Delte Group',
+            title: lang == 1 ? '删除群组' : 'Delete Group',
             text: lang == 1 ? '确定删除？' : 'Confirm Delete?',
             buttons: [
                 {

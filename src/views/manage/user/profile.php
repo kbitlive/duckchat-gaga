@@ -16,7 +16,8 @@
             border-radius: 50%;
             cursor: pointer;
         }
-        .item-row,.weui_switch {
+
+        .item-row, .weui_switch {
             cursor: pointer;
         }
     </style>
@@ -125,7 +126,7 @@
                             <div class="item-body-value">
                                 <img id="user-avatar-img" class="site-user-avatar"
                                      onclick="uploadFile('user-avatar-img-input')"
-                                     avatar = "<?php echo $avatar ?>"
+                                     avatar="<?php echo $avatar ?>"
                                      src=""
                                      onerror="src='../../public/img/msg/default_user.png'">
 
@@ -238,6 +239,31 @@
     <!--   part 4  -->
     <div class="layout-all-row">
         <div class="list-item-center">
+
+            <div class="item-row" id="change-user-password" onclick="changeUserPassword()">
+                <div class="item-body">
+                    <div class="item-body-display">
+
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">修改用户密码</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Change Password</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <div class="item-body-value"></div>
+
+                            <div class="item-body-value-more">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+
             <div class="item-row" id="remove-user" onclick="deleteUserAccount()">
                 <div class="item-body">
                     <div class="item-body-display">
@@ -319,8 +345,8 @@
         updateServerImage(fileId);
 
         var newSrc = "/_api_file_download_/?fileId=" + fileId;
-        if(!isMobile()) {
-            newSrc =  "./index.php?action=http.file.downloadFile&fileId="+ fileId+"&returnBase64=0";
+        if (!isMobile()) {
+            newSrc = "./index.php?action=http.file.downloadFile&fileId=" + fileId + "&returnBase64=0";
         }
         $(".site-user-avatar").attr("src", newSrc);
     }
@@ -348,9 +374,9 @@
 
     $(".site-user-avatar").each(function () {
         var avatar = $(this).attr("avatar");
-        var src =  " /_api_file_download_/?fileId="+avatar;
-        if(!isMobile()) {
-            src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
+        var src = " /_api_file_download_/?fileId=" + avatar;
+        if (!isMobile()) {
+            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
         }
         $(this).attr("src", src);
     });
@@ -477,6 +503,17 @@
     });
 
 
+    $("#change-user-password").click(function () {
+        var title = $(this).find(".item-body-desc").html();
+        var inputBody = $(this).find(".item-body-value").html();
+
+        $("#update-user-button").attr("data", "changePassword");
+        showWindow($(".config-hidden"));
+
+        $(".popup-group-title").html(title);
+        $(".popup-group-input").val(inputBody);
+    });
+
     function updateConfirm() {
         var userId = $("#user-id").attr("data");
         var value = $(".popup-group-input").val();
@@ -505,9 +542,14 @@
 
         if (res.errCode != "success") {
             alert(getLanguage() == 1 ? "更新失败" : "update name error");
+            location.reload();
+        } else {
+            if (data.key == "changePassword") {
+                alert(getLanguage() == 1 ? "修改密码成功" : "change password success");
+            } else {
+                location.reload();
+            }
         }
-
-        location.reload();
     }
 
     //enable realName
@@ -572,15 +614,34 @@
     });
 
     function deleteUserAccount() {
-        var userId = $("#user-id").attr("data");
 
-        var url = "index.php?action=manage.user.delete&lang=" + getLanguage();
+        var lang = getLanguage();
+        $.modal({
+            title: lang == 1 ? '删除用户' : 'Delete User',
+            text: lang == 1 ? '确定删除？' : 'Confirm Delete?',
+            buttons: [
+                {
+                    text: lang == 1 ? "取消" : "cancel", className: "default", onClick: function () {
+                        // alert("cancel");
+                    }
+                },
+                {
+                    text: lang == 1 ? "确定" : "confirm", className: "main-color", onClick: function () {
+                        var userId = $("#user-id").attr("data");
 
-        var data = {
-            'deleteUserId': userId
-        };
+                        var url = "index.php?action=manage.user.delete&lang=" + getLanguage();
 
-        zalyjsCommonAjaxPostJson(url, data, removeUserResponse);
+                        var data = {
+                            'deleteUserId': userId
+                        };
+
+                        zalyjsCommonAjaxPostJson(url, data, removeUserResponse);
+                    }
+                },
+
+            ]
+        });
+
     }
 
     function removeUserResponse(url, data, result) {

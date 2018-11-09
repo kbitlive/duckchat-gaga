@@ -75,8 +75,6 @@ class Api_Passport_PasswordResetPasswordController extends BaseController
     private function updatePasswordByLoginName($loginName, $password)
     {
         $tag = __CLASS__ . '-' . __FUNCTION__;
-        $this->ctx->Wpf_Logger->error($tag, "error_msg password--------------" . $password);
-
         try{
            $where = [
                "loginName" => $loginName
