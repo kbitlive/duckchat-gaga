@@ -534,6 +534,9 @@ $(document).on("click", ".plugin-info", function () {
     } else {
         landingPageUrl = landingPageUrl+"?duckchat_sessionid="+duckchatSessionId;
     }
+    var clientHeight = $(".plugin-list-dialog")[0].clientHeight - $(".plugin-head")[0].clientHeight;
+    $(".plugin-right-body")[0].style.height = clientHeight+"px";
+
     var pluginId = $(this).attr("plugin-id");
     localStorage.setItem(defaultPluginDisplay, pluginId);
     $(".title").html(name);

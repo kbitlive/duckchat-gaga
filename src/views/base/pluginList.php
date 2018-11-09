@@ -1,4 +1,4 @@
-<div class="right-head">
+<div class="right-head plugin-head">
     <img src="<?php echo $siteAddress?>/public/img/back.png"  class="plugin_back"/>
 
     <div class="title plugin-title"></div>
