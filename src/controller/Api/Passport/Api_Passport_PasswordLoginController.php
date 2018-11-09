@@ -22,9 +22,9 @@ class Api_Passport_PasswordLoginController extends Api_Passport_PasswordBase
      */
     public function rpc(\Google\Protobuf\Internal\Message $request, \Google\Protobuf\Internal\Message $transportData)
     {
+        header('Access-Control-Allow-Origin: *');
         $tag = __CLASS__ . '-' . __FUNCTION__;
         try {
-            error_log("=========api.passport.passwordLogin request=" . $request->serializeToJsonString());
             $loginName = $request->getLoginName();
             $password = $request->getPassword();
             $sitePubkPem = $request->getSitePubkPem();
