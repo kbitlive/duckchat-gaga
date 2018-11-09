@@ -57,11 +57,13 @@
             <div class="search_group_friend">
                 <img src="<?php echo $siteAddress?>/public/img/msg/search_icon.png">
                 <input type="text" onkeydown="searchGroupAndFriendByKeyDown(event)" class="search_for_group_friend">
+                <img src="<?php echo $siteAddress?>/public/img/msg/btn-x.png" style="left:24rem;" onclick="deleteSearchInfo()">
+
             </div>
             <div class="left-body-container">
 
                 <!-- home -->
-                <div class="left-body-home home-page" style="position: relative;display: none;">
+                <div class="left-body-home home-page left-body-item" style="position: relative;display: none;">
                     <div style="width: 100%;" class="home-tools">
                         <div class="" style="font-size: 14px;color: #666666; margin: 14px 0 6px 20px">
                             <span data-local-value="miniProgramTip">小程序列表</span>
@@ -91,7 +93,7 @@
                             </div>
                             <div class="group-list-div"><span  data-local-value="groupListTip">群聊列表</span><span style="margin-left: 0.5rem;" class="group-count"></span></div>
                         </div>
-                        <div style="position: absolute;width: 100%;margin:0 auto;">
+                        <div style="position: absolute;width: 100%;margin:0 auto;height: 100%;">
                             <div class="group-list-contact-row" style="overflow-y: scroll;position: relative;">
                             </div>
                         </div>
@@ -115,7 +117,7 @@
                             </div>
                         <div class="friend-list-div" ><span data-local-value="friendListTip">好友列表</span><span style="margin-left: 0.5rem;" class="friend-count"><span></div>
                     </div>
-                    <div style="width: 28.14rem;position: absolute;margin:0 auto;">
+                    <div style="width: 28.14rem;position: absolute;margin:0 auto;height:100%;">
                         <div class="friend-list-contact-row" style="overflow-y: scroll;position: relative">
                         </div>
                     </div>
@@ -124,8 +126,35 @@
 
                 <!-- search friends -->
                 <div class="left-body-search-list search-friend-group-lists left-body-item"  style="display: none;">
-                    <div style="width: 28.14rem;position: absolute;margin:0 auto;">
+                    <div class="search-friend-group-lists-div" style="width: 28.14rem;position: absolute;margin:0 auto;height: 100%;">
                         <div class="search-list-contact-row" style="overflow-y: scroll;position: relative">
+                           <div class="search-friend-div">
+                               <div class="friend-list-div" ><span data-local-value="friendListTip">好友</span></div>
+                               <div class="search_display_friend">
+                               </div>
+                               <div class="search_see_friend_all_tip display_all_friend" style="display: none" >
+                                   <span>查看全部</span> <span class="search_friend_count"></span>
+                               </div>
+                               <div class="search_hidden_friend" style="display: none">
+                               </div>
+                               <div class="search_see_friend_all_tip hide_all_friend" style="display: none" >
+                                   <span>收起</span>
+                               </div>
+                           </div>
+
+                            <div class="search-group-div">
+                                <div class="group-list-div" ><span data-local-value="GroupListTip">群组</span></div>
+                                <div class="search_display_group">
+                                </div>
+                                <div class="search_see_group_all_tip display_all_group" style="display: none" >
+                                    <span>查看全部</span> <span class="search_group_count"></span>
+                                </div>
+                                <div class="search_hidden_group" style="display: none">
+                                </div>
+                                <div class="search_see_group_all_tip hide_all_group" style="display: none" >
+                                    <span>收起</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

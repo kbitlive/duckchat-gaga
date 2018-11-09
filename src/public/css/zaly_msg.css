@@ -2015,10 +2015,11 @@ button:active{
     position: relative;
 }
 .search_group_friend img{
-    width: 1.3rem;
-    height: 1.3rem;
+    width: 1.5rem;
+    height:1.5rem;
     position: absolute;
     left:2rem;
+    cursor: pointer;
 }
 .search_group_friend input{
     width:26.27rem;
@@ -2031,4 +2032,17 @@ button:active{
     padding-left:3rem;
     margin-right: 1rem;
     margin-left: 1rem;
+}
+.search_see_friend_all_tip,.search_see_group_all_tip {
+    height:3rem;
+    line-height: 3rem;
+    font-size:12px;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(127,118,180,1);
+    line-height:12px;
+    margin-left: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
 }

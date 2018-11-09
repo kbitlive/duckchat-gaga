@@ -195,6 +195,9 @@ getGroupList(initGroupList);
 friendOffset = 0;
 getFriendList(initFriendList);
 $(document).on("click", ".l-sb-item", function(){
+    $(".search-friend-group-lists")[0].style.display="none";
+    $(".search_for_group_friend").val("");
+
     var currentActive = $(".left-sidebar").find(".l-sb-item-active");
     $(currentActive).removeClass("l-sb-item-active");
     $(this).addClass("l-sb-item-active");
@@ -218,6 +221,7 @@ $(document).on("click", ".l-sb-item", function(){
         $("."+unselectClassName)[0].style.display = "none";
         $("."+selectClassName)[0].style.display = "block";
     }
+    $(".left-body-item[default='1']").attr("default", 0);
 
     switch (dataType){
         case "home":
@@ -235,9 +239,9 @@ $(document).on("click", ".l-sb-item", function(){
             $(".chatsession-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
             $(".group-lists").attr("default", 1);
+            groupOffset = 0;
+            getGroupList(initGroupList);
 
-            // groupOffset = 0;
-            // getGroupList(initGroupList);
             break;
         case "chatSession" :
             getRoomList();
@@ -254,8 +258,10 @@ $(document).on("click", ".l-sb-item", function(){
             $(".chatsession-lists")[0].style.display = "none";
             $(".group-lists")[0].style.display = "none";
             $(".friend-lists").attr("default", 1);
-            // friendOffset = 0;
-            // getFriendList(initFriendList);
+
+            friendOffset = 0;
+            getFriendList(initFriendList);
+
             break;
         case "more":
             displayDownloadApp();
@@ -308,46 +314,129 @@ function searchGroupAndFriendByKeyDown(event)
         return;
     }
     var searchVal = $(".search_for_group_friend").val();
-    console.log("searchVal===="+searchVal);
-    $(".search-list-contact-row").html("");
+
+    $(".search_display_friend").html("");
+    $(".search_display_group").html("");
+
+    $(".search-group-div")[0].style.display = "block";
+    $(".search-friend-div")[0].style.display = "block";
 
 
-    var friendListRow = $(".contact-row-u2-profile");
+    var friendListRow = $(".friend-list-contact-row .contact-row-u2-profile");
     var friendListRowLength = friendListRow.length;
+    var currentFriendCount = 0;
+    $(".hide_all_friend")[0].style.display = "none";
+    $(".search_hidden_friend")[0].style.display = "none";
+    $(".display_all_friend")[0].style.display = "none";
+    console.log("friendListRowLength---------"+friendListRowLength)
+
     for(var i=0; i< friendListRowLength; i++) {
         var friendRow = friendListRow[i];
+        var newFriendRow = friendRow.cloneNode(true);
         var friendName = $(friendRow).attr("friend-name");
         try{
             if(friendName.indexOf(searchVal)!=-1) {
-                console.log("search friendName====="+friendName);
-
-                $(".search-list-contact-row").append($(friendRow));
+                currentFriendCount +=1;
+                if(currentFriendCount > 2) {
+                    $(".display_all_friend")[0].style.display = "flex";
+                    $(".search_hidden_friend").append($(newFriendRow));
+                } else {
+                    $(".search_display_friend").append($(newFriendRow));
+                }
             }
         }catch (error) {
-            
+
         }
     }
 
+    if(currentFriendCount > 2) {
+        var currentFriendCountStr = "("+currentFriendCount+")";
+        $(".search_friend_count").html(currentFriendCountStr);
+    }
+
+    $(".hide_all_group")[0].style.display = "none";
+    $(".search_hidden_group")[0].style.display = "none";
+    $(".display_all_group")[0].style.display = "none";
+
     var groupListRow = $(".contact-row-group-profile");
     var groupListRowLength = groupListRow.length;
+    var currentGroupCount = 0;
     for(var i=0; i< groupListRowLength; i++) {
         var groupRow = groupListRow[i];
+        var newGroupRow = friendRow.cloneNode(true);
         var groupName = $(groupRow).attr("group-name");
 
         try{
             if(groupName.indexOf(searchVal)!=-1) {
-                console.log("search groupName====="+groupName);
-
-                $(".search-list-contact-row").append($(groupRow));
+                currentGroupCount +=1;
+                if(currentGroupCount > 2) {
+                    $(".display_all_group")[0].style.display = "flex";
+                    $(".search_hidden_group").append($(newGroupRow));
+                } else {
+                    $(".search_display_group").append($(newGroupRow));
+                }
             }
         }catch (error) {
 
         }
     }
-    $(".left-body-item[default=1]")[0].style.display = "none";
+    if(currentGroupCount > 2) {
+        var currentGroupCountStr = "("+currentGroupCount+")";
+        $(".search_group_count").html(currentGroupCountStr);
+    }
+
+    $(".left-body-item[default='1']")[0].style.display = "none";
+    $(".left-body-item[default='1']").attr("default", 0)
+
     $(".search-friend-group-lists")[0].style.display = "block";
+    $(".search-friend-group-lists").attr("default", 1);
 
 }
+
+$(document).on("click", ".display_all_friend", function () {
+    $(".search_hidden_friend")[0].style.display = "block";
+    $(".display_all_friend")[0].style.display = "none";
+    $(".hide_all_friend")[0].style.display = "flex";
+    var clientHeight = $(".search-friend-group-lists")[0].clientHeight - $(".friend-list-div")[0].clientHeight;
+    $(".search-friend-group-lists-div")[0].style.height = clientHeight+"px";
+});
+
+$(document).on("click", ".hide_all_friend", function () {
+    $(".display_all_friend")[0].style.display = "flex";
+    $(".hide_all_friend")[0].style.display = "none";
+    $(".search_hidden_friend")[0].style.display = "none";
+});
+
+
+$(document).on("click", ".display_all_group", function () {
+    $(".search_hidden_group")[0].style.display = "block";
+    $(".display_all_group")[0].style.display = "none";
+    $(".hide_all_group")[0].style.display = "flex";
+    var clientHeight = $(".search-friend-group-lists")[0].clientHeight - $(".group-list-div")[0].clientHeight;
+    $(".search-friend-group-lists-div")[0].style.height = clientHeight+"px";
+});
+
+$(document).on("click", ".hide_all_group", function () {
+    $(".display_all_group")[0].style.display = "flex";
+    $(".hide_all_group")[0].style.display = "none";
+    $(".search_hidden_group")[0].style.display = "none";
+});
+
+function deleteSearchInfo()
+{
+    $(".search_for_group_friend").val('');
+    $(".search-group-div")[0].style.display = "none";
+    $(".search-friend-div")[0].style.display = "none";
+
+}
+
+$(document).on("input onpropertychange", ".search_for_group_friend", function () {
+    var value = $(".search_for_group_friend").val();
+    if(!value ||  value.length<1) {
+        deleteSearchInfo();
+    }
+});
+
 
 //-------------------------------------------api.plugin.list------------------------------------------------
 /// plugin operation - api.plugin.list
