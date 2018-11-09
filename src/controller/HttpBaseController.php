@@ -126,14 +126,17 @@ abstract class HttpBaseController extends \Wpf_Controller
     {
         try {
             $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
-            $loginKey = isset($_GET['thirdPartyKey']) ? $_GET['thirdPartyKey'] : "";
+            $thirdPartyLoginKey = isset($_GET['thirdPartyKey']) ? $_GET['thirdPartyKey'] : "";
+            $thirdPartyLoginKey = trim($thirdPartyLoginKey);
+            error_log("========web pc login thirdPartyKey=" . $thirdPartyLoginKey);
+
             $userCustomArray = [];
             if ($preSessionId) {
                 $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
                 if ($preSessionId) {
                     $clientType = Zaly\Proto\Core\UserClientType::UserClientWeb;
 //                    $userProfile = $this->ctx->Site_Login->loginByThirdPary($preSessionId, "", $clientType);
-                    $userProfile = $this->ctx->Site_Login->doLogin($loginKey, $preSessionId, "", $clientType, $userCustomArray);
+                    $userProfile = $this->ctx->Site_Login->doLogin($thirdPartyLoginKey, $preSessionId, "", $clientType, $userCustomArray);
                     $this->setCookie($userProfile["sessionId"], $this->siteCookieName);
                 }
             }
@@ -227,9 +230,9 @@ abstract class HttpBaseController extends \Wpf_Controller
 
         if ($jumpPage) {
             if (strpos($apiPageLogin, "?")) {
-                header("Location:" . $apiPageLogin . "&".$jumpPage);
+                header("Location:" . $apiPageLogin . "&" . $jumpPage);
             } else {
-                header("Location:" . $apiPageLogin . "?".$jumpPage);
+                header("Location:" . $apiPageLogin . "?" . $jumpPage);
             }
         } else {
             if (strpos($apiPageLogin, "?")) {
@@ -246,8 +249,8 @@ abstract class HttpBaseController extends \Wpf_Controller
         $x = isset($_GET['x']) ? $_GET['x'] : "";
         $page = isset($_GET['page']) ? $_GET['page'] : "";
         $jumpPage = "";
-        if($page) {
-            $jumpPage = "page=".$page."&x=" . $x;
+        if ($page) {
+            $jumpPage = "page=" . $page . "&x=" . $x;
         }
         return $jumpPage;
     }

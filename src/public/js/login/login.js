@@ -873,5 +873,9 @@ $(document).on("click", ".third_login_logo", function () {
     var html = template("tpl_third_login", {
         landingUrl:landingUrl
     });
-    $(".container").html(html);
+    $(".login_div_container").html(html);
+});
+
+$(document).on("click",".third_login_close",function () {
+    window.location.reload();
 });

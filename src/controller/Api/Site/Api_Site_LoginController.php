@@ -58,7 +58,7 @@ class Api_Site_LoginController extends \BaseController
             }
 
 
-            $thirdPartyKey = $request->getThirdPartyKey();
+            $thirdPartyKey = trim($request->getThirdPartyKey());
             $userCustoms = $request->getUserCustoms();
 
             $customData = [];
