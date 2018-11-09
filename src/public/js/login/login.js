@@ -831,7 +831,7 @@ function registerForPassportPassword() {
 
     if (languageNum == UserClientLangZH) {
         if (pwdContainCharacters) {
-            var pwdTip = pwdContainCharacters + "; 长度 " + pwdMinLength + "-" + pwdMaxLength;
+            var pwdTip = pwdContainCharacters + ",长度 " + pwdMinLength + "-" + pwdMaxLength;
         } else {
             var pwdTip = " 长度 " + pwdMinLength + "-" + pwdMaxLength;
         }
@@ -841,7 +841,7 @@ function registerForPassportPassword() {
         var loginNameTip = "长度 " + loginNameMinLength + "-" + loginNameMaxLength;
     } else {
         if (pwdContainCharacters) {
-            var pwdTip = pwdContainCharacters + "; length " + pwdMinLength + "-" + pwdMaxLength;
+            var pwdTip = pwdContainCharacters + ",length " + pwdMinLength + "-" + pwdMaxLength;
         } else {
             var pwdTip = " length " + pwdMinLength + "-" + pwdMaxLength;
         }
