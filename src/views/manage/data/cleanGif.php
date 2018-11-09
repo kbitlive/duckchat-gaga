@@ -83,6 +83,7 @@
             display: block;
             height: 100%;
             overflow-y: scroll;
+            background-color: white;
         }
         .clean-button-div {
             position: absolute;

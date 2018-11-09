@@ -6,7 +6,7 @@
  * Time: 6:32 PM
  */
 
-abstract class Manage_ServletController extends MiniProgramController
+abstract class Manage_ServletController extends MiniProgram_BaseController
 {
 
     protected function getMiniProgramId()
