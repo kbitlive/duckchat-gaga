@@ -292,7 +292,6 @@ class Api_Site_ConfigController extends \BaseController
             if (count($requestUris)) {
                 $requestUriPath = implode("/", $requestUris);
             }
-            error_log('------------------------' . $scheme . "://" . "$host" . $requestUriPath);
             return $scheme . "://" . "$host" . $requestUriPath;
         } elseif ("https" == $scheme && $port == 443) {
             return $scheme . "://" . "$host";

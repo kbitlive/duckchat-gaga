@@ -216,6 +216,7 @@ class InstallDBController
             $sampleFile = require(dirname(dirname(__FILE__)) . "/config.sample.php");
 
             if ($isInstallRootPath === false) {
+                header("Content-Type: text/html; charset=UTF-8");
                 echo $this->lang == 1 ? "目前只支持根目录运行" : "Currently only the root directory is supported.";
                 return;
             }

@@ -3505,18 +3505,13 @@ function searchUserByKeyDown(event)
         return;
     }
     isSearchUser = true;
-    console.log("isSearchUser= searchUserByKeyDown="+isSearchUser);
-
     searchUser();
 }
-$(document).on("change", ".search-user-input", function () {
+$(document).on("input porpertychange", ".search-user-input", function () {
     isSearchUser = false;
-    console.log("isSearchUser change=="+isSearchUser);
 });
 
 function searchUserByOnBlur() {
-    console.log("isSearchUser searchUserByOnBlur=="+isSearchUser);
-
     if(isSearchUser == true) {
         return;
     }
