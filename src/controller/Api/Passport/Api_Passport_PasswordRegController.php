@@ -24,6 +24,7 @@ class Api_Passport_PasswordRegController  extends Api_Passport_PasswordBase
     {
         $tag = __CLASS__ . '-' . __FUNCTION__;
         try {
+            header('Access-Control-Allow-Origin: *');
             $loginName = $request->getLoginName();
             $email     = $request->getEmail();
             $password  = $request->getPassword();

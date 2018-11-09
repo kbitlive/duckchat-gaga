@@ -34,6 +34,8 @@ class Site_Login
      */
     public function doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $userCustomArray)
     {
+        error_log('---------------shaoye  api.site.login---------'.$thirdPartyKey);
+
         $userProfile = false;
 
         if (empty($thirdPartyKey)) {
