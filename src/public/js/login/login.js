@@ -135,7 +135,6 @@ function zalyLoginConfig(results) {
     enableInvitationCode = siteConfig.enableInvitationCode;
     enableRealName=siteConfig.enableRealName;
     sitePubkPem = siteConfig.sitePubkPem;
-
 }
 
 
@@ -869,10 +868,12 @@ $(document).on("click", ".third_login_logo", function () {
     var landingUrl = $(this).attr("landingUrl");
     var siteAddressUrl = encodeURIComponent(siteAddress);
     if(landingUrl.indexOf("?") != -1) {
-        landingUrl +="&duckchat_third_login_name="+name+"&redirect_url="+siteAddressUrl;
+        landingUrl +="&duckchat_third_login_name="+name+"&from=duckchat&redirect_url="+siteAddressUrl;
     } else {
-        landingUrl +="?duckchat_third_login_name="+name+"&redirect_url="+siteAddressUrl;
+        landingUrl +="?duckchat_third_login_name="+name+"&from=duckchat&redirect_url="+siteAddressUrl;
     }
+    console.log("landingUrl-------"+landingUrl);
+
     var html = template("tpl_third_login", {
         landingUrl:landingUrl
     });
