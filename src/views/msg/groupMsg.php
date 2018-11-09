@@ -109,6 +109,7 @@
 
     localStorage.setItem(chatTypeKey, DefaultChat);
     getRoomList();
+    $(".chatsession-lists").attr("default", 1);
 
     history.pushState(null, null, document.URL);
     window.addEventListener('popstate', function () {

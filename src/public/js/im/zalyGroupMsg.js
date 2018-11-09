@@ -189,8 +189,15 @@ function isJudgeSiteMasters(userId)
     return false;
 }
 
+groupOffset = 0;
+getGroupList(initGroupList);
 
+friendOffset = 0;
+getFriendList(initFriendList);
 $(document).on("click", ".l-sb-item", function(){
+    $(".search-friend-group-lists")[0].style.display="none";
+    $(".search_for_group_friend").val("");
+
     var currentActive = $(".left-sidebar").find(".l-sb-item-active");
     $(currentActive).removeClass("l-sb-item-active");
     $(this).addClass("l-sb-item-active");
@@ -214,6 +221,7 @@ $(document).on("click", ".l-sb-item", function(){
         $("."+unselectClassName)[0].style.display = "none";
         $("."+selectClassName)[0].style.display = "block";
     }
+    $(".left-body-item[default='1']").attr("default", 0);
 
     switch (dataType){
         case "home":
@@ -221,6 +229,7 @@ $(document).on("click", ".l-sb-item", function(){
             $(".group-lists")[0].style.display = "none";
             $(".chatsession-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
+            $(".home-page").attr("default", 1);
             pluginOffset = 0;
             getPluginList(pluginOffset, PluginUsageType.PluginUsageIndex, initPluginList);
             break;
@@ -229,8 +238,10 @@ $(document).on("click", ".l-sb-item", function(){
             $(".group-lists")[0].style.display = "block";
             $(".chatsession-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
+            $(".group-lists").attr("default", 1);
             groupOffset = 0;
             getGroupList(initGroupList);
+
             break;
         case "chatSession" :
             getRoomList();
@@ -238,14 +249,19 @@ $(document).on("click", ".l-sb-item", function(){
             $(".chatsession-lists")[0].style.display = "block";
             $(".group-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
+            $(".chatsession-lists").attr("default", 1);
+
             break;
         case "friend":
             $(".home-page")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "block";
             $(".chatsession-lists")[0].style.display = "none";
             $(".group-lists")[0].style.display = "none";
+            $(".friend-lists").attr("default", 1);
+
             friendOffset = 0;
             getFriendList(initFriendList);
+
             break;
         case "more":
             displayDownloadApp();
@@ -291,6 +307,135 @@ function checkIsEnterBack(event)
     }
     return true;
 }
+
+function searchGroupAndFriendByKeyDown(event)
+{
+    if(!checkIsEnterBack(event)) {
+        return;
+    }
+    var searchVal = $(".search_for_group_friend").val();
+
+    $(".search_display_friend").html("");
+    $(".search_display_group").html("");
+
+    $(".search-group-div")[0].style.display = "block";
+    $(".search-friend-div")[0].style.display = "block";
+
+
+    var friendListRow = $(".friend-list-contact-row .contact-row-u2-profile");
+    var friendListRowLength = friendListRow.length;
+    var currentFriendCount = 0;
+    $(".hide_all_friend")[0].style.display = "none";
+    $(".search_hidden_friend")[0].style.display = "none";
+    $(".display_all_friend")[0].style.display = "none";
+
+    for(var i=0; i< friendListRowLength; i++) {
+        var friendRow = friendListRow[i];
+        var newFriendRow = friendRow.cloneNode(true);
+        var friendName = $(friendRow).attr("friend-name");
+        try{
+            if(friendName.indexOf(searchVal)!=-1) {
+                currentFriendCount +=1;
+                if(currentFriendCount > 2) {
+                    $(".display_all_friend")[0].style.display = "flex";
+                    $(".search_hidden_friend").append($(newFriendRow));
+                } else {
+                    $(".search_display_friend").append($(newFriendRow));
+                }
+            }
+        }catch (error) {
+
+        }
+    }
+
+    if(currentFriendCount > 2) {
+        var currentFriendCountStr = "("+currentFriendCount+")";
+        $(".search_friend_count").html(currentFriendCountStr);
+    }
+
+    $(".hide_all_group")[0].style.display = "none";
+    $(".search_hidden_group")[0].style.display = "none";
+    $(".display_all_group")[0].style.display = "none";
+
+    var groupListRow = $(".contact-row-group-profile");
+    var groupListRowLength = groupListRow.length;
+    var currentGroupCount = 0;
+    for(var i=0; i< groupListRowLength; i++) {
+        var groupRow = groupListRow[i];
+        var newGroupRow = groupRow.cloneNode(true);
+        var groupName = $(groupRow).attr("group-name");
+
+        try{
+            if(groupName.indexOf(searchVal)!=-1) {
+                currentGroupCount +=1;
+                if(currentGroupCount > 2) {
+                    $(".display_all_group")[0].style.display = "flex";
+                    $(".search_hidden_group").append($(newGroupRow));
+                } else {
+                    $(".search_display_group").append($(newGroupRow));
+                }
+            }
+        }catch (error) {
+
+        }
+    }
+    if(currentGroupCount > 2) {
+        var currentGroupCountStr = "("+currentGroupCount+")";
+        $(".search_group_count").html(currentGroupCountStr);
+    }
+
+    $(".left-body-item[default='1']")[0].style.display = "none";
+    $(".left-body-item[default='1']").attr("default", 0)
+
+    $(".search-friend-group-lists")[0].style.display = "block";
+    $(".search-friend-group-lists").attr("default", 1);
+
+}
+
+$(document).on("click", ".display_all_friend", function () {
+    $(".search_hidden_friend")[0].style.display = "block";
+    $(".display_all_friend")[0].style.display = "none";
+    $(".hide_all_friend")[0].style.display = "flex";
+    var clientHeight = $(".search-friend-group-lists")[0].clientHeight - $(".friend-list-div")[0].clientHeight;
+    $(".search-friend-group-lists-div")[0].style.height = clientHeight+"px";
+});
+
+$(document).on("click", ".hide_all_friend", function () {
+    $(".display_all_friend")[0].style.display = "flex";
+    $(".hide_all_friend")[0].style.display = "none";
+    $(".search_hidden_friend")[0].style.display = "none";
+});
+
+
+$(document).on("click", ".display_all_group", function () {
+    $(".search_hidden_group")[0].style.display = "block";
+    $(".display_all_group")[0].style.display = "none";
+    $(".hide_all_group")[0].style.display = "flex";
+    var clientHeight = $(".search-friend-group-lists")[0].clientHeight - $(".group-list-div")[0].clientHeight;
+    $(".search-friend-group-lists-div")[0].style.height = clientHeight+"px";
+});
+
+$(document).on("click", ".hide_all_group", function () {
+    $(".display_all_group")[0].style.display = "flex";
+    $(".hide_all_group")[0].style.display = "none";
+    $(".search_hidden_group")[0].style.display = "none";
+});
+
+function deleteSearchInfo()
+{
+    $(".search_for_group_friend").val('');
+    $(".search-group-div")[0].style.display = "none";
+    $(".search-friend-div")[0].style.display = "none";
+
+}
+
+$(document).on("input onpropertychange", ".search_for_group_friend", function () {
+    var value = $(".search_for_group_friend").val();
+    if(!value ||  value.length<1) {
+        deleteSearchInfo();
+    }
+});
+
 
 //-------------------------------------------api.plugin.list------------------------------------------------
 /// plugin operation - api.plugin.list
@@ -866,6 +1011,7 @@ function getGroupList(callback)
     }
     handleClientSendRequest(action, reqData, callback);
 }
+
 /// group operation - api.group.list - init html
 function initGroupList(results)
 {
@@ -902,23 +1048,9 @@ function appendGroupListHtml(results) {
         var groupsDivHeight = $(".left-body-groups")[0].clientHeight;
         var groupToolsHeight = $(".group-tools")[0].clientHeight;
         $(".group-list-contact-row")[0].style.height = Number(groupsDivHeight-groupToolsHeight)+"px";
+        getGroupList(appendGroupListHtml);
     }
 }
-
-/// group operation - api.group.list - scroll append html
-$(function () {
-    ////加载群组列表
-    $('.group-lists').scroll(function(){
-        var pwLeft = $(".group-lists")[0];
-        var ch  = pwLeft.clientHeight;
-        var sh = pwLeft.scrollHeight;
-        var st = $('.group-lists').scrollTop();
-        ////文档的高度-视口的高度-滚动条的高度
-        if((sh - ch - st) == 0){
-            getGroupList(appendGroupListHtml);
-        }
-    });
-});
 
 //-------------------------------------------api.group.invitableFriends-------------------------------------------------
 unselectMemberOffset = 0;
@@ -2415,6 +2547,7 @@ function  appendFriendListHtml(results)
         var friendsDivHeight = $(".left-body-friends")[0].clientHeight;
         var friendToolsHeight = $(".friend-tools")[0].clientHeight;
         $(".friend-list-contact-row")[0].style.height = Number(friendsDivHeight-friendToolsHeight)+"px";
+        getFriendList(appendFriendListHtml);
     }
 }
 
@@ -2427,21 +2560,6 @@ function initFriendList(results)
     }
     displayApplyFriendNum();
 }
-
-// friend operation -- api.friend.list - scroll append html
-$('.friend-list-contact-row').scroll(function(event){
-    var pwLeft = $(".friend-list-contact-row")[0];
-    var ch  = pwLeft.clientHeight;
-    var sh = pwLeft.scrollHeight;
-    var st = $('.friend-list-contact-row').scrollTop();
-
-    //文档的高度-视口的高度-滚动条的高度
-    if((sh - ch - st) == 0){
-        getFriendList(appendFriendListHtml);
-    }
-});
-
-
 
 //---------------------------------------api.friend.profile----------------------------------------------
 
