@@ -103,22 +103,9 @@
             </div>
         </div>
 
-        <div class="init_check_info justify-content-left ext_curl" isLoad="{{isCanUseCurl}}">
-            <div class="init_check isCanUseCurl" style="color: #F44336;">
-                4.是否可以正确Curl请求
-            </div>
-            <div class="init_check_result">
-                {{if isCanUseCurl}}
-                <img class="isCanUseCurlImg" src='../../public/img/init/check_success.png' />
-                {{else}}
-                <img class="isCanUseCurlImg" src='../../public/img//init/check_failed.png'  />
-                {{/if}}
-            </div>
-        </div>
-
         <div class="init_check_info justify-content-left  ext_is_write" isLoad="{{isWritePermission}}">
             <div class="init_check isWritePermission">
-                5.当前目录写权限
+                4.当前目录写权限
             </div>
             <div class="init_check_result">
                 {{if isWritePermission}}
@@ -131,7 +118,7 @@
 
         <div class="init_check_info justify-content-left  ext_is_write" isLoad="{{isLoadProperties}}">
             <div class="init_check isLoadProperties">
-                6.是否可以加载语言包
+                4.是否可以加载语言包
             </div>
             <div class="init_check_result">
                 {{if isLoadProperties}}
