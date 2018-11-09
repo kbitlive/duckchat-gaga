@@ -47,6 +47,9 @@
  *
  * @property Pinyin Pinyin
  *
+ * @property DuckChat_Client DuckChat_Client
+ * @property DuckChat_Session DuckChat_Session
+ *
  */
 class BaseCtx extends Wpf_Ctx
 {

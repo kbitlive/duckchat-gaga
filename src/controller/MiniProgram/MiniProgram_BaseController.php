@@ -11,7 +11,7 @@ use Zaly\Proto\Core\TransportData;
 use Zaly\Proto\Core\TransportDataHeaderKey;
 use Google\Protobuf\Internal\Message;
 
-abstract class MiniProgramController extends \Wpf_Controller
+abstract class MiniProgram_BaseController extends \Wpf_Controller
 {
     protected $logger;
 
@@ -129,7 +129,7 @@ abstract class MiniProgramController extends \Wpf_Controller
             $requestData = new Zaly\Proto\Plugin\DuckChatSessionProfileRequest();
             $requestData->setEncryptedSessionId($duckchatSessionId);
 
-            $response = $this->requestDuckChatInnerApi($miniProgramId, $action, $requestData);
+            $response = $this->ctx->DuckChat_Client->doRequest($miniProgramId, $action, $requestData);
 
             $this->logger->info($tag, "response=" . json_encode($response));
 
@@ -156,30 +156,33 @@ abstract class MiniProgramController extends \Wpf_Controller
      */
     public function requestDuckChatInnerApi($miniProgramId, $action, $requestProtoData)
     {
-        $miniProgramProfile = $this->getMiniProgramProfile($miniProgramId);
+//        $miniProgramProfile = $this->getMiniProgramProfile($miniProgramId);
+//
+//        $authKey = $miniProgramProfile['authKey'];
+//
+//        $requestTransportDataString = $this->buildTransportData($action, $requestProtoData);
+////        $requestBodyJson = array(
+////            "body" => $requestTransportDataString,
+////            "time" => time(),
+////        );
+////        $requestBodyJson = json_encode($requestBodyJson);
+//
+//        //加密发送
+//        $encryptedTransportData = $this->ctx->ZalyAes->encrypt($requestTransportDataString, $authKey);
+//
+//        $requestUrl = "/?action=" . $action . "&body_format=pb&miniProgramId=" . $miniProgramId;
+//        $requestUrl = ZalyHelper::getFullReqUrl($requestUrl);
+//
+////        $this->ctx->Wpf_Logger->error($action, "fihttp request url =" . $requestUrl);
+//
+//        $encryptedHttpTransportResponse = $this->ctx->ZalyCurl->request($requestUrl, "POST", $encryptedTransportData);
+//        //解密结果
+//        $httpResponse = $this->ctx->ZalyAes->decrypt($encryptedHttpTransportResponse, $authKey);
 
-        $authKey = $miniProgramProfile['authKey'];
+        $response = $this->ctx->DuckChat_Client->doRequest($miniProgramId, $action, $requestProtoData);
 
-        $requestTransportDataString = $this->buildTransportData($action, $requestProtoData);
-//        $requestBodyJson = array(
-//            "body" => $requestTransportDataString,
-//            "time" => time(),
-//        );
-//        $requestBodyJson = json_encode($requestBodyJson);
-
-        //加密发送
-        $encryptedTransportData = $this->ctx->ZalyAes->encrypt($requestTransportDataString, $authKey);
-
-        $requestUrl = "/?action=" . $action . "&body_format=pb&miniProgramId=" . $miniProgramId;
-        $requestUrl = ZalyHelper::getFullReqUrl($requestUrl);
-
-//        $this->ctx->Wpf_Logger->error($action, "fihttp request url =" . $requestUrl);
-
-        $encryptedHttpTransportResponse = $this->ctx->ZalyCurl->request($requestUrl, "POST", $encryptedTransportData);
-        //解密结果
-        $httpResponse = $this->ctx->ZalyAes->decrypt($encryptedHttpTransportResponse, $authKey);
-
-        return $this->buildResponseFromHttp($requestUrl, $httpResponse);
+//        return $this->buildResponseFromHttp($requestUrl, $httpResponse);
+        return $response;
     }
 
     private function buildTransportData($action, $requestBody)

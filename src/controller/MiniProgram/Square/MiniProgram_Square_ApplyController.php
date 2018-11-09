@@ -6,7 +6,7 @@
  * Time: 5:01 PM
  */
 
-class MiniProgram_Square_ApplyController extends MiniProgramController
+class MiniProgram_Square_ApplyController extends MiniProgram_BaseController
 {
     private $squarePluginId = 199;
 

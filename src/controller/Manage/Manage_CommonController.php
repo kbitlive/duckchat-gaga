@@ -11,7 +11,7 @@ use Zaly\Proto\Core\TransportData;
 use Zaly\Proto\Core\TransportDataHeaderKey;
 use Google\Protobuf\Internal\Message;
 
-abstract class Manage_CommonController extends MiniProgramController
+abstract class Manage_CommonController extends MiniProgram_BaseController
 {
 
     protected function getMiniProgramId()
