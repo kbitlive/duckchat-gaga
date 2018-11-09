@@ -33,6 +33,10 @@ if(thirdLoginName) {
     localStorage.setItem(thirdLoginNameKey, thirdLoginName);
 }
 
+console.log("thirdLoginName-----discuz-----"+window.location.href)
+
+console.log("thirdLoginName-----discuz-----"+thirdLoginName)
+
 var zalyjsSiteLoginMessageBody = {};
 
 
@@ -206,7 +210,12 @@ function zalyjsWebSuccessCallBack() {
         refererUrl = "./index.php";
     }
     localStorage.clear();
-    window.location.href = refererUrl;
+    try{
+        window.parent.location.href = refererUrl
+    }catch (error) {
+        window.location.href = refererUrl;
+
+    }
 }
 
 // -private  登录pc, 暂时没有使用callbackId,
@@ -245,7 +254,7 @@ function zalyjsWebLoginSuccess() {
         if (refererUrl.indexOf("?") > -1) {
             var refererUrl = refererUrl + "&preSessionId=" + zalyjsSiteLoginMessageBody.sessionid + "&isRegister=" + zalyjsSiteLoginMessageBody.isRegister;
             if(zalyjsSiteLoginMessageBody.thirdPartyKey) {
-                 refererUrl = refererUrl + "&thirdPartyKey="+zalyjsSiteLoginMessageBody.thirdPartyKey;
+                refererUrl = refererUrl + "&thirdPartyKey="+zalyjsSiteLoginMessageBody.thirdPartyKey;
             }
         } else {
             var refererUrl = refererUrl + "?preSessionId=" + zalyjsSiteLoginMessageBody.sessionid + "&isRegister=" + zalyjsSiteLoginMessageBody.isRegister
