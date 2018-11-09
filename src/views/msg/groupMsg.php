@@ -32,7 +32,7 @@
             <?php include(dirname(__DIR__) . '/base/chatDialog.php'); ?>
         </div>
         <div  class="no-chat-dialog-div" style="display: none">
-            <img src="../../public/img/msg/no_chat_dialog.png" style=" " class="no-chat-dialog">
+            <img src="<?php echo $siteAddress?>/public/img/msg/no_chat_dialog.png" style=" " class="no-chat-dialog">
         </div>
     </div>
 
@@ -65,6 +65,7 @@
 
 <script type="text/javascript">
 
+    var siteAddress = $(".siteAddress").val();
     requestSiteConfig(ZalyIm);
 
     $(window).resize(function () {
@@ -153,7 +154,7 @@
 
     jQuery.i18n.properties({
         name: "lang",
-        path: '../../public/js/config/',
+        path: siteAddress + '/public/js/config/',
         mode: 'map',
         language: languageName,
         callback: function () {

@@ -231,7 +231,7 @@ class InstallDBController
                 "siteVersion"       => isset($sampleFile['siteVersionName']) ? $sampleFile['siteVersionName'] : "",
                 "versionCode"       => $sampleFile['siteVersionCode'],
                 "isInstallRootPath" => $isInstallRootPath,
-                "siteAddress"       => ZalyHelper::getRequestAddress(),
+                "siteAddress"       => ZalyHelper::getRequestAddressPath(),
             ];
             //get db file
             $dbDir   = dirname(__DIR__);

@@ -479,6 +479,7 @@ function handlePluginListHtml(results)
                 duckchatSessionId:plugin.userSessionId,
                 logo:logo,
                 loadingType:loadingType,
+                siteAddress:siteAddress
             });
             $(".mini-program-row").append(html);
         }
@@ -1082,7 +1083,9 @@ function initUnselectMemberList(results)
     if(list) {
         getUnselectMemberListHtml(results);
     } else {
-        html = template("tpl-invite-member-no-data", {});
+        html = template("tpl-invite-member-no-data", {
+            siteAddress:siteAddress
+        });
         html = handleHtmlLanguage(html);
         $(".pw-left").append(html);
     }
@@ -1105,7 +1108,8 @@ function getUnselectMemberListHtml(results)
             html = template("tpl-invite-member", {
                 userId : user.userId,
                 nickname:user.nickname ?  user.nickname : defaultUserName,
-                friendAvatarImg:friendAvatarImg
+                friendAvatarImg:friendAvatarImg,
+                siteAddress:siteAddress
             });
             html = handleHtmlLanguage(html);
             $(".pw-left").append(html);
@@ -3282,7 +3286,8 @@ function displaySelfInfo()
         userId:token,
         nickname:nickname,
         loginName:loginName,
-        isMaster:isMaster
+        isMaster:isMaster,
+        siteAddress:siteAddress
     });
     html = handleHtmlLanguage(html);
     $(".wrapper").append(html);

@@ -52,6 +52,7 @@ var host = window.location.host;
 var pathname = window.location.pathname;
 var originDomain = protocol+"//"+host+pathname;
 var isRegister=false;
+var siteAddress = $(".siteAddressPath").val();
 
 var siteName = $(".siteName").val();
 
@@ -309,7 +310,8 @@ function getLoginPage()
         siteLogo:siteLogo,
         siteName:siteName,
         thirdLoginOptions:thirdLoginOptions,
-        thirdLoginOptionsCount:thirdLoginOptionsCount
+        thirdLoginOptionsCount:thirdLoginOptionsCount,
+        siteAddress:siteAddress
     });
     html = handleHtmlLanguage(html);
     $('.login_for_size_div').html(html);
@@ -853,7 +855,8 @@ function registerForPassportPassword() {
         loginNameAlias:loginNameAlias,
         passwordFindWay:passwordFindWay,
         pwdTip:pwdTip,
-        loginNameTip:loginNameTip
+        loginNameTip:loginNameTip,
+        siteAddress:siteAddress
     });
     html = handleHtmlLanguage(html);
     $(".zaly_site_register-name").html(html);
