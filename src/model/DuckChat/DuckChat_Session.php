@@ -51,7 +51,7 @@ class DuckChat_Session
         $sessionInfo = $this->ctx->SiteSessionTable->getSessionInfoBySessionId($sessionId);
 
         if (empty($sessionInfo)) {
-            throw new Exception("check user sesssionId is empty sessionId====" . $sessionId . '========duckchat_sessionid=======' . $duckchatSessionId);
+            throw new Exception("check user sesssionId is empty sessionId=" . $sessionId . '，duckchat_sessionid=' . $duckchatSessionId);
         }
 
         $userId = $sessionInfo['userId'];
@@ -94,11 +94,37 @@ class DuckChat_Session
 
     /**
      * duckchat.session.clear
+     * @param $pluginId
      * @param \Zaly\Proto\Plugin\DuckChatSessionClearRequest $request
+     * @return bool
+     * @throws Exception
      */
-    public function clearSession()
+    public function clearSession($pluginId, $request)
     {
 
+        $userId = $request->getUserId();
+
+        if (!$userId) {
+            throw new Exception("duckchat.session.id userid is not exits");
+        }
+
+        return;
+
+        if ($this->clearSessionByUserId($userId)) {
+            return new \Zaly\Proto\Plugin\DuckChatSessionClearResponse();
+        }
+
+        return false;
+    }
+
+    private function clearSessionByUserId($userId)
+    {
+        $flag = $this->ctx->SiteSessionTable->deleteSessionByUserId($userId);
+
+        if ($flag > 0) {
+            return true;
+        }
+        throw new Exception("delete session failed");
     }
 
 }

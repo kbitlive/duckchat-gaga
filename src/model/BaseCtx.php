@@ -49,6 +49,9 @@
  *
  * @property DuckChat_Client DuckChat_Client
  * @property DuckChat_Session DuckChat_Session
+ * @property DuckChat_Message DuckChat_Message
+ * @property DuckChat_User DuckChat_User
+ * @property DuckChat_Group DuckChat_Group
  *
  */
 class BaseCtx extends Wpf_Ctx
