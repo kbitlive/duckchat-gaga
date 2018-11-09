@@ -246,3 +246,5 @@ uploadFileUrl = './index.php?action=http.file.uploadWeb';
 isSyncingMsg = false;
 isPreSyncingMsgTime="";
 
+soundNotificationKey = "sound_notification";
+

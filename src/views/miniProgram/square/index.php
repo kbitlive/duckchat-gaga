@@ -598,6 +598,7 @@
                     if (isMobile) {
                         src = '/_api_file_download_/?fileId=' + user['avatar'];
                     }
+
                     var userHtml = '<div class="item-row" userId="' + user["userId"] + '" >'
                         + '<div class="item-header">'
                         + '<img class="user-avatar-image" src="' + src + '" onerror="this.src=\'../../public/img/msg/default_user.png\'" />'

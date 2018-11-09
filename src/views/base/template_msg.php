@@ -475,7 +475,11 @@
         <div class="d-flex flex-row justify-content-center">
             <div class="self_profile_item self-qrcode siteSelfInfo" id="newMsgSound" style="position: relative">
                 <span class="logout-span siteSelfInfo" id="logout-span" data-local-value="newMsgSoundTip" onclick="">消息通知声音</span>
+                {{if soundNotification == "on"}}
+                <img src="{{siteAddress}}/public/img/msg/icon_switch_on.png" class="sound_mute siteSelfInfo" is_on="on"  >
+                {{else}}
                 <img src="{{siteAddress}}/public/img/msg/icon_switch_off.png" class="sound_mute siteSelfInfo" is_on="off"  >
+                {{/if}}
             </div>
         </div>
 

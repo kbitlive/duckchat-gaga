@@ -2,8 +2,10 @@
 $(".left-body-chatsession").html("");
 $(".right-chatbox").html("");
 
+var soundMuteNow = false;
 function showMsgWebNotification(msg, msgContent)
 {
+
     var msgId = msg.msgId;
     var nickname="";
     var name='';
@@ -39,13 +41,28 @@ function showMsgWebNotification(msg, msgContent)
         icon  =  downloadFileUrl + "&fileId="+msg.avatar+"&returnBase64=0&lang="+languageNum;
     }
 
+
     if(document.hidden && (mute == 0)) {
         if(window.Notification && Notification.permission !== "denied"){
+            var soundMute = localStorage.getItem(soundNotificationKey);
+            if(soundMute == "on" && !soundMuteNow) {
+                //浏览器支持 audio
+               try{
+                   var audio = document.getElementById("msg_sound_tip");
+                   audio.muted = false;
+                   audio.play();
+               }catch (error) {
+
+               }
+            }
+            soundMuteNow = true;
+            setTimeout(function () {
+                soundMuteNow = false;
+            }, 2000);
             var notification = new Notification(notification, {
                 "tag":siteConfig.serverAddressForApi,
                 "icon":icon,
                 "renotify": true,
-                "sound":"../../public/voice/definite.mp3"
             });
             notification.onclick = function(event) {
                 window.focus();
@@ -53,6 +70,10 @@ function showMsgWebNotification(msg, msgContent)
         }
     }
 }
+
+
+
+
 
 function showOtherWebNotification()
 {
@@ -190,6 +211,7 @@ function isJudgeSiteMasters(userId)
     }
     return false;
 }
+
 
 groupOffset = 0;
 getGroupList(initGroupList);
@@ -836,6 +858,9 @@ function logout(event)
         window.location.href = "./index.php?action=page.logout";
     }
 }
+
+
+
 
 //------------------------------------*********Group function*********--------------------------------------------
 
@@ -3283,18 +3308,37 @@ function editFriendRemark()
 ////展示个人消息
 function displaySelfInfo()
 {
+    var soundNotification = localStorage.getItem(soundNotificationKey);
+
     var isMaster = isJudgeSiteMasters(token);
     var html = template("tpl-self-info", {
         userId:token,
         nickname:nickname,
         loginName:loginName,
         isMaster:isMaster,
-        siteAddress:siteAddress
+        siteAddress:siteAddress,
+        soundNotification:soundNotification
     });
     html = handleHtmlLanguage(html);
     $(".wrapper").append(html);
     getNotMsgImg(token, avatar);
 }
+
+$(document).on("click", ".sound_mute", function () {
+    var type = $(this).attr("is_on");
+    var switchOnSrc = siteAddress+"/public/img/msg/icon_switch_on.png";
+    var switchOffSrc = siteAddress+"/public/img/msg/icon_switch_off.png";
+
+    if(type == "off") {
+        $(this).attr("src", switchOnSrc);
+        $(this).attr("is_on", 'on');
+        localStorage.setItem(soundNotificationKey, "on");
+    }else {
+        $(this).attr("src", switchOffSrc);
+        $(this).attr("is_on", 'off');
+        localStorage.setItem(soundNotificationKey, "off");
+    }
+});
 
 $(document).on("click", ".selfInfo", function () {
     displaySelfInfo();

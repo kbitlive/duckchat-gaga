@@ -47,6 +47,12 @@
 
 </div>
 
+
+    <audio id="msg_sound_tip" style="display: none" muted="muted">
+        <source src="<?php echo $siteAddress?>/public/voice/definite.mp3" type="audio/mpeg">
+    </audio>
+
+
 <?php include(dirname(__DIR__) . '/base/template.php'); ?>
 <?php include(dirname(__DIR__) . '/base/template_msg.php'); ?>
 
