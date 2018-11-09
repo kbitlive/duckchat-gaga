@@ -182,7 +182,6 @@ function zalyjsLoginSuccess(loginName, sessionid, isRegister, callback) {
     if(thirdLoginName == null || thirdLoginName == undefined) {
         thirdLoginName=""
     }
-    console.log("thirdLoginName==="+thirdLoginName);
     var messageBody = {}
     messageBody["loginName"] = loginName
     messageBody["sessionid"] = sessionid

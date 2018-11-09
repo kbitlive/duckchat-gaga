@@ -85,14 +85,6 @@ function addTemplate(jqElement)
 }
 
 
-
-//点击触发一个对象的点击
-function uploadFile(obj)
-{
-    $("#"+obj).val("");
-    $("#"+obj).click();
-}
-
 function showLoading(jeElement) {
     try{
         var html = "<div class=\"loader\" > <div class=\"circular_div\"> <svg class=\"circular\" viewBox=\"25 25 50 50\"> <circle class=\"path\" cx=\"50\" cy=\"50\" r=\"20\" fill=\"none\" stroke-width=\"2\" stroke-miterlimit=\"10\"/> </svg> </div> </div>";

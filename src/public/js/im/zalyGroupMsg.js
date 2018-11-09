@@ -72,10 +72,12 @@ function showOtherWebNotification()
 }
 
 
+uploadSelfAvatar = false;
 
 //点击触发一个对象的点击
 function uploadFile(obj, type)
 {
+
     if(type == 'user_avatar') {
         uploadSelfAvatar = true
     }
@@ -3303,12 +3305,12 @@ $(".selfInfo").mouseover(function(){
 }).mouseout(function () {
 
 });
-uploadSelfAvatar = false;
-// $(document).on("mouseleave","#selfInfo", function () {
-//     if( uploadSelfAvatar == false) {
-//         removeWindow($("#selfInfo"));
-//     }
-// });
+
+$(document).on("mouseleave","#selfInfo", function () {
+    if( uploadSelfAvatar == false) {
+        removeWindow($("#selfInfo"));
+    }
+});
 
 
 $(document).on("click", "#self-qrcode", function () {
