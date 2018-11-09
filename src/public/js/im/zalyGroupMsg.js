@@ -93,6 +93,43 @@ function showOtherWebNotification()
 }
 
 
+function displayFrontPage()
+{
+    try{
+        var configStr = localStorage.getItem(siteConfigKey);
+        console.log("configStr----"+configStr);
+
+        var config = JSON.parse(configStr);
+        if(config.hasOwnProperty("hiddenHomePage") && config['hiddenHomePage'] == true) {
+            var isMaster = isJudgeSiteMasters(token);
+            if(!isMaster) {
+                $(".l-sb-item[data='home']")[0].style.display="none";
+            }
+        } else {
+            //1:Home 2:Chats 3:Contacts friend 4:Me
+            if(config.hasOwnProperty('frontPage')) {
+                var frontPage = config['frontPage'];
+                switch (frontPage) {
+                    case "FrontPageChats":
+                        $(".l-sb-item[data='chatSession']").click();
+                        break;
+                    case "FrontPageContacts":
+                        $(".l-sb-item[data='friend']").click();
+                        break;
+                    default:
+                        $(".l-sb-item[data='home']").click();
+                }
+            } else {
+                $(".l-sb-item[data='home']").click();
+            }
+            $(".l-sb-item[data='home']")[0].style.display="flex";
+        }
+    }catch (error){
+        $(".l-sb-item[data='chatSession']").click();
+    }
+}
+
+
 uploadSelfAvatar = false;
 
 //点击触发一个对象的点击
