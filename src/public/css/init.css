@@ -30,7 +30,16 @@ body,html {
     height: 100%;
     position: relative;
 }
-
+.phpinfo {
+    width:13.13rem;
+    height:1.88rem;
+    font-size:1.31rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(48,165,255,1);
+    line-height:1.88rem;
+    margin-bottom: 3rem;
+}
 .zaly_init {
     width:75.05rem;
     position: absolute;
@@ -184,7 +193,8 @@ button {
     justify-content: center;
     margin-top: 2rem;
 }
-.previte_init_protocol{
+.previte_init_protocol,
+.previte_init_env{
     width:13.13rem;
     height:3.94rem;
     background:rgba(255,255,255,1);
@@ -193,10 +203,10 @@ button {
     font-size:1.31rem;
     font-family:MicrosoftYaHei;
     color:rgba(76,59,177,1);
-    margin-left: 23rem;
     margin-right: 2rem;
 }
-.next_init_data {
+.next_init_data,
+.login_button {
     width:13.13rem;
     height:3.94rem;
     background:rgba(76,59,177,1);
@@ -209,7 +219,7 @@ button {
 
 .initHeader{
     text-align: center;
-    margin-top: 5rem;
+    margin-top: 4rem;
     font-size:2.25rem;
     height: 2.25rem;
     font-family:PingFangSC-Medium;
@@ -387,29 +397,14 @@ button {
     font-family:PingFangSC-Regular;
     font-weight:400;
     color:rgba(244,67,54,1);
+    margin-top: 3rem;
 }
 
-.login_button {
-    width:28.14rem;
-    height:4.69rem;
-    background:rgba(76,59,177,1);
-    border:0.09rem solid rgba(229,229,229,1);
-    border-radius:0.66rem;
-    color: white;
-    font-size:1.88rem;
-    font-family:PingFangSC-Medium;
-    font-weight:500;
-    cursor: pointer;
-    outline: none;
-    margin-top: 2rem;
-}
+
 .margin-top3 {
     margin-top: 3rem;
 }
-.login_button:focus,
-.login_button:active {
-    outline: none;
-}
+
 .choose_login_type {
     margin-right: 32rem;
 }
@@ -446,6 +441,7 @@ button {
 
     .zaly_init {
         width:90%;
+        height:100%;
         position: absolute;
         left: 0;
         right: 0;
@@ -453,6 +449,7 @@ button {
         background:rgba(243,243,243,1);
         box-shadow:0rem 0.94rem 1.41rem 0.47rem rgba(74,56,180,1);
         border-radius:0.94rem;
+
     }
 
     .zaly_protocol_init {

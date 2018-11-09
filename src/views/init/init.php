@@ -6,11 +6,10 @@
     <!-- Latest compiled and minified CSS -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="../../public/css/init.css?_version=<?php echo $versionCode?>">
-    <script type="text/javascript" src="../../../public/js/jquery.min.js"></script>
-    <script src="../../public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
-    <script src="../../public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
-    <script src="../../public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
+    <link rel="stylesheet" href="<?php echo $siteAddress;?>/public/css/init.css?_version=<?php echo $versionCode?>">
+    <script type="text/javascript" src="<?php echo $siteAddress;?>/public/js/jquery.min.js"></script>
+    <script src="<?php echo $siteAddress;?>/public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
+    <script src="<?php echo $siteAddress;?>/public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
     <script type="text/javascript">
         var latestVersion="0";
         function setLasteVersion(lasteVersion) {
@@ -47,8 +46,11 @@
     <input type="hidden" value="<?php echo $isLoadCurl;?>" class="isLoadCurl">
     <input type="hidden" value="<?php echo $isWritePermission;?>" class="isWritePermission">
     <input type="hidden" value='<?php echo $dbFiles;?>' class="dbFiles">
+    <input type="hidden" value='<?php echo $phpinfo;?>' class="phpinfo">
+    <input type="hidden" value='<?php echo $siteAddress;?>' class="siteAddress">
 
     <?php include (dirname(__DIR__) . '/init/template_init.php');?>
+    <script src="<?php echo $siteAddress;?>/public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
 
 <script>
 
@@ -57,10 +59,12 @@
     var isLoadPDOMysql = $(".isLoadPDOMysql").val();
     var isLoadPDOSqlite = $(".isLoadPDOSqlite").val();
     var isWritePermission = $(".isWritePermission").val();
+    var phpinfo = $(".phpinfo").val();
     var isLoadCurl = $(".isLoadCurl").val();
     var isCanLoadPropertites = false;
     var dbFiles = $(".dbFiles").val();
     var isAvaliableSiteEnv = true;
+    var siteAddress = $(".siteAddress").val();
 
     var dbHost = "";
     var dbPort = "";
@@ -79,7 +83,7 @@
     {
         $.ajax({
             method: "GET",
-            url: "./public/js/config/lang_init_"+languageName+".properties?_"+Date.now(),
+            url: siteAddress+"/public/js/config/lang_init_"+languageName+".properties?_"+Date.now(),
             success: function () {
                 isCanLoadPropertites = true;
             }
@@ -91,7 +95,7 @@
 
     jQuery.i18n.properties({
         name: "lang_init",
-        path: '../../public/js/config/',
+        path: siteAddress+'/public/js/config/',
         mode: 'map',
         language: languageName,
         callback: function () {
@@ -174,6 +178,7 @@
             isLoadCurl:isLoadCurl,
             isWritePermission:isWritePermission,
             isLoadProperties:isCanLoadPropertites,
+            phpinfo:phpinfo
         });
         html = handleHtmlLanguage(html);
         $(".zaly_init").html(html);
@@ -420,6 +425,7 @@
                 dbType: dbType,
                 adminLoginName:adminName,
                 adminPassword:adminPwd,
+                phpinfo:phpinfo
             };
             testConnectMysql(data);
             return;
@@ -442,6 +448,7 @@
             sqliteDbFile: sqliteFileName,
             adminLoginName:adminName,
             adminPassword:adminPwd,
+            phpinfo:phpinfo
         };
         initSite(data);
     });
@@ -451,7 +458,7 @@
         var adminName  = $(".admin_name").val();
         var adminPwd   = $(".admin_pwd").val();
         var adminRepwd = $(".admin_repwd").val();
-        var containCharaters = "letter,number";
+        var containCharaters = "letter";
 
         if(checkIsEntities(adminName) || adminName.length<5 || adminName.length>24 || !verifyChars(containCharaters, adminName) ) {
             if(isFocus == false) {

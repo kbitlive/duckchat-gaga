@@ -22,40 +22,16 @@ class Duckchat_User_ProfileController extends Duckchat_MiniProgramController
      */
     public function rpc(\Google\Protobuf\Internal\Message $request, \Google\Protobuf\Internal\Message $transportData)
     {
-        $tag = __CLASS__.'-'.__FUNCTION__;
-        try{
-            $userId = $request->getUserId();
-            $userProfile = $this->getUserProfile($userId);
-            if($userProfile == false) {
-                throw new Exception("user is not exists");
-            }
-            $response = $this->getUserProfileResponse($userProfile);
-            $this->setRpcError($this->defaultErrorCode, "");
-            $this->rpcReturn($transportData->getAction(), $response);
-        }catch (Exception $ex) {
-            $this->ctx->Wpf_Logger->error($tag, "error_msg ==".$ex->getMessage());
-            $errorCode = $this->zalyError->errorExistUser;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            $this->setRpcError($errorCode, $errorInfo);
-            $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
+        $tag = __CLASS__ . '-' . __FUNCTION__;
+        try {
+
+            $response = $this->ctx->DuckChat_User->getProfile($this->pluginMiniProgramId, $request);
+
+            $this->returnSuccessRPC($response);
+        } catch (Exception $ex) {
+            $this->ctx->Wpf_Logger->error($tag, "error=" . $ex->getMessage() . $ex->getTraceAsString());
+            $this->returnErrorRPC(new $this->classNameForResponse(), $ex);
         }
-    }
-
-    private function getUserProfile($userId)
-    {
-        return $this->ctx->SiteUserTable->getUserByUserId($userId);
-    }
-
-    private function getUserProfileResponse($userProfile)
-    {
-        $allUserProfile = new \Zaly\Proto\Core\AllUserProfile();
-        $publicUserProfile = $this->getPublicUserProfile($userProfile);
-        $allUserProfile->setPublic($publicUserProfile);
-        $allUserProfile->setTimeReg($userProfile['timeReg']);
-
-        $response = new \Zaly\Proto\Plugin\DuckChatUserProfileResponse();
-        $response->setProfile($allUserProfile);
-        return $response;
     }
 
 }

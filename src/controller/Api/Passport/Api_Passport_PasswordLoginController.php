@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: zhangjun
@@ -23,11 +24,12 @@ class Api_Passport_PasswordLoginController extends Api_Passport_PasswordBase
     {
         $tag = __CLASS__ . '-' . __FUNCTION__;
         try {
-            $loginName   = $request->getLoginName();
-            $password    = $request->getPassword();
+            error_log("=========api.passport.passwordLogin request=" . $request->serializeToJsonString());
+            $loginName = $request->getLoginName();
+            $password = $request->getPassword();
             $sitePubkPem = $request->getSitePubkPem();
 
-            if(!$sitePubkPem || strlen($sitePubkPem) < 0) {
+            if (!$sitePubkPem || strlen($sitePubkPem) < 0) {
                 $errorCode = $this->zalyError->errorSitePubkPem;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
                 $this->setRpcError($errorCode, $errorInfo);
@@ -48,21 +50,21 @@ class Api_Passport_PasswordLoginController extends Api_Passport_PasswordBase
         }
     }
 
-    private function  verifyUserInfo($loginName, $password)
+    private function verifyUserInfo($loginName, $password)
     {
-        $tag = __CLASS__.'->'.__FUNCTION__;
+        $tag = __CLASS__ . '->' . __FUNCTION__;
         $user = $this->ctx->PassportPasswordTable->getUserByLoginName($loginName);
 
-        if(!$user) {
-                $errorCode = $this->zalyError->errorExistUser;
-                $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("loginName is not exist");
+        if (!$user) {
+            $errorCode = $this->zalyError->errorExistUser;
+            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
+            $this->setRpcError($errorCode, $errorInfo);
+            throw new Exception("loginName is not exist");
         }
 
         $this->checkPasswordErrorNum($user['userId']);
 
-        if(!password_verify($password, $user['password'])) {
+        if (!password_verify($password, $user['password'])) {
             $this->insertPassportPasswordLog($user, 1);
             $errorCode = $this->zalyError->errorMatchLogin;
             $errorInfo = $this->zalyError->getErrorInfo($errorCode);
@@ -79,18 +81,18 @@ class Api_Passport_PasswordLoginController extends Api_Passport_PasswordBase
     {
         $preSessionId = ZalyHelper::generateStrId();
 
-        try{
+        try {
             $preSessionInfo = [
                 "userId" => $user['userId'],
                 "preSessionId" => $preSessionId,
-                "sitePubkPem"  => base64_encode($sitePubkPem)
+                "sitePubkPem" => base64_encode($sitePubkPem)
             ];
 
             $this->ctx->PassportPasswordPreSessionTable->insertPreSessionData($preSessionInfo);
-        }catch (Exception $ex) {
+        } catch (Exception $ex) {
             $preSessionInfo = [
                 "preSessionId" => $preSessionId,
-                "sitePubkPem"  => base64_encode($sitePubkPem)
+                "sitePubkPem" => base64_encode($sitePubkPem)
             ];
             $where = [
                 "userId" => $user['userId']

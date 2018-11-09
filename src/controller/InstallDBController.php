@@ -64,7 +64,6 @@ class InstallDBController
             exit();
         }
 
-
         $config = require($sampleFileName);
         $sqliteName = "";
         $this->lang = isset($_GET['lang']) ? $_GET['lang'] : "1";
@@ -158,7 +157,14 @@ class InstallDBController
                 }
 
                 $this->initSiteOwner($_POST['adminLoginName'], $_POST['adminPassword']);
+                try{
+                    $phpinfo = isset($_POST['phpinfo']) ? $_POST['phpinfo'] : "" ;
+                    if($phpinfo) {
+                        unlink("./".$phpinfo);
+                    }
+                }catch (Exception $ex) {
 
+                }
                 $result['errCode'] = "success";
                 echo "success";
             } catch (Exception $ex) {
@@ -213,21 +219,24 @@ class InstallDBController
                 echo $this->lang == 1 ? "目前只支持根目录运行" : "Currently only the root directory is supported.";
                 return;
             }
+
+
             $params = [
                 "isPhpVersionValid" => version_compare(PHP_VERSION, "5.6.0") >= 0,
-                "isLoadOpenssl" => extension_loaded("openssl") && false != ZalyRsa::newRsaKeyPair(2048),
-                "isLoadPDOSqlite" => extension_loaded("pdo_sqlite"),
-                "isLoadPDOMysql" => extension_loaded("pdo_mysql"),
-                "isLoadCurl" => extension_loaded("curl"),
+                "isLoadOpenssl"     => extension_loaded("openssl") && false != ZalyRsa::newRsaKeyPair(2048),
+                "isLoadPDOSqlite"   => extension_loaded("pdo_sqlite"),
+                "isLoadPDOMysql"    => extension_loaded("pdo_mysql"),
+                "isLoadCurl"        => extension_loaded("curl"),
                 "isWritePermission" => $permissionDirectory,
-                "siteVersion" => isset($sampleFile['siteVersionName']) ? $sampleFile['siteVersionName'] : "",
-                "versionCode" => $sampleFile['siteVersionCode'],
+                "siteVersion"       => isset($sampleFile['siteVersionName']) ? $sampleFile['siteVersionName'] : "",
+                "versionCode"       => $sampleFile['siteVersionCode'],
                 "isInstallRootPath" => $isInstallRootPath,
+                "siteAddress"       => ZalyHelper::getRequestAddressPath(),
             ];
             //get db file
-            $dbDir = dirname(__DIR__);
+            $dbDir   = dirname(__DIR__);
             $dbFiles = scandir($dbDir);
-
+            $phpInfoExist = false;
             if (!empty($dbFiles)) {
                 $sqliteFiles = [];
                 foreach ($dbFiles as $dbFile) {
@@ -235,9 +244,33 @@ class InstallDBController
                     if (isset($fileExt) && ($fileExt == "sqlite" || $fileExt == "sqlite3")) {
                         $sqliteFiles[] = $dbFile;
                     }
+
+                    if(strpos($dbFile, "_info.php") !== false) {
+                        $phpInfoExist = true;
+                        $phpInfo = $dbFile;
+                    }
+
                 }
                 $params['dbFiles'] = json_encode($sqliteFiles);
             }
+
+            if(!$phpInfoExist) {
+                $phpInfo = ZalyHelper::generateStrKey(10)."_info.php";
+                $phpInfoFilePath = dirname(dirname(__FILE__)) ."/".$phpInfo;
+                $infoData = <<<DATA
+<?php
+if (file_exists('./config.php')) {
+    header('HTTP/1.0 403 Forbidden');
+    die('Forbidden');
+}
+
+
+phpinfo();
+DATA;
+                file_put_contents($phpInfoFilePath, $infoData) ;
+            }
+            $params['phpinfo'] = $phpInfo;
+
             echo $this->display("init_init", $params);
             return;
         }
@@ -373,7 +406,7 @@ class InstallDBController
 
     private function _insertSiteConfig($siteName, $loginPluginId)
     {
-        $siteConfig = SiteConfig::$siteConfig;
+        $siteConfig = SiteConfig::$initSiteConfig;
 
         $siteConfig[SiteConfig::SITE_NAME] = $siteName;
 

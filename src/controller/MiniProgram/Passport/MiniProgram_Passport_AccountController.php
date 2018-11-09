@@ -6,7 +6,7 @@
  * Time: 10:25 AM
  */
 
-class MiniProgram_Passport_AccountController extends MiniProgramController
+class MiniProgram_Passport_AccountController extends MiniProgram_BaseController
 {
     private $passporAccountPluginId = 105;
     private $errorCode = "";

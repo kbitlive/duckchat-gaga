@@ -16,6 +16,12 @@ class Manage_CustomController extends Manage_CommonController
     {
         $params['lang'] = $this->language;
 
+        $frontPage = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_FRONT_PAGE);
+        $hiddenHomePage = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_HIDDEN_HOME_PAGE);
+
+        $params["frontPage"] = isset($frontPage) ? $frontPage : 0;
+        $params["hiddenHomePage"] = isset($hiddenHomePage) ? $hiddenHomePage : 0;
+
         echo $this->display("manage_custom_index", $params);
 
         return;

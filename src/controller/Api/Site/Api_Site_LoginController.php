@@ -28,6 +28,7 @@ class Api_Site_LoginController extends \BaseController
         ///处理request，
         $tag = __CLASS__ . '-' . __FUNCTION__;
         try {
+            error_log("--==============", "api.site.login request=" . $request->serializeToJsonString());
             $loginName = $request->getLoginName();
             $userExists = $this->checkUserExists($loginName);
             $isRegister = $request->getIsRegister();
@@ -56,9 +57,27 @@ class Api_Site_LoginController extends \BaseController
                 throw new Exception($errorInfo);
             }
 
+
+            $thirdPartyKey = trim($request->getThirdPartyKey());
+            $userCustoms = $request->getUserCustoms();
+
+            $customData = [];
+            if (!empty($userCustoms)) {
+                new Zaly\Proto\Core\CustomUserProfile();
+                foreach ($userCustoms as $custom) {
+                    $key = $custom->getCustomKey();
+                    $value = $custom->getCustomValue();
+                    $customData[$key] = $value;
+                }
+            }
+
             //get user profile from platform clientSiteType=1:mobile client
             $clientType = Zaly\Proto\Core\UserClientType::UserClientMobileApp;
-            $userProfile = $this->ctx->Site_Login->checkPreSessionIdFromPlatform($preSessionId, $devicePubkPem, $clientType);
+
+
+            $userProfile = $this->ctx->Site_Login->doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $customData);
+
+//            $userProfile = $this->ctx->Site_Login->checkPreSessionIdFromPlatform($preSessionId, $devicePubkPem, $clientType);
 
             $realSessionId = $userProfile['sessionId'];
             $response = $this->buildApiSiteLoginResponse($userProfile, $realSessionId);
@@ -72,9 +91,9 @@ class Api_Site_LoginController extends \BaseController
             $this->rpcReturn($transportData->getAction(), $response);
         } catch (Exception $ex) {
             $this->ctx->Wpf_Logger->error($tag, "error=" . $ex);
-             $errorCode = $this->zalyError->errorSiteLogin;
+            $errorCode = $this->zalyError->errorSiteLogin;
 //                $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-             $this->setRpcError($errorCode, $ex->getMessage());
+            $this->setRpcError($errorCode, $ex->getMessage());
             $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
         }
 

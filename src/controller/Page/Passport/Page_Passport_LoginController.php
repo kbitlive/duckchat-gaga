@@ -11,25 +11,25 @@ class Page_Passport_LoginController extends HttpBaseController
 
     public function index()
     {
-        $tag = __CLASS__.'->'.__FUNCTION__;
-        try{
+        $tag = __CLASS__ . '->' . __FUNCTION__;
+        try {
             $this->checkUserCookie();
-            if($this->userId) {
+            if ($this->userId) {
                 $jumpPage = $this->getJumpUrlFromParams();
                 $apiPageIndex = ZalyConfig::getApiIndexUrl();
-                if($jumpPage) {
+                if ($jumpPage) {
                     if (strpos($apiPageIndex, "?")) {
-                        $apiPageIndex .= "&".$jumpPage;
+                        $apiPageIndex .= "&" . $jumpPage;
                     } else {
-                        header("Location:" . $apiPageIndex . "?".$jumpPage);
-                        $apiPageIndex .= "?".$jumpPage;
+                        header("Location:" . $apiPageIndex . "?" . $jumpPage);
+                        $apiPageIndex .= "?" . $jumpPage;
                     }
                 }
                 header("Location:" . $apiPageIndex);
                 exit();
             }
         } catch (Exception $ex) {
-            $this->logger->error($tag, $ex);
+            $this->logger->error($tag, "page.passport.login error=" . $ex->getMessage());
         }
 
         $cookieStr = isset($_SERVER['HTTP_COOKIE']) ? $_SERVER['HTTP_COOKIE'] : "";
@@ -68,10 +68,10 @@ class Page_Passport_LoginController extends HttpBaseController
         $siteVersionName = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionNameKey);
 
         $loginNameMinLengthConfig = isset($loginConfig[LoginConfig::LOGINNAME_MINLENGTH]) ? $loginConfig[LoginConfig::LOGINNAME_MINLENGTH] : "";
-        $loginNameMinLength = isset($loginNameMinLengthConfig["configValue"]) ? $loginNameMinLengthConfig["configValue"] : 1;
+        $loginNameMinLength = isset($loginNameMinLengthConfig["configValue"]) ? $loginNameMinLengthConfig["configValue"] : 5;
 
         $loginNameMaxLengthConfig = isset($loginConfig[LoginConfig::LOGINNAME_MAXLENGTH]) ? $loginConfig[LoginConfig::LOGINNAME_MAXLENGTH] : "";
-        $loginNameMaxLength = isset($loginNameMaxLengthConfig["configValue"]) ? $loginNameMaxLengthConfig["configValue"] : 24;
+        $loginNameMaxLength = isset($loginNameMaxLengthConfig["configValue"]) ? $loginNameMaxLengthConfig["configValue"] : 32;
 
         $pwdMaxLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MAXLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MAXLENGTH] : "";
         $pwdMaxLength = isset($pwdMaxLengthConfig["configValue"]) ? $pwdMaxLengthConfig["configValue"] : 32;
@@ -82,6 +82,7 @@ class Page_Passport_LoginController extends HttpBaseController
         $pwdContainCharactersConfig = isset($loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS]) ? $loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS] : "";
         $pwdContainCharacters = isset($pwdContainCharactersConfig["configValue"]) ? $pwdContainCharactersConfig["configValue"] : "";
 
+        $thirdPartyLoginOptions = ZalyLogin::getThirdPartyConfigWithoutVerifyUrl();
 
         $params = [
             'siteName' => $siteName,
@@ -105,31 +106,8 @@ class Page_Passport_LoginController extends HttpBaseController
             'passwordFindWay' => $passwordRestWay,
             'passwordResetWay' => $passwordRestWay,
             'passwordResetRequired' => $passwordResetRequired,
-            'customLoginItems' => [
-                //自定义的登陆项
-                [
-                    'email' => "邮箱",
-                    'icon' => "",
-                    'placeholder' => "",
-                    'isRequired' => $passwordResetRequired,
-                ],
-
-                [
-                    'phone' => "手机号",
-                    'icon' => "",
-                    'placeholder' => "",
-                    'isRequired' => $passwordResetRequired,
-                ],
-
-                [
-                    'name' => "姓名",
-                    'icon' => "",
-                    'placeholder' => "",
-                    'isRequired' => $passwordResetRequired,
-                ],
-            ],
+            'thirdPartyLoginOptions' => json_encode($thirdPartyLoginOptions),
         ];
-
         echo $this->display("passport_login", $params);
         return;
     }

@@ -7,38 +7,38 @@
         </div>
 
         <div class="d-flex flex-row justify-content-left login_name_div margin-top2 login_name_div_mobile" >
-            <image src="../../public/img/login/loginName.png" class="img"/>
+            <image src="{{siteAddress}}/public/img/login/loginName.png" class="img"/>
             {{if loginNameAlias }}
             <input type="text" id="register_input_loginName"  datatype="s"  class="input_login_site  register_input_loginName"   autocapitalize="off"   placeholder="{{loginNameAlias}}" >
             {{else}}
             <input type="text" id="register_input_loginName"  datatype="s"  class="input_login_site  register_input_loginName" data-local-placeholder="registerLoginNamePlaceholder"  autocapitalize="off"   placeholder="用户名" >
             {{/if}}
-            <img src="../../public/img/msg/msg_failed.png" class="img-failed register_input_loginName_failed">
+            <img src="{{siteAddress}}/public/img/msg/msg_failed.png" class="img-failed register_input_loginName_failed">
         </div>
         <div class="register_line"></div>
         <div style="font-size:1.31rem;font-family:PingFangSC-Regular;font-weight:400;color:rgba(153,153,153,1);" >{{loginNameTip}}</div>
 
 
         <div class="login_name_div" style="margin-top: 1rem;">
-            <image src="../../public/img/login/pwd.png" class="img"/>
+            <image src="{{siteAddress}}/public/img/login/pwd.png" class="img"/>
             <input type="password" class="input_login_site register_input_pwd" autocapitalize="off"   id="register_input_pwd" data-local-placeholder="enterPasswordPlaceholder"  placeholder="输入密码"  >
             <div class="pwd_div" onclick="changeImgByClickPwd()"><image src="../../public/img/login/hide_pwd.png" class="pwd" img_type="hide"/></div>
-            <img src="../../public/img/msg/msg_failed.png" class="img-failed register_input_pwd_failed">
+            <img src="{{siteAddress}}/public/img/msg/msg_failed.png" class="img-failed register_input_pwd_failed">
         </div>
         <div class="register_line"></div>
         <div style="font-size:1.31rem;font-family:PingFangSC-Regular;font-weight:400;color:rgba(153,153,153,1);" >{{pwdTip}}</div>
 
 
         <div class="login_name_div" style="margin-top: 1rem;">
-            <image src="../../public/img/login/pwd.png" class="img"/>
+            <image src="{{siteAddress}}/public/img/login/pwd.png" class="img"/>
             <input type="password" class="input_login_site register_input_repwd" autocapitalize="off"   id="register_input_repwd" data-local-placeholder="enterRepasswordPlaceholder"  placeholder="再次输入密码"  >
             <div class="repwd_div" onclick="changeImgByClickRepwd()"><image src="../../public/img/login/hide_pwd.png" class="repwd" img_type="hide"/></div>
-            <img src="../../public/img/msg/msg_failed.png" class="img-failed register_input_repwd_failed">
+            <img src="{{siteAddress}}/public/img/msg/msg_failed.png" class="img-failed register_input_repwd_failed">
         </div>
         <div class="register_line" ></div>
 
         <div class="login_name_div" style="margin-top: 1rem;">
-            <image src="../../public/img/login/find_pwd.png" class="img"/>
+            <image src="{{siteAddress}}/public/img/login/find_pwd.png" class="img"/>
 
             {{if enableInvitationCode == 1}}
                 {{if passwordFindWay }}
@@ -53,7 +53,7 @@
                     <input type="text" class="input_login_site register_input_email" autocapitalize="off"  id="register_input_email" data-local-placeholder="enterEmailPlaceholder" onkeydown="registerAndLoginByKeyDown(event)" placeholder="输入邮箱" >
                 {{/if}}
             {{/if}}
-            <img src="../../public/img/msg/msg_failed.png" class="img-failed register_input_email_failed">
+            <img src="{{siteAddress}}/public/img/msg/msg_failed.png" class="img-failed register_input_email_failed">
         </div>
         <div class="register_line"></div>
         <div style="font-size:1.31rem;font-family:PingFangSC-Regular;font-weight:400;color:rgba(153,153,153,1);"data-local-value="findPasswordTip" >通过此信息联系管理员找回密码。</div>
@@ -90,22 +90,22 @@
             </div>
 
             <div class=" d-flex flex-row justify-content-left login_name_div" >
-                <image src="../../public/img/login/loginName.png" class="img"/>
+                <image src="{{siteAddress}}/public/img/login/loginName.png" class="img"/>
                 {{if loginNameAlias }}
                  <input type="text" class="input_login_site  login_input_loginName" datatype="s" autocapitalize="off"  placeholder="{{loginNameAlias}}" >
                 {{else}}
                     <input type="text" class="input_login_site  login_input_loginName" datatype="s" autocapitalize="off"  data-local-placeholder="loginNamePlaceholder" placeholder="输入登录名" >
                 {{/if}}
                 <div class="clearLoginName" onclick="clearLoginName()"><image src="../../public/img/msg/btn-x.png" class="clearLoginName clear_img" /></div>
-                <img src="../../public/img/msg/msg_failed.png" class="img-failed login_input_loginName_failed">
+                <img src="{{siteAddress}}/public/img/msg/msg_failed.png" class="img-failed login_input_loginName_failed">
             </div>
             <div class="line"></div>
 
             <div class="login_name_div margin-top2">
-                <image src="../../public/img/login/pwd.png" class="img"/>
+                <image src="{{siteAddress}}/public/img/login/pwd.png" class="img"/>
                 <input type="password" class="input_login_site phone_num  login_input_pwd" autocapitalize="off"  data-local-placeholder="enterPasswordPlaceholder"  onkeydown="loginPassportByKeyPress(event)"  placeholder="输入密码, 长度5到20个字符(无中文)" >
                 <div class="pwd_div" onclick="changeImgByClickPwd()"><image src="../../public/img/login/hide_pwd.png" class="pwd" img_type="hide" /></div>
-                <img src="../../public/img/msg/msg_failed.png" class="img-failed login_input_pwd_failed">
+                <img src="{{siteAddress}}/public/img/msg/msg_failed.png" class="img-failed login_input_pwd_failed">
             </div>
             <div class="line"></div>
 
@@ -120,14 +120,19 @@
         </div>
 
         <!--   third party landing      -->
+        {{if thirdLoginOptionsCount > 0  }}
         <div class="login-others">
             <div class="landing-third-title">使用以下账号直接登录</div>
 
             <div class="landing-third-content">
-                <img class="landing-third-party" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1541429508429&di=9ec060276e75c9c2d72ec16966f2497c&imgtype=0&src=http%3A%2F%2Fpic.51yuansu.com%2Fpic3%2Fcover%2F00%2F68%2F08%2F58ab18fbd095e_610.jpg"/>
-                <img class="landing-third-party" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1541429549168&di=c9e7304f80e803f07dedfb763ad350c9&imgtype=0&src=http%3A%2F%2Fbpic.588ku.com%2Felement_origin_min_pic%2F01%2F31%2F52%2F65573b45671ae3b.jpg"/>
+
+                {{each thirdLoginOptions thirdLogin }}
+                    <img class="third_login_logo"  landingUrl="{{thirdLogin['landingUrl']}}" src="{{thirdLogin['logo']}}" name="{{thirdLogin['name']}}" onerror="src='{{siteAddress}}/public/img/plugin/default.png'">
+                {{/each}}
+
             </div>
         </div>
+        {{/if}}
 
         <!--  for   -->
         <div class="mobile_slogn_div" style="position: absolute;bottom:3rem;">
@@ -144,7 +149,7 @@
             {{if siteLogo}}
              <img src="{{siteLogo}}" class="company_logo">
             {{else }}
-                <img src="../../public/img/login/logo.png" class="company_logo">
+                <img src="{{siteAddress}}/public/img/login/logo.png" class="company_logo">
             {{/if}}
         </div>
         <div>
@@ -167,4 +172,10 @@
 
 <script type="text/html" id="tpl-string">
     {{string}}
+</script>
+
+<script type="text/html" id="tpl_third_login">
+    <div style="width: 100%;height: 100%">
+        <iframe src="{{landingUrl}}" class="third_login_iframe">
+    </div>
 </script>

@@ -9,11 +9,13 @@
 class ZalyAvatar
 {
     private static $logger;
-    public static $avatars = [];
+    private static $avatars = [];
 
     private static function writeAvatars()
     {
         $cacheDir = WPF_ROOT_DIR . "/cache";
+
+        error_log("====================write to Avatar Cache Dir = " . $cacheDir);
 
         if (!is_dir($cacheDir)) {
             mkdir($cacheDir, 0755, true);
@@ -21,24 +23,47 @@ class ZalyAvatar
 
         $avatarPhpName = $cacheDir . "/avatar.php";
 
+        $emojiAvatar = [];
         for ($i = 1; $i <= 74; $i++) {
-            $defaultAva = dirname(__FILE__) . "/../../public/avatar/" . $i . "@3x.png";
+            $defaultAva = dirname(__FILE__) . "/../../public/avatar/emoji/" . $i . "@3x.png";
+            error_log("====================emoji Avatar Dir = " . $defaultAva);
             if (!file_exists($defaultAva)) {
-                break;
+                continue;
             }
 
             $defaultAvatarData = file_get_contents($defaultAva);
             $fileManager = new File_Manager();
             $fileId = $fileManager->saveFile($defaultAvatarData, "20180101");
-            self::$avatars[] = $fileId;
+            $emojiAvatar[] = $fileId;
+        }
+
+        $sceneryAvatar = [];
+        for ($j = 1; $j <= 128; $j++) {
+            $defaultAva = dirname(__FILE__) . "/../../public/avatar/scenery/" . $j . ".png";
+
+            error_log("====================scenery Avatar Dir = " . $defaultAva);
+
+            if (!file_exists($defaultAva)) {
+                continue;
+            }
+
+            $defaultAvatarData = file_get_contents($defaultAva);
+            $fileManager = new File_Manager();
+            $fileId = $fileManager->saveFile($defaultAvatarData, "20180101");
+            $sceneryAvatar[] = $fileId;
         }
 
         $allAvatars = [
-            "emojiAvatar" => self::$avatars,
+            "emojiAvatar" => $emojiAvatar,
+            "sceneryAvatar" => $sceneryAvatar,
         ];
+
+        self::$avatars = array_merge($emojiAvatar, $sceneryAvatar);
 
         $contents = var_export($allAvatars, true);
         file_put_contents($avatarPhpName, "<?php\n return {$contents};\n ");
+
+        self::resetOpcache();
     }
 
     private static function getAvatars()
@@ -49,7 +74,15 @@ class ZalyAvatar
         }
         $allAvatars = require($fileName);
         if (!empty($allAvatars)) {
-            self::$avatars = $allAvatars['emojiAvatar'];
+            $emojiAvatars = $allAvatars['emojiAvatar'];
+            $sceneryAvatars = $allAvatars['sceneryAvatar'];
+
+            if (empty($sceneryAvatars)) {
+                self::writeAvatars();
+                return;
+            }
+
+            self::$avatars = array_merge($emojiAvatars, $sceneryAvatars);
         }
     }
 
@@ -63,6 +96,8 @@ class ZalyAvatar
     public static function getRandomAvatar()
     {
         self::setLogger();
+
+        error_log("=======test static avatars = " . var_export(self::$avatars, true));
 
         $tag = __CLASS__ . "->" . __FUNCTION__;
         try {
@@ -86,4 +121,10 @@ class ZalyAvatar
         return '';
     }
 
+    private static function resetOpcache()
+    {
+        if (function_exists("opcache_reset")) {
+            opcache_reset();
+        }
+    }
 }

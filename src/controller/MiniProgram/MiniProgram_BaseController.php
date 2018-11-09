@@ -1,17 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: childeYin<尹少爷>
- * Date: 13/07/2018
- * Time: 6:32 PM
+ * 小程序基础类
+ * User: anguoyue
+ * Date: 15/08/2018
+ * Time: 10:58 AM
  */
 
-use Google\Protobuf\Any;
-use Zaly\Proto\Core\TransportData;
-use Zaly\Proto\Core\TransportDataHeaderKey;
-use Google\Protobuf\Internal\Message;
-
-abstract class MiniProgramController extends \Wpf_Controller
+abstract class MiniProgram_BaseController extends \Wpf_Controller
 {
     protected $logger;
 
@@ -129,14 +124,11 @@ abstract class MiniProgramController extends \Wpf_Controller
             $requestData = new Zaly\Proto\Plugin\DuckChatSessionProfileRequest();
             $requestData->setEncryptedSessionId($duckchatSessionId);
 
-            $response = $this->requestDuckChatInnerApi($miniProgramId, $action, $requestData);
-
-            $this->logger->info($tag, "response=" . json_encode($response));
+            $response = $this->ctx->DuckChat_Client->doRequest($miniProgramId, $action, $requestData);
 
             if (empty($response)) {
                 throw new Exception("get empty response by duckchat_sessionid error");
             }
-
             $userProfile = $response->getProfile();
             return $userProfile->getPublic();
         } catch (Exception $ex) {
@@ -156,112 +148,8 @@ abstract class MiniProgramController extends \Wpf_Controller
      */
     public function requestDuckChatInnerApi($miniProgramId, $action, $requestProtoData)
     {
-        $miniProgramProfile = $this->getMiniProgramProfile($miniProgramId);
-
-        $authKey = $miniProgramProfile['authKey'];
-
-        $requestTransportDataString = $this->buildTransportData($action, $requestProtoData);
-//        $requestBodyJson = array(
-//            "body" => $requestTransportDataString,
-//            "time" => time(),
-//        );
-//        $requestBodyJson = json_encode($requestBodyJson);
-
-        //加密发送
-        $encryptedTransportData = $this->ctx->ZalyAes->encrypt($requestTransportDataString, $authKey);
-
-        $requestUrl = "/?action=" . $action . "&body_format=pb&miniProgramId=" . $miniProgramId;
-        $requestUrl = ZalyHelper::getFullReqUrl($requestUrl);
-
-//        $this->ctx->Wpf_Logger->error($action, "fihttp request url =" . $requestUrl);
-
-        $encryptedHttpTransportResponse = $this->ctx->ZalyCurl->request($requestUrl, "POST", $encryptedTransportData);
-        //解密结果
-        $httpResponse = $this->ctx->ZalyAes->decrypt($encryptedHttpTransportResponse, $authKey);
-
-        return $this->buildResponseFromHttp($requestUrl, $httpResponse);
-    }
-
-    private function buildTransportData($action, $requestBody)
-    {
-        $anyBody = new \Google\Protobuf\Any();
-        $anyBody->pack($requestBody);
-
-        $transportData = new \Zaly\Proto\Core\TransportData();
-        $transportData->setAction($action);
-        $transportData->setBody($anyBody);
-        $transportData->setTimeMillis(ZalyHelper::getMsectime());
-        return $transportData->serializeToString();
-    }
-
-    private function buildResponseFromHttp($url, $httpResponse)
-    {
-
-        $urlParams = parse_url($url);
-        $query = isset($urlParams['query']) ? $urlParams['query'] : [];
-        $urlParams = $this->ctx->ZalyCurl->convertUrlQuery($query);
-        $requestAction = $urlParams['action'];
-        $responseBodyFormat = $urlParams['body_format'];
-
-        if (empty($requestAction)) {
-            throw new Exception("request url with no action");
-        }
-
-        if (empty($responseBodyFormat)) {
-            $responseBodyFormat = 'json';
-        }
-
-        $responseTransportData = new Zaly\Proto\Core\TransportData();
-        switch ($responseBodyFormat) {
-            case "json":
-                $responseTransportData->mergeFromJsonString($httpResponse);
-                break;
-            case "pb":
-                $responseTransportData->mergeFromString($httpResponse);
-                break;
-            case "base64pb":
-                $realData = base64_decode($httpResponse);
-                $responseTransportData->mergeFromString($realData);
-                break;
-        }
-
-        if ($requestAction != $responseTransportData->getAction()) {
-            throw new Exception("response with error action");
-        }
-
-        $responseHeader = $responseTransportData->getHeader();
-
-        if (empty($responseHeader)) {
-            throw new Exception("response with empty header");
-        }
-
-        $errCode = $this->getHeaderValue($responseHeader, TransportDataHeaderKey::HeaderErrorCode);
-
-        if ("success" == $errCode) {
-            $responseMessage = $responseTransportData->getBody()->unpack();
-            return $responseMessage;
-        } else {
-            $errInfo = $this->getHeaderValue($responseHeader, TransportDataHeaderKey::HeaderErrorInfo);
-            throw new Exception($errInfo);
-        }
-
-    }
-
-    private function getMiniProgramProfile($miniProgramId)
-    {
-        $miniProgramProfile = $this->ctx->SitePluginTable->getPluginById($miniProgramId);
-
-        if (!empty($miniProgramProfile)) {
-
-            if (empty($miniProgramProfile['authKey'])) {
-                if (empty($authKey)) {
-                    $miniProgramProfile['authKey'] = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_PLUGIN_PLBLIC_KEY);
-                }
-            }
-
-        }
-
-        return $miniProgramProfile;
+        $response = $this->ctx->DuckChat_Client->doRequest($miniProgramId, $action, $requestProtoData);
+        return $response;
     }
 
     private function getHeaderValue($header, $key)
@@ -278,7 +166,6 @@ abstract class MiniProgramController extends \Wpf_Controller
 //        header("Location:" . "http://www.akaxin.com/");
         exit();
     }
-
 
     protected function getAndSetClientLang()
     {

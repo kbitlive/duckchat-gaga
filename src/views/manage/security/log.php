@@ -223,12 +223,12 @@
                         <?php } else { ?>
                              <?php if ($lang == "1") { ?>修改密码 <?php } else { ?>Modify Password <?php }?>
 
-                        <? } ?>
+                        <?php  } ?>
                     </div>
                     <div class="row-head cell"><?php echo $log['ip']; ?></div>
                     <div class="data cell"><?php echo date('Y-m-d H:i', $log['operateTime']/ 1000); ?></div>
                 </div>
-            <?}?>
+            <?php } ?>
 
         </div>
     </div>

@@ -126,11 +126,17 @@ abstract class HttpBaseController extends \Wpf_Controller
     {
         try {
             $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
+            $thirdPartyLoginKey = isset($_GET['thirdPartyKey']) ? $_GET['thirdPartyKey'] : "";
+            $thirdPartyLoginKey = trim($thirdPartyLoginKey);
+            error_log("========web pc login thirdPartyKey=" . $thirdPartyLoginKey);
+
+            $userCustomArray = [];
             if ($preSessionId) {
                 $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
                 if ($preSessionId) {
                     $clientType = Zaly\Proto\Core\UserClientType::UserClientWeb;
-                    $userProfile = $this->ctx->Site_Login->checkPreSessionIdFromPlatform($preSessionId, "", $clientType);
+//                    $userProfile = $this->ctx->Site_Login->loginByThirdPary($preSessionId, "", $clientType);
+                    $userProfile = $this->ctx->Site_Login->doLogin($thirdPartyLoginKey, $preSessionId, "", $clientType, $userCustomArray);
                     $this->setCookie($userProfile["sessionId"], $this->siteCookieName);
                 }
             }
@@ -224,9 +230,9 @@ abstract class HttpBaseController extends \Wpf_Controller
 
         if ($jumpPage) {
             if (strpos($apiPageLogin, "?")) {
-                header("Location:" . $apiPageLogin . "&".$jumpPage);
+                header("Location:" . $apiPageLogin . "&" . $jumpPage);
             } else {
-                header("Location:" . $apiPageLogin . "?".$jumpPage);
+                header("Location:" . $apiPageLogin . "?" . $jumpPage);
             }
         } else {
             if (strpos($apiPageLogin, "?")) {
@@ -243,8 +249,8 @@ abstract class HttpBaseController extends \Wpf_Controller
         $x = isset($_GET['x']) ? $_GET['x'] : "";
         $page = isset($_GET['page']) ? $_GET['page'] : "";
         $jumpPage = "";
-        if($page) {
-            $jumpPage = "page=".$page."&x=" . $x;
+        if ($page) {
+            $jumpPage = "page=" . $page . "&x=" . $x;
         }
         return $jumpPage;
     }
@@ -263,9 +269,9 @@ abstract class HttpBaseController extends \Wpf_Controller
 
     public function display($viewName, $params = [])
     {
-        try{
+        try {
             $siteName = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_NAME);
-        }catch (Exception $ex) {
+        } catch (Exception $ex) {
             $siteName = "";
         }
         // 自己实现实现一下这个方法，加载view目录下的文件
@@ -283,7 +289,7 @@ abstract class HttpBaseController extends \Wpf_Controller
         $params['jumpRelation'] = $this->jumpRelation;
         $params['versionCode'] = ZalyConfig::getConfig("siteVersionCode");
         $params['siteName'] = $siteName;
-
+        $params['siteAddress'] = ZalyHelper::getRequestAddressPath();
         return parent::display($viewName, $params);
     }
 

@@ -6,12 +6,11 @@
     <!-- Latest compiled and minified CSS -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="../../public/css/login.css?_version=<?php echo $versionCode?>">
-    <script type="text/javascript" src="../../public/js/jquery.min.js"></script>
-    <script src="../../public/js/jquery.i18n.properties.min.js"></script>
-    <script src="../../public/sdk/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
-    <script src="../../public/js/template-web.js"></script>
-    <script src="../../public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
+    <link rel="stylesheet" href="<?php echo $siteAddress;?>/public/css/login.css?_version=<?php echo $versionCode?>">
+    <script type="text/javascript" src="<?php echo $siteAddress;?>/public/js/jquery.min.js"></script>
+    <script src="<?php echo $siteAddress;?>/public/js/jquery.i18n.properties.min.js"></script>
+    <script src="<?php echo $siteAddress;?>/public/sdk/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
+    <script src="<?php echo $siteAddress;?>/public/js/template-web.js"></script>
 
 </head>
 
@@ -33,6 +32,11 @@
 <input type="hidden" value="<?php echo $loginNameMinLength;?>" class="loginNameMinLength">
 <input type="hidden" value="<?php echo $pwdMaxLength;?>" class="pwdMaxLength">
 <input type="hidden" value="<?php echo $pwdMinLength;?>" class="pwdMinLength">
+
+<input type="hidden" value='<?php echo $thirdPartyLoginOptions;?>' class="thirdPartyLoginOptions">
+<input type="hidden" value='<?php echo $siteAddress;?>' class="siteAddressPath">
+
+
 
 <div class="site-warning"></div>
     <div style="position: relative; width:100%;height:100%;" class="site_login_div">
@@ -147,15 +151,17 @@
 
 <input type="hidden" value="<?php echo $jumpRoomId;?>" class="jumpRoomId">
 <input type="hidden" value="<?php echo $jumpRoomType;?>" class="jumpRoomType">
+<input type="hidden" value="<?php echo $siteAddress;?>" class="siteAddress">
+<input type="hidden" value="<?php echo $isDuckchat; ?>" class="isDuckchat">
 
 <?php include(dirname(__DIR__) . '/passport/template_login.php'); ?>
+<script src="<?php echo $siteAddress;?>/public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
 
-<input type="hidden" value="<?php echo $isDuckchat; ?>" class="isDuckchat">
-<script src="../../public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
-<script src="../../public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
-<script src="../../public/js/im/zalyClient.js?_version=<?php echo $versionCode?>"></script>
-<script src="../../public/js/im/zalyBaseWs.js?_version=<?php echo $versionCode?>"></script>
-<script src="../../public/js/login/login.js?_version=<?php echo $versionCode?>"></script>
+<script src="<?php echo $siteAddress;?>/public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
+<script src="<?php echo $siteAddress;?>/public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
+<script src="<?php echo $siteAddress;?>/public/js/im/zalyClient.js?_version=<?php echo $versionCode?>"></script>
+<script src="<?php echo $siteAddress;?>/public/js/im/zalyBaseWs.js?_version=<?php echo $versionCode?>"></script>
+<script src="<?php echo $siteAddress;?>/public/js/login/login.js?_version=<?php echo $versionCode?>"></script>
 
 
 </body>

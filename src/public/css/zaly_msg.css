@@ -193,7 +193,7 @@ html, body{
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    padding-top:7rem;
+    /*padding-top:7rem;*/
     height: 100%;
 }
 
@@ -209,7 +209,7 @@ html, body{
     box-shadow: 0rem -0.09rem 0.38rem 0rem rgba(223,223,223,1);
 }
 
-.left-body-home,.left-body-chatsession, .left-body-groups, .left-body-friends{
+.left-body-home,.left-body-chatsession, .left-body-groups, .left-body-friends, .left-body-search-list{
     flex-grow: 1;
     flex-shrink : 1;
     width: 100%;
@@ -220,7 +220,7 @@ html, body{
     overflow-y: scroll;
 }
 
-.group-list-contact-row,.friend-list-contact-row {
+.group-list-contact-row,.friend-list-contact-row, .search-list-contact-row {
     overflow-y: scroll;
     flex-grow: 1;
     flex-shrink : 1;
@@ -1004,8 +1004,7 @@ html, body{
     font-size:1.31rem;
     font-family:PingFangSC-Regular;
     font-weight:400;
-    /*color:rgba(255,255,255,1);*/
-    color: #FFAF5D;
+    color:rgba(255,255,255,1);
 }
 
 .text-align-right-text pre a,
@@ -1975,4 +1974,75 @@ button:active{
     bottom:1rem;
     margin:auto;
     cursor: pointer;
+}
+
+.master_tip{
+    width: 4rem;
+    height:1.3rem;
+    background:rgba(249,183,38,1);
+    border-radius:0.19rem;
+    text-align: center;
+    font-size:0.94rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(255,255,255,0.87);
+    line-height:1.3rem;
+}
+
+.chat_master_tip{
+    width:2.63rem;
+    height: 1rem;
+    background:rgba(249,183,38,1);
+    border-radius:0.19rem;
+    text-align: center;
+    font-size:0.94rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(255,255,255,0.87);
+    height: 1rem;
+    margin-right: 5px;
+}
+
+.plugin-right-body{
+    width: 100%;
+    height: 100%;
+}
+.search_group_friend {
+    height:7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.search_group_friend img{
+    width: 1.5rem;
+    height:1.5rem;
+    position: absolute;
+    left:2rem;
+    cursor: pointer;
+}
+.search_group_friend input{
+    width:26.27rem;
+    height:2.81rem;
+    background:rgba(244,244,246,1);
+    border-radius:0.19rem;
+    border:0.09rem solid #E9E8ED;
+    outline: none;
+    cursor: pointer;
+    padding-left:3rem;
+    margin-right: 1rem;
+    margin-left: 1rem;
+}
+.search_see_friend_all_tip,.search_see_group_all_tip {
+    height:3rem;
+    line-height: 3rem;
+    font-size:12px;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(127,118,180,1);
+    line-height:12px;
+    margin-left: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
 }
