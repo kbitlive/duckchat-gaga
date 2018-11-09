@@ -45,7 +45,7 @@ function showMsgWebNotification(msg, msgContent)
                 "tag":siteConfig.serverAddressForApi,
                 "icon":icon,
                 "renotify": true,
-                "sound":"../../public/voice/msg.mp3"
+                "sound":"../../public/voice/definite.mp3"
             });
             notification.onclick = function(event) {
                 window.focus();
@@ -232,6 +232,7 @@ $(document).on("click", ".l-sb-item", function(){
             $(".home-page").attr("default", 1);
             pluginOffset = 0;
             getPluginList(pluginOffset, PluginUsageType.PluginUsageIndex, initPluginList);
+            displayRightPage(DISPLAY_HOME);
             break;
         case "group":
             $(".home-page")[0].style.display = "none";
@@ -250,7 +251,7 @@ $(document).on("click", ".l-sb-item", function(){
             $(".group-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
             $(".chatsession-lists").attr("default", 1);
-
+            displayRightPage(DISPLAY_CHAT);
             break;
         case "friend":
             $(".home-page")[0].style.display = "none";
