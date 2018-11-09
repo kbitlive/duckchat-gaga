@@ -374,6 +374,14 @@
 
 <script type="text/javascript">
 
+    function openPage(url) {
+        if (isMobile()) {
+            zalyjsOpenNewPage(url);
+        } else {
+            zalyjsOpenPage(url);
+        }
+    }
+
     function getLanguage() {
         var nl = navigator.language;
         if ("zh-cn" == nl || "zh-CN" == nl) {
@@ -384,58 +392,58 @@
 
     $("#site-config-id").click(function () {
         var url = "/index.php?action=manage.config&lang=" + getLanguage();
-        zalyjsOpenPage(url);
+        openPage(url);
     });
 
     $("#mini-program-id").click(function () {
         var url = "index.php?action=manage.miniProgram&lang=" + getLanguage();
-        zalyjsOpenPage(url);
+        openPage(url);
     });
 
     $("#user-manage-id").click(function () {
         var url = "index.php?action=manage.user&lang=" + getLanguage();
-        zalyjsOpenPage(url);
+        openPage(url);
     });
 
     $("#group-manage-id").click(function () {
         var url = "index.php?action=manage.group&lang=" + getLanguage();
-        zalyjsOpenPage(url);
+        openPage(url);
     });
 
     $("#uic-manage-id").click(function () {
         var url = "index.php?action=manage.uic&page=index&lang=" + getLanguage();
-        zalyjsOpenPage(url);
+        openPage(url);
     });
 
     $("#site-clean-data").click(function () {
         var url = "index.php?action=manage.data.clean&lang=" + getLanguage();
-        zalyjsOpenPage(url);
+        openPage(url);
     });
 
     $("#stie-data-report").click(function () {
         var url = "index.php?action=manage.data.report";
-        zalyjsOpenPage(url);
+        openPage(url);
     });
 
     $("#site-custom-page").click(function () {
         var url = "index.php?action=manage.custom&lang=" + getLanguage();
-        zalyjsOpenPage(url);
+        openPage(url);
     });
 
     $("#site-advanced").click(function () {
         var url = "index.php?action=manage.advanced&lang=" + getLanguage();
-        zalyjsOpenPage(url);
+        openPage(url);
     });
 
     $("#site-security").on("click", function () {
         var url = "index.php?action=manage.security&lang=" + getLanguage();
-        zalyjsOpenPage(url);
+        openPage(url);
     });
 
 
     function showPluginAdmin(url) {
         url += "&lang=" + getLanguage();
-        zalyjsOpenPage(url);
+        openPage(url);
     }
 
 </script>

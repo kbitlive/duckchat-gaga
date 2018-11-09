@@ -66,7 +66,7 @@ class SiteConfig
 
     const SITE_FRONT_PAGE = "frontPage";
 
-    const SITE_SHOW_HOME_PAGE = "showHomePage";
+    const SITE_HIDDEN_HOME_PAGE = "hiddenHomePage";
 
     public static function getPubkAndPrikPem()
     {
@@ -126,7 +126,7 @@ class SiteConfig
         self::SITE_FILE_SIZE,
 
         self::SITE_FRONT_PAGE,
-        self::SITE_SHOW_HOME_PAGE,
+        self::SITE_HIDDEN_HOME_PAGE,
     ];
 
     public static $numericKeys = [

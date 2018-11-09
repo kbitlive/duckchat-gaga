@@ -98,11 +98,11 @@ class PublicSiteConfig extends \Google\Protobuf\Internal\Message
      */
     private $frontPage = 0;
     /**
-     *true:show home page ,false hidden home page
+     *false:show home page ,true hidden home page
      *
-     * Generated from protobuf field <code>bool showHomePage = 19;</code>
+     * Generated from protobuf field <code>bool hiddenHomePage = 19;</code>
      */
-    private $showHomePage = false;
+    private $hiddenHomePage = false;
 
     public function __construct() {
         \GPBMetadata\Core\Site::initOnce();
@@ -526,27 +526,27 @@ class PublicSiteConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *true:show home page ,false hidden home page
+     *false:show home page ,true hidden home page
      *
-     * Generated from protobuf field <code>bool showHomePage = 19;</code>
+     * Generated from protobuf field <code>bool hiddenHomePage = 19;</code>
      * @return bool
      */
-    public function getShowHomePage()
+    public function getHiddenHomePage()
     {
-        return $this->showHomePage;
+        return $this->hiddenHomePage;
     }
 
     /**
-     *true:show home page ,false hidden home page
+     *false:show home page ,true hidden home page
      *
-     * Generated from protobuf field <code>bool showHomePage = 19;</code>
+     * Generated from protobuf field <code>bool hiddenHomePage = 19;</code>
      * @param bool $var
      * @return $this
      */
-    public function setShowHomePage($var)
+    public function setHiddenHomePage($var)
     {
         GPBUtil::checkBool($var);
-        $this->showHomePage = $var;
+        $this->hiddenHomePage = $var;
 
         return $this;
     }

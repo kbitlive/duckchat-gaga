@@ -225,13 +225,13 @@ class Api_Site_ConfigController extends \BaseController
             $config->setSiteIdPubkBase64($configData[SiteConfig::SITE_ID_PUBK_PEM]);
             $config->setAccountSafePluginId($configData[SiteConfig::SITE_PASSPORT_ACCOUNT_SAFE_PLUGIN_ID]);
 
-            if (isset($configData[SiteConfig::SITE_SHOW_HOME_PAGE])) {
-                $config->setShowHomePage($configData[SiteConfig::SITE_SHOW_HOME_PAGE]);
+            if (isset($configData[SiteConfig::SITE_HIDDEN_HOME_PAGE])) {
+                $config->setHiddenHomePage($configData[SiteConfig::SITE_HIDDEN_HOME_PAGE]);
             } else {
-                $config->setShowHomePage(true);
+                $config->setHiddenHomePage(false);
             }
 
-            if ($config->getShowHomePage()) {
+            if (!$config->getHiddenHomePage()) {//show home page
                 if (isset($configData[SiteConfig::SITE_FRONT_PAGE])) {
                     $config->setFrontPage($configData[SiteConfig::SITE_FRONT_PAGE]);
                 } else {
