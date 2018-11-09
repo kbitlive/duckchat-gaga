@@ -132,7 +132,10 @@
                     $(".l-sb-item[data='home']").click();
                 }
             } else {
-                $(".l-sb-item[data='home']")[0].style.display="none";
+                var isMaster = isJudgeSiteMasters(token);
+                if(!isMaster) {
+                   $(".l-sb-item[data='home']")[0].style.display="none";
+                }
                 $(".l-sb-item[data='chatSession']").click();
             }
         }catch (error){

@@ -83,7 +83,7 @@
             /*background: rgba(255, 255, 255, 1);*/
             padding-bottom: 11px;
             /*padding-left: 1rem;*/
-
+            overflow-y: scroll;
         }
 
         .item-body-display {
@@ -307,6 +307,8 @@
                     </div>
                 </div>
             </div>
+
+
             <div class="division-line"></div>
 
             <div class="item-row" id="site-clean-data">
@@ -329,7 +331,26 @@
                 </div>
             </div>
             <div class="division-line"></div>
-        </div>
+
+            <div class="item-row" id="site-clean-gif-data">
+                <div class="item-header">
+                    <img class="site-manage-image" src="../../public/img/manage/data_clean.png"/>
+                </div>
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <div class="item-body-desc">
+                            <?php if ($lang == "1") { ?>
+                                动图表情
+                            <?php } else { ?>
+                                Gif
+                            <?php } ?></div>
+
+                        <div class="item-body-tail">
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
     </div>
 
@@ -409,6 +430,11 @@
 
     $("#site-clean-data").click(function () {
         var url = "index.php?action=manage.data.clean&lang=" + getLanguage();
+        zalyjsOpenPage(url);
+    });
+
+    $("#site-clean-gif-data").click(function () {
+        var url = "index.php?action=manage.data.cleanGif&lang=" + getLanguage();
         zalyjsOpenPage(url);
     });
 
