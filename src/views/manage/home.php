@@ -83,7 +83,7 @@
             /*background: rgba(255, 255, 255, 1);*/
             padding-bottom: 11px;
             /*padding-left: 1rem;*/
-
+            overflow-y: scroll;
         }
 
         .item-body-display {
@@ -307,6 +307,8 @@
                     </div>
                 </div>
             </div>
+
+
             <div class="division-line"></div>
 
             <div class="item-row" id="site-clean-data">
@@ -328,8 +330,6 @@
                     </div>
                 </div>
             </div>
-            <div class="division-line"></div>
-        </div>
 
     </div>
 
@@ -419,6 +419,8 @@
         var url = "index.php?action=manage.data.clean&lang=" + getLanguage();
         openPage(url);
     });
+
+
 
     $("#stie-data-report").click(function () {
         var url = "index.php?action=manage.data.report";

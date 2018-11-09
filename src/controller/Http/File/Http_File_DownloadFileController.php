@@ -14,6 +14,7 @@ class Http_File_DownloadFileController extends \HttpBaseController
         "image/jpeg",
         "image/jpg",
         "image/png",
+        "image/gif",
     ];
     public function index()
     {
@@ -23,7 +24,6 @@ class Http_File_DownloadFileController extends \HttpBaseController
         $isGroupMessage = isset($_GET['isGroupMessage']) ? $_GET['isGroupMessage'] : "";
         $messageId = isset($_GET['messageId']) ? $_GET['messageId'] : "";
         $returnBase64 = $_GET['returnBase64'];
-
         try{
             if(!in_array($mimeType, $this->notMsgMimeType) && !$messageId) {
                 throw new Exception("it's msg attachment");
