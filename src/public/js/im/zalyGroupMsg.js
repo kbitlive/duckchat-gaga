@@ -328,7 +328,6 @@ function searchGroupAndFriendByKeyDown(event)
     $(".hide_all_friend")[0].style.display = "none";
     $(".search_hidden_friend")[0].style.display = "none";
     $(".display_all_friend")[0].style.display = "none";
-    console.log("friendListRowLength---------"+friendListRowLength)
 
     for(var i=0; i< friendListRowLength; i++) {
         var friendRow = friendListRow[i];
@@ -363,7 +362,7 @@ function searchGroupAndFriendByKeyDown(event)
     var currentGroupCount = 0;
     for(var i=0; i< groupListRowLength; i++) {
         var groupRow = groupListRow[i];
-        var newGroupRow = friendRow.cloneNode(true);
+        var newGroupRow = groupRow.cloneNode(true);
         var groupName = $(groupRow).attr("group-name");
 
         try{
