@@ -29,7 +29,7 @@ class Page_Passport_LoginController extends HttpBaseController
                 exit();
             }
         } catch (Exception $ex) {
-            $this->logger->error($tag, $ex);
+            $this->logger->error($tag, "page.passport.login error=" . $ex->getMessage());
         }
 
         $cookieStr = isset($_SERVER['HTTP_COOKIE']) ? $_SERVER['HTTP_COOKIE'] : "";

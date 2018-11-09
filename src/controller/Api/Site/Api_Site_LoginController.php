@@ -28,6 +28,7 @@ class Api_Site_LoginController extends \BaseController
         ///处理request，
         $tag = __CLASS__ . '-' . __FUNCTION__;
         try {
+            error_log("--==============", "api.site.login request=" . $request->serializeToJsonString());
             $loginName = $request->getLoginName();
             $userExists = $this->checkUserExists($loginName);
             $isRegister = $request->getIsRegister();
