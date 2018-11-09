@@ -333,8 +333,9 @@ function searchGroupAndFriendByKeyDown(event)
         var friendRow = friendListRow[i];
         var newFriendRow = friendRow.cloneNode(true);
         var friendName = $(friendRow).attr("friend-name");
+        var friendNameLatin = $(friendRow).attr("friend-name-latin");
         try{
-            if(friendName.indexOf(searchVal)!=-1) {
+            if(friendName.indexOf(searchVal)!=-1 || friendNameLatin.indexOf(searchVal) != -1) {
                 currentFriendCount +=1;
                 if(currentFriendCount > 2) {
                     $(".display_all_friend")[0].style.display = "flex";
@@ -364,9 +365,10 @@ function searchGroupAndFriendByKeyDown(event)
         var groupRow = groupListRow[i];
         var newGroupRow = groupRow.cloneNode(true);
         var groupName = $(groupRow).attr("group-name");
+        var groupNameLatin = $(groupRow).attr("group-name-latin");
 
         try{
-            if(groupName.indexOf(searchVal)!=-1) {
+            if(groupName.indexOf(searchVal)!=-1 || groupNameLatin.indexOf(searchVal) != -1) {
                 currentGroupCount +=1;
                 if(currentGroupCount > 2) {
                     $(".display_all_group")[0].style.display = "flex";
@@ -1040,7 +1042,8 @@ function appendGroupListHtml(results) {
             html = template("tpl-group-contact", {
                 groupId : group.id,
                 groupName : group.name,
-                groupAvatarImg:groupAvatarImg
+                groupAvatarImg:groupAvatarImg,
+                nameInLatin:group.nameInLatin
             });
             html = handleHtmlLanguage(html);
             $(".group-list-contact-row").append(html);
@@ -2539,7 +2542,8 @@ function  appendFriendListHtml(results)
             var html = template("tpl-friend-contact", {
                 userId : u2.userId,
                 nickname: u2.nickname ? u2.nickname : defaultUserName,
-                friendAvatarImg:friendAvatarImg
+                friendAvatarImg:friendAvatarImg,
+                nicknameInLatin:u2.nicknameInLatin
             });
             html = handleHtmlLanguage(html);
             $(".friend-list-contact-row").append(html);
