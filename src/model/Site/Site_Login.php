@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 登陆站点操作
  * User: zhangjun
  * Date: 06/08/2018
  * Time: 11:45 PM
@@ -34,7 +34,6 @@ class Site_Login
      */
     public function doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $userCustomArray)
     {
-//        $thirdPartyKey = "localLanding";
         $userProfile = false;
 
         if (empty($thirdPartyKey)) {
@@ -156,7 +155,6 @@ class Site_Login
             $sessionVerifyRequest = new \Zaly\Proto\Platform\ApiSessionVerifyRequest();
             $sessionVerifyRequest->setPreSessionId($preSessionId);
 
-//            $sessionVerifyUrl = ZalyConfig::getSessionVerifyUrl($pluginId);
             $sessionVerifyUrl = ZalyHelper::getFullReqUrl($sessionVerifyUrl);
 
             $this->logger->error("==============request to api.session.verify Url=", $sessionVerifyUrl);
