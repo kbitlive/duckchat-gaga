@@ -106,11 +106,37 @@
         return rem;
     }
 
+    function displayFrontPage()
+    {
+        var configStr = localStorage.getItem(siteConfigKey);
+        var config = JSON.parse(configStr);
+        if(config.hasOwnProperty("showHomePage") && config['showHomePage'] == true) {
+            $(".l-sb-item[data='home']")[0].style.display="flex";
+            //1:Home 2:Chats 3:Contacts friend 4:Me
+            if(config.hasOwnProperty('frontPage')) {
+                var frontPage = Number( config['frontPage']);
+                switch (frontPage ) {
+                    case 2:
+                        $(".l-sb-item[data='chatSession']").click();
+                        break;
+                    case 3:
+                        $(".l-sb-item[data='friend']").click();
+                        break;
+                    default:
+                        $(".l-sb-item[data='home']").click();
+                }
+            } else {
+                $(".l-sb-item[data='home']").click();
+            }
+        } else {
+            $(".l-sb-item[data='home']")[0].style.display="none";
+            localStorage.setItem(chatTypeKey, DefaultChat);
+            $(".l-sb-item[data='chatSession']").click();
+        }
+    }
 
-    localStorage.setItem(chatTypeKey, DefaultChat);
-    getRoomList();
-    $(".chatsession-lists").attr("default", 1);
-
+    displayFrontPage();
+    
     history.pushState(null, null, document.URL);
     window.addEventListener('popstate', function () {
         history.pushState(null, null, document.URL);
