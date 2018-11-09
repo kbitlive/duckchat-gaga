@@ -118,7 +118,7 @@
 
         <div class="init_check_info justify-content-left  ext_is_write" isLoad="{{isLoadProperties}}">
             <div class="init_check isLoadProperties">
-                4.是否可以加载语言包
+                5.是否可以加载语言包
             </div>
             <div class="init_check_result">
                 {{if isLoadProperties}}
