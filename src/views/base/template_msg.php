@@ -349,7 +349,7 @@
 
 
 <script id="tpl-group-contact" type="text/html">
-    <div class="pw-contact-row   contact-row-group-profile {{groupId}}" chat-session-id="{{groupId}}" group-name="{{groupName}}">
+    <div class="pw-contact-row   contact-row-group-profile {{groupId}}" chat-session-id="{{groupId}}" group-name="{{groupName}}" group-name-latin="{{nameInLatin}}">
         <div class="pw-contact-row-image">
             {{if groupAvatarImg}}
                 <img class="user-info-avatar " src="{{groupAvatarImg}}"  onerror="this.src='../../public/img/msg/group_default_avatar.png'"/>
@@ -363,7 +363,7 @@
 
 
 <script id="tpl-friend-contact" type="text/html">
-    <div class="pw-contact-row  contact-row-u2-profile {{userId}}" chat-session-id="{{userId}}" friend-name="{{nickname}}">
+    <div class="pw-contact-row  contact-row-u2-profile {{userId}}" chat-session-id="{{userId}}" friend-name="{{nickname}}" friend-name-latin="{{nicknameInLatin}}">
         <div class="pw-contact-row-image">
             {{if friendAvatarImg}}
                 <img class="user-info-avatar"  src="{{friendAvatarImg}}"  onerror="this.src='../../public/img/msg/default_user.png'"/>
