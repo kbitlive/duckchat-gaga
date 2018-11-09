@@ -180,10 +180,9 @@
             isLoadProperties:isCanLoadPropertites,
             phpinfo:phpinfo
         });
+
         html = handleHtmlLanguage(html);
         $(".zaly_init").html(html);
-
-        testCurl();
 
         if(!isPhpVersionValid) {
             $(".isPhpVersionValid")[0].style.color="#F44336";
@@ -206,11 +205,15 @@
             $(".isLoadProperties")[0].style.color="#F44336";
             isAvaliableSiteEnv = false;
         }
-
         if(isAvaliableSiteEnv == false) {
             $(".next_init_data")[0].style.background="rgba(201,201,201,1)";
+
             $(".next_init_data").attr("disabled", "disabled");
+            return;
         }
+        $(".next_init_data")[0].style.background="rgba(76,59,177,1)";
+        $(".next_init_data").attr("disabled", false);
+
     }
     
     $(document).on("click", ".previte_init_protocol", function () {
@@ -536,25 +539,6 @@
         });
     }
 
-    function testCurl()
-    {
-        $.ajax({
-            method: "GET",
-            url: "./index.php?action=installDB&for=test_curl_result",
-            success: function (resp) {
-                if (resp == "success") {
-                    $(".isCanUseCurlImg").attr("src", "../../public/img/init/check_success.png");
-                    $(".isCanUseCurl")[0].style.color="rgba(102,102,102,1)";
-                    $(".next_init_data")[0].style.background="rgba(76,59,177,1)";
-                    $(".next_init_data").attr("disabled", false);
-                    return;
-                }
-                isAvaliableSiteEnv = false;
-                $(".next_init_data")[0].style.background="rgba(201,201,201,1)";
-                $(".next_init_data").attr("disabled", "disabled");
-            },
-        });
-    }
 
 </script>
 </body>
