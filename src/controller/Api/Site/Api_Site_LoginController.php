@@ -74,15 +74,10 @@ class Api_Site_LoginController extends \BaseController
             //get user profile from platform clientSiteType=1:mobile client
             $clientType = Zaly\Proto\Core\UserClientType::UserClientMobileApp;
 
-
             $userProfile = $this->ctx->Site_Login->doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $customData);
-
-//            $userProfile = $this->ctx->Site_Login->checkPreSessionIdFromPlatform($preSessionId, $devicePubkPem, $clientType);
 
             $realSessionId = $userProfile['sessionId'];
             $response = $this->buildApiSiteLoginResponse($userProfile, $realSessionId);
-
-            $this->ctx->Wpf_Logger->info("api.site.login", "response=" . $response->serializeToJsonString());
 
             //clearLimitSession
             $this->clearLimitSession($userProfile['userId'], $userProfile['deviceId']);

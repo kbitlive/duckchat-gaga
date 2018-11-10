@@ -1,7 +1,7 @@
 <?php
 /**
  * check current version need to upgrade
- * User: anguoyue
+ * User: SAM<an.guoyue254@gmail.com>
  * Date: 13/10/2018
  * Time: 3:54 PM
  */

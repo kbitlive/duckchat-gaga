@@ -53,6 +53,8 @@
  * @property DuckChat_User DuckChat_User
  * @property DuckChat_Group DuckChat_Group
  *
+ * @property Upgrade_Client Upgrade_Client
+ *
  */
 class BaseCtx extends Wpf_Ctx
 {

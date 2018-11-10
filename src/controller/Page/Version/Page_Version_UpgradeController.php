@@ -55,6 +55,7 @@ class Page_Version_UpgradeController extends Page_VersionController
                 $this->versionCode = 10102;
                 $this->versionName = "1.1.2";
                 $result = $this->upgrade_10101_10102();
+                $result = Upgrade_Client::doUpgrade(10101, 10102);
                 //最新版本审计完成以后，删除密码存储文件，准备下次更新新密码
                 $this->deleteUpgradeFile();
             }
