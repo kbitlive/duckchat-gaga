@@ -84,6 +84,9 @@ class Page_Passport_LoginController extends HttpBaseController
 
         $thirdPartyLoginOptions = ZalyLogin::getThirdPartyConfigWithoutVerifyUrl();
 
+        $enableInvitationCode = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_INVITATION_CODE);
+        $enableRealName  = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_REAL_NAME);
+
         $params = [
             'siteName' => $siteName,
             'siteLogo' => $this->ctx->File_Manager->getCustomPathByFileId($siteLogo),
@@ -102,11 +105,14 @@ class Page_Passport_LoginController extends HttpBaseController
 
             'loginBackgroundImageDisplay' => $loginBackgroundImageDisplay,
 
-            'loginNameAlias' => $loginNameAlias,
-            'passwordFindWay' => $passwordRestWay,
+            'loginNameAlias'   => $loginNameAlias,
+            'passwordFindWay'  => $passwordRestWay,
             'passwordResetWay' => $passwordRestWay,
-            'passwordResetRequired' => $passwordResetRequired,
+            'passwordResetRequired'  => $passwordResetRequired,
             'thirdPartyLoginOptions' => json_encode($thirdPartyLoginOptions),
+
+            'enableInvitationCode' => $enableInvitationCode,
+            'enableRealName' =>  $enableRealName
         ];
         echo $this->display("passport_login", $params);
         return;

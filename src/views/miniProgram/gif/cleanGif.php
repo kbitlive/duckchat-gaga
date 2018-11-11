@@ -284,7 +284,7 @@
 
     function cleanGif(delGifId) {
 
-        var url = "index.php?action=manage.data.cleanGif&lang=" + getLanguage();
+        var url = "index.php?action=miniProgram.gif.cleanGif&lang=" + getLanguage();
 
         var data = {
             "delGifIds": delGifId,

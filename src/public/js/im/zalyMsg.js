@@ -328,6 +328,7 @@ function uniqueMsgAndCheckMsgId(msgList, msgId, roomChatSessionKey)
     }catch (error) {
         handleSetItemError(error);
     }
+    return false;
 }
 function handleSetItemError(error)
 {
@@ -502,15 +503,14 @@ function setRoomMsgUnreadNum(chatSessionId)
             var unReadAllMuteNum =  !localStorage.getItem(roomListMsgMuteUnReadNumKey) ? 1 : (Number(localStorage.getItem(roomListMsgMuteUnReadNumKey))+1);
             localStorage.setItem(roomListMsgMuteUnReadNumKey, unReadAllMuteNum);
         }
-
         localStorage.setItem(unreadMuteKey, 1);
     }else {
         var unreadKey = roomMsgUnReadNum + chatSessionId;
         var unreadNum = !localStorage.getItem(unreadKey) ? 1 : (Number(localStorage.getItem(unreadKey))+1);
         localStorage.setItem(unreadKey, unreadNum);
 
-        var unReadAllMuteNum = !localStorage.getItem(roomListMsgUnReadNum)? 1 : (Number(localStorage.getItem(roomListMsgUnReadNum))+1);
-        localStorage.setItem(roomListMsgUnReadNum, unReadAllMuteNum);
+        var unReadAllNum = !localStorage.getItem(roomListMsgUnReadNum) ? 1 : (Number(localStorage.getItem(roomListMsgUnReadNum))+1);
+        localStorage.setItem(roomListMsgUnReadNum, unReadAllNum);
     }
     displayRoomListMsgUnReadNum();
 }
@@ -647,7 +647,7 @@ function clearRoomUnreadMsgNum(chatSessionId)
     localStorage.setItem(roomListMsgMuteUnReadNumKey, roomMuteNum);
 
     var unreadKey = roomMsgUnReadNum + chatSessionId;
-    var unReadNum = localStorage.getItem(unreadKey) ?  Number(localStorage.getItem(unreadKey)) : 0 ;
+    var unReadNum = Number(localStorage.getItem(unreadKey)) ?  Number(localStorage.getItem(unreadKey)) : 0 ;
     var roomListUnreadNum = localStorage.getItem(roomListMsgUnReadNum);
     roomListUnreadNum =  (roomListUnreadNum-unReadNum) >0 ? (roomListUnreadNum-unReadNum) : 0;
     roomListUnreadNum =  (roomListUnreadNum-unReadNum) >99 ? "99+": roomListUnreadNum;

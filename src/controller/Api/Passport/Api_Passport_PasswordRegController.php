@@ -28,7 +28,8 @@ class Api_Passport_PasswordRegController  extends Api_Passport_PasswordBase
             $loginName = $request->getLoginName();
             $email     = $request->getEmail();
             $password  = $request->getPassword();
-            $sitePubkPem = $request->getSitePubkPem();
+            $sitePubkPem =  $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_ID_PUBK_PEM);
+
             $invitationCode = $request->getInvitationCode();
 
             $this->getCustomLoginConfig();

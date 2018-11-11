@@ -2,7 +2,6 @@
 $(".left-body-chatsession").html("");
 $(".right-chatbox").html("");
 
-var soundMuteNow = false;
 function showMsgWebNotification(msg, msgContent)
 {
 
@@ -44,21 +43,6 @@ function showMsgWebNotification(msg, msgContent)
 
     if(document.hidden && (mute == 0)) {
         if(window.Notification && Notification.permission !== "denied"){
-            var soundMute = localStorage.getItem(soundNotificationKey);
-            if(soundMute == "on" && !soundMuteNow) {
-                //浏览器支持 audio
-               try{
-                   var audio = document.getElementById("msg_sound_tip");
-                   audio.muted = false;
-                   audio.play();
-               }catch (error) {
-
-               }
-            }
-            soundMuteNow = true;
-            setTimeout(function () {
-                soundMuteNow = false;
-            }, 2000);
             var notification = new Notification(notification, {
                 "tag":siteConfig.serverAddressForApi,
                 "icon":icon,
@@ -70,9 +54,6 @@ function showMsgWebNotification(msg, msgContent)
         }
     }
 }
-
-
-
 
 
 function showOtherWebNotification()
@@ -97,8 +78,6 @@ function displayFrontPage()
 {
     try{
         var configStr = localStorage.getItem(siteConfigKey);
-        console.log("configStr----"+configStr);
-
         var config = JSON.parse(configStr);
         if(config.hasOwnProperty("hiddenHomePage") && config['hiddenHomePage'] == true) {
             var isMaster = isJudgeSiteMasters(token);
@@ -127,6 +106,8 @@ function displayFrontPage()
     }catch (error){
         $(".l-sb-item[data='chatSession']").click();
     }
+
+    jump();
 }
 
 
@@ -153,21 +134,21 @@ jumpRoomType = $(".jumpRoomType").attr("data");
 jumpRoomId = $(".jumpRoomId").attr("data");
 jumpRelation = $(".jumpRelation").attr("data");
 
-jump();
 
 function jump()
 {
     //群，好友
     // http://127.0.0.1/index.php?page=u2Msg&x=
     // http://127.0.0.1/index.php?page=groupMsg&x=
+
     if(jumpRoomType != "" && jumpRoomId != "") {
-        if(jumpRoomType == JUMP_GroupMsg) {
+        if(jumpRoomType == JUMP_GroupMsg ) {
             if(jumpRelation == 1) {
                 localStorage.setItem(chatSessionIdKey, jumpRoomId);
                 localStorage.setItem(jumpRoomId, GROUP_MSG);
                 handleClickRowGroupProfile(jumpRoomId);
             }
-        } else if(jumpRoomType == JUMP_U2Msg) {
+        } else if(jumpRoomType == JUMP_U2Msg || jumpRoomType == JUMP_U2Profile) {
             localStorage.setItem(chatSessionIdKey, jumpRoomId);
             localStorage.setItem(jumpRoomId, U2_MSG);
             sendFriendProfileReq(jumpRoomId, handleGetJumpFriendProfile);
@@ -208,13 +189,12 @@ function displayRoomListMsgUnReadNum()
             $(".room-list-msg-unread")[0].style.display = 'block';
             $(".room-list-msg-unread").html(unReadAllNum);
         } else {
+            localStorage.setItem(newSiteTipKey, "clear");
+            setDocumentTitle();
+            $(".room-list-msg-unread")[0].style.display = 'none';
             var mute = localStorage.getItem(roomListMsgMuteUnReadNumKey);
             if(mute >= 1) {
                 $(".unread-num-mute")[0].style.display = "block";
-            } else {
-                localStorage.setItem(newSiteTipKey, "clear");
-                setDocumentTitle();
-                $(".room-list-msg-unread")[0].style.display = 'none';
             }
         }
     } else {
@@ -1298,6 +1278,10 @@ function getGroupProfile(groupId)
     }
 
     if(reqProfileTime != false && reqProfileTime != null && reqProfileTime !=undefined  && ((nowTimestamp-reqProfileTime)<reqTimeout) ) {
+        setTimeout(function () {
+            sessionStorage.removeItem(groupInfoReqKey);
+            getGroupProfile(groupId);
+        }, 2000);
         return false;
     }
     sessionStorage.setItem(groupInfoReqKey, nowTimestamp);

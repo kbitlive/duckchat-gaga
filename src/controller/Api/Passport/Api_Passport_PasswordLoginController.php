@@ -27,7 +27,7 @@ class Api_Passport_PasswordLoginController extends Api_Passport_PasswordBase
         try {
             $loginName = $request->getLoginName();
             $password = $request->getPassword();
-            $sitePubkPem = $request->getSitePubkPem();
+            $sitePubkPem =  $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_ID_PUBK_PEM);
 
             if (!$sitePubkPem || strlen($sitePubkPem) < 0) {
                 $errorCode = $this->zalyError->errorSitePubkPem;

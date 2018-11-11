@@ -153,6 +153,8 @@
 <input type="hidden" value="<?php echo $jumpRoomType;?>" class="jumpRoomType">
 <input type="hidden" value="<?php echo $siteAddress;?>" class="siteAddress">
 <input type="hidden" value="<?php echo $isDuckchat; ?>" class="isDuckchat">
+<input type="hidden" value="<?php echo $enableInvitationCode; ?>" class="enableInvitationCode">
+<input type="hidden" value="<?php echo $enableRealName; ?>" class="enableRealName">
 
 <?php include(dirname(__DIR__) . '/passport/template_login.php'); ?>
 <script src="<?php echo $siteAddress;?>/public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>

@@ -6,10 +6,26 @@
  * Time: 1:29 PM
  */
 
-class Manage_Data_CleanGifController extends Manage_CommonController
+class MiniProgram_Gif_CleanGifController extends MiniProgram_BaseController
 {
 
+    private $gifMiniProgramId = 104;
     private $defaultLimit = 200;
+
+    public function getMiniProgramId()
+    {
+        return $this->gifMiniProgramId;
+    }
+
+    public function requestException($ex)
+    {
+        $this->showPermissionPage();
+    }
+
+    public function preRequest()
+    {
+    }
+
     public function doRequest()
     {
         $params = ["lang" => $this->language];
@@ -33,7 +49,7 @@ class Manage_Data_CleanGifController extends Manage_CommonController
         $offset = ($page-1)*($this->defaultLimit);
         $results = $this->ctx->SiteUserGifTable->getGifListFromSiteGif($offset, $this->defaultLimit);
         $params['gifs'] = json_encode($results);
-        echo $this->display("manage_data_cleanGif", $params);
+        echo $this->display("miniProgram_gif_cleanGif", $params);
         return;
     }
 }

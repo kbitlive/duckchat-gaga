@@ -35,7 +35,6 @@ $(":input").attr("autocapitalize", "off");
 siteConfig = {};
 enableInvitationCode=0;
 enableRealName=0;
-sitePubkPem="";
 invitationCode='';
 allowShareRealname=0;
 siteLogo="";
@@ -125,18 +124,8 @@ if(isPhoneFlag == false) {
     }
 }
 
-
-function zalyLoginConfig(results) {
-    if(typeof results == "object" ) {
-        siteConfig = results;
-    } else {
-        siteConfig = JSON.parse(results);
-    }
-    enableInvitationCode = siteConfig.enableInvitationCode;
-    enableRealName=siteConfig.enableRealName;
-    sitePubkPem = siteConfig.sitePubkPem;
-}
-
+enableInvitationCode = $(".enableInvitationCode").val();
+enableRealName=$(".enableRealName").val();
 
 function loginFailed(result)
 {
@@ -154,8 +143,6 @@ function loginFailed(result)
 }
 
 getOsType();
-
-zalyjsLoginConfig(zalyLoginConfig);
 
 var loginNameAlias = $(".loginNameAlias").val();
 var passwordFindWay = $(".passwordFindWay").val();
@@ -521,17 +508,12 @@ function handlePassportPasswordReg(results)
 
 function loginNameNotExist()
 {
-    if(sitePubkPem.length<1) {
-        hideLoading();
-        alert("站点公钥获取失败");
-        return false;
-    }
+
     var action = "api.passport.passwordReg";
     var reqData = {
         loginName:registerLoginName,
         password:registerPassword,
         email:registerEmail,
-        sitePubkPem:sitePubkPem,
         invitationCode:invitationCode,
     }
     handleClientSendRequest(action, reqData, handlePassportPasswordReg);
@@ -603,7 +585,6 @@ function updatePassportPasswordInvitationCode(results)
     }
     var action = "api.passport.passwordUpdateInvitationCode";
     var reqData = {
-        sitePubkPem:sitePubkPem,
         invitationCode:invitationCode,
         preSessionId:preSessionId,
     }
@@ -684,10 +665,7 @@ function loginPassport()
     }
     $(".login_input_pwd_failed")[0].style.display = "none";
 
-    if(sitePubkPem.length<1) {
-        alert("站点公钥获取失败");
-        return false;
-    }
+
     showLoading($(".site_login_div"));
     cancelLoadingBySelf();
     apiPassportPasswordLogin(handleApiPassportPasswordLogin);
@@ -704,7 +682,6 @@ function apiPassportPasswordLogin(callback)
     var reqData = {
         loginName:name,
         password:password,
-        sitePubkPem:sitePubkPem,
     };
     handleClientSendRequest(action, reqData, callback);
 }
