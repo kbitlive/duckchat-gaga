@@ -301,7 +301,7 @@ abstract class HttpBaseController extends \Wpf_Controller
     public function getSiteConfigFromDB($columns)
     {
         try {
-            $results = $this->ctx->SiteConfigTable->selectSiteConfig($columns);
+            $results = $this->ctx->Site_Config->getConfigValue($columns);
             return $results;
         } catch (Exception $e) {
             $tag = __CLASS__ . "-" . __FUNCTION__;

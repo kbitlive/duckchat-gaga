@@ -17,7 +17,8 @@ class Page_SiteConfigController extends  HttpBaseController
     {
         header('Access-Control-Allow-Origin: *');
         header("Content-Type:application/javascript; charset=utf-8");
-        $configData = $this->getSiteConfigFromDB([SiteConfig::SITE_ENABLE_INVITATION_CODE,SiteConfig::SITE_ENABLE_REAL_NAME, SiteConfig::SITE_ID_PUBK_PEM]);
+        $configData['enableInvitationCode'] = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_INVITATION_CODE);
+        $configData['enableRealName'] = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_REAL_NAME);
         $configData = json_encode($configData);
         $callBack = $_GET['callback'];
         $configDataJson = json_encode($configData);
