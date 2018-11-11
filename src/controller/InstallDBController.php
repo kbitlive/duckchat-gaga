@@ -157,14 +157,7 @@ class InstallDBController
                 }
 
                 $this->initSiteOwner($_POST['adminLoginName'], $_POST['adminPassword']);
-                try{
-                    $phpinfo = isset($_POST['phpinfo']) ? $_POST['phpinfo'] : "" ;
-                    if($phpinfo) {
-                        unlink("./".$phpinfo);
-                    }
-                }catch (Exception $ex) {
 
-                }
                 $result['errCode'] = "success";
                 echo "success";
             } catch (Exception $ex) {
@@ -221,7 +214,6 @@ class InstallDBController
                 return;
             }
 
-
             $params = [
                 "isPhpVersionValid" => version_compare(PHP_VERSION, "5.6.0") >= 0,
                 "isLoadOpenssl"     => extension_loaded("openssl") && false != ZalyRsa::newRsaKeyPair(2048),
@@ -233,6 +225,7 @@ class InstallDBController
                 "versionCode"       => $sampleFile['siteVersionCode'],
                 "isInstallRootPath" => $isInstallRootPath,
                 "siteAddress"       => ZalyHelper::getRequestAddressPath(),
+                'phpinfo'           => "./phpinfo.php",
             ];
             //get db file
             $dbDir   = dirname(__DIR__);
@@ -245,32 +238,9 @@ class InstallDBController
                     if (isset($fileExt) && ($fileExt == "sqlite" || $fileExt == "sqlite3")) {
                         $sqliteFiles[] = $dbFile;
                     }
-
-                    if(strpos($dbFile, "_info.php") !== false) {
-                        $phpInfoExist = true;
-                        $phpInfo = $dbFile;
-                    }
-
                 }
                 $params['dbFiles'] = json_encode($sqliteFiles);
             }
-
-            if(!$phpInfoExist) {
-                $phpInfo = ZalyHelper::generateStrKey(10)."_info.php";
-                $phpInfoFilePath = dirname(dirname(__FILE__)) ."/".$phpInfo;
-                $infoData = <<<DATA
-<?php
-if (file_exists('./config.php')) {
-    header('HTTP/1.0 403 Forbidden');
-    die('Forbidden');
-}
-
-
-phpinfo();
-DATA;
-                file_put_contents($phpInfoFilePath, $infoData) ;
-            }
-            $params['phpinfo'] = $phpInfo;
 
             echo $this->display("init_init", $params);
             return;
