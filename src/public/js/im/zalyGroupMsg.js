@@ -106,6 +106,8 @@ function displayFrontPage()
     }catch (error){
         $(".l-sb-item[data='chatSession']").click();
     }
+
+    jump();
 }
 
 
@@ -132,21 +134,21 @@ jumpRoomType = $(".jumpRoomType").attr("data");
 jumpRoomId = $(".jumpRoomId").attr("data");
 jumpRelation = $(".jumpRelation").attr("data");
 
-jump();
 
 function jump()
 {
     //群，好友
     // http://127.0.0.1/index.php?page=u2Msg&x=
     // http://127.0.0.1/index.php?page=groupMsg&x=
+
     if(jumpRoomType != "" && jumpRoomId != "") {
-        if(jumpRoomType == JUMP_GroupMsg) {
+        if(jumpRoomType == JUMP_GroupMsg ) {
             if(jumpRelation == 1) {
                 localStorage.setItem(chatSessionIdKey, jumpRoomId);
                 localStorage.setItem(jumpRoomId, GROUP_MSG);
                 handleClickRowGroupProfile(jumpRoomId);
             }
-        } else if(jumpRoomType == JUMP_U2Msg) {
+        } else if(jumpRoomType == JUMP_U2Msg || jumpRoomType == JUMP_U2Profile) {
             localStorage.setItem(chatSessionIdKey, jumpRoomId);
             localStorage.setItem(jumpRoomId, U2_MSG);
             sendFriendProfileReq(jumpRoomId, handleGetJumpFriendProfile);
