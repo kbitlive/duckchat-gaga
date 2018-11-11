@@ -56,9 +56,6 @@ function showMsgWebNotification(msg, msgContent)
 }
 
 
-
-
-
 function showOtherWebNotification()
 {
     if(document.hidden) {
@@ -81,8 +78,6 @@ function displayFrontPage()
 {
     try{
         var configStr = localStorage.getItem(siteConfigKey);
-        console.log("configStr----"+configStr);
-
         var config = JSON.parse(configStr);
         if(config.hasOwnProperty("hiddenHomePage") && config['hiddenHomePage'] == true) {
             var isMaster = isJudgeSiteMasters(token);
@@ -192,12 +187,12 @@ function displayRoomListMsgUnReadNum()
             $(".room-list-msg-unread")[0].style.display = 'block';
             $(".room-list-msg-unread").html(unReadAllNum);
         } else {
+            localStorage.setItem(newSiteTipKey, "clear");
+            setDocumentTitle();
             var mute = localStorage.getItem(roomListMsgMuteUnReadNumKey);
             if(mute >= 1) {
                 $(".unread-num-mute")[0].style.display = "block";
             } else {
-                localStorage.setItem(newSiteTipKey, "clear");
-                setDocumentTitle();
                 $(".room-list-msg-unread")[0].style.display = 'none';
             }
         }
