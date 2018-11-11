@@ -88,6 +88,13 @@ abstract class Page_VersionController extends UpgradeController
         $this->resetOpcache();
     }
 
+    protected function updateUpgradeInfo($newInfo)
+    {
+        $oldInfo = $this->getUpgradeVersion();
+        $newInfo = array_merge($oldInfo, $newInfo);
+        $this->updateUpgradeFile($newInfo);
+    }
+
     protected function updatePassword()
     {
         $upgradeInfo = $this->getUpgradeVersion();

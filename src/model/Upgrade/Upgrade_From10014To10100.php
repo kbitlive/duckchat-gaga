@@ -15,7 +15,7 @@ class Upgrade_From10014To10100 extends Upgrade_Version
             "test_curl" => "testCurl",
             "session_verify_" => "sessionVerify",
         ];
-        $this->updateSiteConfigKey($key);
+        $this->updateConfigPhpKey($key);
         $this->updateSitePlugin();
         return true;
     }

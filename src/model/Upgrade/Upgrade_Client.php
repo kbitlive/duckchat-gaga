@@ -14,6 +14,7 @@ class Upgrade_Client
         $oldVersionCode = trim($oldVersionCode);
         $newVersionCode = trim($newVersionCode);
         $upgradeClassName = "Upgrade_From" . $oldVersionCode . "To" . $newVersionCode;
+        error_log("=============old=" . $oldVersionCode . " to new=" . $newVersionCode);
         $phpPath = WPF_ROOT_DIR . "/model/Upgrade/" . $upgradeClassName . ".php";
         include($phpPath);
         $upgrade = new $upgradeClassName(new BaseCtx());

@@ -34,18 +34,23 @@ class Page_Version_UpgradeController extends Page_VersionController
             } elseif ($currentCode == 10012) {
                 $this->versionCode = 10013;
                 $this->versionName = "1.0.13";
+                $this->checkoutPreviousUpgrade($currentCode, "1.0.12");
             } elseif ($currentCode == 10013) {
                 $this->versionCode = 10014;
                 $this->versionName = "1.0.14";
+                $this->checkoutPreviousUpgrade($currentCode, "1.0.13");
             } elseif ($currentCode >= 10014 && $currentCode < 10100) {
                 $this->versionCode = 10100;
                 $this->versionName = "1.1.0";
+                $this->checkoutPreviousUpgrade($currentCode, "1.0.14");
             } elseif ($currentCode == 10100) {
                 $this->versionCode = 10101;
                 $this->versionName = "1.1.1";
+                $this->checkoutPreviousUpgrade($currentCode, "1.1.1");
             } elseif ($currentCode == 10101) {
                 $this->versionCode = 10102;
                 $this->versionName = "1.1.2";
+                $this->checkoutPreviousUpgrade($currentCode, "1.1.2");
                 // change upgrade password
                 $this->updatePassword();
             }
@@ -90,4 +95,40 @@ class Page_Version_UpgradeController extends Page_VersionController
         return true;
     }
 
+    private function checkoutPreviousUpgrade($currentCode, $currentVersionName)
+    {
+        $upgradeResult = $this->getUpgradeVersion();
+        $versionCode = $upgradeResult["versionCode"];
+        $upgradeCode = $upgradeResult["upgradeErrCode"];
+        if ($currentCode <= $versionCode && "success" == $upgradeCode) {
+            $this->initUpgradeInfo($currentCode, $currentVersionName);
+            return true;
+        }
+
+        $siteVersionCode = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionCodeKey);
+
+        if (!is_numeric($siteVersionCode)) {
+            $siteVersionCode = 10011;
+        }
+
+        $siteVersionCode = max($siteVersionCode, 10011);
+
+        if ($currentCode <= $siteVersionCode) {
+            $this->initUpgradeInfo($currentCode, $currentVersionName);
+            return true;
+        }
+
+        throw new Exception($currentCode . " upgrade error ,as last upgrade failed");
+    }
+
+    private function initUpgradeInfo($versionCode, $versionName)
+    {
+        $initInfo = [
+//            "versionCode" => $versionCode,
+//            "versionName" => $versionName,
+            "upgradeErrCode" => "",
+            "upgradeErrInfo" => "",
+        ];
+        $this->updateUpgradeInfo($initInfo);
+    }
 }

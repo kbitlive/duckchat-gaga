@@ -51,7 +51,7 @@ abstract class Upgrade_Version
     protected function executeMysqlScript()
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
-        $mysqlScriptPath = dirname(__DIR__) . "/../database-sql/site_mysql.sql";
+        $mysqlScriptPath = dirname(__DIR__) . "/database-sql/site_mysql.sql";
 
         $_sqlContent = file_get_contents($mysqlScriptPath);//写自己的.sql文件
         $_sqlArr = explode(';', $_sqlContent);
@@ -75,7 +75,7 @@ abstract class Upgrade_Version
     protected function executeSqliteScript()
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
-        $mysqlScriptPath = dirname(__DIR__) . "/../database-sql/site_sqlite.sql";
+        $mysqlScriptPath = dirname(__DIR__) . "/database-sql/site_sqlite.sql";
         $_sqlContent = file_get_contents($mysqlScriptPath);//写自己的.sql文件
         $_sqlArr = explode(';', $_sqlContent);
         $_sqlArr = array_filter($_sqlArr);
