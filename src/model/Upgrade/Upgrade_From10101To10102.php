@@ -45,15 +45,16 @@ class Upgrade_From10101To10102 extends Upgrade_Version
         $where = [
             "pluginId" => 102,
         ];
-        return $this->ctx->SitePluginTable->updateProfile($data, $where);
+        $result = $this->ctx->SitePluginTable->updateProfile($data, $where);
 
         $data = [
             'management' => "index.php?action=miniProgram.gif.cleanGif",
         ];
         $where = [
             "pluginId" => 104,
-            'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageU2Message
+//            'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageU2Message
         ];
-        $this->ctx->SitePluginTable->updateProfile($data, $where);
+        $result = $this->ctx->SitePluginTable->updateProfile($data, $where) && $result;
+        return $result;
     }
 }
