@@ -2,7 +2,6 @@
 $(".left-body-chatsession").html("");
 $(".right-chatbox").html("");
 
-var soundMuteNow = false;
 function showMsgWebNotification(msg, msgContent)
 {
 
@@ -44,21 +43,6 @@ function showMsgWebNotification(msg, msgContent)
 
     if(document.hidden && (mute == 0)) {
         if(window.Notification && Notification.permission !== "denied"){
-            var soundMute = localStorage.getItem(soundNotificationKey);
-            if(soundMute == "on" && !soundMuteNow) {
-                //浏览器支持 audio
-               try{
-                   var audio = document.getElementById("msg_sound_tip");
-                   audio.muted = false;
-                   audio.play();
-               }catch (error) {
-
-               }
-            }
-            soundMuteNow = true;
-            setTimeout(function () {
-                soundMuteNow = false;
-            }, 2000);
             var notification = new Notification(notification, {
                 "tag":siteConfig.serverAddressForApi,
                 "icon":icon,
