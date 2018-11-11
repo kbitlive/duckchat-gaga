@@ -116,7 +116,8 @@ abstract class Page_VersionController extends UpgradeController
 
     protected function deleteUpgradeFile()
     {
-        //删除些什么
+        //update password instead of delete file
+        $this->updatePassword();
     }
 
     /**

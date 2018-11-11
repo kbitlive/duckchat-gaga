@@ -11,11 +11,12 @@ class Upgrade_Client
 
     public static function doUpgrade($oldVersionCode, $newVersionCode)
     {
-        $fileName = "Upgrade_From" . $oldVersionCode . "To" . $newVersionCode . ".php";
-        $phpPath = WPF_ROOT_DIR . "/model/Upgrade/" . $fileName;
-        error_log("======upgrade file=" . $phpPath);
-        include_once($phpPath);
-        $upgrade = new $fileName();
+        $oldVersionCode = trim($oldVersionCode);
+        $newVersionCode = trim($newVersionCode);
+        $upgradeClassName = "Upgrade_From" . $oldVersionCode . "To" . $newVersionCode;
+        $phpPath = WPF_ROOT_DIR . "/model/Upgrade/" . $upgradeClassName . ".php";
+        include($phpPath);
+        $upgrade = new $upgradeClassName(new BaseCtx());
         return $upgrade->upgrade();
     }
 
