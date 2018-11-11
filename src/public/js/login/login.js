@@ -124,17 +124,8 @@ if(isPhoneFlag == false) {
     }
 }
 
-
-function zalyLoginConfig(results) {
-    if(typeof results == "object" ) {
-        siteConfig = results;
-    } else {
-        siteConfig = JSON.parse(results);
-    }
-    enableInvitationCode = siteConfig.enableInvitationCode;
-    enableRealName=siteConfig.enableRealName;
-}
-
+enableInvitationCode = $(".enableInvitationCode").val();
+enableRealName=$(".enableRealName").val();
 
 function loginFailed(result)
 {
@@ -152,8 +143,6 @@ function loginFailed(result)
 }
 
 getOsType();
-
-zalyjsLoginConfig(zalyLoginConfig);
 
 var loginNameAlias = $(".loginNameAlias").val();
 var passwordFindWay = $(".passwordFindWay").val();
