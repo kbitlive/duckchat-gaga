@@ -191,11 +191,10 @@ function displayRoomListMsgUnReadNum()
         } else {
             localStorage.setItem(newSiteTipKey, "clear");
             setDocumentTitle();
+            $(".room-list-msg-unread")[0].style.display = 'none';
             var mute = localStorage.getItem(roomListMsgMuteUnReadNumKey);
             if(mute >= 1) {
                 $(".unread-num-mute")[0].style.display = "block";
-            } else {
-                $(".room-list-msg-unread")[0].style.display = 'none';
             }
         }
     } else {
@@ -1279,6 +1278,10 @@ function getGroupProfile(groupId)
     }
 
     if(reqProfileTime != false && reqProfileTime != null && reqProfileTime !=undefined  && ((nowTimestamp-reqProfileTime)<reqTimeout) ) {
+        setTimeout(function () {
+            sessionStorage.removeItem(groupInfoReqKey);
+            getGroupProfile(groupId);
+        }, 2000);
         return false;
     }
     sessionStorage.setItem(groupInfoReqKey, nowTimestamp);

@@ -117,18 +117,15 @@ class SiteUserGifTable extends BaseTable
     public function deleteGif($gifIds)
     {
         try{
-            $gifIdsStr = implode(',',  $gifIds);
+            $gifIdsStr = implode("','",  $gifIds);
 
             $this->dbSlave->beginTransaction();
-            $sql = "delete from $this->table where gifId in (:gifIds)";
+            $sql = "delete from $this->table where gifId in ('$gifIdsStr')";
             $prepare = $this->dbSlave->prepare($sql);
-            $prepare->bindValue(":gifIds", $gifIdsStr, PDO::PARAM_STR);
             $result = $prepare->execute();
 
-            $sql = "delete from $this->siteGifTable where gifId in (:gifIds)";
+            $sql = "delete from $this->siteGifTable where gifId in ('$gifIdsStr')";
             $prepare = $this->dbSlave->prepare($sql);
-
-            $prepare->bindValue(":gifIds", $gifIdsStr, PDO::PARAM_STR);
             $resultSiteGif = $prepare->execute();
 
             if($result && $resultSiteGif) {

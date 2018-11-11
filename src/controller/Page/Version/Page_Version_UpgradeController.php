@@ -598,6 +598,15 @@ class Page_Version_UpgradeController extends Page_VersionController
             ];
             $this->ctx->SitePluginTable->updateProfile($data, $where);
 
+            $data = [
+                'management' => "index.php?action=miniProgram.gif.cleanGif",
+            ];
+            $where = [
+                "pluginId" => 104,
+                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageU2Message
+            ];
+            $this->ctx->SitePluginTable->updateProfile($data, $where);
+
 
             $newConfig = [
                 'apiPagePassportLogin' => "./index.php?action=page.passport.login"

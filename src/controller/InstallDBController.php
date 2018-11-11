@@ -421,6 +421,7 @@ class InstallDBController
     }
 
 
+
     /**
      * 增加默认扩展小程序
      */
@@ -475,6 +476,7 @@ class InstallDBController
                 'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
                 'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
                 'authKey' => "",
+                "management" => "index.php?action=miniProgram.gif.cleanGif",
             ],
             [
                 'pluginId' => 104,
@@ -487,6 +489,7 @@ class InstallDBController
                 'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
                 'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
                 'authKey' => "",
+                "management" => ""
             ],
             [
                 'pluginId' => 105,
