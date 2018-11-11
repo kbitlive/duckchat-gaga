@@ -11,6 +11,8 @@ class Upgrade_From10012To10013 extends Upgrade_Version
 
     protected function doUpgrade()
     {
+        $this->upgradeSitePluginFor10013();
+
         return $this->addEnableAddFriendInGroupConfig();
     }
 

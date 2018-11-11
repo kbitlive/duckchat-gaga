@@ -88,7 +88,7 @@ abstract class Page_VersionController extends UpgradeController
         $this->resetOpcache();
     }
 
-    private function updatePassword()
+    protected function updatePassword()
     {
         $upgradeInfo = $this->getUpgradeVersion();
         $upgradeInfo['password'] = ZalyHelper::generateNumberKey();
@@ -112,12 +112,6 @@ abstract class Page_VersionController extends UpgradeController
         $versionInfos = $this->getUpgradeVersion();
         $password = $versionInfos['password'];
         return $password;
-    }
-
-    protected function deleteUpgradeFile()
-    {
-        //update password instead of delete file
-        $this->updatePassword();
     }
 
     /**

@@ -31,31 +31,26 @@ class Page_Version_UpgradeController extends Page_VersionController
             if ($currentCode <= 10011) {
                 $this->versionCode = 10012;
                 $this->versionName = "1.0.12";
-                $result = Upgrade_Client::doUpgrade($currentCode, $this->versionCode);
             } elseif ($currentCode == 10012) {
                 $this->versionCode = 10013;
                 $this->versionName = "1.0.13";
-                $result = Upgrade_Client::doUpgrade($currentCode, $this->versionCode);
             } elseif ($currentCode == 10013) {
                 $this->versionCode = 10014;
                 $this->versionName = "1.0.14";
-                $result = $this->upgrade_10013_10014();
-
             } elseif ($currentCode >= 10014 && $currentCode < 10100) {
                 $this->versionCode = 10100;
                 $this->versionName = "1.1.0";
-                $result = $this->upgrade_10014_10100();
             } elseif ($currentCode == 10100) {
                 $this->versionCode = 10101;
                 $this->versionName = "1.1.1";
-                $result = Upgrade_Client::doUpgrade($currentCode, $this->versionCode);
             } elseif ($currentCode == 10101) {
                 $this->versionCode = 10102;
                 $this->versionName = "1.1.2";
-                $result = Upgrade_Client::doUpgrade($currentCode, $this->versionCode);
-                //最新版本审计完成以后，删除密码存储文件，准备下次更新新密码
-                $this->deleteUpgradeFile();
+                // change upgrade password
+                $this->updatePassword();
             }
+
+            $result = Upgrade_Client::doUpgrade($currentCode, $this->versionCode);
 
             if ($result) {
                 $this->upgradeErrCode = "success";

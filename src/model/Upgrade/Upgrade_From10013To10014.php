@@ -11,7 +11,11 @@ class Upgrade_From10013To10014 extends Upgrade_Version
 
     protected function doUpgrade()
     {
-        return true;
+        $phpErrorLog = "php_errors_" . ZalyHelper::generateStrKey(16) . '.log';
+        $config = [
+            "errorLog" => $phpErrorLog,
+        ];
+        return $this->updateConfigPhp($config);
     }
 
     protected function upgrade_DB_mysql()
@@ -24,49 +28,4 @@ class Upgrade_From10013To10014 extends Upgrade_Version
         return $this->executeSqliteScript();
     }
 
-    private function upgrade_10013_10014()
-    {
-        $dbType = $this->ctx->dbType;
-        $phpErrorLog = ZalyHelper::generateStrKey(16) . '_php_errors.log';;
-        $config = [
-            "errorLog" => $phpErrorLog,
-        ];
-        $this->updateSiteConfig($config);
-
-        if ($dbType == "mysql") {
-            return $this->upgrade_10013_10014_mysql();
-        } else {
-            return $this->upgrade_10013_10014_sqlite();
-        }
-    }
-
-
-    private function upgrade_10013_10014_mysql()
-    {
-        $tag = __CLASS__ . "->" . __FUNCTION__;
-
-        try {
-            $this->executeMysqlScript();
-            $this->upgradeErrCode = "success";
-            return true;
-        } catch (Exception $ex) {
-            $this->upgradeErrCode = "error";
-            $this->logger->error($tag, $ex);
-            throw new Exception(var_export($ex->getMessage(), true));
-        }
-    }
-
-    private function upgrade_10013_10014_sqlite()
-    {
-        $tag = __CLASS__ . "->" . __FUNCTION__;
-        try {
-            $this->executeSqliteScript();
-            $this->upgradeErrCode = "success";
-            return true;
-        } catch (Exception $ex) {
-            $this->upgradeErrCode = "error";
-            $this->logger->error($tag, $ex);
-            throw new Exception(var_export($ex->getMessage(), true));
-        }
-    }
 }

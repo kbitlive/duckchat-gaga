@@ -11,41 +11,33 @@ class Upgrade_From10014To10100 extends Upgrade_Version
 
     protected function doUpgrade()
     {
-        return true;
-    }
-
-    protected function upgrade_DB_mysql()
-    {
-        return $this->executeMysqlScript();
-    }
-
-    protected function upgrade_DB_Sqlite()
-    {
-        return $this->executeSqliteScript();
-    }
-
-    public function upgrade_10014_10100()
-    {
         $key = [
             "test_curl" => "testCurl",
             "session_verify_" => "sessionVerify",
         ];
         $this->updateSiteConfigKey($key);
-        $result = $this->upgrade_10014_10100_siteSession();
-
-        $this->upgrade_10014_10100_plugin();
-        $this->upgradeErrCode = "success";
-        return $result;
+        $this->updateSitePlugin();
+        return true;
     }
 
-    private function upgrade_10014_10100_plugin()
+    protected function upgrade_DB_mysql()
+    {
+        return $this->upgradeSiteSession("mysql");
+    }
+
+    protected function upgrade_DB_Sqlite()
+    {
+        return $this->upgradeSiteSession("sqlite");
+    }
+
+    private function updateSitePlugin()
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
 
         $u2Gif = [
             'pluginId' => 104,
-            'name' => "gif小程序",
-            'logo' => $this->getSiteGifIcon(),
+            'name' => "Gif表情",
+            'logo' => $this->getDefaultLogo("/public/img/plugin/gif.png"),
             'sort' => 2, //order = 2
             'landingPageUrl' => "index.php?action=miniProgram.gif.index",
             'landingPageWithProxy' => 1, //1 表示走site代理
@@ -65,8 +57,8 @@ class Upgrade_From10014To10100 extends Upgrade_Version
 
         $groupGif = [
             'pluginId' => 104,
-            'name' => "gif小程序",
-            'logo' => $this->getSiteGifIcon(),
+            'name' => "Gif表情",
+            'logo' => $this->getDefaultLogo("/public/img/plugin/gif.png"),
             'sort' => 2, //order = 2
             'landingPageUrl' => "index.php?action=miniProgram.gif.index",
             'landingPageWithProxy' => 1, //1 表示走site代理
@@ -95,7 +87,7 @@ class Upgrade_From10014To10100 extends Upgrade_Version
 
             //site management default icon
             $data = [
-                'logo' => $this->getPluginDefaultLogo("/public/img/manage/site_manage.png"),
+                'logo' => $this->getDefaultLogo("/public/img/manage/site_manage.png"),
             ];
             $where = [
                 "pluginId" => 100,
@@ -105,7 +97,7 @@ class Upgrade_From10014To10100 extends Upgrade_Version
 
             //site square default icon
             $data = [
-                'logo' => $this->getPluginDefaultLogo("/public/img/manage/site_square.png"),
+                'logo' => $this->getDefaultLogo("/public/img/manage/site_square.png"),
             ];
             $where = [
                 "pluginId" => 199,
@@ -117,26 +109,12 @@ class Upgrade_From10014To10100 extends Upgrade_Version
         }
     }
 
-    private function getSiteGifIcon()
-    {
-        $defaultIcon = WPF_ROOT_DIR . "/public/img/plugin/gif.png";
-        if (!file_exists($defaultIcon)) {
-            return "";
-        }
 
-        $defaultImage = file_get_contents($defaultIcon);
-        $fileManager = new File_Manager();
-        $fileId = $fileManager->saveFile($defaultImage, "20180201");
-        return $fileId;
-    }
-
-
-    private function upgrade_10014_10100_siteSession()
+    private function upgradeSiteSession($dbType)
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
 
         try {
-            $dbType = $this->ctx->dbType;
 
             $this->dropDBTable("siteSession_temp_10014");
 
@@ -164,19 +142,16 @@ class Upgrade_From10014To10100 extends Upgrade_Version
             $flag = $prepare->execute();
 
             if ($flag && $prepare->errorCode() == "00000") {
-                $this->upgradeErrCode = "success";
                 $this->dropDBTable('siteSession_temp_10014');
                 return true;
             }
-            return true;
+            return false;
         } catch (Exception $ex) {
-            $this->upgradeErrCode = "error";
-            $this->logger->error($tag, $ex);
-            throw new Exception(var_export($ex->getMessage(), true));
+            $this->printAndThrowException($tag, $ex);
         }
     }
 
-    private function getPluginDefaultLogo($logoPath)
+    private function getDefaultLogo($logoPath)
     {
         $defaultIcon = WPF_ROOT_DIR . $logoPath;
         if (!file_exists($defaultIcon)) {
@@ -189,4 +164,5 @@ class Upgrade_From10014To10100 extends Upgrade_Version
 
         return $fileId;
     }
+
 }
