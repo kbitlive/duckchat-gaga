@@ -202,11 +202,19 @@ class MiniProgram_Gif_IndexController extends MiniProgram_BaseController
         try {
             $gifUrl = $data['gifId'];
             $gifId = md5($gifUrl);
+           try{
+               list($width, $height, $type, $attr) = $this->ctx->File_Manager->getFileSize($gifUrl);
+           }catch (Exception $ex) {
+               $width = " 200p";
+               $height = "200";
+
+           }
+
             $siteGifData = [
                 'gifId' => $gifId,
                 'gifUrl' => $gifUrl,
-                'width' => $data['width'],
-                'height' => $data['height'],
+                'width'  => $width,
+                'height' => $height,
                 'addTime' => ZalyHelper::getMsectime()
             ];
 
