@@ -262,7 +262,7 @@
                         </div>
                     </div>
                     <div class="add_group_button">
-                        <button >一键加入</button>
+                        <button class="join_group">一键加入</button>
                     </div>
                 </div>
             </div>
@@ -287,6 +287,11 @@
         if (val == "") {
             $("#search-content").hide();
         }
+    });
+
+    $(".join_group").on("click", function () {
+        var url = "index.php?action=miniProgram.search.index&for=search";
+        zalyjsOpenPage(url);
     });
 
     $(".search-input").on('keypress', function (e) {
