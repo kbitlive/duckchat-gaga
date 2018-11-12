@@ -3,28 +3,196 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?php if ($lang == "1") { ?>用户管理<?php } else { ?>User Management<?php } ?></title>
+    <title><?php echo $title; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <link rel="stylesheet" href="../../public/manage/config.css"/>
-    <link rel="stylesheet" href="../../public/manage/search.css"/>
-
     <style>
-        .item-row-title {
-            /*width: 100%;*/
-            height: 20px;
-            font-size: 14px;
-            font-family: PingFangSC-Medium;
-            font-weight: 500;
-            color: rgba(153, 153, 153, 1);
-            line-height: 20px;
-            margin: 17px 0px 7px 10px;
+        body,html {
+            height: 100%;
         }
-        .item-row {
+        #wrapper {
+            height: 100%;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            background:rgba(233,232,237,1);
+        }
+        .continer {
+            width: 375px;
+            height:100%;
+            background:white;
+        }
+        .logo_img {
+            width: 51px;
+        }
+        .box {
+            text-align: center;
+            margin-top: 18px;
+            width: 335px;
+            margin-left: 20px;
+        }
+        .search_input {
+            width:304px;
+            height:42px;
+            border-radius:2px;
+            border:1px solid;
+            outline: none;
+            padding-left: 31px;
+            margin-top: 25px;
+        }
+        .box_relation {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            height:97px;
+            position: relative;
+        }
+        .search_logo{
+            width: 14px;
+            height:16px;
+        }
+        .search_absoulte {
+            position: absolute;
+        }
+        .search_logo_div {
+            height: 92px;
+            display: flex;
+            justify-content: left;
+            margin-left: -150px;
+            align-items: center;
+            width: 16px;
+        }
+        .desc {
+            width: 335px;
+            font-size: 12px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            color: rgba(52,54,60,1);
+            line-height: 17px;
+            word-break: break-all;
+            text-align: left;
+            margin-left: 20px;
+        }
+        .desc_div {
+            width: 100%;
+            text-align: left;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .sub_title {
+            width:335px;
+            height:14px;
+            font-size:10px;
+            font-family:PingFangSC-Regular;
+            font-weight:400;
+            color:rgba(52,54,60,1);
+            line-height:14px;
+            margin-top: 21px;
+        }
+
+        .sub_title_contact {
+            width:335px;
+            height:10px;
+            font-size:10px;
+            font-family:PingFangSC-Regular;
+            font-weight:400;
+            color:rgba(52,54,60,1);
+            line-height:10px;
+            margin-bottom: 7px;
+        }
+        .v_line {
+            width:1px;
+            height:40px;
+            background:rgba(233,232,237,1);
+            margin-right: 7px;
+        }
+        .search_tip {
+            height:16px;
+            font-size:16px;
+            font-family:PingFangSC-Medium;
+            font-weight:500;
+            color:rgba(50,136,255,1);
+            line-height:16px;
+        }
+        .v_line_absoulte {
+            right: 80px;
+            height: 92px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .search_tip_div {
+            right: 12px;
+            height: 92px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
         }
-        #search-user-div {
+        .grap_div {
+            height:10px;
+            background:rgba(233,232,237,1);
+        }
+        .row {
+            width: 100%;
+            height: 50%;
+            background:white;
+        }
+        .title_recomment_group {
+            height:40px;
+            font-size:16px;
+            font-family:PingFangSC-Medium;
+            font-weight:500;
+            color:rgba(27,27,27,1);
+            line-height:40px;
+            text-align: left;
+            margin-left: 10px;
+        }
+        .line {
+            width:365px;
+            height:1px;
+            background:rgba(233,232,237,1);
+        }
+        .group_row {
+            height:56px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        .group_info {
+            display:flex;
+            height: 100%;
             text-align: center;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .group_name, .group_owner {
+            text-align: left;
+        }
+        .group_detail_info {
+            display: flex;
+        }
+        .add_group_button {
+            margin-right: 20px;
+            height: 28px;
+        }
+        .add_group_button  button {
+            height:28px;
+            background:rgba(76,59,177,1);
+            border: rgba(76,59,177,1);;
+            border-radius:2px;
+            font-size:12px;
+            font-family:PingFangSC-Regular;
+            font-weight:400;
+            color:rgba(255,255,255,1);
+            line-height:28px;
+            outline: none;
+            cursor: pointer;
         }
     </style>
 
@@ -34,160 +202,73 @@
 
 <div class="wrapper" id="wrapper">
 
-    <div class="item-search">
-        <img class="search-img" width="19px" height="19px" src="../../public/img/manage/search.png">
-
-        <?php if ($lang == "1") { ?>
-            <input class="search-input" placeholder="通过登录名、昵称、用户ID 搜索用户">
-        <?php } else { ?>
-            <input class="search-input" placeholder="search loginName,nickname,userId">
-        <?php } ?>
-
-    </div>
-
-    <div class="layout-all-row" id="search-content" style="display: none">
-        <div class="list-item-center">
-
-            <div id="search-title" class="item-row-title">
-                <?php if ($lang == "1") { ?>
-                    用户搜索结果
-                <?php } else { ?>
-                    Search Groups
-                <?php } ?>
-
+    <div class="continer">
+            <div class="box">
+                <img class="logo_img" src="../../public/img/search/logo.png">
             </div>
-
-
-            <div id="search-user-div">
-
-            </div>
-        </div>
-    </div>
-
-    <div class="layout-all-row">
-
-        <div class="list-item-center">
-
-            <div class="item-row-title">
-                <div class="">
-                    <?php if ($lang == "1") { ?>
-                        站点成员列表
-                    <?php } else { ?>
-                        Site Users
-                    <?php } ?>
-                    (<?php echo $totalUserCount ?>)
+            <div class="box box_relation">
+                <div class="search_absoulte">
+                    <input type="text" class="search search_input">
+                </div>
+                <div class="search_absoulte search_logo_div">
+                    <img class="search_logo " src="../../public/img/search/search.png">
+                </div>
+                <div class="search_absoulte v_line_absoulte">
+                    <div class="v_line"></div>
+                </div>
+                <div class="search_absoulte search_tip_div">
+                    <span class="search_tip">搜索一下</span>
                 </div>
             </div>
+            <div class="desc">
+                核武站简介：这是一个核武内部系统搭建的聊天站点，此处的描述内容可以在管理后台进行修改配置。这是一个核武内部系统搭建的聊天站点，此处的描述内容可以在管理后台进行修改配置。
+            </div>
+            <div class="sub_title">
+                核武站技术团队
+            </div>
+            <div class="sub_title_contact">
+                李萌：13273247332
+            </div>
+        <div class="grap_div">
+        </div>
+        <div class="row">
+            <div class="title_recomment_group">
+                热门推荐
+            </div>
+            <div class="line"></div>
 
-            <div class="item-row-list">
-                <?php foreach ($userList as $key => $profile) { ?>
-
-                    <div class="item-row">
-                        <div class="item-body" onclick="showUserProfile('<?php echo($profile["userId"]) ?>')"
-                             id="user-list-id">
-                            <div class="item-body-display" style="align-items: center">
-                                <div class="item-body-desc"><?php
-                                    $username = $profile["userId"];
-                                    if ($profile["nickname"]) {
-                                        $username = $profile["nickname"];
-                                    } else if ($profile["loginName"]) {
-                                        $username = $profile["loginName"];
-                                    }
-
-                                    $length = mb_strlen($username);
-                                    if ($length > 20) {
-                                        echo mb_substr($username, 0, 20) . "...";
-                                    } else {
-                                        echo $username;
-                                    }
-                                    ?></div>
-
-                                <div class="item-body-tail">
-                                    <div class="item-body-value">
-                                        <img class="more-img" src="../../public/img/manage/more.png"/>
-                                    </div>
-                                </div>
+            <div class="group_row">
+                <div class="group_info">
+                    <div class="group_detail_info">
+                        <div >
+                            <img class="avatar" src="../../public/img/msg/default_user.png">
+                        </div>
+                        <div>
+                            <div class="group_name">
+                                群1
                             </div>
-
+                            <div class="group_owner">
+                                群主：少爷
+                            </div>
                         </div>
                     </div>
-                    <div class="division-line"></div>
-                <?php } ?>
+                    <div class="add_group_button">
+                        <button >一键加入</button>
+                    </div>
+                </div>
             </div>
-        </div>
+            <div class="line"></div>
 
+        </div>
     </div>
+
+
 </div>
 
 
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../public/manage/native.js"></script>
 <script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
-
-<script type="text/javascript">
-
-    var currentPageNum = 1;
-    var loading = true;
-
-    $(window).scroll(function () {
-        //判断是否滑动到页面底部
-        if ($(window).scrollTop() === $(document).height() - $(window).height()) {
-
-            if (!loading) {
-                return;
-            }
-
-            loadMoreUsers();
-        }
-    });
-
-    function loadMoreUsers() {
-
-        var data = {
-            'pageNum': ++currentPageNum,
-        };
-
-        var url = "index.php?action=manage.user";
-        zalyjsCommonAjaxPostJson(url, data, loadMoreResponse)
-    }
-
-    function loadMoreResponse(url, data, result) {
-
-        if (result) {
-            var res = JSON.parse(result);
-
-            var isloading = res['loading'];
-            loading = isloading;
-            var data = res['data'];
-
-            // alert(result);
-            if (data && data.length > 0) {
-                $.each(data, function (index, user) {
-                    var userHtml = ' ' +
-                        '<div class="item-row">' +
-                        '<div class="item-body" onclick="showUserProfile(\'' + user.userId + '\')" id="user-list-id">' +
-                        '<div class="item-body-display" style="align-items: center">' +
-                        ' <div class="item-body-desc">' + user.nickname + '</div>' +
-                        '   <div class="item-body-tail">' +
-                        '   <div class="item-body-value">' +
-                        '   <img class="more-img" src="../../public/img/manage/more.png"/>' +
-                        '   </div>' +
-                        '   </div>' +
-                        '   </div>' +
-                        '   </div>' +
-                        '</div>';
-
-                    userHtml += '<div class="division-line"></div>';
-
-                    $(".item-row-list").append(userHtml);
-                });
-            }
-
-        }
-
-    }
-</script>
-
 
 
 <script type="text/javascript">
@@ -229,34 +310,6 @@
 
         if (result) {
 
-            var res = JSON.parse(result);
-
-            if (res.errCode == "success") {
-
-                var userList = res['users'];
-
-                $.each(userList, function (index, user) {
-
-                    var html = '<div class="item-row">'
-                        + '<div class="item-body" onclick="showUserProfile(\'' + user["userId"] + '\');">'
-                        + '<div class="item-body-display">'
-                        + '<div class="item-body-desc">' + user["nickname"] + '</div>'
-
-                        + '<div class="item-body-tail">'
-                        + '<img class="more-img" src="../../public/img/manage/more.png"/>'
-                        + '</div>'
-                        + '</div>'
-
-                        + '</div>'
-                        + '</div>'
-                        + '<div class="division-line"></div>';
-                    $("#search-user-div").append(html);
-                });
-
-            } else {
-                var html = "";
-                $("#search-user-div").append("没有找到结果");
-            }
 
         } else {
             $("#search-user-div").append("没有找到结果");
