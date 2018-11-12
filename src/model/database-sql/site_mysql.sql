@@ -249,14 +249,6 @@ CREATE TABLE IF NOT EXISTS passportPasswordLog(
     operateDate DATE ,
     operateTime  BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
-CREATE TABLE IF NOT EXISTS siteLoginCustom(
-                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                      configKey VARCHAR(100) NOT NULL,
-                      configValue TEXT,
-                      configValueEN TEXT ,
-                      updateUserId VARCHAR(100),
-                      updateTime BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
-
 CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
                       userId varchar(100) unique not null,
@@ -278,6 +270,14 @@ CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
 --                       dataVerify varchar(50),
 --                       addTime BIGINT,
 --                       unique(customKey,keyType))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS siteLoginCustom(
+                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                      configKey VARCHAR(100) NOT NULL,
+                      configValue TEXT,
+                      configValueEN TEXT ,
+                      updateUserId VARCHAR(100),
+                      updateTime BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- CREATE TABLE IF NOT EXISTS siteUserCustom(
 --                       id INTEGER PRIMARY KEY AUTO_INCREMENT,

@@ -213,14 +213,6 @@ CREATE TABLE IF NOT EXISTS siteUserGif(
                       userId VARCHAR(100) NOT NULL,
                       addTime BIGINT);
 
-CREATE TABLE IF NOT EXISTS siteLoginCustom(
-                      id INTEGER PRIMARY KEY AUTOINCREMENT,
-                      configKey VARCHAR(100) NOT NULL,
-                      configValue TEXT,
-                      configValueEN TEXT ,
-                      updateUserId VARCHAR(100),
-                      updateTime BIGINT);
-
 CREATE TABLE IF NOT EXISTS passportPasswordCountLog(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     userId VARCHAR(100) NOT NULL,
@@ -261,6 +253,15 @@ CREATE TABLE IF NOT EXISTS siteCustomItem(
                       addTime BIGINT,
                       unique(customKey,keyType));
 
+CREATE TABLE IF NOT EXISTS siteLoginCustom(
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      configKey VARCHAR(100) NOT NULL,
+                      configValue TEXT,
+                      configValueEN TEXT ,
+                      updateUserId VARCHAR(100),
+                      updateTime BIGINT);
+
+-- table name siteXXXCustom
 -- CREATE TABLE IF NOT EXISTS siteUserCustom(
 --                       id INTEGER PRIMARY KEY AUTOINCREMENT,
 --                       userId VARCHAR(100) NOT NULL,
