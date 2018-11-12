@@ -10,7 +10,7 @@ class MiniProgram_Gif_CleanGifController extends MiniProgram_BaseController
 {
 
     private $gifMiniProgramId = 104;
-    private $defaultLimit =  5;
+    private $defaultLimit =  200;
 
     public function getMiniProgramId()
     {
