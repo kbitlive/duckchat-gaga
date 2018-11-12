@@ -128,14 +128,12 @@ abstract class HttpBaseController extends \Wpf_Controller
             $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
             $thirdPartyLoginKey = isset($_GET['thirdPartyKey']) ? $_GET['thirdPartyKey'] : "";
             $thirdPartyLoginKey = trim($thirdPartyLoginKey);
-            error_log("========web pc login thirdPartyKey=" . $thirdPartyLoginKey);
 
             $userCustomArray = [];
             if ($preSessionId) {
                 $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
                 if ($preSessionId) {
                     $clientType = Zaly\Proto\Core\UserClientType::UserClientWeb;
-//                    $userProfile = $this->ctx->Site_Login->loginByThirdPary($preSessionId, "", $clientType);
                     $userProfile = $this->ctx->Site_Login->doLogin($thirdPartyLoginKey, $preSessionId, "", $clientType, $userCustomArray);
                     $this->setCookie($userProfile["sessionId"], $this->siteCookieName);
                 }
