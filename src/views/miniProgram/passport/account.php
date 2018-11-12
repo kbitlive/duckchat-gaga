@@ -115,12 +115,20 @@
    function displayPasswordTip()
    {
        if(languageNum == UserClientLangZH) {
-           var pwdTip = pwdContainCharacters+"; 长度 "+pwdMinLength+"-"+pwdMaxLength;
+            if(pwdContainCharacters) {
+                var pwdTip = pwdContainCharacters+", 长度 "+pwdMinLength+"-"+pwdMaxLength;
+            } else {
+                var pwdTip = "长度 "+pwdMinLength+"-"+pwdMaxLength;
+            }
            pwdTip = pwdTip.replace("letter", "字母");
            pwdTip = pwdTip.replace("number", "数字");
            pwdTip = pwdTip.replace("special_characters", "特殊字符");
        } else {
-           var pwdTip = pwdContainCharacters+"; length"+pwdMinLength+"-"+pwdMaxLength;
+           if(pwdContainCharacters) {
+               var pwdTip = pwdContainCharacters+", length "+pwdMinLength+"-"+pwdMaxLength;
+           } else {
+               var pwdTip = "length"+pwdMinLength+"-"+pwdMaxLength;
+           }
        }
 
        $(".passwordTips").html(pwdTip);
