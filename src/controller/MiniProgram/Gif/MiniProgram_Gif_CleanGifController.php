@@ -10,7 +10,7 @@ class MiniProgram_Gif_CleanGifController extends MiniProgram_BaseController
 {
 
     private $gifMiniProgramId = 104;
-    private $defaultLimit = 200;
+    private $defaultLimit =  200;
 
     public function getMiniProgramId()
     {
@@ -46,6 +46,13 @@ class MiniProgram_Gif_CleanGifController extends MiniProgram_BaseController
             return;
         }
         $page = isset($_GET['page']) ?  $_GET['page'] : 1;
+        $offset = ($page-1)*($this->defaultLimit);
+        $results = $this->ctx->SiteUserGifTable->getGifListFromSiteGif($offset, $this->defaultLimit);
+        $params['gifs'] = json_encode($results);
+        if($page>1) {
+            echo json_encode($results);
+            return;
+        }
         $offset = ($page-1)*($this->defaultLimit);
         $results = $this->ctx->SiteUserGifTable->getGifListFromSiteGif($offset, $this->defaultLimit);
         $params['gifs'] = json_encode($results);

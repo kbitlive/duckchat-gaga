@@ -130,13 +130,11 @@
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../public/jquery/jquery-weui.min.js"></script>
 <script type="text/javascript" src="../../public/js/jquery-confirm.js"></script>
-<script type="text/javascript" src="../../../public/sdk/zalyjsNative.js"></script>
+<script type="text/javascript" src="../../public/manage/native.js"></script>
 
 <script type="text/javascript">
-    gifs  = '<?php echo $gifs;?>';
-
-    gifArr = JSON.parse(gifs);
-    gifLength = gifArr.length ;
+    gifs     = '<?php echo $gifs;?>';
+    gifArr   = JSON.parse(gifs);
     var line = 0;
     roomType = $(".roomType").val();
     fromUserId = $(".fromUserId").val();
@@ -149,52 +147,100 @@
         return false;
     }
 
-    if(gifLength>0) {
-        for(var i=1; i<=gifLength ;i ++) {
-            var num = i-1;
-            var gif = gifArr[num];
-            var gifId = "";
-            var gifUrl="";
-            var isDefault=0;
-            try{
-                gifId=gif.gifId;
-                gifUrl=gif.gifUrl;
-                isDefault=gif.isDefault;
-            }catch (error) {
-                gifId="";
+    function displayGif(gifArr)
+    {
+        var gifLength = gifArr.length ;
+
+        if(gifLength>0) {
+            for(var i=1; i<=gifLength ;i ++) {
+                var num = i-1;
+                var gif = gifArr[num];
+
+                var gifId = "";
+                var gifUrl="";
+                var isDefault=0;
+                try{
+                    gifId=gif.gifId;
+                    gifUrl=gif.gifUrl;
+                    isDefault=gif.isDefault;
+                }catch (error) {
+                    gifId="";
+                }
+                if(i == 1 || (i%4)== 1) {
+                    var html = '';
+                    line = line+1;
+                    html += " <div class=\"list-item-center\"><div class='item-body-select'  gif-div='"+(line-1)+"'>";
+                }
+                html +=template("tpl-gif", {
+                    num:i,
+                    gifUrl:gifUrl,
+                    gifId:gifId,
+                    isDefault:isDefault
+                });
+                if(i>1 && (i-4)%4 == 0) {
+                    line = line+1;
+                    html += "</div></div>";
+                    $(".layout-all-row").append(html);
+                } else if(i==gifLength) {
+                    html +="</div></div>";
+                    $(".layout-all-row").append(html);
+                }
             }
-            if(i == 1 || (i%4)== 1) {
-                var html = '';
-                line = line+1;
-                html += " <div class=\"list-item-center\"><div class='item-body-select'  gif-div='"+(line-1)+"'>";
-            }
-            html +=template("tpl-gif", {
-                num:i,
-                gifUrl:gifUrl,
-                gifId:gifId,
-                isDefault:isDefault
+            $(".gifImg").each(function (index, gifImg) {
+                var gifUrl = $(gifImg).attr("gifUrl");
+                var  src = "./index.php?action=http.file.downloadFile&fileId="+gifUrl;
+                if(isMobile()) {
+                    src =  " /_api_file_download_/?fileId="+gifUrl;
+                }
+                $(gifImg)[0].style.backgroundImage="url("+src+") ";
+                $(gifImg)[0].style.backgroundRepeat = "no-repeat";
             });
-            if(i>1 && (i-4)%4 == 0) {
-                line = line+1;
-                html += "</div></div>";
-                $(".layout-all-row").append(html);
-            } else if(i==gifLength) {
-                html +="</div></div>";
-                $(".layout-all-row").append(html);
-            }
+
+            var height =  $(".gif_div")[0].clientWidth;
+            $(".gif_div").each(function (index, gif) {
+                $(gif)[0].style.height =  height+"px";
+                $(gif)[0].style.width  =  height+"px";
+            });
         }
     }
+    displayGif(gifArr);
 
-    var height =  $(".gif_div")[0].clientWidth;
-    $(".gif_div").each(function (index, gif) {
-        $(gif)[0].style.height =  height+"px";
-        $(gif)[0].style.width =  height+"px";
+
+    function handleClientGetGif(url, result)
+    {
+        console.log(JSON.stringify(result));
+        try{
+            var data = JSON.parse(result);
+            console.log(data.length);
+            if(data.length>0) {
+                displayGif(data);
+                return;
+            }
+        }catch (error) {
+
+        }
+        ending = true;
+    }
+
+    currentPageNum = 1;
+    ending = false;
+
+    $(".layout-all-row").scroll(function () {
+
+        var pwLeft = $(".layout-all-row")[0];
+        var ch  = pwLeft.clientHeight;
+        var sh = pwLeft.scrollHeight;
+        var st = $(".layout-all-row").scrollTop();
+
+        if((sh - ch - st) < 10 && !ending){
+            currentPageNum = ++currentPageNum;
+            var url = "index.php?action=miniProgram.gif.cleanGif&page="+currentPageNum;
+            zalyjsCommonAjaxGet(url, handleClientGetGif);
+        }
     });
-    // var bottomHeight = $(".clean-button-div")[0].clientHeight;
-    // console.log("boootom ----height-------------"+bottomHeight);
-    // $(".layout-all-row")[0].style.marginBottom = bottomHeight+"px";
 
-    // $(".gif_div").style.height =  height+"px";
+
+
     function getLanguage() {
         var nl = navigator.language;
         if ("zh-cn" == nl || "zh-CN" == nl) {
@@ -210,15 +256,6 @@
         }
         return false;
     }
-    $(".gifImg").each(function (index, gifImg) {
-        var gifUrl = $(gifImg).attr("gifUrl");
-        var  src = "./index.php?action=http.file.downloadFile&fileId="+gifUrl;
-        if(isMobile()) {
-            src =  " /_api_file_download_/?fileId="+gifUrl;
-        }
-        $(gifImg)[0].style.backgroundImage="url("+src+") ";
-        $(gifImg)[0].style.backgroundRepeat = "no-repeat";
-    });
 
     $(".clean-button").click(function () {
         var operation = $(this).attr('operation');
