@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS siteGroupMessagePointer(
 CREATE INDEX IF NOT EXISTS indexSiteGroupMessagePointerGud ON siteGroupMessagePointer(groupId,userId,deviceId);
 
 
-CREATE TABLE sitePlugin(
+CREATE TABLE IF NOT EXISTS sitePlugin(
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               pluginId INTEGER NOT NULL,
               name VARCHAR(100) NOT NULL, /*名字*/
@@ -213,14 +213,6 @@ CREATE TABLE IF NOT EXISTS siteUserGif(
                       userId VARCHAR(100) NOT NULL,
                       addTime BIGINT);
 
-CREATE TABLE IF NOT EXISTS siteLoginCustom(
-                      id INTEGER PRIMARY KEY AUTOINCREMENT,
-                      configKey VARCHAR(100) NOT NULL,
-                      configValue TEXT,
-                      configValueEN TEXT ,
-                      updateUserId VARCHAR(100),
-                      updateTime BIGINT);
-
 CREATE TABLE IF NOT EXISTS passportPasswordCountLog(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     userId VARCHAR(100) NOT NULL,
@@ -238,6 +230,14 @@ CREATE TABLE IF NOT EXISTS passportPasswordLog(
     operateDate DATE ,
     operateTime  BIGINT);
 
+CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      userId varchar(100) unique not null,
+                      loginKey varchar(50) not null,
+                      loginUserId varchar(100) not null,
+                      loginTime BIGINT);
+
+CREATE INDEX IF NOT EXISTS indexSiteThirdPartyLoginSourceUserId on siteThirdPartyLogin(sourceUserId);
 
 CREATE TABLE IF NOT EXISTS siteCustomItem(
                       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -253,16 +253,15 @@ CREATE TABLE IF NOT EXISTS siteCustomItem(
                       addTime BIGINT,
                       unique(customKey,keyType));
 
-CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
+CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       id INTEGER PRIMARY KEY AUTOINCREMENT,
-                      userId varchar(100) unique not null,
-                      loginKey varchar(50) not null,
-                      loginUserId varchar(100) not null,
-                      loginTime BIGINT);
+                      configKey VARCHAR(100) NOT NULL,
+                      configValue TEXT,
+                      configValueEN TEXT ,
+                      updateUserId VARCHAR(100),
+                      updateTime BIGINT);
 
-CREATE INDEX IF NOT EXISTS indexSiteThirdPartyLoginSourceUserId on siteThirdPartyLogin(sourceUserId);
-
-
+-- table name siteXXXCustom
 -- CREATE TABLE IF NOT EXISTS siteUserCustom(
 --                       id INTEGER PRIMARY KEY AUTOINCREMENT,
 --                       userId VARCHAR(100) NOT NULL,

@@ -183,7 +183,7 @@ CREATE TABLE IF NOT EXISTS siteGroupMessagePointer(
 
 ALTER TABLE siteGroupMessagePointer CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-CREATE TABLE sitePlugin(
+CREATE TABLE IF NOT EXISTS sitePlugin(
               id INTEGER PRIMARY KEY AUTO_INCREMENT,
               pluginId INTEGER NOT NULL,
               name VARCHAR(100) NOT NULL, /*名字*/
@@ -249,6 +249,28 @@ CREATE TABLE IF NOT EXISTS passportPasswordLog(
     operateDate DATE ,
     operateTime  BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
+CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
+                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                      userId varchar(100) unique not null,
+                      loginKey varchar(50) not null,
+                      loginUserId varchar(100) not null,
+                      loginTime BIGINT,
+                      INDEX(loginUserId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+
+-- CREATE TABLE IF NOT EXISTS siteCustomItem(
+--                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
+--                       customKey varchar(50) not null,
+--                       keyName varchar(100) not null,
+--                       keyDesc TEXT,
+--                       keyType int,
+--                       keySort int,
+--                       keyConstraint int,
+--                       status int,
+--                       tableName varchar(50),
+--                       dataVerify varchar(50),
+--                       addTime BIGINT,
+--                       unique(customKey,keyType))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+
 CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
                       configKey VARCHAR(100) NOT NULL,
@@ -257,24 +279,10 @@ CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       updateUserId VARCHAR(100),
                       updateTime BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
-CREATE TABLE IF NOT EXISTS siteCustomItem(
-                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                      customKey varchar(50) not null,
-                      keyName varchar(100) not null,
-                      keyDesc TEXT,
-                      keyType int,
-                      keySort int,
-                      keyConstraint int,
-                      status int,
-                      tableName varchar(50),
-                      dataVerify varchar(50),
-                      addTime BIGINT,
-                      unique(customKey,keyType))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
-
-CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
-                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                      userId varchar(100) unique not null,
-                      loginKey varchar(50) not null,
-                      loginUserId varchar(100) not null,
-                      loginTime BIGINT,
-                      INDEX(loginUserId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+-- CREATE TABLE IF NOT EXISTS siteUserCustom(
+--                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
+--                       userId VARCHAR(100) NOT NULL,
+--                       phone varchar(50) not null,
+--                       name varchar(100) not null,
+--                       age int,
+--                       addTime BIGINT);
