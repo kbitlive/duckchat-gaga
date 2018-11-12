@@ -41,7 +41,7 @@ class Site_SessionVerify
 
         $this->deletePreSession($preSessionId);
 
-        $this->logger->error("site.session.verify=========", 'VERIFY PROFILE=' . $loginProfile->serializeToJsonString());
+//        $this->logger->error("site.session.verify=========", 'VERIFY PROFILE=' . $loginProfile->serializeToJsonString());
         return $loginProfile;
     }
 
@@ -67,7 +67,7 @@ class Site_SessionVerify
 
         $this->deletePreSession($preSessionId);
 
-        $this->logger->error("api.session.verify=========", 'VERIFY PROFILE=' . $loginProfile->serializeToJsonString());
+//        $this->logger->error("api.session.verify=========", 'VERIFY PROFILE=' . $loginProfile->serializeToJsonString());
         return [
             "loginProfile" => $loginProfile,
             "sitePubkPem" => $sitePubkPem,
