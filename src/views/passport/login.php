@@ -37,10 +37,9 @@
 <input type="hidden" value='<?php echo $siteAddress;?>' class="siteAddressPath">
 
 
-
 <div class="site-warning"></div>
-    <div style="position: relative; width:100%;height:100%;" class="site_login_div">
 
+    <div style="position: relative; width:100%;height:100%;" class="site_login_div">
         <?php if($loginBackgroundColor) { ?>
             <div style="position: absolute;background-color: <?php echo $loginBackgroundColor; ?>;opacity:0.4;filter:alpha(opacity=40);top:0rem; height: 100%;width: 100%;">
             </div>
@@ -53,10 +52,6 @@
 
         <div style="" class="login_div_container">
                 <div class="login_container">
-
-
-
-
                     <div class="container">
                         <div  class="login_custom_made">
                             <div class="company_custom_made">
@@ -148,6 +143,7 @@
                 </div>
         </div>
     </div>
+
 
 <input type="hidden" value="<?php echo $jumpRoomId;?>" class="jumpRoomId">
 <input type="hidden" value="<?php echo $jumpRoomType;?>" class="jumpRoomType">
