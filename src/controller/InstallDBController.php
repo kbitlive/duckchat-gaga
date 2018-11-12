@@ -467,7 +467,7 @@ class InstallDBController
             ],
             [
                 'pluginId' => 104,
-                'name' => "gif小程序",
+                'name' => "Gif表情",
                 'logo' => $this->getSiteGifIcon(),
                 'sort' => 2, //order = 2
                 'landingPageUrl' => "index.php?action=miniProgram.gif.index",
@@ -480,7 +480,7 @@ class InstallDBController
             ],
             [
                 'pluginId' => 104,
-                'name' => "gif小程序",
+                'name' => "Gif表情",
                 'logo' => $this->getSiteGifIcon(),
                 'sort' => 2, //order = 2
                 'landingPageUrl' => "index.php?action=miniProgram.gif.index",
@@ -489,7 +489,7 @@ class InstallDBController
                 'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
                 'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
                 'authKey' => "",
-                "management" => ""
+                "management" => "index.php?action=miniProgram.gif.cleanGif"
             ],
             [
                 'pluginId' => 105,
