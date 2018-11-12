@@ -13,11 +13,12 @@
 
     <style>
         .color-picker {
-            width: 30px;
-            height: 30px;
-            border: 0px;
+            width: 100px;
+            height: 35px;
+            border: 1px solid #10aeff;
             outline: none;
             cursor: pointer;
+            font-size: 14px;
         }
 
         /*填充*/
