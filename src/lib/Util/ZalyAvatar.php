@@ -22,7 +22,7 @@ class ZalyAvatar
         $avatarPhpName = $cacheDir . "/avatar.php";
 
         $sceneryAvatar = [];
-        for ($j = 1; $j <= 128; $j++) {
+        for ($j = 1; $j <= 125; $j++) {
             $defaultAva = dirname(__FILE__) . "/../../public/avatar/scenery/" . $j . ".png";
 
             if (!file_exists($defaultAva)) {
