@@ -253,6 +253,19 @@
                 </div>
                 <div class="division-line"></div>
 
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="wrapper" id="wrapper-middle">
+        <div class="layout-all-row">
+
+            <div class="list-item-center">
+
+
                 <div class="item-row" id="site-custom-page">
                     <div class="item-header">
                         <img class="site-manage-image" src="../../public/img/manage/home_page.png"/>
@@ -263,7 +276,7 @@
                                 <?php if ($lang == "1") { ?>
                                     页面配置
                                 <?php } else { ?>
-                                    Page Config
+                                    Page Settings
                                 <?php } ?></div>
 
                             <div class="item-body-tail">
@@ -284,7 +297,7 @@
                                 <?php if ($lang == "1") { ?>
                                     安全配置
                                 <?php } else { ?>
-                                    Security configuration
+                                    Security Settings
                                 <?php } ?></div>
 
                             <div class="item-body-tail">
@@ -343,6 +356,7 @@
         </div>
 
     </div>
+
     <div class="wrapper-bottom" id="wrapper-bottom">
         <div class="layout-all-row">
 
@@ -427,7 +441,6 @@
         var url = "index.php?action=manage.data.clean&lang=" + getLanguage();
         openPage(url);
     });
-
 
 
     $("#stie-data-report").click(function () {
