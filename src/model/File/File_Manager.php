@@ -406,7 +406,6 @@ class File_Manager
 
     public function fileIsExists($fileId)
     {
-        error_log("===========fileId=" . $fileId);
         //处理异常，异常return true
         $fileName = explode("-", $fileId);
         $dateDir = $fileName[0];
