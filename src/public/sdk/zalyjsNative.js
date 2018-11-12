@@ -33,10 +33,6 @@ if(thirdLoginName) {
     localStorage.setItem(thirdLoginNameKey, thirdLoginName);
 }
 
-console.log("thirdLoginName-----discuz-----"+window.location.href)
-
-console.log("thirdLoginName-----discuz-----"+thirdLoginName)
-
 var zalyjsSiteLoginMessageBody = {};
 
 

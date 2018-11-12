@@ -835,9 +835,9 @@ intervalId = undefined
 function setDocumentTitle()
 {
     iconNum = 0;
-    intervalId = 0;
     if(document.hidden == true) {
         var siteTip = localStorage.getItem(newSiteTipKey);
+
         if(intervalId == undefined && siteTip != "clear") {
             intervalId = setInterval(function () {
                 if(siteTip == "clear") {
@@ -847,9 +847,9 @@ function setDocumentTitle()
                     if(Number(iconNum%2) == 0) {
                         $(".icon").attr("href", "favicon.ico?_v="+intervalId);
                     } else {
+                        console.log("tip.png?_v="+intervalId)
                         $(".icon").attr("href", "tip.png?_v="+intervalId);
                     }
-
                     iconNum = Number(iconNum+1);
                 }
             }, 100);
