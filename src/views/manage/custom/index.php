@@ -75,7 +75,7 @@
                                 <?php } else if ($frontPage == "2") { ?>
                                     <?php if ($lang == "1") { ?> 聊天 <?php } else { ?> Chats <?php } ?>
                                 <?php } else if ($frontPage == "3") { ?>
-                                    <?php if ($lang == "1") { ?> 通讯录 <?php } else { ?> Show Content <?php } ?>
+                                    <?php if ($lang == "1") { ?> 通讯录/好友 <?php } else { ?> Contacts/Friends <?php } ?>
                                 <?php } else if ($frontPage == "4") { ?>
                                     <?php if ($lang == "1") { ?> 我<?php } else { ?> Me <?php } ?>
                                 <?php } ?>
@@ -172,22 +172,24 @@
                         updateFrontPage(2);
                     }
                 }, {
-                    text: language == 0 ? "Contacts" : "通讯录",
+                    text: language == 0 ? "Contacts/Friends" : "通讯录/好友",
                     className: "select-color-primary",
                     onClick: function () {
-                        $("#custom-front-page-text").html(language == 0 ? "Contacts" : "通讯录");
+                        $("#custom-front-page-text").html(language == 0 ? "Contacts/Friends" : "通讯录/好友");
                         $("#custom-front-page").attr("data", "3");
                         updateFrontPage(3);
                     }
-                }, {
-                    text: language == 0 ? "Me" : "我",
-                    className: "select-color-primary",
-                    onClick: function () {
-                        $("#custom-front-page-text").html(language == 0 ? "Me" : "我");
-                        $("#custom-front-page").attr("data", "4");
-                        updateFrontPage(4);
-                    }
-                }]
+                }
+                    // , {
+                    //     text: language == 0 ? "Me" : "我",
+                    //     className: "select-color-primary",
+                    //     onClick: function () {
+                    //         $("#custom-front-page-text").html(language == 0 ? "Me" : "我");
+                    //         $("#custom-front-page").attr("data", "4");
+                    //         updateFrontPage(4);
+                    //     }
+                    // }
+                ]
             });
         });
 

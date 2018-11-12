@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS siteConfig(
                   id INTEGER PRIMARY KEY AUTO_INCREMENT,
                   configKey VARCHAR(100) NOT NULL,
                   configValue TEXT ,
-                  UNIQUE (configKey))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                  UNIQUE (configKey))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE  IF NOT EXISTS siteUser (
                    id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -18,7 +18,7 @@ CREATE TABLE  IF NOT EXISTS siteUser (
                    countryCode VARCHAR(10),
                    phoneId VARCHAR(11),
                    friendVersion INTEGER,
-                   timeReg BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                   timeReg BIGINT)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteUser CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -28,7 +28,7 @@ CREATE TABLE if not EXISTS siteFriendApply(
               friendId VARCHAR(100) NOT NULL,
               greetings VARCHAR(100),
               applyTime BIGINT,
-              UNIQUE(userId, friendId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+              UNIQUE(userId, friendId))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteFriendApply CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS siteUserFriend(
                     mute BOOLEAN,/*1互为好友 2我删除了对方 3临时会话 */
                     version INTEGER,
                     addTime BIGINT,/*是否静音 1表示静音，0表示没有静音*/
-                    UNIQUE(userId, friendId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                    UNIQUE(userId, friendId))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteUserFriend CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -63,7 +63,7 @@ create table IF NOT EXISTS siteSession(
                 gatewaySocketId VARCHAR(100),
                 loginPluginId  VARCHAR(100),
                 UNIQUE(sessionId,userId),
-                UNIQUE(userId,deviceId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                UNIQUE(userId,deviceId))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteSession CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -84,7 +84,7 @@ CREATE TABLE  IF NOT EXISTS siteGroup (
                status INTEGER default 1,/*表示群的状态， 1表示正常*/
                isWidget INTEGER default 0, /*表示1是挂件，0不是挂件*/
                timeCreate BIGINT,
-               UNIQUE(groupId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+               UNIQUE(groupId))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteGroup CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS siteGroupUser(
                memberType INTEGER,
                isMute BOOLEAN default 0 ,/*是否静音 1表示静音，0表示没有静音*/
                timeJoin BIGINT,
-               UNIQUE(groupId, userId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+               UNIQUE(groupId, userId))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteGroupUser CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS siteU2Message(
             content TEXT,   -- 可能是一个json，可能是一个proto toString
             msgTime BIGINT,
             INDEX(userId),
-            INDEX(fromUserId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+            INDEX(fromUserId))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteU2Message CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS siteU2MessagePointer(
             deviceId VARCHAR(100),
             clientSideType INTEGER,     -- 0:无效，1:手机客户端  2:web客户端
             pointer INTEGER,
-            UNIQUE(userId,deviceId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+            UNIQUE(userId,deviceId))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteU2MessagePointer CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS siteGroupMessage(
             msgType INTEGER,
             content TEXT,
             msgTime BIGINT,
-            INDEX(groupId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+            INDEX(groupId))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteGroupMessage CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS passportPassword(
                 invitationCode VARCHAR(100),
                 timeReg BIGINT,
                 unique(userId),
-                unique(loginName))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                unique(loginName))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE passportPassword CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -159,7 +159,7 @@ CREATE TABLE IF NOT EXISTS passportPasswordPreSession(
                 userId VARCHAR(100) NOT NULL,
                 preSessionId VARCHAR(100) NOT NULL,
                 sitePubkPem TEXT,
-                unique(userId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                unique(userId))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE passportPasswordPreSession CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS passportPasswordToken(
                 loginName VARCHAR(100) NOT NULL,
                 token VARCHAR(100) NOT NULL,
                 timeReg BIGINT,
-                UNIQUE(loginName))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                UNIQUE(loginName))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE passportPasswordToken CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -179,7 +179,7 @@ CREATE TABLE IF NOT EXISTS siteGroupMessagePointer(
             deviceId VARCHAR(100),
             clientSideType INTEGER, -- 0:无效，1:手机客户端  2:web客户端
             pointer INTEGER,
-            UNIQUE(groupId,userId,deviceId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+            UNIQUE(groupId,userId,deviceId))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteGroupMessagePointer CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -197,7 +197,7 @@ CREATE TABLE IF NOT EXISTS sitePlugin(
               authKey VARCHAR(32) NOT NULL,
               addTime BIGINT,
               management TEXT,
-              UNIQUE(pluginId,usageType))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+              UNIQUE(pluginId,usageType))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE sitePlugin CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS siteUic(
             status INTEGER, -- 0：无效，1：所有人可用 2：会员可用等
             createTime BIGINT,
             useTime BIGINT,
-            INDEX(userId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+            INDEX(userId))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteUic CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -220,7 +220,7 @@ CREATE TABLE IF NOT EXISTS siteGif(
                       width INTEGER not null default 0,
                       height INTEGER not null default 0,
                       addTime BIGINT,
-                      UNIQUE (gifUrl))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                      UNIQUE (gifUrl))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteGif CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -228,7 +228,7 @@ CREATE TABLE IF NOT EXISTS siteUserGif(
                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
                       gifId VARCHAR(100) NOT NULL,
                       userId VARCHAR(100) NOT NULL,
-                      addTime BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                      addTime BIGINT)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteUserGif CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS passportPasswordCountLog(
     num INTEGER ,
     operateDate DATE ,
     operateTime  BIGINT,
-    UNIQUE userIdAndOperDate(userId, operateDate))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+    UNIQUE userIdAndOperDate(userId, operateDate))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS passportPasswordLog(
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -247,7 +247,7 @@ CREATE TABLE IF NOT EXISTS passportPasswordLog(
     operation INTEGER ,
     ip VARCHAR(100),
     operateDate DATE ,
-    operateTime  BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+    operateTime  BIGINT)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -255,7 +255,7 @@ CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
                       loginKey varchar(50) not null,
                       loginUserId varchar(100) not null,
                       loginTime BIGINT,
-                      INDEX(loginUserId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                      INDEX(loginUserId))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- CREATE TABLE IF NOT EXISTS siteCustomItem(
 --                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -269,7 +269,7 @@ CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
 --                       tableName varchar(50),
 --                       dataVerify varchar(50),
 --                       addTime BIGINT,
---                       unique(customKey,keyType))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+--                       unique(customKey,keyType))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -277,7 +277,7 @@ CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       configValue TEXT,
                       configValueEN TEXT ,
                       updateUserId VARCHAR(100),
-                      updateTime BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                      updateTime BIGINT)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- CREATE TABLE IF NOT EXISTS siteUserCustom(
 --                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
