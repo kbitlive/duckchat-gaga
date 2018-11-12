@@ -10,7 +10,6 @@ class Site_Login
 {
     private $ctx;
     private $zalyError;
-    private $sessionVerifyAction = "api.session.verify";
     private $pinyin;
     private $timeOut = 10;
     private $logger;
@@ -34,8 +33,6 @@ class Site_Login
      */
     public function doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $userCustomArray)
     {
-        error_log('---------------shaoye  api.site.login---------'.$thirdPartyKey);
-
         $userProfile = false;
 
         if (empty($thirdPartyKey)) {
@@ -99,17 +96,17 @@ class Site_Login
                 throw new Exception("get user profile error from third party");
             }
 
+            //update loginName
+            $loginUserProfile->setLoginName($thirdPartyLoginKey . "_" . $loginUserProfile->getLoginName());
+
             $thirdPartyLoginUserId = $loginUserProfile->getUserId();
             $thirdPartyInfo = $this->getThirdPartyAccount($thirdPartyLoginKey, $thirdPartyLoginUserId);
 
-            $this->logger->error("-=-==========", "thirdPartyInfo=" . var_export($thirdPartyInfo, true));
             $siteUserId = false;
 
             if ($thirdPartyInfo) {
                 $siteUserId = $thirdPartyInfo['userId'];
             }
-
-            $this->logger->error("-=-==========", "siteUserId=" . $siteUserId);
 
             //get intivation first
             $uicInfo = $this->getIntivationCode($loginUserProfile->getInvitationCode());
@@ -159,7 +156,7 @@ class Site_Login
 
             $sessionVerifyUrl = ZalyHelper::getFullReqUrl($sessionVerifyUrl);
 
-            $this->logger->error("==============request to api.session.verify Url=", $sessionVerifyUrl);
+//            $this->logger->error("==============request to api.session.verify Url=", $sessionVerifyUrl);
 
             $response = $this->ctx->ZalyCurl->httpRequestByAction('POST', $sessionVerifyUrl, $sessionVerifyRequest, $this->timeOut);
 
