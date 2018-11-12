@@ -82,7 +82,6 @@ class Api_Passport_PasswordModifyPasswordController extends Api_Passport_Passwor
     private function updatePasswordByLoginName($loginName, $password)
     {
         $tag = __CLASS__ . '-' . __FUNCTION__;
-        $this->ctx->Wpf_Logger->error($tag, "error_msg password--------------" . $password);
 
         try{
             $where = [

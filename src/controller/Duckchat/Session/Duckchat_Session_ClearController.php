@@ -23,7 +23,6 @@ class Duckchat_Session_ClearController extends Duckchat_MiniProgramController
     public function rpc(\Google\Protobuf\Internal\Message $request, \Google\Protobuf\Internal\Message $transportData)
     {
         try {
-
             $response = $this->ctx->DuckChat_Session->clearSession($this->pluginMiniProgramId, $request);
 
             if ($response) {

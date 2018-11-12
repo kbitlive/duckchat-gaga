@@ -265,7 +265,6 @@
                                 <div class="item-body-desc tip">Must contain characters</div>
                             <?php } ?>
                             <div class="item-body-tail">
-                                <div class="item-body-value" id="passwordMinLength"> <?php echo $passwordMinLength; ?></div>
                                 <div class="item-body-value">
                                     <img class="more-img" src="../../public/img/manage/more.png"/>
                                 </div>
