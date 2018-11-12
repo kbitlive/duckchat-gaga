@@ -1,7 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: childeYin<尹少爷>
+ * duckchat小程序访问公共类
+ * User: SAM<an.guoyue254@gmail.com>
  * Date: 13/07/2018
  * Time: 6:32 PM
  */

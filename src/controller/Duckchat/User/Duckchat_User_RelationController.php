@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: zhangjun
+ * 获取用户关系
+ * User: SAM<an.guoyue254@gmail.com>
  * Date: 04/09/2018
  * Time: 6:15 PM
  */

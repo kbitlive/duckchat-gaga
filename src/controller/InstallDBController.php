@@ -55,6 +55,7 @@ class InstallDBController
                 $sqliteName = $this->_dbPath . "/" . $sqliteName;
                 $fileExists = file_exists($sqliteName);
                 if ($newConfig['dbType'] == "sqlite" && !$fileExists) {
+                    header("Content-Type: text/html; charset=UTF-8");
                     echo "sqlite DB 文件不存在, 请删除config.php文件，初始化站点";
                     return;
                 }
@@ -216,19 +217,19 @@ class InstallDBController
 
             $params = [
                 "isPhpVersionValid" => version_compare(PHP_VERSION, "5.6.0") >= 0,
-                "isLoadOpenssl"     => extension_loaded("openssl") && false != ZalyRsa::newRsaKeyPair(2048),
-                "isLoadPDOSqlite"   => extension_loaded("pdo_sqlite"),
-                "isLoadPDOMysql"    => extension_loaded("pdo_mysql"),
-                "isLoadCurl"        => extension_loaded("curl"),
+                "isLoadOpenssl" => extension_loaded("openssl") && false != ZalyRsa::newRsaKeyPair(2048),
+                "isLoadPDOSqlite" => extension_loaded("pdo_sqlite"),
+                "isLoadPDOMysql" => extension_loaded("pdo_mysql"),
+                "isLoadCurl" => extension_loaded("curl"),
                 "isWritePermission" => $permissionDirectory,
-                "siteVersion"       => isset($sampleFile['siteVersionName']) ? $sampleFile['siteVersionName'] : "",
-                "versionCode"       => $sampleFile['siteVersionCode'],
+                "siteVersion" => isset($sampleFile['siteVersionName']) ? $sampleFile['siteVersionName'] : "",
+                "versionCode" => $sampleFile['siteVersionCode'],
                 "isInstallRootPath" => $isInstallRootPath,
-                "siteAddress"       => ZalyHelper::getRequestAddressPath(),
-                'phpinfo'           => "./phpinfo.php",
+                "siteAddress" => ZalyHelper::getRequestAddressPath(),
+                'phpinfo' => "./phpinfo.php",
             ];
             //get db file
-            $dbDir   = dirname(__DIR__);
+            $dbDir = dirname(__DIR__);
             $dbFiles = scandir($dbDir);
             $phpInfoExist = false;
             if (!empty($dbFiles)) {
@@ -419,7 +420,6 @@ class InstallDBController
             $this->logger->error("site.install.db", $e);
         }
     }
-
 
 
     /**

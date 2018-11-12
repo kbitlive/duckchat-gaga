@@ -1,7 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: anguoyue
+ * 通过duckchat_sessionid 校验用户身份
+ * User: SAM<an.guoyue254@gmail.com>
  * Date: 04/09/2018
  * Time: 4:27 PM
  */
