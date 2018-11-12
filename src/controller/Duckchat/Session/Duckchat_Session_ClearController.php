@@ -10,7 +10,6 @@ class Duckchat_Session_ClearController extends Duckchat_MiniProgramController
 {
     private $classNameForRequest = '\Zaly\Proto\Plugin\DuckChatSessionClearRequest';
     private $classNameForResponse = '\Zaly\Proto\Plugin\DuckChatSessionClearResponse';
-    private $requestAction = "duckchat.session.clear";
 
     public function rpcRequestClassName()
     {
@@ -24,34 +23,19 @@ class Duckchat_Session_ClearController extends Duckchat_MiniProgramController
     public function rpc(\Google\Protobuf\Internal\Message $request, \Google\Protobuf\Internal\Message $transportData)
     {
         try {
-            $userId = $request->getUserId();
+            $response = $this->ctx->DuckChat_Session->clearSession($this->pluginMiniProgramId, $request);
 
-            if(!$userId) {
-                $errorCode = $this->zalyError->errorSessionClear;
-                $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("duckchat.session.id userid is not exits");
+            if ($response) {
+                $this->returnSuccessRPC($response);
+            } else {
+                throw new Exception("clear user session result=false");
             }
-            $this->clearSessionByUserId($userId);
-            $this->setRpcError($this->defaultErrorCode, "");
+
         } catch (Exception $ex) {
-            $tag = __CLASS__."-".__FUNCTION__;
-            $errorCode = $this->zalyError->errorSessionClear;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            $this->setRpcError($errorCode, $errorInfo);
-            $this->ctx->Wpf_Logger->error($tag, $ex->getMessage());
+            $this->ctx->Wpf_Logger->error($this->action, $ex->getMessage() . $ex->getTraceAsString());
+            $this->returnErrorRPC(new \Zaly\Proto\Plugin\DuckChatSessionClearResponse(), $ex);
         }
-        $this->rpcReturn($this->requestAction, new \Zaly\Proto\Plugin\DuckChatSessionClearResponse());
         return;
     }
 
-    private function clearSessionByUserId($userId)
-    {
-        $flag = $this->ctx->SiteSessionTable->deleteSessionByUserId($userId);
-
-        if($flag >0) {
-            return true;
-        }
-        throw new Exception("delete session failed");
-    }
 }

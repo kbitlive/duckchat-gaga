@@ -6,20 +6,40 @@
     <!-- Latest compiled and minified CSS -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="../../public/css/login.css?_version=<?php echo $versionCode?>">
-    <script type="text/javascript" src="../../public/js/jquery.min.js"></script>
-    <script src="../../public/js/jquery.i18n.properties.min.js"></script>
-    <script src="../../public/sdk/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
-    <script src="../../public/js/template-web.js"></script>
-    <script src="../../public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
+    <link rel="stylesheet" href="<?php echo $siteAddress;?>/public/css/login.css?_version=<?php echo $versionCode?>">
+    <script type="text/javascript" src="<?php echo $siteAddress;?>/public/js/jquery.min.js"></script>
+    <script src="<?php echo $siteAddress;?>/public/js/jquery.i18n.properties.min.js"></script>
+    <script src="<?php echo $siteAddress;?>/public/sdk/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
+    <script src="<?php echo $siteAddress;?>/public/js/template-web.js"></script>
 
 </head>
 
 <body>
 <input type="hidden" value="<?php echo $siteName;?>" class="siteName">
-<div class="site-warning"></div>
-    <div style="position: relative; width:100%;height:100%;" class="site_login_div">
+<input type="hidden" value="<?php echo $loginNameAlias;?>" class="loginNameAlias">
+<input type="hidden" value="<?php echo $passwordFindWay;?>" class="passwordFindWay">
+<input type="hidden" value="<?php echo $loginWelcomeText;?>" class="loginWelcomeText">
+<input type="hidden" value="<?php echo $loginBackgroundColor;?>" class="loginBackgroundColor">
+<input type="hidden" value="<?php echo $loginBackgroundImage;?>" class="loginBackgroundImage">
+<input type="hidden" value="<?php echo $loginBackgroundImageDisplay;?>" class="loginBackgroundImageDisplay">
+<input type="hidden" value="<?php echo $siteVersionName;?>" class="siteVersionName">
+<input type="hidden" value="<?php echo $siteName;?>" class="siteName">
+<input type="hidden" value="<?php echo $siteLogo;?>" class="siteLogo">
+<input type="hidden" value="<?php echo $passwordResetRequired;?>" class="passwordResetRequired">
 
+<input type="hidden" value="<?php echo $pwdContainCharacters;?>" class="pwdContainCharacters">
+<input type="hidden" value="<?php echo $loginNameMaxLength;?>" class="loginNameMaxLength">
+<input type="hidden" value="<?php echo $loginNameMinLength;?>" class="loginNameMinLength">
+<input type="hidden" value="<?php echo $pwdMaxLength;?>" class="pwdMaxLength">
+<input type="hidden" value="<?php echo $pwdMinLength;?>" class="pwdMinLength">
+
+<input type="hidden" value='<?php echo $thirdPartyLoginOptions;?>' class="thirdPartyLoginOptions">
+<input type="hidden" value='<?php echo $siteAddress;?>' class="siteAddressPath">
+
+
+<div class="site-warning"></div>
+
+    <div style="position: relative; width:100%;height:100%;" class="site_login_div">
         <?php if($loginBackgroundColor) { ?>
             <div style="position: absolute;background-color: <?php echo $loginBackgroundColor; ?>;opacity:0.4;filter:alpha(opacity=40);top:0rem; height: 100%;width: 100%;">
             </div>
@@ -32,17 +52,6 @@
 
         <div style="" class="login_div_container">
                 <div class="login_container">
-                    <input type="hidden" value="<?php echo $loginNameAlias;?>" class="loginNameAlias">
-                    <input type="hidden" value="<?php echo $passwordFindWay;?>" class="passwordFindWay">
-                    <input type="hidden" value="<?php echo $loginWelcomeText;?>" class="loginWelcomeText">
-                    <input type="hidden" value="<?php echo $loginBackgroundColor;?>" class="loginBackgroundColor">
-                    <input type="hidden" value="<?php echo $loginBackgroundImage;?>" class="loginBackgroundImage">
-                    <input type="hidden" value="<?php echo $loginBackgroundImageDisplay;?>" class="loginBackgroundImageDisplay">
-                    <input type="hidden" value="<?php echo $siteVersionName;?>" class="siteVersionName">
-                    <input type="hidden" value="<?php echo $siteName;?>" class="siteName">
-                    <input type="hidden" value="<?php echo $siteLogo;?>" class="siteLogo">
-                    <input type="hidden" value="<?php echo $passwordResetRequired;?>" class="passwordResetRequired">
-
                     <div class="container">
                         <div  class="login_custom_made">
                             <div class="company_custom_made">
@@ -136,14 +145,22 @@
     </div>
 
 
-<?php include(dirname(__DIR__) . '/passport/template_login.php'); ?>
-
+<input type="hidden" value="<?php echo $jumpRoomId;?>" class="jumpRoomId">
+<input type="hidden" value="<?php echo $jumpRoomType;?>" class="jumpRoomType">
+<input type="hidden" value="<?php echo $siteAddress;?>" class="siteAddress">
 <input type="hidden" value="<?php echo $isDuckchat; ?>" class="isDuckchat">
-<script src="../../public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
-<script src="../../public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
-<script src="../../public/js/im/zalyClient.js?_version=<?php echo $versionCode?>"></script>
-<script src="../../public/js/im/zalyBaseWs.js?_version=<?php echo $versionCode?>"></script>
-<script src="../../public/js/login/login.js?_version=<?php echo $versionCode?>"></script>
+<input type="hidden" value="<?php echo $enableInvitationCode; ?>" class="enableInvitationCode">
+<input type="hidden" value="<?php echo $enableRealName; ?>" class="enableRealName">
+
+<?php include(dirname(__DIR__) . '/passport/template_login.php'); ?>
+<script src="<?php echo $siteAddress;?>/public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
+
+<script src="<?php echo $siteAddress;?>/public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
+<script src="<?php echo $siteAddress;?>/public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
+<script src="<?php echo $siteAddress;?>/public/js/im/zalyClient.js?_version=<?php echo $versionCode?>"></script>
+<script src="<?php echo $siteAddress;?>/public/js/im/zalyBaseWs.js?_version=<?php echo $versionCode?>"></script>
+<script src="<?php echo $siteAddress;?>/public/js/login/login.js?_version=<?php echo $versionCode?>"></script>
+
 
 </body>
 </html>

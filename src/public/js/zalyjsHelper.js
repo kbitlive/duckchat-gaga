@@ -4,6 +4,8 @@
 UserClientLangZH = "1";
 UserClientLangEN = "0";
 
+siteAddress = $(".siteAddress").val();
+
 //语言国际化，替换文案
 function handleHtmlLanguage(html)
 {
@@ -83,14 +85,6 @@ function addTemplate(jqElement)
 }
 
 
-
-//点击触发一个对象的点击
-function uploadFile(obj)
-{
-    $("#"+obj).val("");
-    $("#"+obj).click();
-}
-
 function showLoading(jeElement) {
     try{
         var html = "<div class=\"loader\" > <div class=\"circular_div\"> <svg class=\"circular\" viewBox=\"25 25 50 50\"> <circle class=\"path\" cx=\"50\" cy=\"50\" r=\"20\" fill=\"none\" stroke-width=\"2\" stroke-miterlimit=\"10\"/> </svg> </div> </div>";
@@ -123,12 +117,15 @@ function getLoadingCss()
     var cssId = 'loading';  // you could encode the css path itself to generate id..
     if (!document.getElementById(cssId))
     {
+        if(siteAddress == undefined) {
+            siteAddress = "../..";
+        }
         var head  = document.getElementsByTagName('head')[0];
         var link  = document.createElement('link');
         link.id   = cssId;
         link.rel  = 'stylesheet';
         link.type = 'text/css';
-        link.href = '../../public/css/loading.css';
+        link.href = siteAddress + '/public/css/loading.css';
         link.media = 'all';
         head.appendChild(link);
     }
@@ -143,11 +140,43 @@ function cancelLoadingBySelf()
         hideLoading();
     }, 5000);
 }
+
 function checkIsEntities(str){
     var entitiesReg = /(&nbsp;|&#160;|&lt;|&#60;|&gt;|&#62;|&amp;|&#38;|&quot;|&#34;|&apos;|&#39;|&cent;|&#162;|&pound;|&#163;|&yen;|&#165;|&euro;|&#8364;|&sect;|&#167;|&copy;|&#169;|&reg;|&#174;|&times;|&#215;|&divide;|&#247;|&)/g;
     var arrEntities = str.match(entitiesReg);
     if(arrEntities != null) {
         return true;
+    }
+    return false;
+}
+
+/**
+ * 数字 字母下划线
+ * @param password
+ */
+function verifyChars(containCharaters, password) {
+    if(containCharaters == "" || !containCharaters) {
+        return true;
+    }
+    var flagLetter = true;
+    var flagNumber = true;
+    var flagSpecialCharacters = true;
+    if(containCharaters.indexOf("letter") != -1) {
+        var reg = /[a-zA-Z]/g;
+        flagLetter = reg.test(password);
+    }
+
+    if(containCharaters.indexOf("number") != -1) {
+        var reg = /\d/g;
+        flagNumber = reg.test(password);
+    }
+
+    if(containCharaters.indexOf("special_characters") != -1) {
+        var reg = /[@&*$\(\){}!\.~:,\<\>]/g;
+        flagSpecialCharacters = reg.test(password);
+    }
+    if(flagLetter && flagNumber && flagSpecialCharacters) {
+        return  true;
     }
     return false;
 }

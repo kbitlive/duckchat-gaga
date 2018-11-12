@@ -50,6 +50,8 @@ var ZalyAction = {
 
     api_plugin_list:"site.ApiPluginListRequest",
 
+    api_site_mute:"site.ApiSiteMuteRequest",
+
     getReqeustName : function (action) {
         var action = action.split(".").join("_");
         return ZalyAction[action];
@@ -64,7 +66,15 @@ var ZalyAction = {
                 actionUrl = actionUrl.replace("./", "/");
             }
             actionUrl = serverAddressForApi+actionUrl;
+        } else {
+            if(actionUrl.indexOf("./") != -1) {
+                actionUrl = actionUrl.replace("./", "/");
+            }
+            if(siteAddress != undefined) {
+                actionUrl = siteAddress + actionUrl;
+            }
         }
+
         if(actionUrl.indexOf("?") == -1) {
             actionUrl = actionUrl + "?lang="+languageNum;
         } else {

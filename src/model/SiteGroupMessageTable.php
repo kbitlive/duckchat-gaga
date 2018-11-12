@@ -55,6 +55,21 @@ class SiteGroupMessageTable extends BaseTable
         return $this->handlerResult($result, $prepare, $tag);
     }
 
+    public function deleteMessageByTime($msgTime)
+    {
+        $tag = __CLASS__ . '->' . __FUNCTION__;
+        $sql = "delete from $this->table where msgTime <=:msgTime;";
+
+        $prepare = $this->db->prepare($sql);
+        $prepare->bindValue(":msgTime", $msgTime);
+
+        $result = $prepare->execute();
+
+        $this->logger->writeSqlLog($tag, $sql, [$msgTime], $this->getCurrentTimeMills());
+
+        return $this->handlerResult($result, $prepare, $tag);
+    }
+
     /**
      * 删除群的所有游标
      *

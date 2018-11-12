@@ -25,4 +25,16 @@ class LoginConfig
 
     const PASSWORD_ERROR_NUM = "passwordErrorNum";//错误次数
 
+    const PASSWORD_CONTAIN_CHARACTERS = "passwordContainCharacters"; //密码的组成校验规则
+
+    const PASSWORD_MAXLENGTH = "passwordMaxLength"; //密码最大长度
+
+    const PASSWORD_MINLENGTH = 'passwordMinLength';//密码最小长度
+
+    const LOGINNAME_MINLENGTH = 'loginNameMinLength';//用户名最小长度
+
+    const LOGINNAME_MAXLENGTH = 'loginNameMaxLength';//用户名最大长度
+
+    const PASSWORD_CONTAIN_CHARACTER_TYPE = "passwodContainCharactersType";//密码快速配置 pwd_default, pwd_convinence, pwd_security
+
 }

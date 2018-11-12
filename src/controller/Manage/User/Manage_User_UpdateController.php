@@ -70,6 +70,14 @@ class Manage_User_UpdateController extends Manage_CommonController
                         $response['errCode'] = "success";
                     }
                     break;
+                case "changePassword"://update user password
+                    $updateValue = trim($updateValue);
+                    if (empty($updateValue)) {
+                        throw new Exception($this->language == 1 ? "请输入修改的新密码" : "please input new password");
+                    }
+
+                    $response['errCode'] = $this->updateUserPassword($userId, $updateValue) ? "success" : "error";
+                    break;
                 default:
                     throw new Exception("known update field:" . $updateKey);
             }
@@ -139,6 +147,20 @@ class Manage_User_UpdateController extends Manage_CommonController
         } else {
             return $this->ctx->Site_Config->removeDefaultFriend($userId);
         }
+    }
+
+    private function updateUserPassword($userId, $newPassword)
+    {
+        $userProfile = $this->ctx->SiteUserTable->getUserByUserId($userId);
+
+        $where = [
+            "loginName" => $userProfile['loginName']
+        ];
+
+        $data = [
+            "password" => password_hash($newPassword, PASSWORD_BCRYPT)
+        ];
+        return $this->ctx->PassportPasswordTable->updateUserData($where, $data);
     }
 
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * check current version need to upgrade
- * User: anguoyue
+ * User: SAM<an.guoyue254@gmail.com>
  * Date: 13/10/2018
  * Time: 3:54 PM
  */
@@ -17,6 +17,7 @@ abstract class Page_VersionController extends UpgradeController
         10014 => "1.0.14",
         10100 => "1.1.0",
         10101 => "1.1.1",
+        10102 => "1.1.2",
     ];
 
     abstract function doRequest();
@@ -87,7 +88,14 @@ abstract class Page_VersionController extends UpgradeController
         $this->resetOpcache();
     }
 
-    private function updatePassword()
+    protected function updateUpgradeInfo($newInfo)
+    {
+        $oldInfo = $this->getUpgradeVersion();
+        $newInfo = array_merge($oldInfo, $newInfo);
+        $this->updateUpgradeFile($newInfo);
+    }
+
+    protected function updatePassword()
     {
         $upgradeInfo = $this->getUpgradeVersion();
         $upgradeInfo['password'] = ZalyHelper::generateNumberKey();
@@ -111,11 +119,6 @@ abstract class Page_VersionController extends UpgradeController
         $versionInfos = $this->getUpgradeVersion();
         $password = $versionInfos['password'];
         return $password;
-    }
-
-    protected function deleteUpgradeFile()
-    {
-        //删除些什么
     }
 
     /**
@@ -223,7 +226,6 @@ abstract class Page_VersionController extends UpgradeController
         $siteConfig = ZalyConfig::getAllConfig();
         $siteConfig = array_merge($siteConfig, $config);
         ZalyConfig::updateConfigFile($siteConfig);
-        ZalyConfig::getAllConfig();
     }
 
     protected function updateSiteConfigKey($keys)

@@ -20,10 +20,16 @@
 
         }
 
+        .wrapper_div {
+            height: 100%;
+            overflow-y: scroll;
+        }
+
         .wrapper {
             width: 100%;
             display: flex;
             align-items: stretch;
+
         }
 
         .layout-all-row {
@@ -83,7 +89,7 @@
             /*background: rgba(255, 255, 255, 1);*/
             padding-bottom: 11px;
             /*padding-left: 1rem;*/
-
+            overflow-y: scroll;
         }
 
         .item-body-display {
@@ -125,171 +131,153 @@
 
 <body>
 
-<div class="wrapper" id="wrapper">
+<div class="wrapper_div">
+    <div class="wrapper" id="wrapper">
 
-    <div class="layout-all-row">
+        <div class="layout-all-row">
 
-        <div class="list-item-center">
+            <div class="list-item-center">
 
-            <div class="item-row" id="site-config-id">
-                <div class="item-header">
-                    <img class="site-manage-image" src="../../public/img/manage/home_config.png"/>
-                </div>
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <div class="item-body-desc"><?php if ($lang == "1") { ?>
-                                站点设置
-                            <?php } else { ?>
-                                Site Config
-                            <?php } ?>
-                        </div>
-
-                        <div class="item-body-tail">
-                            <img class="more-img" src="../../public/img/manage/more.png"/>
-                        </div>
+                <div class="item-row" id="site-config-id">
+                    <div class="item-header">
+                        <img class="site-manage-image" src="../../public/img/manage/home_config.png"/>
                     </div>
+                    <div class="item-body">
+                        <div class="item-body-display">
+                            <div class="item-body-desc"><?php if ($lang == "1") { ?>
+                                    站点设置
+                                <?php } else { ?>
+                                    Site Config
+                                <?php } ?>
+                            </div>
 
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-
-            <div class="item-row" id="mini-program-id">
-                <div class="item-header">
-                    <img class="site-manage-image" src="../../public/img/manage/home_miniProgram.png"/>
-                </div>
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <div class="item-body-desc">
-                            <?php if ($lang == "1") { ?>
-                                小程序管理
-                            <?php } else { ?>
-                                Mini Program
-                            <?php } ?>
+                            <div class="item-body-tail">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
                         </div>
 
-                        <div class="item-body-tail">
-                            <img class="more-img" src="../../public/img/manage/more.png"/>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-
-            <div class="item-row" id="user-manage-id">
-                <div class="item-header">
-                    <img class="site-manage-image" src="../../public/img/manage/home_user.png"/>
-                </div>
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <div class="item-body-desc">
-                            <?php if ($lang == "1") { ?>
-                                用户管理
-                            <?php } else { ?>
-                                User Management
-                            <?php } ?>
-                        </div>
-
-                        <div class="item-body-tail">
-                            <img class="more-img" src="../../public/img/manage/more.png"/>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-            <div class="item-row" id="group-manage-id">
-                <div class="item-header">
-                    <img class="site-manage-image" src="../../public/img/manage/home_group.png"/>
-                </div>
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <div class="item-body-desc">
-                            <?php if ($lang == "1") { ?>
-                                群组管理
-                            <?php } else { ?>
-                                Group Management
-                            <?php } ?>
-                        </div>
-
-                        <div class="item-body-tail">
-                            <img class="more-img" src="../../public/img/manage/more.png"/>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-            <div class="item-row" id="uic-manage-id">
-                <div class="item-header">
-                    <img class="site-manage-image" src="../../public/img/manage/home_uic.png"/>
-                </div>
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <div class="item-body-desc">
-                            <?php if ($lang == "1") { ?>
-                                邀请码
-                            <?php } else { ?>
-                                Invitation Code
-                            <?php } ?></div>
-
-                        <div class="item-body-tail">
-                            <img class="more-img" src="../../public/img/manage/more.png"/>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-            <div class="item-row" id="site-custom-page">
-                <div class="item-header">
-                    <img class="site-manage-image" src="../../public/img/manage/home_page.png"/>
-                </div>
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <div class="item-body-desc">
-                            <?php if ($lang == "1") { ?>
-                                页面配置
-                            <?php } else { ?>
-                                Page Config
-                            <?php } ?></div>
-
-                        <div class="item-body-tail">
-                            <img class="more-img" src="../../public/img/manage/more.png"/>
-                        </div>
                     </div>
                 </div>
+                <div class="division-line"></div>
+
+
+                <div class="item-row" id="mini-program-id">
+                    <div class="item-header">
+                        <img class="site-manage-image" src="../../public/img/manage/home_miniProgram.png"/>
+                    </div>
+                    <div class="item-body">
+                        <div class="item-body-display">
+                            <div class="item-body-desc">
+                                <?php if ($lang == "1") { ?>
+                                    小程序管理
+                                <?php } else { ?>
+                                    Mini Program
+                                <?php } ?>
+                            </div>
+
+                            <div class="item-body-tail">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="division-line"></div>
+
+
+                <div class="item-row" id="user-manage-id">
+                    <div class="item-header">
+                        <img class="site-manage-image" src="../../public/img/manage/home_user.png"/>
+                    </div>
+                    <div class="item-body">
+                        <div class="item-body-display">
+                            <div class="item-body-desc">
+                                <?php if ($lang == "1") { ?>
+                                    用户管理
+                                <?php } else { ?>
+                                    User Management
+                                <?php } ?>
+                            </div>
+
+                            <div class="item-body-tail">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="division-line"></div>
+
+                <div class="item-row" id="group-manage-id">
+                    <div class="item-header">
+                        <img class="site-manage-image" src="../../public/img/manage/home_group.png"/>
+                    </div>
+                    <div class="item-body">
+                        <div class="item-body-display">
+                            <div class="item-body-desc">
+                                <?php if ($lang == "1") { ?>
+                                    群组管理
+                                <?php } else { ?>
+                                    Group Management
+                                <?php } ?>
+                            </div>
+
+                            <div class="item-body-tail">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="division-line"></div>
+
+                <div class="item-row" id="uic-manage-id">
+                    <div class="item-header">
+                        <img class="site-manage-image" src="../../public/img/manage/home_uic.png"/>
+                    </div>
+                    <div class="item-body">
+                        <div class="item-body-display">
+                            <div class="item-body-desc">
+                                <?php if ($lang == "1") { ?>
+                                    邀请码
+                                <?php } else { ?>
+                                    Invitation Code
+                                <?php } ?></div>
+
+                            <div class="item-body-tail">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="division-line"></div>
+
+
             </div>
-            <div class="division-line"></div>
 
         </div>
 
     </div>
 
-</div>
+    <div class="wrapper" id="wrapper-middle">
+        <div class="layout-all-row">
+
+            <div class="list-item-center">
 
 
-<div class="wrapper-bottom" id="wrapper-bottom">
-    <div class="layout-all-row">
-
-        <div class="list-item-center">
-
-            <?php foreach ($miniProgramList as $miniProgram) { ?>
-
-                <div class="item-row">
+                <div class="item-row" id="site-custom-page">
                     <div class="item-header">
-                        <img class="site-manage-image" src="../../public/img/manage/plugin_default.png"/>
+                        <img class="site-manage-image" src="../../public/img/manage/home_page.png"/>
                     </div>
-                    <div class="item-body" onclick="showPluginAdmin('<?php echo $miniProgram["adminPageUrl"] ?>')">
+                    <div class="item-body">
                         <div class="item-body-display">
                             <div class="item-body-desc">
-                                <?php echo $miniProgram["name"] ?>
-                            </div>
+                                <?php if ($lang == "1") { ?>
+                                    页面配置
+                                <?php } else { ?>
+                                    Page Settings
+                                <?php } ?></div>
 
                             <div class="item-body-tail">
                                 <img class="more-img" src="../../public/img/manage/more.png"/>
@@ -299,60 +287,186 @@
                 </div>
                 <div class="division-line"></div>
 
-            <?php } ?>
+                <div class="item-row" id="site-security">
+                    <div class="item-header">
+                        <img class="site-manage-image" src="../../public/img/manage/security.png"/>
+                    </div>
+                    <div class="item-body">
+                        <div class="item-body-display">
+                            <div class="item-body-desc">
+                                <?php if ($lang == "1") { ?>
+                                    安全配置
+                                <?php } else { ?>
+                                    Security Settings
+                                <?php } ?></div>
+
+                            <div class="item-body-tail">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="division-line"></div>
+
+                <div class="item-row" id="site-advanced">
+                    <div class="item-header">
+                        <img class="site-manage-image" src="../../public/img/manage/advanced.png"/>
+                    </div>
+                    <div class="item-body">
+                        <div class="item-body-display">
+                            <div class="item-body-desc">
+                                <?php if ($lang == "1") { ?>
+                                    高级
+                                <?php } else { ?>
+                                    Advanced
+                                <?php } ?></div>
+
+                            <div class="item-body-tail">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="division-line"></div>
+
+                <div class="item-row" id="site-clean-data">
+                    <div class="item-header">
+                        <img class="site-manage-image" src="../../public/img/manage/data_clean.png"/>
+                    </div>
+                    <div class="item-body">
+                        <div class="item-body-display">
+                            <div class="item-body-desc">
+                                <?php if ($lang == "1") { ?>
+                                    数据清理
+                                <?php } else { ?>
+                                    Clean Data
+                                <?php } ?></div>
+
+                            <div class="item-body-tail">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="wrapper-bottom" id="wrapper-bottom">
+        <div class="layout-all-row">
+
+            <div class="list-item-center">
+
+                <?php foreach ($miniProgramList as $miniProgram) { ?>
+
+                    <div class="item-row">
+                        <div class="item-header">
+                            <img class="site-manage-image" src="../../public/img/manage/plugin_default.png"/>
+                        </div>
+                        <div class="item-body" onclick="showPluginAdmin('<?php echo $miniProgram["adminPageUrl"] ?>')">
+                            <div class="item-body-display">
+                                <div class="item-body-desc">
+                                    <?php echo $miniProgram["name"] ?>
+                                </div>
+
+                                <div class="item-body-tail">
+                                    <img class="more-img" src="../../public/img/manage/more.png"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="division-line"></div>
+
+                <?php } ?>
+
+            </div>
 
         </div>
 
     </div>
 
 </div>
-
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="../../public/manage/native.js"></script>
+<script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
 
 <script type="text/javascript">
 
+    function openPage(url) {
+        if (isMobile()) {
+            zalyjsOpenNewPage(url);
+        } else {
+            zalyjsOpenPage(url);
+        }
+    }
+
+    function getLanguage() {
+        var nl = navigator.language;
+        if ("zh-cn" == nl || "zh-CN" == nl) {
+            return 1;
+        }
+        return 0;
+    }
+
     $("#site-config-id").click(function () {
         var url = "/index.php?action=manage.config&lang=" + getLanguage();
-        zalyjsCommonOpenNewPage(url);
+        openPage(url);
     });
 
     $("#mini-program-id").click(function () {
         var url = "index.php?action=manage.miniProgram&lang=" + getLanguage();
-        // alert("url=" + url);
-        zalyjsCommonOpenNewPage(url);
+        openPage(url);
     });
 
     $("#user-manage-id").click(function () {
         var url = "index.php?action=manage.user&lang=" + getLanguage();
-        zalyjsCommonOpenNewPage(url);
+        openPage(url);
     });
 
     $("#group-manage-id").click(function () {
         var url = "index.php?action=manage.group&lang=" + getLanguage();
-        zalyjsCommonOpenNewPage(url);
+        openPage(url);
     });
 
     $("#uic-manage-id").click(function () {
         var url = "index.php?action=manage.uic&page=index&lang=" + getLanguage();
-        zalyjsCommonOpenNewPage(url);
+        openPage(url);
+    });
+
+    $("#site-clean-data").click(function () {
+        var url = "index.php?action=manage.data.clean&lang=" + getLanguage();
+        openPage(url);
+    });
+
+
+    $("#stie-data-report").click(function () {
+        var url = "index.php?action=manage.data.report";
+        openPage(url);
     });
 
     $("#site-custom-page").click(function () {
-        var url = "index.php?action=manage.custom.page&lang=" + getLanguage();
-        zalyjsCommonOpenNewPage(url);
+        var url = "index.php?action=manage.custom&lang=" + getLanguage();
+        openPage(url);
     });
 
-    $("#data-report-id").click(function () {
-        var url = "index.php?action=manage.dataReport";
-        // alert("url=" + url);
-        zalyjsCommonOpenNewPage(url);
+    $("#site-advanced").click(function () {
+        var url = "index.php?action=manage.advanced&lang=" + getLanguage();
+        openPage(url);
+    });
+
+    $("#site-security").on("click", function () {
+        var url = "index.php?action=manage.security&lang=" + getLanguage();
+        openPage(url);
     });
 
 
     function showPluginAdmin(url) {
         url += "&lang=" + getLanguage();
-        zalyjsCommonOpenNewPage(url);
+        openPage(url);
     }
 
 </script>

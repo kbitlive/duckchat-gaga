@@ -7,8 +7,8 @@
  */
 
 return array(
-    'siteVersionName' => '1.1.1',
-    'siteVersionCode' => '10101',
+    'siteVersionName' => '1.1.2',
+    'siteVersionCode' => '10102',
     'siteId' => "",//sha1(pubk),获取此值，请从Site_Config中获取
     'apiPageIndex' => './index.php?action=page.index',
     'apiPageLogin' => './index.php?action=page.login',
@@ -19,6 +19,7 @@ return array(
     'apiPageSiteInit' => "./index.php?action=installDB",
     'sessionVerify102' => './index.php?action=api.session.verify&body_format=base64pb',
     'testCurl' => "./index.php?action=installDB&for=test_curl",
+    'apiPagePassportLogin' => "./index.php?action=page.passport.login",
     'errorLog' => '',
     'dbType' => 'sqlite',
     'dbVersion' => '2',

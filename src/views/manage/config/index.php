@@ -12,10 +12,11 @@
     <link rel="stylesheet" href="../../public/manage/config.css"/>
 
     <style>
-        .item-row,.create_button,.weui-actionsheet__cell{
+        .item-row, .create_button, .weui-actionsheet__cell {
             cursor: pointer;
             outline: none;
         }
+
         .weui_switch {
             cursor: pointer;
         }
@@ -327,8 +328,8 @@
                                     <?php if ($lang == "1") { ?> 显示文本内容<?php } else { ?> Show Content <?php } ?>
                                 <?php } ?>
                             </div>
-                            <div class="item-body-value"><img class="more-img"
-                                                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
                         </div>
                     </div>
@@ -732,11 +733,11 @@
         updateSiteLogo(fileId);
 
 
-        if(isMobile()) {
-           var newSrc = "/_api_file_download_/?fileId=" + fileId;
-       } else {
-            var newSrc =  "./index.php?action=http.file.downloadFile&fileId="+ fileId+"&returnBase64=0";
-       }
+        if (isMobile()) {
+            var newSrc = "/_api_file_download_/?fileId=" + fileId;
+        } else {
+            var newSrc = "./index.php?action=http.file.downloadFile&fileId=" + fileId + "&returnBase64=0";
+        }
 
         $(".site-logo-image").attr("src", newSrc);
     }
@@ -765,13 +766,12 @@
 
     $(".site-logo-image").each(function () {
         console.log($(this).attr("avatar"));
-        if(!isMobile()) {
+        if (!isMobile()) {
             var avatar = $(this).attr("avatar");
-            var src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
+            var src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
             $(this).attr("src", src);
         }
     });
-
 
 
     function uploadFileToServer(formData, src) {

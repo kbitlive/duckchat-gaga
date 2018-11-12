@@ -6,7 +6,7 @@
  * Time: 10:59 AM
  */
 
-class MiniProgram_Gif_InfoController extends MiniProgramController
+class MiniProgram_Gif_InfoController extends MiniProgram_BaseController
 {
     private $fileType = 'gif';
 

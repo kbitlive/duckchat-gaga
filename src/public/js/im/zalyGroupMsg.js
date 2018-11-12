@@ -4,6 +4,7 @@ $(".right-chatbox").html("");
 
 function showMsgWebNotification(msg, msgContent)
 {
+
     var msgId = msg.msgId;
     var nickname="";
     var name='';
@@ -39,15 +40,21 @@ function showMsgWebNotification(msg, msgContent)
         icon  =  downloadFileUrl + "&fileId="+msg.avatar+"&returnBase64=0&lang="+languageNum;
     }
 
+
     if(document.hidden && (mute == 0)) {
         if(window.Notification && Notification.permission !== "denied"){
-            var notification = new Notification(notification, {"tag":siteConfig.serverAddressForApi, "icon":icon,  renotify: true});
+            var notification = new Notification(notification, {
+                "tag":siteConfig.serverAddressForApi,
+                "icon":icon,
+                "renotify": true,
+            });
             notification.onclick = function(event) {
                 window.focus();
             }
         }
     }
 }
+
 
 function showOtherWebNotification()
 {
@@ -67,10 +74,49 @@ function showOtherWebNotification()
 }
 
 
+function displayFrontPage()
+{
+    try{
+        var configStr = localStorage.getItem(siteConfigKey);
+        var config = JSON.parse(configStr);
+        if(config.hasOwnProperty("hiddenHomePage") && config['hiddenHomePage'] == true) {
+            var isMaster = isJudgeSiteMasters(token);
+            if(!isMaster) {
+                $(".l-sb-item[data='home']")[0].style.display="none";
+            }
+        } else {
+            //1:Home 2:Chats 3:Contacts friend 4:Me
+            if(config.hasOwnProperty('frontPage')) {
+                var frontPage = config['frontPage'];
+                switch (frontPage) {
+                    case "FrontPageChats":
+                        $(".l-sb-item[data='chatSession']").click();
+                        break;
+                    case "FrontPageContacts":
+                        $(".l-sb-item[data='friend']").click();
+                        break;
+                    default:
+                        $(".l-sb-item[data='home']").click();
+                }
+            } else {
+                $(".l-sb-item[data='home']").click();
+            }
+            $(".l-sb-item[data='home']")[0].style.display="flex";
+        }
+    }catch (error){
+        $(".l-sb-item[data='chatSession']").click();
+    }
+
+    jump();
+}
+
+
+uploadSelfAvatar = false;
 
 //点击触发一个对象的点击
 function uploadFile(obj, type)
 {
+
     if(type == 'user_avatar') {
         uploadSelfAvatar = true
     }
@@ -88,35 +134,41 @@ jumpRoomType = $(".jumpRoomType").attr("data");
 jumpRoomId = $(".jumpRoomId").attr("data");
 jumpRelation = $(".jumpRelation").attr("data");
 
-jump();
 
 function jump()
 {
     //群，好友
+    // http://127.0.0.1/index.php?page=u2Msg&x=
+    // http://127.0.0.1/index.php?page=groupMsg&x=
+
     if(jumpRoomType != "" && jumpRoomId != "") {
-        if(jumpRoomType == GROUP_MSG) {
-            if(jumpRelation == 0) {
-                ///todo add group
-                var userIds = [];
-                userIds.push(token);
-                addMemberToGroup(userIds, jumpRoomId);
-            } else if(jumpRelation == 1) {
+        if(jumpRoomType == JUMP_GroupMsg ) {
+            if(jumpRelation == 1) {
                 localStorage.setItem(chatSessionIdKey, jumpRoomId);
-                localStorage.setItem(jumpRoomId, jumpRoomType);
+                localStorage.setItem(jumpRoomId, GROUP_MSG);
                 handleClickRowGroupProfile(jumpRoomId);
             }
-        } else if(jumpRoomType == U2_MSG) {
-            if(jumpRelation == 0) {
-                ///todo sendAddFriend
-                sendFriendApplyReq(jumpRoomId, "", handleSendFriendApplyReq);
-            } else if(jumpRelation == 1) {
-                localStorage.setItem(chatSessionIdKey, jumpRoomId);
-                localStorage.setItem(jumpRoomId, jumpRoomType);
-                sendFriendProfileReq(jumpRoomId);
-                insertU2Room(undefined, jumpRoomId);
-            }
+        } else if(jumpRoomType == JUMP_U2Msg || jumpRoomType == JUMP_U2Profile) {
+            localStorage.setItem(chatSessionIdKey, jumpRoomId);
+            localStorage.setItem(jumpRoomId, U2_MSG);
+            sendFriendProfileReq(jumpRoomId, handleGetJumpFriendProfile);
         }
     }
+}
+
+function handleGetJumpFriendProfile(results)
+{
+    handleGetFriendProfile(results);
+
+    if(results == undefined) {
+        return;
+    }
+    var profile = results.profile;
+
+    if(profile != undefined && profile["profile"]) {
+        insertU2Room(undefined, jumpRoomId);
+    }
+
 }
 
 //display unread msg
@@ -137,13 +189,12 @@ function displayRoomListMsgUnReadNum()
             $(".room-list-msg-unread")[0].style.display = 'block';
             $(".room-list-msg-unread").html(unReadAllNum);
         } else {
+            localStorage.setItem(newSiteTipKey, "clear");
+            setDocumentTitle();
+            $(".room-list-msg-unread")[0].style.display = 'none';
             var mute = localStorage.getItem(roomListMsgMuteUnReadNumKey);
             if(mute >= 1) {
                 $(".unread-num-mute")[0].style.display = "block";
-            } else {
-                localStorage.setItem(newSiteTipKey, "clear");
-                setDocumentTitle();
-                $(".room-list-msg-unread")[0].style.display = 'none';
             }
         }
     } else {
@@ -167,8 +218,27 @@ function displayRoomListMsgUnReadNum()
     }
 }
 
+function isJudgeSiteMasters(userId)
+{
+    var siteConfigJson = localStorage.getItem("site_config");
+    var siteConfig = JSON.parse(siteConfigJson);
+    var mastersStr = siteConfig.masters;
+    if(mastersStr.indexOf(userId) != -1) {
+        return true;
+    }
+    return false;
+}
 
+
+groupOffset = 0;
+getGroupList(initGroupList);
+
+friendOffset = 0;
+getFriendList(initFriendList);
 $(document).on("click", ".l-sb-item", function(){
+    $(".search-friend-group-lists")[0].style.display="none";
+    $(".search_for_group_friend").val("");
+
     var currentActive = $(".left-sidebar").find(".l-sb-item-active");
     $(currentActive).removeClass("l-sb-item-active");
     $(this).addClass("l-sb-item-active");
@@ -192,6 +262,7 @@ $(document).on("click", ".l-sb-item", function(){
         $("."+unselectClassName)[0].style.display = "none";
         $("."+selectClassName)[0].style.display = "block";
     }
+    $(".left-body-item[default='1']").attr("default", 0);
 
     switch (dataType){
         case "home":
@@ -199,16 +270,20 @@ $(document).on("click", ".l-sb-item", function(){
             $(".group-lists")[0].style.display = "none";
             $(".chatsession-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
+            $(".home-page").attr("default", 1);
             pluginOffset = 0;
             getPluginList(pluginOffset, PluginUsageType.PluginUsageIndex, initPluginList);
+            displayRightPage(DISPLAY_HOME);
             break;
         case "group":
             $(".home-page")[0].style.display = "none";
             $(".group-lists")[0].style.display = "block";
             $(".chatsession-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
+            $(".group-lists").attr("default", 1);
             groupOffset = 0;
             getGroupList(initGroupList);
+
             break;
         case "chatSession" :
             getRoomList();
@@ -216,14 +291,19 @@ $(document).on("click", ".l-sb-item", function(){
             $(".chatsession-lists")[0].style.display = "block";
             $(".group-lists")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "none";
+            $(".chatsession-lists").attr("default", 1);
+            displayRightPage(DISPLAY_CHAT);
             break;
         case "friend":
             $(".home-page")[0].style.display = "none";
             $(".friend-lists")[0].style.display = "block";
             $(".chatsession-lists")[0].style.display = "none";
             $(".group-lists")[0].style.display = "none";
+            $(".friend-lists").attr("default", 1);
+
             friendOffset = 0;
             getFriendList(initFriendList);
+
             break;
         case "more":
             displayDownloadApp();
@@ -270,6 +350,137 @@ function checkIsEnterBack(event)
     return true;
 }
 
+function searchGroupAndFriendByKeyDown(event)
+{
+    if(!checkIsEnterBack(event)) {
+        return;
+    }
+    var searchVal = $(".search_for_group_friend").val();
+
+    $(".search_display_friend").html("");
+    $(".search_display_group").html("");
+
+    $(".search-group-div")[0].style.display = "block";
+    $(".search-friend-div")[0].style.display = "block";
+
+
+    var friendListRow = $(".friend-list-contact-row .contact-row-u2-profile");
+    var friendListRowLength = friendListRow.length;
+    var currentFriendCount = 0;
+    $(".hide_all_friend")[0].style.display = "none";
+    $(".search_hidden_friend")[0].style.display = "none";
+    $(".display_all_friend")[0].style.display = "none";
+
+    for(var i=0; i< friendListRowLength; i++) {
+        var friendRow = friendListRow[i];
+        var newFriendRow = friendRow.cloneNode(true);
+        var friendName = $(friendRow).attr("friend-name");
+        var friendNameLatin = $(friendRow).attr("friend-name-latin");
+        try{
+            if(friendName.indexOf(searchVal)!=-1 || friendNameLatin.indexOf(searchVal) != -1) {
+                currentFriendCount +=1;
+                if(currentFriendCount > 2) {
+                    $(".display_all_friend")[0].style.display = "flex";
+                    $(".search_hidden_friend").append($(newFriendRow));
+                } else {
+                    $(".search_display_friend").append($(newFriendRow));
+                }
+            }
+        }catch (error) {
+
+        }
+    }
+
+    if(currentFriendCount > 2) {
+        var currentFriendCountStr = "("+currentFriendCount+")";
+        $(".search_friend_count").html(currentFriendCountStr);
+    }
+
+    $(".hide_all_group")[0].style.display = "none";
+    $(".search_hidden_group")[0].style.display = "none";
+    $(".display_all_group")[0].style.display = "none";
+
+    var groupListRow = $(".contact-row-group-profile");
+    var groupListRowLength = groupListRow.length;
+    var currentGroupCount = 0;
+    for(var i=0; i< groupListRowLength; i++) {
+        var groupRow = groupListRow[i];
+        var newGroupRow = groupRow.cloneNode(true);
+        var groupName = $(groupRow).attr("group-name");
+        var groupNameLatin = $(groupRow).attr("group-name-latin");
+
+        try{
+            if(groupName.indexOf(searchVal)!=-1 || groupNameLatin.indexOf(searchVal) != -1) {
+                currentGroupCount +=1;
+                if(currentGroupCount > 2) {
+                    $(".display_all_group")[0].style.display = "flex";
+                    $(".search_hidden_group").append($(newGroupRow));
+                } else {
+                    $(".search_display_group").append($(newGroupRow));
+                }
+            }
+        }catch (error) {
+
+        }
+    }
+    if(currentGroupCount > 2) {
+        var currentGroupCountStr = "("+currentGroupCount+")";
+        $(".search_group_count").html(currentGroupCountStr);
+    }
+
+    $(".left-body-item[default='1']")[0].style.display = "none";
+    $(".left-body-item[default='1']").attr("default", 0)
+
+    $(".search-friend-group-lists")[0].style.display = "block";
+    $(".search-friend-group-lists").attr("default", 1);
+
+}
+
+$(document).on("click", ".display_all_friend", function () {
+    $(".search_hidden_friend")[0].style.display = "block";
+    $(".display_all_friend")[0].style.display = "none";
+    $(".hide_all_friend")[0].style.display = "flex";
+    var clientHeight = $(".search-friend-group-lists")[0].clientHeight - $(".friend-list-div")[0].clientHeight;
+    $(".search-friend-group-lists-div")[0].style.height = clientHeight+"px";
+});
+
+$(document).on("click", ".hide_all_friend", function () {
+    $(".display_all_friend")[0].style.display = "flex";
+    $(".hide_all_friend")[0].style.display = "none";
+    $(".search_hidden_friend")[0].style.display = "none";
+});
+
+
+$(document).on("click", ".display_all_group", function () {
+    $(".search_hidden_group")[0].style.display = "block";
+    $(".display_all_group")[0].style.display = "none";
+    $(".hide_all_group")[0].style.display = "flex";
+    var clientHeight = $(".search-friend-group-lists")[0].clientHeight - $(".group-list-div")[0].clientHeight;
+    $(".search-friend-group-lists-div")[0].style.height = clientHeight+"px";
+});
+
+$(document).on("click", ".hide_all_group", function () {
+    $(".display_all_group")[0].style.display = "flex";
+    $(".hide_all_group")[0].style.display = "none";
+    $(".search_hidden_group")[0].style.display = "none";
+});
+
+function deleteSearchInfo()
+{
+    $(".search_for_group_friend").val('');
+    $(".search-group-div")[0].style.display = "none";
+    $(".search-friend-div")[0].style.display = "none";
+
+}
+
+$(document).on("input onpropertychange", ".search_for_group_friend", function () {
+    var value = $(".search_for_group_friend").val();
+    if(!value ||  value.length<1) {
+        deleteSearchInfo();
+    }
+});
+
+
 //-------------------------------------------api.plugin.list------------------------------------------------
 /// plugin operation - api.plugin.list
 function getPluginList(offset, type, callback)
@@ -309,6 +520,7 @@ function handlePluginListHtml(results)
                 duckchatSessionId:plugin.userSessionId,
                 logo:logo,
                 loadingType:loadingType,
+                siteAddress:siteAddress
             });
             $(".mini-program-row").append(html);
         }
@@ -339,6 +551,9 @@ $(document).on("click", ".plugin-info", function () {
     } else {
         landingPageUrl = landingPageUrl+"?duckchat_sessionid="+duckchatSessionId;
     }
+    var clientHeight = $(".plugin-list-dialog")[0].clientHeight - $(".plugin-head")[0].clientHeight;
+    $(".plugin-right-body")[0].style.height = clientHeight+"px";
+
     var pluginId = $(this).attr("plugin-id");
     localStorage.setItem(defaultPluginDisplay, pluginId);
     $(".title").html(name);
@@ -420,7 +635,12 @@ $(document).on("click", ".chat_plugin", function () {
 
 
 $(document).on("click", ".plugin_back", function () {
-    $(".plugin-iframe")[0].contentWindow.history.go(-1); // back
+    try{
+        $(".plugin-iframe")[0].contentWindow.history.go(-1); // back
+        $(".plugin-iframe")[0].contentWindow.onload();
+    }catch (error){
+
+    }
 });
 
 //--------------------------------------http.file.downloadFile----------------------------------------------
@@ -621,6 +841,7 @@ function setDocumentTitle()
     iconNum = 0;
     if(document.hidden == true) {
         var siteTip = localStorage.getItem(newSiteTipKey);
+
         if(intervalId == undefined && siteTip != "clear") {
             intervalId = setInterval(function () {
                 if(siteTip == "clear") {
@@ -630,9 +851,9 @@ function setDocumentTitle()
                     if(Number(iconNum%2) == 0) {
                         $(".icon").attr("href", "favicon.ico?_v="+intervalId);
                     } else {
+                        console.log("tip.png?_v="+intervalId)
                         $(".icon").attr("href", "tip.png?_v="+intervalId);
                     }
-
                     iconNum = Number(iconNum+1);
                 }
             }, 100);
@@ -661,6 +882,9 @@ function logout(event)
         window.location.href = "./index.php?action=page.logout";
     }
 }
+
+
+
 
 //------------------------------------*********Group function*********--------------------------------------------
 
@@ -842,6 +1066,7 @@ function getGroupList(callback)
     }
     handleClientSendRequest(action, reqData, callback);
 }
+
 /// group operation - api.group.list - init html
 function initGroupList(results)
 {
@@ -870,7 +1095,8 @@ function appendGroupListHtml(results) {
             html = template("tpl-group-contact", {
                 groupId : group.id,
                 groupName : group.name,
-                groupAvatarImg:groupAvatarImg
+                groupAvatarImg:groupAvatarImg,
+                nameInLatin:group.nameInLatin
             });
             html = handleHtmlLanguage(html);
             $(".group-list-contact-row").append(html);
@@ -878,23 +1104,9 @@ function appendGroupListHtml(results) {
         var groupsDivHeight = $(".left-body-groups")[0].clientHeight;
         var groupToolsHeight = $(".group-tools")[0].clientHeight;
         $(".group-list-contact-row")[0].style.height = Number(groupsDivHeight-groupToolsHeight)+"px";
+        getGroupList(appendGroupListHtml);
     }
 }
-
-/// group operation - api.group.list - scroll append html
-$(function () {
-    ////加载群组列表
-    $('.group-lists').scroll(function(){
-        var pwLeft = $(".group-lists")[0];
-        var ch  = pwLeft.clientHeight;
-        var sh = pwLeft.scrollHeight;
-        var st = $('.group-lists').scrollTop();
-        ////文档的高度-视口的高度-滚动条的高度
-        if((sh - ch - st) == 0){
-            getGroupList(appendGroupListHtml);
-        }
-    });
-});
 
 //-------------------------------------------api.group.invitableFriends-------------------------------------------------
 unselectMemberOffset = 0;
@@ -922,7 +1134,9 @@ function initUnselectMemberList(results)
     if(list) {
         getUnselectMemberListHtml(results);
     } else {
-        html = template("tpl-invite-member-no-data", {});
+        html = template("tpl-invite-member-no-data", {
+            siteAddress:siteAddress
+        });
         html = handleHtmlLanguage(html);
         $(".pw-left").append(html);
     }
@@ -945,7 +1159,8 @@ function getUnselectMemberListHtml(results)
             html = template("tpl-invite-member", {
                 userId : user.userId,
                 nickname:user.nickname ?  user.nickname : defaultUserName,
-                friendAvatarImg:friendAvatarImg
+                friendAvatarImg:friendAvatarImg,
+                siteAddress:siteAddress
             });
             html = handleHtmlLanguage(html);
             $(".pw-left").append(html);
@@ -1065,6 +1280,11 @@ function getGroupProfile(groupId)
 
         }
     }
+
+    setTimeout(function (groupId) {
+        sessionStorage.removeItem(profileKey + groupId);
+        getGroupProfile(groupId);
+    }, 3000);
 
     if(reqProfileTime != false && reqProfileTime != null && reqProfileTime !=undefined  && ((nowTimestamp-reqProfileTime)<reqTimeout) ) {
         return false;
@@ -1448,7 +1668,6 @@ function openU2Chat(result)
         localStorage.setItem(chatSessionIdKey, userId);
         localStorage.setItem(userId, U2_MSG);
         $(".right-chatbox").attr("chat-session-id", userId);
-        $(".user-desc-body").html(userId);
         insertU2Room(undefined, userId);
     }
 }
@@ -2098,18 +2317,31 @@ $(document).on("click", ".contact-row-group-profile", function () {
     handleClickRowGroupProfile(groupId);
 });
 
+
+function handleClickGroupProfile(results)
+{
+    try {
+        var groupProfile = results.profile;
+        if (groupProfile) {
+            insertGroupRoom(groupProfile.id, groupProfile.name);
+            handleMsgRelation($(this), groupProfile.id);
+        }
+    }catch (error) {
+
+    }
+    handleGetGroupProfile(results);
+
+}
+
 function handleClickRowGroupProfile(groupId)
 {
-    sendGroupProfileReq(groupId, handleGetGroupProfile);
+    sendGroupProfileReq(groupId, handleClickGroupProfile);
 
     var groupName = $('.nickname_'+groupId).html();
     groupName = template("tpl-string", {
         string : groupName
     });
     $(".chatsession-title").html(groupName);
-
-    insertGroupRoom(groupId, groupName);
-    handleMsgRelation($(this), groupId);
 }
 
 //---------------------------------------api.group.update-----------------------------------------------
@@ -2371,7 +2603,8 @@ function  appendFriendListHtml(results)
             var html = template("tpl-friend-contact", {
                 userId : u2.userId,
                 nickname: u2.nickname ? u2.nickname : defaultUserName,
-                friendAvatarImg:friendAvatarImg
+                friendAvatarImg:friendAvatarImg,
+                nicknameInLatin:u2.nicknameInLatin
             });
             html = handleHtmlLanguage(html);
             $(".friend-list-contact-row").append(html);
@@ -2379,6 +2612,7 @@ function  appendFriendListHtml(results)
         var friendsDivHeight = $(".left-body-friends")[0].clientHeight;
         var friendToolsHeight = $(".friend-tools")[0].clientHeight;
         $(".friend-list-contact-row")[0].style.height = Number(friendsDivHeight-friendToolsHeight)+"px";
+        getFriendList(appendFriendListHtml);
     }
 }
 
@@ -2391,21 +2625,6 @@ function initFriendList(results)
     }
     displayApplyFriendNum();
 }
-
-// friend operation -- api.friend.list - scroll append html
-$('.friend-list-contact-row').scroll(function(event){
-    var pwLeft = $(".friend-list-contact-row")[0];
-    var ch  = pwLeft.clientHeight;
-    var sh = pwLeft.scrollHeight;
-    var st = $('.friend-list-contact-row').scrollTop();
-
-    //文档的高度-视口的高度-滚动条的高度
-    if((sh - ch - st) == 0){
-        getFriendList(appendFriendListHtml);
-    }
-});
-
-
 
 //---------------------------------------api.friend.profile----------------------------------------------
 
@@ -2568,7 +2787,6 @@ function updateInfo(profileId, profileType)
         name = friendProfile != false && friendProfile != null ? friendProfile.nickname : "";
         if(friendProfile != false && friendProfile != null && friendProfile.avatar) {
             var friendAvatarImg = getNotMsgImgUrl(friendProfile.avatar);
-            console.log(friendAvatarImg);
             $(".info-avatar-"+friendProfile.userId).attr("src", friendAvatarImg);
         }
     } else {
@@ -2631,11 +2849,20 @@ function displayCurrentProfile()
                 });
                 $(".nickname_"+chatSessionId).html(nickname);
                 $(".chatsession-title").html(nickname);
-                $(".user-desc-body").html(nickname);
+                var isMaster = isJudgeSiteMasters(chatSessionId);
+                var html = template("tpl-friend-profile", {
+                    isMaster:isMaster,
+                    nickname:nickname,
+                    loginName:friendProfile.loginName
+                });
+                $(".user-desc-body").html(html);
             } else {
                 $(".chatsession-title").html("");
                 $(".user-desc-body").html("");
             }
+
+
+
             $(".chat_session_id_"+chatSessionId).addClass("chatsession-row-active");
             var relationKey = friendRelationKey + chatSessionId;
             var relation = localStorage.getItem(relationKey) ;
@@ -2818,10 +3045,7 @@ $(document).mouseup(function(e){
     if(targetClassName != "gif") {
         document.getElementById("chat_plugin").style.display = "none";
     }
-    if(targetId != "selfAvatarUploadDiv" && targetId != "selfNickname" && targetId != "logout" && targetId != "logout-span"
-        && targetId != "self-qrcode" && targetId != "user-image-upload" && targetId != "user-img-carmera"
-        &&targetClassName != "nickNameDiv" && targetId !="selfQrcodeDiv" && targetId !="selfQrcodeCanvas" && targetId != "selfQrcode"
-        && targetClassName != "self-qrcode" && targetId != "clear_all_chat" && targetClassName != "clear_all_chat") {
+    if(targetClassName.indexOf("siteSelfInfo") == -1) {
         $("#selfInfo").remove();
     }
 });
@@ -2935,7 +3159,6 @@ applyFriendListOffset = 0;
 $(document).on("click", ".apply-friend-list", function () {
     addActiveForPwContactRow($(this));
     var tip = languageNum == $.i18n.map['newFriendsTip'] != undefined? $.i18n.map['newFriendsTip'] : "好友申请";
-    console.log("tiptiptip==="+tip);
     $(".title").html(tip);
     applyFriendListOffset = 0;
     getFriendApplyList();
@@ -3109,18 +3332,42 @@ function editFriendRemark()
 
 
 //-------------------------------------self qrcode-------------------------------------------------------
+
+
 ////展示个人消息
 function displaySelfInfo()
 {
+    var soundNotification = localStorage.getItem(soundNotificationKey);
+
+    var isMaster = isJudgeSiteMasters(token);
     var html = template("tpl-self-info", {
         userId:token,
         nickname:nickname,
         loginName:loginName,
+        isMaster:isMaster,
+        siteAddress:siteAddress,
+        soundNotification:soundNotification
     });
     html = handleHtmlLanguage(html);
     $(".wrapper").append(html);
     getNotMsgImg(token, avatar);
 }
+
+$(document).on("click", ".sound_mute", function () {
+    var type = $(this).attr("is_on");
+    var switchOnSrc = siteAddress+"/public/img/msg/icon_switch_on.png";
+    var switchOffSrc = siteAddress+"/public/img/msg/icon_switch_off.png";
+
+    if(type == "off") {
+        $(this).attr("src", switchOnSrc);
+        $(this).attr("is_on", 'on');
+        localStorage.setItem(soundNotificationKey, "on");
+    }else {
+        $(this).attr("src", switchOffSrc);
+        $(this).attr("is_on", 'off');
+        localStorage.setItem(soundNotificationKey, "off");
+    }
+});
 
 $(document).on("click", ".selfInfo", function () {
     displaySelfInfo();
@@ -3131,7 +3378,7 @@ $(".selfInfo").mouseover(function(){
 }).mouseout(function () {
 
 });
-uploadSelfAvatar = false;
+
 $(document).on("mouseleave","#selfInfo", function () {
     if( uploadSelfAvatar == false) {
         removeWindow($("#selfInfo"));
@@ -3196,6 +3443,10 @@ $(document).on("click", ".nickNameDiv",function () {
     $(this)[0].parentNode.replaceChild($(html)[0], $(this)[0]);
 });
 
+function handleApiSiteMute() {
+
+}
+
 
 //------------------------------------api.friend.delete--------------------------------------------------------
 
@@ -3243,11 +3494,11 @@ function searchUserByKeyDown(event)
         return;
     }
     isSearchUser = true;
-    setTimeout(function () {
-        isSearchUser = false;
-    }, 2000);
     searchUser();
 }
+$(document).on("input porpertychange", ".search-user-input", function () {
+    isSearchUser = false;
+});
 
 function searchUserByOnBlur() {
     if(isSearchUser == true) {
@@ -3273,8 +3524,6 @@ function searchUser() {
 
 function handleSearchUser(results)
 {
-    isSearchUser = false;
-
     if(results.hasOwnProperty("friends")) {
         var friends = results.friends;
         var friendsLength = friends.length;
@@ -3532,7 +3781,6 @@ function displayRightPage(displayType)
                 $(".friend-apply-dialog")[0].style.display = "none";
                 break;
             case DISPLAY_CHAT:
-
                 $(".friend-apply-dialog")[0].style.display = "none";
                 $(".plugin-list-dialog")[0].style.display = "none";
                 var chatSessionId  = localStorage.getItem(chatSessionIdKey);
@@ -3628,31 +3876,35 @@ function sendMsgBySend()
 
 //粘贴图片
 document.getElementById("msg_content").addEventListener('paste', function(event) {
-    var imgFile = null;
-    var idx;
-    var items = event.clipboardData.items;
-    if(items == undefined) {
-        return;
-    }
-    for(var i=0,len=items.length; i<len; i++) {
-        var item = items[i];
-        if (item.kind == 'file' ||item.type.indexOf('image') > -1) {
-            var blob = item.getAsFile();
-            var reader = new FileReader();
-            reader.onload = function(event) {
-                var data = event.target.result;
-                var img = new Image();
-                img.src = data;
-                img.onload =  function (ev) {
-                    autoMsgImgSize(img, 400, 300);
-                };
-                document.getElementById("msgImage").style.display = "block";
-                document.getElementById("msgImage").appendChild(img);
-                return false;
-            }; // data url!
-            reader.readAsDataURL(blob);
-        }
-    }
+   try{
+       var imgFile = null;
+       var idx;
+       var items = event.clipboardData.items;
+       if(items == undefined) {
+           return;
+       }
+       for(var i=0,len=items.length; i<len; i++) {
+           var item = items[i];
+           if (item.kind == 'file' ||item.type.indexOf('image') > -1) {
+               var blob = item.getAsFile();
+               var reader = new FileReader();
+               reader.onload = function(event) {
+                   var data = event.target.result;
+                   var img = new Image();
+                   img.src = data;
+                   img.onload =  function (ev) {
+                       autoMsgImgSize(img, 400, 300);
+                   };
+                   document.getElementById("msgImage").style.display = "block";
+                   document.getElementById("msgImage").appendChild(img);
+                   return false;
+               }; // data url!
+               reader.readAsDataURL(blob);
+           }
+       }
+   }catch (error){
+
+   }
 });
 
 document.onkeydown=function(e){

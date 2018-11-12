@@ -64,7 +64,7 @@ class File_Manager
 
     public function getFileSize($fileId)
     {
-        try{
+        try {
             if (strlen($fileId) < 1) {
                 return false;
             }
@@ -75,7 +75,7 @@ class File_Manager
 
             $path = $this->getPath($dirName, $fileId, false);
             return getimagesize($path);
-        }catch (Exception $ex) {
+        } catch (Exception $ex) {
             return false;
         }
     }
@@ -232,31 +232,16 @@ class File_Manager
                 $picElements = $this->buildImageElements(1, $start_x, $start_y, $pic_w, $pic_h, []);
                 break;
             case 2://ok
+                $start_y = 128.5;
                 $pic_w = intval($default_width / 2) - 5;//width
                 $pic_h = $pic_w;
                 $picElements = $this->buildImageElements(2, $start_x, $start_y, $pic_w, $pic_h, []);
-
-//                $element1 = [
-//                    "x" => 0,
-//                    "y" => 0,
-//                    "w" => intval($default_width / 2) - 5,
-//                    "h" => intval($default_width / 2) - 5,
-//                ];
-//                $picElements[] = $element1;
-//
-//                $element2 = [
-//                    "x" => 255,
-//                    "y" => 255,
-//                    "w" => intval($default_width / 2) - 5,
-//                    "h" => intval($default_width / 2) - 5,
-//                ];
-//
-//                $picElements[] = $element2;
                 break;
             case 3:
+                $start_x = 127.5;
                 $pic_w = intval($default_width / 2) - 5;//width
                 $pic_h = $pic_w;
-                $picElements = $this->buildImageElements(3, $start_x, $start_y, $pic_w, $pic_h, [2]);
+                $picElements = $this->buildImageElements(3, $start_x, $start_y, $pic_w, $pic_h, [1]);
                 break;
             case 4: //OK
                 $pic_w = intval($default_width / 2) - 5; // 宽度
@@ -264,34 +249,17 @@ class File_Manager
                 $picElements = $this->buildImageElements(4, $start_x, $start_y, $pic_w, $pic_h, [2]);
                 break;
             case 5:
-                $pic_w = intval($default_width / 2) - 5;
-                $pic_h = intval($default_height / 2) - 5;
-
-                $newLineArr = array(2);
-
-                for ($i = 0; $i < 5; $i++) {
-
-                    $element = [
-                        "x" => $start_x,
-                        "y" => $start_y,
-                        "w" => $pic_w,
-                        "h" => $pic_h,
-                    ];
-                    $picElements[] = $element;
-
-                    if (in_array($i + 1, $newLineArr)) {
-                        $start_x = 0;
-                        $start_y = $start_y + $pic_h + $space_y;
-                        $pic_w = intval($default_width / 3) - 5;
-                    } else {
-                        $start_x = $start_x + $pic_w + $space_x;
-                    }
-                }
+                $start_x = 83.33;
+                $start_y = 83.33;
+                $pic_w = intval($default_width / 3) - 5; // 宽度
+                $pic_h = intval($default_height / 3) - 5; // 高度
+                $picElements = $this->buildImageElements(5, $start_x, $start_y, $pic_w, $pic_h, [2]);
 
                 break;
             case 6://ok
+                $start_y = 83.33;
                 $pic_w = intval($default_width / 3) - 5; // 宽度
-                $pic_h = intval($default_height / 2) - 5; // 高度
+                $pic_h = intval($default_height / 3) - 5; // 高度
                 $picElements = $this->buildImageElements(6, $start_x, $start_y, $pic_w, $pic_h, [3]);
                 break;
             case 7://ok
@@ -336,7 +304,7 @@ class File_Manager
             imagecopyresized($defaultImage, $resource, $element['x'], $element['y'], 0, 0, $element['w'], $element['h'], imagesx($resource), imagesy($resource)); // 最后两个参数为原始图片宽度和高度，倒数两个参数为copy时的图片宽度和高度
         }
 
-        header("Content-type: image/jpg");
+//        header("Content-type: image/jpg");
 
         $res = imagejpeg($defaultImage, $outImagePath);
 
@@ -436,4 +404,21 @@ class File_Manager
         return $path;
     }
 
+    public function fileIsExists($fileId)
+    {
+        //处理异常，异常return true
+        $fileName = explode("-", $fileId);
+        $dateDir = $fileName[0];
+        $fileId = $fileName[1];
+        $fileId = str_replace("../", "", $fileId);
+        $dateDir = str_replace("../", "", $dateDir);
+
+        $filePathName = WPF_LIB_DIR . "/../{$this->attachmentDir}/$dateDir/$fileId";
+
+        if (!file_exists($filePathName)) {
+            return false;
+        }
+
+        return true;
+    }
 }

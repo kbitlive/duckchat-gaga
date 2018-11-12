@@ -20,19 +20,9 @@ class ApiPushAuthResponse extends \Google\Protobuf\Internal\Message
      */
     private $siteIsMute = false;
 
-    /**
-     * Constructor.
-     *
-     * @param array $data {
-     *     Optional. Data for populating the Message object.
-     *
-     *     @type bool $siteIsMute
-     *          site is mute
-     * }
-     */
-    public function __construct($data = NULL) {
+    public function __construct() {
         \GPBMetadata\Platform\ApiPushAuth::initOnce();
-        parent::__construct($data);
+        parent::__construct();
     }
 
     /**

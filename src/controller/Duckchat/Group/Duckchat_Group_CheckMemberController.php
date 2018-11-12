@@ -1,7 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: zhangjun
+ * duckchat 对外接口
+ * User: SAM<an.guoyue254@gmail.com>
  * Date: 04/09/2018
  * Time: 4:29 PM
  */
@@ -10,7 +10,6 @@ class Duckchat_Group_CheckMemberController extends Duckchat_MiniProgramControlle
 {
     private $classNameForRequest = '\Zaly\Proto\Plugin\DuckChatGroupCheckMemberRequest';
     private $classNameForResponse = '\Zaly\Proto\Plugin\DuckChatGroupCheckMemberResponse';
-    private $logoutAction = "api.site.logout";
 
     public function rpcRequestClassName()
     {
@@ -24,44 +23,14 @@ class Duckchat_Group_CheckMemberController extends Duckchat_MiniProgramControlle
     public function rpc(\Google\Protobuf\Internal\Message $request, \Google\Protobuf\Internal\Message $transportData)
     {
         $tag = __CLASS__ . '-' . __FUNCTION__;
-
         try {
-            $groupId = $request->getGroupId();
-            $userId = $request->getUserId();
-            $memberType = $this->getMemberType($groupId, $userId);
-            $response = $this->getGroupCheckMemberResponse($memberType);
-            $this->setRpcError($this->defaultErrorCode, "");
-            $this->rpcReturn($transportData->getAction(), $response);
+            $response = $this->ctx->DuckChat_Group->checkMember($this->pluginMiniProgramId, $request);
+            $this->returnSuccessRPC($response);
         } catch (Exception $ex) {
-            $this->ctx->Wpf_Logger->error($tag, "error_msg ==" . $ex->getMessage());
-            $errorCode = $this->zalyError->errorExistUser;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            $this->setRpcError($errorCode, $errorInfo);
-            $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
+            $this->ctx->Wpf_Logger->error($tag, "error=" . $ex->getMessage() . "\n" . $ex->getTraceAsString());
+            $this->returnErrorRPC(new $this->classNameForResponse(), $ex);
         }
 
     }
 
-    private function getMemberType($groupId, $userId)
-    {
-        $groupUserInfo = $this->ctx->SiteGroupUserTable->getGroupUser($groupId, $userId);
-        if ($groupUserInfo == false) {
-            throw new Exception("none user");
-        }
-        return $groupUserInfo['memberType'];
-    }
-
-    private function getGroupCheckMemberResponse($memberType)
-    {
-        $tag = __CLASS__ . '-' . __FUNCTION__;
-
-        try {
-            $response = new \Zaly\Proto\Plugin\DuckChatGroupCheckMemberResponse();
-            $response->setMemberType($memberType);
-            return $response;
-        } catch (Exception $ex) {
-            $this->ctx->Wpf_Logger->error($tag, "error_msg ==" . $ex->getMessage());
-
-        }
-    }
 }

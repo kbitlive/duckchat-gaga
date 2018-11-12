@@ -3,52 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?php if ($lang == "1") { ?>站点设置<?php } else { ?>Site Config<?php } ?></title>
+    <title><?php if ($lang == "1") { ?>页面配置<?php } else { ?>Page Config<?php } ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="stylesheet" href="../../public/jquery/weui.min.css"/>
     <link rel="stylesheet" href="../../public/jquery/jquery-weui.min.css"/>
-
     <link rel="stylesheet" href="../../public/manage/config.css"/>
-
-    <style>
-        .color-picker {
-            width: 30px;
-            height: 30px;
-            border: 0px;
-            outline: none;
-            cursor: pointer;
-        }
-
-        /*填充*/
-        .login-background-image-0 {
-            margin: 5px 10px 5px 10px;
-            height: 200px;
-            /*background-color: #0bb20c;*/
-            background-size: cover;
-            background-attachment: fixed;
-        }
-
-        /*拉伸*/
-        .login-background-image-1 {
-            margin: 5px 10px 5px 10px;
-            height: 200px;
-            background-position: 0 0;
-            background-size: 100% 100%;
-        }
-
-        .login-background-image-2 {
-            margin: 5px 10px 5px 10px;
-            height: 200px;
-            background-repeat: repeat;
-        }
-
-        .item-row,.create_button {
-            cursor: pointer;
-            outline: none;
-        }
-
-    </style>
 
 </head>
 
@@ -60,21 +20,18 @@
 
         <div class="list-item-center">
 
-            <div class="item-row" id="site-name" onclick="showLoginWelcomeText()">
+            <div class="item-row" id="custom_login">
                 <div class="item-body">
                     <div class="item-body-display">
-
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">登陆页欢迎文案</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Login Page Introduction</div>
-                        <?php } ?>
+                        <div class="item-body-desc"><?php if ($lang == "1") { ?>
+                                登录页
+                            <?php } else { ?>
+                                Login Page
+                            <?php } ?>
+                        </div>
 
                         <div class="item-body-tail">
-                            <div class="item-body-value"><?php echo $loginWelcomeText; ?></div>
-                            <div class="item-body-value">
-                                <img class="more-img" src="../../public/img/manage/more.png"/>
-                            </div>
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
                         </div>
                     </div>
 
@@ -82,22 +39,18 @@
             </div>
             <div class="division-line"></div>
 
-            <div class="item-row">
+            <div class="item-row" id="custom_register">
                 <div class="item-body">
                     <div class="item-body-display">
-
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">登陆页背景颜色</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Login Background Color</div>
-                        <?php } ?>
+                        <div class="item-body-desc"><?php if ($lang == "1") { ?>
+                                注册页
+                            <?php } else { ?>
+                                Register Page
+                            <?php } ?>
+                        </div>
 
                         <div class="item-body-tail">
-                            <input class="color-picker" type="color" id="html5colorpicker"
-                                   onchange="clickColor(0, -1, -1, 5)" value="<?php echo $loginBackgroundColor; ?>">
-                            <div class="item-body-value">
-                                <img class="more-img" src="../../public/img/manage/more.png"/>
-                            </div>
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
                         </div>
                     </div>
 
@@ -105,57 +58,26 @@
             </div>
             <div class="division-line"></div>
 
-        </div>
-
-    </div>
-
-    <div class="layout-all-row">
-
-        <div class="list-item-center">
-
-            <div class="item-row">
+            <div class="item-row" id="custom-front-page">
                 <div class="item-body">
-                    <div class="item-body-display" onclick="uploadFile('upload-background-image')">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">登陆页背景图片</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Login Page Background-image</div>
-                        <?php } ?>
-
-                        <div class="item-body-tail">
-                            <div class="item-body-value">
-                                <img class="more-img" src="../../public/img/manage/more.png"/>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="login-background-image-<?php echo $loginBackgroundImageDisplay ?> image-bg"
-                 style="background-image: url('/_api_file_download_/?fileId=<?php echo $loginBackgroundImage ?>');" bgImgId="<?php echo $loginBackgroundImage ?>">
-                <input id="upload-background-image" type="file" onchange="uploadImageFile(this)"
-                       accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
-                       style="display: none;">
-            </div>
-
-            <div class="item-row">
-                <div class="item-body" id="image-display-type" data="<?php echo $loginBackgroundImageDisplay ?>">
                     <div class="item-body-display">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">登陆页背景图片模式</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Login Page backgroud display mode</div>
-                        <?php } ?>
+                        <div class="item-body-desc"><?php if ($lang == "1") { ?>
+                                默认帧
+                            <?php } else { ?>
+                                Front Page
+                            <?php } ?>
+                        </div>
 
                         <div class="item-body-tail">
-                            <div class="item-body-value" id="image-display-type-text">
-                                <?php if ($loginBackgroundImageDisplay == "0") { ?>
-                                    <?php if ($lang == "1") { ?> 默认(填充)<?php } else { ?> Default(Cover) <?php } ?>
-                                <?php } else if ($loginBackgroundImageDisplay == "1") { ?>
-                                    <?php if ($lang == "1") { ?> 拉伸<?php } else { ?>Fill<?php } ?>
-                                <?php } else if ($loginBackgroundImageDisplay == "2") { ?>
-                                    <?php if ($lang == "1") { ?> 平铺<?php } else { ?> Repeat <?php } ?>
+                            <div class="item-body-value" id="custom-front-page-text">
+                                <?php if ($frontPage == "0" || $frontPage == 1) { ?>
+                                    <?php if ($lang == "1") { ?> 主页 <?php } else { ?> Home <?php } ?>
+                                <?php } else if ($frontPage == "2") { ?>
+                                    <?php if ($lang == "1") { ?> 聊天 <?php } else { ?> Chats <?php } ?>
+                                <?php } else if ($frontPage == "3") { ?>
+                                    <?php if ($lang == "1") { ?> 通讯录/好友 <?php } else { ?> Contacts/Friends <?php } ?>
+                                <?php } else if ($frontPage == "4") { ?>
+                                    <?php if ($lang == "1") { ?> 我<?php } else { ?> Me <?php } ?>
                                 <?php } ?>
                             </div>
                             <div class="item-body-value">
@@ -168,312 +90,150 @@
             </div>
             <div class="division-line"></div>
 
+            <div class="item-row" id="hidden-home-page">
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <div class="item-body-desc"><?php if ($lang == "1") { ?>
+                                是否隐藏主页
+                            <?php } else { ?>
+                                Hidden Home Page
+                            <?php } ?>
+                        </div>
+
+                        <div class="item-body-tail">
+                            <?php if ($hiddenHomePage == 1) { ?>
+                                <input id="hiddenHomeSwitch" class="weui_switch" type="checkbox" checked>
+                            <?php } else { ?>
+                                <input id="hiddenHomeSwitch" class="weui_switch" type="checkbox">
+                            <?php } ?>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
         </div>
 
     </div>
 
-</div>
 
+    <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="../../public/manage/native.js"></script>
 
-<div class="wrapper-mask" id="wrapper-mask" style="visibility: hidden;"></div>
+    <script type="text/javascript" src="../../public/jquery/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="../../public/js/jquery-confirm.js"></script>
 
-<div class="popup-template" style="display:none;">
+    <script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
 
-    <div class="config-hidden" id="popup-group">
+    <script type="text/javascript">
 
-        <div class="flex-container">
-            <div class="header_tip_font popup-group-title"></div>
-        </div>
-
-        <div class="" style="text-align: center">
-            <input type="text" class="popup-group-input"
-                   data-local-placeholder="enterGroupNamePlaceholder" placeholder="please input">
-        </div>
-
-        <div class="line"></div>
-
-        <div class="" style="text-align:center;">
-            <?php if ($lang == "1") { ?>
-                <button id="updatePopupButton" type="button" class="create_button" style="cursor: pointer;outline: none"key-value=""
-                        onclick="updateDataValue();">确认
-                </button>
-            <?php } else { ?>
-                <button id="updatePopupButton" type="button" class="create_button"  style="cursor: pointer;outline: none" key-value=""
-                        onclick="updateDataValue();">Confirm
-                </button>
-            <?php } ?>
-        </div>
-
-    </div>
-
-</div>
-
-<script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="../../public/jquery/jquery-weui.min.js"></script>
-<script type="text/javascript" src="../../public/js/jquery-confirm.js"></script>
-
-<script type="text/javascript" src="../../public/manage/native.js"></script>
-
-<script type="text/javascript">
-
-    function uploadFile(obj) {
-        $("#" + obj).val("");
-        $("#" + obj).click();
-    }
-
-
-    function uploadImageFile(obj) {
-
-        if (obj) {
-            if (obj.files) {
-                var formData = new FormData();
-
-                formData.append("file", obj.files.item(0));
-                formData.append("fileType", 1);
-                formData.append("isMessageAttachment", false);
-
-                var src = window.URL.createObjectURL(obj.files.item(0));
-
-                uploadFileToServer(formData, src);
-
-                //上传以后本地展示的
-                $(".site-logo-image").attr("src", src);
+        function getLanguage() {
+            var nl = navigator.language;
+            if ("zh-cn" == nl || "zh-CN" == nl) {
+                return 1;
             }
-            return obj.value;
+            return 0;
         }
 
-    }
-
-    $(".image-bg").each(function () {
-        if(!isMobile()) {
-            var imgId = $(this).attr("bgImgId");
-            var src =  "./index.php?action=http.file.downloadFile&fileId="+ imgId+"&returnBase64=0";
-            $(".image-bg")[0].style.backgroundImage = " url('"+src+"')";
-        }
-    });
-
-
-    function uploadFileToServer(formData, src) {
-
-        var url = "./index.php?action=http.file.uploadWeb";
-
-        if (isMobile()) {
-            url = "/_api_file_upload_/?fileType=1";  //fileType=1,表示文件
-        }
-
-        $.ajax({
-            url: url,
-            type: "post",
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (imageFileIdResult) {
-
-                if (imageFileIdResult) {
-                    var res = JSON.parse(imageFileIdResult);
-                    var fileId = res.fileId;
-                    updateLoginBackgroundImage(fileId);
-                } else {
-                    alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");
-                }
-
-            },
-            error: function (err) {
-                alert("update image error");
-                return false;
-            }
+        $("#custom_login").on("click", function () {
+            var url = "index.php?action=manage.custom.login&page=phpinfo&lang=" + getLanguage();
+            zalyjsCommonOpenNewPage(url);
         });
-    }
-
-    function updateLoginBackgroundImage(imageFileId) {
-        var url = "index.php?action=miniProgram.admin.updateLogin";
-        var data = {
-            'key': 'loginBackgroundImage',
-            'value': imageFileId,
-        };
-        zalyjsCommonAjaxPostJson(url, data, updateImageResponse);
-    }
-
-    function updateImageResponse(url, data, result) {
-        var res = JSON.parse(result);
-
-        if (res.errCode) {
-            window.location.reload();
-        } else {
-            alert("errorInfo:" + res.errInfo);
-        }
-    }
-
-    function showWindow(jqElement) {
-        jqElement.css("visibility", "visible");
-        $(".wrapper-mask").css("visibility", "visible").append(jqElement);
-    }
 
 
-    function removeWindow(jqElement) {
-        jqElement.remove();
-        $(".popup-template").append(jqElement);
-        $(".wrapper-mask").css("visibility", "hidden");
-    }
-
-
-    $(".wrapper-mask").mouseup(function (e) {
-        var targetId = e.target.id;
-        var targetClassName = e.target.className;
-
-        if (targetId == "wrapper-mask") {
-            var wrapperMask = document.getElementById("wrapper-mask");
-            var length = wrapperMask.children.length;
-            var i;
-            for (i = 0; i < length; i++) {
-                var node = wrapperMask.children[i];
-                node.remove();
-                // addTemplate(node);
-                $(".popup-template").append(node);
-                $(".popup-template").hide();
-            }
-            $(".popup-group-input").val("");
-            $("#updatePopupButton").attr("data", "");
-            wrapperMask.style.visibility = "hidden";
-        }
-    });
-
-
-    function updateDataValue() {
-
-        var key = $("#updatePopupButton").attr("key-value");
-
-        var url = "index.php?action=miniProgram.admin.updateLogin&lang=" + getLanguage();
-
-        var value = $.trim($(".popup-group-input").val());
-
-        var data = {
-            'key': key,
-            'value': value,
-        };
-
-        zalyjsCommonAjaxPostJson(url, data, updateConfigResponse);
-
-        // close
-        removeWindow($(".config-hidden"));
-    }
-
-    function updateConfigResponse(url, data, result) {
-        var res = JSON.parse(result);
-        if ("success" == res.errCode) {
-            window.location.reload();
-        } else {
-            alert("error : " + res.errInfo);
-        }
-    }
-
-    function showLoginWelcomeText() {
-        var title = $("#site-name").find(".item-body-desc").html();
-        var inputBody = $("#site-name").find(".item-body-value").html();
-
-        showWindow($(".config-hidden"));
-
-        $(".popup-group-title").html(title);
-        $(".popup-group-input").val(inputBody);
-        $("#updatePopupButton").attr("key-value", "loginWelcomeText");
-    }
-
-    //loginMiniProgramId item-body-value
-    $(".loginMiniProgram").click(function () {
-        var miniProgramId = $(this).find("#loginMiniProgramId").html();
-        var url = "index.php?action=manage.miniProgram.profile&lang=" + getLanguage() + "&pluginId=" + miniProgramId;
-        zalyjsCommonOpenPage(url);
-    });
-
-
-    $("#image-display-type").click(function () {
-        var language = getLanguage();
-
-        $.actions({
-            title: "",
-            onClose: function () {
-                console.log("close");
-            },
-            actions: [{
-                text: language == 0 ? "Default(Cover)" : "默认(填充)",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#image-display-type-text").html(language == 0 ? "Default" : "默认");
-                    $("#image-display-type").attr("data", "0");
-                    updateImageDisplayType(0);
-                }
-            }, {
-                text: language == 0 ? "Fill" : "拉伸",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#image-display-type-text").html(language == 0 ? "Cover" : "填充");
-                    $("#image-display-type").attr("data", "1");
-                    updateImageDisplayType(1);
-                }
-            }, {
-                text: language == 0 ? "Repeat" : "平铺",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#image-display-type-text").html(language == 0 ? "Repeat" : "平铺");
-                    $("#image-display-type").attr("data", "2");
-
-                    updateImageDisplayType(2);
-                }
-            }]
+        $("#custom_register").on("click", function () {
+            var url = "index.php?action=manage.custom.register&page=phpinfo&lang=" + getLanguage();
+            zalyjsCommonOpenNewPage(url);
         });
-    });
-
-    //update push notice type
-    function updateImageDisplayType(displayValue) {
-        var url = "index.php?action=miniProgram.admin.updateLogin&lang=" + getLanguage();
-        var data = {
-            'key': 'loginBackgroundImageDisplay',
-            'value': displayValue,
-        };
-
-        zalyjsCommonAjaxPostJson(url, data, updateResponse);
-    }
 
 
-    function updateResponse(url, data, result) {
-        if (result) {
+        $("#custom-front-page").click(function () {
+            var language = getLanguage();
+            $.actions({
+                title: "",
+                onClose: function () {
+                    console.log("close");
+                },
+                actions: [{
+                    text: language == 0 ? "Home" : "主页",
+                    className: "select-color-primary",
+                    onClick: function () {
+                        $("#custom-front-page-text").html(language == 0 ? "Home" : "主页");
+                        $("#custom-front-page").attr("data", "1");
+                        updateFrontPage(1);
+                    }
+                }, {
+                    text: language == 0 ? "Chats" : "聊天",
+                    className: "select-color-primary",
+                    onClick: function () {
+                        $("#custom-front-page-text").html(language == 0 ? "Chats" : "聊天");
+                        $("#custom-front-page").attr("data", "2");
+                        updateFrontPage(2);
+                    }
+                }, {
+                    text: language == 0 ? "Contacts/Friends" : "通讯录/好友",
+                    className: "select-color-primary",
+                    onClick: function () {
+                        $("#custom-front-page-text").html(language == 0 ? "Contacts/Friends" : "通讯录/好友");
+                        $("#custom-front-page").attr("data", "3");
+                        updateFrontPage(3);
+                    }
+                }
+                    // , {
+                    //     text: language == 0 ? "Me" : "我",
+                    //     className: "select-color-primary",
+                    //     onClick: function () {
+                    //         $("#custom-front-page-text").html(language == 0 ? "Me" : "我");
+                    //         $("#custom-front-page").attr("data", "4");
+                    //         updateFrontPage(4);
+                    //     }
+                    // }
+                ]
+            });
+        });
 
-            var res = JSON.parse(result);
+        function updateFrontPage(frontPageValue) {
+            var url = "index.php?action=manage.config.update";
 
-            if (!"success" == res.errCode) {
+            var data = {
+                'key': 'frontPage',
+                'value': frontPageValue,
+            };
+
+            zalyjsCommonAjaxPostJson(url, data, updateConfigResponse);
+        }
+
+        //update invitation code
+        $("#hiddenHomeSwitch").change(function () {
+            var isChecked = $(this).is(':checked');
+            var url = "index.php?action=manage.config.update";
+
+            var data = {
+                'key': 'hiddenHomePage',
+                'value': isChecked ? 1 : 0,
+            };
+
+            zalyjsCommonAjaxPostJson(url, data, updateConfigResponse);
+
+        });
+
+        function updateConfigResponse(url, data, result) {
+            if (result) {
+                var res = JSON.parse(result);
+
+                if ("success" != res.errCode) {
+                    var errInfo = res.errInfo;
+                    var errMsg = (getLanguage() == 1 ? "操作失败,原因：" : "update error, cause:") + errInfo;
+                    alert(errMsg);
+                }
+
+            } else {
                 alert(getLanguage() == 1 ? "操作失败" : "update error");
             }
-
-        } else {
-            alert(getLanguage() == 1 ? "操作失败" : "update error");
-        }
-        window.location.reload();
-    }
-
-    function clickColor(hex, seltop, selleft, html5) {
-
-        var color;
-        if (html5 && html5 == 5) {
-            color = document.getElementById("html5colorpicker").value;
-        } else {
-            if (hex == 0) {
-                color = document.getElementById("entercolor").value;
-            } else {
-                color = hex;
-            }
         }
 
-        var url = "index.php?action=miniProgram.admin.updateLogin&lang=" + getLanguage();
-        var data = {
-            'key': 'loginBackgroundColor',
-            'value': color,
-        };
-
-        zalyjsCommonAjaxPostJson(url, data, updateResponse);
-    }
-
-</script>
-
+    </script>
 
 </body>
 </html>

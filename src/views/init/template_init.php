@@ -57,7 +57,7 @@
 
 
 <script id="tpl-check-site-environment" type="text/html">
-    <div class="initDiv " style="margin-top:2rem;">
+    <div class="initDiv" >
         <div class="initHeader" style="">
             检测站点信息
         </div>
@@ -90,36 +90,9 @@
             </div>
         </div>
 
-        <div class="init_check_info justify-content-left  ext_pdo_sqlite" isLoad="{{isLoadPDOSqlite}}">
-            <div class="init_check isLoadPDOSqlite">
-                3.是否安装PDO_Sqlite
-            </div>
-            <div class="init_check_result">
-                {{if isLoadPDOSqlite}}
-                <img src='../../public/img/init/check_success.png' />
-                {{else}}
-                <img src='../../public/img//init/check_failed.png'  />
-                {{/if}}
-            </div>
-        </div>
-
-
-        <div class="init_check_info justify-content-left ext_curl" isLoad="{{isLoadPDOMysql}}">
-            <div class="init_check isLoadPDOMysql">
-                4.是否安装PDO_Mysql
-            </div>
-            <div class="init_check_result">
-                {{if isLoadPDOMysql}}
-                <img src='../../public/img/init/check_success.png' />
-                {{else}}
-                <img src='../../public/img//init/check_failed.png'  />
-                {{/if}}
-            </div>
-        </div>
-
         <div class="init_check_info justify-content-left ext_curl" isLoad="{{isLoadCurl}}">
             <div class="init_check isLoadCurl">
-                5.是否安装Curl
+                3.是否安装Curl
             </div>
             <div class="init_check_result">
                 {{if isLoadCurl}}
@@ -130,22 +103,9 @@
             </div>
         </div>
 
-        <div class="init_check_info justify-content-left ext_curl" isLoad="{{isCanUseCurl}}">
-            <div class="init_check isCanUseCurl" style="color: #F44336;">
-                6.是否可以正确Curl请求
-            </div>
-            <div class="init_check_result">
-                {{if isCanUseCurl}}
-                <img class="isCanUseCurlImg" src='../../public/img/init/check_success.png' />
-                {{else}}
-                <img class="isCanUseCurlImg" src='../../public/img//init/check_failed.png'  />
-                {{/if}}
-            </div>
-        </div>
-
         <div class="init_check_info justify-content-left  ext_is_write" isLoad="{{isWritePermission}}">
             <div class="init_check isWritePermission">
-                7.当前目录写权限
+                4.当前目录写权限
             </div>
             <div class="init_check_result">
                 {{if isWritePermission}}
@@ -158,7 +118,7 @@
 
         <div class="init_check_info justify-content-left  ext_is_write" isLoad="{{isLoadProperties}}">
             <div class="init_check isLoadProperties">
-                8.是否可以加载语言包
+                5.是否可以加载语言包
             </div>
             <div class="init_check_result">
                 {{if isLoadProperties}}
@@ -169,26 +129,21 @@
             </div>
         </div>
 
-        <div style="margin-top:4rem;margin-bottom: 5rem;">
+        <div style="margin-top:4rem;  text-align: center;">
             <button class="previte_init_protocol" data-local-value="prevStepTip">上一步</button>
             <button class="next_init_data" style="background:rgba(201,201,201,1);"  disabled data-local-value="nextStepTip">下一步</button>
+        </div>
+        <div style="text-align: center; margin-top:4rem;margin-bottom: 3rem;">
+            <a class="phpinfo" href="./{{phpinfo}}" target="_blank"  data-local-value="phpinfoTip">查看当前PHP环境</a>
         </div>
 </script>
 
 
 <script id="tpl-init-data" type="text/html">
     <div class="initDiv ">
-        <img style="width: 3rem;height: 3rem;margin-top:2rem;margin-left: 2rem;cursor: pointer;" onclick="newStepForCheckEnv('data_init')" src="../../public/img/back.png">
         <div class="initHeader" style="margin-top: 0rem;">
             数据初始化
         </div>
-        <div class="initHeader-setting">
-            邀请码<span style="font-size: 1rem;color: #FF6500;">（注：第一个用户使用此邀请码则为管理员）</span>
-        </div>
-        <div class="initHeader-uic">
-            <input type="text" class="uic-input" placeholder="000000, 纯数字，6-20位">
-        </div>
-
         <div class="initHeader-setting">
             请选择登录方式：
             <select id="verifyPluginId">
@@ -210,35 +165,66 @@
         </div>
 
 
+        <div class="init_check_info justify-content-left  ext_pdo_sqlite" isLoad="{{isLoadPDOSqlite}}" style="display: none;">
+            <div class="init_check isLoadPDOSqlite">
+                是否安装PDO_Sqlite
+            </div>
+            <div class="init_check_result">
+                {{if isLoadPDOSqlite}}
+                <img src='../../public/img/init/check_success.png' />
+                {{else}}
+                <img src='../../public/img//init/check_failed.png'  />
+                {{/if}}
+            </div>
+        </div>
+
+
+        <div class="init_check_info justify-content-left ext_pdo_mysql"  isLoad="{{isLoadPDOMysql}}" >
+            <div class="init_check isLoadPDOMysql">
+                是否安装PDO_Mysql
+            </div>
+            <div class="init_check_result">
+                {{if isLoadPDOMysql}}
+                <img src='../../public/img/init/check_success.png' />
+                {{else}}
+                <img src='../../public/img//init/check_failed.png'  />
+                {{/if}}
+            </div>
+        </div>
+
         <div class="mysql-div">
             <!--       sql address         -->
             <div class="sql-setting mysql-setting">
+                <span>数据库地址：</span>
                 <input type="text" class="sql-input sql-dbHost" placeholder="数据库地址">
                 <img src="../../public/img/init/failed.png" class="failed_img dbHostFailed">
             </div>
             <!--       sql port         -->
             <div class="sql-setting mysql-setting">
+                <span>端口号：</span>
                 <input type="text" class="sql-input sql-dbPort" placeholder="数据库端口号,默认：3306">
                 <img src="../../public/img/init/failed.png" class="failed_img dbPortFailed">
             </div>
             <!--      sql name          -->
             <div class="sql-setting mysql-setting">
+                <span>数据库名称：</span>
                 <input type="text" class="sql-input sql-dbName" placeholder="数据库名称">
                 <img src="../../public/img/init/failed.png" class="failed_img dbNameFailed">
             </div>
             <!--      sql user          -->
             <div class="sql-setting mysql-setting">
-                <input type="text" class="sql-input sql-dbUserName" placeholder="用户名">
+                <span>用户名：</span>
+                <input type="text" class="sql-input sql-dbUserName" placeholder="数据库用户名">
                 <img src="../../public/img/init/failed.png" class="failed_img dbUserNameFailed">
             </div>
             <!--      sql password          -->
             <div class="sql-setting mysql-setting">
-                <input type="text" class="sql-input sql-dbPassword" placeholder="数据库密码">
+                <span>数据库密码：</span><input type="text" class="sql-input sql-dbPassword" placeholder="数据库密码">
                 <img src="../../public/img/init/failed.png" class="failed_img dbPasswordFailed">
             </div>
         </div>
         <div class="sqlite-div">
-            本地文件
+            <span style="width:6.57rem;height:1.31rem;font-size:1.31rem;font-family:PingFangSC-Regular;font-weight:400;color:rgba(102,102,102,1);line-height:1.31rem;margin-right: 1rem;">本地文件:</span>
             <select id="sqlite-file">
                 <option class="selectOption" fileName="">创建新Sqlite数据库</option>
                     {{each dbFiles file }}
@@ -247,11 +233,38 @@
             </select>
         </div>
 
+
+
+        <div class="initHeader-setting">
+            管理员账号
+        </div>
+       <div>
+           <div class="initHeader-admin">
+               <span>用户名：</span><input type="text" class="admin-input admin_name">
+               <img src="../../public/img/init/failed.png" class="admin_failed_img admin_name_failed">
+           </div>
+           <div class="initHeader-admin-tip">包含字母，长度5-24</div>
+
+           <div class="initHeader-admin">
+               <span>密码：</span><input type="password" class="admin-input admin_pwd">
+               <img src="../../public/img/init/failed.png" class="admin_failed_img admin_pwd_failed">
+           </div>
+           <div class="initHeader-admin-tip">包含字母，长度8-32</div>
+
+           <div class="initHeader-admin">
+               <span>确认密码：</span><input type="password" class="admin-input admin_repwd">
+               <img src="../../public/img/init/failed.png" class="admin_failed_img admin_repwd_failed">
+           </div>
+
+
+       </div>
+
         <div class="errorInfo">
         </div>
 
         <div class="d-flex flex-row justify-content-center init_data_btn" >
-            <button type="button" class="btn login_button"><span class="span_btn_tip">初始化数据</span></button>
+            <button class="previte_init_env" onclick="newStepForCheckEnv('data_init')" data-local-value="prevStepTip">Previous Step</button>
+            <button type="button" class="btn login_button"><span class="span_btn_tip" data-local-value="initSiteTip">初始化站点</span></button>
         </div>
     </div>
 </script>

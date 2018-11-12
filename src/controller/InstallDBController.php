@@ -17,8 +17,7 @@ class InstallDBController
     private $passportAccountSafePluginId = 105;
     private $configName = "config.php";
     private $sampleConfigName = "config.sample.php";
-    private $defaultUic = "000000";
-    private $uic;
+    private $sitePubkPem;
 
     private $lang = Zaly\Proto\Core\UserClientLangType::UserClientLangZH;
     /**
@@ -56,6 +55,7 @@ class InstallDBController
                 $sqliteName = $this->_dbPath . "/" . $sqliteName;
                 $fileExists = file_exists($sqliteName);
                 if ($newConfig['dbType'] == "sqlite" && !$fileExists) {
+                    header("Content-Type: text/html; charset=UTF-8");
                     echo "sqlite DB 文件不存在, 请删除config.php文件，初始化站点";
                     return;
                 }
@@ -64,7 +64,6 @@ class InstallDBController
             header("Location:" . $apiPageIndex);
             exit();
         }
-
 
         $config = require($sampleFileName);
         $sqliteName = "";
@@ -81,13 +80,6 @@ class InstallDBController
                 $serverHost = $_SERVER['HTTP_HOST'];
                 $port = $_SERVER['SERVER_PORT'];
                 $dbType = $_POST['dbType'];
-                $this->uic = isset($_POST['uic']) && $_POST['uic'] != "" ? $_POST['uic'] : $this->defaultUic;
-
-                $isUic = ZalyHelper::isUicNumber($this->uic);
-                if (!$isUic) {
-                    echo $this->lang == 1 ? "邀请码格式不正确，长度6-20位的数字" : "invitation code error";
-                    return;
-                }
 
                 $hosts = explode(":", $serverHost);
                 $host = array_shift($hosts);
@@ -165,13 +157,16 @@ class InstallDBController
                     $this->initSiteWithSqlite($sqliteName, $siteName, $host, $port);
                 }
 
+                $this->initSiteOwner($_POST['adminLoginName'], $_POST['adminPassword']);
+
                 $result['errCode'] = "success";
                 echo "success";
             } catch (Exception $ex) {
+                $this->deleteConfigFile();
                 $this->logger->error("do install site", $ex);
-                $result['errInfo'] = $ex->getMessage();
-//                echo $result;
-                echo $ex->getMessage();
+                $result['errCode'] = "error";
+                $result['errInfo'] = $ex->getMessage() . " " . $ex->getTraceAsString();
+                echo $ex->getMessage() . " " . $ex->getTraceAsString();
                 return;
             }
         } else if ($method == "GET") {
@@ -183,6 +178,11 @@ class InstallDBController
 
             if (isset($_GET['for']) && $_GET['for'] == 'test_curl_result') {
                 echo $this->isCanUserCurl();
+                return;
+            }
+
+            if (isset($_GET['for']) && $_GET['for'] == 'phpinfo') {
+                phpinfo();
                 return;
             }
 
@@ -215,9 +215,11 @@ class InstallDBController
             $sampleFile = require(dirname(dirname(__FILE__)) . "/config.sample.php");
 
             if ($isInstallRootPath === false) {
+                header("Content-Type: text/html; charset=UTF-8");
                 echo $this->lang == 1 ? "目前只支持根目录运行" : "Currently only the root directory is supported.";
                 return;
             }
+
             $params = [
                 "isPhpVersionValid" => version_compare(PHP_VERSION, "5.6.0") >= 0,
                 "isLoadOpenssl" => extension_loaded("openssl") && false != ZalyRsa::newRsaKeyPair(2048),
@@ -228,11 +230,13 @@ class InstallDBController
                 "siteVersion" => isset($sampleFile['siteVersionName']) ? $sampleFile['siteVersionName'] : "",
                 "versionCode" => $sampleFile['siteVersionCode'],
                 "isInstallRootPath" => $isInstallRootPath,
+                "siteAddress" => ZalyHelper::getRequestAddressPath(),
+                'phpinfo' => "./index.php?action=installDB&for=phpinfo",
             ];
             //get db file
             $dbDir = dirname(__DIR__);
             $dbFiles = scandir($dbDir);
-
+            $phpInfoExist = false;
             if (!empty($dbFiles)) {
                 $sqliteFiles = [];
                 foreach ($dbFiles as $dbFile) {
@@ -243,6 +247,7 @@ class InstallDBController
                 }
                 $params['dbFiles'] = json_encode($sqliteFiles);
             }
+
             echo $this->display("init_init", $params);
             return;
         }
@@ -251,7 +256,7 @@ class InstallDBController
     private function isCanUserCurl()
     {
         $sampleFile = require(dirname(dirname(__FILE__)) . "/config.sample.php");
-        $testCurlUrl = isset($sampleFile['testCurl'])?$sampleFile['testCurl'] : $sampleFile['test_curl'];
+        $testCurlUrl = isset($sampleFile['testCurl']) ? $sampleFile['testCurl'] : $sampleFile['test_curl'];
         $testCurlUrl = ZalyHelper::getFullReqUrl($testCurlUrl);
         $curlResult = $this->curl->request($testCurlUrl, 'get');
         echo $curlResult;
@@ -372,19 +377,17 @@ class InstallDBController
         $loginPluginId = ZalyConfig::getConfig("loginPluginId");
         $this->_insertSiteConfig($siteName, $loginPluginId);
 
-        $ownerUic = $this->uic;
-        $this->_insertSiteOwnerUic($ownerUic);
         $this->initPluginMiniProgram();
         return;
     }
 
     private function _insertSiteConfig($siteName, $loginPluginId)
     {
-        $siteConfig = SiteConfig::$siteConfig;
+        $siteConfig = SiteConfig::$initSiteConfig;
 
         $siteConfig[SiteConfig::SITE_NAME] = $siteName;
 
-        $siteConfig[SiteConfig::SITE_ENABLE_INVITATION_CODE] = 1;//init with uic when first user login
+        $siteConfig[SiteConfig::SITE_ENABLE_INVITATION_CODE] = 0;//init with uic when first user login
 
         $siteConfig[SiteConfig::SITE_LOGIN_PLUGIN_ID] = $loginPluginId;
 
@@ -393,6 +396,8 @@ class InstallDBController
 
         $pubkAndPrikPems = SiteConfig::getPubkAndPrikPem();
         $siteConfig = array_merge($siteConfig, $pubkAndPrikPems);
+
+        $this->sitePubkPem = $siteConfig[SiteConfig::SITE_ID_PUBK_PEM];
 
         $sqlStr = "";
         foreach ($siteConfig as $configKey => $configVal) {
@@ -451,7 +456,7 @@ class InstallDBController
                 'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingNewPage,
                 'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
                 'authKey' => "",
-                'management' => "index.php?action=miniProgram.admin.passwordLogin",
+                'management' => "",
             ],
             [
                 'pluginId' => 103,
@@ -467,7 +472,7 @@ class InstallDBController
             ],
             [
                 'pluginId' => 104,
-                'name' => "gif小程序",
+                'name' => "Gif表情",
                 'logo' => $this->getSiteGifIcon(),
                 'sort' => 2, //order = 2
                 'landingPageUrl' => "index.php?action=miniProgram.gif.index",
@@ -476,11 +481,12 @@ class InstallDBController
                 'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
                 'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
                 'authKey' => "",
+                "management" => "index.php?action=miniProgram.gif.cleanGif",
             ],
             [
                 'pluginId' => 104,
-                'name' => "gif小程序",
-                'logo' =>  $this->getSiteGifIcon(),
+                'name' => "Gif表情",
+                'logo' => $this->getSiteGifIcon(),
                 'sort' => 2, //order = 2
                 'landingPageUrl' => "index.php?action=miniProgram.gif.index",
                 'landingPageWithProxy' => 1, //1 表示走site代理
@@ -488,6 +494,7 @@ class InstallDBController
                 'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingChatbox,
                 'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
                 'authKey' => "",
+                "management" => "index.php?action=miniProgram.gif.cleanGif"
             ],
             [
                 'pluginId' => 105,
@@ -658,6 +665,7 @@ class InstallDBController
         $fileId = $fileManager->saveFile($defaultImage, "20180201");
         return $fileId;
     }
+
     private function getSiteGifIcon()
     {
         $defaultIcon = WPF_ROOT_DIR . "/public/img/plugin/gif.png";
@@ -669,5 +677,49 @@ class InstallDBController
         $fileManager = new File_Manager();
         $fileId = $fileManager->saveFile($defaultImage, "20180201");
         return $fileId;
+    }
+
+    private function initSiteOwner($adminLoginName, $adminPassword)
+    {
+        if (empty($adminLoginName) || empty($adminPassword)) {
+            throw new Exception("loginName or password error");
+        }
+
+        $passwordUserId = ZalyHelper::generateStrId();
+        //register user
+        $result = $this->registerSiteOwner($passwordUserId, $adminLoginName, $adminPassword);
+
+        if (!$result) {
+            throw new Exception("register site admin error");
+        }
+
+        if (empty($this->sitePubkPem)) {
+            throw new Exception("site RSA Public Key error");
+        }
+
+        $siteUserId = sha1($passwordUserId . "@" . $this->sitePubkPem);
+        //set site owner
+        $siteConfig = new Site_Config(new BaseCtx());
+        $siteConfig->updateConfigValue(SiteConfig::SITE_OWNER, $siteUserId);
+        return true;
+    }
+
+    private function registerSiteOwner($userId, $loginName, $password)
+    {
+        $userInfo = [
+            "userId" => $userId,
+            "loginName" => $loginName,
+            "password" => password_hash($password, PASSWORD_BCRYPT),
+            "nickname" => $loginName,
+            "timeReg" => ZalyHelper::getMsectime()
+        ];
+        $PassportPasswordTable = new PassportPasswordTable(new BaseCtx());
+        return $PassportPasswordTable->insertUserInfo($userInfo);
+    }
+
+    private function deleteConfigFile()
+    {
+        $configFilePath = dirname(dirname(__FILE__)) . "/config.php";
+        unlink($configFilePath);
     }
 }

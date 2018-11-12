@@ -71,12 +71,24 @@
 }
 
 .user-desc-body {
-    height:1.5rem;
     font-size:1.5rem;
     color:rgba(20,16,48,1);
     line-height:1.5rem;
     padding-bottom: 3rem;
-    padding-top:1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.user-desc-loginName {
+    width: 100%;
+    text-align: center;
+    height:1.31rem;
+    font-size:1.31rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(153,153,153,1);
+    line-height:1.31rem;
+    margin-top: 0.5rem;
 }
 
 .save_group_introduce {

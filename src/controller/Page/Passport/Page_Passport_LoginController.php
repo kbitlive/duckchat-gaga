@@ -11,6 +11,27 @@ class Page_Passport_LoginController extends HttpBaseController
 
     public function index()
     {
+        $tag = __CLASS__ . '->' . __FUNCTION__;
+        try {
+            $this->checkUserCookie();
+            if ($this->userId) {
+                $jumpPage = $this->getJumpUrlFromParams();
+                $apiPageIndex = ZalyConfig::getApiIndexUrl();
+                if ($jumpPage) {
+                    if (strpos($apiPageIndex, "?")) {
+                        $apiPageIndex .= "&" . $jumpPage;
+                    } else {
+                        header("Location:" . $apiPageIndex . "?" . $jumpPage);
+                        $apiPageIndex .= "?" . $jumpPage;
+                    }
+                }
+                header("Location:" . $apiPageIndex);
+                exit();
+            }
+        } catch (Exception $ex) {
+            $this->logger->error($tag, "page.passport.login error=" . $ex->getMessage());
+        }
+
         $cookieStr = isset($_SERVER['HTTP_COOKIE']) ? $_SERVER['HTTP_COOKIE'] : "";
         $isDuckchat = 0;
 
@@ -24,8 +45,8 @@ class Page_Passport_LoginController extends HttpBaseController
         $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
 
         $loginNameAliasConfig = isset($loginConfig[LoginConfig::LOGIN_NAME_ALIAS]) ? $loginConfig[LoginConfig::LOGIN_NAME_ALIAS] : "";
-        $loginNameAlias = isset( $loginNameAliasConfig["configValue"]) ?  $loginNameAliasConfig["configValue"] : "";
-        $passwordResetWayConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_WAY]) ?  $loginConfig[LoginConfig::PASSWORD_RESET_WAY] : "";
+        $loginNameAlias = isset($loginNameAliasConfig["configValue"]) ? $loginNameAliasConfig["configValue"] : "";
+        $passwordResetWayConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_WAY]) ? $loginConfig[LoginConfig::PASSWORD_RESET_WAY] : "";
         $passwordRestWay = isset($passwordResetWayConfig["configValue"]) ? $passwordResetWayConfig["configValue"] : "";
 
         $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
@@ -46,21 +67,53 @@ class Page_Passport_LoginController extends HttpBaseController
 
         $siteVersionName = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionNameKey);
 
+        $loginNameMinLengthConfig = isset($loginConfig[LoginConfig::LOGINNAME_MINLENGTH]) ? $loginConfig[LoginConfig::LOGINNAME_MINLENGTH] : "";
+        $loginNameMinLength = isset($loginNameMinLengthConfig["configValue"]) ? $loginNameMinLengthConfig["configValue"] : 5;
+
+        $loginNameMaxLengthConfig = isset($loginConfig[LoginConfig::LOGINNAME_MAXLENGTH]) ? $loginConfig[LoginConfig::LOGINNAME_MAXLENGTH] : "";
+        $loginNameMaxLength = isset($loginNameMaxLengthConfig["configValue"]) ? $loginNameMaxLengthConfig["configValue"] : 32;
+
+        $pwdMaxLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MAXLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MAXLENGTH] : "";
+        $pwdMaxLength = isset($pwdMaxLengthConfig["configValue"]) ? $pwdMaxLengthConfig["configValue"] : 32;
+
+        $pwdMinLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MINLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MINLENGTH] : "";
+        $pwdMinLength = isset($pwdMinLengthConfig["configValue"]) ? $pwdMinLengthConfig["configValue"] : 6;
+
+        $pwdContainCharactersConfig = isset($loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS]) ? $loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS] : "";
+        $pwdContainCharacters = isset($pwdContainCharactersConfig["configValue"]) ? $pwdContainCharactersConfig["configValue"] : "";
+
+        $thirdPartyLoginOptions = ZalyLogin::getThirdPartyConfigWithoutVerifyUrl();
+
+        $enableInvitationCode = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_INVITATION_CODE);
+        $enableRealName  = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_REAL_NAME);
+
         $params = [
             'siteName' => $siteName,
             'siteLogo' => $this->ctx->File_Manager->getCustomPathByFileId($siteLogo),
             'siteVersionName' => $siteVersionName,
             'isDuckchat' => $isDuckchat,
-            'loginNameAlias' => $loginNameAlias,
-            'passwordFindWay' => $passwordRestWay,
-            'passwordResetWay' => $passwordRestWay,
-            'passwordResetRequired' => $passwordResetRequired,
             'loginWelcomeText' => $loginWelcomeText,
             'loginBackgroundColor' => $loginBackgroundColor,
             'loginBackgroundImage' => $this->ctx->File_Manager->getCustomPathByFileId($loginBackgroundImage),
-            'loginBackgroundImageDisplay' => $loginBackgroundImageDisplay,
-        ];
 
+            "pwdMaxLength" => $pwdMaxLength,
+            "pwdMinLength" => $pwdMinLength,
+            "loginNameMinLength" => $loginNameMinLength,
+            "loginNameMaxLength" => $loginNameMaxLength,
+            'passwordResetRequired' => $passwordResetRequired,
+            "pwdContainCharacters" => $pwdContainCharacters,
+
+            'loginBackgroundImageDisplay' => $loginBackgroundImageDisplay,
+
+            'loginNameAlias'   => $loginNameAlias,
+            'passwordFindWay'  => $passwordRestWay,
+            'passwordResetWay' => $passwordRestWay,
+            'passwordResetRequired'  => $passwordResetRequired,
+            'thirdPartyLoginOptions' => json_encode($thirdPartyLoginOptions),
+
+            'enableInvitationCode' => $enableInvitationCode,
+            'enableRealName' =>  $enableRealName
+        ];
         echo $this->display("passport_login", $params);
         return;
     }

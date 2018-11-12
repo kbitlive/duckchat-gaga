@@ -32,10 +32,10 @@ class Manage_IndexController extends Manage_CommonController
     {
         $hasAdminMiniPrograms = [];
 
-        $miniPrograms = $this->ctx->SitePluginTable->getAllPluginList();
+        $miniProgramList = $this->ctx->SitePluginTable->getNonRepeatedPluginList();
 
-        if ($miniPrograms) {
-            foreach ($miniPrograms as $miniProgram) {
+        if ($miniProgramList) {
+            foreach ($miniProgramList as $miniProgram) {
 
                 $adminPageUrl = $miniProgram['adminPageUrl'];
 

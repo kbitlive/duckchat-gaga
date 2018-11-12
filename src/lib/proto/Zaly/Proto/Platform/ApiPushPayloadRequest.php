@@ -22,18 +22,9 @@ class ApiPushPayloadRequest extends \Google\Protobuf\Internal\Message
      */
     private $payloads;
 
-    /**
-     * Constructor.
-     *
-     * @param array $data {
-     *     Optional. Data for populating the Message object.
-     *
-     *     @type \Zaly\Proto\Platform\Payload[]|\Google\Protobuf\Internal\RepeatedField $payloads
-     * }
-     */
-    public function __construct($data = NULL) {
+    public function __construct() {
         \GPBMetadata\Platform\ApiPushPayload::initOnce();
-        parent::__construct($data);
+        parent::__construct();
     }
 
     /**

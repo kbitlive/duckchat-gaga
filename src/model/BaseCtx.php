@@ -7,6 +7,7 @@
  *
  * @property File_Manager File_Manager
  * @property Site_Login Site_Login
+ * @property Site_SessionVerify Site_SessionVerify
  * @property SiteConfig SiteConfig
  * @property Site_Config Site_Config
  * @property Site_Custom Site_Custom
@@ -29,6 +30,9 @@
  * @property SiteUicTable SiteUicTable
  * @property SitePluginTable SitePluginTable
  * @property SiteLoginCustomTable SiteLoginCustomTable
+ * @property SiteCustomItemTable SiteCustomItemTable
+ * @property SiteThirdPartyLoginTable SiteThirdPartyLoginTable
+ * @property SiteUserCustomTable SiteUserCustomTable
  *
  * @property Message_Client Message_Client
  * @property Message_News Message_News
@@ -42,6 +46,14 @@
  * @property SiteUserGifTable SiteUserGifTable
  *
  * @property Pinyin Pinyin
+ *
+ * @property DuckChat_Client DuckChat_Client
+ * @property DuckChat_Session DuckChat_Session
+ * @property DuckChat_Message DuckChat_Message
+ * @property DuckChat_User DuckChat_User
+ * @property DuckChat_Group DuckChat_Group
+ *
+ * @property Upgrade_Client Upgrade_Client
  *
  */
 class BaseCtx extends Wpf_Ctx
