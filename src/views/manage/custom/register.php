@@ -24,27 +24,6 @@
 
             <div class="item-row">
                 <div class="item-body">
-                    <div class="item-body-display loginMiniProgram">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">登陆小程序ID</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Login MiniProgram ID</div>
-                        <?php } ?>
-
-                        <div class="item-body-tail">
-                            <div class="item-body-value" id="loginMiniProgramId"> <?php echo $loginPluginId; ?></div>
-                            <div class="item-body-value">
-                                <img class="more-img" src="../../public/img/manage/more.png"/>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-            <div class="item-row">
-                <div class="item-body">
                     <div class="item-body-display loginNameAlias" onclick="showLoginNameAlias()">
                         <?php if ($lang == "1") { ?>
                             <div class="item-body-desc">登录名别名</div>
@@ -163,7 +142,7 @@
         $("#updatePopupButton").attr("key-value", "loginNameAlias");
     }
 
-    function showPasswordErrorNum(){
+    function showPasswordErrorNum() {
         var title = $(".passwordErrorNum").find(".item-body-desc").html();
         var inputBody = $("#passwordErrorNum").html();
 
