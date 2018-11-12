@@ -15,7 +15,7 @@ class Page_Version_CheckController extends Page_VersionController
         $method = $_SERVER['REQUEST_METHOD'];
         if ($method == 'GET') {
 
-            $params["passwordFileName"] = "upgrade.php/password";
+            $params["passwordFileName"] = "src/upgrade.php文件中的password字段";
             //tell client if need upgrade
             $params["needUpgrade"] = $this->needUpgrade;
 
