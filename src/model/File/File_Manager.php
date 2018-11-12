@@ -232,7 +232,7 @@ class File_Manager
                 $picElements = $this->buildImageElements(1, $start_x, $start_y, $pic_w, $pic_h, []);
                 break;
             case 2://ok
-                $start_y = 127.5;
+                $start_y = 128.5;
                 $pic_w = intval($default_width / 2) - 5;//width
                 $pic_h = $pic_w;
                 $picElements = $this->buildImageElements(2, $start_x, $start_y, $pic_w, $pic_h, []);
@@ -304,7 +304,7 @@ class File_Manager
             imagecopyresized($defaultImage, $resource, $element['x'], $element['y'], 0, 0, $element['w'], $element['h'], imagesx($resource), imagesy($resource)); // 最后两个参数为原始图片宽度和高度，倒数两个参数为copy时的图片宽度和高度
         }
 
-        header("Content-type: image/jpg");
+//        header("Content-type: image/jpg");
 
         $res = imagejpeg($defaultImage, $outImagePath);
 
@@ -406,7 +406,6 @@ class File_Manager
 
     public function fileIsExists($fileId)
     {
-        error_log("===========fileId=" . $fileId);
         //处理异常，异常return true
         $fileName = explode("-", $fileId);
         $dateDir = $fileName[0];
