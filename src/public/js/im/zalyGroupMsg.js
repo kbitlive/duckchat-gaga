@@ -1277,11 +1277,12 @@ function getGroupProfile(groupId)
         }
     }
 
+    setTimeout(function (groupId) {
+        sessionStorage.removeItem(profileKey + groupId);
+        getGroupProfile(groupId);
+    }, 3000);
+
     if(reqProfileTime != false && reqProfileTime != null && reqProfileTime !=undefined  && ((nowTimestamp-reqProfileTime)<reqTimeout) ) {
-        setTimeout(function () {
-            sessionStorage.removeItem(groupInfoReqKey);
-            getGroupProfile(groupId);
-        }, 2000);
         return false;
     }
     sessionStorage.setItem(groupInfoReqKey, nowTimestamp);
