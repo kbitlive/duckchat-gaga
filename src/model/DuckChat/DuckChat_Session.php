@@ -108,8 +108,6 @@ class DuckChat_Session
             throw new Exception("duckchat.session.id userid is not exits");
         }
 
-        return;
-
         if ($this->clearSessionByUserId($userId)) {
             return new \Zaly\Proto\Plugin\DuckChatSessionClearResponse();
         }

@@ -117,6 +117,9 @@ function getLoadingCss()
     var cssId = 'loading';  // you could encode the css path itself to generate id..
     if (!document.getElementById(cssId))
     {
+        if(siteAddress == undefined) {
+            siteAddress = "../..";
+        }
         var head  = document.getElementsByTagName('head')[0];
         var link  = document.createElement('link');
         link.id   = cssId;

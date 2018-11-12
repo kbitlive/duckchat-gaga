@@ -58,23 +58,7 @@
                 </div>
             </div>
             <div class="division-line"></div>
-
-            <div class="item-row" id="site-clean-gif-data">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <div class="item-body-desc">
-                            <?php if ($lang == "1") { ?>
-                                动图表情
-                            <?php } else { ?>
-                                Gif
-                            <?php } ?></div>
-
-                        <div class="item-body-tail">
-                            <img class="more-img" src="../../public/img/manage/more.png"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
 
     </div>
