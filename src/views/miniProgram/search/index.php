@@ -174,6 +174,15 @@
         .group_name, .group_owner {
             text-align: left;
         }
+        .group_owner {
+            height:12px;
+            font-size:12px;
+            font-family:PingFangSC-Regular;
+            font-weight:400;
+            color:rgba(153,153,153,1);
+            line-height:12px;
+            margin-top: 8px;
+        }
         .group_detail_info {
             display: flex;
         }
