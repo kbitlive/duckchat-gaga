@@ -367,7 +367,7 @@
         var friendId = $(this).attr("userId");
         var url = "duckchat://0.0.0.0/goto?page=u2Msg&x=" + friendId;
         try {
-            zalyjsGotoPage(url);
+            zalyjsGoto(null, "u2Msg", friendId);
         } catch (e) {
             alert(getLanguage() == 1 ? "客户端暂不支持，请升级客户端" : "Please upgrade the client version.");
         }

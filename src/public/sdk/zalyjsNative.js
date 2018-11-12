@@ -9,13 +9,12 @@ var refererUrlKey = "documentReferer";
 var thirdLoginNameKey = "thirdLoginName";
 
 
-function getUrlParam(key)
-{
+function getUrlParam(key) {
     var pathParams = window.location.search.substring(1).split('&');
     var paramsLength = pathParams.length;
-    for(var i=0; i<paramsLength; i++) {
+    for (var i = 0; i < paramsLength; i++) {
         var param = pathParams[i].split('=');
-        if(param[0] == key) {
+        if (param[0] == key) {
             var url = decodeURIComponent(param[1]);
             return url;
         }
@@ -24,12 +23,12 @@ function getUrlParam(key)
 }
 
 var redirectUrl = getUrlParam("redirect_url");
-if(redirectUrl) {
+if (redirectUrl) {
     localStorage.setItem(refererUrlKey, redirectUrl);
 }
 
 var thirdLoginName = getUrlParam("duckchat_third_login_name");
-if(thirdLoginName) {
+if (thirdLoginName) {
     localStorage.setItem(thirdLoginNameKey, thirdLoginName);
 }
 
@@ -179,8 +178,8 @@ function zalyjsLoginSuccess(loginName, sessionid, isRegister, callback) {
 
     var callbackId = zalyjsCallbackHelper.register(callback)
     var thirdLoginName = localStorage.getItem(thirdLoginNameKey);
-    if(thirdLoginName == null || thirdLoginName == undefined) {
-        thirdLoginName=""
+    if (thirdLoginName == null || thirdLoginName == undefined) {
+        thirdLoginName = ""
     }
     var messageBody = {}
     messageBody["loginName"] = loginName
@@ -206,9 +205,9 @@ function zalyjsWebSuccessCallBack() {
         refererUrl = "./index.php";
     }
     localStorage.clear();
-    try{
+    try {
         window.parent.location.href = refererUrl
-    }catch (error) {
+    } catch (error) {
         window.location.href = refererUrl;
 
     }
@@ -249,13 +248,13 @@ function zalyjsWebLoginSuccess() {
     if (refererUrl) {
         if (refererUrl.indexOf("?") > -1) {
             var refererUrl = refererUrl + "&preSessionId=" + zalyjsSiteLoginMessageBody.sessionid + "&isRegister=" + zalyjsSiteLoginMessageBody.isRegister;
-            if(zalyjsSiteLoginMessageBody.thirdPartyKey) {
-                refererUrl = refererUrl + "&thirdPartyKey="+zalyjsSiteLoginMessageBody.thirdPartyKey;
+            if (zalyjsSiteLoginMessageBody.thirdPartyKey) {
+                refererUrl = refererUrl + "&thirdPartyKey=" + zalyjsSiteLoginMessageBody.thirdPartyKey;
             }
         } else {
             var refererUrl = refererUrl + "?preSessionId=" + zalyjsSiteLoginMessageBody.sessionid + "&isRegister=" + zalyjsSiteLoginMessageBody.isRegister
-            if(zalyjsSiteLoginMessageBody.thirdPartyKey) {
-                refererUrl = refererUrl + "&thirdPartyKey="+zalyjsSiteLoginMessageBody.thirdPartyKey;
+            if (zalyjsSiteLoginMessageBody.thirdPartyKey) {
+                refererUrl = refererUrl + "&thirdPartyKey=" + zalyjsSiteLoginMessageBody.thirdPartyKey;
             }
         }
         refererUrl = refererUrl + " &fail_callback=" + zalyjsSiteLoginMessageBody.callbackName + "&success_callback=zalyjsWebSuccessCallBack";
@@ -307,20 +306,22 @@ function zalyjsClosePage() {
 }
 
 //-public
-function zalyjsGoto(page, xarg, siteAddress) {
+//siteAddress => 127.0.0.1:8888
+function zalyjsGoto(siteAddress, page, xarg) {
 
-    if(siteAddress == undefined) {
-        siteAddress = "duckchat://0.0.0.0";
+    if (siteAddress == null || siteAddress == undefined || siteAddress == "") {
+        siteAddress = "0.0.0.0";
     }
-    var gotoUrl = siteAddress + "/goto?page=" + page + "&x=" + xarg;
+
+    var gotoUrl = "duckchat://" + siteAddress + "/goto?page=" + page + "&x=" + xarg;
 
     if (isAndroid()) {
         window.Android.zalyjsGoto(gotoUrl);
     } else if (isIOS()) {
         window.webkit.messageHandlers.zalyjsGoto.postMessage(gotoUrl);
     } else {
-        var gotoUrl = siteAddress+"/index.php?page=" + page + "&x=" + xarg;
-        window.open(gotoUrl,"_blank");
+        var gotoUrl = siteAddress + "/index.php?page=" + page + "&x=" + xarg;
+        window.open(gotoUrl, "_blank");
     }
 }
 
