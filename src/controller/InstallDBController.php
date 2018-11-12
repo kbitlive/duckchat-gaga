@@ -181,6 +181,11 @@ class InstallDBController
                 return;
             }
 
+            if (isset($_GET['for']) && $_GET['for'] == 'phpinfo') {
+                phpinfo();
+                return;
+            }
+
             $permissionDirectory = is_writable(dirname(dirname(__FILE__)));
             $configFile = dirname(dirname(__FILE__)) . "/config.php";
             $attachDir = dirname(dirname(__FILE__)) . "/attachment";
@@ -226,7 +231,7 @@ class InstallDBController
                 "versionCode" => $sampleFile['siteVersionCode'],
                 "isInstallRootPath" => $isInstallRootPath,
                 "siteAddress" => ZalyHelper::getRequestAddressPath(),
-                'phpinfo' => "./phpinfo.php",
+                'phpinfo' => "./index.php?action=installDB&for=phpinfo",
             ];
             //get db file
             $dbDir = dirname(__DIR__);
