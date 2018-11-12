@@ -25,8 +25,6 @@ class Manage_MiniProgram_ProfileController extends Manage_CommonController
             $miniProgramProfile["usageType_" . $usageType] = $usageType;
         }
 
-        $this->logger->error("============", "profile=" . var_export($miniProgramProfile, true));
-
         echo $this->display("manage_miniProgram_profile", $miniProgramProfile);
         return;
     }

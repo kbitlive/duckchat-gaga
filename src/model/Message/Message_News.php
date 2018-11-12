@@ -26,8 +26,6 @@ class Message_News
      */
     public function tellClientNews($isGroup, $toId)
     {
-        error_log("tell client news isGroup=" . $isGroup . " toId=" . $toId);
-
         if ($isGroup == false) {
             //u2 Message
             $this->ctx->Gateway_Client->sendMessageByUserId($toId, $this->stc_news, new Zaly\Proto\Client\ImStcNewsRequest());

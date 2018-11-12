@@ -8,8 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <script type="text/javascript" src="../../../public/js/jquery.min.js"></script>
-    <script src="../../../public/sdk/zalyjsNative.js"></script>
-    <script src="../../../public/js/template-web.js"></script>
+    <script type="text/javascript" src="../../../public/js/template-web.js"></script>
     <style>
         body, html {
             font-size: 10.66px;
@@ -78,6 +77,7 @@
 <script src="../../../public/js/im/zalyAction.js"></script>
 <script src="../../../public/js/im/zalyClient.js"></script>
 <script src="../../../public/js/im/zalyBaseWs.js"></script>
+<script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
 
 <script id="tpl-gif" type="text/html">
     <div class='gif_content_div'>
@@ -139,7 +139,7 @@
                 }
 
                 if(i==1) {
-                    html += "<div class='gif_content_div'><img accept='image/gif,image/jpeg,image/png,image/jpg' onclick=\"uploadFile('gifFile')\" src='../../../public/img/gif/add.png' class='add_gif'>  " +
+                    html += "<div class='gif_content_div'><img  onclick=\"uploadGifFile('gifFile')\" src='../../../public/img/gif/add.png' class='add_gif'>  " +
                         "<input id='gifFile' type='file' onchange='uploadForGif(this)' accept='image/gif,image/jpeg,image/png,image/jpg' style='display: none;'></div>";
                 }
 
@@ -167,7 +167,7 @@
         } else {
             var html = '';
             html += "<div class='gif_div gif_div_0'  gif-div='"+(line-1)+"'><div class='gif_sub_div'>";
-            html += "<div class='gif_content_div'><img accept='image/gif,image/jpeg,image/png,image/jpg' onclick=\"uploadFile('gifFile')\" src='../../../public/img/gif/add.png' class='add_gif'>  " +
+            html += "<div class='gif_content_div'><img  onclick=\"uploadGifFile('gifFile')\" src='../../../public/img/gif/add.png' class='add_gif'>  " +
                 "<input id='gifFile' type='file' onchange='uploadForGif(this)' accept='image/gif,image/jpeg,image/png,image/jpg' style='display: none;'></div>";
             html += "</div>";
             $(".zaly_container").append(html);
@@ -193,10 +193,21 @@
         };
     }
 
-    function uploadFile(id) {
-        $("#"+id).val("");
-        $("#"+id).click();
+    function uploadGifFile(id) {
+        if (isAndroid()) {
+            zalyjsImageUpload(uploadAvatarImageResult);
+        } else {
+            $("#"+id).val("");
+            $("#"+id).click();
+        }
     }
+
+    function uploadAvatarImageResult(result) {
+
+        var fileId = result.fileId;
+        updateServerGif(fileId);
+    }
+
     function uploadForGif(obj) {
         if (obj) {
             if (obj.files) {
@@ -255,8 +266,7 @@
             touchend: function(event){
                 event.preventDefault();
                 event.stopPropagation();
-                $("#gifFile").val("");
-                $("#gifFile").click();
+                uploadGifFile("gifFile");
                 return false;
             }
         });

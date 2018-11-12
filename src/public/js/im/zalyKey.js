@@ -176,6 +176,11 @@ roomListKey = "room_list";
 MaxStorageStore=3;
 
 
+JUMP_U2Profile = "u2Profile";
+JUMP_U2Msg = "u2Msg";
+JUMP_GroupProfile = "groupProfile";
+JUMP_GroupMsg = "groupMsg";
+
 DISPLAY_HOME = "home";
 DISPLAY_CHAT = "chat";
 DISPLAY_APPLY_FRIEND_LIST = "apply_friend_list";
@@ -240,4 +245,7 @@ languageNum = getLanguage();
 uploadFileUrl = './index.php?action=http.file.uploadWeb';
 isSyncingMsg = false;
 isPreSyncingMsgTime="";
+
+
+soundNotificationKey = "sound_notification";
 

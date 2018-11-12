@@ -35,23 +35,9 @@ class ApiSiteMuteRequest extends \Google\Protobuf\Internal\Message
      */
     private $isMute = false;
 
-    /**
-     * Constructor.
-     *
-     * @param array $data {
-     *     Optional. Data for populating the Message object.
-     *
-     *     @type string $siteCode
-     *          code = sha1(pubkPem)
-     *     @type string $siteUserId
-     *          site userId
-     *     @type bool $isMute
-     *          is mute value
-     * }
-     */
-    public function __construct($data = NULL) {
+    public function __construct() {
         \GPBMetadata\Platform\ApiSiteMute::initOnce();
-        parent::__construct($data);
+        parent::__construct();
     }
 
     /**

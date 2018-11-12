@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 客户端获取站点相关配置.
  * User: childeYin<尹少爷>
  * Date: 13/07/2018
  * Time: 11:20 AM
@@ -186,8 +186,8 @@ class Api_Site_ConfigController extends \BaseController
             }
 
             $zalyPort = isset($configData[SiteConfig::SITE_ZALY_PORT]) ? $configData[SiteConfig::SITE_ZALY_PORT] : "";
-            $wsPort = isset( $configData[SiteConfig::SITE_WS_PORT]) ?  $configData[SiteConfig::SITE_WS_PORT] :"";
-            $wsAddress = isset($configData[SiteConfig::SITE_WS_ADDRESS])? $configData[SiteConfig::SITE_WS_ADDRESS] : "";
+            $wsPort = isset($configData[SiteConfig::SITE_WS_PORT]) ? $configData[SiteConfig::SITE_WS_PORT] : "";
+            $wsAddress = isset($configData[SiteConfig::SITE_WS_ADDRESS]) ? $configData[SiteConfig::SITE_WS_ADDRESS] : "";
 
             $addressForAPi = "";
             $addressForIM = "";
@@ -225,7 +225,30 @@ class Api_Site_ConfigController extends \BaseController
             $config->setSiteIdPubkBase64($configData[SiteConfig::SITE_ID_PUBK_PEM]);
             $config->setAccountSafePluginId($configData[SiteConfig::SITE_PASSPORT_ACCOUNT_SAFE_PLUGIN_ID]);
 
+            if (isset($configData[SiteConfig::SITE_HIDDEN_HOME_PAGE])) {
+                $config->setHiddenHomePage($configData[SiteConfig::SITE_HIDDEN_HOME_PAGE]);
+            } else {
+                $config->setHiddenHomePage(false);
+            }
+
+            if (!$config->getHiddenHomePage()) {//show home page
+                if (isset($configData[SiteConfig::SITE_FRONT_PAGE])) {
+                    $config->setFrontPage($configData[SiteConfig::SITE_FRONT_PAGE]);
+                } else {
+                    $config->setFrontPage(\Zaly\Proto\Core\FrontPage::FrontPageDefault);
+                }
+            } else {
+                $frontPageValue = $configData[SiteConfig::SITE_FRONT_PAGE];
+                if (isset($frontPageValue) && $frontPageValue != \Zaly\Proto\Core\FrontPage::FrontPageHome) {
+                    $config->setFrontPage($configData[SiteConfig::SITE_FRONT_PAGE]);//不显示首页，一定显示第二页
+                } else {
+                    $config->setFrontPage(\Zaly\Proto\Core\FrontPage::FrontPageChats);//不显示首页，一定显示第二页
+                }
+            }
+
             $config->setVersion($this->getSiteVersion());
+            $currentVersionCode = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionCodeKey);
+            $config->setVersionCode($currentVersionCode);
 
             $response->setConfig($config);
 
@@ -262,7 +285,14 @@ class Api_Site_ConfigController extends \BaseController
     private function buildAddress($scheme, $host, $port)
     {
         if ("http" == $scheme && $port == 80) {
-            return $scheme . "://" . "$host";
+            $requestUri = isset($_SERVER['REQUEST_URI']) ? str_replace(array("\\", "//"), array("/", "/"), $_SERVER['REQUEST_URI']) : "";
+            $requestUris = explode("/", $requestUri);
+            array_pop($requestUris);
+            $requestUriPath = "";
+            if (count($requestUris)) {
+                $requestUriPath = implode("/", $requestUris);
+            }
+            return $scheme . "://" . "$host" . $requestUriPath;
         } elseif ("https" == $scheme && $port == 443) {
             return $scheme . "://" . "$host";
         }

@@ -7,7 +7,7 @@ namespace Zaly\Proto\Platform;
 /**
  *payload type
  *
- * Protobuf type <code>platform.PayloadType</code>
+ * Protobuf enum <code>Platform\PayloadType</code>
  */
 class PayloadType
 {

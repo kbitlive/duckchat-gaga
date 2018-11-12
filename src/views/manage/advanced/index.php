@@ -132,9 +132,6 @@
         <div class="list-item-center">
 
             <div class="item-row" id="check_phpinfo">
-                <div class="item-header">
-                    <img class="site-manage-image" src="../../public/img/manage/home_config.png"/>
-                </div>
                 <div class="item-body">
                     <div class="item-body-display">
                         <div class="item-body-desc"><?php if ($lang == "1") { ?>

@@ -30,10 +30,13 @@ class SiteUserGifTable extends BaseTable
         "height",
         "addTime"
     ];
+    private $querySiteGifColumns;
+
 
     public function init()
     {
         $this->queryColumns = implode(",", $this->columns);
+        $this->querySiteGifColumns = implode(",", $this->siteGifColumns);
     }
 
     public function addGif($siteGifData, $siteUserGifData)
@@ -99,6 +102,41 @@ class SiteUserGifTable extends BaseTable
         $prepare->execute();
         $result = $prepare->fetch(PDO::FETCH_ASSOC);
         return $result;
+    }
+
+    public function getGifListFromSiteGif($offset, $limit)
+    {
+        $sql = "select $this->querySiteGifColumns from $this->siteGifTable order by id desc limit $offset, $limit";
+        $prepare = $this->dbSlave->prepare($sql);
+        $this->handlePrepareError("site.gif", $prepare);
+        $prepare->execute();
+        $results = $prepare->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
+
+    public function deleteGif($gifIds)
+    {
+        try{
+            $gifIdsStr = implode("','",  $gifIds);
+
+            $this->dbSlave->beginTransaction();
+            $sql = "delete from $this->table where gifId in ('$gifIdsStr')";
+            $prepare = $this->dbSlave->prepare($sql);
+            $result = $prepare->execute();
+
+            $sql = "delete from $this->siteGifTable where gifId in ('$gifIdsStr')";
+            $prepare = $this->dbSlave->prepare($sql);
+            $resultSiteGif = $prepare->execute();
+
+            if($result && $resultSiteGif) {
+                $this->dbSlave->commit();
+                return true;
+            }
+            throw new Exception("删除失败");
+        }catch (Exception $ex) {
+            $this->dbSlave->rollBack();
+            throw new Exception("删除失败");
+        }
     }
 }
 

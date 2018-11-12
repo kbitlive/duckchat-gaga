@@ -29,56 +29,45 @@ class Api_Session_VerifyController extends BaseController
     public function rpc(\Google\Protobuf\Internal\Message $request, \Google\Protobuf\Internal\Message $transportData)
     {
         $tag = __CLASS__ . "-" . __FUNCTION__;
-        try {
-            $preSessionId = $request->getPreSessionId();
-            $preSessionId = trim($preSessionId);
-            $errorCode = $this->zalyError->errorPreSessionId;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            if (!$preSessionId) {
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("401 ");
-            }
-            $userInfo = $this->ctx->PassportPasswordPreSessionTable->getInfoByPreSessionId($preSessionId);
-
-            if (!$userInfo || !$userInfo['userId']) {
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception($errorInfo);
-            }
-
-            $response = $this->buildApiSessionVerifyResponse($userInfo);
-
-            $this->ctx->PassportPasswordPreSessionTable->delInfoByPreSessionId($preSessionId);
-
-            $this->setRpcError($this->defaultErrorCode, "");
-            $this->rpcReturn($transportData->getAction(), $response);
-        } catch (Exception $ex) {
-            $this->ctx->Wpf_Logger->info($tag, " error_msg=" . $ex->getMessage());
-            $this->setRpcError("error.alert", $ex->getMessage());
-            $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
-        }
+//        try {
+//            $preSessionId = $request->getPreSessionId();
+//            $preSessionId = trim($preSessionId);
+//            $errorCode = $this->zalyError->errorPreSessionId;
+//            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
+//
+//            if (!$preSessionId) {
+//                $this->setRpcError($errorCode, $errorInfo);
+//                throw new Exception("401 ");
+//            }
+//
+//            $verifyResult = $this->ctx->Site_SessionVerify->doApiVerify($preSessionId);
+//
+//            $loginProfile = $verifyResult["loginProfile"];
+//            $sitePubkPem = $verifyResult["sitePubkPem"];
+//
+//            if (!$loginProfile || !$sitePubkPem) {
+//                throw new Exception("session verify with error loginProfile or sitePubkPem.");
+//            }
+//
+//            $response = $this->buildApiSessionVerifyResponse($sitePubkPem, $loginProfile);
+//            $this->returnSuccessRPC($response);
+//        } catch (Exception $ex) {
+//            $this->ctx->Wpf_Logger->info($tag, $ex->getMessage() . "\n" . $ex->getTraceAsString());
+//            $this->returnErrorRPC(new $this->classNameForResponse(), $ex);
+//        }
+        return;
     }
 
-    private function buildApiSessionVerifyResponse($userInfo)
+    private function buildApiSessionVerifyResponse($sitePubkPem, $pluginUserProfile)
     {
         $tag = __CLASS__ . "-" . __FUNCTION__;
         try {
-            $sitePubkPem = base64_decode($userInfo['sitePubkPem']);
-            $nickname = $userInfo['nickname'];
-
-            $userId = sha1($userInfo['userId'] . "@" . $sitePubkPem);
-            $userProfile = new \Zaly\Proto\Platform\LoginUserProfile();
-            $userProfile->setUserId($userId);
-            $userProfile->setLoginName($userInfo['loginName']);
-            $userProfile->setNickName($nickname);
-            $userProfile->setInvitationCode($userInfo['invitationCode']);
-            $loginUserProfileKey = $this->generateStrKey();
-            $key = $this->ctx->ZalyRsa->encrypt($loginUserProfileKey, $sitePubkPem);
-            $aesStr = $this->ctx->ZalyAes->encrypt(serialize($userProfile), $loginUserProfileKey);
-
-            $this->ctx->Wpf_Logger->info("site: api.session.verify", "proto profile=" . $userProfile->serializeToJsonString());
-
+            //16位的随机字符串
+            $randomKey = ZalyHelper::generateStrKey(16);
+            $secretKey = $this->ctx->ZalyRsa->encrypt($randomKey, $sitePubkPem);
+            $aesStr = $this->ctx->ZalyAes->encrypt(serialize($pluginUserProfile), $randomKey);
             $response = new \Zaly\Proto\Platform\ApiSessionVerifyResponse();
-            $response->setKey($key);
+            $response->setKey($secretKey);
             $response->setEncryptedProfile($aesStr);
             return $response;
         } catch (Exception $ex) {
@@ -87,17 +76,4 @@ class Api_Session_VerifyController extends BaseController
         }
     }
 
-    private function generateStrKey($length = 16, $strParams = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
-    {
-        if (!is_int($length) || $length < 0) {
-            $length = 16;
-        }
-
-        $str = '';
-        for ($i = $length; $i > 0; $i--) {
-            $str .= $strParams[mt_rand(0, strlen($strParams) - 1)];
-        }
-
-        return $str;
-    }
 }

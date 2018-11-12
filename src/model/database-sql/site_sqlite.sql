@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS siteGroupMessagePointer(
 CREATE INDEX IF NOT EXISTS indexSiteGroupMessagePointerGud ON siteGroupMessagePointer(groupId,userId,deviceId);
 
 
-CREATE TABLE sitePlugin(
+CREATE TABLE IF NOT EXISTS sitePlugin(
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               pluginId INTEGER NOT NULL,
               name VARCHAR(100) NOT NULL, /*名字*/
@@ -213,14 +213,6 @@ CREATE TABLE IF NOT EXISTS siteUserGif(
                       userId VARCHAR(100) NOT NULL,
                       addTime BIGINT);
 
-CREATE TABLE IF NOT EXISTS siteLoginCustom(
-                      id INTEGER PRIMARY KEY AUTOINCREMENT,
-                      configKey VARCHAR(100) NOT NULL,
-                      configValue TEXT,
-                      configValueEN TEXT ,
-                      updateUserId VARCHAR(100),
-                      updateTime BIGINT);
-
 CREATE TABLE IF NOT EXISTS passportPasswordCountLog(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     userId VARCHAR(100) NOT NULL,
@@ -237,3 +229,43 @@ CREATE TABLE IF NOT EXISTS passportPasswordLog(
     ip VARCHAR(100),
     operateDate DATE ,
     operateTime  BIGINT);
+
+CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      userId varchar(100) unique not null,
+                      loginKey varchar(50) not null,
+                      loginUserId varchar(100) not null,
+                      loginTime BIGINT);
+
+CREATE INDEX IF NOT EXISTS indexSiteThirdPartyLoginSourceUserId on siteThirdPartyLogin(loginUserId);
+
+CREATE TABLE IF NOT EXISTS siteCustomItem(
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      customKey varchar(50) not null,
+                      keyName varchar(100) not null,
+                      keyDesc TEXT,
+                      keyType int,
+                      keySort int,
+                      keyConstraint int,
+                      status int,
+                      tableName varchar(50),
+                      dataVerify varchar(50),
+                      addTime BIGINT,
+                      unique(customKey,keyType));
+
+CREATE TABLE IF NOT EXISTS siteLoginCustom(
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      configKey VARCHAR(100) NOT NULL,
+                      configValue TEXT,
+                      configValueEN TEXT ,
+                      updateUserId VARCHAR(100),
+                      updateTime BIGINT);
+
+-- table name siteXXXCustom
+-- CREATE TABLE IF NOT EXISTS siteUserCustom(
+--                       id INTEGER PRIMARY KEY AUTOINCREMENT,
+--                       userId VARCHAR(100) NOT NULL,
+--                       phone varchar(50) not null,
+--                       name varchar(100) not null,
+--                       age int,
+--                       addTime BIGINT);

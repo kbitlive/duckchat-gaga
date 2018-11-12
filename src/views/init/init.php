@@ -6,11 +6,10 @@
     <!-- Latest compiled and minified CSS -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="../../public/css/init.css?_version=<?php echo $versionCode?>">
-    <script type="text/javascript" src="../../../public/js/jquery.min.js"></script>
-    <script src="../../public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
-    <script src="../../public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
-    <script src="../../public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
+    <link rel="stylesheet" href="<?php echo $siteAddress;?>/public/css/init.css?_version=<?php echo $versionCode?>">
+    <script type="text/javascript" src="<?php echo $siteAddress;?>/public/js/jquery.min.js"></script>
+    <script src="<?php echo $siteAddress;?>/public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
+    <script src="<?php echo $siteAddress;?>/public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
     <script type="text/javascript">
         var latestVersion="0";
         function setLasteVersion(lasteVersion) {
@@ -47,8 +46,11 @@
     <input type="hidden" value="<?php echo $isLoadCurl;?>" class="isLoadCurl">
     <input type="hidden" value="<?php echo $isWritePermission;?>" class="isWritePermission">
     <input type="hidden" value='<?php echo $dbFiles;?>' class="dbFiles">
+    <input type="hidden" value='<?php echo $phpinfo;?>' class="phpinfo">
+    <input type="hidden" value='<?php echo $siteAddress;?>' class="siteAddress">
 
     <?php include (dirname(__DIR__) . '/init/template_init.php');?>
+    <script src="<?php echo $siteAddress;?>/public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
 
 <script>
 
@@ -57,10 +59,12 @@
     var isLoadPDOMysql = $(".isLoadPDOMysql").val();
     var isLoadPDOSqlite = $(".isLoadPDOSqlite").val();
     var isWritePermission = $(".isWritePermission").val();
+    var phpinfo = $(".phpinfo").val();
     var isLoadCurl = $(".isLoadCurl").val();
     var isCanLoadPropertites = false;
     var dbFiles = $(".dbFiles").val();
     var isAvaliableSiteEnv = true;
+    var siteAddress = $(".siteAddress").val();
 
     var dbHost = "";
     var dbPort = "";
@@ -79,7 +83,7 @@
     {
         $.ajax({
             method: "GET",
-            url: "./public/js/config/lang_init_"+languageName+".properties?_"+Date.now(),
+            url: siteAddress+"/public/js/config/lang_init_"+languageName+".properties?_"+Date.now(),
             success: function () {
                 isCanLoadPropertites = true;
             }
@@ -91,7 +95,7 @@
 
     jQuery.i18n.properties({
         name: "lang_init",
-        path: '../../public/js/config/',
+        path: siteAddress+'/public/js/config/',
         mode: 'map',
         language: languageName,
         callback: function () {
@@ -171,16 +175,14 @@
         var html = template("tpl-check-site-environment", {
             isPhpVersionValid:isPhpVersionValid,
             isLoadOpenssl:isLoadOpenssl,
-            isLoadPDOSqlite:isLoadPDOSqlite,
-            isLoadPDOMysql:isLoadPDOMysql,
             isLoadCurl:isLoadCurl,
             isWritePermission:isWritePermission,
             isLoadProperties:isCanLoadPropertites,
+            phpinfo:phpinfo
         });
+
         html = handleHtmlLanguage(html);
         $(".zaly_init").html(html);
-
-        testCurl();
 
         if(!isPhpVersionValid) {
             $(".isPhpVersionValid")[0].style.color="#F44336";
@@ -190,14 +192,7 @@
             $(".isLoadOpenssl")[0].style.color="#F44336";
             isAvaliableSiteEnv = false;
         }
-        if(!isLoadPDOSqlite) {
-            $(".isLoadPDOSqlite")[0].style.color="#F44336";
-            isAvaliableSiteEnv = false;
-        }
-        if(!isLoadPDOMysql) {
-            $(".isLoadPDOMysql")[0].style.color="#F44336";
-            isAvaliableSiteEnv = false;
-        }
+
         if(!isLoadCurl) {
             $(".isLoadCurl")[0].style.color="#F44336";
             isAvaliableSiteEnv = false;
@@ -210,11 +205,15 @@
             $(".isLoadProperties")[0].style.color="#F44336";
             isAvaliableSiteEnv = false;
         }
-
         if(isAvaliableSiteEnv == false) {
             $(".next_init_data")[0].style.background="rgba(201,201,201,1)";
+
             $(".next_init_data").attr("disabled", "disabled");
+            return;
         }
+        $(".next_init_data")[0].style.background="rgba(76,59,177,1)";
+        $(".next_init_data").attr("disabled", false);
+
     }
     
     $(document).on("click", ".previte_init_protocol", function () {
@@ -236,10 +235,21 @@
         }
 
         var initDataHtml = template("tpl-init-data", {
-            dbFiles:sqliteFiles
+            dbFiles:sqliteFiles,
+            isLoadPDOSqlite:isLoadPDOSqlite,
+            isLoadPDOMysql:isLoadPDOMysql,
         });
         initDataHtml = handleHtmlLanguage(initDataHtml);
         $(".zaly_init").html(initDataHtml);
+
+        if(!isLoadPDOSqlite) {
+            $(".isLoadPDOSqlite")[0].style.color="#F44336";
+            isAvaliableSiteEnv = false;
+        }
+        if(!isLoadPDOMysql) {
+            $(".isLoadPDOMysql")[0].style.color="#F44336";
+            isAvaliableSiteEnv = false;
+        }
 
         if(dbType == "mysql") {
             $(".sql-dbHost").val(dbHost);
@@ -272,7 +282,6 @@
             $(".sqliteRadio").attr("src", unSelectSrc);
             $(".mysql-div")[0].style.display = "block";
             $(".sqlite-div")[0].style.display = "none";
-
             $(".ext_pdo_sqlite").hide();
             $(".ext_pdo_mysql").show();
         } else {
@@ -280,7 +289,6 @@
             $(".mysqlRadio").attr("src", unSelectSrc);
             $(".sqlite-div")[0].style.display = "block";
             $(".mysql-div")[0].style.display = "none";
-
             $(".ext_pdo_sqlite").show();
             $(".ext_pdo_mysql").hide();
         }
@@ -327,18 +335,9 @@
             return false;
         }
 
-        if (!isLoadPDOSqlite) {
-            alert("请先安装pdo_sqlite");
-            return false;
-        }
 
         if (!isLoadCurl) {
             alert("请先安装is_curl");
-            return false;
-        }
-
-        if(!isLoadPDOMysql) {
-            alert("请先安装pdo_mysql");
             return false;
         }
 
@@ -353,6 +352,9 @@
             alert("请选择数据库类型");
             return;
         }
+        var adminName  = $(".admin_name").val();
+        var adminPwd   = $(".admin_pwd").val();
+        var adminRepwd = $(".admin_repwd").val();
 
         var uic = $(".uic-input").val();
         if (dbType == 'mysql') {
@@ -362,11 +364,26 @@
              dbPassword = $(".sql-dbPassword").val();
              dbName = $(".sql-dbName").val();
 
+            if(!isLoadPDOMysql) {
+                alert("请先安装pdo_mysql");
+                return false;
+            }
             var isFocus = false;
+
+            if (dbHost == "" || dbHost.length < 1) {
+                $(".dbHostFailed")[0].style.display = "block";
+                if (isFocus == false) {
+                    $(".sql-dbHost").focus();
+                    isFocus = true;
+                }
+            }
+
             if (dbName == "" || dbName.length < 1) {
                 $(".dbNameFailed")[0].style.display = "block";
-                isFocus = true;
-                $(".sql-dbName").focus();
+                if(isFocus == false) {
+                    isFocus = true;
+                    $(".sql-dbName").focus();
+                }
             }
 
             if (dbUserName == "" || dbUserName.length < 1) {
@@ -383,8 +400,10 @@
                 if (isFocus == false) {
                     $(".sql-dbPassword").focus();
                     isFocus = true;
-                    $(".dbNameFailed")[0].style.display = "none";
                     $(".dbUserNameFailed")[0].style.display = "none";
+                    $(".dbPortFailed")[0].style.display = "none";
+                    $(".dbNameFailed")[0].style.display = "none";
+                    $(".dbHostFailed")[0].style.display = "none";
                 }
             }
 
@@ -392,23 +411,13 @@
                 dbPort = 3306;
             }
 
-            if (dbHost == "" || dbHost.length < 1) {
-                $(".dbHostFailed")[0].style.display = "block";
-                if (isFocus == false) {
-                    $(".sql-dbHost").focus();
-                    isFocus = true;
-                    $(".dbPortFailed")[0].style.display = "none";
-                    $(".dbNameFailed")[0].style.display = "none";
-                    $(".dbHostFailed")[0].style.display = "none";
-                    $(".dbPasswordFailed")[0].style.display = "none";
-                }
-            }
-
+            isFocus = checkAdminAccount(isFocus);
             if (isFocus == true) {
                 return;
             }
             $(".dbPasswordFailed")[0].style.display = "none";
             showLoading($(".container"));
+
             var data = {
                 pluginId: pluginId,
                 dbHost: dbHost,
@@ -417,9 +426,20 @@
                 dbPassword: dbPassword,
                 dbName: dbName,
                 dbType: dbType,
-                uic: uic
+                adminLoginName:adminName,
+                adminPassword:adminPwd,
+                phpinfo:phpinfo
             };
             testConnectMysql(data);
+            return;
+        }
+        if (!isLoadPDOSqlite) {
+            alert("请先安装pdo_sqlite");
+            return false;
+        }
+        var isFocus = false;
+        isFocus = checkAdminAccount(isFocus);
+        if (isFocus == true) {
             return;
         }
 
@@ -429,11 +449,48 @@
             pluginId: pluginId,
             dbType: dbType,
             sqliteDbFile: sqliteFileName,
-            uic: uic
+            adminLoginName:adminName,
+            adminPassword:adminPwd,
+            phpinfo:phpinfo
         };
         initSite(data);
     });
 
+    function checkAdminAccount(isFocus)
+    {
+        var adminName  = $(".admin_name").val();
+        var adminPwd   = $(".admin_pwd").val();
+        var adminRepwd = $(".admin_repwd").val();
+        var containCharaters = "letter";
+
+        if(checkIsEntities(adminName) || adminName.length<5 || adminName.length>24 || !verifyChars(containCharaters, adminName) ) {
+            if(isFocus == false) {
+                $(".admin_name").focus();
+                isFocus = true;
+            }
+            $(".admin_name_failed")[0].style.display = "block";
+        }
+
+        if(checkIsEntities(adminPwd) || adminPwd.length<8 || adminPwd.length>32 || !verifyChars(containCharaters, adminName) ) {
+            $(".admin_pwd_failed")[0].style.display = "block";
+            if(isFocus == false) {
+                $(".admin_pwd").focus();
+                $(".admin_name_failed")[0].style.display = "none";
+                isFocus = true;
+            }
+        }
+
+        if(adminPwd != adminRepwd) {
+            $(".admin_repwd_failed")[0].style.display = "block";
+            if(isFocus == false) {
+                $(".admin_repwd").focus();
+                $(".admin_name_failed")[0].style.display = "none";
+                $(".admin_pwd_failed")[0].style.display = "none";
+                isFocus = true;
+            }
+        }
+        return isFocus;
+    }
     function initSite(data)
     {
         $.ajax({
@@ -482,25 +539,6 @@
         });
     }
 
-    function testCurl()
-    {
-        $.ajax({
-            method: "GET",
-            url: "./index.php?action=installDB&for=test_curl_result",
-            success: function (resp) {
-                if (resp == "success") {
-                    $(".isCanUseCurlImg").attr("src", "../../public/img/init/check_success.png");
-                    $(".isCanUseCurl")[0].style.color="rgba(102,102,102,1)";
-                    $(".next_init_data")[0].style.background="rgba(76,59,177,1)";
-                    $(".next_init_data").attr("disabled", false);
-                    return;
-                }
-                isAvaliableSiteEnv = false;
-                $(".next_init_data")[0].style.background="rgba(201,201,201,1)";
-                $(".next_init_data").attr("disabled", "disabled");
-            },
-        });
-    }
 
 </script>
 </body>

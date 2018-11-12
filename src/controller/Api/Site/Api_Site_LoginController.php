@@ -56,14 +56,27 @@ class Api_Site_LoginController extends \BaseController
                 throw new Exception($errorInfo);
             }
 
+
+            $thirdPartyKey = trim($request->getThirdPartyKey());
+            $userCustoms = $request->getUserCustoms();
+
+            $customData = [];
+            if (!empty($userCustoms)) {
+                new Zaly\Proto\Core\CustomUserProfile();
+                foreach ($userCustoms as $custom) {
+                    $key = $custom->getCustomKey();
+                    $value = $custom->getCustomValue();
+                    $customData[$key] = $value;
+                }
+            }
+
             //get user profile from platform clientSiteType=1:mobile client
             $clientType = Zaly\Proto\Core\UserClientType::UserClientMobileApp;
-            $userProfile = $this->ctx->Site_Login->checkPreSessionIdFromPlatform($preSessionId, $devicePubkPem, $clientType);
+
+            $userProfile = $this->ctx->Site_Login->doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $customData);
 
             $realSessionId = $userProfile['sessionId'];
             $response = $this->buildApiSiteLoginResponse($userProfile, $realSessionId);
-
-            $this->ctx->Wpf_Logger->info("api.site.login", "response=" . $response->serializeToJsonString());
 
             //clearLimitSession
             $this->clearLimitSession($userProfile['userId'], $userProfile['deviceId']);
@@ -72,9 +85,9 @@ class Api_Site_LoginController extends \BaseController
             $this->rpcReturn($transportData->getAction(), $response);
         } catch (Exception $ex) {
             $this->ctx->Wpf_Logger->error($tag, "error=" . $ex);
-             $errorCode = $this->zalyError->errorSiteLogin;
+            $errorCode = $this->zalyError->errorSiteLogin;
 //                $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-             $this->setRpcError($errorCode, $ex->getMessage());
+            $this->setRpcError($errorCode, $ex->getMessage());
             $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
         }
 

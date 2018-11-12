@@ -276,8 +276,7 @@
     }
 
     function gotoTest(page, xarg) {
-        alert("page=" + page + " xarg=" + xarg);
-        zalyjsGoto(page, xarg);
+        zalyjsGoto(null, page, xarg);
     }
 
 </script>

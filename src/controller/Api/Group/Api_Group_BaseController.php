@@ -260,7 +260,11 @@ class Api_Group_BaseController extends BaseController
 
             foreach ($groupMembers as $groupMember) {
                 $userAvatar = $groupMember['avatar'];
-                $avatars[] = $userAvatar;
+                //判断头像存在
+                $isExists = $this->ctx->File_Manager->fileIsExists($userAvatar);
+                if ($isExists) {
+                    $avatars[] = $userAvatar;
+                }
             }
 
             if ($loopNum >= 10 || count($avatars) >= 9) {

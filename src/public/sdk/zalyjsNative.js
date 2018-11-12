@@ -6,21 +6,31 @@ var callbackIdParamName = "zalyjsCallbackId";
 //localStorage, prevent page flush, and the referrer is lost
 var refererUrl = document.referrer;
 var refererUrlKey = "documentReferer";
+var thirdLoginNameKey = "thirdLoginName";
 
-function getUrlParam(key)
-{
+
+function getUrlParam(key) {
     var pathParams = window.location.search.substring(1).split('&');
     var paramsLength = pathParams.length;
-    for(var i=0; i<paramsLength; i++) {
+    for (var i = 0; i < paramsLength; i++) {
         var param = pathParams[i].split('=');
-        if(param[0] == key) {
+        if (param[0] == key) {
             var url = decodeURIComponent(param[1]);
-            localStorage.setItem(refererUrlKey, url);
+            return url;
         }
     }
+    return false;
 }
 
-getUrlParam("redirect_url");
+var redirectUrl = getUrlParam("redirect_url");
+if (redirectUrl) {
+    localStorage.setItem(refererUrlKey, redirectUrl);
+}
+
+var thirdLoginName = getUrlParam("duckchat_third_login_name");
+if (thirdLoginName) {
+    localStorage.setItem(thirdLoginNameKey, thirdLoginName);
+}
 
 var zalyjsSiteLoginMessageBody = {};
 
@@ -167,10 +177,15 @@ function zalyjsOpenNewPage(url) {
 function zalyjsLoginSuccess(loginName, sessionid, isRegister, callback) {
 
     var callbackId = zalyjsCallbackHelper.register(callback)
+    var thirdLoginName = localStorage.getItem(thirdLoginNameKey);
+    if (thirdLoginName == null || thirdLoginName == undefined) {
+        thirdLoginName = ""
+    }
     var messageBody = {}
     messageBody["loginName"] = loginName
     messageBody["sessionid"] = sessionid
     messageBody["isRegister"] = (isRegister == true ? true : false)
+    messageBody['thirdPartyKey'] = thirdLoginName
     messageBody[callbackIdParamName] = callbackId
     messageBody = JSON.stringify(messageBody)
 
@@ -190,7 +205,12 @@ function zalyjsWebSuccessCallBack() {
         refererUrl = "./index.php";
     }
     localStorage.clear();
-    window.location.href = refererUrl;
+    try {
+        window.parent.location.href = refererUrl
+    } catch (error) {
+        window.location.href = refererUrl;
+
+    }
 }
 
 // -private  登录pc, 暂时没有使用callbackId,
@@ -228,8 +248,14 @@ function zalyjsWebLoginSuccess() {
     if (refererUrl) {
         if (refererUrl.indexOf("?") > -1) {
             var refererUrl = refererUrl + "&preSessionId=" + zalyjsSiteLoginMessageBody.sessionid + "&isRegister=" + zalyjsSiteLoginMessageBody.isRegister;
+            if (zalyjsSiteLoginMessageBody.thirdPartyKey) {
+                refererUrl = refererUrl + "&thirdPartyKey=" + zalyjsSiteLoginMessageBody.thirdPartyKey;
+            }
         } else {
-            var refererUrl = refererUrl + "?preSessionId=" + zalyjsSiteLoginMessageBody.sessionid + "&isRegister=" + zalyjsSiteLoginMessageBody.isRegister;
+            var refererUrl = refererUrl + "?preSessionId=" + zalyjsSiteLoginMessageBody.sessionid + "&isRegister=" + zalyjsSiteLoginMessageBody.isRegister
+            if (zalyjsSiteLoginMessageBody.thirdPartyKey) {
+                refererUrl = refererUrl + "&thirdPartyKey=" + zalyjsSiteLoginMessageBody.thirdPartyKey;
+            }
         }
         refererUrl = refererUrl + " &fail_callback=" + zalyjsSiteLoginMessageBody.callbackName + "&success_callback=zalyjsWebSuccessCallBack";
         addJsByDynamic(refererUrl);
@@ -280,20 +306,22 @@ function zalyjsClosePage() {
 }
 
 //-public
-function zalyjsGoto(page, xarg, siteAddress) {
+//siteAddress => 127.0.0.1:8888
+function zalyjsGoto(siteAddress, page, xarg) {
 
-    if(siteAddress == undefined) {
-        siteAddress = "duckchat://0.0.0.0";
+    if (siteAddress == null || siteAddress == undefined || siteAddress == "") {
+        siteAddress = "0.0.0.0";
     }
-    var gotoUrl = siteAddress + "/goto?page=" + page + "&x=" + xarg;
+
+    var gotoUrl = "duckchat://" + siteAddress + "/goto?page=" + page + "&x=" + xarg;
 
     if (isAndroid()) {
         window.Android.zalyjsGoto(gotoUrl);
     } else if (isIOS()) {
         window.webkit.messageHandlers.zalyjsGoto.postMessage(gotoUrl);
     } else {
-        var gotoUrl = siteAddress+"/index.php?page=" + page + "&x=" + xarg;
-        window.open(gotoUrl,"_blank");
+        var gotoUrl = siteAddress + "/index.php?page=" + page + "&x=" + xarg;
+        window.open(gotoUrl, "_blank");
     }
 }
 
