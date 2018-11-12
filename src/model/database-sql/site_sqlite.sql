@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS siteGroupMessagePointer(
 CREATE INDEX IF NOT EXISTS indexSiteGroupMessagePointerGud ON siteGroupMessagePointer(groupId,userId,deviceId);
 
 
-CREATE TABLE sitePlugin(
+CREATE TABLE IF NOT EXISTS sitePlugin(
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               pluginId INTEGER NOT NULL,
               name VARCHAR(100) NOT NULL, /*名字*/
@@ -238,6 +238,14 @@ CREATE TABLE IF NOT EXISTS passportPasswordLog(
     operateDate DATE ,
     operateTime  BIGINT);
 
+CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      userId varchar(100) unique not null,
+                      loginKey varchar(50) not null,
+                      loginUserId varchar(100) not null,
+                      loginTime BIGINT);
+
+CREATE INDEX IF NOT EXISTS indexSiteThirdPartyLoginSourceUserId on siteThirdPartyLogin(sourceUserId);
 
 CREATE TABLE IF NOT EXISTS siteCustomItem(
                       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -252,16 +260,6 @@ CREATE TABLE IF NOT EXISTS siteCustomItem(
                       dataVerify varchar(50),
                       addTime BIGINT,
                       unique(customKey,keyType));
-
-CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
-                      id INTEGER PRIMARY KEY AUTOINCREMENT,
-                      userId varchar(100) unique not null,
-                      loginKey varchar(50) not null,
-                      loginUserId varchar(100) not null,
-                      loginTime BIGINT);
-
-CREATE INDEX IF NOT EXISTS indexSiteThirdPartyLoginSourceUserId on siteThirdPartyLogin(sourceUserId);
-
 
 -- CREATE TABLE IF NOT EXISTS siteUserCustom(
 --                       id INTEGER PRIMARY KEY AUTOINCREMENT,
