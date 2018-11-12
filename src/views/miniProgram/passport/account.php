@@ -130,7 +130,6 @@
                var pwdTip = "length"+pwdMinLength+"-"+pwdMaxLength;
            }
        }
-
        $(".passwordTips").html(pwdTip);
    }
 

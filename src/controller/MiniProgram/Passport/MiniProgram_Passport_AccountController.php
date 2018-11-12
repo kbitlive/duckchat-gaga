@@ -33,6 +33,8 @@ class MiniProgram_Passport_AccountController extends MiniProgram_BaseController
     public function doRequest()
     {
 
+        header('Access-Control-Allow-Origin: *');
+
         $tag = __CLASS__.'-'.__FUNCTION__;
         $method = strtolower($_SERVER['REQUEST_METHOD']);
 
