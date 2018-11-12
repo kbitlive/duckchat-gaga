@@ -43,7 +43,7 @@
             background-repeat: repeat;
         }
 
-        .item-row,.create_button {
+        .item-row, .create_button {
             cursor: pointer;
             outline: none;
         }
@@ -133,7 +133,8 @@
             </div>
 
             <div class="login-background-image-<?php echo $loginBackgroundImageDisplay ?> image-bg"
-                 style="background-image: url('/_api_file_download_/?fileId=<?php echo $loginBackgroundImage ?>');" bgImgId="<?php echo $loginBackgroundImage ?>">
+                 style="background-image: url('/_api_file_download_/?fileId=<?php echo $loginBackgroundImage ?>');"
+                 bgImgId="<?php echo $loginBackgroundImage ?>">
                 <input id="upload-background-image" type="file" onchange="uploadImageFile(this)"
                        accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
                        style="display: none;">
@@ -194,11 +195,13 @@
 
         <div class="" style="text-align:center;">
             <?php if ($lang == "1") { ?>
-                <button id="updatePopupButton" type="button" class="create_button" style="cursor: pointer;outline: none"key-value=""
+                <button id="updatePopupButton" type="button" class="create_button" style="cursor: pointer;outline: none"
+                        key-value=""
                         onclick="updateDataValue();">确认
                 </button>
             <?php } else { ?>
-                <button id="updatePopupButton" type="button" class="create_button"  style="cursor: pointer;outline: none" key-value=""
+                <button id="updatePopupButton" type="button" class="create_button" style="cursor: pointer;outline: none"
+                        key-value=""
                         onclick="updateDataValue();">Confirm
                 </button>
             <?php } ?>
@@ -245,10 +248,10 @@
     }
 
     $(".image-bg").each(function () {
-        if(!isMobile()) {
+        if (!isMobile()) {
             var imgId = $(this).attr("bgImgId");
-            var src =  "./index.php?action=http.file.downloadFile&fileId="+ imgId+"&returnBase64=0";
-            $(".image-bg")[0].style.backgroundImage = " url('"+src+"')";
+            var src = "./index.php?action=http.file.downloadFile&fileId=" + imgId + "&returnBase64=0";
+            $(".image-bg")[0].style.backgroundImage = " url('" + src + "')";
         }
     });
 
@@ -286,7 +289,7 @@
     }
 
     function updateLoginBackgroundImage(imageFileId) {
-        var url = "index.php?action=miniProgram.admin.updateLogin";
+        var url = "index.php?action=manage.custom.login&lang=" + getLanguage();
         var data = {
             'key': 'loginBackgroundImage',
             'value': imageFileId,
@@ -340,10 +343,9 @@
 
 
     function updateDataValue() {
-
         var key = $("#updatePopupButton").attr("key-value");
 
-        var url = "index.php?action=miniProgram.admin.updateLogin&lang=" + getLanguage();
+        var url = "index.php?action=manage.custom.login&lang=" + getLanguage();
 
         var value = $.trim($(".popup-group-input").val());
 
@@ -377,13 +379,6 @@
         $(".popup-group-input").val(inputBody);
         $("#updatePopupButton").attr("key-value", "loginWelcomeText");
     }
-
-    //loginMiniProgramId item-body-value
-    $(".loginMiniProgram").click(function () {
-        var miniProgramId = $(this).find("#loginMiniProgramId").html();
-        var url = "index.php?action=manage.miniProgram.profile&lang=" + getLanguage() + "&pluginId=" + miniProgramId;
-        zalyjsCommonOpenPage(url);
-    });
 
 
     $("#image-display-type").click(function () {
@@ -425,7 +420,7 @@
 
     //update push notice type
     function updateImageDisplayType(displayValue) {
-        var url = "index.php?action=miniProgram.admin.updateLogin&lang=" + getLanguage();
+        var url = "index.php?action=manage.custom.login&lang=" + getLanguage();
         var data = {
             'key': 'loginBackgroundImageDisplay',
             'value': displayValue,
@@ -463,7 +458,7 @@
             }
         }
 
-        var url = "index.php?action=miniProgram.admin.updateLogin&lang=" + getLanguage();
+        var url = "index.php?action=manage.custom.login&lang=" + getLanguage();
         var data = {
             'key': 'loginBackgroundColor',
             'value': color,
