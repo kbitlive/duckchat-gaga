@@ -15,33 +15,15 @@ class ZalyAvatar
     {
         $cacheDir = WPF_ROOT_DIR . "/cache";
 
-        error_log("====================write to Avatar Cache Dir = " . $cacheDir);
-
         if (!is_dir($cacheDir)) {
             mkdir($cacheDir, 0755, true);
         }
 
         $avatarPhpName = $cacheDir . "/avatar.php";
 
-        $emojiAvatar = [];
-        for ($i = 1; $i <= 74; $i++) {
-            $defaultAva = dirname(__FILE__) . "/../../public/avatar/emoji/" . $i . "@3x.png";
-            error_log("====================emoji Avatar Dir = " . $defaultAva);
-            if (!file_exists($defaultAva)) {
-                continue;
-            }
-
-            $defaultAvatarData = file_get_contents($defaultAva);
-            $fileManager = new File_Manager();
-            $fileId = $fileManager->saveFile($defaultAvatarData, "20180101");
-            $emojiAvatar[] = $fileId;
-        }
-
         $sceneryAvatar = [];
         for ($j = 1; $j <= 128; $j++) {
             $defaultAva = dirname(__FILE__) . "/../../public/avatar/scenery/" . $j . ".png";
-
-            error_log("====================scenery Avatar Dir = " . $defaultAva);
 
             if (!file_exists($defaultAva)) {
                 continue;
@@ -54,11 +36,10 @@ class ZalyAvatar
         }
 
         $allAvatars = [
-            "emojiAvatar" => $emojiAvatar,
             "sceneryAvatar" => $sceneryAvatar,
         ];
 
-        self::$avatars = array_merge($emojiAvatar, $sceneryAvatar);
+        self::$avatars = $sceneryAvatar;
 
         $contents = var_export($allAvatars, true);
         file_put_contents($avatarPhpName, "<?php\n return {$contents};\n ");
@@ -74,7 +55,6 @@ class ZalyAvatar
         }
         $allAvatars = require($fileName);
         if (!empty($allAvatars)) {
-            $emojiAvatars = $allAvatars['emojiAvatar'];
             $sceneryAvatars = $allAvatars['sceneryAvatar'];
 
             if (empty($sceneryAvatars)) {
@@ -82,7 +62,7 @@ class ZalyAvatar
                 return;
             }
 
-            self::$avatars = array_merge($emojiAvatars, $sceneryAvatars);
+            self::$avatars = $sceneryAvatars;
         }
     }
 
@@ -96,9 +76,6 @@ class ZalyAvatar
     public static function getRandomAvatar()
     {
         self::setLogger();
-
-        error_log("=======test static avatars = " . var_export(self::$avatars, true));
-
         $tag = __CLASS__ . "->" . __FUNCTION__;
         try {
             if (empty(self::$avatars)) {
