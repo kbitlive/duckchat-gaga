@@ -267,5 +267,7 @@ CREATE TABLE IF NOT EXISTS siteLoginCustom(
 -- table name siteXXXCustom
 CREATE TABLE IF NOT EXISTS siteUserCustom(
                       id INTEGER PRIMARY KEY AUTOINCREMENT,
-                      userId VARCHAR(100) NOT NULL,
+                      userId VARCHAR(100) UNIQUE NOT NULL,
+                      phoneId VARCHAR(20),
+                      email VARCHAR(100),
                       addTime BIGINT);

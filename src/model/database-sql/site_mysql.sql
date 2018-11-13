@@ -268,7 +268,7 @@ CREATE TABLE IF NOT EXISTS siteCustomItem(
                       keyConstraint varchar(100),--约束条件
                       isRequired boolean default false,
                       isOpen boolean default true,
-                      status int, --  -1：无效，0：正常
+                      status int, --  0：无效，1：正常
                       dataType int, -- text，number，手机号码，其他
                       dataVerify varchar(100),-- 校验数据类型类型,可能是一个正则
                       addTime BIGINT,
@@ -284,5 +284,7 @@ CREATE TABLE IF NOT EXISTS siteLoginCustom(
 
 CREATE TABLE IF NOT EXISTS siteUserCustom(
                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                      userId VARCHAR(100) NOT NULL,
+                      userId VARCHAR(100) UNIQUE NOT NULL,
+                      phoneId VARCHAR(20),
+                      email VARCHAR(100),
                       addTime BIGINT);

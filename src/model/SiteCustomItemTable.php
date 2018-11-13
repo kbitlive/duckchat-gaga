@@ -43,8 +43,7 @@ class SiteCustomItemTable extends BaseTable
 
     public function insertUserCustomKeys(array $keyData)
     {
-        $keyData['keyType'] = 1;
-        $keyData['tableName'] = "siteUserCustom";
+        $keyData['keyType'] = Zaly\Proto\Core\CustomType::CustomTypeUser;
         $keyData['addTime'] = $this->getCurrentTimeMills();
         return $this->insertData($this->table, $keyData, $this->columns);
     }

@@ -30,11 +30,11 @@ return array(
         ),
     'mysql' =>
         array(
-            'dbName' => 'duckchat_site',
+            'dbName' => '',
             'dbHost' => '127.0.0.1',
             'dbPort' => '3306',
-            'dbUserName' => 'duckchat',
-            'dbPassword' => '1234567890',
+            'dbUserName' => '',
+            'dbPassword' => '',
         ),
     'mysqlSlave' => array(
 //        'slave_0' => array(
