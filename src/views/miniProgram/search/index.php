@@ -276,13 +276,13 @@
             <div class="box desc_box">
                 <div style="width: 90%;">
                     <div class="desc">
-                        核武站简介：这是一个核武内部系统搭建的聊天站点，此处的描述内容可以在管理后台进行修改配置。这是一个核武内部系统搭建的聊天站点，此处的描述内容可以在管理后台进行修改配置。
+                        <?php echo $about_us_desc; ?>
                     </div>
                     <div class="sub_title">
-                        核武站技术团队
+                        <?php echo $about_us_title; ?>
                     </div>
                     <div class="sub_title_contact">
-                        李萌：13273247332
+                       <?php echo $about_us_contact; ?>
                     </div>
                 </div>
             </div>

@@ -99,6 +99,10 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
                         $groupList = $this->getGroupListByGroupId($groupIds);
                         $params['groups'] = $groupList;
                     }
+                    $params['about_us_desc']    = $config['about_us_desc'];
+                    $params['about_us_title']   = $config['about_us_title'];
+                    $params['about_us_contact'] = $config['about_us_contact'];
+
                     echo $this->display("miniProgram_search_index", $params);
             }
         }
