@@ -26,6 +26,10 @@ class Manual_User extends Manual_Common
         $results = $this->ctx->SearchSiteUserTable->getSiteUserListWithRelationByLoginName($currentUserId, $nameInLatin, $pageNum, $pageSize);
         if($results) {
             foreach ($results as $key => $user) {
+                if($user['userId'] == $currentUserId) {
+                    unset($results[$key]);
+                    continue;
+                }
                 if(isset($user['friendId'])) {
                     $user['isFollow'] = true;
                 } else {

@@ -41,8 +41,8 @@
         }
         .box {
             text-align: center;
-            margin-top: 18px;
             width: 100%;
+            margin-top: 17px;
         }
         .search_input {
             width:80%;
@@ -58,7 +58,7 @@
             text-align: center;
             display: flex;
             justify-content: center;
-            height:97px;
+            height: 71px;
             position: relative;
         }
         .search_logo{
@@ -70,12 +70,12 @@
             width: 100%;
         }
         .search_logo_div {
-            height: 92px;
+            height: 96px;
             display: flex;
             justify-content: left;
             align-items: center;
             width: 16px;
-            left: 10%;
+            left: 9.5%;
         }
         .desc {
             width: 100%;
@@ -120,10 +120,9 @@
             width:1px;
             height:45px;
             background:rgba(233,232,237,1);
-            margin-right: 5px;
         }
         .search_tip {
-            font-size:14px;
+            font-size:16px;
             font-family:PingFangSC-Medium;
             font-weight:500;
             color:rgba(50,136,255,1);
@@ -131,6 +130,7 @@
             outline: none;
             cursor: pointer;
             background: white;
+            width: 100px;
         }
         .v_line_absoulte {
             height: 92px;
@@ -148,7 +148,7 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            width: 80px;
+            width: 100px;
         }
         .search_tip_div:focus {
             background: none;
@@ -252,22 +252,49 @@
             align-items: center;
         }
 
-        .group_name, .group_owner {
+        .group_name {
             height: 18px;
             line-height: 18px;
             text-align: left;
-            margin-top: 5px;
+            margin-top: 10px;
+        }
+        .group_owner {
+            height: 12px;
+            line-height: 12px;
+            text-align: left;
+            margin-bottom: 10px;
         }
         .group_owner {
             font-size:12px;
             font-family:PingFangSC-Regular;
             font-weight:400;
             color:rgba(153,153,153,1);
-            line-height:28px;
+            line-height:12px;
         }
         .disableButton {
             background: #cccccc;
         }
+        .desc_box_div {
+            width: 80%;
+            padding-right: 31px;
+        }
+        .division-line {
+            margin-left: 10px;
+        }
+
+        @media (max-width: 500px) {
+            .desc_box_div {
+                width: 90%;
+                padding-right: 0px;
+            }
+            .search_tip_div {
+                right:7%;
+            }
+            .search_logo_div {
+                left:8%;
+            }
+        }
+
     </style>
 
 </head>
@@ -293,15 +320,17 @@
                 </div>
             </div>
             <div class="box desc_box">
-                <div style="width: 90%;">
-                    <div class="desc">
-                        <?php echo $about_us_desc; ?>
-                    </div>
-                    <div class="sub_title">
-                        <?php echo $about_us_title; ?>
-                    </div>
-                    <div class="sub_title_contact">
-                       <?php echo $about_us_contact; ?>
+                <div style="width: 100%;display: flex;justify-content: center">
+                    <div class="desc_box_div">
+                        <div class="desc">
+                            <?php echo $about_us_desc; ?>
+                        </div>
+                        <div class="sub_title">
+                            <?php echo $about_us_title; ?>
+                        </div>
+                        <div class="sub_title_contact">
+                            <?php echo $about_us_contact; ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -396,9 +425,10 @@
 
     $(".group-avatar-image").each(function () {
         var avatar = $(this).attr("avatar");
-        var src = " /_api_file_download_/?fileId=" + avatar;
-        if (!isMobile()) {
-            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        var src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        if (isMobile()) {
+            var path = avatar.split("-");
+            src = "../../attachment/"+path[0]+"/"+path[1];
         }
         $(this).attr("src", src);
     });

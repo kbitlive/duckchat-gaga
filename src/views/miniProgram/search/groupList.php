@@ -204,10 +204,13 @@
                 var isMobileClient = isMobile();
 
                 $.each(data, function (index, group) {
-                    var src = "./index.php?action=http.file.downloadFile&fileId=" + group['avatar'] + "&returnBase64=0&lang=" + getLanguage();
+                    var src = "./index.php?action=http.file.downloadFile&fileId=" +  group['avatar'] + "&returnBase64=0";
                     if (isMobileClient) {
-                        src = '/_api_file_download_/?fileId=' + group['avatar'];
+                        var avatar = group['avatar'];
+                        var path = avatar.split("-");
+                        src = "../../attachment/"+path[0]+"/"+path[1];
                     }
+
                     var userHtml = template("tpl-search-group", {
                         name:group['name'],
                         groupId:group['groupId'],
@@ -230,9 +233,10 @@
 
     $(".group-avatar-image").each(function () {
         var avatar = $(this).attr("avatar");
-        var src = " /_api_file_download_/?fileId=" + avatar;
-        if (!isMobile()) {
-            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        var src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        if (isMobile()) {
+            var path = avatar.split("-");
+            src = "../../attachment/"+path[0]+"/"+path[1];
         }
         $(this).attr("src", src);
     });
