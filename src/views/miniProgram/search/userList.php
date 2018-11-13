@@ -300,8 +300,6 @@
 
     $(document).on("click", ".chatButton", function () {
         var friendId = $(this).attr("userId");
-        var url = "duckchat://0.0.0.0/goto?page=u2Msg&x=" + friendId;
-
         if(isMobile()) {
             try {
                 zalyjsGoto(null, "u2Msg", friendId);

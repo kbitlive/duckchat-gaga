@@ -84,10 +84,22 @@
             </div>
 
             <div class="item-body-tail">
+                {{if isMember}}
+                    <button class="addButton chatButton" groupId="<?php echo $group['groupId'];?>">
+                        发起聊天
+                    </button>
+                    {{ else}}
 
-                <button class="addButton applyButton" groupId="{{groupId}}">
-                    一键入群
-                </button>
+                {{if permissionJoin == 0}}
+                        <button class="addButton applyButton" groupId="<?php echo $group['groupId'];?>">
+                            一键入群
+                        </button>
+                {{ else}}
+                        <button class="addButton applyButton disableButton" groupId="<?php echo $group['groupId'];?>">
+                            非公开群
+                        </button>
+                {{ /if}}
+                {{ /if}}
 
             </div>
         </div>

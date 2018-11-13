@@ -85,6 +85,8 @@ class Manual_Group extends Manual_Common implements Group
                 $groupId = $group["groupId"];
                 if ($this->isGroupMember($groupId, $currentUserId)) {
                     $group['isMember'] = true;
+                } else {
+                    $group['isMember'] = false;
                 }
                 $returnProfiles[] = $group;
             }

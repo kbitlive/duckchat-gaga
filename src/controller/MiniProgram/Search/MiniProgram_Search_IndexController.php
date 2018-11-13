@@ -49,7 +49,7 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
                     break;
                 case "group":
                     $groupList = $this->ctx->Manual_Group->search($loginName,  $page, $this->defaultPageSize);
-                    $groupList = $this->getOwerName($groupList);
+                    $groupList = $this->getGroupProfile($groupList);
                     echo json_encode(["data" => $groupList]);
                     break;
                 case "joinGroup":
@@ -73,7 +73,7 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
                     $params['users'] = $userList;
 
                     $groupList = $this->ctx->Manual_Group->search($loginName, 1, 3);
-                    $groupList = $this->getOwerName($groupList);
+                    $groupList = $this->getGroupProfile($groupList);
                     $params['groups'] = $groupList;
 
                     echo $this->display("miniProgram_search_searchList", $params);
@@ -85,7 +85,7 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
                     break;
                 case "group":
                     $groupList = $this->ctx->Manual_Group->search($loginName, 1, $this->defaultPageSize);
-                    $groupList = $this->getOwerName($groupList);
+                    $groupList = $this->getGroupProfile($groupList);
                     $params['groups'] = $groupList;
                     echo $this->display("miniProgram_search_groupList", $params);
                     break;
@@ -97,25 +97,33 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
         }
     }
 
-    protected function getOwerName($groupLists)
+    protected function getGroupProfile($groupLists)
     {
         $tag = __CLASS__.'->'.__FUNCTION__;
         try{
             $ownerIds = [];
+            $groupIds = [];
             foreach ($groupLists as $key => $group) {
                 $ownerIds[] = $group['owner'];
+                $groupIds[] = $group['groupId'];
             }
+
             $ownerIds = array_unique($ownerIds);
 
             $list = $this->ctx->Manual_User->getProfiles($this->userId, $ownerIds);
 
             $userList = array_column($list, "loginName", "userId");
 
+            $list = $this->ctx->Manual_Group->getProfiles($this->userId, $groupIds);
+            $memberInGroupList = array_column($list, "isMember", "groupId");
+
             foreach ($groupLists as $key => $group) {
                 $group['ownerName'] = $userList[$group['owner']];
+                $group['isMember']  =  $memberInGroupList[$group['groupId']];
                 $groupLists[$key] = $group;
             }
 
+            return $groupLists;
         }catch (Exception $ex) {
             $this->ctx->getLogger()->error($tag, $ex);
         }

@@ -85,6 +85,9 @@
             width:40px;
             height:40px;
         }
+        .disableButton {
+            background: #cccccc;
+        }
     </style>
 
 </head>
@@ -120,9 +123,22 @@
                             </div>
 
                             <div class="item-body-tail">
-                                <button class="addButton applyButton" groupId="<?php echo $group['groupId'];?>">
-                                    一键入群
+                                <?php if($group['isMember'] == true):?>
+                                <button class="addButton chatButton" groupId="<?php echo $group['groupId'];?>">
+                                    发起聊天
                                 </button>
+                                <?php else :?>
+                                    <?php if($group['permissionJoin'] == 0):?>
+                                        <button class="addButton applyButton" groupId="<?php echo $group['groupId'];?>">
+                                            一键入群
+                                        </button>
+                                    <?php else: ?>
+                                        <button class="addButton applyButton disableButton" groupId="<?php echo $group['groupId'];?>">
+                                            非公开群
+                                        </button>
+                                    <?php endif;?>
+                                <?php endif;?>
+
                             </div>
                         </div>
                     </div>
@@ -195,7 +211,9 @@
                         name:group['name'],
                         groupId:group['groupId'],
                         ownerName:group['ownerName'],
-                        avatar:src
+                        avatar:src,
+                        isMember:group['isMember'],
+                        permissionJoin:group['permissionJoin']
                     });
 
                     $(".item-row-list").append(userHtml);
@@ -236,6 +254,20 @@
         }
         alert("加入成功")
     }
+
+    $(document).on("click", ".chatButton", function () {
+        var groupId = $(this).attr("groupId");
+        if(isMobile()) {
+            try {
+                zalyjsGoto(null, "groupMsg", groupId);
+            } catch (e) {
+                alert("客户端暂不支持，请升级客户端");
+            }
+        } else {
+            alert("web端暂不支持，请使用客户端");
+        }
+
+    });
 </script>
 
 
