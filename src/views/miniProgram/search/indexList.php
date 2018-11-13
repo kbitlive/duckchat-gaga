@@ -10,6 +10,17 @@
     <style>
         body,html {
             height: 100%;
+            -webkit-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            user-select:none;
+        }
+        div{
+            -webkit-tap-highlight-color:rgba(0,0,0,0);
+            -webkit-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            user-select:none;
         }
         #wrapper {
             height: 100%;
@@ -23,7 +34,6 @@
             height:100%;
             background:white;
             overflow-y: scroll;
-            max-width: 375px;
             border: 1px solid #cccccc;
         }
         .logo_img {
@@ -35,7 +45,7 @@
             width: 100%;
         }
         .search_input {
-            width:304px;
+            width:80%;
             height:42px;
             border-radius:2px;
             border:1px solid;
@@ -56,14 +66,15 @@
         }
         .search_absoulte {
             position: absolute;
+            width: 100%;
         }
         .search_logo_div {
             height: 92px;
             display: flex;
             justify-content: left;
-            margin-left: -150px;
             align-items: center;
             width: 16px;
+            left: 10%;
         }
         .desc {
             width: 100%;
@@ -108,29 +119,38 @@
             width:1px;
             height:45px;
             background:rgba(233,232,237,1);
-            margin-right: 7px;
+            margin-right: 5px;
         }
         .search_tip {
-            font-size:16px;
+            font-size:14px;
             font-family:PingFangSC-Medium;
             font-weight:500;
             color:rgba(50,136,255,1);
+            border: none;
+            outline: none;
+            cursor: pointer;
+            background: white;
         }
         .v_line_absoulte {
-            right: 80px;
             height: 92px;
             display: flex;
             justify-content: center;
             align-items: center;
+            right: 15%;
+            width: 5px;
         }
         .search_tip_div {
-            right: 12px;
-            height: 92px;
+            right: 9%;
+            top: 25px;
+            margin:auto;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             width: 80px;
+        }
+        .search_tip_div:focus {
+            background: none;
         }
         .grap_div {
             height:10px;
@@ -153,7 +173,7 @@
             margin-left: 10px;
         }
         .line {
-            width:365px;
+            width:100%;
             height:1px;
             background:rgba(233,232,237,1);
         }
@@ -266,11 +286,9 @@
                 <div class="search_absoulte search_logo_div">
                     <img class="search_logo " src="../../public/img/search/search.png">
                 </div>
-                <div class="search_absoulte v_line_absoulte">
-                    <div class="v_line"></div>
-                </div>
+
                 <div class="search_absoulte search_tip_div">
-                    <span class="search_tip">搜索一下</span>
+                    <div class="v_line"></div><button class="search_tip">搜索一下</button>
                 </div>
             </div>
             <div class="box desc_box">

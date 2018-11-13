@@ -426,7 +426,6 @@ class SiteUserTable extends BaseTable
         return $this->updateUserFriendVersion($userId, $friendVersion);
     }
 
-
     /**
      * 根据条件查找站点用户profile
      *
