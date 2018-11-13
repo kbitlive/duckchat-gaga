@@ -124,7 +124,7 @@
 
                             <div class="item-body-tail">
                                 <?php if($group['isMember'] == true):?>
-                                <button class="addButton " groupId="<?php echo $group['groupId'];?>">
+                                <button class="addButton disableButton" groupId="<?php echo $group['groupId'];?>">
                                     已入群
                                 </button>
                                 <?php else :?>
