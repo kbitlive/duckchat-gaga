@@ -317,7 +317,7 @@
 
                                     <div class="item-body-tail">
                                         <?php if($group['isMember'] == true):?>
-                                            <button class="addButton chatButton" groupId="<?php echo $group['groupId'];?>">
+                                            <button class="addButton chatButton disableButton" groupId="<?php echo $group['groupId'];?>">
                                                 发起聊天
                                             </button>
                                         <?php else :?>
@@ -396,7 +396,6 @@
             try {
                 zalyjsGoto(null, "groupMsg", groupId);
             } catch (e) {
-                console.log(e)
                 alert("客户端暂不支持，请升级客户端");
             }
         } else {

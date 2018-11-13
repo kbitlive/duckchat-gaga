@@ -7,8 +7,11 @@
  */
 
 return array(
-    "ls3345oxvf",
-    "20xbmsqytw",
-    "snjruduizn",
-    "je78yz5soj"
+    "groupIds" => array(
+        "ls3345oxvf",
+        "20xbmsqytw",
+        "snjruduizn",
+        "je78yz5soj"
+    ),
+    'miniProgramId' => "200"
 );

@@ -9,13 +9,15 @@
 class MiniProgram_Search_IndexController extends MiniProgram_BaseController
 {
 
-    private $miniProgramId = 200;
+    private $miniProgramId   = "";
     private $defaultPageSize = 30;
     private $title = "核武搜索";
     private  $defaultLang = \Zaly\Proto\Core\UserClientLangType::UserClientLangZH;
 
     public function getMiniProgramId()
     {
+        $config = require(dirname(__FILE__)."/recommend.php");
+        $this->miniProgramId = isset($config['miniProgramId']) ? $config['miniProgramId'] : $this->miniProgramId;
         return $this->miniProgramId;
     }
 
@@ -90,9 +92,13 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
                     echo $this->display("miniProgram_search_groupList", $params);
                     break;
                 default:
-                    $groupIds = require(dirname(__FILE__)."/recommend.php");
-                    $groupList = $this->getGroupListByGroupId($groupIds);
-                    $params['groups'] = $groupList;
+                    $config = require(dirname(__FILE__)."/recommend.php");
+                    $params['groups'] =  [];
+                    if(isset($config['groupIds'])) {
+                        $groupIds  = $config['groupIds'];
+                        $groupList = $this->getGroupListByGroupId($groupIds);
+                        $params['groups'] = $groupList;
+                    }
                     echo $this->display("miniProgram_search_index", $params);
             }
         }
