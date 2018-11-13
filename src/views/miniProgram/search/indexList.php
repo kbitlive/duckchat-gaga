@@ -226,7 +226,7 @@
             display: flex;
             align-items: center;
         }
-        .applyButton, .chatButton  {
+        .applyButton, .chatButton, .addButton  {
             height:28px;
             background:rgba(76,59,177,1);
             border-radius:2px;
