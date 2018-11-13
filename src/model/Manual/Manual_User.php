@@ -11,15 +11,34 @@
 
 class Manual_User
 {
+    private $ctx;
+    public function __construct(BaseCtx $ctx)
+    {
+        $this->ctx = $ctx;
+    }
+
     /**
      * 更具$search查找用户
      * @param $search   查找的内容
      * @param int $pageNum 第几页，从1开始
      * @param int $pageSize 每页面数量
      */
-    public function search($search, $pageNum = 1, $pageSize = 20)
+    public function search($currentUserId, $search, $pageNum = 1, $pageSize = 200)
     {
-
+        $results = $this->ctx->SiteUserTable->getSiteUserListWithRelationByWhere($currentUserId, $search, $pageNum, $pageSize);
+        if($results) {
+            foreach ($results as $key => $user) {
+                if(isset($user['friend'])) {
+                    $user['isFollow'] = true;
+                } else {
+                    $user['isFollow'] = false;
+                }
+                $results[$key] = $user;
+            }
+        } else {
+            $results = [];
+        }
+        return $results;
     }
 
     /**

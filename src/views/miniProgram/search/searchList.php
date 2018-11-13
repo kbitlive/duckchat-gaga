@@ -61,12 +61,26 @@
             height: 36px;
             line-height: 36px;
         }
+        .user-avatar-image {
+            width:40px;
+            height:40px;
+        }
+
+        .item-header {
+            height:56px;
+            width: 60px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 
 </head>
 
 <body>
 
+<input type="hidden" value="<?php echo $key?>" class="search_key">
 <div class="wrapper" id="wrapper">
 
     <div class="layout-all-row">
@@ -85,62 +99,31 @@
                 </div>
                 <div class="division-line"></div>
 
+                <?php if(count($users)):?>
+                    <?php foreach ($users as $user):?>
                     <div class="item-row group-list">
-                        <div class="item-body" onclick="showGroupProfile('1111');">
+                        <div class="item-header">
+                            <img class="user-avatar-image" avatar="<?php echo $user['avatar'] ?>"
+                                 src=""
+                                 onerror="this.src='../../public/img/msg/default_user.png'"/>
+                        </div>
+                        <div class="item-body" onclick="showGroupProfile(<?php echo $user['userId']; ?>);">
                             <div class="item-body-display">
                                 <div class="item-body-desc">
-                                   111111
-                                </div>
-
-                                <div class="item-body-tail">
-                                    <div class="item-body-value">
-                                        <img class="more-img" src="../../public/img/manage/more.png"/>
-                                    </div>
+                                   <?php echo $user['loginName']; ?>
                                 </div>
                             </div>
 
                         </div>
                     </div>
                     <div class="division-line"></div>
-
-                <div class="item-row group-list">
-                    <div class="item-body" onclick="showGroupProfile('1111');">
-                        <div class="item-body-display">
-                            <div class="item-body-desc">
-                                111111
-                            </div>
-
-                            <div class="item-body-tail">
-                                <div class="item-body-value">
-                                    <img class="more-img" src="../../public/img/manage/more.png"/>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
+                    <?php endforeach;?>
+                <?php endif;?>
                 <div class="division-line"></div>
-                <div class="item-row group-list">
-                    <div class="item-body" onclick="showGroupProfile('1111');">
-                        <div class="item-body-display">
-                            <div class="item-body-desc">
-                                111111
-                            </div>
-
-                            <div class="item-body-tail">
-                                <div class="item-body-value">
-                                    <img class="more-img" src="../../public/img/manage/more.png"/>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="division-line"></div>
-                <div class="item-row group-list height36">
-                    <div class="item-body height36" >
-                        <div class="item-body-display height36">
-                            <div class="item-body-desc show_all_tip height36" >
+                <div class="item-row group-list height36 show_all_friend">
+                    <div class="item-body height36 " >
+                        <div class="item-body-display height36 ">
+                            <div class="item-body-desc show_all_tip height36 " >
                                 查看更多好友
                             </div>
 
@@ -254,115 +237,23 @@
 
 <script type="text/javascript">
 
-    var currentPageNum = 1;
-    var loading = true;
 
-    $(window).scroll(function () {
-        //判断是否滑动到页面底部
-        if ($(window).scrollTop() === $(document).height() - $(window).height()) {
-
-            if (!loading) {
-                return;
-            }
-
-            loadMoreUsers();
+    $(".user-avatar-image").each(function () {
+        var avatar = $(this).attr("avatar");
+        var src = " /_api_file_download_/?fileId=" + avatar;
+        if (!isMobile()) {
+            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
         }
+        $(this).attr("src", src);
     });
 
-    function loadMoreUsers() {
-
-        var data = {
-            'pageNum': ++currentPageNum,
-        };
-
-        var url = "index.php?action=manage.group";
-        zalyjsCommonAjaxPostJson(url, data, loadMoreResponse)
-    }
-
-
-</script>
-
-<script type="text/javascript">
-
-    $(".search-input").on('input porpertychange', function () {
-        var val = $(this).val();
-        if (val == "") {
-            $("#search-content").hide();
-        }
-    });
-
-    $(".search-input").on('keypress', function (e) {
-
-        var keycode = e.keyCode;
-        var searchName = $(this).val();
-        if (keycode == '13') {
-            // The Event interface's preventDefault() method tells the user agent that if the event does not get explicitly handled, its default action should not be taken as it normally would be. The event continues to propagate as usual, unless one of its event listeners calls stopPropagation() or stopImmediatePropagation(), either of which terminates propagation at once.
-            e.preventDefault();
-
-            var searchValue = $(this).val();
-            searchGroups(searchValue)
-        }
-    });
-
-    function searchGroups(searchValue) {
-        $("#search-content").show();
-
-        var url = "./index.php?action=manage.group.search&lang=" + getLanguage();
-        var data = {
-            "searchValue": searchValue
-        };
-
-        zalyjsCommonAjaxPostJson(url, data, searchGroupsResponse);
-    }
-
-    function searchGroupsResponse(url, data, result) {
-        $("#search-group-div").html("");
-
-        if (result) {
-
-            var res = JSON.parse(result);
-
-            if (res.errCode == "success") {
-
-                var groupList = res['groups'];
-
-                $.each(groupList, function (index, group) {
-
-                    var html = '<div class="item-row">'
-                        + '<div class="item-body" onclick="showGroupProfile(\'' + group["groupId"] + '\');">'
-                        + '<div class="item-body-display">'
-                        + '<div class="item-body-desc">' + group["name"] + '</div>'
-
-                        + '<div class="item-body-tail">'
-                        + '<img class="more-img" src="../../public/img/manage/more.png"/>'
-                        + '</div>'
-                        + '</div>'
-
-                        + '</div>'
-                        + '</div>'
-                        + '<div class="division-line"></div>';
-                    $("#search-group-div").append(html);
-                });
-
-            } else {
-                var text = getLanguage() == 1 ? "没有找到结果" : "found no groups";
-                $("#search-group-div").append(text);
-            }
-
-        } else {
-            var text = getLanguage() == 1 ? "没有找到结果" : "found no groups";
-            $("#search-group-div").append(text);
-        }
-    }
-
-    function showGroupProfile(groupId) {
-        var url = "index.php?action=manage.group.profile&lang=" + getLanguage() + "&groupId=" + groupId;
+    $(".show_all_friend").on("click", function () {
+        var param = $(".search_key").val();
+        var url = "index.php?action=miniProgram.search.index&for=user&key="+param;
         zalyjsCommonOpenPage(url);
-    }
-
+    });
 
 </script>
-
 
 </body>
 </html>

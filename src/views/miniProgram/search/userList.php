@@ -79,6 +79,8 @@
         <div class="list-item-center" style="margin-top: 20px;">
             <div class="item-row-list">
 
+                <?php if(count($users)): ?>
+                    <?php foreach ($users as $user):?>
                 <div class="item-row">
                     <div class="item-header">
                         <img class="user-avatar-image" avatar="<?php echo $user['avatar'] ?>"
@@ -87,26 +89,29 @@
                     </div>
                     <div class="item-body">
                         <div class="item-body-display">
-                            <div class="item-body-desc" onclick="showUserChat('')">
-                               11111111
+                            <div class="item-body-desc" onclick="showUserChat('<?php echo $user["userId"] ?>')">
+                                <?php echo $user['loginName']; ?>
                             </div>
 
                             <div class="item-body-tail">
-
-                                    <button class="addButton applyButton" userId="">
-                                        添加好友
-                                    </button>
+                                <?php if($user['isFllow']):?>
                                     <button class="chatButton" userId="">
                                         发起会话
                                     </button>
+                                <?php else: ?>
+                                    <button class="addButton applyButton" userId="">
+                                        添加好友
+                                    </button>
 
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="division-line"></div>
-
+            <?php endforeach;?>
+                <?php endif;?>
 
             </div>
         </div>
@@ -115,10 +120,44 @@
 
 </div>
 
+
+<div class="wrapper-mask" id="wrapper-mask" style="visibility: hidden;"></div>
+
+<div class="popup-template" style="display:none;">
+
+    <div class="config-hidden" id="popup-group">
+
+        <div class="flex-container">
+            <div class="header_tip_font popup-group-title"></div>
+        </div>
+
+        <div class="" style="text-align: center">
+            <input type="text" class="popup-group-input"
+                   data-local-placeholder="enterGroupNamePlaceholder" placeholder="please input">
+        </div>
+
+        <div class="line"></div>
+
+        <div class="" style="text-align:center;">
+            <?php if ($lang == "1") { ?>
+                <button id="update-user-button" type="button" class="create_button" data=""
+                        onclick="sendRequest();">发送
+                </button>
+            <?php } else { ?>
+                <button id="update-user-button" type="button" class="create_button" data=""
+                        onclick="sendRequest();">Send
+                </button>
+            <?php } ?>
+        </div>
+
+    </div>
+
+</div>
+<input type="hidden" value="<?php echo $loginName;?>" id="myUserId">
+
+
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../public/manage/native.js"></script>
-
-
 <script type="text/javascript">
 
     var currentPageNum = 1;
@@ -146,89 +185,76 @@
         zalyjsCommonAjaxPostJson(url, data, loadMoreResponse)
     }
 
+    function showWindow(jqElement) {
+        jqElement.css("visibility", "visible");
+        $(".wrapper-mask").css("visibility", "visible").append(jqElement);
+    }
+    function removeWindow(jqElement) {
+        jqElement.remove();
+        $(".popup-template").append(jqElement);
+        $(".wrapper-mask").css("visibility", "hidden");
+        $("#update-user-button").attr("data", "");
+        $(".popup-group-input").val("");
+        $(".popup-template").hide();
+    }
 
-</script>
+    $(".applyButton").on("click", function () {
+        var lang = getLanguage();
+        var myNickname = $("#myUserId").val();
+        var title = lang == 1 ? "申请好友" : "Apply Friend";
+        var inputBody = "I'm " + myNickname + ",apply for friend";
 
-<script type="text/javascript">
-
-    $(".search-input").on('input porpertychange', function () {
-        var val = $(this).val();
-        if (val == "") {
-            $("#search-content").hide();
+        if (lang == 1) {
+            inputBody = "我是 " + myNickname + ",申请添加好友";
         }
+
+        var friendId = $(this).attr("userId");
+
+        $("#update-user-button").attr("data", friendId);
+        showWindow($(".config-hidden"));
+
+        $(".popup-group-title").html(title);
+        $(".popup-group-input").val(inputBody);
     });
 
-    $(".search-input").on('keypress', function (e) {
 
-        var keycode = e.keyCode;
-        var searchName = $(this).val();
-        if (keycode == '13') {
-            // The Event interface's preventDefault() method tells the user agent that if the event does not get explicitly handled, its default action should not be taken as it normally would be. The event continues to propagate as usual, unless one of its event listeners calls stopPropagation() or stopImmediatePropagation(), either of which terminates propagation at once.
-            e.preventDefault();
+    function sendRequest() {
+        var friendUserId = $("#update-user-button").attr("data");
+        var applyInfo = $(".popup-group-input").val();
 
-            var searchValue = $(this).val();
-            searchGroups(searchValue)
-        }
-    });
-
-    function searchGroups(searchValue) {
-        $("#search-content").show();
-
-        var url = "./index.php?action=manage.group.search&lang=" + getLanguage();
         var data = {
-            "searchValue": searchValue
+            'friendId': friendUserId,
+            'greeting': applyInfo
         };
 
-        zalyjsCommonAjaxPostJson(url, data, searchGroupsResponse);
+        var url = "index.php?action=miniProgram.search.apply";
+        zalyjsCommonAjaxPostJson(url, data, applyResponse)
+
+        removeWindow($(".config-hidden"));
     }
 
-    function searchGroupsResponse(url, data, result) {
-        $("#search-group-div").html("");
 
-        if (result) {
+    function applyResponse(url, data, result) {
+        var res = JSON.parse(result);
 
-            var res = JSON.parse(result);
-
-            if (res.errCode == "success") {
-
-                var groupList = res['groups'];
-
-                $.each(groupList, function (index, group) {
-
-                    var html = '<div class="item-row">'
-                        + '<div class="item-body" onclick="showGroupProfile(\'' + group["groupId"] + '\');">'
-                        + '<div class="item-body-display">'
-                        + '<div class="item-body-desc">' + group["name"] + '</div>'
-
-                        + '<div class="item-body-tail">'
-                        + '<img class="more-img" src="../../public/img/manage/more.png"/>'
-                        + '</div>'
-                        + '</div>'
-
-                        + '</div>'
-                        + '</div>'
-                        + '<div class="division-line"></div>';
-                    $("#search-group-div").append(html);
-                });
-
-            } else {
-                var text = getLanguage() == 1 ? "没有找到结果" : "found no groups";
-                $("#search-group-div").append(text);
-            }
-
-        } else {
-            var text = getLanguage() == 1 ? "没有找到结果" : "found no groups";
-            $("#search-group-div").append(text);
+        if (res.errCode != "success") {
+            alert(res.errInfo);
         }
     }
 
-    function showGroupProfile(groupId) {
-        var url = "index.php?action=manage.group.profile&lang=" + getLanguage() + "&groupId=" + groupId;
-        zalyjsCommonOpenPage(url);
-    }
+    $(".user-avatar-image").each(function () {
+        var avatar = $(this).attr("avatar");
+        var src = " /_api_file_download_/?fileId=" + avatar;
+        if (!isMobile()) {
+            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        }
+        $(this).attr("src", src);
+    });
 
 
 </script>
+
+
 
 
 </body>

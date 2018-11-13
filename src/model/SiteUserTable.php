@@ -426,4 +426,90 @@ class SiteUserTable extends BaseTable
         return $this->updateUserFriendVersion($userId, $friendVersion);
     }
 
+
+    /**
+     * 根据条件查找站点用户profile
+     *
+     * @param $userId
+     * @param $pageNum
+     * @param $pageSize
+     * @return array|bool
+     * @throws Exception
+     */
+    public function getSiteUserListWithRelationByWhere($userId, $where, $pageNum, $pageSize)
+    {
+        $startTime = $this->getCurrentTimeMills();
+        $whereStr = "";
+        if(is_array($where) && isset($where['loginName'])){
+            $whereStr = "a.loginName like :loginName or a.loginNameLowercase like :loginName";
+        }
+        if(is_array($where) && isset($where['nickName'])){
+            if($whereStr) {
+                $whereStr = " and (a.nickname like :nickName or a.nicknameInLatin like :nickName)";
+            } else {
+                $whereStr = " a.nickname like :nickName or a.nicknameInLatin like :nickName ";
+            }
+        }
+
+        if(is_array($where) && isset($where['searchUserId'])){
+            if($whereStr) {
+                $whereStr = " and (a.userId in (:searchUserId))";
+            } else {
+                $whereStr = "a.userId in (:searchUserId)";
+            }
+        }
+
+        if(!$whereStr) {
+            $whereStr = "1=1";
+        }
+        try {
+            $tag = __CLASS__ . "->" . __FUNCTION__;
+            $sql = "SELECT 
+                        a.userId as userId ,
+                        a.nickname as nickname,
+                        a.loginName as loginName,
+                        a.nicknameInLatin as nicknameInLatin,
+                        a.avatar as avatar,
+                        a.availableType as availableType,
+                        b.friendId as friendId 
+                    FROM 
+                        siteUser AS a 
+                    LEFT JOIN 
+                        (SELECT userId,friendId FROM siteUserFriend WHERE userId=:userId) AS b 
+                    ON a.userId=b.friendId 
+                    WHERE  ($whereStr)
+                    ORDER BY a.id DESC LIMIT :pageNum,:pageSize;";
+            $prepare = $this->db->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->bindValue(":userId", $userId);
+            $prepare->bindValue(":pageNum", (int)(($pageNum - 1) * $pageSize), PDO::PARAM_INT);
+            $prepare->bindValue(":pageSize", (int)$pageSize, PDO::PARAM_INT);
+
+            if(is_array($where) && isset($where['loginName'])){
+                $loginName = $where['loginName'];
+                error_log("loginName-----".json_encode($loginName));
+                $prepare->bindValue(":loginName", "%$loginName%");
+
+            }
+            if(is_array($where) && isset($where['nickname'])){
+                $nickname = $where['nickname'];
+                $prepare->bindValue(":nickname", "%$nickname%");
+            }
+
+            if(is_array($where) && isset($where['searchUserId'])){
+                $searchUserId = $where['searchUserId'];
+                $prepare->bindValue(":searchUserId", $searchUserId);
+            }
+
+            $prepare->execute();
+
+//            $this->logger->error($tag, "result=" . var_export($prepare->errorInfo(), true));
+
+            $result = $prepare->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } finally {
+            $this->logger->writeSqlLog($tag, $sql, [$userId, $pageNum, $pageSize], $startTime);
+        }
+        return false;
+    }
 }

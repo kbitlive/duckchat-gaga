@@ -275,64 +275,27 @@
 
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../public/manage/native.js"></script>
-<script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
 <script type="text/javascript" src="../../public/js/template-web.js"></script>
 
 
 <script type="text/javascript">
 
-    $(".search-input").on('input porpertychange', function () {
-        var val = $(this).val();
-        if (val == "") {
-            $("#search-content").hide();
+
+    $(".search_tip_div").on("click", function () {
+        var param = $(".search_input").val();
+        if(param == undefined || param.length < 1) {
+            alert("请输入需要搜索的内容");
+            return;
         }
+        var url = "index.php?action=miniProgram.search.index&for=search&key="+param;
+        zalyjsCommonOpenPage(url);
     });
 
     $(".join_group").on("click", function () {
         var url = "index.php?action=miniProgram.search.index&for=search";
-        zalyjsOpenPage(url);
+        zalyjsCommonOpenPage(url);
     });
 
-    $(".search-input").on('keypress', function (e) {
-
-        var keycode = e.keyCode;
-        var searchName = $(this).val();
-        if (keycode == '13') {
-            // The Event interface's preventDefault() method tells the user agent that if the event does not get explicitly handled, its default action should not be taken as it normally would be. The event continues to propagate as usual, unless one of its event listeners calls stopPropagation() or stopImmediatePropagation(), either of which terminates propagation at once.
-            e.preventDefault();
-
-            var searchValue = $(this).val();
-            searchUsers(searchValue)
-        }
-    });
-
-    function searchUsers(searchValue) {
-        $("#search-content").show();
-
-        var url = "./index.php?action=manage.user.search&lang=" + getLanguage();
-        var data = {
-            "searchValue": searchValue
-        };
-
-        zalyjsCommonAjaxPostJson(url, data, searchUsersResponse);
-    }
-
-    function searchUsersResponse(url, data, result) {
-
-        $("#search-user-div").html("");
-
-        if (result) {
-
-
-        } else {
-            $("#search-user-div").append("没有找到结果");
-        }
-    }
-
-    function showUserProfile(userId) {
-        var url = "./index.php?action=manage.user.profile&lang=" + getLanguage() + "&userId=" + userId;
-        zalyjsOpenPage(url);
-    }
 
 </script>
 
