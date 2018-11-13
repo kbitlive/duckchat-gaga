@@ -59,7 +59,6 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
                 case "user":
                     $userList = $this->ctx->Manual_User->search($this->userId, $loginName, 1, $this->defaultPageSize);
                     $params['users'] = $userList;
-                    $this->ctx->Manual_User->search($this->userId, $loginName, $pageNum = 1, $pageSize = 200);
                     echo $this->display("miniProgram_search_userList", $params);
                     break;
                 case "group":

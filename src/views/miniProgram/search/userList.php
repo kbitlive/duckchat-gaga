@@ -94,12 +94,12 @@
                             </div>
 
                             <div class="item-body-tail">
-                                <?php if($user['isFllow']):?>
-                                    <button class="chatButton" userId="">
+                                <?php if($user['isFollow']):?>
+                                    <button class="chatButton" userId="<?php echo $user["userId"] ?>">
                                         发起会话
                                     </button>
                                 <?php else: ?>
-                                    <button class="addButton applyButton" userId="">
+                                    <button class="addButton applyButton" userId="<?php echo $user["userId"] ?>">
                                         添加好友
                                     </button>
 
@@ -161,6 +161,8 @@
 <script type="text/javascript" src="../../public/js/template-web.js"></script>
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../public/manage/native.js"></script>
+<script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
+
 <script type="text/javascript">
 
     var currentPageNum = 1;
@@ -201,7 +203,6 @@
 
                 $.each(data, function (index, user) {
                     var src = "./index.php?action=http.file.downloadFile&fileId=" + user['avatar'] + "&returnBase64=0&lang=" + getLanguage();
-
                     if (isMobileClient) {
                         src = '/_api_file_download_/?fileId=' + user['avatar'];
                     }
@@ -237,7 +238,7 @@
         $(".popup-template").hide();
     }
 
-    $(".applyButton").on("click", function () {
+    $(document).on("click",".applyButton", function () {
         var lang = getLanguage();
         var myNickname = $("#myUserId").val();
         var title = lang == 1 ? "申请好友" : "Apply Friend";
@@ -289,6 +290,29 @@
         }
         $(this).attr("src", src);
     });
+
+    function isMobile() {
+        if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+            return true;
+        }
+        return false;
+    }
+
+    $(document).on("click", ".chatButton", function () {
+        var friendId = $(this).attr("userId");
+        var url = "duckchat://0.0.0.0/goto?page=u2Msg&x=" + friendId;
+        if(isMobile()) {
+            try {
+                zalyjsGoto(null, "u2Msg", friendId);
+            } catch (e) {
+                alert("客户端暂不支持，请升级客户端");
+            }
+        } else {
+            alert("web端暂不支持，请使用客户端");
+        }
+
+    });
+
 
 
 </script>
