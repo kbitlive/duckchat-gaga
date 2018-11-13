@@ -23,11 +23,13 @@ class SiteCustomItemTable extends BaseTable
         "customKey",
         "keyName",
         "keyDesc",
-        "keyType", //1:user custom key
+        "keyType",
         "keySort",
         "keyConstraint",
-        "status", //0:无效 1:有效并且客户端显示 2：有效但是客户端不显示
-        "tableName",
+        "isRequired",
+        "isOpen",
+        "status",
+        "dataType",
         "dataVerify",
         "addTime",
     ];
