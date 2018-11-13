@@ -21,10 +21,20 @@ interface Group
     public function search($search, $pageNum = 1, $pageSize = 20);
 
     /**
+     * @param $currentUserId
      * @param array $groupIds 批量获取的群组ID数组
      * @return array 返回群组资料的数组
      */
-    public function getProfiles(array $groupIds);
+    public function getProfiles($currentUserId, array $groupIds);
+
+
+    /**
+     * 检测用户是否是群组成员
+     * @param $groupId
+     * @param $userId
+     * @return mixed
+     */
+    public function isMember($groupId, $userId);
 
     /**
      * $userId 加入 $groupId，这里需要做群组的权限控制，群组允许加群才可以入群
@@ -60,12 +70,38 @@ class Manual_Group extends Manual_Common implements Group
     }
 
     /**
+     * @param $currentUserId
      * @param array $groupIds 批量获取的群组ID数组
      * @return array 返回群组资料的数组
      */
-    public function getProfiles(array $groupIds)
+    public function getProfiles($currentUserId, array $groupIds)
     {
-        return $this->ctx->SiteGroupTable->getGroupListByGroupIds($groupIds);
+        //可能需要$currentUserId，获取用户是否在群中
+        $groupList = $this->ctx->SiteGroupTable->getGroupListByGroupIds($groupIds);
+
+        $returnProfiles = [];
+        if (!empty($groupList)) {
+            foreach ($groupList as $group) {
+                $groupId = $group["groupId"];
+                if ($this->isGroupMember($groupId, $currentUserId)) {
+                    $group['isMember'] = true;
+                }
+                $returnProfiles[] = $group;
+            }
+        }
+
+        return $returnProfiles;
+    }
+
+    /**
+     * 检测用户是否是群组成员
+     * @param $groupId
+     * @param $userId
+     * @return mixed
+     */
+    public function isMember($groupId, $userId)
+    {
+        return $this->isGroupMember($groupId, $userId);
     }
 
     /**
@@ -80,12 +116,25 @@ class Manual_Group extends Manual_Common implements Group
      */
     public function joinGroup($groupId, array $userIds, $joinNotice, $inviteUserId = false, $lang = Zaly\Proto\Core\UserClientLangType::UserClientLangZH)
     {
-        //check permission by group profile
+        if (empty($userIds)) {
+            return false;
+        }
 
         //获取群组资料信息
         $groupInfo = $this->getGroupProfile($groupId);
         if ($groupInfo === false) {
             return false;
+        }
+
+        $memberIds = [];
+        foreach ($userIds as $newMemberId) {
+            if (!$this->isGroupMember($groupId, $newMemberId)) {
+                $memberIds[] = $newMemberId;
+            }
+        }
+
+        if (empty($memberIds)) {
+            throw new ZalyException(ZalyError::ErrorGroupIsMember);
         }
 
         switch ($groupInfo['permissionJoin']) {
@@ -115,7 +164,7 @@ class Manual_Group extends Manual_Common implements Group
             $siteMaxGroupMembers = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_MAX_GROUP_MEMBERS);
         }
 
-        $newGroupUserCount = $groupUserCount + count($userIds);
+        $newGroupUserCount = $groupUserCount + count($memberIds);
         if ($siteMaxGroupMembers <= $groupUserCount || $siteMaxGroupMembers < $newGroupUserCount) {
             $errorInfo = $lang == 1 ? "因群组最大成员限制（{$siteMaxGroupMembers}），此操作未成功"
                 : "failed due to the max members limit of the group ({$siteMaxGroupMembers})";
@@ -123,7 +172,7 @@ class Manual_Group extends Manual_Common implements Group
         }
 
         /// 公开的直接进入
-        $this->addMemberToGroup($userIds, $groupId);
+        $this->addMemberToGroup($memberIds, $groupId);
 
         $this->finish_request();
 

@@ -15,6 +15,7 @@ class ZalyError
     const ErrorGroupAdmin = "error.group.admin";
     const ErrorGroupMember = "error.group.member";
     const ErrorGroupMemberCount = "error.group.maxMemberCount";
+    const ErrorGroupIsMember = "error.group.isMember";
 
     private static $defaultErrors = ["error", "request error", "请求错误"];
 
@@ -27,7 +28,7 @@ class ZalyError
         "error.group.admin" => ["error.alert", "No permission to operate", "只允许群主或者管理员邀请好友入群"],
         "error.group.member" => ["error.alert", "No permission to operate", "不是群成员，无权限操作"],
         "error.group.maxMemberCount" => ["error.alert", "The group member is full", "群已满员"],
-
+        "error.group.isMember" => ["error.group.isMember", "user is already group member", "当前用户已经是群成员"],
     ];
 
     public static function getErrCode($error)
