@@ -90,8 +90,9 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
                     echo $this->display("miniProgram_search_groupList", $params);
                     break;
                 default:
-                    $config = require(dirname(__FILE__)."/recommend.php");
-                    $params['recommend_groupids'] = json_encode($config);
+                    $groupIds = require(dirname(__FILE__)."/recommend.php");
+                    $groupList = $this->getGroupListByGroupId($groupIds);
+                    $params['groups'] = $groupList;
                     echo $this->display("miniProgram_search_index", $params);
             }
         }
@@ -129,6 +130,35 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
         }
         return $groupLists;
 
+    }
+
+    protected function getGroupListByGroupId($groupIds)
+    {
+        $tag = __CLASS__.'->'.__FUNCTION__;
+
+        try{
+            $groupLists = $this->ctx->Manual_Group->getProfiles($this->userId, $groupIds);
+
+            $ownerIds = [];
+
+            foreach ($groupLists as $key => $group) {
+                $ownerIds[] = $group['owner'];
+            }
+
+            $ownerIds = array_unique($ownerIds);
+
+            $list = $this->ctx->Manual_User->getProfiles($this->userId, $ownerIds);
+
+            $userList = array_column($list, "loginName", "userId");
+            foreach ($groupLists as $key => $group) {
+                $group['ownerName'] = $userList[$group['owner']];
+                $groupLists[$key] = $group;
+            }
+            return $groupLists;
+        }catch (Exception $ex) {
+            $this->ctx->getLogger()->error($tag, $ex);
+        }
+        return [];
     }
 
 }

@@ -161,11 +161,10 @@
             height:56px;
         }
 
-        .avatar {
+        .group-avatar-image {
             width: 40px;
             height: 40px;
             margin-left: 10px;
-            margin-right: 10px;
         }
         .group_info {
             display:flex;
@@ -186,13 +185,7 @@
             line-height:12px;
             margin-top: 8px;
         }
-        .group_detail_info {
-            display: flex;
-        }
-        .add_group_button {
-            margin-right: 20px;
-            height: 28px;
-        }
+
         .add_group_button  button {
             height:28px;
             background:rgba(76,59,177,1);
@@ -212,6 +205,47 @@
             justify-content: center;
             display: flex;
             align-items: center;
+        }
+        .applyButton, .chatButton  {
+            height:28px;
+            background:rgba(76,59,177,1);
+            border-radius:2px;
+            font-size:12px;
+            font-family:PingFangSC-Regular;
+            font-weight:400;
+            color:rgba(255,255,255,1);
+            line-height: 28px;
+            cursor: pointer;
+            outline: none;
+            border:1px solid;
+        }
+        .item-body-display, .item-body-desc, .item-body, .item-row {
+            height:56px;
+            line-height: 56px;
+        }
+        .item-header {
+            width: 50px;
+            height: 56px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .group_name, .group_owner {
+            height: 18px;
+            line-height: 18px;
+            text-align: left;
+            margin-top: 5px;
+        }
+        .group_owner {
+            font-size:12px;
+            font-family:PingFangSC-Regular;
+            font-weight:400;
+            color:rgba(153,153,153,1);
+            line-height:28px;
+        }
+        .disableButton {
+            background: #cccccc;
         }
     </style>
 
@@ -261,6 +295,51 @@
             <div class="line"></div>
 
             <div class="group_rows">
+                <?php if(count($groups)): ?>
+                    <?php foreach ($groups as $group):?>
+                        <div class="item-row">
+                            <div class="item-header">
+                                <img class="group-avatar-image" avatar="<?php echo $group['avatar'] ?>"
+                                     src=""
+                                     onerror="this.src='../../public/img/msg/default_user.png'"/>
+                            </div>
+
+                            <div class="item-body">
+                                <div class="item-body-display">
+                                    <div class="item-body-desc" >
+                                        <div class="group_name">
+                                            <?php echo $group['name'];?>
+                                        </div>
+                                        <div class="group_owner">
+                                            群主：<?php echo $group['ownerName'];?>
+                                        </div>
+                                    </div>
+
+                                    <div class="item-body-tail">
+                                        <?php if($group['isMember'] == true):?>
+                                            <button class="addButton chatButton" groupId="<?php echo $group['groupId'];?>">
+                                                发起聊天
+                                            </button>
+                                        <?php else :?>
+                                            <?php if($group['permissionJoin'] == 0):?>
+                                                <button class="addButton applyButton" groupId="<?php echo $group['groupId'];?>">
+                                                    一键入群
+                                                </button>
+                                            <?php else: ?>
+                                                <button class="addButton applyButton disableButton" groupId="<?php echo $group['groupId'];?>">
+                                                    非公开群
+                                                </button>
+                                            <?php endif;?>
+                                        <?php endif;?>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="division-line"></div>
+                    <?php endforeach;?>
+                <?php endif;?>
 
             </div>
 
@@ -276,6 +355,7 @@
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../public/manage/native.js"></script>
 <script type="text/javascript" src="../../public/js/template-web.js"></script>
+<script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
 
 
 <script type="text/javascript">
@@ -296,7 +376,34 @@
         zalyjsCommonOpenPage(url);
     });
 
+    $(".group-avatar-image").each(function () {
+        var avatar = $(this).attr("avatar");
+        var src = " /_api_file_download_/?fileId=" + avatar;
+        if (!isMobile()) {
+            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        }
+        $(this).attr("src", src);
+    });
+    function isMobile() {
+        if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+            return true;
+        }
+        return false;
+    }
+    $(document).on("click", ".chatButton", function () {
+        var groupId = $(this).attr("groupId");
+        if(isMobile()) {
+            try {
+                zalyjsGoto(null, "groupMsg", groupId);
+            } catch (e) {
+                console.log(e)
+                alert("客户端暂不支持，请升级客户端");
+            }
+        } else {
+            alert("web端暂不支持，请使用客户端");
+        }
 
+    });
 </script>
 
 

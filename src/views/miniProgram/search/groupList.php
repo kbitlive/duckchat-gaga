@@ -70,7 +70,7 @@
         }
         .group_name, .group_owner {
             height: 18px;
-            line-height: 28px;
+            line-height: 18px;
             text-align: left;
             margin-top: 5px;
         }
