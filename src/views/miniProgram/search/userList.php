@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?php if ($lang == "1") { ?>群组管理<?php } else { ?>Group Management<?php } ?></title>
+    <title>用户列表</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="stylesheet" href="../../public/manage/config.css"/>
@@ -218,9 +218,9 @@
                 loading = true;
                 return;
             }
-            currentPageNum = currentPageNum-1;
-            loading = false;
         }
+        loading = false;
+        currentPageNum = currentPageNum-1;
     }
 
 
@@ -301,6 +301,7 @@
     $(document).on("click", ".chatButton", function () {
         var friendId = $(this).attr("userId");
         var url = "duckchat://0.0.0.0/goto?page=u2Msg&x=" + friendId;
+
         if(isMobile()) {
             try {
                 zalyjsGoto(null, "u2Msg", friendId);

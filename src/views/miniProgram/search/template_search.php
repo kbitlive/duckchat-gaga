@@ -62,3 +62,38 @@
     <div class="division-line"></div>
 
 </script>
+
+<script id="tpl-search-group" type="text/html">
+
+<div class="item-row" groupId="{{groupId}}">
+    <div class="item-header">
+        <img class="user-avatar-image"
+             src="{{avatar}}"
+             onerror="this.src='../../public/img/msg/default_user.png'"/>
+    </div>
+
+    <div class="item-body">
+        <div class="item-body-display">
+            <div class="item-body-desc">
+                <div class="group_name">
+                    {{name}}
+                </div>
+                <div class="group_owner" >
+                    {{ownerName}}
+                </div>
+            </div>
+
+            <div class="item-body-tail">
+
+                <button class="addButton applyButton" groupId="{{groupId}}">
+                    一键入群
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="division-line"></div>
+
+</script>

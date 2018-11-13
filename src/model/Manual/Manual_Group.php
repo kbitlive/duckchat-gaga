@@ -83,7 +83,7 @@ class Manual_Group extends Manual_Common implements Group
         //check permission by group profile
 
         //获取群组资料信息
-        $groupInfo = $this->getGroupProfile($groupId);
+        $groupInfo = $this->getGroupProfile($groupId, $lang);
         if ($groupInfo === false) {
             return false;
         }

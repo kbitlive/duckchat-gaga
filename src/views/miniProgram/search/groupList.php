@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?php if ($lang == "1") { ?>群组管理<?php } else { ?>Group Management<?php } ?></title>
+    <title>群组列表</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="stylesheet" href="../../public/manage/config.css"/>
@@ -52,6 +52,9 @@
             width:40px;
             height:40px;
         }
+        .item-row-list {
+            height: 100%;
+        }
         .applyButton, .chatButton  {
             height:28px;
             background:rgba(76,59,177,1);
@@ -66,8 +69,10 @@
             border:1px solid;
         }
         .group_name, .group_owner {
-            height:28px;
+            height: 18px;
             line-height: 28px;
+            text-align: left;
+            margin-top: 5px;
         }
         .group_owner {
             font-size:12px;
@@ -76,11 +81,16 @@
             color:rgba(153,153,153,1);
             line-height:28px;
         }
+        .group-avatar-image {
+            width:40px;
+            height:40px;
+        }
     </style>
 
 </head>
 
 <body>
+<?php include (dirname(__DIR__) . '/search/template_search.php');?>
 
 <div class="wrapper" id="wrapper">
 
@@ -89,36 +99,38 @@
         <div class="list-item-center" style="margin-top: 20px;">
             <div class="item-row-list">
 
+                <?php if(count($groups)): ?>
+                <?php foreach ($groups as $group):?>
                 <div class="item-row">
                     <div class="item-header">
-                        <img class="user-avatar-image" avatar="<?php echo $user['avatar'] ?>"
+                        <img class="group-avatar-image" avatar="<?php echo $group['avatar'] ?>"
                              src=""
                              onerror="this.src='../../public/img/msg/default_user.png'"/>
                     </div>
+
                     <div class="item-body">
                         <div class="item-body-display">
-                            <div class="item-body-desc" onclick="showUserChat('')">
+                            <div class="item-body-desc" >
                                <div class="group_name">
-                                   11111111
+                                   <?php echo $group['name'];?>
                                </div>
                                 <div class="group_owner">
-                                    群主少爷
+                                    群主：<?php echo $group['ownerName'];?>
                                 </div>
                             </div>
 
                             <div class="item-body-tail">
-
-                                <button class="addButton applyButton" userId="">
+                                <button class="addButton applyButton" groupId="<?php echo $group['groupId'];?>">
                                     一键入群
                                 </button>
-
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="division-line"></div>
-
+                    <?php endforeach;?>
+                <?php endif;?>
 
             </div>
         </div>
@@ -126,120 +138,104 @@
     </div>
 
 </div>
-
+<input type="hidden" value="<?php echo $key;?>" class="search_key">
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../public/manage/native.js"></script>
 
+<script type="text/javascript" src="../../public/js/template-web.js"></script>
 
 <script type="text/javascript">
-
     var currentPageNum = 1;
     var loading = true;
 
     $(window).scroll(function () {
         //判断是否滑动到页面底部
-        if ($(window).scrollTop() === $(document).height() - $(window).height()) {
 
+        var pwLeft = $(".item-row-list")[0];
+        var ch  = pwLeft.clientHeight;
+        var sh = pwLeft.scrollHeight;
+        var st = $(".item-row-list").scrollTop();
+        if ((ch-sh-st) < 1) {
             if (!loading) {
                 return;
             }
-
-            loadMoreUsers();
+            loadMoreGroups();
         }
     });
 
-    function loadMoreUsers() {
+    function loadMoreGroups() {
 
         var data = {
-            'pageNum': ++currentPageNum,
+            'page': ++currentPageNum,
         };
-
-        var url = "index.php?action=manage.group";
+        var searchKey = $(".search_key").val();
+        var url = "index.php?action=miniProgram.search.index&for=group&key="+searchKey;
         zalyjsCommonAjaxPostJson(url, data, loadMoreResponse)
     }
 
-
-</script>
-
-<script type="text/javascript">
-
-    $(".search-input").on('input porpertychange', function () {
-        var val = $(this).val();
-        if (val == "") {
-            $("#search-content").hide();
+    function isMobile() {
+        if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+            return true;
         }
-    });
-
-    $(".search-input").on('keypress', function (e) {
-
-        var keycode = e.keyCode;
-        var searchName = $(this).val();
-        if (keycode == '13') {
-            // The Event interface's preventDefault() method tells the user agent that if the event does not get explicitly handled, its default action should not be taken as it normally would be. The event continues to propagate as usual, unless one of its event listeners calls stopPropagation() or stopImmediatePropagation(), either of which terminates propagation at once.
-            e.preventDefault();
-
-            var searchValue = $(this).val();
-            searchGroups(searchValue)
-        }
-    });
-
-    function searchGroups(searchValue) {
-        $("#search-content").show();
-
-        var url = "./index.php?action=manage.group.search&lang=" + getLanguage();
-        var data = {
-            "searchValue": searchValue
-        };
-
-        zalyjsCommonAjaxPostJson(url, data, searchGroupsResponse);
+        return false;
     }
-
-    function searchGroupsResponse(url, data, result) {
-        $("#search-group-div").html("");
-
+    function loadMoreResponse(url, data, result) {
         if (result) {
-
             var res = JSON.parse(result);
+            var data = res['data'];
+            if (data && data.length > 0) {
+                var isMobileClient = isMobile();
 
-            if (res.errCode == "success") {
+                $.each(data, function (index, group) {
+                    var src = "./index.php?action=http.file.downloadFile&fileId=" + group['avatar'] + "&returnBase64=0&lang=" + getLanguage();
+                    if (isMobileClient) {
+                        src = '/_api_file_download_/?fileId=' + group['avatar'];
+                    }
+                    var userHtml = template("tpl-search-group", {
+                        name:group['name'],
+                        groupId:group['groupId'],
+                        ownerName:group['ownerName'],
+                        avatar:src
+                    });
 
-                var groupList = res['groups'];
-
-                $.each(groupList, function (index, group) {
-
-                    var html = '<div class="item-row">'
-                        + '<div class="item-body" onclick="showGroupProfile(\'' + group["groupId"] + '\');">'
-                        + '<div class="item-body-display">'
-                        + '<div class="item-body-desc">' + group["name"] + '</div>'
-
-                        + '<div class="item-body-tail">'
-                        + '<img class="more-img" src="../../public/img/manage/more.png"/>'
-                        + '</div>'
-                        + '</div>'
-
-                        + '</div>'
-                        + '</div>'
-                        + '<div class="division-line"></div>';
-                    $("#search-group-div").append(html);
+                    $(".item-row-list").append(userHtml);
+                    $(".applyButton").bind("click");
                 });
-
-            } else {
-                var text = getLanguage() == 1 ? "没有找到结果" : "found no groups";
-                $("#search-group-div").append(text);
+                loading = true;
+                return;
             }
-
-        } else {
-            var text = getLanguage() == 1 ? "没有找到结果" : "found no groups";
-            $("#search-group-div").append(text);
         }
+        loading = false;
+        currentPageNum = currentPageNum-1;
     }
 
-    function showGroupProfile(groupId) {
-        var url = "index.php?action=manage.group.profile&lang=" + getLanguage() + "&groupId=" + groupId;
-        zalyjsCommonOpenPage(url);
+    $(".group-avatar-image").each(function () {
+        var avatar = $(this).attr("avatar");
+        var src = " /_api_file_download_/?fileId=" + avatar;
+        if (!isMobile()) {
+            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        }
+        $(this).attr("src", src);
+    });
+
+    $(".applyButton").on("click", function () {
+        var groupId = $(this).attr("groupId");
+        var data = {
+            groupId:groupId
+        };
+        var searchKey = $(".search_key").val();
+        var url = "index.php?action=miniProgram.search.index&for=joinGroup&key="+searchKey;
+        zalyjsCommonAjaxPostJson(url, data, joinGroupResponse)
+    });
+
+    function  joinGroupResponse(url, jsonBody, result){
+        var result = JSON.parse(result);
+        if(result['errorCode'] == "error") {
+            alert(result['errorInfo']);
+            return;
+        }
+        alert("加入成功")
     }
-
-
 </script>
 
 

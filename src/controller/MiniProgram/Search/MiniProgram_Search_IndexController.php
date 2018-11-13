@@ -12,6 +12,7 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
     private $miniProgramId = 200;
     private $defaultPageSize = 30;
     private $title = "核武搜索";
+    private  $defaultLang = \Zaly\Proto\Core\UserClientLangType::UserClientLangZH;
 
     public function getMiniProgramId()
     {
@@ -47,6 +48,22 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
                     echo json_encode(["data" => $userList]);
                     break;
                 case "group":
+                    $groupList = $this->ctx->Manual_Group->search($loginName,  $page, $this->defaultPageSize);
+                    $groupList = $this->getOwerName($groupList);
+                    echo json_encode(["data" => $groupList]);
+                    break;
+                case "joinGroup":
+                    try{
+                        $groupId = $_POST['groupId'];
+                        $userIds = [$this->userId];
+                        $joinNotice = "$this->loginName 通过核武搜索进入本群";
+                        $this->ctx->Manual_Group->joinGroup($groupId, $userIds, $joinNotice);
+                        $results = ["errorCode" => "success", "errorInfo" => ""];
+                    }catch (ZalyException $ex) {
+                        $results = ["errorCode" => "error", "errorInfo" => $ex->getErrInfo($this->defaultLang)];
+                    }
+                    echo json_encode($results);
+
                     break;
             }
         }else {
@@ -54,6 +71,11 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
                 case "search":
                     $userList = $this->ctx->Manual_User->search($this->userId, $loginName, 1, 3);
                     $params['users'] = $userList;
+
+                    $groupList = $this->ctx->Manual_Group->search($loginName, 1, 3);
+                    $groupList = $this->getOwerName($groupList);
+                    $params['groups'] = $groupList;
+
                     echo $this->display("miniProgram_search_searchList", $params);
                     break;
                 case "user":
@@ -62,6 +84,9 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
                     echo $this->display("miniProgram_search_userList", $params);
                     break;
                 case "group":
+                    $groupList = $this->ctx->Manual_Group->search($loginName, 1, $this->defaultPageSize);
+                    $groupList = $this->getOwerName($groupList);
+                    $params['groups'] = $groupList;
                     echo $this->display("miniProgram_search_groupList", $params);
                     break;
                 default:
@@ -72,5 +97,30 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
         }
     }
 
+    protected function getOwerName($groupLists)
+    {
+        $tag = __CLASS__.'->'.__FUNCTION__;
+        try{
+            $ownerIds = [];
+            foreach ($groupLists as $key => $group) {
+                $ownerIds[] = $group['owner'];
+            }
+            $ownerIds = array_unique($ownerIds);
+
+            $list = $this->ctx->Manual_User->getProfiles($this->userId, $ownerIds);
+
+            $userList = array_column($list, "loginName", "userId");
+
+            foreach ($groupLists as $key => $group) {
+                $group['ownerName'] = $userList[$group['owner']];
+                $groupLists[$key] = $group;
+            }
+
+        }catch (Exception $ex) {
+            $this->ctx->getLogger()->error($tag, $ex);
+        }
+        return $groupLists;
+
+    }
 
 }

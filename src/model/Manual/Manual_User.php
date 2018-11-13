@@ -11,7 +11,6 @@
 
 class Manual_User extends Manual_Common
 {
-    protected $ctx;
 
     /**
      * 更具$search查找用户
@@ -24,7 +23,7 @@ class Manual_User extends Manual_Common
         $pinyin = new \Overtrue\Pinyin\Pinyin();
         $nameInLatin = $pinyin->permalink($search, "");
 
-        $results = $this->ctx->SiteUserTable->getSiteUserListWithRelationByWhere($currentUserId, $nameInLatin, $pageNum, $pageSize);
+        $results = $this->ctx->SiteUserTable->getSiteUserListWithRelationByLoginName($currentUserId, $nameInLatin, $pageNum, $pageSize);
         if($results) {
             foreach ($results as $key => $user) {
                 if(isset($user['friendId'])) {
@@ -47,8 +46,20 @@ class Manual_User extends Manual_Common
      */
     public function getProfiles($currentUserId, array $userIds)
     {
-
-        return [];
+        $results = $this->ctx->SiteUserTable->getSiteUserListWithRelationByUserId($currentUserId, $userIds);
+        if($results) {
+            foreach ($results as $key => $user) {
+                if(isset($user['friendId'])) {
+                    $user['isFollow'] = true;
+                } else {
+                    $user['isFollow'] = false;
+                }
+                $results[$key] = $user;
+            }
+        } else {
+            $results = [];
+        }
+        return $results;
     }
 
 }

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?php if ($lang == "1") { ?>群组管理<?php } else { ?>Group Management<?php } ?></title>
+    <title>搜索列表</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="stylesheet" href="../../public/manage/config.css"/>
@@ -157,59 +157,34 @@
                 </div>
                 <div class="division-line"></div>
 
-                <div class="item-row group-list">
-                    <div class="item-body" onclick="showGroupProfile('1111');">
-                        <div class="item-body-display">
-                            <div class="item-body-desc">
-                                111111
+                <?php if(count($groups)):?>
+                <?php foreach ($groups as $group):?>
+                        <div class="item-row group-list">
+                            <div class="item-header">
+                                <img class="user-avatar-image" avatar="<?php echo $group['avatar'] ?>"
+                                     src=""
+                                     onerror="this.src='../../public/img/msg/default_user.png'"/>
                             </div>
+                            <div class="item-body">
+                                <div class="item-body-display">
+                                    <div class="item-body-desc">
+                                        <?php echo $group['name']?>
+                                    </div>
 
-                            <div class="item-body-tail">
-                                <div class="item-body-value">
-                                    <img class="more-img" src="../../public/img/manage/more.png"/>
+                                    <div class="item-body-tail">
+                                        <div class="item-body-value">
+                                            <img class="more-img" src="../../public/img/manage/more.png"/>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
+                        <div class="division-line"></div>
+                    <?php endforeach;?>
+                <?php endif;?>
 
-                    </div>
-                </div>
-                <div class="division-line"></div>
-
-                <div class="item-row group-list">
-                    <div class="item-body" onclick="showGroupProfile('1111');">
-                        <div class="item-body-display">
-                            <div class="item-body-desc">
-                                111111
-                            </div>
-
-                            <div class="item-body-tail">
-                                <div class="item-body-value">
-                                    <img class="more-img" src="../../public/img/manage/more.png"/>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="division-line"></div>
-                <div class="item-row group-list">
-                    <div class="item-body" onclick="showGroupProfile('1111');">
-                        <div class="item-body-display">
-                            <div class="item-body-desc">
-                                111111
-                            </div>
-
-                            <div class="item-body-tail">
-                                <div class="item-body-value">
-                                    <img class="more-img" src="../../public/img/manage/more.png"/>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="division-line"></div>
-                <div class="item-row group-list height36">
+                <div class="item-row group-list height36 show_all_group">
                     <div class="item-body height36" >
                         <div class="item-body-display height36">
                             <div class="item-body-desc show_all_tip height36" >
@@ -252,6 +227,12 @@
         var url = "index.php?action=miniProgram.search.index&for=user&key="+param;
         zalyjsCommonOpenPage(url);
     });
+    $(".show_all_group").on("click", function () {
+        var param = $(".search_key").val();
+        var url = "index.php?action=miniProgram.search.index&for=group&key="+param;
+        zalyjsCommonOpenPage(url);
+    });
+
 
 </script>
 
