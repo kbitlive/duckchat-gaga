@@ -390,7 +390,7 @@
         try{
             var result = JSON.parse(result);
             if(result['errorCode'] == "error") {
-                alert(result['errorInfo']);
+                alert('此群不支持任意加入，请联系群主');
                 return;
             }
         }catch (error) {
