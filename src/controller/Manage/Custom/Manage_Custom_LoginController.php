@@ -9,43 +9,6 @@
 class Manage_Custom_LoginController extends Manage_ServletController
 {
 
-    /**
-     * 处理正式的请求逻辑，比如跳转界面，post获取信息等
-     */
-//    protected function doRequest()
-//    {
-//        $params['lang'] = $this->language;
-//
-//        //2.loginConfig
-//        $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
-//
-//        $loginWelcomeTextConfig = $loginConfig[LoginConfig::LOGIN_PAGE_WELCOME_TEXT];
-//        $loginWelcomeText = $loginWelcomeTextConfig["configValue"];
-//
-//        $loginBackgroundColorConfig = $loginConfig[LoginConfig::LOGIN_PAGE_BACKGROUND_COLOR];
-//        $loginBackgroundColor = $loginBackgroundColorConfig["configValue"];
-//
-//        $loginBackgroundImageConfig = $loginConfig[LoginConfig::LOGIN_PAGE_BACKGROUND_IMAGE];
-//        $loginBackgroundImage = $loginBackgroundImageConfig["configValue"];
-//
-//        $loginBackgroundImageDisplayConfig = $loginConfig[LoginConfig::LOGIN_PAGE_BACKGROUND_IMAGE_DISPLAY];
-//        $loginBackgroundImageDisplay = $loginBackgroundImageDisplayConfig["configValue"];
-//
-//        $params['loginWelcomeText'] = $loginWelcomeText;
-//        $params['loginBackgroundColor'] = $loginBackgroundColor;
-//        $params['loginBackgroundImage'] = $loginBackgroundImage;
-//
-//        if (isset($loginBackgroundImageDisplay)) {
-//            $params['loginBackgroundImageDisplay'] = $loginBackgroundImageDisplay;
-//        } else {
-//            $params['loginBackgroundImageDisplay'] = 0;
-//        }
-//
-//        echo $this->display("manage_custom_login", $params);
-//
-//        return;
-//    }
-
     protected function doGet()
     {
         $params['lang'] = $this->language;
