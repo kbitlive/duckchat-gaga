@@ -9,7 +9,7 @@
  * Time: 11:00 AM
  */
 
-class Manual_Group
+class Manual_Group extends Manual_Common
 {
 
     /**
@@ -17,10 +17,16 @@ class Manual_Group
      * @param $search   查找的内容
      * @param int $pageNum 第几页，从1开始
      * @param int $pageSize 每页面数量
+     * @return
      */
     public function search($search, $pageNum = 1, $pageSize = 20)
     {
+        $search = trim($search);
+        $pinyin = new \Overtrue\Pinyin\Pinyin();
+        $nameInLatin = $pinyin->permalink($search, "");
+        $groups = $this->ctx->SiteGroupTable->getGroupProfileByNameInLatin($nameInLatin);
 
+        return $groups;
     }
 
     /**
