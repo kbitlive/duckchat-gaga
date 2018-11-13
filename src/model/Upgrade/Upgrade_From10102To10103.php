@@ -24,6 +24,7 @@ class Upgrade_From10102To10103 extends Upgrade_Version
 
     protected function upgrade_DB_mysql()
     {
+        $this->dropSiteCustomItemTable();
         $result = $this->executeSqliteScript();
         $result = $this->insertDefaultCustomItem() && $result;
         return $result;
@@ -72,7 +73,7 @@ class Upgrade_From10102To10103 extends Upgrade_Version
         $result = true;
         foreach ($customs as $customArray) {
             try {
-                $result = $this->ctx->SiteCustomItemTable->insertUserCustomKeys($customArray) && $result;
+                $result = $this->ctx->SiteCustomTable->insertUserCustomKeys($customArray) && $result;
             } catch (Exception $e) {
                 $this->logger->error($tag, $e);
             }

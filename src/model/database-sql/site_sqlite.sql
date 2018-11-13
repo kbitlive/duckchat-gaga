@@ -239,7 +239,7 @@ CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
 
 CREATE INDEX IF NOT EXISTS indexSiteThirdPartyLoginSourceUserId on siteThirdPartyLogin(loginUserId);
 
-CREATE TABLE IF NOT EXISTS siteCustomItem(
+CREATE TABLE IF NOT EXISTS siteCustom(
                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                       customKey varchar(50) not null,
                       keyName varchar(100) not null,

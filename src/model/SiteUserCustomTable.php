@@ -82,14 +82,14 @@ class SiteUserCustomTable extends BaseTable
 
     private function getAllColumns()
     {
-        $columns = $this->ctx->SiteCustomItemTable->queryUserCustomKeysAll();
+        $columns = $this->ctx->SiteCustomTable->queryUserCustomKeysAll();
         $this->logger->error("==============", "all custom keys for user=" . var_export($columns, true));
         return $columns;
     }
 
     private function getColumns()
     {
-        $columns = $this->ctx->SiteCustomItemTable->queryUserCustomKeysShow();
+        $columns = $this->ctx->SiteCustomTable->queryUserCustomKeysShow();
         $this->logger->error("==============", "custom keys for user show=" . var_export($columns, true));
         return $columns;
     }

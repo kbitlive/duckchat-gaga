@@ -6,13 +6,13 @@
  * Time: 7:45 PM
  */
 
-class SiteCustomItemTable extends BaseTable
+class SiteCustomTable extends BaseTable
 {
     /**
      * @var Wpf_Logger
      */
     private $logger;
-    private $table = "siteCustomItem";
+    private $table = "siteCustom";
     /**
      * keyType:
      *  1:login

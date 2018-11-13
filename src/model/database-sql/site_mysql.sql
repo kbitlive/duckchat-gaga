@@ -258,7 +258,7 @@ CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
                       INDEX(loginUserId))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- client custom item keys
-CREATE TABLE IF NOT EXISTS siteCustomItem(
+CREATE TABLE IF NOT EXISTS siteCustom(
                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
                       customKey varchar(50) not null,
                       keyName varchar(100) not null,
