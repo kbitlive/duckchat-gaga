@@ -85,6 +85,8 @@ class Manual_Group extends Manual_Common implements Group
                 $groupId = $group["groupId"];
                 if ($this->isGroupMember($groupId, $currentUserId)) {
                     $group['isMember'] = true;
+                } else {
+                    $group['isMember'] = false;
                 }
                 $returnProfiles[] = $group;
             }
@@ -121,7 +123,7 @@ class Manual_Group extends Manual_Common implements Group
         }
 
         //获取群组资料信息
-        $groupInfo = $this->getGroupProfile($groupId);
+        $groupInfo = $this->getGroupProfile($groupId, $lang);
         if ($groupInfo === false) {
             return false;
         }

@@ -52,7 +52,9 @@
  * @property DuckChat_Message DuckChat_Message
  * @property DuckChat_User DuckChat_User
  * @property DuckChat_Group DuckChat_Group
- *
+ * @property Manual_User Manual_User
+ * @property Manual_Group Manual_Group
+
  * @property Upgrade_Client Upgrade_Client
  *
  */

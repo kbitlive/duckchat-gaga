@@ -11,15 +11,32 @@
 
 class Manual_User extends Manual_Common
 {
+
     /**
      * 更具$search查找用户
      * @param $search   查找的内容
      * @param int $pageNum 第几页，从1开始
      * @param int $pageSize 每页面数量
      */
-    public function search($search, $pageNum = 1, $pageSize = 20)
+    public function search($currentUserId, $search, $pageNum = 1, $pageSize = 200)
     {
+        $pinyin = new \Overtrue\Pinyin\Pinyin();
+        $nameInLatin = $pinyin->permalink($search, "");
 
+        $results = $this->ctx->SearchSiteUserTable->getSiteUserListWithRelationByLoginName($currentUserId, $nameInLatin, $pageNum, $pageSize);
+        if($results) {
+            foreach ($results as $key => $user) {
+                if(isset($user['friendId'])) {
+                    $user['isFollow'] = true;
+                } else {
+                    $user['isFollow'] = false;
+                }
+                $results[$key] = $user;
+            }
+        } else {
+            $results = [];
+        }
+        return $results;
     }
 
     /**
@@ -29,8 +46,20 @@ class Manual_User extends Manual_Common
      */
     public function getProfiles($currentUserId, array $userIds)
     {
-
-        return [];
+        $results = $this->ctx->SearchSiteUserTable->getSiteUserListWithRelationByUserId($currentUserId, $userIds);
+        if($results) {
+            foreach ($results as $key => $user) {
+                if(isset($user['friendId'])) {
+                    $user['isFollow'] = true;
+                } else {
+                    $user['isFollow'] = false;
+                }
+                $results[$key] = $user;
+            }
+        } else {
+            $results = [];
+        }
+        return $results;
     }
 
 }

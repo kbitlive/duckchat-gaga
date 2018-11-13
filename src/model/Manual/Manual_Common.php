@@ -61,15 +61,14 @@ abstract class Manual_Common
      * @return bool|mixed
      * @throws Exception
      */
-    protected function getGroupProfile($groupId)
+    protected function getGroupProfile($groupId, $lang)
     {
         $groupInfo = $this->ctx->SiteGroupTable->getGroupInfo($groupId);
         if (!$groupInfo) {
             $tag = __CLASS__ . '-' . __FUNCTION__;
             $this->ctx->Wpf_Logger->error($tag, " errorGroupExist group id = " . $groupId);
-            $exText = ZalyText::getText("text.group.notExists", $this->language);
-            $this->returnErrorCodeRPC("error.group.notExists", $exText);
-            return false;
+            $exText = ZalyText::getText("text.group.notExists", $lang);
+            throw new Exception($exText);
         }
         return $groupInfo;
     }

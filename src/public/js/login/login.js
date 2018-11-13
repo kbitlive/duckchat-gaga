@@ -849,8 +849,6 @@ $(document).on("click", ".third_login_logo", function () {
     } else {
         landingUrl +="?duckchat_third_login_name="+name+"&from=duckchat&redirect_url="+siteAddressUrl;
     }
-    console.log("landingUrl-------"+landingUrl);
-
     var html = template("tpl_third_login", {
         landingUrl:landingUrl
     });
