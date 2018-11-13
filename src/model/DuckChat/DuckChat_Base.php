@@ -14,4 +14,14 @@ abstract class DuckChat_Base
         return ZalyHelper::getMsgId($roomType, $userId);
     }
 
+    protected function finish_request()
+    {
+        if (!function_exists("fastcgi_finish_request")) {
+            function fastcgi_finish_request()
+            {
+            }
+        }
+        fastcgi_finish_request();
+    }
+
 }
