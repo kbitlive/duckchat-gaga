@@ -159,6 +159,7 @@
 <script type="text/javascript" src="../../public/manage/native.js"></script>
 
 <script type="text/javascript" src="../../public/js/template-web.js"></script>
+<script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
 
 <script type="text/javascript">
     var currentPageNum = 1;
@@ -261,6 +262,7 @@
             try {
                 zalyjsGoto(null, "groupMsg", groupId);
             } catch (e) {
+                console.log(e)
                 alert("客户端暂不支持，请升级客户端");
             }
         } else {

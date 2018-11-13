@@ -118,7 +118,7 @@
                     </div>
                     <div class="division-line"></div>
                     <?php endforeach;?>
-                <?php endif;?>
+
                 <div class="division-line"></div>
                 <div class="item-row group-list height36 show_all_friend">
                     <div class="item-body height36 " >
@@ -136,6 +136,7 @@
 
                     </div>
                 </div>
+                <?php endif;?>
             </div>
         </div>
 
@@ -182,7 +183,6 @@
                         </div>
                         <div class="division-line"></div>
                     <?php endforeach;?>
-                <?php endif;?>
 
                 <div class="item-row group-list height36 show_all_group">
                     <div class="item-body height36" >
@@ -200,7 +200,10 @@
 
                     </div>
                 </div>
+                <?php endif;?>
+
             </div>
+
         </div>
 
     </div>
