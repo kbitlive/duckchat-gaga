@@ -7,8 +7,8 @@
  */
 
 return array(
-    'siteVersionName' => '1.1.2',
-    'siteVersionCode' => '10102',
+    'siteVersionName' => '1.1.3',
+    'siteVersionCode' => '10103',
     'siteId' => "",//sha1(pubk),获取此值，请从Site_Config中获取
     'apiPageIndex' => './index.php?action=page.index',
     'apiPageLogin' => './index.php?action=page.login',
