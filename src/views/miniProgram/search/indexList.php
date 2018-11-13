@@ -336,16 +336,16 @@
 
                                     <div class="item-body-tail">
                                         <?php if($group['isMember'] == true):?>
-                                            <button class="addButton  disableButton" groupId="<?php echo $group['groupId'];?>">
+                                            <button class="addButton  disableButton <?php echo $group['groupId'];?>" groupId="<?php echo $group['groupId'];?>">
                                                 已入群
                                             </button>
                                         <?php else :?>
                                             <?php if($group['permissionJoin'] == 0):?>
-                                                <button class="addButton applyButton" groupId="<?php echo $group['groupId'];?>">
+                                                <button class="addButton applyButton <?php echo $group['groupId'];?> " groupId="<?php echo $group['groupId'];?>">
                                                     一键入群
                                                 </button>
                                             <?php else: ?>
-                                                <button class="addButton applyButton disableButton" groupId="<?php echo $group['groupId'];?>">
+                                                <button class="addButton applyButton disableButton <?php echo $group['groupId'];?> " groupId="<?php echo $group['groupId'];?>">
                                                     非公开群
                                                 </button>
                                             <?php endif;?>
@@ -365,7 +365,6 @@
         </div>
     </div>
 
-<input type="hidden" value="<?php echo $recommend_groupids;?>" class="recommendGroupIds">
 </div>
 
 
@@ -421,6 +420,33 @@
             alert("web端暂不支持，请使用客户端");
         }
     });
+
+    $(".applyButton").on("click", function () {
+        var groupId = $(this).attr("groupId");
+        var data = {
+            groupId:groupId
+        };
+        var searchKey = $(".search_key").val();
+        var url = "index.php?action=miniProgram.search.index&for=joinGroup&key="+searchKey;
+        zalyjsCommonAjaxPostJson(url, data, joinGroupResponse)
+    });
+
+    function  joinGroupResponse(url, jsonBody, result){
+        try{
+            var result = JSON.parse(result);
+            if(result['errorCode'] == "error") {
+                alert(result['errorInfo']);
+                return;
+            }
+        }catch (error) {
+
+        }
+        var groupId = jsonBody.groupId;
+        $("."+groupId).removeClass("applyButton");
+        $("."+groupId).addClass("disableButton");
+        $("."+groupId).attr("disabled", "disabled");
+        $("."+groupId).html("已入群");
+    }
 </script>
 
 

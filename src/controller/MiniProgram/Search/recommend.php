@@ -11,7 +11,7 @@ return array(
         "ls3345oxvf",
         "20xbmsqytw",
         "snjruduizn",
-        "je78yz5soj"
+        "zx4ciq7x1y"
     ),
     'miniProgramId'    => "200",
     "about_us_desc"    => "",

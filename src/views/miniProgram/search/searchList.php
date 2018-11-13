@@ -203,16 +203,16 @@
 
                                     <div class="item-body-tail">
                                         <?php if($group['isMember'] == true):?>
-                                            <button class="addButton disableButton" groupId="<?php echo $group['groupId'];?>">
+                                            <button class="addButton disableButton <?php echo $group['groupId'];?> " groupId="<?php echo $group['groupId'];?>">
                                                 已入群
                                             </button>
                                         <?php else :?>
                                             <?php if($group['permissionJoin'] == 0):?>
-                                                <button class="addButton applyButton" groupId="<?php echo $group['groupId'];?>">
+                                                <button class="addButton applyJoinButton <?php echo $group['groupId'];?> " groupId="<?php echo $group['groupId'];?>">
                                                     一键入群
                                                 </button>
                                             <?php else: ?>
-                                                <button class="addButton disableButton" groupId="<?php echo $group['groupId'];?>">
+                                                <button class="addButton disableButton <?php echo $group['groupId'];?>" groupId="<?php echo $group['groupId'];?>">
                                                     非公开群
                                                 </button>
                                             <?php endif;?>
@@ -271,15 +271,10 @@
         <div class="line"></div>
 
         <div class="" style="text-align:center;">
-            <?php if ($lang == "1") { ?>
                 <button id="update-user-button" type="button" class="create_button" data=""
                         onclick="sendRequest();">发送
                 </button>
-            <?php } else { ?>
-                <button id="update-user-button" type="button" class="create_button" data=""
-                        onclick="sendRequest();">Send
-                </button>
-            <?php } ?>
+
         </div>
 
     </div>
@@ -312,6 +307,14 @@
         var url = "index.php?action=miniProgram.search.index&for=group&key="+param;
         zalyjsCommonOpenPage(url);
     });
+    function getLanguage() {
+        var nl = navigator.language;
+        if ("zh-cn" == nl || "zh-CN" == nl) {
+            return 1;
+        }
+        return 0;
+    }
+
 
     $(document).on("click",".applyButton", function () {
         var lang = getLanguage();
@@ -369,6 +372,33 @@
         if (res.errCode != "success") {
             alert(res.errInfo);
         }
+    }
+
+    $(".applyJoinButton").on("click", function () {
+        var groupId = $(this).attr("groupId");
+        var data = {
+            groupId:groupId
+        };
+        var searchKey = $(".search_key").val();
+        var url = "index.php?action=miniProgram.search.index&for=joinGroup&key="+searchKey;
+        zalyjsCommonAjaxPostJson(url, data, joinGroupResponse)
+    });
+
+    function  joinGroupResponse(url, jsonBody, result){
+        try{
+            var result = JSON.parse(result);
+            if(result['errorCode'] == "error") {
+                alert(result['errorInfo']);
+                return;
+            }
+        }catch (error) {
+
+        }
+        var groupId = jsonBody.groupId;
+        $("."+groupId).removeClass("applyButton");
+        $("."+groupId).addClass("disableButton");
+        $("."+groupId).attr("disabled", "disabled");
+        $("."+groupId).html("已入群");
     }
 
 

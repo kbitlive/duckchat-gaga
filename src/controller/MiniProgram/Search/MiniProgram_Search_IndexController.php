@@ -61,13 +61,14 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
                         $joinNotice = "$this->loginName 通过核武搜索进入本群";
                         $this->ctx->Manual_Group->joinGroup($groupId, $userIds, $joinNotice);
                         $results = ["errorCode" => "success", "errorInfo" => ""];
+                        echo json_encode($results);
                     }catch (ZalyException $ex) {
                         $results = ["errorCode" => "error", "errorInfo" => $ex->getErrInfo($this->defaultLang)];
+                        echo json_encode($results);
                     }
-                    echo json_encode($results);
-
                     break;
             }
+            return;
         }else {
             switch ($for) {
                 case "search":
