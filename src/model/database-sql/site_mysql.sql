@@ -257,19 +257,20 @@ CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
                       loginTime BIGINT,
                       INDEX(loginUserId))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
--- CREATE TABLE IF NOT EXISTS siteCustomItem(
---                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
---                       customKey varchar(50) not null,
---                       keyName varchar(100) not null,
---                       keyDesc TEXT,
---                       keyType int,
---                       keySort int,
---                       keyConstraint int,
---                       status int,
---                       tableName varchar(50),
---                       dataVerify varchar(50),
---                       addTime BIGINT,
---                       unique(customKey,keyType))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+-- client custom item keys
+CREATE TABLE IF NOT EXISTS siteCustomItem(
+                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                      customKey varchar(50) not null,
+                      keyName varchar(100) not null,
+                      keyDesc TEXT,
+                      keyType int,
+                      keySort int,
+                      keyConstraint int,
+                      status int,
+                      tableName varchar(50),
+                      dataVerify varchar(50),
+                      addTime BIGINT,
+                      unique(customKey,keyType))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -279,10 +280,10 @@ CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       updateUserId VARCHAR(100),
                       updateTime BIGINT)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
--- CREATE TABLE IF NOT EXISTS siteUserCustom(
---                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
---                       userId VARCHAR(100) NOT NULL,
---                       phone varchar(50) not null,
---                       name varchar(100) not null,
---                       age int,
---                       addTime BIGINT);
+CREATE TABLE IF NOT EXISTS siteUserCustom(
+                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                      userId VARCHAR(100) NOT NULL,
+                      phone varchar(50) not null,
+                      name varchar(100) not null,
+                      age int,
+                      addTime BIGINT);

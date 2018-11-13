@@ -262,10 +262,10 @@ CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       updateTime BIGINT);
 
 -- table name siteXXXCustom
--- CREATE TABLE IF NOT EXISTS siteUserCustom(
---                       id INTEGER PRIMARY KEY AUTOINCREMENT,
---                       userId VARCHAR(100) NOT NULL,
---                       phone varchar(50) not null,
---                       name varchar(100) not null,
---                       age int,
---                       addTime BIGINT);
+CREATE TABLE IF NOT EXISTS siteUserCustom(
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      userId VARCHAR(100) NOT NULL,
+                      phone varchar(50) not null,
+                      name varchar(100) not null,
+                      age int,
+                      addTime BIGINT);
