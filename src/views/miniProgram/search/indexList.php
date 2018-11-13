@@ -47,6 +47,7 @@
         .search_input {
             width:80%;
             height:42px;
+            font-size:14px;
             border-radius:2px;
             border:1px solid;
             outline: none;
