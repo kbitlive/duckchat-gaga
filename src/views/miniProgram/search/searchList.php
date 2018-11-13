@@ -41,6 +41,9 @@
             height:56px;
             line-height: 56px;
         }
+        .item-body-desc {
+            display: flex;
+        }
 
         .show_all_list_name {
             height: 30px;

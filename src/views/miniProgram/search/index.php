@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title><?php echo $title; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
+    <link rel="stylesheet" href="../../public/manage/config.css"/>
     <style>
         body,html {
             height: 100%;
@@ -15,12 +15,15 @@
             text-align: center;
             display: flex;
             justify-content: center;
-            background:rgba(233,232,237,1);
+            background:white;
         }
         .continer {
-            width: 375px;
+            width: 100%;
             height:100%;
             background:white;
+            overflow-y: scroll;
+            max-width: 375px;
+            border: 1px solid #cccccc;
         }
         .logo_img {
             width: 51px;
@@ -28,8 +31,7 @@
         .box {
             text-align: center;
             margin-top: 18px;
-            width: 335px;
-            margin-left: 20px;
+            width: 100%;
         }
         .search_input {
             width:304px;
@@ -63,7 +65,7 @@
             width: 16px;
         }
         .desc {
-            width: 335px;
+            width: 100%;
             font-size: 12px;
             font-family: PingFangSC-Regular;
             font-weight: 400;
@@ -71,7 +73,7 @@
             line-height: 17px;
             word-break: break-all;
             text-align: left;
-            margin-left: 20px;
+
         }
         .desc_div {
             width: 100%;
@@ -81,7 +83,7 @@
             align-items: center;
         }
         .sub_title {
-            width:335px;
+            width: 100%;
             height:14px;
             font-size:10px;
             font-family:PingFangSC-Regular;
@@ -92,7 +94,7 @@
         }
 
         .sub_title_contact {
-            width:335px;
+            width: 100%;
             height:10px;
             font-size:10px;
             font-family:PingFangSC-Regular;
@@ -103,17 +105,15 @@
         }
         .v_line {
             width:1px;
-            height:40px;
+            height:45px;
             background:rgba(233,232,237,1);
             margin-right: 7px;
         }
         .search_tip {
-            height:16px;
             font-size:16px;
             font-family:PingFangSC-Medium;
             font-weight:500;
             color:rgba(50,136,255,1);
-            line-height:16px;
         }
         .v_line_absoulte {
             right: 80px;
@@ -129,10 +129,12 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            width: 80px;
         }
         .grap_div {
             height:10px;
             background:rgba(233,232,237,1);
+            overflow: hidden;
         }
         .row {
             width: 100%;
@@ -203,6 +205,13 @@
             outline: none;
             cursor: pointer;
         }
+        .desc_box {
+            text-align: center;
+            width: 100%;
+            justify-content: center;
+            display: flex;
+            align-items: center;
+        }
     </style>
 
 </head>
@@ -229,14 +238,18 @@
                     <span class="search_tip">搜索一下</span>
                 </div>
             </div>
-            <div class="desc">
-                核武站简介：这是一个核武内部系统搭建的聊天站点，此处的描述内容可以在管理后台进行修改配置。这是一个核武内部系统搭建的聊天站点，此处的描述内容可以在管理后台进行修改配置。
-            </div>
-            <div class="sub_title">
-                核武站技术团队
-            </div>
-            <div class="sub_title_contact">
-                李萌：13273247332
+            <div class="box desc_box">
+                <div style="width: 90%;">
+                    <div class="desc">
+                        核武站简介：这是一个核武内部系统搭建的聊天站点，此处的描述内容可以在管理后台进行修改配置。这是一个核武内部系统搭建的聊天站点，此处的描述内容可以在管理后台进行修改配置。
+                    </div>
+                    <div class="sub_title">
+                        核武站技术团队
+                    </div>
+                    <div class="sub_title_contact">
+                        李萌：13273247332
+                    </div>
+                </div>
             </div>
         <div class="grap_div">
         </div>
