@@ -335,8 +335,8 @@
 
                                     <div class="item-body-tail">
                                         <?php if($group['isMember'] == true):?>
-                                            <button class="addButton chatButton disableButton" groupId="<?php echo $group['groupId'];?>">
-                                                发起聊天
+                                            <button class="addButton  disableButton" groupId="<?php echo $group['groupId'];?>">
+                                                已入群
                                             </button>
                                         <?php else :?>
                                             <?php if($group['permissionJoin'] == 0):?>

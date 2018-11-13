@@ -85,8 +85,8 @@
 
             <div class="item-body-tail">
                 {{if isMember}}
-                    <button class="addButton chatButton" groupId="<?php echo $group['groupId'];?>">
-                        发起聊天
+                    <button class="addButton " groupId="<?php echo $group['groupId'];?>">
+                        已入群
                     </button>
                     {{ else}}
 
@@ -95,7 +95,7 @@
                             一键入群
                         </button>
                 {{ else}}
-                        <button class="addButton applyButton disableButton" groupId="<?php echo $group['groupId'];?>">
+                        <button class="addButton  disableButton" groupId="<?php echo $group['groupId'];?>">
                             非公开群
                         </button>
                 {{ /if}}
