@@ -10,9 +10,8 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
 {
 
     private $miniProgramId = 200;
-    private $defaultPageSize = 200;
+    private $defaultPageSize = 30;
     private $title = "核武搜索";
-    private $cookieTimeOut = 2592000;//30天 单位s
 
     public function getMiniProgramId()
     {
@@ -36,26 +35,31 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
         $method = strtolower($_SERVER['REQUEST_METHOD']);
         $params['title'] = $this->title;
         $params['loginName'] = $this->loginName;
+        $for = isset($_GET['for']) ? $_GET['for'] : "index";
+        $loginName = isset($_GET['key']) ?  $_GET['key'] : "";
+        $params['key'] = $loginName;
 
         if($method == "post") {
-
+            $page = isset($_POST['page']) ? $_POST['page']:1;
+            switch ($for) {
+                case "user":
+                    $userList = $this->ctx->Manual_User->search($this->userId, $loginName, $page, $this->defaultPageSize);
+                    echo json_encode(["data" => $userList]);
+                    break;
+                case "group":
+                    break;
+            }
         }else {
-            $for = isset($_GET['for']) ? $_GET['for'] : "index";
-            $key = isset($_GET['key']) ?  $_GET['key'] : "";
-            $search['loginName'] = $key;
-            $page = isset($_GET['page'] )?$_GET['page']  : 1;
             switch ($for) {
                 case "search":
-                    $userList = $this->ctx->Manual_User->search($this->userId, $search, 1, 3);
+                    $userList = $this->ctx->Manual_User->search($this->userId, $loginName, 1, 3);
                     $params['users'] = $userList;
-                    $params['key'] = $key;
                     echo $this->display("miniProgram_search_searchList", $params);
                     break;
                 case "user":
-                    $userList = $this->ctx->Manual_User->search($this->userId, $search, $page, $this->defaultPageSize);
+                    $userList = $this->ctx->Manual_User->search($this->userId, $loginName, 1, $this->defaultPageSize);
                     $params['users'] = $userList;
-                    $params['key'] = $key;
-                    $this->ctx->Manual_User->search($this->userId, $search, $pageNum = 1, $pageSize = 200);
+                    $this->ctx->Manual_User->search($this->userId, $loginName, $pageNum = 1, $pageSize = 200);
                     echo $this->display("miniProgram_search_userList", $params);
                     break;
                 case "group":

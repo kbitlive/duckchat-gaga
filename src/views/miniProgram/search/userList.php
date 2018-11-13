@@ -155,7 +155,10 @@
 </div>
 <input type="hidden" value="<?php echo $loginName;?>" id="myUserId">
 
+<input type="hidden" value="<?php echo $key;?>" class="search_key">
+<?php include (dirname(__DIR__) . '/search/template_search.php');?>
 
+<script type="text/javascript" src="../../public/js/template-web.js"></script>
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../public/manage/native.js"></script>
 <script type="text/javascript">
@@ -165,8 +168,12 @@
 
     $(window).scroll(function () {
         //判断是否滑动到页面底部
-        if ($(window).scrollTop() === $(document).height() - $(window).height()) {
 
+        var pwLeft = $(".item-row-list")[0];
+        var ch  = pwLeft.clientHeight;
+        var sh = pwLeft.scrollHeight;
+        var st = $(".item-row-list").scrollTop();
+        if ((ch-sh-st) < 1) {
             if (!loading) {
                 return;
             }
@@ -178,17 +185,49 @@
     function loadMoreUsers() {
 
         var data = {
-            'pageNum': ++currentPageNum,
+            'page': ++currentPageNum,
         };
-
-        var url = "index.php?action=manage.group";
+        var searchKey = $(".search_key").val();
+        var url = "index.php?action=miniProgram.search.index&for=user&key="+searchKey;
         zalyjsCommonAjaxPostJson(url, data, loadMoreResponse)
     }
+
+    function loadMoreResponse(url, data, result) {
+        if (result) {
+            var res = JSON.parse(result);
+            var data = res['data'];
+            if (data && data.length > 0) {
+                var isMobileClient = isMobile();
+
+                $.each(data, function (index, user) {
+                    var src = "./index.php?action=http.file.downloadFile&fileId=" + user['avatar'] + "&returnBase64=0&lang=" + getLanguage();
+
+                    if (isMobileClient) {
+                        src = '/_api_file_download_/?fileId=' + user['avatar'];
+                    }
+                    var userHtml = template("tpl-search-user", {
+                        loginName:user['loginName'],
+                        userId:user['userId'],
+                        avatar:src
+                    });
+
+                    $(".item-row-list").append(userHtml);
+                    $(".applyButton").bind("click");
+                });
+                loading = true;
+                return;
+            }
+            currentPageNum = currentPageNum-1;
+            loading = false;
+        }
+    }
+
 
     function showWindow(jqElement) {
         jqElement.css("visibility", "visible");
         $(".wrapper-mask").css("visibility", "visible").append(jqElement);
     }
+
     function removeWindow(jqElement) {
         jqElement.remove();
         $(".popup-template").append(jqElement);

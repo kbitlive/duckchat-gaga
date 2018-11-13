@@ -33,23 +33,23 @@
     <div class="item-row">
         <div class="item-header">
             <img class="user-avatar-image" avatar="{{avatar}}"
-                 src=""
+                 src="{{avatar}}"
                  onerror="this.src='../../public/img/msg/default_user.png'"/>
         </div>
         <div class="item-body">
             <div class="item-body-display">
-                <div class="item-body-desc" onclick="showUserChat('')">
+                <div class="item-body-desc" onclick="showUserChat({{userId}})">
                     {{loginName}}
                 </div>
 
                 <div class="item-body-tail">
                     {{if isFllow }}
-                    <button class="chatButton" userId="">
+                    <button class="chatButton" userId="{{userId}}">
                         发起会话
                     </button>
                     {{else}}
 
-                    <button class="addButton applyButton" userId="">
+                    <button class="addButton applyButton" userId="{{userId}}">
                         添加好友
                     </button>
                     {{/if}}

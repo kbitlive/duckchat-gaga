@@ -11,11 +11,7 @@
 
 class Manual_User extends Manual_Common
 {
-    private $ctx;
-    public function __construct(BaseCtx $ctx)
-    {
-        $this->ctx = $ctx;
-    }
+    protected $ctx;
 
     /**
      * 更具$search查找用户
@@ -25,7 +21,10 @@ class Manual_User extends Manual_Common
      */
     public function search($currentUserId, $search, $pageNum = 1, $pageSize = 200)
     {
-        $results = $this->ctx->SiteUserTable->getSiteUserListWithRelationByWhere($currentUserId, $search, $pageNum, $pageSize);
+        $pinyin = new \Overtrue\Pinyin\Pinyin();
+        $nameInLatin = $pinyin->permalink($search, "");
+
+        $results = $this->ctx->SiteUserTable->getSiteUserListWithRelationByWhere($currentUserId, $nameInLatin, $pageNum, $pageSize);
         if($results) {
             foreach ($results as $key => $user) {
                 if(isset($user['friend'])) {
