@@ -37,7 +37,6 @@
 
         }
 
-
         .item-body-display, .item-body-desc, .item-body, .item-row {
             height:56px;
             line-height: 56px;

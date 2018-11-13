@@ -6,6 +6,7 @@
     <title><?php echo $title; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="../../public/manage/config.css"/>
+
     <style>
         body,html {
             height: 100%;
@@ -259,38 +260,23 @@
             </div>
             <div class="line"></div>
 
-            <div class="group_row">
-                <div class="group_info">
-                    <div class="group_detail_info">
-                        <div >
-                            <img class="avatar" src="../../public/img/msg/default_user.png">
-                        </div>
-                        <div>
-                            <div class="group_name">
-                                群1
-                            </div>
-                            <div class="group_owner">
-                                群主：少爷
-                            </div>
-                        </div>
-                    </div>
-                    <div class="add_group_button">
-                        <button class="join_group">一键加入</button>
-                    </div>
-                </div>
+            <div class="group_rows">
+
             </div>
-            <div class="line"></div>
 
         </div>
     </div>
 
-
+<input type="hidden" value="<?php echo $recommend_groupids;?>" class="recommendGroupIds">
 </div>
 
+
+<?php include (dirname(__DIR__) . '/search/template_search.php');?>
 
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../public/manage/native.js"></script>
 <script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
+<script type="text/javascript" src="../../public/js/template-web.js"></script>
 
 
 <script type="text/javascript">
