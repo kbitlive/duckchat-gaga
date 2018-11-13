@@ -7,10 +7,12 @@
  */
 class MiniProgram_Search_ApplyController extends MiniProgram_BaseController
 {
-    private $miniProgramId = 200;
+    private $miniProgramId = "";
 
     protected function getMiniProgramId()
     {
+        $config = require(dirname(__FILE__)."/recommend.php");
+        $this->miniProgramId = isset($config['miniProgramId']) ? $config['miniProgramId'] : $this->miniProgramId;
         return $this->miniProgramId;
     }
 
