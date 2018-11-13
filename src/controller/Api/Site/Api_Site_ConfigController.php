@@ -246,6 +246,12 @@ class Api_Site_ConfigController extends \BaseController
                 }
             }
 
+            if (isset($configData[SiteConfig::SITE_OPEN_WATERMARK])) {
+                $config->setOpenWaterMark($configData[SiteConfig::SITE_OPEN_WATERMARK]);
+            } else {
+                $config->setOpenWaterMark(false);
+            }
+
             $config->setVersion($this->getSiteVersion());
             $currentVersionCode = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionCodeKey);
             $config->setVersionCode($currentVersionCode);

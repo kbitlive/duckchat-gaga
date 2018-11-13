@@ -263,12 +263,14 @@ CREATE TABLE IF NOT EXISTS siteCustomItem(
                       customKey varchar(50) not null,
                       keyName varchar(100) not null,
                       keyDesc TEXT,
-                      keyType int,
+                      keyType int,-- 登陆自定义类型，用户自定义类型
                       keySort int,
-                      keyConstraint int,
-                      status int,
-                      tableName varchar(50),
-                      dataVerify varchar(50),
+                      keyConstraint varchar(100),--约束条件
+                      isRequired boolean default false,
+                      isOpen boolean default true,
+                      status int, --  -1：无效，0：正常
+                      dataType int, -- text，number，手机号码，其他
+                      dataVerify varchar(100),-- 校验数据类型类型,可能是一个正则
                       addTime BIGINT,
                       unique(customKey,keyType))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -283,7 +285,4 @@ CREATE TABLE IF NOT EXISTS siteLoginCustom(
 CREATE TABLE IF NOT EXISTS siteUserCustom(
                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
                       userId VARCHAR(100) NOT NULL,
-                      phone varchar(50) not null,
-                      name varchar(100) not null,
-                      age int,
                       addTime BIGINT);

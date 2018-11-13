@@ -103,6 +103,12 @@ class PublicSiteConfig extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>bool hiddenHomePage = 19;</code>
      */
     private $hiddenHomePage = false;
+    /**
+     *true : show watermark ,false: hidden water mark(default)
+     *
+     * Generated from protobuf field <code>bool openWaterMark = 20;</code>
+     */
+    private $openWaterMark = false;
 
     public function __construct() {
         \GPBMetadata\Core\Site::initOnce();
@@ -547,6 +553,32 @@ class PublicSiteConfig extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkBool($var);
         $this->hiddenHomePage = $var;
+
+        return $this;
+    }
+
+    /**
+     *true : show watermark ,false: hidden water mark(default)
+     *
+     * Generated from protobuf field <code>bool openWaterMark = 20;</code>
+     * @return bool
+     */
+    public function getOpenWaterMark()
+    {
+        return $this->openWaterMark;
+    }
+
+    /**
+     *true : show watermark ,false: hidden water mark(default)
+     *
+     * Generated from protobuf field <code>bool openWaterMark = 20;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setOpenWaterMark($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->openWaterMark = $var;
 
         return $this;
     }

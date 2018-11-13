@@ -35,6 +35,8 @@ class Manage_ConfigController extends Manage_CommonController
             $config[SiteConfig::SITE_FILE_SIZE] = 10;
         }
 
+//        $openWaterMark = $config[SiteConfig::SITE_OPEN_WATERMARK];
+
         echo $this->display("manage_config_index", $config);
         return;
     }

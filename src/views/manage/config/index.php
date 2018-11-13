@@ -154,6 +154,27 @@
             </div>
             <div class="division-line"></div>
 
+            <div class="item-row">
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">开启水印</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Open WaterMark</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <?php if ($openWaterMark == 1) { ?>
+                                <input id="openWaterMarkSwitch" class="weui_switch" type="checkbox" checked>
+                            <?php } else { ?>
+                                <input id="openWaterMarkSwitch" class="weui_switch" type="checkbox">
+                            <?php } ?>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
         </div>
 
     </div>
@@ -1346,6 +1367,19 @@
 
         var data = {
             'key': 'enableInvitationCode',
+            'value': isChecked ? 1 : 0,
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, enableSwitchResponse);
+
+    });
+
+    $("#openWaterMarkSwitch").change(function () {
+        var isChecked = $(this).is(':checked');
+        var url = "index.php?action=manage.config.update&key=enableInvitationCode";
+
+        var data = {
+            'key': 'openWaterMark',
             'value': isChecked ? 1 : 0,
         };
 
