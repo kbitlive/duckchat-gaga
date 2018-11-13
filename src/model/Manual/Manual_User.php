@@ -9,7 +9,7 @@
  * Time: 11:00 AM
  */
 
-class Manual_User
+class Manual_User extends Manual_Common
 {
     private $ctx;
     public function __construct(BaseCtx $ctx)
