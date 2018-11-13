@@ -12,6 +12,10 @@ class ZalyError
     const ErrorGroupEmptyId = "error.group.emptyId";
     const ErrorGroupPermission = "error.group.permission";
 
+    const ErrorGroupAdmin = "error.group.admin";
+    const ErrorGroupMember = "error.group.member";
+    const ErrorGroupMemberCount = "error.group.maxMemberCount";
+
     private static $defaultErrors = ["error", "request error", "请求错误"];
 
 
@@ -19,6 +23,11 @@ class ZalyError
         "error.group.emptyId" => ["error.alert", "groupId is empty", "群Id为空"],
         "error.group.permission" => ["error.alert", "no permission for group", "无当前群组操作权限"],
         "error.group.create.forbid" => ["error.alert", "create group forbidden", "站点禁止创建群组"],
+
+        "error.group.admin" => ["error.alert", "No permission to operate", "只允许群主或者管理员邀请好友入群"],
+        "error.group.member" => ["error.alert", "No permission to operate", "不是群成员，无权限操作"],
+        "error.group.maxMemberCount" => ["error.alert", "The group member is full", "群已满员"],
+
     ];
 
     public static function getErrCode($error)

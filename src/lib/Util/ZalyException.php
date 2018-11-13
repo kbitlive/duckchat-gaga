@@ -12,7 +12,7 @@ class ZalyException extends Exception
     private $errInfo;
 
 
-    public function __construct($errCode, $errInfo, Throwable $previous = null)
+    public function __construct($errCode, $errInfo = false, Throwable $previous = null)
     {
         parent::__construct($errInfo, 0, $previous);
         $this->errCode = $errCode;
@@ -25,8 +25,12 @@ class ZalyException extends Exception
         return $this->errCode;
     }
 
-    public function getErrInfo()
+    public function getErrInfo($lang)
     {
-        return $this->errInfo;
+        if ($this->errInfo) {
+            return $this->errInfo;
+        }
+        return ZalyError::getErrorInfo($this->errCode, $lang);
     }
+
 }
