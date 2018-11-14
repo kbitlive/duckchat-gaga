@@ -76,25 +76,24 @@
                 </div>
             </div>
 
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display add-user-column" onclick="addNewColumn()">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">添加字段</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Add Column</div>
-                        <?php } ?>
 
-                        <div class="item-body-tail">
-                            <div class="item-body-value">
-                                <img class="more-img" src="../../public/img/manage/more.png"/>
+            <?php foreach ($userCustoms as $userCustom) { ?>
+                <div class="item-row" onclick="gotoUserCustomProfile('<?php echo $userCustom['customKey']; ?>')">
+                    <div class="item-body">
+                        <div class="item-body-display add-user-column" onclick="addNewColumn()">
+                            <div class="item-body-desc"><?php echo $userCustom['keyName']; ?></div>
+
+                            <div class="item-body-tail">
+                                <div class="item-body-value">
+                                    <img class="more-img" src="../../public/img/manage/more.png"/>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
-            </div>
-            <div class="division-line"></div>
+                <div class="division-line"></div>
+            <?php } ?>
 
         </div>
 
@@ -123,12 +122,10 @@
         }
     }
 
-    // loginMiniProgramId item-body-value
-    $(".loginMiniProgram").click(function () {
-        var miniProgramId = $(this).find("#loginMiniProgramId").html();
-        var url = "index.php?action=manage.miniProgram.profile&lang=" + getLanguage() + "&pluginId=" + miniProgramId;
-        zalyjsCommonOpenPage(url);
-    });
+    function gotoUserCustomProfile(customKey) {
+        var url = "index.php?action=manage.custom.userUpdate&lang=" + getLanguage() + "&customKey=" + customKey;
+        zalyjsOpenPage(url);
+    }
 
 </script>
 

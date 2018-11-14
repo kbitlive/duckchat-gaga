@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?php if ($lang == "1") { ?>小程序资料<?php } else { ?>Mini Program Profile<?php } ?></title>
+    <title><?php echo $title ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="stylesheet" href="../../public/jquery/weui.min.css"/>
@@ -12,11 +12,24 @@
 
     <style>
 
+        .save_button,
+        .save_button:hover,
+        .save_button:focus,
+        .save_button:active {
+            margin-top: 2rem;
+            width: 100%;
+            height: 44px;
+            background: rgba(76, 59, 177, 1);
+            border-radius: 0.94rem;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 1);
+            line-height: 1.67rem;
+        }
+
         .site-image {
             width: 30px;
             height: 30px;
             margin-top: 12px;
-            /*margin-bottom: 7px;*/
             cursor: pointer;
         }
 
@@ -27,295 +40,141 @@
         .select-color-primary {
             color: #4C3BB1;
         }
-
-        .item-row, .weui-actionsheet__cell {
-            cursor: pointer;
-        }
-
-        .usage-select {
-            width: 100%;
-            height: 30px;
-            font-size: 14px;
-            border-width: 0;
-            size: 14px;
-        }
-
-        .usage-select-option {
-            font-size: 14px;
-        }
-
     </style>
+
 
 </head>
 
 <body>
 
-<div class="wrapper-mask" id="wrapper-mask" style="visibility: hidden;"></div>
-
 <div class="wrapper" id="wrapper">
 
-    <!--  site basic config  -->
     <div class="layout-all-row">
 
         <div class="list-item-center">
 
-
-            <div class="item-row" id="mini-program-id" data="<?php echo $pluginId ?>">
-                <div class="item-body">
-                    <div class="item-body-display">
-
-                        <div class="item-body-desc">ID</div>
-
-                        <div class="item-body-tail" style="margin-right: 20px">
-                            <?php echo $pluginId ?>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-            <!--      part1: site name      -->
-            <div class="item-row" id="mini-program-name" data="<?php $name ?>">
+            <div class="item-row" id="custom-key" data="<?php echo $userCustomInfo["customKey"]; ?>">
                 <div class="item-body">
                     <div class="item-body-display">
 
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">名称</div>
-                            <div class="item-body-tail">
-                                <input id="mini-program-name-text" type="text" class="plugin-add-input"
-                                       placeholder="请输入小程序名称" value="<?php echo $name ?>">
-                            </div>
+                            <div class="item-body-desc">自定义字段</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Name</div>
-                            <div class="item-body-tail">
-                                <input id="mini-program-name-text" type="text" class="plugin-add-input"
-                                       placeholder="input mini program name" value="<?php echo $name ?>">
-                            </div>
-                        <?php } ?>
-
-
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display">
-
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">图标</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Icon</div>
-                        <?php } ?>
-
-
-                        <div class="item-body-tail">
-                            <div class="item-body-value" id="mini-program-img-id" fileId="<?php echo $logo ?>">
-                                <img id="mini-program-img" class="site-image"
-                                     onclick="uploadFile('mini-program-img-input')"
-                                     avatar="<?php echo $logo ?>"
-                                     src=""
-                                     onerror="src='../../public/img/manage/plugin_default.png'">
-
-                                <input id="mini-program-img-input" type="file" onchange="uploadImageFile(this)"
-                                       accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
-                                       style="display: none;">
-                            </div>
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-        </div>
-
-    </div>
-
-
-    <!-- part 2  register && login plugin-->
-    <div class="layout-all-row">
-
-        <div class="list-item-center">
-
-            <div class="item-row" id="mini-program-landing-page" data="<?php echo $landingPageUrl ?>">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">落地页URL</div>
-                            <div class="item-body-tail">
-                                <input id="mini-program-landing-text" type="text" class="plugin-add-input"
-                                       placeholder="纯网页小程序请填写页面完整URL" value="<?php echo $landingPageUrl ?>">
-                            </div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Home Page Url</div>
-                            <div class="item-body-tail">
-                                <input id="mini-program-landing-text" type="text" class="plugin-add-input"
-                                       placeholder="http or proxy url" value="<?php echo $landingPageUrl ?>">
-                            </div>
-                        <?php } ?>
-
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-            <!--            <div class="item-row">-->
-            <!--                <div class="item-body">-->
-            <!--                    <div class="item-body-display">-->
-            <!--                        --><?php //if ($lang == "1") { ?>
-            <!--                            <div class="item-body-desc">是否开启站点代理请求</div>-->
-            <!--                        --><?php //} else { ?>
-            <!--                            <div class="item-body-desc">Open Site HTTP Proxy</div>-->
-            <!--                        --><?php //} ?>
-            <!---->
-            <!--                        <div class="item-body-tail">-->
-            <!--                            --><?php //if ($landingPageWithProxy == "1") { ?>
-            <!--                                <input id="openProxySwitch-text" class="weui_switch" type="checkbox" checked>-->
-            <!--                            --><?php //} else { ?>
-            <!--                                <input id="openProxySwitch-text" class="weui_switch" type="checkbox">-->
-            <!--                            --><?php //} ?>
-            <!--                        </div>-->
-            <!--                    </div>-->
-            <!---->
-            <!--                </div>-->
-            <!--            </div>-->
-            <!--            <div class="division-line"></div>-->
-
-        </div>
-
-    </div>
-
-    <!--   part 3  -->
-    <div class="layout-all-row">
-
-        <div class="list-item-center">
-            
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">小程序使用类别</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Mini Program Usage</div>
+                            <div class="item-body-desc">Custom Key</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <select class="usage-select mini-program-usage-select" multiple="multiple" size="2">
-                                <option class="usage-select-option" value="1" <?php if ($usageType_1 == "1") {
-                                    echo 'selected';
-                                } ?> ><?php if ($lang == "1") { ?> 首页小程序<?php } else { ?> Home Mini Program <?php } ?></option>
-                                <option value="2" <?php if ($usageType_2 == "2") {
-                                    echo 'selected';
-                                } ?> ><?php if ($lang == "1") { ?> 登陆小程序<?php } else { ?>  "Login Mini Program" <?php } ?></option>
-                                <option value="3" <?php if ($usageType_3 == "3") {
-                                    echo 'selected';
-                                } ?> ><?php if ($lang == "1") { ?> 二人聊天小程序<?php } else { ?> U2 Chat Mini Program <?php } ?></option>
-                                <option value="4" <?php if ($usageType_4 == "4") {
-                                    echo 'selected';
-                                } ?> ><?php if ($lang == "1") { ?> 临时会话小程序<?php } else { ?> Tmp Chat Mini Program <?php } ?></option>
-                                <option value="5" <?php if ($usageType_5 == "5") {
-                                    echo 'selected';
-                                } ?> ><?php if ($lang == "1") { ?>群组聊天小程序<?php } else { ?> Group Chat Mini Program <?php } ?></option>
-                                <option value="6" <?php if ($usageType_6 == "6") {
-                                    echo 'selected';
-                                } ?> >
-                                    <?php if ($lang == "1") { ?>账户安全小程序<?php } else { ?> Account Mini Program <?php } ?>
-                                </option>
-                                <option value="7" <?php if ($usageType_7 == "7") {
-                                    echo 'selected';
-                                } ?> ><?php if ($lang == "1") { ?>无效小程序<?php } else { ?> Invalid Mini Program <?php } ?></option>
-                            </select>
+                            <div class="item-body-value"
+                                 id="custom-key-value"><?php echo $userCustomInfo["customKey"]; ?></div>
+                            <div class="item-body-value-more">
+                            </div>
                         </div>
+
                     </div>
+
                 </div>
             </div>
             <div class="division-line"></div>
 
-            <div class="item-row" id="mini-program-order">
+            <div class="item-row" id="custom-key-name" update-key="keyName" onclick="showPopup('custom-key-name');">
                 <div class="item-body">
-                    <div class="item-body-display mini-program-order">
+                    <div class="item-body-display">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">字段名称</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Key Name</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <div class="item-body-value"
+                                 id="custom-key-name-value"><?php echo $userCustomInfo["keyName"]; ?></div>
+                            <div class="item-body-value-more">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+            <div class="item-row" id="mini-program-icon-id">
+                <div class="item-body">
+                    <div class="item-body-display">
+
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">字段图标</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Key Icon</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <div class="item-body-value" id="custom-key-fileid"
+                                 fileId="<?php echo $userCustomInfo["keyIcon"]; ?>">
+                                <img class="site-image" id="custom-key-image" onclick="uploadImage('custom-key-logo');"
+                                     fileId="<?php echo $userCustomInfo["keyIcon"]; ?>"
+                                     src="../../public/img/manage/plugin_default.png">
+
+                                <input id="custom-key-logo" type="file" onchange="uploadImageFile(this)"
+                                       style="display: none;" accept="image/*">
+                            </div>
+
+                            <div class="item-body-value-more">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+            <div class="item-row" id="custom-key-sort" update-key="keySort" onclick="showPopup('custom-key-sort');">
+                <div class="item-body">
+                    <div class="item-body-display">
                         <?php if ($lang == "1") { ?>
                             <div class="item-body-desc">排序</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Order</div>
+                            <div class="item-body-desc">KeySort</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <input id="mini-program-order-text" class="plugin-add-input" type="text"
-                                   value="<?php echo $sort ?>">
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display mini-program-display" data="<?php echo $loadingType ?>"
-                         onclick="selectMiniProgramDisplay();">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">打开方式</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Display Mode</div>
-                        <?php } ?>
-
-                        <div class="item-body-tail">
-                            <div id="mini-program-display-text" style="margin-right: 4px">
-                                <?php if ($loadingType == "0") { ?>
-                                    <?php if ($lang == "1") { ?> 新页面打开<?php } else { ?> New Page <?php } ?>
-                                <?php } else if ($loadingType == "1") { ?>
-                                    <?php if ($lang == "1") { ?> 悬浮打开<?php } else { ?> Float Page <?php } ?>
-                                <?php } else if ($loadingType == "2") { ?>
-                                    <?php if ($lang == "1") { ?> Mask打开<?php } else { ?> Mask Page <?php } ?>
-                                <?php } else if ($loadingType == "3") { ?>
-                                    <?php if ($lang == "1") { ?> Chatbox打开<?php } else { ?> Chatbox Page <?php } ?>
-                                <?php } else if ($loadingType == "4") { ?>
-                                    <?php if ($lang == "1") { ?> 全屏打开<?php } else { ?> Full Screen <?php } ?>
-                                <?php } ?>
+                            <div class="item-body-value"><?php echo $userCustomInfo["keySort"]; ?></div>
+                            <div class="item-body-value-more">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
-
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
                         </div>
+
                     </div>
 
                 </div>
             </div>
             <div class="division-line"></div>
+        </div>
+
+    </div>
+
+
+    <div class="layout-all-row">
+
+        <div class="list-item-center">
 
             <div class="item-row">
                 <div class="item-body">
-                    <div class="item-body-display mini-program-permission" data="<?php echo $permissionType ?>"
-                         onclick="selectMiniProgramPermission();">
+                    <div class="item-body-display custom-key-status">
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">使用权限</div>
+                            <div class="item-body-desc">是否注册时填写</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Use Permission</div>
+                            <div class="item-body-desc">Register Need</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
-
-                            <div id="mini-program-permission-text" style="margin-right: 4px">
-                                <?php if ($permissionType == "0") { ?>
-                                    <?php if ($lang == "1") { ?> 站点管理员可用<?php } else { ?>Site Managers Available<?php } ?>
-                                <?php } else if ($permissionType == "1") { ?>
-                                    <?php if ($lang == "1") { ?> 所有人可用<?php } else { ?> All Users Available<?php } ?>
-                                <?php } else if ($permissionType == "2") { ?>
-                                    <?php if ($lang == "1") { ?> 群管理员可用<?php } else { ?> Group Managers Available<?php } ?>
-                                <?php } ?>
-                            </div>
-
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <?php if ($userCustomInfo["status"] == 2) { ?>
+                                <input id="custom-key-status-switch" class="weui_switch" type="checkbox" checked>
+                            <?php } else { ?>
+                                <input id="custom-key-status-switch" class="weui_switch" type="checkbox">
+                            <?php } ?>
                         </div>
                     </div>
 
@@ -325,18 +184,42 @@
 
             <div class="item-row">
                 <div class="item-body">
-                    <div class="item-body-display mini-program-secret-key">
+                    <div class="item-body-display custom-key-required">
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">安全秘钥</div>
+                            <div class="item-body-desc">是否必填</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Secret Key</div>
+                            <div class="item-body-desc">Required</div>
                         <?php } ?>
 
-                        <div class="item-body-tail" style="margin-right: 25px">
-                            <?php echo $authKey ?>
+                        <div class="item-body-tail">
+                            <?php if ($userCustomInfo["isRequired"] == 1) { ?>
+                                <input id="custom-key-required-switch" class="weui_switch" type="checkbox" checked>
+                            <?php } else { ?>
+                                <input id="custom-key-required-switch" class="weui_switch" type="checkbox">
+                            <?php } ?>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="division-line"></div>
 
+            <div class="item-row">
+                <div class="item-body">
+                    <div class="item-body-display custom-key-open">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">是否公开显示</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Public Display</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <?php if ($userCustomInfo["isOpen"] == 1) { ?>
+                                <input id="custom-key-open-switch" class="weui_switch" type="checkbox" checked>
+                            <?php } else { ?>
+                                <input id="custom-key-open-switch" class="weui_switch" type="checkbox">
+                            <?php } ?>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="division-line"></div>
@@ -348,50 +231,18 @@
     <div class="layout-all-row">
 
         <div class="list-item-center">
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display">
-
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">小程序管理</div>
-                            <div class="item-body-tail">
-                                <input id="mini-program-management-text" type="text" class="plugin-add-input"
-                                       placeholder="请输入小程序管理地址" value="<?php echo $management ?>">
-                            </div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Management</div>
-                            <div class="item-body-tail">
-                                <input id="mini-program-management-text" type="text" class="plugin-add-input"
-                                       placeholder="miniProgram management url" value="<?php echo $management ?>">
-                            </div>
-                        <?php } ?>
-
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="division-line"></div>
-
-        </div>
-    </div>
-
-    <div class="layout-all-row">
-
-        <div class="list-item-center">
 
             <div class="item-row">
                 <div class="item-body">
-                    <div class="item-body-display" onclick="deleteMiniProgram();">
+                    <div class="item-body-display" onclick="deleteUserCostom();">
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">删除小程序</div>
+                            <div class="item-body-desc">删除</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Delete Mini Program</div>
+                            <div class="item-body-desc">Delete</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
                         </div>
                     </div>
                 </div>
@@ -404,13 +255,14 @@
 
 </div>
 
+<div class="wrapper-mask" id="wrapper-mask" style="visibility: hidden;"></div>
 
-<div class="popup-template" style="display:none;">
+<div class="popup-template" style="display: none;">
 
     <div class="config-hidden" id="popup-group">
 
         <div class="flex-container">
-            <div class="header_tip_font popup-group-title" data-local-value="createGroupTip">创建群组</div>
+            <div class="header_tip_font popup-group-title"></div>
         </div>
 
         <div class="" style="text-align: center">
@@ -421,9 +273,13 @@
 
         <div class="" style="text-align:center;">
             <?php if ($lang == "1") { ?>
-                <button type="button" class="create_button" url-value="">保存</button>
+                <button type="button" id="updatePopupButton" class="create_button" onclick="updateDataValue()"
+                        url-value="">保存
+                </button>
             <?php } else { ?>
-                <button type="button" class="create_button" url-value="">Save</button>
+                <button type="button" id="updatePopupButton" class="create_button" onclick="updateDataValue()"
+                        url-value="">Save
+                </button>
             <?php } ?>
         </div>
 
@@ -431,32 +287,38 @@
 
 </div>
 
+
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../public/jquery/jquery-weui.min.js"></script>
-<script type="text/javascript" src="../../public/js/jquery-confirm.js"></script>
 <script type="text/javascript" src="../../public/manage/native.js"></script>
 
 <script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
 
 <script type="text/javascript">
 
-    function uploadFile(obj) {
+    $(".site-image").each(function () {
+        var avatar = $(this).attr("fileId");
+        var src = " /_api_file_download_/?fileId=" + avatar;
+        if (!isMobile()) {
+            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        }
+        $(this).attr("src", src);
+    });
 
+    function uploadImage(obj) {
         if (isAndroid()) {
             zalyjsImageUpload(uploadImageResult);
         } else {
             $("#" + obj).val("");
             $("#" + obj).click();
         }
-
     }
 
     function uploadImageResult(result) {
 
         var fileId = result.fileId;
 
-        //update server image
-        updateMiniProgramProfile("logo", fileId);
+        updateServerImage(fileId);
 
         var newSrc = "/_api_file_download_/?fileId=" + fileId;
 
@@ -466,35 +328,23 @@
     downloadFileUrl = "./index.php?action=http.file.downloadFile";
 
 
-    $("#mini-program-img").each(function () {
-        var avatar = $(this).attr("avatar");
-        var src = " /_api_file_download_/?fileId=" + avatar;
-        if (!isMobile()) {
-            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
-        }
-        $(this).attr("src", src);
-    });
-
-
     function uploadImageFile(obj) {
         if (obj) {
             if (obj.files) {
                 var formData = new FormData();
 
                 formData.append("file", obj.files.item(0));
-                formData.append("fileType", 1);
+                formData.append("fileType", "FileImage");
                 formData.append("isMessageAttachment", false);
 
                 var src = window.URL.createObjectURL(obj.files.item(0));
 
                 uploadFileToServer(formData, src);
 
-                //直接放图片
-                $("#mini-program-img").attr("src", src);
+                $("#mini-program-image").attr("src", src);
             }
             return obj.value;
         }
-
     }
 
     function uploadFileToServer(formData, src) {
@@ -512,15 +362,16 @@
             contentType: false,
             processData: false,
             success: function (imageFileIdResult) {
-
                 if (imageFileIdResult) {
-                    var res = JSON.parse(imageFileIdResult);
-                    var fileId = res.fileId;
-                    updateMiniProgramProfile("logo", fileId);
+                    var fileId = imageFileIdResult;
+                    if (isMobile()) {
+                        var res = JSON.parse(imageFileIdResult);
+                        fileId = res.fileId;
+                    }
+                    updateServerImage(fileId);
                 } else {
                     alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");
                 }
-
             },
             error: function (err) {
                 alert("update image error");
@@ -529,22 +380,29 @@
         });
     }
 
-    function showImage(fileId, htmlImgId) {
-        var requestUrl = "./_api_file_download_/test?fileId=" + fileId;
+    function updateServerImage(fileId) {
+        var customKey = $("#custom-key").attr("data");
+        var url = "index.php?action=manage.custom.userUpdate";
+        var data = {
+            'customKey': customKey,
+            'updateKey': 'keyIcon',
+            'updateValue': fileId,
+        };
 
+        zalyjsCommonAjaxPostJson(url, data, updateResponse);
+    }
 
-        if (!isMobile()) {
-            requestUrl = downloadFileUrl + "&fileId=" + fileId + "&returnBase64=0";
-        }
-
+    function showLocalImage(fileId) {
+        var requestUrl = downloadFileUrl + "&fileId=" + fileId + "&returnBase64=0";
         var xhttp = new XMLHttpRequest();
+        console.log("showSiteLogo imageId ==" + fileId);
 
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && (this.status == 200 || this.status == 304)) {
                 var blob = this.response;
                 var src = window.URL.createObjectURL(blob);
-
-                $("#" + htmlImgId).attr("src", src);
+                console.log("showSiteLogo imageId response src=" + src);
+                $("#mini-program-image").attr("src", src);
             }
         };
         xhttp.open("GET", requestUrl, true);
@@ -553,238 +411,174 @@
         xhttp.send();
     }
 
-    $(function () {
-        var fileId = $("#mini-program-img-id").attr("fileId");
-        showImage(fileId, 'mini-program-img');
-    });
 
-    $("#mini-program-name-text").blur(function () {
-        var name = $(this).val();
-        updateMiniProgramProfile("name", name);
-    });
+    function showWindow(jqElement) {
+        jqElement.css("visibility", "visible");
+        $(".wrapper-mask").css("visibility", "visible").append(jqElement);
+    }
 
 
-    $("#mini-program-landing-text").blur(function () {
-        var value = $(this).val();
-        updateMiniProgramProfile("landingPageUrl", value);
-    });
+    function removeWindow(jqElement) {
+        jqElement.remove();
+        $(".popup-template").append(jqElement);
+        $(".wrapper-mask").css("visibility", "hidden");
+    }
 
-    $("#mini-program-order-text").blur(function () {
-        var value = $(this).val();
-        updateMiniProgramProfile("sort", value);
-    });
 
-    $("#mini-program-management-text").blur(function () {
-        var value = $(this).val();
-        updateMiniProgramProfile("management", value);
-    });
+    $(".wrapper-mask").mouseup(function (e) {
+        var targetId = e.target.id;
+        var targetClassName = e.target.className;
 
-    //enable tmp chat
-    $("#openProxySwitch-text").change(function () {
-        var isChecked = $(this).is(':checked')
-
-        var value = 0;
-        if (isChecked) {
-            value = 1;
+        if (targetId == "wrapper-mask") {
+            var wrapperMask = document.getElementById("wrapper-mask");
+            var length = wrapperMask.children.length;
+            var i;
+            for (i = 0; i < length; i++) {
+                var node = wrapperMask.children[i];
+                node.remove();
+                // addTemplate(node);
+                $(".popup-template").append(node);
+                $(".popup-template").hide();
+            }
+            $(".popup-group-input").val("");
+            $("#updatePopupButton").attr("data", "");
+            wrapperMask.style.visibility = "hidden";
         }
-
-        updateMiniProgramProfile("landingPageWithProxy", value);
     });
 
-
-    $(".mini-program-usage-select").change(function () {
-
-        var selectValues = [];
-
-        $(".mini-program-usage-select option:selected").each(function () {
-            // selectValues.add($(this).val());
-            selectValues.push($(this).val());
-        });
-
-        var values = selectValues.join(",");
-
-        updateMiniProgramProfile("usageType", values);
-    });
-
-
-    function selectMiniProgramDisplay() {
-        var language = getLanguage();
-        // PluginLoadingNewPage = 0;
-        // PluginLoadingFloat   = 1;
-        // PluginLoadingMask    = 2;
-        // PluginLoadingChatbox = 3;
-        // PluginLoadingFullScreen = 4;
-
-        $.actions({
-            title: language == 0 ? "select mini program open way" : "请选择小程序打开方式",
-            onClose: function () {
-                console.log("close");
-            },
-            actions: [{
-                text: language == 0 ? "New Page" : "新页面打开",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-display-text").html(language == 0 ? "New Page" : "新页面打开");
-                    $(".mini-program-display").attr("data", "0");
-                    updateMiniProgramProfile("loadingType", "0");
-                }
-            }, {
-                text: language == 0 ? "Float Page" : "悬浮打开",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-display-text").html(language == 0 ? "Float Page" : "悬浮打开打开");
-                    $(".mini-program-display").attr("data", "1");
-                    updateMiniProgramProfile("loadingType", "1");
-                }
-            },
-                // {
-                //     text: language == 0 ? "Mask Page" : "Mask打开",
-                //     className: "select-color-primary",
-                //     onClick: function () {
-                //         $("#mini-program-display-text").html(language == 0 ? "Mask Page" : "Mask打开");
-                //         $(".mini-program-display").attr("data", "2");
-                //         updateMiniProgramProfile("loadingType", "2");
-                //     }
-                // },
-                {
-                    text: language == 0 ? "Chatbox Page" : "Chatbox打开",
-                    className: "select-color-primary",
-                    onClick: function () {
-                        $("#mini-program-display-text").html(language == 0 ? "Chatbox Page" : "Chatbox打开");
-                        $(".mini-program-display").attr("data", "3");
-                        updateMiniProgramProfile("loadingType", "3");
-                    }
-                },
-                // {
-                //     text: language == 0 ? "FullScreen" : "全屏打开",
-                //     className: "select-color-primary",
-                //     onClick: function () {
-                //         $("#mini-program-display-text").html(language == 0 ? "FullScreen" : "全屏打开");
-                //         $(".mini-program-display").attr("data", "4");
-                //         updateMiniProgramProfile("loadingType", "4");
-                //     }
-                // }
-            ]
-        });
-    }
-
-    function selectMiniProgramPermission() {
-        var language = getLanguage();
-        // PluginPermissionAdminOnly   = 0;
-        // PluginPermissionAll     = 1;
-        // PluginPermissionGroupMaster = 2;
-
-        $.actions({
-            title: language == 0 ? "select mini program permission" : "请选择小程序权限",
-            onClose: function () {
-                console.log("close");
-            },
-            actions: [{
-                text: language == 0 ? "All User Available" : "所有人可用",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-permission-text").html(language == 0 ? "All User Available" : "所有人可用");
-                    $(".mini-program-permission").attr("data", "1");
-                    updateMiniProgramProfile("permissionType", "1");
-                }
-            }, {
-                text: language == 0 ? "Group Master Available" : "群管理员可用",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-permission-text").html(language == 0 ? "Group Master Available" : "群管理员可用");
-                    $(".mini-program-permission").attr("data", "2");
-                    updateMiniProgramProfile("permissionType", "2");
-                }
-            }, {
-                text: language == 0 ? "Site Managers Available" : "站点管理员可用",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-permission-text").html(language == 0 ? "Site Managers Available" : "站点管理员可用");
-                    $(".mini-program-permission").attr("data", "0");
-                    updateMiniProgramProfile("permissionType", "0");
-                }
-            }]
-        });
-    }
-
-    function updateMiniProgramProfile(name, value) {
-
-        var language = getLanguage();
-
-        var pluginId = $("#mini-program-id").attr("data");
-
-        // alert("pluginId=" + pluginId + "name=" + name + " value=" + value);
+    function updateDataValue() {
+        var customKey = $("#custom-key").attr("data");
+        var key = $("#updatePopupButton").attr("key-value");
+        var updateValue = $.trim($(".popup-group-input").val());
+        var updateKey = $("#" + key).attr("update-key");
+        alert("updateKey=" + updateKey + " updateValue" + updateValue);
 
         var data = {
-            'pluginId': pluginId,
-            'name': name,
-            'value': value
+            'customKey': customKey,
+            'updateKey': updateKey,
+            'updateValue': updateValue,
         };
 
-        var url = "index.php?action=manage.miniProgram.update&lang=" + language;
+        var url = "index.php?action=manage.custom.userUpdate";
 
-        zalyjsCommonAjaxPostJson(url, data, updateProfileResponse);
+        zalyjsCommonAjaxPostJson(url, data, updateResponse);
+        // close
+        removeWindow($(".config-hidden"));
     }
 
-    function updateProfileResponse(url, jsonData, result) {
-
+    function updateResponse(url, data, result) {
         if (result) {
-            var resJson = JSON.parse(result);
 
-            var errCode = resJson.errCode;
+            var res = JSON.parse(result);
 
-            if ("success" != errCode) {
-                var errInfo = resJson['errInfo'];
-                alert(errInfo);
+            if ("success" != res.errCode) {
+                var errInfo = res.errInfo;
+                var errMsg = (getLanguage() == 1 ? "操作失败,原因：" : "update error, cause:") + errInfo;
+                alert(errMsg);
+            } else {
+                window.location.reload();
             }
-        } else {
-            alert("error");
-        }
 
+        } else {
+            alert(getLanguage() == 1 ? "操作失败" : "update error");
+        }
     }
 
-    function deleteMiniProgram() {
-        var lang = getLanguage();
-        $.modal({
-            title: lang == 1 ? '删除小程序' : 'Delete Mini Program',
-            text: lang == 1 ? '确定删除？' : 'Confirm Delete?',
-            buttons: [
-                {
-                    text: lang == 1 ? "取消" : "cancel", className: "default", onClick: function () {
-                        // alert("cancel");
-                    }
-                },
-                {
-                    text: lang == 1 ? "确定" : "confirm", onClick: function () {
-                        var pluginId = $("#mini-program-id").attr("data");
-                        var data = {
-                            'pluginId': pluginId,
-                        };
+    function showPopup(showId) {
+        var title = $("#" + showId).find(".item-body-desc").html();
+        var inputBody = $("#" + showId).find(".item-body-value").html();
 
-                        var url = "index.php?action=manage.miniProgram.delete&lang=" + getLanguage();
+        showWindow($(".config-hidden"));
 
-                        zalyjsCommonAjaxPostJson(url, data, deleteResponse);
-                    }
-                },
+        $(".popup-group-title").html(title);
+        $(".popup-group-input").val(inputBody);
+        $("#updatePopupButton").attr("key-value", showId);
+    }
 
-            ]
-        });
+
+    $("#custom-key-status-switch").change(function () {
+        var customKey = $("#custom-key").attr("data");
+        var isChecked = $(this).is(':checked');
+        var url = "index.php?action=manage.custom.userUpdate";
+        var data = {
+            'customKey': customKey,
+            'updateKey': 'status',
+            'updateValue': isChecked ? 2 : 1,
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, enableSwitchResponse);
+
+    });
+
+    $("#custom-key-required-switch").change(function () {
+        var customKey = $("#custom-key").attr("data");
+        var isChecked = $(this).is(':checked');
+        var url = "index.php?action=manage.custom.userUpdate";
+        var data = {
+            'customKey': customKey,
+            'updateKey': 'isRequired',
+            'updateValue': isChecked ? 1 : 0,
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, enableSwitchResponse);
+
+    });
+
+    $("#custom-key-open-switch").change(function () {
+        var customKey = $("#custom-key").attr("data");
+        var isChecked = $(this).is(':checked');
+        var url = "index.php?action=manage.custom.userUpdate";
+        var data = {
+            'customKey': customKey,
+            'updateKey': 'isOpen',
+            'updateValue': isChecked ? 1 : 0,
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, enableSwitchResponse);
+    });
+
+    function enableSwitchResponse(url, data, result) {
+        if (result) {
+
+            var res = JSON.parse(result);
+
+            if ("success" != res.errCode) {
+                var errInfo = res.errInfo;
+                var errMsg = (getLanguage() == 1 ? "操作失败,原因：" : "update error, cause:") + errInfo;
+                alert(errMsg);
+            }
+
+        } else {
+            alert(getLanguage() == 1 ? "操作失败" : "update error");
+        }
+    }
+
+    function deleteUserCostom() {
+        var customKey = $("#custom-key").attr("data");
+        var url = "index.php?action=manage.custom.userDelete";
+
+        var data = {
+            'customKey': customKey,
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, deleteResponse);
     }
 
     function deleteResponse(url, data, result) {
         if (result) {
             var res = JSON.parse(result);
 
-            if (res.errCode == "success") {
-                var url = "index.php?action=manage.miniProgram.list&type=page&lang=" + getLanguage();
-                zalyjsCommonOpenPage(url);
+            if ("success" != res.errCode) {
+                var errInfo = res.errInfo;
+                var errMsg = (getLanguage() == 1 ? "删除失败,原因：" : "update error, cause:") + errInfo;
+                alert(errMsg);
             } else {
-                alert(res.errInfo);
-                window.location.reload();
+                var url = "index.php?action=manage.custom.user";
+                zalyjsOpenPage(url);
             }
+
         } else {
-            alert(getLanguage() == 1 ? "删除失败" : "delete fail");
-            window.location.reload();
+            alert(getLanguage() == 1 ? "删除失败" : "delete error");
         }
     }
 

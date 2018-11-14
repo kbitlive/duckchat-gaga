@@ -543,7 +543,7 @@ class InstallDBController
     private function initSiteCustom()
     {
         $customs = [
-            0 => [
+            [
                 "customKey" => "phoneId",
                 "keyName" => "手机号码",
                 "keyDesc" => "手机号码",
@@ -557,7 +557,7 @@ class InstallDBController
                 "dataVerify" => "",
                 "addTime" => ZalyHelper::getMsectime(),
             ],
-            1 => [
+            [
                 "customKey" => "email",
                 "keyName" => "邮箱",
                 "keyDesc" => "邮箱",
