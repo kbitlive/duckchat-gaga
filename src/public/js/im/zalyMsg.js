@@ -221,6 +221,8 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
         name = name.substr(0, 8) + "...";
     }
 
+    var isSiteMaster = isJudgeSiteMasters(msg.chatSessionId);
+
     var html = template("tpl-chatSession", {
         className:msg.roomType == U2_MSG ? "u2-profile" : "group-profile",
         isMute:msg.isMute,
@@ -234,6 +236,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
         avatar:avatar,
         timeServer:msgTime,
         msgServerTime:msg.timeServer,
+        isSiteMaster:isSiteMaster
     })
 
     if($(".chatsession-row").length > 0 ) {

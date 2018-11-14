@@ -329,7 +329,14 @@
 
         </div>
         <div class="chatsession-row-header">
-            <div class="chatsession-row-title nickname_{{chatSessionId}}">{{name}}</div>
+            <div class="chatsession-row-title ">
+                <div style="display: flex;justify-content: center;align-items: center">
+                    <div style="width:28px;height:14px;background:rgba(249,183,38,1); text-align: center;border-radius:2px;font-size:10px; font-family:PingFangSC-Regular; font-weight:400; color:rgba(255,255,255,0.87); line-height:14px;">站长</div>
+                    <span class="nickname_{{chatSessionId}}"> {{name}}</span>
+
+                </div>
+
+            </div>
             <div class="chatsession-row-time" msgTime="{{msgServerTime}}">{{msgTime}}</div>
         </div>
         <div class="chatsession-row-desc chatsession-row-desc-{{chatSessionId}}">{{msgContent}}</div>
