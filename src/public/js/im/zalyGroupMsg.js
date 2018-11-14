@@ -3813,11 +3813,20 @@ function displayRightPage(displayType)
 
 function displayWaterMark()
 {
-    var time  = Date.parse(new Date());
-    var params =  loginName +"，"+crc32UserId+"，"+time;
-    var data = { watermark_txt:params }
-    watermark.load(data, $(".right-chatbox"));
 
+   try{
+       var configStr = localStorage.getItem(siteConfigKey);
+       var config = JSON.parse(configStr);
+
+       if(config.hasOwnProperty("openWaterMark") && config['openWaterMark']) {
+           var time  = Date.parse(new Date());
+           var params =  loginName +"，"+crc32UserId+"，"+time;
+           var data = { watermark_txt:params }
+           watermark.load(data, $(".right-chatbox"));
+       }
+
+   }catch (error)  {
+   }
 }
 
 $(".input-box").on("click",function () {

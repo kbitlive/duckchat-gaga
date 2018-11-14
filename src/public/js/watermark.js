@@ -44,7 +44,6 @@
             document.body.removeChild(document.getElementById("otdivid"));
             window.watermarkdivs = [];
         }catch (error) {
-            console.log(error)
         }
         //获取页面最大宽度
         var page_width = Math.max(jqElement[0].scrollWidth, jqElement[0].clientWidth);
