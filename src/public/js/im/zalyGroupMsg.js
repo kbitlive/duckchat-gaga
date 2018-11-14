@@ -4113,14 +4113,16 @@ function downloadMsg(msgId, event) {
             } else {
                 $(".left_msg_file_div[msgId="+msgId+"]").click();
             }
-
     }
-
 }
 
-function recallMsg( msgId,event) {
+function recallMsg(msgId,event) {
     event.preventDefault();
     event.stopPropagation();
+    var chatSessionId = localStorage.getItem(chatSessionIdKey);
+    var chatSessionType = localStorage.getItem(chatSessionId)
+    var msgText = loginName + " recall msg";
+    sendRecallMsg(msgId, msgText, chatSessionId, chatSessionType);
 }
 
 function seeMsg( msgId,event) {
