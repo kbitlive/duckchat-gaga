@@ -426,12 +426,6 @@
                  <div class="item p-2" id="remove-admin" data-local-value="removeAdminTip">移除管理员</div>
             {{/if}}
 
-            {{if (!memberIsSpeaker && !memberIsOwner  && !memberIsAdmin)}}
-                    <div class="item p-2" id="set-speaker" data-local-value="setSpeakerTip">设为发言人</div>
-            {{else if (memberIsSpeaker != false && !memberIsOwner  && !memberIsAdmin)}}
-                    <div class="item p-2" id="remove-speaker" data-local-value="removeSpeakerTip">移除发言人</div>
-            {{/if}}
-
             {{if (isOwner == 1 || (!memberIsAdmin && !memberIsOwner))}}
                 <div class="item p-2" id="remove-group-chat" data-local-value="removeGroupMemberTip">移除成员</div>
             {{/if}}
