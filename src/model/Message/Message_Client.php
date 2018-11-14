@@ -90,6 +90,7 @@ class Message_Client
             case \Zaly\Proto\Core\MessageType::MessageRecall:
                 $recall = $message->getRecall();
                 $result = $this->saveU2Message($msgId, $userId, $fromUserId, $toUserId, $msgType, $recall, $roomType);
+                break;
             default:
                 $this->ctx->Wpf_Logger->error("u2-message", "unsupport message type");
                 break;
@@ -166,6 +167,7 @@ class Message_Client
             case \Zaly\Proto\Core\MessageType::MessageRecall:
                 $recall = $message->getRecall();
                 $result = $this->saveGroupMessage($msgId, $fromUserId, $groupId, $msgType, $recall);
+                break;
             default:
                 $this->ctx->Wpf_Logger->error($tag, "do error group Message with unsupport msgType=" . $msgType);
                 break;
