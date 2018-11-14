@@ -1088,7 +1088,8 @@ function appendMsgHtmlToChatDialog(msg)
                     msgStatus:msgStatus,
                     avatar:userAvatar,
                     userId:msg.fromUserId,
-                    timeServer:msg.timeServer
+                    timeServer:msg.timeServer,
+                    msgType:msgType,
                 });
                 break;
             case MessageType.MessageDocument:
@@ -1108,6 +1109,7 @@ function appendMsgHtmlToChatDialog(msg)
                     fileSize:size,
                     fileName:fileName,
                     originName:originName,
+                    msgType:msgType,
                     timeServer:msg.timeServer
                 });
                 break;
@@ -1126,7 +1128,8 @@ function appendMsgHtmlToChatDialog(msg)
                     height:imgObject.height,
                     userId:msg.fromUserId,
                     timeServer:msg.timeServer,
-                    msgImgUrl:msgImgUrl
+                    msgImgUrl:msgImgUrl,
+                    msgType:msgType,
                 });
                 break;
             case MessageType.MessageAudio:
@@ -1138,6 +1141,7 @@ function appendMsgHtmlToChatDialog(msg)
                     msgStatus:msgStatus,
                     avatar:userAvatar,
                     userId:msg.fromUserId,
+                    msgType:msgType,
                     timeServer:msg.timeServer
                 });
                 break;
@@ -1184,6 +1188,7 @@ function appendMsgHtmlToChatDialog(msg)
                     msgContent:msgContent,
                     avatar:userAvatar,
                     userId:msg.fromUserId,
+                    msgType:msgType,
                     timeServer:msg.timeServer
                 });
                 break;
@@ -1202,6 +1207,7 @@ function appendMsgHtmlToChatDialog(msg)
                     msgContent:msgContent,
                     groupUserImg : groupUserImageClassName,
                     avatar:userAvatar,
+                    msgType:msgType,
                     isMaster:isMaster
                 });
                 break;
@@ -1222,6 +1228,7 @@ function appendMsgHtmlToChatDialog(msg)
                     width:imgObject.width,
                     height:imgObject.height,
                     msgImgUrl:msgImgUrl,
+                    msgType:msgType,
                     isMaster:isMaster
                 });
                 break;
@@ -1255,6 +1262,7 @@ function appendMsgHtmlToChatDialog(msg)
                     fileName:fileName,
                     originName:originName,
                     timeServer:msg.timeServer,
+                    msgType:msgType,
                     isMaster:isMaster
                 });
                 break;

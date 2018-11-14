@@ -3820,7 +3820,7 @@ function displayWaterMark()
 
        if(config.hasOwnProperty("openWaterMark") && config['openWaterMark']) {
            var time  = Date.parse(new Date());
-           var params =  loginName +" "+crc32UserId+" "+time;
+           var params =  loginName +" "+crc32UserId+""+time;
            var data = { watermark_txt:params }
            watermark.load(data, $(".right-chatbox"));
        }
@@ -3972,3 +3972,137 @@ function sortRoomList(jqElement)
     }
 }
 
+$(document).bind("contextmenu", ".msg_content_for_click", function(event){
+
+
+    var msgId = $(event.target).attr("msgId");
+    var msgType = $(event.target).attr("msgType");
+    var sendtime = $(event.target).attr("sendtime");
+
+    var trueTarget = event.target;
+    if(msgId == undefined) {
+        var findNode = false;
+        var targets = $(event.target).parents();
+        targets.each(function (index, target) {
+            if($(target).hasClass("msg_content_for_click")) {
+                msgId = $(target).attr("msgId");
+                msgType = $(target).attr("msgType");
+                sendtime = $(target).attr("sendtime");
+                trueTarget = target;
+            }
+        });
+    }
+
+    try{
+       $("#msg-menu")[0].remove();
+    }catch (error) {
+    }
+    var clientX = event.offsetX;
+    var clientY = event.offsetY;
+
+    if(msgId == undefined) {
+        return false;
+    }
+    var isCopy = false;
+    var isSave = false;
+    var isRecall = false;
+    var isSee = false;
+
+    var nowTime =  Date.now();
+    //两分钟内的允许撤回
+    if(sendtime != undefined && (nowTime-sendtime < 120000)) {
+        isRecall = true;
+    }
+    switch (msgType) {
+        case MessageType.MessageText:
+            isCopy = true;
+            break;
+        case MessageType.MessageDocument:
+            isSave = true;
+            break;
+        case MessageType.MessageImage:
+            isSee = true;
+            break;
+    }
+
+    var html = template("tpl-msg-menu", {
+        msgId : msgId,
+        isCopy:isCopy,
+        isSave:isSave,
+        isRecall:isRecall,
+        isSee:isSee,
+        left:clientX,
+        top:clientY,
+    });
+
+    $(trueTarget).append(html);
+    return false;
+});
+
+function copyMsg( msgId, event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    try{
+        $("#msg-menu")[0].remove();
+    }catch (error) {
+    }
+
+    try{
+        $(".msg_content_for_click_"+msgId)[0].onclick = function () {
+            document.execCommand('copy');
+        }
+
+        $(".msg_content_for_click_"+msgId)[0].addEventListener('copy', function (e) {
+            var value = $(this).find("pre").html();
+            e.preventDefault();
+            if (e.clipboardData) {
+                e.clipboardData.setData('text/plain', value);
+            } else if (window.clipboardData) {
+                window.clipboardData.setData('Text', value);
+            }
+        });
+
+        $(".msg_content_for_click_"+msgId).click();
+    }catch (error) {
+
+    }
+}
+
+
+function downloadMsg(msgId, event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var msgType = $(".msg_content_for_click_"+msgId).attr("msgType");
+    var msgTime = $(".msg_content_for_click_"+msgId).attr("msgTime");
+
+    try{
+        $("#msg-menu")[0].remove();
+    }catch (error) {
+    }
+
+    switch (msgType) {
+        case MessageType.MessageImage:
+            break;
+        case MessageType.MessageDocument:
+            if($(".msg_content_for_click_"+msgId).hasClass("right_msg_file_div")) {
+                $(".right_msg_file_div[msgId="+msgId+"]").click();
+            } else {
+                $(".left_msg_file_div[msgId="+msgId+"]").click();
+            }
+
+    }
+
+}
+
+function recallMsg( msgId,event) {
+    event.preventDefault();
+    event.stopPropagation();
+}
+
+function seeMsg( msgId,event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var src = $(".msg-img-"+msgId).attr("src");
+    window.open(src);
+}
