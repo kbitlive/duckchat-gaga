@@ -425,6 +425,7 @@ function handleSyncMsgForRoom(results)
                 }
                 handleSyncMsg(msg);
             }
+
             isSyncingMsg = false;
 
             if(isNeewUpdatePointer == true) {
@@ -474,9 +475,12 @@ function handleSyncMsg(msg)
         if(msg.type == MessageType.MessageRecall) {
             var msgId = msg['recall'].msgId;
             $(".msg-id-"+msgId).replace();
-            $(".msg-id-"+msgId)[0].parentNode.replaceChild(ol,$(".msg-id-"+msgId)[0]);
-
-
+            var msgContent = msg["recall"].msgText ? msg["recall"].msgText : loginName +" recall msg";
+            var html = template("tpl-receive-msg-notice", {
+                msgContent:msgContent,
+                timeServer:msg.timeServer
+            });
+            $(".msg-id-"+msgId)[0].parentNode.replaceChild($(html),$(".msg-id-"+msgId));
         }
     } else if(msg.chatSessionId != currentChatSessionId && isNewMsg) {
         if(msg.chatSessionId != token) {
