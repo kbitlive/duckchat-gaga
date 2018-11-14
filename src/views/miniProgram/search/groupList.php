@@ -69,13 +69,14 @@
             border:1px solid;
         }
         .group_name, .group_owner {
+            font-size:14px;
             height: 18px;
             line-height: 18px;
             text-align: left;
             margin-top: 5px;
         }
         .group_owner {
-            font-size:12px;
+            font-size:10px;
             font-family:PingFangSC-Regular;
             font-weight:400;
             color:rgba(153,153,153,1);
@@ -88,6 +89,7 @@
         .disableButton {
             background: #cccccc;
         }
+
     </style>
 
 </head>

@@ -38,8 +38,8 @@
         </div>
         <div class="item-body">
             <div class="item-body-display">
-                <div class="item-body-desc" onclick="showUserChat({{userId}})">
-                    {{loginName}}
+                <div class="item-body-desc" style="font-size: 10px;" onclick="showUserChat({{userId}})">
+                    {{nickname}}
                 </div>
 
                 <div class="item-body-tail">
@@ -47,7 +47,7 @@
                     <button class="chatButton" userId="{{userId}}">
                         发起会话
                     </button>
-                    {{else}}
+                    {{elif (!isFllow && token != userId )}}
 
                     <button class="addButton applyButton" userId="{{userId}}">
                         添加好友
