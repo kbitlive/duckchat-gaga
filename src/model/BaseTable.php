@@ -194,6 +194,11 @@ class BaseTable
         return $this->ctx->ZalyHelper->getMsectime();
     }
 
+    protected function getTimeHMS()
+    {
+        return date("y_m_d_h_i_s", time());
+    }
+
     /**
      * 处理 增，删 情况
      * @param $tag

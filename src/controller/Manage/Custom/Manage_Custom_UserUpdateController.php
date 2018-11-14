@@ -44,7 +44,7 @@ class Manage_Custom_UserUpdateController extends Manage_ServletController
                 $text = $this->language == 1 ? "禁止修改Key" : "forbid to operate";
                 throw new Exception($text);
             }
-            error_log("=========-" . var_export($_POST, true));
+            
             if ($this->updateUserCustom($customKey, $key, $value)) {
                 $result["errCode"] = "success";
             }

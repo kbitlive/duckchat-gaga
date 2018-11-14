@@ -86,8 +86,22 @@ class SiteUserCustomTable extends BaseTable
 
     public function insertUserCustomInfo(array $customInfo)
     {
+        //迁移数据库
 
         return $this->ctx->SiteCustomTable->insertUserCustomKeys($customInfo);
+    }
+
+    private function migrateTable()
+    {
+        $dbFlag = $this->getTimeHMS();
+        $newTableName = $this->table . "_" . $dbFlag;
+        $sql = "alter table $this->table rename to $newTableName";
+        $result = $this->db->exec($sql);
+
+        $this->logger->error("======", "alert table result-=" . $result);
+
+        $sql  = "PRAGMA table_info($this);";
+
     }
 
     public function deleteUserCustomInfo($customKey)

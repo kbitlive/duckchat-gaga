@@ -288,6 +288,7 @@ class Im_Cts_SyncController extends Im_BaseController
                         $recallMsg = new Zaly\Proto\Core\RecallMessage();
                         $recallMsg->mergeFromJsonString($content);
                         $message->setRecall($recallMsg);
+                        break;
                     default:
                         $this->ctx->Wpf_Logger->error("im.stc.message", "sync message with error msgType");
                 }
