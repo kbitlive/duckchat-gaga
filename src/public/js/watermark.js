@@ -25,7 +25,7 @@
             watermark_font:'微软雅黑',//水印字体
             watermark_color:'black',//水印字体颜色
             watermark_fontsize:'12px',//水印字体大小
-            watermark_alpha:0.05,//水印透明度，要求设置在大于等于0.003
+            watermark_alpha:0.1,//水印透明度，要求设置在大于等于0.003
             watermark_width:60,//水印宽度
             watermark_height:60,//水印长度
             watermark_angle:45,//水印倾斜度数
