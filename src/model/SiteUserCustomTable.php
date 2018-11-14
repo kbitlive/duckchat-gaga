@@ -71,7 +71,7 @@ class SiteUserCustomTable extends BaseTable
         try {
             $queryColumns = implode(",", $queryColumns);
             $sql = "select $queryColumns from $this->table where userId=:userId;";
-            $prepare = $this->db->prepare($sql);
+            $prepare = $this->dbSlave->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
             $prepare->bindValue("userId", $userId);
             $result = $prepare->fetchAll(PDO::FETCH_ASSOC);
@@ -83,6 +83,12 @@ class SiteUserCustomTable extends BaseTable
 
 
     //**************************** bind siteCustom ****************************/
+
+    public function insertUserCustomInfo(array $customInfo)
+    {
+
+        return $this->ctx->SiteCustomTable->insertUserCustomKeys($customInfo);
+    }
 
     public function deleteUserCustomInfo($customKey)
     {

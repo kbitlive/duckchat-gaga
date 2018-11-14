@@ -87,6 +87,9 @@ class Message_Client
                 $vedio = $message->getVideo();
                 $result = $this->saveU2Message($msgId, $userId, $fromUserId, $toUserId, $msgType, $vedio, $roomType);
                 break;
+            case \Zaly\Proto\Core\MessageType::MessageRecall:
+                $recall = $message->getRecall();
+                $result = $this->saveU2Message($msgId, $userId, $fromUserId, $toUserId, $msgType, $recall, $roomType);
             default:
                 $this->ctx->Wpf_Logger->error("u2-message", "unsupport message type");
                 break;
@@ -114,7 +117,6 @@ class Message_Client
             case \Zaly\Proto\Core\MessageType::MessageNotice:
                 $notice = $message->getNotice();
                 $noticeBody = $notice->getBody();
-                //# TODO limit body length 2KB = 2048 Byte
                 $noticeBody = substr($noticeBody, 0, 2048);
                 $notice->setBody(trim($noticeBody));
                 $result = $this->saveGroupMessage($msgId, $fromUserId, $groupId, $msgType, $notice);
@@ -161,6 +163,9 @@ class Message_Client
                 $vedio = $message->getVideo();
                 $result = $this->saveGroupMessage($msgId, $fromUserId, $groupId, $msgType, $vedio);
                 break;
+            case \Zaly\Proto\Core\MessageType::MessageRecall:
+                $recall = $message->getRecall();
+                $result = $this->saveGroupMessage($msgId, $fromUserId, $groupId, $msgType, $recall);
             default:
                 $this->ctx->Wpf_Logger->error($tag, "do error group Message with unsupport msgType=" . $msgType);
                 break;
