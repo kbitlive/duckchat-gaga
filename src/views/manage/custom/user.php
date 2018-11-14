@@ -1,84 +1,60 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="ZH">
 
 <head>
     <meta charset="UTF-8">
-    <title><?php if ($lang == "1") { ?>安全配置<?php } else { ?>Security configuration<?php } ?></title>
+    <title><?php echo $title ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
     <link rel="stylesheet" href="../../public/jquery/weui.min.css"/>
     <link rel="stylesheet" href="../../public/jquery/jquery-weui.min.css"/>
+
     <link rel="stylesheet" href="../../public/manage/config.css"/>
-
-    <style>
-
-        .weui_switch {
-            margin-top: 0px;
-        }
-
-    </style>
 </head>
 
 <body>
 
-
 <div class="wrapper" id="wrapper">
-    <div class="layout-all-row" style="margin-top:10px;">
 
-        <div class="list-item-center">
-            <div class="item-row" id="quick_configuration">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <div class="item-body-desc"><?php if ($lang == "1") { ?>
-                                快速配置
-                            <?php } else { ?>
-                                Quick configuration
-                            <?php } ?>
-                        </div>
-
-                        <div class="item-body-tail">
-                            <img class="more-img" src="../../public/img/manage/more.png"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="division-line"></div>
-        </div>
-    </div>
     <div class="layout-all-row">
-        <div class="list-item-center">
-            <div class="item-row" id="security_configuration">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <div class="item-body-desc"><?php if ($lang == "1") { ?>
-                                用户名、密码策略
-                            <?php } else { ?>
-                                Username, password policy
-                            <?php } ?>
-                        </div>
 
-                        <div class="item-body-tail">
-                            <img class="more-img" src="../../public/img/manage/more.png"/>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-        </div>
-    </div>
-    <div class="layout-all-row">
         <div class="list-item-center">
+
             <div class="item-row">
                 <div class="item-body">
-                    <div class="item-body-display passwordErrorNum" onclick="showPasswordErrorNum()">
+                    <div class="item-body-display loginNameAlias" onclick="showLoginNameAlias()">
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">用户每天密码错误上限</div>
+                            <div class="item-body-desc">登录名别名</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Password error limit per day</div>
+                            <div class="item-body-desc">Alias For LoginName</div>
                         <?php } ?>
+
                         <div class="item-body-tail">
-                            <div class="item-body-value" id="passwordErrorNum"> <?php echo $passwordErrorNum; ?></div>
+                            <div class="item-body-value" id="loginNameAliasId"> <?php echo $loginNameAlias; ?></div>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+
+            <div class="item-row">
+                <div class="item-body">
+                    <div class="item-body-display passwordResetWay" onclick="showPasswordResetWay()">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">密码找回别称</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Password Recovery Alias</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <div class="item-body-value" id="passwordResetWayId"> <?php echo $passwordResetWay; ?></div>
                             <div class="item-body-value">
                                 <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
@@ -89,50 +65,21 @@
                 </div>
             </div>
             <div class="division-line"></div>
-        </div>
-    </div>
-
-    <div class="layout-all-row">
-        <div class="list-item-center">
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display" id="password_error_log">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">密码错误日志</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Password error log</div>
-                        <?php } ?>
-                        <div class="item-body-tail">
-                            <img class="more-img" src="../../public/img/manage/more.png"/>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-        </div>
-    </div>
-
-
-    <div class="layout-all-row">
-        <div class="list-item-center">
 
             <div class="item-row">
                 <div class="item-body">
                     <div class="item-body-display">
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">开启聊天水印</div>
+                            <div class="item-body-desc">密码找回必填</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Open Chat WaterMark</div>
+                            <div class="item-body-desc">Password Recovery Required</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <?php if ($openWaterMark == 1) { ?>
-                                <input id="openWaterMarkSwitch" class="weui_switch" type="checkbox" checked>
+                            <?php if ($passwordResetRequired == 1) { ?>
+                                <input id="passwordResetRequiredSwitch" class="weui_switch" type="checkbox" checked>
                             <?php } else { ?>
-                                <input id="openWaterMarkSwitch" class="weui_switch" type="checkbox">
+                                <input id="passwordResetRequiredSwitch" class="weui_switch" type="checkbox">
                             <?php } ?>
                         </div>
                     </div>
@@ -140,8 +87,11 @@
                 </div>
             </div>
             <div class="division-line"></div>
+
         </div>
+
     </div>
+
 </div>
 
 <div class="wrapper-mask" id="wrapper-mask" style="visibility: hidden;"></div>
@@ -179,23 +129,18 @@
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../public/manage/native.js"></script>
 
-<script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
+<script>
 
-<script type="text/javascript">
+    function showLoginNameAlias() {
+        var title = $(".loginNameAlias").find(".item-body-desc").html();
+        var inputBody = $("#loginNameAliasId").html();
 
-    $("#quick_configuration").on("click", function () {
-        var url = "index.php?action=manage.security.quick&lang=" + getLanguage();
-        zalyjsCommonOpenNewPage(url);
-    });
-    $("#security_configuration").on("click", function () {
-        var url = "index.php?action=manage.security.normal&lang=" + getLanguage();
-        zalyjsCommonOpenNewPage(url);
-    });
+        showWindow($(".config-hidden"));
 
-    $("#password_error_log").on("click", function () {
-        var url = "index.php?action=manage.security.log&lang=" + getLanguage();
-        zalyjsCommonOpenNewPage(url);
-    });
+        $(".popup-group-title").html(title);
+        $(".popup-group-input").val(inputBody);
+        $("#updatePopupButton").attr("key-value", "loginNameAlias");
+    }
 
     function showPasswordErrorNum() {
         var title = $(".passwordErrorNum").find(".item-body-desc").html();
@@ -206,6 +151,17 @@
         $(".popup-group-title").html(title);
         $(".popup-group-input").val(inputBody);
         $("#updatePopupButton").attr("key-value", "passwordErrorNum");
+    }
+
+    function showPasswordResetWay() {
+        var title = $(".passwordResetWay").find(".item-body-desc").html();
+        var inputBody = $("#passwordResetWayId").html();
+
+        showWindow($(".config-hidden"));
+
+        $(".popup-group-title").html(title);
+        $(".popup-group-input").val(inputBody);
+        $("#updatePopupButton").attr("key-value", "passwordResetWay");
     }
 
     function showWindow(jqElement) {
@@ -246,7 +202,7 @@
 
         var key = $("#updatePopupButton").attr("key-value");
 
-        var url = "index.php?action=manage.security.update";
+        var url = "index.php?action=manage.custom.register";
 
         var value = $.trim($(".popup-group-input").val());
 
@@ -270,12 +226,26 @@
         }
     }
 
-    $("#openWaterMarkSwitch").change(function () {
+    $("#passwordResetRequiredSwitch").change(function () {
+        var isChecked = $(this).is(':checked');
+
+        var url = "index.php?action=manage.custom.register";
+
+        var data = {
+            'key': 'passwordResetRequired',
+            'value': isChecked ? 1 : 0,
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, enableSwitchResponse);
+    });
+
+    //update uic
+    $("#enableUicSwitch").change(function () {
         var isChecked = $(this).is(':checked');
         var url = "index.php?action=manage.config.update&key=enableInvitationCode";
 
         var data = {
-            'key': 'openWaterMark',
+            'key': 'enableInvitationCode',
             'value': isChecked ? 1 : 0,
         };
 
@@ -298,11 +268,16 @@
             alert(getLanguage() == 1 ? "操作失败" : "update error");
         }
     }
+
+    // loginMiniProgramId item-body-value
+    $(".loginMiniProgram").click(function () {
+        var miniProgramId = $(this).find("#loginMiniProgramId").html();
+        var url = "index.php?action=manage.miniProgram.profile&lang=" + getLanguage() + "&pluginId=" + miniProgramId;
+        zalyjsCommonOpenPage(url);
+    });
+
 </script>
 
 </body>
+
 </html>
-
-
-
-

@@ -257,19 +257,22 @@ CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
                       loginTime BIGINT,
                       INDEX(loginUserId))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
--- CREATE TABLE IF NOT EXISTS siteCustomItem(
---                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
---                       customKey varchar(50) not null,
---                       keyName varchar(100) not null,
---                       keyDesc TEXT,
---                       keyType int,
---                       keySort int,
---                       keyConstraint int,
---                       status int,
---                       tableName varchar(50),
---                       dataVerify varchar(50),
---                       addTime BIGINT,
---                       unique(customKey,keyType))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+-- client custom item keys
+CREATE TABLE IF NOT EXISTS siteCustom(
+                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                      customKey varchar(50) not null,
+                      keyName varchar(100) not null,
+                      keyDesc TEXT,
+                      keyType int,-- 登陆自定义类型，用户自定义类型
+                      keySort int,
+                      keyConstraint varchar(100),--约束条件
+                      isRequired boolean default false,
+                      isOpen boolean default true,
+                      status int, --  0：无效，1：正常
+                      dataType int, -- text，number，手机号码，其他
+                      dataVerify varchar(100),-- 校验数据类型类型,可能是一个正则
+                      addTime BIGINT,
+                      unique(customKey,keyType))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -279,10 +282,9 @@ CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       updateUserId VARCHAR(100),
                       updateTime BIGINT)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
--- CREATE TABLE IF NOT EXISTS siteUserCustom(
---                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
---                       userId VARCHAR(100) NOT NULL,
---                       phone varchar(50) not null,
---                       name varchar(100) not null,
---                       age int,
---                       addTime BIGINT);
+CREATE TABLE IF NOT EXISTS siteUserCustom(
+                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                      userId VARCHAR(100) UNIQUE NOT NULL,
+                      phoneId VARCHAR(20),
+                      email VARCHAR(100),
+                      addTime BIGINT);

@@ -6,13 +6,13 @@
  * Time: 7:45 PM
  */
 
-class SiteCustomItemTable extends BaseTable
+class SiteCustomTable extends BaseTable
 {
     /**
      * @var Wpf_Logger
      */
     private $logger;
-    private $table = "siteCustomItem";
+    private $table = "siteCustom";
     /**
      * keyType:
      *  1:login
@@ -23,11 +23,13 @@ class SiteCustomItemTable extends BaseTable
         "customKey",
         "keyName",
         "keyDesc",
-        "keyType", //1:user custom key
+        "keyType",
         "keySort",
         "keyConstraint",
-        "status", //0:无效 1:有效并且客户端显示 2：有效但是客户端不显示
-        "tableName",
+        "isRequired",
+        "isOpen",
+        "status",
+        "dataType",
         "dataVerify",
         "addTime",
     ];
@@ -43,8 +45,7 @@ class SiteCustomItemTable extends BaseTable
 
     public function insertUserCustomKeys(array $keyData)
     {
-        $keyData['keyType'] = 1;
-        $keyData['tableName'] = "siteUserCustom";
+        $keyData['keyType'] = Zaly\Proto\Core\CustomType::CustomTypeUser;
         $keyData['addTime'] = $this->getCurrentTimeMills();
         return $this->insertData($this->table, $keyData, $this->columns);
     }

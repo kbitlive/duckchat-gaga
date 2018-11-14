@@ -239,20 +239,23 @@ CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
 
 CREATE INDEX IF NOT EXISTS indexSiteThirdPartyLoginSourceUserId on siteThirdPartyLogin(loginUserId);
 
-CREATE TABLE IF NOT EXISTS siteCustomItem(
+CREATE TABLE IF NOT EXISTS siteCustom(
                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                       customKey varchar(50) not null,
                       keyName varchar(100) not null,
                       keyDesc TEXT,
-                      keyType int,
+                      keyType int,-- 登陆自定义类型，用户自定义类型
                       keySort int,
-                      keyConstraint int,
-                      status int,
-                      tableName varchar(50),
-                      dataVerify varchar(50),
+                      keyConstraint varchar(100),--约束条件
+                      isRequired boolean default false,
+                      isOpen boolean default true,
+                      status int, --  -1：无效，0：正常/可见，1：不公开/自己可见
+                      dataType int, -- text，number，手机号码，其他
+                      dataVerify varchar(50),-- 校验数据类型类型,可能是一个正则
                       addTime BIGINT,
                       unique(customKey,keyType));
 
+-- table name siteXXXCustom
 CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                       configKey VARCHAR(100) NOT NULL,
@@ -262,10 +265,9 @@ CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       updateTime BIGINT);
 
 -- table name siteXXXCustom
--- CREATE TABLE IF NOT EXISTS siteUserCustom(
---                       id INTEGER PRIMARY KEY AUTOINCREMENT,
---                       userId VARCHAR(100) NOT NULL,
---                       phone varchar(50) not null,
---                       name varchar(100) not null,
---                       age int,
---                       addTime BIGINT);
+CREATE TABLE IF NOT EXISTS siteUserCustom(
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      userId VARCHAR(100) UNIQUE NOT NULL,
+                      phoneId VARCHAR(20),
+                      email VARCHAR(100),
+                      addTime BIGINT);

@@ -18,6 +18,7 @@
         }
 
         .weui_switch {
+            margin-top: 0px;
             cursor: pointer;
         }
 
