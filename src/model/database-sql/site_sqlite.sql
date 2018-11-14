@@ -254,7 +254,7 @@ CREATE TABLE IF NOT EXISTS siteCustom(
                       dataType int, -- text，number，手机号码，其他
                       dataVerify varchar(50),-- 校验数据类型类型,可能是一个正则
                       addTime BIGINT,
-                      unique(customKey,keyType));
+                      unique(keyType,customKey));
 
 -- table name siteXXXCustom
 CREATE TABLE IF NOT EXISTS siteLoginCustom(
