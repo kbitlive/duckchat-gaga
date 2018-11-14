@@ -1844,6 +1844,7 @@ button:active{
     border-radius:0.56rem 0rem 0.56rem 0.56rem;
     display: flex;
     cursor: pointer;
+    border: 1px solid #ccc;
 }
 
 .left_msg_file_div img {

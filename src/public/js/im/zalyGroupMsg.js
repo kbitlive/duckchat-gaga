@@ -133,7 +133,7 @@ jumpPage = $(".jumpPage").attr("data");
 jumpRoomType = $(".jumpRoomType").attr("data");
 jumpRoomId = $(".jumpRoomId").attr("data");
 jumpRelation = $(".jumpRelation").attr("data");
-
+crc32UserId = $(".crc32UserId").attr("data");
 
 function jump()
 {
@@ -3794,8 +3794,9 @@ function displayRightPage(displayType)
                     $(".no-chat-dialog-div")[0].style.display = "block";
                     $(".chat-dialog")[0].style.display = "none";
                 }
-                $(".msg_content").focus()
+                $(".msg_content").focus();
 
+                displayWaterMark();
                 checkOsVersion();
                 break;
             case DISPLAY_APPLY_FRIEND_LIST:
@@ -3808,6 +3809,15 @@ function displayRightPage(displayType)
     }catch (error) {
         // console.log(error.message);
     }
+}
+
+function displayWaterMark()
+{
+    var time  = Date.parse(new Date());
+    var params =  loginName +"，"+crc32UserId+"，"+time;
+    var data = { watermark_txt:params }
+    watermark.load(data, $(".right-chatbox"));
+
 }
 
 $(".input-box").on("click",function () {

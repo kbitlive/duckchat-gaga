@@ -9,13 +9,14 @@
     <input type="hidden" data="<?php echo $jumpRoomId;?>" class="jumpRoomId" />
     <input type="hidden" data="<?php echo $jumpRoomType;?>" class="jumpRoomType" />
     <input type="hidden" data="<?php echo $jumpRelation;?>" class="jumpRelation" />
+    <input type="hidden" data="<?php echo $crc32UserId;?>" class="crc32UserId" />
 
     <div id="group-invite-people" class="pop-window pop-window-invite-people">
         <div class="pw-left">
             <div class="no_data">
                 <div class="d-flex" style="text-align: center">
                     <div class="p-2">
-                        <img class="no_data_img" src="<?php echo $siteAddress;?>/public/img/no_data.png"/>
+                        <img class="no_data_img" src="./public/img/no_data.png"/>
                     </div>
                     <div class="p-2 no_data_tip" data-local-value="noFriendDataTip">No Friends For Invite</div>
                 </div>
@@ -70,7 +71,7 @@
 
     <div id="edit-remark">
         <div class="close_div">
-            <img src="<?php echo $siteAddress; ?>/public/img/close.png" onclick="closeMaskDiv('#edit-remark');">
+            <img src="./public/img/close.png" onclick="closeMaskDiv('#edit-remark');">
         </div>
         <div class="flex-container" style="display: flex;justify-content: center;">
             <div class="header_tip_font align-items-center" data-local-value="editRemarkTip">修改备注</div>
@@ -97,7 +98,7 @@
 
     <div id="permission-join">
         <div class="close_div">
-            <img src="<?php echo $siteAddress;?>/public/img/close.png" onclick="closeMaskDiv('#permission-join');">
+            <img src="./public/img/close.png" onclick="closeMaskDiv('#permission-join');">
         </div>
         <div class="flex-container" style="display: flex;justify-content: center;">
             <div class="header_tip_line_left "></div>
@@ -110,7 +111,7 @@
                 <div class="permission-join-operation join-by-admin">
                     <div class="d-flex flex-row" style="width: 50%"  data-local-value="groupAdminInvitationTip">管理员邀请</div>
                     <div  class="d-flex flex-row ">
-                        <img class="imgDiv" src="<?php echo $siteAddress; ?>/public/img/msg/member_unselect.png"  permissionJoin="GroupJoinPermissionAdmin">
+                        <img class="imgDiv" src="./public/img/msg/member_unselect.png"  permissionJoin="GroupJoinPermissionAdmin">
                     </div>
                 </div>
                 <div class="permission-join-operation join-by-member">
@@ -118,7 +119,7 @@
                         Members Invitation
                     </div>
                     <div class="d-flex flex-row ">
-                        <img class="imgDiv"src="<?php echo $siteAddress; ?>/public/img/msg/member_unselect.png" permissionJoin="GroupJoinPermissionMember">
+                        <img class="imgDiv"src="./public/img/msg/member_unselect.png" permissionJoin="GroupJoinPermissionMember">
                     </div>
                 </div>
                 <div class="permission-join-operation join-by-public">
