@@ -18,5 +18,9 @@ class UserCustomStatus
      * Generated from protobuf enum <code>UserCustomNormal = 1;</code>
      */
     const UserCustomNormal = 1;
+    /**
+     * Generated from protobuf enum <code>UserCustomRegisterRequired = 2;</code>
+     */
+    const UserCustomRegisterRequired = 2;
 }
 
