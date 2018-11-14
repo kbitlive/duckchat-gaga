@@ -3023,32 +3023,50 @@ $(document).mouseup(function(e){
     var targetId = e.target.id;
     var targetClassName = e.target.className;
 
-    if(targetId == "wrapper-mask") {
-        var wrapperMask = document.getElementById("wrapper-mask");
-        var length = wrapperMask.children.length;
-        var i;
-        for(i=0;i<length; i++) {
-            var node  = wrapperMask.children[i];
-            node.remove();
-            addTemplate(node);
+   try{
+       if(targetId == "wrapper-mask") {
+           var wrapperMask = document.getElementById("wrapper-mask");
+           var length = wrapperMask.children.length;
+           var i;
+           for(i=0;i<length; i++) {
+               var node  = wrapperMask.children[i];
+               node.remove();
+               addTemplate(node);
+           }
+           wrapperMask.style.visibility = "hidden";
+       }
+       ////隐藏群组点击头像之后的弹出菜单
+       if(targetClassName != "group-user-img" && targetClassName != "item p-2") {
+           hideGroupUserMenu();
+       }
+
+       if(targetClassName != "emotion-item") {
+           document.getElementById("emojies").style.display = "none";
+       }
+       if(targetClassName != "gif") {
+           document.getElementById("chat_plugin").style.display = "none";
+       }
+       if(targetClassName.indexOf("siteSelfInfo") == -1) {
+           $("#selfInfo").remove();
+       }
+
+   }catch (error) {
+
+   }
+});
+
+$(document).mousedown(function (e) {
+    try{
+        if($("#msg-menu").length > 0 && e.target.className.indexOf("item") == -1) {
+            $("#msg-menu").remove();
+            return false;
         }
-        wrapperMask.style.visibility = "hidden";
-    }
-    ////隐藏群组点击头像之后的弹出菜单
-    if(targetClassName != "group-user-img" && targetClassName != "item p-2") {
-        hideGroupUserMenu();
+    }catch (error) {
+
     }
 
-    if(targetClassName != "emotion-item") {
-        document.getElementById("emojies").style.display = "none";
-    }
-    if(targetClassName != "gif") {
-        document.getElementById("chat_plugin").style.display = "none";
-    }
-    if(targetClassName.indexOf("siteSelfInfo") == -1) {
-        $("#selfInfo").remove();
-    }
 });
+
 
 function hideGroupUserMenu()
 {
