@@ -378,6 +378,7 @@ class InstallDBController
         $this->_insertSiteConfig($siteName, $loginPluginId);
 
         $this->initPluginMiniProgram();
+        $this->initSiteCustom();
         return;
     }
 
@@ -539,6 +540,42 @@ class InstallDBController
 
     }
 
+    private function initSiteCustom()
+    {
+        $customs = [
+            0 => [
+                "customKey" => "phoneId",
+                "keyName" => "手机号码",
+                "keyDesc" => "手机号码",
+                "keyType" => Zaly\Proto\Core\CustomType::CustomTypeUser,
+                "keySort" => 1,
+                "keyConstraint" => "",
+                "isRequired" => false,
+                "isOpen" => 1,
+                "status" => Zaly\Proto\Core\UserCustomStatus::UserCustomNormal,
+//                "dataType" => "",
+                "dataVerify" => "",
+                "addTime" => ZalyHelper::getMsectime(),
+            ],
+            1 => [
+                "customKey" => "email",
+                "keyName" => "邮箱",
+                "keyDesc" => "邮箱",
+                "keyType" => Zaly\Proto\Core\CustomType::CustomTypeUser,
+                "keySort" => 2,
+                "keyConstraint" => "",
+                "isRequired" => false,
+                "isOpen" => 1,
+                "status" => Zaly\Proto\Core\UserCustomStatus::UserCustomNormal,
+//                "dataType" => "",
+                "dataVerify" => "",
+                "addTime" => ZalyHelper::getMsectime(),
+            ],
+        ];
+
+        $this->_insertSiteCustom($customs);
+    }
+
 
     private function _insertSitePlugin($miniPrograms)
     {
@@ -555,6 +592,23 @@ class InstallDBController
             }
         }
         $this->logger->info("site.install.db", "init miniPrograms finish success=" . json_encode($successParams));
+    }
+
+    private function _insertSiteCustom(array $customs)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $successParams = [];
+        foreach ($customs as $custom) {
+            try {
+                $success = $this->insertData("siteCustom", $custom);
+                if ($success) {
+                    $successParams[] = $custom['keyName'];
+                }
+            } catch (Throwable $e) {
+                $this->logger->error($tag, $e);
+            }
+        }
+        $this->logger->info("site.install.db", "init site Custom finish success=" . json_encode($successParams));
     }
 
     public function insertData($tableName, $data)
