@@ -14,6 +14,7 @@ class SiteUserCustomTable extends BaseTable
      */
     private $logger;
     private $table = "siteUserCustom";
+    private $customKeyType = Zaly\Proto\Core\CustomType::CustomTypeUser;
 
     public function init()
     {
@@ -38,7 +39,7 @@ class SiteUserCustomTable extends BaseTable
      */
     public function insertCustomProfile($customArray)
     {
-        $columns = $this->getAllColumns($customArray);
+        $columns = $this->getAllColumns();
         return $this->insertData($this->table, $customArray, $columns);
     }
 
@@ -70,7 +71,7 @@ class SiteUserCustomTable extends BaseTable
         try {
             $queryColumns = implode(",", $queryColumns);
             $sql = "select $queryColumns from $this->table where userId=:userId;";
-            $prepare = $this->db->prepare($sql);
+            $prepare = $this->dbSlave->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
             $prepare->bindValue("userId", $userId);
             $result = $prepare->fetchAll(PDO::FETCH_ASSOC);
@@ -80,18 +81,50 @@ class SiteUserCustomTable extends BaseTable
         }
     }
 
-    private function getAllColumns()
+
+    //**************************** bind siteCustom ****************************/
+
+    public function insertUserCustomInfo(array $customInfo)
+    {
+
+        return $this->ctx->SiteCustomTable->insertUserCustomKeys($customInfo);
+    }
+
+    public function deleteUserCustomInfo($customKey)
+    {
+        return $this->ctx->SiteCustomTable->deleteCustomInfo($this->customKeyType, $customKey);
+    }
+
+    public function updateUserCustomInfo($data, $where)
+    {
+        $where['keyType'] = $this->customKeyType;
+        return $this->ctx->SiteCustomTable->updateCustomInfo($data, $where);
+    }
+
+    public function getAllColumns()
     {
         $columns = $this->ctx->SiteCustomTable->queryUserCustomKeysAll();
         $this->logger->error("==============", "all custom keys for user=" . var_export($columns, true));
         return $columns;
     }
 
-    private function getColumns()
+    public function getColumns()
     {
         $columns = $this->ctx->SiteCustomTable->queryUserCustomKeysShow();
         $this->logger->error("==============", "custom keys for user show=" . var_export($columns, true));
         return $columns;
+    }
+
+    public function getCustomByKey($customKey)
+    {
+        $info = $this->ctx->SiteCustomTable->queryCustomByKey($this->customKeyType, $customKey);
+        return $info;
+    }
+
+    public function getAllColumnInfos()
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        return $this->ctx->SiteCustomTable->queryUserCustomInfo(false, $tag);
     }
 
 }

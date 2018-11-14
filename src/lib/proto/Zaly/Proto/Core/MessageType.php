@@ -46,6 +46,10 @@ class MessageType
      */
     const MessageVideo = 8;
     /**
+     * Generated from protobuf enum <code>MessageRecall = 9;</code>
+     */
+    const MessageRecall = 9;
+    /**
      * event message start
      *
      * Generated from protobuf enum <code>MessageEventFriendRequest = 20;</code>

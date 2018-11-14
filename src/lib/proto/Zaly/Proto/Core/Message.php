@@ -444,6 +444,28 @@ class Message extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * Generated from protobuf field <code>.core.RecallMessage recall = 18;</code>
+     * @return \Zaly\Proto\Core\RecallMessage
+     */
+    public function getRecall()
+    {
+        return $this->readOneof(18);
+    }
+
+    /**
+     * Generated from protobuf field <code>.core.RecallMessage recall = 18;</code>
+     * @param \Zaly\Proto\Core\RecallMessage $var
+     * @return $this
+     */
+    public function setRecall($var)
+    {
+        GPBUtil::checkMessage($var, \Zaly\Proto\Core\RecallMessage::class);
+        $this->writeOneof(18, $var);
+
+        return $this;
+    }
+
+    /**
      * reverts 15-50
      *
      * Generated from protobuf field <code>bool treatPointerAsU2Pointer = 51;</code>
