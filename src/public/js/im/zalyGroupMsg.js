@@ -4025,11 +4025,15 @@ $(document).bind("contextmenu", ".msg_content_for_click", function(event){
     var isSave = false;
     var isRecall = false;
     var isSee = false;
+    var recallDisabled = false;
 
     var nowTime =  Date.now();
     //两分钟内的允许撤回
-    if(sendtime != undefined && (nowTime-sendtime < 120000)) {
+    if(sendtime != undefined ) {
         isRecall = true;
+        if(nowTime-sendtime > 120000) {
+            recallDisabled = true
+        }
     }
     switch (msgType) {
         case MessageType.MessageText:
@@ -4051,6 +4055,7 @@ $(document).bind("contextmenu", ".msg_content_for_click", function(event){
         isSee:isSee,
         left:clientX,
         top:clientY,
+        recallDisabled:recallDisabled
     });
 
     $(trueTarget).append(html);

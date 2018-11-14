@@ -455,7 +455,11 @@
         <div class="item p-2" onclick="downloadMsg('{{msgId}}', event)" data-local-value="openChatTip">下载</div>
         {{/if}}
         {{ if isRecall }}
-        <div class="item p-2" onclick="recallMsg('{{msgId}}', event)"   data-local-value="撤回">撤回</div>
+            {{if recallDisabled }}
+                <div class="item p-2" style="background-color: #cccccc" disabled  data-local-value="撤回">撤回</div>
+            {{else}}
+                <div class="item p-2" onclick="recallMsg('{{msgId}}', event)"   data-local-value="撤回">撤回</div>
+            {{/if}}
         {{/if}}
     </div>
 
