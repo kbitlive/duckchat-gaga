@@ -54,7 +54,7 @@ class Manage_Custom_UserAddController extends Manage_ServletController
 
     private function addUserCustomKey(array $customArr)
     {
-        return $this->ctx->SiteCustomTable->insertUserCustomKeys($customArr);
+        return $this->ctx->SiteUserCustomTable->insertUserCustomInfo($customArr);
     }
 
 }
