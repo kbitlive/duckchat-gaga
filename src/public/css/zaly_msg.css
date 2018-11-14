@@ -1038,7 +1038,7 @@ html, body{
     padding: 0.5rem;
 }
 
-#group-user-menu {
+#group-user-menu, #msg-menu {
     display: inline-block;
     justify-content: center;
     background:rgba(255,255,255,1);
@@ -1050,7 +1050,8 @@ html, body{
     left: 1rem;
 }
 
-#group-user-menu .item {
+#group-user-menu .item,
+#msg-menu .item {
     margin:0 auto;
     height:2.83rem;
     text-align: center;
@@ -1060,9 +1061,11 @@ html, body{
     line-height:2.83rem;
     padding-left: 1rem;
     padding-right: 1rem;
+    cursor: pointer;
 }
 
-#group-user-menu .item:hover {
+#group-user-menu .item:hover,
+#msg-menu .item:hover{
     background:rgba(76,59,177,1);
     color:rgba(255,255,255,1);
 }
@@ -1844,6 +1847,7 @@ button:active{
     border-radius:0.56rem 0rem 0.56rem 0.56rem;
     display: flex;
     cursor: pointer;
+    border: 1px solid #ccc;
 }
 
 .left_msg_file_div img {
@@ -2045,4 +2049,8 @@ button:active{
     cursor: pointer;
     display: flex;
     align-items: center;
+}
+
+.msg_content_for_click {
+    position: relative;
 }

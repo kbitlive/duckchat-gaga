@@ -69,13 +69,14 @@
             border:1px solid;
         }
         .group_name, .group_owner {
+            font-size:14px;
             height: 18px;
             line-height: 18px;
             text-align: left;
             margin-top: 5px;
         }
         .group_owner {
-            font-size:12px;
+            font-size:10px;
             font-family:PingFangSC-Regular;
             font-weight:400;
             color:rgba(153,153,153,1);
@@ -88,6 +89,7 @@
         .disableButton {
             background: #cccccc;
         }
+
     </style>
 
 </head>
@@ -204,10 +206,13 @@
                 var isMobileClient = isMobile();
 
                 $.each(data, function (index, group) {
-                    var src = "./index.php?action=http.file.downloadFile&fileId=" + group['avatar'] + "&returnBase64=0&lang=" + getLanguage();
+                    var src = "./index.php?action=http.file.downloadFile&fileId=" +  group['avatar'] + "&returnBase64=0";
                     if (isMobileClient) {
-                        src = '/_api_file_download_/?fileId=' + group['avatar'];
+                        var avatar = group['avatar'];
+                        var path = avatar.split("-");
+                        src = "../../attachment/"+path[0]+"/"+path[1];
                     }
+
                     var userHtml = template("tpl-search-group", {
                         name:group['name'],
                         groupId:group['groupId'],
@@ -230,9 +235,10 @@
 
     $(".group-avatar-image").each(function () {
         var avatar = $(this).attr("avatar");
-        var src = " /_api_file_download_/?fileId=" + avatar;
-        if (!isMobile()) {
-            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        var src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        if (isMobile()) {
+            var path = avatar.split("-");
+            src = "../../attachment/"+path[0]+"/"+path[1];
         }
         $(this).attr("src", src);
     });
@@ -251,7 +257,7 @@
        try{
            var result = JSON.parse(result);
            if(result['errorCode'] == "error") {
-               alert(result['errorInfo']);
+               alert('此群不支持任意加入，请联系群主');
                return;
            }
        }catch (error) {

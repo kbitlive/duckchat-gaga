@@ -41,9 +41,6 @@
             height:56px;
             line-height: 56px;
         }
-        .item-body-desc {
-            display: flex;
-        }
 
         .show_all_list_name {
             height: 30px;
@@ -91,6 +88,20 @@
         .disableButton {
             background: #cccccc;
         }
+        .group_name, .group_owner {
+            font-size:14px;
+            height: 18px;
+            line-height: 18px;
+            text-align: left;
+            margin-top: 5px;
+        }
+        .group_owner {
+            font-size:10px;
+            font-family:PingFangSC-Regular;
+            font-weight:400;
+            color:rgba(153,153,153,1);
+            line-height:28px;
+        }
     </style>
 
 </head>
@@ -126,15 +137,15 @@
                         </div>
                         <div class="item-body" >
                             <div class="item-body-display">
-                                <div class="item-body-desc">
-                                   <?php echo $user['loginName']; ?>
+                                <div class="item-body-desc" style="font-size: 10px;">
+                                   <?php echo $user['nickname']; ?>
                                 </div>
                                 <div class="item-body-tail">
                                     <?php if($user['isFollow']):?>
                                         <button class="chatButton" userId="<?php echo $user["userId"] ?>">
                                             发起会话
                                         </button>
-                                    <?php else: ?>
+                                    <?php elseif(!$user['isFollow'] && ($user['userId'] != $token)): ?>
                                         <button class="addButton applyButton" userId="<?php echo $user["userId"] ?>">
                                             添加好友
                                         </button>
@@ -198,7 +209,12 @@
                             <div class="item-body">
                                 <div class="item-body-display">
                                     <div class="item-body-desc">
-                                        <?php echo $group['name']?>
+                                        <div class="group_name">
+                                            <?php echo $group['name'];?>
+                                        </div>
+                                        <div class="group_owner">
+                                            群主：<?php echo $group['ownerName'];?>
+                                        </div>
                                     </div>
 
                                     <div class="item-body-tail">
@@ -252,6 +268,7 @@
 </div>
 
 <input type="hidden" value="<?php echo $loginName;?>" id="myUserId">
+<input type="hidden" value="<?php echo $token;?>" id="token">
 
 <div class="wrapper-mask" id="wrapper-mask" style="visibility: hidden;"></div>
 
@@ -290,10 +307,12 @@
 
     $(".user-avatar-image").each(function () {
         var avatar = $(this).attr("avatar");
-        var src = " /_api_file_download_/?fileId=" + avatar;
-        if (!isMobile()) {
-            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        var src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        if (isMobile()) {
+            var path = avatar.split("-");
+            src = "../../attachment/"+path[0]+"/"+path[1];
         }
+
         $(this).attr("src", src);
     });
 
@@ -388,7 +407,7 @@
         try{
             var result = JSON.parse(result);
             if(result['errorCode'] == "error") {
-                alert(result['errorInfo']);
+                alert('此群不支持任意加入，请联系群主');
                 return;
             }
         }catch (error) {

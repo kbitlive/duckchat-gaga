@@ -42,6 +42,7 @@
             height:56px;
             line-height: 56px;
         }
+
         .item-header {
             width: 50px;
             height: 56px;
@@ -89,8 +90,8 @@
                     </div>
                     <div class="item-body">
                         <div class="item-body-display">
-                            <div class="item-body-desc" onclick="showUserChat('<?php echo $user["userId"] ?>')">
-                                <?php echo $user['loginName']; ?>
+                            <div class="item-body-desc" style="font-size: 10px;" onclick="showUserChat('<?php echo $user["userId"] ?>')">
+                                <?php echo $user['nickname']; ?>
                             </div>
 
                             <div class="item-body-tail">
@@ -98,7 +99,7 @@
                                     <button class="chatButton" userId="<?php echo $user["userId"] ?>">
                                         发起会话
                                     </button>
-                                <?php else: ?>
+                                <?php elseif(!$user['isFollow'] && ($user['userId']!=$token)): ?>
                                     <button class="addButton applyButton" userId="<?php echo $user["userId"] ?>">
                                         添加好友
                                     </button>
@@ -154,7 +155,7 @@
 
 </div>
 <input type="hidden" value="<?php echo $loginName;?>" id="myUserId">
-
+<input type="hidden" value="<?php echo $token;?>" id="token">
 <input type="hidden" value="<?php echo $key;?>" class="search_key">
 <?php include (dirname(__DIR__) . '/search/template_search.php');?>
 
@@ -167,7 +168,7 @@
 
     var currentPageNum = 1;
     var loading = true;
-
+    var token = $(".token").val();
     $(window).scroll(function () {
         //判断是否滑动到页面底部
 
@@ -202,14 +203,18 @@
                 var isMobileClient = isMobile();
 
                 $.each(data, function (index, user) {
-                    var src = "./index.php?action=http.file.downloadFile&fileId=" + user['avatar'] + "&returnBase64=0&lang=" + getLanguage();
+                    var src = "./index.php?action=http.file.downloadFile&fileId=" +  user['avatar'] + "&returnBase64=0";
                     if (isMobileClient) {
-                        src = '/_api_file_download_/?fileId=' + user['avatar'];
+                        var avatar = user['avatar'];
+                        var path = avatar.split("-");
+                        src = "../../attachment/"+path[0]+"/"+path[1];
                     }
+
                     var userHtml = template("tpl-search-user", {
-                        loginName:user['loginName'],
+                        nickname:user['nickname'],
                         userId:user['userId'],
-                        avatar:src
+                        avatar:src,
+                        token:token
                     });
 
                     $(".item-row-list").append(userHtml);
@@ -284,9 +289,10 @@
 
     $(".user-avatar-image").each(function () {
         var avatar = $(this).attr("avatar");
-        var src = " /_api_file_download_/?fileId=" + avatar;
-        if (!isMobile()) {
-            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        var src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        if (isMobile()) {
+            var path = avatar.split("-");
+            src = "../../attachment/"+path[0]+"/"+path[1];
         }
         $(this).attr("src", src);
     });

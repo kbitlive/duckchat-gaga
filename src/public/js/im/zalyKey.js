@@ -19,6 +19,7 @@ MessageType = {
     MessageWebNotice : "MessageWebNotice",
     MessageDocument:"MessageDocument",
     MessageVideo:"MessageVideo",
+    MessageRecall:"MessageRecall",
 
     // event message start
     MessageEventFriendRequest : "MessageEventFriendRequest",

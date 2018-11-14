@@ -221,6 +221,8 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
         name = name.substr(0, 8) + "...";
     }
 
+    var isSiteMaster = isJudgeSiteMasters(msg.chatSessionId);
+
     var html = template("tpl-chatSession", {
         className:msg.roomType == U2_MSG ? "u2-profile" : "group-profile",
         isMute:msg.isMute,
@@ -234,6 +236,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
         avatar:avatar,
         timeServer:msgTime,
         msgServerTime:msg.timeServer,
+        isSiteMaster:isSiteMaster
     })
 
     if($(".chatsession-row").length > 0 ) {
@@ -467,6 +470,14 @@ function handleSyncMsg(msg)
         }
         localStorage.setItem(newSiteTipKey, "new_msg");
         setDocumentTitle();
+    } else if(msg.chatSessionId  == currentChatSessionId && !isNewMsg) {
+        if(msg.type == MessageType.MessageRecall) {
+            var msgId = msg['recall'].msgId;
+            $(".msg-id-"+msgId).replace();
+            $(".msg-id-"+msgId)[0].parentNode.replaceChild(ol,$(".msg-id-"+msgId)[0]);
+
+
+        }
     } else if(msg.chatSessionId != currentChatSessionId && isNewMsg) {
         if(msg.chatSessionId != token) {
             setRoomMsgUnreadNum(msg.chatSessionId);
@@ -550,10 +561,22 @@ function handleMsgForMsgRoom(chatSessionId, pushMsg)
         }
 
         if(pushMsg != undefined) {
-            msgList.push(pushMsg);
-
-            var isNewMsg = uniqueMsgAndCheckMsgId(msgList, pushMsg.msgId, roomChatSessionKey);
-
+            if(pushMsg.type == MessageType.MessageRecall) {
+                var msgListLength = msgList.length;
+                for(var i=0;i<msgListLength; i++) {
+                    var msg = msgList[i];
+                    if(msg.msgId == pushMsg.recall['msgId']) {
+                        msg.type = MessageType.MessageRecall;
+                        msg.recall = pushMsg.recall
+                        msg[i] = msg;
+                        break;
+                    }
+                }
+                var isNewMsg = false;
+            } else {
+                msgList.push(pushMsg);
+                var isNewMsg = uniqueMsgAndCheckMsgId(msgList, pushMsg.msgId, roomChatSessionKey);
+            }
             return isNewMsg;
         }
         msgList.sort(compare);
@@ -796,6 +819,41 @@ function sendMsg( chatSessionId, chatSessionType, msgContent, msgType, params)
     handleMsgForMsgRoom(chatSessionId, message);
     addMsgToChatDialog(chatSessionId, message);
 };
+
+
+function sendRecallMsg(msgId, msgText, chatSessionId, chatSessionType)
+{
+    var action = "im.cts.message";
+    var msgId  = Date.now();
+
+    var message = {};
+    message['fromUserId'] = token;
+    var msgIdSuffix = "";
+    if(chatSessionType == U2_MSG) {
+        message['roomType'] = U2_MSG;
+        message['toUserId'] = chatSessionId
+        msgIdSuffix = "U2-";
+    } else {
+        message['roomType'] = GROUP_MSG;
+        message['toGroupId'] = chatSessionId;
+        msgIdSuffix = "GROUP-";
+    }
+    var msgId = msgIdSuffix + msgId+"";
+    message['msgId'] = msgId;
+
+    message['timeServer'] = Date.parse(new Date());
+
+    message['recall'] = {msgId:msgId, msgText:msgText};
+    message['type'] = MessageType.MessageRecall;
+
+    var reqData = {
+        "message" : message
+    };
+    var msgIdInChatSession = msgIdInChatSessionKey + msgId;
+    sessionStorage.setItem(msgIdInChatSession, chatSessionId);
+
+    handleImSendRequest(action, reqData, "");
+}
 
 
 //---------------------------------------------msg realtion function-------------------------------------------------
@@ -1085,7 +1143,8 @@ function appendMsgHtmlToChatDialog(msg)
                     msgStatus:msgStatus,
                     avatar:userAvatar,
                     userId:msg.fromUserId,
-                    timeServer:msg.timeServer
+                    timeServer:msg.timeServer,
+                    msgType:msgType,
                 });
                 break;
             case MessageType.MessageDocument:
@@ -1105,6 +1164,7 @@ function appendMsgHtmlToChatDialog(msg)
                     fileSize:size,
                     fileName:fileName,
                     originName:originName,
+                    msgType:msgType,
                     timeServer:msg.timeServer
                 });
                 break;
@@ -1123,7 +1183,8 @@ function appendMsgHtmlToChatDialog(msg)
                     height:imgObject.height,
                     userId:msg.fromUserId,
                     timeServer:msg.timeServer,
-                    msgImgUrl:msgImgUrl
+                    msgImgUrl:msgImgUrl,
+                    msgType:msgType,
                 });
                 break;
             case MessageType.MessageAudio:
@@ -1135,6 +1196,13 @@ function appendMsgHtmlToChatDialog(msg)
                     msgStatus:msgStatus,
                     avatar:userAvatar,
                     userId:msg.fromUserId,
+                    msgType:msgType,
+                    timeServer:msg.timeServer
+                });
+            case MessageType.MessageRecall:
+                var msgContent = msg["recall"].msgText ? msg["recall"].msgText : loginName +" recall msg";
+                html = template("tpl-receive-msg-notice", {
+                    msgContent:msgContent,
                     timeServer:msg.timeServer
                 });
                 break;
@@ -1181,6 +1249,7 @@ function appendMsgHtmlToChatDialog(msg)
                     msgContent:msgContent,
                     avatar:userAvatar,
                     userId:msg.fromUserId,
+                    msgType:msgType,
                     timeServer:msg.timeServer
                 });
                 break;
@@ -1199,6 +1268,7 @@ function appendMsgHtmlToChatDialog(msg)
                     msgContent:msgContent,
                     groupUserImg : groupUserImageClassName,
                     avatar:userAvatar,
+                    msgType:msgType,
                     isMaster:isMaster
                 });
                 break;
@@ -1219,6 +1289,7 @@ function appendMsgHtmlToChatDialog(msg)
                     width:imgObject.width,
                     height:imgObject.height,
                     msgImgUrl:msgImgUrl,
+                    msgType:msgType,
                     isMaster:isMaster
                 });
                 break;
@@ -1252,6 +1323,7 @@ function appendMsgHtmlToChatDialog(msg)
                     fileName:fileName,
                     originName:originName,
                     timeServer:msg.timeServer,
+                    msgType:msgType,
                     isMaster:isMaster
                 });
                 break;
@@ -1298,6 +1370,12 @@ function appendMsgHtmlToChatDialog(msg)
                     msgContent:msgContent,
                     avatar:userAvatar,
                     userId :msg.fromUserId,
+                    timeServer:msg.timeServer
+                });
+            case MessageType.MessageRecall:
+                var msgContent = msg["recall"].msgText ? msg["recall"].msgText :  msg.nickname +" recall msg";
+                html = template("tpl-receive-msg-notice", {
+                    msgContent:msgContent,
                     timeServer:msg.timeServer
                 });
                 break;

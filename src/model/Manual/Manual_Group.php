@@ -63,9 +63,7 @@ class Manual_Group extends Manual_Common implements Group
     public function search($search, $pageNum = 1, $pageSize = 20)
     {
         $search = trim($search);
-        $pinyin = new \Overtrue\Pinyin\Pinyin();
-        $nameInLatin = $pinyin->permalink($search, "");
-        $likeGroupList = $this->ctx->SiteGroupTable->getGroupProfileByNameInLatin($nameInLatin, $pageNum, $pageSize);
+        $likeGroupList = $this->ctx->SearchSiteTable->getGroupProfileByName($search, $pageNum, $pageSize);
         return $likeGroupList;
     }
 

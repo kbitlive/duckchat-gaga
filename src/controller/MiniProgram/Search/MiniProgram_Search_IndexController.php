@@ -39,18 +39,19 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
         $params['title'] = $this->title;
         $params['loginName'] = $this->loginName;
         $for = isset($_GET['for']) ? $_GET['for'] : "index";
-        $loginName = isset($_GET['key']) ?  $_GET['key'] : "";
-        $params['key'] = $loginName;
+        $nickname = isset($_GET['key']) ?  $_GET['key'] : "";
+        $params['key']   = $nickname;
+        $params['token'] = $this->userId;
 
         if($method == "post") {
             $page = isset($_POST['page']) ? $_POST['page']:1;
             switch ($for) {
                 case "user":
-                    $userList = $this->ctx->Manual_User->search($this->userId, $loginName, $page, $this->defaultPageSize);
+                    $userList = $this->ctx->Manual_User->search($this->userId, $nickname, $page, $this->defaultPageSize);
                     echo json_encode(["data" => $userList]);
                     break;
                 case "group":
-                    $groupList = $this->ctx->Manual_Group->search($loginName,  $page, $this->defaultPageSize);
+                    $groupList = $this->ctx->Manual_Group->search($nickname,  $page, $this->defaultPageSize);
                     $groupList = $this->getGroupProfile($groupList);
                     echo json_encode(["data" => $groupList]);
                     break;
@@ -72,22 +73,22 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
         }else {
             switch ($for) {
                 case "search":
-                    $userList = $this->ctx->Manual_User->search($this->userId, $loginName, 1, 3);
+                    $userList = $this->ctx->Manual_User->search($this->userId, $nickname, 1, 3);
                     $params['users'] = $userList;
 
-                    $groupList = $this->ctx->Manual_Group->search($loginName, 1, 3);
+                    $groupList = $this->ctx->Manual_Group->search($nickname, 1, 3);
                     $groupList = $this->getGroupProfile($groupList);
                     $params['groups'] = $groupList;
 
                     echo $this->display("miniProgram_search_searchList", $params);
                     break;
                 case "user":
-                    $userList = $this->ctx->Manual_User->search($this->userId, $loginName, 1, $this->defaultPageSize);
+                    $userList = $this->ctx->Manual_User->search($this->userId, $nickname, 1, $this->defaultPageSize);
                     $params['users'] = $userList;
                     echo $this->display("miniProgram_search_userList", $params);
                     break;
                 case "group":
-                    $groupList = $this->ctx->Manual_Group->search($loginName, 1, $this->defaultPageSize);
+                    $groupList = $this->ctx->Manual_Group->search($nickname, 1, $this->defaultPageSize);
                     $groupList = $this->getGroupProfile($groupList);
                     $params['groups'] = $groupList;
                     echo $this->display("miniProgram_search_groupList", $params);
@@ -124,7 +125,7 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
 
             $list = $this->ctx->Manual_User->getProfiles($this->userId, $ownerIds);
 
-            $userList = array_column($list, "loginName", "userId");
+            $userList = array_column($list, "nickname", "userId");
 
             $list = $this->ctx->Manual_Group->getProfiles($this->userId, $groupIds);
             $memberInGroupList = array_column($list, "isMember", "groupId");
@@ -160,7 +161,7 @@ class MiniProgram_Search_IndexController extends MiniProgram_BaseController
 
             $list = $this->ctx->Manual_User->getProfiles($this->userId, $ownerIds);
 
-            $userList = array_column($list, "loginName", "userId");
+            $userList = array_column($list, "nickname", "userId");
             foreach ($groupLists as $key => $group) {
                 $group['ownerName'] = $userList[$group['owner']];
                 $groupLists[$key] = $group;

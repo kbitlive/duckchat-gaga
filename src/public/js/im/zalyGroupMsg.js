@@ -133,7 +133,7 @@ jumpPage = $(".jumpPage").attr("data");
 jumpRoomType = $(".jumpRoomType").attr("data");
 jumpRoomId = $(".jumpRoomId").attr("data");
 jumpRelation = $(".jumpRelation").attr("data");
-
+crc32UserId = $(".crc32UserId").attr("data");
 
 function jump()
 {
@@ -3023,32 +3023,50 @@ $(document).mouseup(function(e){
     var targetId = e.target.id;
     var targetClassName = e.target.className;
 
-    if(targetId == "wrapper-mask") {
-        var wrapperMask = document.getElementById("wrapper-mask");
-        var length = wrapperMask.children.length;
-        var i;
-        for(i=0;i<length; i++) {
-            var node  = wrapperMask.children[i];
-            node.remove();
-            addTemplate(node);
+   try{
+       if(targetId == "wrapper-mask") {
+           var wrapperMask = document.getElementById("wrapper-mask");
+           var length = wrapperMask.children.length;
+           var i;
+           for(i=0;i<length; i++) {
+               var node  = wrapperMask.children[i];
+               node.remove();
+               addTemplate(node);
+           }
+           wrapperMask.style.visibility = "hidden";
+       }
+       ////隐藏群组点击头像之后的弹出菜单
+       if(targetClassName != "group-user-img" && targetClassName != "item p-2") {
+           hideGroupUserMenu();
+       }
+
+       if(targetClassName != "emotion-item") {
+           document.getElementById("emojies").style.display = "none";
+       }
+       if(targetClassName != "gif") {
+           document.getElementById("chat_plugin").style.display = "none";
+       }
+       if(targetClassName.indexOf("siteSelfInfo") == -1) {
+           $("#selfInfo").remove();
+       }
+
+   }catch (error) {
+
+   }
+});
+
+$(document).mousedown(function (e) {
+    try{
+        if($("#msg-menu").length > 0 && e.target.className.indexOf("item") == -1) {
+            $("#msg-menu").remove();
+            return false;
         }
-        wrapperMask.style.visibility = "hidden";
-    }
-    ////隐藏群组点击头像之后的弹出菜单
-    if(targetClassName != "group-user-img" && targetClassName != "item p-2") {
-        hideGroupUserMenu();
+    }catch (error) {
+
     }
 
-    if(targetClassName != "emotion-item") {
-        document.getElementById("emojies").style.display = "none";
-    }
-    if(targetClassName != "gif") {
-        document.getElementById("chat_plugin").style.display = "none";
-    }
-    if(targetClassName.indexOf("siteSelfInfo") == -1) {
-        $("#selfInfo").remove();
-    }
 });
+
 
 function hideGroupUserMenu()
 {
@@ -3794,8 +3812,9 @@ function displayRightPage(displayType)
                     $(".no-chat-dialog-div")[0].style.display = "block";
                     $(".chat-dialog")[0].style.display = "none";
                 }
-                $(".msg_content").focus()
+                $(".msg_content").focus();
 
+                displayWaterMark();
                 checkOsVersion();
                 break;
             case DISPLAY_APPLY_FRIEND_LIST:
@@ -3808,6 +3827,24 @@ function displayRightPage(displayType)
     }catch (error) {
         // console.log(error.message);
     }
+}
+
+function displayWaterMark()
+{
+
+   try{
+       var configStr = localStorage.getItem(siteConfigKey);
+       var config = JSON.parse(configStr);
+
+       if(config.hasOwnProperty("openWaterMark") && config['openWaterMark']) {
+           var time  = Date.parse(new Date());
+           var params =  loginName +" "+crc32UserId+""+time;
+           var data = { watermark_txt:params }
+           watermark.load(data, $(".right-chatbox"));
+       }
+
+   }catch (error)  {
+   }
 }
 
 $(".input-box").on("click",function () {
@@ -3953,3 +3990,144 @@ function sortRoomList(jqElement)
     }
 }
 
+$(document).bind("contextmenu", ".msg_content_for_click", function(event){
+
+
+    var msgId = $(event.target).attr("msgId");
+    var msgType = $(event.target).attr("msgType");
+    var sendtime = $(event.target).attr("sendtime");
+
+    var trueTarget = event.target;
+    if(msgId == undefined) {
+        var findNode = false;
+        var targets = $(event.target).parents();
+        targets.each(function (index, target) {
+            if($(target).hasClass("msg_content_for_click")) {
+                msgId = $(target).attr("msgId");
+                msgType = $(target).attr("msgType");
+                sendtime = $(target).attr("sendtime");
+                trueTarget = target;
+            }
+        });
+    }
+
+    try{
+       $("#msg-menu")[0].remove();
+    }catch (error) {
+    }
+    var clientX = event.offsetX;
+    var clientY = event.offsetY;
+
+    if(msgId == undefined) {
+        return false;
+    }
+    var isCopy = false;
+    var isSave = false;
+    var isRecall = false;
+    var isSee = false;
+    var recallDisabled = false;
+
+    var nowTime =  Date.now();
+    //两分钟内的允许撤回
+    if(sendtime != undefined ) {
+        isRecall = true;
+        if(nowTime-sendtime > 120000) {
+            recallDisabled = true
+        }
+    }
+    switch (msgType) {
+        case MessageType.MessageText:
+            isCopy = true;
+            break;
+        case MessageType.MessageDocument:
+            isSave = true;
+            break;
+        case MessageType.MessageImage:
+            isSee = true;
+            break;
+    }
+
+    var html = template("tpl-msg-menu", {
+        msgId : msgId,
+        isCopy:isCopy,
+        isSave:isSave,
+        isRecall:isRecall,
+        isSee:isSee,
+        left:clientX,
+        top:clientY,
+        recallDisabled:recallDisabled
+    });
+
+    $(trueTarget).append(html);
+    return false;
+});
+
+function copyMsg( msgId, event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    try{
+        $("#msg-menu")[0].remove();
+    }catch (error) {
+    }
+
+    try{
+        $(".msg_content_for_click_"+msgId)[0].onclick = function () {
+            document.execCommand('copy');
+        }
+
+        $(".msg_content_for_click_"+msgId)[0].addEventListener('copy', function (e) {
+            var value = $(this).find("pre").html();
+            e.preventDefault();
+            if (e.clipboardData) {
+                e.clipboardData.setData('text/plain', value);
+            } else if (window.clipboardData) {
+                window.clipboardData.setData('Text', value);
+            }
+        });
+
+        $(".msg_content_for_click_"+msgId).click();
+    }catch (error) {
+
+    }
+}
+
+
+function downloadMsg(msgId, event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var msgType = $(".msg_content_for_click_"+msgId).attr("msgType");
+    var msgTime = $(".msg_content_for_click_"+msgId).attr("msgTime");
+
+    try{
+        $("#msg-menu")[0].remove();
+    }catch (error) {
+    }
+
+    switch (msgType) {
+        case MessageType.MessageImage:
+            break;
+        case MessageType.MessageDocument:
+            if($(".msg_content_for_click_"+msgId).hasClass("right_msg_file_div")) {
+                $(".right_msg_file_div[msgId="+msgId+"]").click();
+            } else {
+                $(".left_msg_file_div[msgId="+msgId+"]").click();
+            }
+    }
+}
+
+function recallMsg(msgId,event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var chatSessionId = localStorage.getItem(chatSessionIdKey);
+    var chatSessionType = localStorage.getItem(chatSessionId)
+    var msgText = loginName + " recall msg";
+    sendRecallMsg(msgId, msgText, chatSessionId, chatSessionType);
+}
+
+function seeMsg( msgId,event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var src = $(".msg-img-"+msgId).attr("src");
+    window.open(src);
+}
