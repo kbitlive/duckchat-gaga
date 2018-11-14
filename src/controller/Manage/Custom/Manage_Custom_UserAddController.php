@@ -22,18 +22,40 @@ class Manage_Custom_UserAddController extends Manage_ServletController
 
     protected function doPost()
     {
-        // TODO: Implement doPost() method.
+        $result = [
+            'errCode' => "error",
+        ];
+
+        error_log("================" . var_export($_POST, true));
+
+
+        $keySort = trim($_POST['keySort']);
+        if (!is_numeric($keySort)) {
+            $keySort = 10;
+        }
+
+        $customs = [
+            'customKey' => $_POST['customKey'],
+            'keyName' => $_POST['keyName'],
+            'keyIcon' => $_POST['keyIcon'],
+            'keySort' => $_POST['keySort'],
+            'status' => $_POST['status'],
+            'isOpen' => $_POST['isOpen'],
+            'isRequired' => $_POST['isRequired'],
+        ];
+
+        if ($this->addUserCustomKey($customs)) {
+            $result['errCode'] = "success";
+        }
+
+        echo json_encode($result);
+        return;
     }
 
-    private function getMiniProgramName($miniProgramId)
+    private function addUserCustomKey(array $customArr)
     {
-        $profile = $this->getMiniProgramProfile($miniProgramId);
-        return $profile["name"];
+        return $this->ctx->SiteCustomTable->insertUserCustomKeys($customArr);
     }
 
-    private function getMiniProgramProfile($miniProgramId)
-    {
-        return $this->ctx->SitePluginTable->getPluginById($miniProgramId);
-    }
 }
 

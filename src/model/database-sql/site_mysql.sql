@@ -262,6 +262,7 @@ CREATE TABLE IF NOT EXISTS siteCustom(
                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
                       customKey varchar(50) not null,
                       keyName varchar(100) not null,
+                      keyIcon varchar(100),
                       keyDesc TEXT,
                       keyType int,-- 登陆自定义类型，用户自定义类型
                       keySort int,

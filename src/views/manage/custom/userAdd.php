@@ -128,6 +128,27 @@
             </div>
             <div class="division-line"></div>
 
+            <div class="item-row" id="custom-key-sort" onclick="showPopup('custom-key-sort');">
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">排序</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">KeySort</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <div class="item-body-value"></div>
+                            <div class="item-body-value-more">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
         </div>
 
     </div>
@@ -399,29 +420,36 @@
 
 
     $("#addButton").click(function () {
-        var miniProgramName = $("#mini-program-name-id").val();
+        var customKey = $("#custom-key").find(".item-body-value").html();
+        var customKeyName = $("#custom-key-name").find(".item-body-value").html();
+        var customKeyIconFileId = $("#custom-key-fileid").attr("fileId");
+        var customKeySort = $("#custom-key-sort").find(".item-body-value").html();
 
-        var imageFileId = $("#mini-program-fileid").attr("fileId");
+        var statusIsChecked = $("#custom-key-status-switch").is(':checked');
+        var requiredIsChecked = $("#custom-key-required-switch").is(':checked');
+        var openIsChecked = $("#custom-key-open-switch").is(':checked');
 
-        var landingPageUrl = $("#mini-program-landing-id").val();
-
-        if (miniProgramName == null || miniProgramName == "") {
-            alert(getLanguage() == 1 ? "请输入小程序名称" : "please input mini program name");
-            alert("mini program name must not be null");
-            return;
-        }
-
-        if (landingPageUrl == null || landingPageUrl == "") {
-            alert(getLanguage() == 1 ? "请输入小程序落地页" : "mini program landing url is empty");
-            return;
-        }
-
+        //"customKey",
+        //        "keyName",
+        //        "keyDesc",
+        //        "keyType",
+        //        "keySort",
+        //        "keyConstraint",
+        //        "isRequired",
+        //        "isOpen",
+        //        "status",
+        //        "dataType",
+        //        "dataVerify",
+        //        "addTime",
         var data = {
-            // name: miniProgramName
+            'customKey': customKey,
+            'keyName': customKeyName,
+            'keyIcon': customKeyIconFileId,
+            'keySort': customKeySort,
+            'status': statusIsChecked ? 2 : 1,
+            'isOpen': openIsChecked ? 1 : 0,
+            'isRequired': requiredIsChecked ? 1 : 0,
         };
-        data['name'] = miniProgramName;
-        data['logo'] = imageFileId;
-        data['landingPageUrl'] = landingPageUrl;
 
         var url = "./index.php?action=manage.custom.userAdd&lang=" + getLanguage();
         zalyjsCommonAjaxPostJson(url, data, addResponse);

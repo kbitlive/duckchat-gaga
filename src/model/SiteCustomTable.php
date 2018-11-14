@@ -22,6 +22,7 @@ class SiteCustomTable extends BaseTable
         "id",
         "customKey",
         "keyName",
+        "keyIcon",
         "keyDesc",
         "keyType",
         "keySort",
