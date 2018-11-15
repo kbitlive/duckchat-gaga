@@ -85,7 +85,7 @@ class Page_Passport_LoginController extends HttpBaseController
         $thirdPartyLoginOptions = ZalyLogin::getThirdPartyConfigWithoutVerifyUrl();
 
         $enableInvitationCode = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_INVITATION_CODE);
-        $enableRealName  = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_REAL_NAME);
+        $enableRealName = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_REAL_NAME);
 
         $params = [
             'siteName' => $siteName,
@@ -105,17 +105,26 @@ class Page_Passport_LoginController extends HttpBaseController
 
             'loginBackgroundImageDisplay' => $loginBackgroundImageDisplay,
 
-            'loginNameAlias'   => $loginNameAlias,
-            'passwordFindWay'  => $passwordRestWay,
+            'loginNameAlias' => $loginNameAlias,
+            'passwordFindWay' => $passwordRestWay,
             'passwordResetWay' => $passwordRestWay,
-            'passwordResetRequired'  => $passwordResetRequired,
+            'passwordResetRequired' => $passwordResetRequired,
             'thirdPartyLoginOptions' => json_encode($thirdPartyLoginOptions),
 
             'enableInvitationCode' => $enableInvitationCode,
-            'enableRealName' =>  $enableRealName
+            'enableRealName' => $enableRealName,
+            '$registerCustoms' => $this->getRegisterCustoms(),
         ];
         echo $this->display("passport_login", $params);
         return;
+    }
+
+    //获取注册
+    private function getRegisterCustoms()
+    {
+        $registerCustoms = $this->ctx->SiteUserCustomTable->getColumnInfosForRegister();
+        error_log("========user customs for register = " . var_export($registerCustoms, true));
+        return $registerCustoms;
     }
 
 }

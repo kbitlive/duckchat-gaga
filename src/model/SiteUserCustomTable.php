@@ -293,4 +293,11 @@ class SiteUserCustomTable extends BaseTable
         return $this->ctx->SiteCustomTable->queryUserCustomInfo(false, $tag);
     }
 
+    public function getColumnInfosForRegister()
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $status = Zaly\Proto\Core\UserCustomStatus::UserCustomRegisterRequired;
+        return $this->ctx->SiteCustomTable->queryUserCustomInfo($status, $tag);
+    }
+
 }
