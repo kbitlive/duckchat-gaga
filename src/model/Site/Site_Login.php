@@ -13,8 +13,6 @@ class Site_Login
     private $pinyin;
     private $timeOut = 10;
     private $logger;
-    public $siteCookieName = "zaly_site_user";
-    private $cookieTimeOut = 2592000;//30天 单位s
 
     public function __construct(BaseCtx $ctx)
     {
@@ -49,8 +47,6 @@ class Site_Login
             //login success, save custom
             $this->saveUserCustoms($userProfile["userId"], $userCustomArray);
         }
-
-        setcookie($this->siteCookieName, $userProfile["sessionId"], time() + $this->cookieTimeOut, "/", "", false, true);
 
         return $userProfile;
     }

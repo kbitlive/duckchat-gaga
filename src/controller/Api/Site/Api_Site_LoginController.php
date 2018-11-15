@@ -13,6 +13,8 @@ class Api_Site_LoginController extends \BaseController
     private $classNameForResponse = '\Zaly\Proto\Site\ApiSiteLoginResponse';
     private $sessionVerifyAction = "api.session.verify";
     private $pinyin;
+    public $siteCookieName = "zaly_site_user";
+    private $cookieTimeOut = 2592000;//30天 单位s
 
     public function rpcRequestClassName()
     {
@@ -74,6 +76,9 @@ class Api_Site_LoginController extends \BaseController
 
             $userProfile = $this->ctx->Site_Login->doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $customData);
 
+            if($clientType == \Zaly\Proto\Core\UserClientType::UserClientWeb) {
+                setcookie($this->siteCookieName, $userProfile["sessionId"], time() + $this->cookieTimeOut, "/", "", false, true);
+            }
             $realSessionId = $userProfile['sessionId'];
             $response = $this->buildApiSiteLoginResponse($userProfile, $realSessionId);
 
