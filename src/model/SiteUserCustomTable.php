@@ -48,6 +48,7 @@ class SiteUserCustomTable extends BaseTable
     public function insertCustomProfile($customArray)
     {
         $columns = $this->getAllColumns();
+        $columns = array_merge($columns, $this->defaultColumns);
         return $this->insertData($this->table, $customArray, $columns);
     }
 

@@ -154,8 +154,10 @@ class SiteCustomTable extends BaseTable
         $sql = "select $this->queryColumns from $this->table where keyType=:keyType ";
 
         if ($status && $status >= 0) {
-            $sql .= " and status=:status;";
+            $sql .= " and status=:status ";
         }
+
+        $sql .= " order by keySort ASC;";
 
         try {
             $prepare = $this->dbSlave->prepare($sql);

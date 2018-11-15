@@ -66,8 +66,9 @@ class Api_Site_LoginController extends \BaseController
             $customData = [];
             if (!empty($userCustoms)) {
                 foreach ($userCustoms as $custom) {
-                    $key = $custom->getCustomKey();
-                    $value = $custom->getCustomValue();
+                    $key = trim($custom->getCustomKey());
+                    $customValue = $custom->getCustomValue();
+                    $value = isset($customValue) ? trim($customValue) : "";
                     $customData[$key] = $value;
                 }
             }
