@@ -29,12 +29,6 @@ class SiteUserCustomTable extends BaseTable
         $this->logger = $this->ctx->getLogger();
     }
 
-    //create table
-    public function createUserCustomTable($createSql)
-    {
-        return $this->db->exec($createSql);
-    }
-
     /**
      * @param $customArray
      * [
@@ -49,6 +43,7 @@ class SiteUserCustomTable extends BaseTable
     {
         $columns = $this->getAllColumns();
         $columns = array_merge($columns, $this->defaultColumns);
+        $customArray['addTime'] = ZalyHelper::getMsectime();
         return $this->insertData($this->table, $customArray, $columns);
     }
 

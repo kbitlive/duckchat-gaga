@@ -122,7 +122,6 @@ class Api_User_UpdateController extends BaseController
         $tag = __CLASS__ . "->" . __FUNCTION__;
         try {
             $customData['userId'] = $userId;
-            $customData['addTime'] = ZalyHelper::getMsectime();
             return $this->ctx->SiteUserCustomTable->insertCustomProfile($customData);
         } catch (Exception $e) {
             $this->logger->error($tag, $e);
