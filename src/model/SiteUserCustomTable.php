@@ -51,6 +51,12 @@ class SiteUserCustomTable extends BaseTable
         return $this->insertData($this->table, $customArray, $columns);
     }
 
+    public function updateCustomProfile($data, $where)
+    {
+        $columns = $this->getAllColumns();
+        return $this->updateInfo($this->table, $where, $data, $columns);
+    }
+
     //get user custom profile which show to others
     public function queryOpenCustomProfile($userId)
     {
