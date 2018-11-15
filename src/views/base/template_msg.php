@@ -908,8 +908,8 @@
     <div style="height:100%;overflow-y: scroll;">
         {{each customs custom}}
         <div class="custom_info">
-            <div class="custom_name">{{custom['customKey']}}</div>
-            <div class="custom_value">{{custom['customName']}}</div>
+            <div class="custom_name">{{custom['customName']}}</div>
+            <div class="custom_value">{{custom['customValue']}}</div>
         </div>
         {{/each}}
     </div>
