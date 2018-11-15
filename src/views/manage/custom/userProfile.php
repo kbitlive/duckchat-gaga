@@ -86,8 +86,7 @@
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <div class="item-body-value"
-                                 id="custom-key-name-value"><?php echo $userCustomInfo["keyName"]; ?></div>
+                            <div class="item-body-value"><?php echo $userCustomInfo["keyName"]; ?></div>
                             <div class="item-body-value-more">
                                 <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
@@ -98,6 +97,28 @@
                 </div>
             </div>
             <div class="division-line"></div>
+
+            <div class="item-row" id="custom-key-desc" update-key="keyDesc" onclick="showPopup('custom-key-desc');">
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">字段描述</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Custom Desc</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <div class="item-body-value"><?php echo $userCustomInfo["keyDesc"]; ?></div>
+                            <div class="item-body-value-more">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
 
             <div class="item-row" id="mini-program-icon-id">
                 <div class="item-body">
@@ -228,31 +249,34 @@
 
     </div>
 
-    <div class="layout-all-row">
 
-        <div class="list-item-center">
+    <?php if (!in_array($userCustomInfo["customKey"], ["phoneId", "email"])) { ?>
 
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display" onclick="deleteUserCostom();">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">删除</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Delete</div>
-                        <?php } ?>
+        <div class="layout-all-row">
 
-                        <div class="item-body-tail">
-                            <img class="more-img" src="../../public/img/manage/more.png"/>
+            <div class="list-item-center">
+
+                <div class="item-row">
+                    <div class="item-body">
+                        <div class="item-body-display" onclick="deleteUserCostom();">
+                            <?php if ($lang == "1") { ?>
+                                <div class="item-body-desc">删除</div>
+                            <?php } else { ?>
+                                <div class="item-body-desc">Delete</div>
+                            <?php } ?>
+
+                            <div class="item-body-tail">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="division-line"></div>
+
             </div>
-            <div class="division-line"></div>
 
         </div>
-
-    </div>
-
+    <?php } ?>
 </div>
 
 <div class="wrapper-mask" id="wrapper-mask" style="visibility: hidden;"></div>
