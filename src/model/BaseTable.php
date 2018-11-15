@@ -241,4 +241,39 @@ class BaseTable
         return false;
     }
 
+    protected function getMysqlTableColumns($tableName)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $mysqlConfig = ZalyConfig::getConfig("mysql");
+        $dbName = $mysqlConfig['dbName'];
+        $prepare = false;
+        $sql = "SELECT COLUMN_NAME FROM information_schema.columns WHERE TABLE_NAME=$tableName AND TABLE_SCHEMA=$dbName;";
+        $prepare = $this->db->prepare($sql);
+
+        $flag = $prepare->execute();
+
+        $columns = $prepare->fetchAll(PDO::FETCH_COLUMN);
+
+        $this->handlerResult($flag, $prepare, $tag);
+
+        return $columns;
+    }
+
+    protected function getSqliteTableColumns($tableName)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $prepare = false;
+        $sql = "PRAGMA table_info($tableName);";
+
+        $prepare = $this->db->prepare($sql);
+
+        $flag = $prepare->execute();
+
+        $columns = $prepare->fetchAll(PDO::FETCH_COLUMN, 1);
+
+        $this->handlerResult($flag, $prepare, $tag);
+
+        return $columns;
+    }
+
 }

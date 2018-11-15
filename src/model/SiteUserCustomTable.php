@@ -16,6 +16,14 @@ class SiteUserCustomTable extends BaseTable
     private $table = "siteUserCustom";
     private $customKeyType = Zaly\Proto\Core\CustomType::CustomTypeUser;
 
+    private $defaultColumns = [
+        "id",
+        "userId",
+        "phoneId",
+        "email",
+        "addTime",
+    ];
+
     public function init()
     {
         $this->logger = $this->ctx->getLogger();
@@ -87,26 +95,170 @@ class SiteUserCustomTable extends BaseTable
     public function insertUserCustomInfo(array $customInfo)
     {
         //迁移数据库
+        if ($this->rebuildTable(true, $customInfo)) {
+            return $this->ctx->SiteCustomTable->insertUserCustomKeys($customInfo);
+        }
 
-        return $this->ctx->SiteCustomTable->insertUserCustomKeys($customInfo);
+        return false;
     }
 
-    private function migrateTable()
+    public function deleteUserCustomInfo($customKey)
     {
+        $customInfo = ["customKey" => $customKey];
+        if ($this->rebuildTable(false, $customInfo)) {
+            return $this->ctx->SiteCustomTable->deleteCustomInfo($this->customKeyType, $customKey);
+        }
+        return false;
+    }
+
+    private function rebuildTable($isAdd, $customInfo)
+    {
+        $dbType = $this->ctx->dbType;
+
+        if ("mysql" == $dbType) {
+            return $this->rebuildUserCustomTableForMysql($isAdd, $customInfo['customKey']);
+        } else {
+            return $this->rebuildUserCustomTableForSqlite($isAdd, $customInfo['customKey']);
+        }
+    }
+
+    private function createSqliteTable($tableName, $columns)
+    {
+        $columns = $this->removeDefaultColumns($columns);
+        $columns = array_unique($columns);
+        $sql = "CREATE TABLE IF NOT EXISTS $tableName(
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      userId VARCHAR(100) UNIQUE NOT NULL,
+                      phoneId VARCHAR(20),
+                      email VARCHAR(100),";
+        foreach ($columns as $column) {
+            $sql .= "$column VARCHAR(100),";
+        }
+
+        $sql .= "addTime BIGINT);";
+        error_log("======new sqlit table sql=" . $sql);
+        return $this->db->exec($sql) !== false;
+    }
+
+    private function removeDefaultColumns($columns)
+    {
+        if (empty($columns)) {
+            return [];
+        }
+
+        foreach ($columns as $key => $column) {
+            if (in_array($column, $this->defaultColumns)) {
+                unset($columns[$key]);
+            }
+        }
+
+        return $columns;
+    }
+
+    private function checkCustomColumns($columns)
+    {
+        $customColumns = $this->getAllColumns();
+        $customColumns = array_merge($customColumns, $this->defaultColumns);
+        foreach ($columns as $key => $column) {
+            if (!in_array($column, $customColumns)) {
+                unset($columns[$key]);
+            }
+        }
+
+        error_log("======custom columns = " . var_export($columns, true));
+        return $columns;
+    }
+
+    private function rebuildUserCustomTableForMysql($isAddColumn, $alterColumnName)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $prepare = false;//充值prepare
+
+        //migrate data to new table
+        if ($isAddColumn) {
+            $sql = "alter table $this->table add column $alterColumnName varchar(100);";
+        } else {
+            $sql = "alter table $this->table drop column $alterColumnName";
+        }
+
+        $prepare = $this->ctx->db->prepare($sql);
+        error_log("=========prepare errorInfo= " . var_export($prepare->errorInfo(), true));
+        $flag = $prepare->execute();
+
+        if ($prepare) {
+            $dbErrCode = $prepare->errorCode();
+            if (("00000" == $dbErrCode) || "42S21" == $dbErrCode) {
+                return true;
+            }
+        }
+
+        error_log($tag . " cause=" . var_export($prepare->errorInfo(), true));
+        return false;
+    }
+
+
+    private function rebuildUserCustomTableForSqlite($isAddColumn, $alterColumnName)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $columns = $this->getSqliteTableColumns($this->table);
+
+        error_log("get sqlit table columns=" . var_export($columns, true));
+
+        //alter table
         $dbFlag = $this->getTimeHMS();
         $newTableName = $this->table . "_" . $dbFlag;
         $sql = "alter table $this->table rename to $newTableName";
         $result = $this->db->exec($sql);
 
-        $this->logger->error("======", "alert table result-=" . $result);
+        error_log("==========================rename result=" . $result);
+        if ($result === false) {
+            throw new Exception("rename table:$this->table to $newTableName error");
+        }
 
-        $sql  = "PRAGMA table_info($this);";
+        try {
+            //checkout column first
+            $columns = $this->checkCustomColumns($columns);
 
+            if (!$isAddColumn) {
+                $columns = array_diff($columns, [$alterColumnName]);
+            } else {
+                $columns[] = $alterColumnName;
+            }
+
+            error_log("==========================unset columns=" . var_export($columns, true));
+
+            if (!$this->createSqliteTable($this->table, $columns)) {
+                throw new Exception("rebuild sqlite table=" . $this->table . " error");
+            }
+
+            $columns = array_diff($columns, [$alterColumnName]);
+            $columns = array_unique($columns);
+
+            $queryColumnString = implode(",", $columns);//migrate data to new table
+            $sql = "insert into $this->table($queryColumnString) select $queryColumnString from $newTableName";
+
+            error_log("=========prepare sql= " . $sql);
+            $prepare = false;//reset prepare
+            $prepare = $this->ctx->db->prepare($sql);
+            error_log("=========prepare errorInfo= " . var_export($prepare->errorInfo(), true));
+            $flag = $prepare->execute();
+            $errCode = $prepare->errorCode();
+            if ($flag && $errCode == "00000") {
+                return true;
+            }
+        } catch (Exception $e) {
+            $this->logger->error($tag, $e);
+            $this->rollbackSqliteRebuild($newTableName, $this->table);
+        }
+        return false;
     }
 
-    public function deleteUserCustomInfo($customKey)
+    private function rollbackSqliteRebuild($oldTable, $newTable)
     {
-        return $this->ctx->SiteCustomTable->deleteCustomInfo($this->customKeyType, $customKey);
+        $sql = "drop table $newTable";
+        $this->db->exec($sql);
+        $sql = "alter table $oldTable rename to $newTable";
+        $this->db->exec($sql);
     }
 
     public function updateUserCustomInfo($data, $where)
@@ -139,6 +291,13 @@ class SiteUserCustomTable extends BaseTable
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         return $this->ctx->SiteCustomTable->queryUserCustomInfo(false, $tag);
+    }
+
+    public function getColumnInfosForRegister()
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $status = Zaly\Proto\Core\UserCustomStatus::UserCustomRegisterRequired;
+        return $this->ctx->SiteCustomTable->queryUserCustomInfo($status, $tag);
     }
 
 }
