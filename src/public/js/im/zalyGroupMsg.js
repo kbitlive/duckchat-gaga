@@ -882,7 +882,6 @@ function setDocumentTitle()
                     if(Number(iconNum%2) == 0) {
                         $(".icon").attr("href", "favicon.ico?_v="+intervalId);
                     } else {
-                        console.log("tip.png?_v="+intervalId)
                         $(".icon").attr("href", "tip.png?_v="+intervalId);
                     }
                     iconNum = Number(iconNum+1);
@@ -4029,8 +4028,6 @@ function sortRoomList(jqElement)
 }
 
 $(document).bind("contextmenu", ".msg_content_for_click", function(event){
-
-
     var msgId = $(event.target).attr("msgId");
     var msgType = $(event.target).attr("msgType");
     var sendtime = $(event.target).attr("sendtime");

@@ -306,6 +306,7 @@ html, body{
 .chatsession-row-title {
     font-size:1.5rem;
     color:#141030;
+    line-height: 1.5rem;
 }
 
 .chatsession-row-time {
@@ -384,7 +385,6 @@ html, body{
 }
 
 .msg-nickname-time {
-    margin-top: 0.23rem;
     display: flex;
     flex-direction: row;
     align-items: baseline;
@@ -413,6 +413,7 @@ html, body{
     font-size:1.31rem;
     color:rgba(20,16,48,0.6);
     font-weight: bold;
+    line-height: 1.31rem;
 }
 
 .msg-time {
@@ -1995,7 +1996,6 @@ button:active{
 
 .chat_master_tip{
     width:2.63rem;
-    height: 1rem;
     background:rgba(249,183,38,1);
     border-radius:0.19rem;
     text-align: center;
@@ -2003,7 +2003,7 @@ button:active{
     font-family:PingFangSC-Regular;
     font-weight:400;
     color:rgba(255,255,255,0.87);
-    height: 1rem;
+    height: 1.3rem;
     margin-right: 5px;
 }
 
