@@ -3453,11 +3453,15 @@ function editFriendRemark()
 
 //-------------------------------------self qrcode-------------------------------------------------------
 
-
-////展示个人消息
-function displaySelfInfo()
+function handleGetUserProfile(result)
 {
-    var soundNotification = localStorage.getItem(soundNotificationKey);
+    var customs = new Array();
+    if(result && result.hasOwnProperty("profile") ) {
+        var profile = result['profile'];
+        if(profile.hasOwnProperty("custom")) {
+            customs = profile.custom;
+        }
+    }
 
     var isMaster = isJudgeSiteMasters(token);
     var html = template("tpl-self-info", {
@@ -3466,11 +3470,19 @@ function displaySelfInfo()
         loginName:loginName,
         isMaster:isMaster,
         siteAddress:siteAddress,
-        soundNotification:soundNotification
+        customs:customs
     });
+
     html = handleHtmlLanguage(html);
     $(".wrapper").append(html);
     getNotMsgImg(token, avatar);
+}
+
+////展示个人消息
+function displaySelfInfo()
+{
+    var action = "api.user.profile"
+    handleClientSendRequest(action, {}, handleGetUserProfile);
 }
 
 $(document).on("click", ".sound_mute", function () {
@@ -3501,7 +3513,7 @@ $(".selfInfo").mouseover(function(){
 
 $(document).on("mouseleave","#selfInfo", function () {
     if( uploadSelfAvatar == false) {
-        removeWindow($("#selfInfo"));
+        // removeWindow($("#selfInfo"));
     }
 });
 
@@ -3535,7 +3547,7 @@ function updateSelfNickName(event)
     }
     var values = new Array();
     var value = {
-        type : "ApiUserUpdateNickname",
+        type : ApiUserUpdateType.ApiUserUpdateNickname,
         nickname : nickname,
     };
     values.push(value);
@@ -3551,6 +3563,7 @@ function updateUserInfo(values)
     handleClientSendRequest(action, reqData, handleUpdateUserInfo);
 }
 
+
 function handleUpdateUserInfo(results)
 {
     window.location.reload();
@@ -3563,8 +3576,33 @@ $(document).on("click", ".nickNameDiv",function () {
     $(this)[0].parentNode.replaceChild($(html)[0], $(this)[0]);
 });
 
-function handleApiSiteMute() {
+// self_custom_edit_info
 
+
+
+function updateUserCustomInfo(event, customKey)
+{
+    var isEnter = checkIsEnterBack(event);
+    if(!isEnter) {
+        return;
+    }
+
+    var customValue = $("self_custom_edit_"+customKey).val();
+    var customName = $("self_custom_edit_"+customKey).attr("customName");
+
+    var customInfo = {
+        customKey:customKey,
+        customValue:customValue,
+        customName:customName
+    }
+
+    var values = new Array();
+    var value = {
+        type : ApiUserUpdateType.ApiUserUpdateCustom,
+        custom : customInfo,
+    };
+    values.push(value);
+    updateUserInfo(values);
 }
 
 

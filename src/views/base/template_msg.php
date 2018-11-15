@@ -500,6 +500,16 @@
         {{/if}}
         <div style="text-align: center;margin:0.12rem auto;width: 34rem; height:1px;background:rgba(223,223,223,1);" ></div>
 
+        <div style="width: 100%;">
+            {{each customs custom}}
+            <div class="siteSelfInfo self_custom_info">
+                <span>{{custom['customName']}}</span> <input type="text" value="{{custom['customValue']}}" onkeydown="updateUserCustomInfo(event, '{{custom[customKey]}}' )" class="customs self_custom_edit_{{custom['customKey']}} siteSelfInfo"customName = "{{custom['customName']}}" customKey="{{custom['customKey']}}" >
+            </div>
+            {{/each}}
+        </div>
+
+        <div style="text-align: center;margin:0.12rem auto;width: 34rem; height:1px;background:rgba(223,223,223,1);margin-top: 1rem" ></div>
+
         <div class="d-flex flex-row justify-content-center">
             <div class="self_profile_item self-qrcode siteSelfInfo" id="logout" >
                 <span class="logout-span siteSelfInfo" id="logout-span" data-local-value="logoutTip" onclick="logout(event)">退出</span>
