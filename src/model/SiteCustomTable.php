@@ -137,7 +137,6 @@ class SiteCustomTable extends BaseTable
 
             $prepare->execute();
             $result = $prepare->fetch(PDO::FETCH_ASSOC);
-            error_log("=====" . var_export($result, true));
             return $result;
         } finally {
             $this->logger->writeSqlLog($tag, $sql, [$customKey, $keyType], $startTime);
