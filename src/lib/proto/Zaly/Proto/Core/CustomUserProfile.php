@@ -25,6 +25,11 @@ class CustomUserProfile extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string customValue = 2;</code>
      */
     private $customValue = '';
+    /**
+     *
+     * Generated from protobuf field <code>string customName = 3;</code>
+     */
+    private $customName = '';
 
     public function __construct() {
         \GPBMetadata\Core\User::initOnce();
@@ -79,6 +84,30 @@ class CustomUserProfile extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->customValue = $var;
+
+        return $this;
+    }
+
+    /**
+     *
+     * Generated from protobuf field <code>string customName = 3;</code>
+     * @return string
+     */
+    public function getCustomName()
+    {
+        return $this->customName;
+    }
+
+    /**
+     *
+     * Generated from protobuf field <code>string customName = 3;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setCustomName($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->customName = $var;
 
         return $this;
     }

@@ -49,6 +49,7 @@ class Api_User_ProfileController extends BaseController
                 $AllUserProfile = new \Zaly\Proto\Core\AllUserProfile();
                 $AllUserProfile->setPublic($publicProfile);
                 $AllUserProfile->setTimeReg($profile['timeReg']);
+                $AllUserProfile->setCustom($this->getUserCustomProfile($userId));
 
                 $response->setProfile($AllUserProfile);
 
@@ -76,4 +77,23 @@ class Api_User_ProfileController extends BaseController
         }
         return [];
     }
+
+    private function getUserCustomProfile($userId)
+    {
+        $customs = [];
+        $customProfiles = $this->ctx->SiteUserCustomTable->queryAllCustomProfile($userId);
+
+        if ($customProfiles) {
+            $userCustom = new Zaly\Proto\Core\CustomUserProfile();
+            foreach ($customProfiles as $customKey => $customValue) {
+                $userCustom->setCustomKey($customKey);
+//                $userCustom->setCustomName($profile['keyName']);
+                $userCustom->setCustomValue($customValue);
+                $customs[] = $userCustom;
+            }
+        }
+
+        return $customs;
+    }
+
 }

@@ -44,11 +44,16 @@ class SiteCustomTable extends BaseTable
     }
 
 
-    public function insertUserCustomKeys(array $keyData)
+    public function insertUserCustomInfo(array $keyData)
     {
         $keyData['keyType'] = Zaly\Proto\Core\CustomType::CustomTypeUser;
         $keyData['addTime'] = $this->getCurrentTimeMills();
         return $this->insertData($this->table, $keyData, $this->columns);
+    }
+
+    public function insertCustomInfo(array $customData)
+    {
+        return $this->insertData($this->table, $customData, $this->columns);
     }
 
     public function deleteCustomInfo($keyType, $customKey)
@@ -72,34 +77,7 @@ class SiteCustomTable extends BaseTable
         return $this->updateInfo($this->table, $where, $data, $this->columns);
     }
 
-    //only get customKey array not all info
-    public function queryUserCustomKeysAll()
-    {
-        $tag = __CLASS__ . '->' . __FUNCTION__;
-        return $this->queryUserCustomKeys(false, $tag);
-    }
-
-    //only get customKey array not all info
-    public function queryUserCustomKeysShow()
-    {
-        $tag = __CLASS__ . '->' . __FUNCTION__;
-        return $this->queryUserCustomKeys(1, $tag);
-    }
-
-    public function queryLoginCustomKeys($status, $tag = false)
-    {
-        $keyType = Zaly\Proto\Core\CustomType::CustomTypeLogin;
-        return $this->queryCustomKeys($keyType, $status, $tag);
-    }
-
-    //only get customKey array not all info
-    public function queryUserCustomKeys($status, $tag = false)
-    {
-        $keyType = Zaly\Proto\Core\CustomType::CustomTypeUser;
-        return $this->queryCustomKeys($keyType, $status, $tag);
-    }
-
-    private function queryCustomKeys($keyType, $status, $tag = false)
+    public function queryCustomKeys($keyType, $status = false, $isOpen = false, $tag = false)
     {
         $startTime = $this->getCurrentTimeMills();
 
@@ -109,8 +87,12 @@ class SiteCustomTable extends BaseTable
 
         $sql = "select customKey from $this->table where keyType=:keyType ";
 
-        if ($status && $status >= 0) {
-            $sql .= " and status=:status;";
+        if ($status !== false) {
+            $sql .= " and status=:status ";
+        }
+
+        if ($isOpen !== false) {
+            $sql .= " and isOpen=:isOpen ";
         }
 
         try {
@@ -118,8 +100,12 @@ class SiteCustomTable extends BaseTable
             $this->handlePrepareError($tag, $prepare);
 
             $prepare->bindValue(":keyType", $keyType);
-            if ($status && $status >= 0) {
+            if ($status !== false) {
                 $prepare->bindValue(":status", $status, PDO::PARAM_INT);
+            }
+
+            if ($isOpen !== false) {
+                $prepare->bindValue(":isOpen", $isOpen, PDO::PARAM_INT);
             }
 
             $prepare->execute();
@@ -157,13 +143,7 @@ class SiteCustomTable extends BaseTable
 
     }
 
-    public function queryUserCustomInfo($status, $tag = false)
-    {
-        $keyType = Zaly\Proto\Core\CustomType::CustomTypeUser;
-        return $this->queryCustomInfo($keyType, $status, $tag);
-    }
-
-    private function queryCustomInfo($keyType, $status, $tag = false)
+    public function queryCustomInfo($keyType, $status, $tag = false)
     {
         $startTime = $this->getCurrentTimeMills();
 

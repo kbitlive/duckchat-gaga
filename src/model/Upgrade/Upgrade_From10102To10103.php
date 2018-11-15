@@ -73,7 +73,7 @@ class Upgrade_From10102To10103 extends Upgrade_Version
         $result = true;
         foreach ($customs as $customArray) {
             try {
-                $result = $this->ctx->SiteCustomTable->insertUserCustomKeys($customArray) && $result;
+                $result = $this->ctx->SiteCustomTable->insertUserCustomInfo($customArray) && $result;
             } catch (Exception $e) {
                 $this->logger->error($tag, $e);
             }

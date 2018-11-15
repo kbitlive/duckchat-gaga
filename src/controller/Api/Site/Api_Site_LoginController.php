@@ -62,7 +62,6 @@ class Api_Site_LoginController extends \BaseController
 
             $customData = [];
             if (!empty($userCustoms)) {
-                new Zaly\Proto\Core\CustomUserProfile();
                 foreach ($userCustoms as $custom) {
                     $key = $custom->getCustomKey();
                     $value = $custom->getCustomValue();
@@ -71,7 +70,7 @@ class Api_Site_LoginController extends \BaseController
             }
 
             //get user profile from platform clientSiteType=1:mobile client
-            $clientType = Zaly\Proto\Core\UserClientType::UserClientMobileApp;
+            $clientType = $this->getUserClient();
 
             $userProfile = $this->ctx->Site_Login->doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $customData);
 
@@ -170,5 +169,14 @@ class Api_Site_LoginController extends \BaseController
 
     }
 
+    private function getUserClient()
+    {
+        $userAgent = $this->getUserAgent();
+        if (empty($userAgent) || strstr($userAgent, "DuckChat")) {
+            return Zaly\Proto\Core\UserClientType::UserClientMobileApp;
+        } else {
+            return Zaly\Proto\Core\UserClientType::UserClientWeb;
+        }
+    }
 }
 

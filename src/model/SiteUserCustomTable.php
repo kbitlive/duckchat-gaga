@@ -52,10 +52,10 @@ class SiteUserCustomTable extends BaseTable
     }
 
     //get user custom profile which show to others
-    public function queryCustomProfile($userId)
+    public function queryOpenCustomProfile($userId)
     {
         $tag = __CLASS__ . '->' . __FUNCTION__;
-        $columns = $this->getColumns();
+        $columns = $this->getOpenColumns();
 
         return $this->queryCustom($columns, $userId, $tag);
     }
@@ -82,11 +82,12 @@ class SiteUserCustomTable extends BaseTable
             $prepare = $this->dbSlave->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
             $prepare->bindValue("userId", $userId);
-            $result = $prepare->fetchAll(PDO::FETCH_ASSOC);
+            $result = $prepare->fetch(PDO::FETCH_ASSOC);
             return $result;
         } finally {
             $this->logger->writeSqlLog($tag, $sql, [$userId], $startTime);
         }
+
     }
 
 
@@ -96,7 +97,7 @@ class SiteUserCustomTable extends BaseTable
     {
         //迁移数据库
         if ($this->rebuildTable(true, $customInfo)) {
-            return $this->ctx->SiteCustomTable->insertUserCustomKeys($customInfo);
+            return $this->ctx->SiteCustomTable->insertUserCustomInfo($customInfo);
         }
 
         return false;
@@ -269,15 +270,17 @@ class SiteUserCustomTable extends BaseTable
 
     public function getAllColumns()
     {
-        $columns = $this->ctx->SiteCustomTable->queryUserCustomKeysAll();
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $columns = $this->ctx->SiteCustomTable->queryCustomKeys($this->customKeyType, false, false, $tag);
         $this->logger->error("==============", "all custom keys for user=" . var_export($columns, true));
         return $columns;
     }
 
-    public function getColumns()
+    public function getOpenColumns()
     {
-        $columns = $this->ctx->SiteCustomTable->queryUserCustomKeysShow();
-        $this->logger->error("==============", "custom keys for user show=" . var_export($columns, true));
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $columns = $this->ctx->SiteCustomTable->queryCustomKeys($this->customKeyType, false, true, $tag);
+        $this->logger->error("==============", "custom keys for user open=" . var_export($columns, true));
         return $columns;
     }
 
@@ -290,14 +293,18 @@ class SiteUserCustomTable extends BaseTable
     public function getAllColumnInfos()
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
-        return $this->ctx->SiteCustomTable->queryUserCustomInfo(false, $tag);
+        $customInfo = $this->ctx->SiteCustomTable->queryCustomInfo($this->customKeyType, false, $tag);
+        $this->logger->error("==============", "get all columnsInfo=" . var_export($customInfo, true));
+        return $customInfo;
     }
 
     public function getColumnInfosForRegister()
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         $status = Zaly\Proto\Core\UserCustomStatus::UserCustomRegisterRequired;
-        return $this->ctx->SiteCustomTable->queryUserCustomInfo($status, $tag);
+        $customInfo = $this->ctx->SiteCustomTable->queryCustomInfo($this->customKeyType, $status, $tag);
+        $this->logger->error("==============", "customInfo for register=" . var_export($customInfo, true));
+        return $customInfo;
     }
 
 }
