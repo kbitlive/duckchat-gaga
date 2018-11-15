@@ -78,14 +78,14 @@ class SiteUserCustomTable extends BaseTable
 
         try {
             $queryColumns = implode(",", $queryColumns);
+
             $sql = "select $queryColumns from $this->table where userId=:userId;";
             $prepare = $this->dbSlave->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
             $prepare->bindValue("userId", $userId);
+            $prepare->execute();
+
             $result = $prepare->fetch(PDO::FETCH_ASSOC);
-
-            error_log("============get user custom profile=" . var_export($result, true));
-
             return $result;
         } finally {
             $this->logger->writeSqlLog($tag, $sql, [$userId], $startTime);
@@ -293,11 +293,19 @@ class SiteUserCustomTable extends BaseTable
         return $info;
     }
 
+    public function getColumnNames()
+    {
+        $columnInfos = $this->getAllColumnInfos();
+        $columnNames = array_column($columnInfos, "keyName", "customKey");
+
+        error_log("==========get column Names=" . var_export($columnNames, true));
+        return $columnNames;
+    }
+
     public function getAllColumnInfos()
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         $customInfo = $this->ctx->SiteCustomTable->queryCustomInfo($this->customKeyType, false, $tag);
-        $this->logger->error("==============", "get all columnsInfo=" . var_export($customInfo, true));
         return $customInfo;
     }
 
@@ -306,7 +314,7 @@ class SiteUserCustomTable extends BaseTable
         $tag = __CLASS__ . "->" . __FUNCTION__;
         $status = Zaly\Proto\Core\UserCustomStatus::UserCustomRegisterRequired;
         $customInfo = $this->ctx->SiteCustomTable->queryCustomInfo($this->customKeyType, $status, $tag);
-        $this->logger->error("==============", "customInfo for register=" . var_export($customInfo, true));
+
         return $customInfo;
     }
 

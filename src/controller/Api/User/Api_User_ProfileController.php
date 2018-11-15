@@ -80,17 +80,23 @@ class Api_User_ProfileController extends BaseController
 
     private function getUserCustomProfile($userId)
     {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
         $customs = [];
-        $customProfiles = $this->ctx->SiteUserCustomTable->queryAllCustomProfile($userId);
 
-        if ($customProfiles) {
-            $userCustom = new Zaly\Proto\Core\CustomUserProfile();
-            foreach ($customProfiles as $customKey => $customValue) {
-                $userCustom->setCustomKey($customKey);
-//                $userCustom->setCustomName($profile['keyName']);
-                $userCustom->setCustomValue($customValue);
-                $customs[] = $userCustom;
+        try {
+            $customProfiles = $this->ctx->SiteUserCustomTable->queryAllCustomProfile($userId);
+            $customNameArray = $this->ctx->SiteUserCustomTable->getColumnNames();
+            if ($customProfiles) {
+                $userCustom = new Zaly\Proto\Core\CustomUserProfile();
+                foreach ($customProfiles as $customKey => $customValue) {
+                    $userCustom->setCustomKey($customKey);
+                    $userCustom->setCustomName($customNameArray[$customKey]);
+                    $userCustom->setCustomValue(isset($customValue) ? $customValue : "");
+                    $customs[] = $userCustom;
+                }
             }
+        } catch (Exception $e) {
+            $this->logger->error($tag, $e);
         }
 
         return $customs;
