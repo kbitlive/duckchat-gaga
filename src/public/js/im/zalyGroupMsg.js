@@ -504,10 +504,10 @@ function handlePluginListHtml(results)
     if(results.hasOwnProperty("list") && results.list) {
         var list = results.list;
         var listLength = list.length;
-        var displayPlugin = localStorage.getItem(defaultPluginDisplay);
         for(var i=0;i<listLength;i++) {
             var plugin = list[i];
             var logo = false;
+            var displayPlugin = localStorage.getItem(defaultPluginDisplay);
             if(!displayPlugin || displayPlugin == null) {
                 localStorage.setItem(defaultPluginDisplay,plugin.id);
             }
