@@ -46,7 +46,7 @@ class Api_Site_LoginController extends \BaseController
             $devicePubkPem = trim($request->getDevicePubkPem());
 
             //get user profile from platform clientSiteType=1:mobile client
-            $clientType = $this->getUserClient();
+            $clientType = $this->getUserClient($devicePubkPem);
 
             if (empty($preSessionId) || (empty($devicePubkPem) && Zaly\Proto\Core\UserClientType::UserClientWeb != $clientType)) {
                 throw new Exception("with error parameters");
@@ -77,14 +77,15 @@ class Api_Site_LoginController extends \BaseController
 
             $userProfile = $this->ctx->Site_Login->doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $customData);
 
-            if($clientType == \Zaly\Proto\Core\UserClientType::UserClientWeb) {
-                setcookie($this->siteCookieName, $userProfile["sessionId"], time() + $this->cookieTimeOut, "/", "", false, true);
-            }
             $realSessionId = $userProfile['sessionId'];
             $response = $this->buildApiSiteLoginResponse($userProfile, $realSessionId);
 
-            //clearLimitSession
-            $this->clearLimitSession($userProfile['userId'], $userProfile['deviceId']);
+            if ($clientType == \Zaly\Proto\Core\UserClientType::UserClientWeb) {
+                setcookie($this->siteCookieName, $userProfile["sessionId"], time() + $this->cookieTimeOut, "/", "", false, true);
+            } else {
+                //clearLimitSession
+                $this->clearLimitSession($userProfile['userId'], $userProfile['deviceId']);
+            }
             //back to request
             $this->setRpcError($this->defaultErrorCode, "");
             $this->rpcReturn($transportData->getAction(), $response);
@@ -175,15 +176,20 @@ class Api_Site_LoginController extends \BaseController
 
     }
 
-    private function getUserClient()
+    private function getUserClient($devicePubkPem)
     {
-        $userAgent = $this->getUserAgent();
-        error_log("=================client userAgent=" . $userAgent);
-        if (empty($userAgent) || strstr($userAgent, "DuckChat")) {
-            return Zaly\Proto\Core\UserClientType::UserClientMobileApp;
-        } else {
+        if (empty($devicePubkPem)) {
             return Zaly\Proto\Core\UserClientType::UserClientWeb;
+        } else {
+            return Zaly\Proto\Core\UserClientType::UserClientMobileApp;
         }
+//        $userAgent = $this->getUserAgent();
+//        error_log("=================client userAgent=" . $userAgent);
+//        if (empty($userAgent) || strstr($userAgent, "DuckChat")) {
+//            return Zaly\Proto\Core\UserClientType::UserClientMobileApp;
+//        } else {
+//            return Zaly\Proto\Core\UserClientType::UserClientWeb;
+//        }
     }
 }
 
