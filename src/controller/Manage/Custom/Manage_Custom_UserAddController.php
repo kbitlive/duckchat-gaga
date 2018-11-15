@@ -49,6 +49,7 @@ class Manage_Custom_UserAddController extends Manage_ServletController
 
         $isOpen = trim($_POST['isOpen']);
         $isRequired = trim($_POST['isRequired']);
+        $keyConstraint = trim($_POST['keyConstraint']);
 
         $pinyin = new \Overtrue\Pinyin\Pinyin();
         $customKey = $pinyin->permalink($customName, "");
@@ -60,6 +61,7 @@ class Manage_Custom_UserAddController extends Manage_ServletController
             'status' => $status,
             'isOpen' => $isOpen ? 1 : 0,
             'isRequired' => $isRequired ? 1 : 0,
+            'keyConstraint' => $keyConstraint ? "index" : "",
         ];
 
         if ($this->addUserCustomKey($customs)) {
