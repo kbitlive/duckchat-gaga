@@ -66,65 +66,35 @@ class Page_Passport_LoginController extends HttpBaseController
         $loginBackgroundImageDisplay = isset($loginBackgroundImageDisplayConfig["configValue"]) ? $loginBackgroundImageDisplayConfig["configValue"] : "";
 
         $siteVersionName = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionNameKey);
-
-        $loginNameMinLengthConfig = isset($loginConfig[LoginConfig::LOGINNAME_MINLENGTH]) ? $loginConfig[LoginConfig::LOGINNAME_MINLENGTH] : "";
-        $loginNameMinLength = isset($loginNameMinLengthConfig["configValue"]) ? $loginNameMinLengthConfig["configValue"] : 5;
-
-        $loginNameMaxLengthConfig = isset($loginConfig[LoginConfig::LOGINNAME_MAXLENGTH]) ? $loginConfig[LoginConfig::LOGINNAME_MAXLENGTH] : "";
-        $loginNameMaxLength = isset($loginNameMaxLengthConfig["configValue"]) ? $loginNameMaxLengthConfig["configValue"] : 32;
-
-        $pwdMaxLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MAXLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MAXLENGTH] : "";
-        $pwdMaxLength = isset($pwdMaxLengthConfig["configValue"]) ? $pwdMaxLengthConfig["configValue"] : 32;
-
-        $pwdMinLengthConfig = isset($loginConfig[LoginConfig::PASSWORD_MINLENGTH]) ? $loginConfig[LoginConfig::PASSWORD_MINLENGTH] : "";
-        $pwdMinLength = isset($pwdMinLengthConfig["configValue"]) ? $pwdMinLengthConfig["configValue"] : 6;
-
-        $pwdContainCharactersConfig = isset($loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS]) ? $loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS] : "";
-        $pwdContainCharacters = isset($pwdContainCharactersConfig["configValue"]) ? $pwdContainCharactersConfig["configValue"] : "";
-
         $thirdPartyLoginOptions = ZalyLogin::getThirdPartyConfigWithoutVerifyUrl();
 
         $enableInvitationCode = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_INVITATION_CODE);
         $enableRealName = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_REAL_NAME);
 
+        $title = ZalyText::getText("text.login", $this->language)."-".$siteName;
+
         $params = [
-            'siteName' => $siteName,
-            'siteLogo' => $this->ctx->File_Manager->getCustomPathByFileId($siteLogo),
-            'siteVersionName' => $siteVersionName,
+            'title' => $title,
+            'siteLogo'   => $this->ctx->File_Manager->getCustomPathByFileId($siteLogo),
             'isDuckchat' => $isDuckchat,
+            'siteVersionName'  => $siteVersionName,
             'loginWelcomeText' => $loginWelcomeText,
             'loginBackgroundColor' => $loginBackgroundColor,
             'loginBackgroundImage' => $this->ctx->File_Manager->getCustomPathByFileId($loginBackgroundImage),
 
-            "pwdMaxLength" => $pwdMaxLength,
-            "pwdMinLength" => $pwdMinLength,
-            "loginNameMinLength" => $loginNameMinLength,
-            "loginNameMaxLength" => $loginNameMaxLength,
-            'passwordResetRequired' => $passwordResetRequired,
-            "pwdContainCharacters" => $pwdContainCharacters,
-
             'loginBackgroundImageDisplay' => $loginBackgroundImageDisplay,
 
-            'loginNameAlias' => $loginNameAlias,
-            'passwordFindWay' => $passwordRestWay,
+            'loginNameAlias'   => $loginNameAlias,
+            'passwordFindWay'  => $passwordRestWay,
             'passwordResetWay' => $passwordRestWay,
-            'passwordResetRequired' => $passwordResetRequired,
-            'thirdPartyLoginOptions' => json_encode($thirdPartyLoginOptions),
+            'passwordResetRequired'  => $passwordResetRequired,
+            'thirdPartyLoginOptions' => $thirdPartyLoginOptions,
 
             'enableInvitationCode' => $enableInvitationCode,
-            'enableRealName' => $enableRealName,
-            '$registerCustoms' => $this->getRegisterCustoms(),
+            'enableRealName'       => $enableRealName,
         ];
         echo $this->display("passport_login", $params);
         return;
-    }
-
-    //获取注册
-    private function getRegisterCustoms()
-    {
-        $registerCustoms = $this->ctx->SiteUserCustomTable->getColumnInfosForRegister();
-        error_log("========user customs for register = " . var_export($registerCustoms, true));
-        return $registerCustoms;
     }
 
 }

@@ -154,9 +154,9 @@
             {{if roomType == "MessageRoomGroup"}}
                 <div class="msg-nickname-time">
                     {{if isMaster}}
-                    <div class="chat_master_tip" style="align-items: center;padding-bottom: 2px;">
-                        站长
-                    </div>
+                        <div  style="align-items: center; display: flex;justify-content: center;">
+                            <span class="chat_master_tip">站长</span>
+                        </div>
                     {{/if}}
                     <div class="msg-nickname nickname_{{userId}}">{{nickname}}</div>
                 </div>
@@ -187,8 +187,8 @@
 
             <div class="msg-nickname-time">
                 {{if isMaster}}
-                <div class="chat_master_tip" style="align-items: center;padding-bottom: 2px;">
-                    站长
+                <div  style="align-items: center; display: flex;justify-content: center;">
+                    <span class="chat_master_tip">站长</span>
                 </div>
                 {{/if}}
                 <div class="msg-nickname nickname_{{userId}}">{{nickname}}</div>
@@ -225,8 +225,8 @@
                 {{if roomType == "MessageRoomGroup"}}
                     <div class="msg-nickname-time">
                         {{if isMaster}}
-                        <div class="chat_master_tip" style="align-items: center;padding-bottom: 2px;">
-                            站长
+                        <div  style="align-items: center; display: flex;justify-content: center;">
+                            <span class="chat_master_tip">站长</span>
                         </div>
                         {{/if}}
                         <div class="msg-nickname nickname_{{userId}}">{{nickname}}</div>
@@ -277,17 +277,17 @@
 
 
 <script id="tpl-receive-msg-text" type="text/html">
-    <div class="msg-row msg-left msg-text msg-id-{{msgId}}" id="msg-row-{{msgId}}"> <div class="msg-avatar ">{{if avatar}} <img class="{{groupUserImg}} user-info-avatar " src="{{avatar}}" onerror="this.src='../../public/img/msg/default_user.png'" userId="{{userId}}"  msgId="{{msgId}}"/>{{else}} <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/> {{/if}}</div> <div class="right-msg-body  text-align-left " > {{if roomType == "MessageRoomGroup"}} <div class="msg-nickname-time">  {{if isMaster}} <div class="chat_master_tip" style="align-items: center;padding-bottom: 2px;"> 站长 </div> {{/if}}<div class="msg-nickname nickname_{{userId}}">{{nickname}}</div> </div> <div class="msg-content hint--bottom msg_content_for_click" msgId="{{msgId}}" msgType="{{msgType}}" aria-label="{{msgTime}}"> {{else}} <div class="msg-content hint--bottom msg_content_for_click" msgId="{{msgId}}" msgType="{{msgType}}" aria-label="{{msgTime}}" style="margin-top: 1rem;"> {{/if}} <div class="text-align-left msgContent text-align-right-text"><pre class="msg_content_for_handle" msg_content_for_handle="msg_content_for_handle">{{msgContent}}</div> </div> </div> </div>
+    <div class="msg-row msg-left msg-text msg-id-{{msgId}}" id="msg-row-{{msgId}}"> <div class="msg-avatar ">{{if avatar}} <img class="{{groupUserImg}} user-info-avatar " src="{{avatar}}" onerror="this.src='../../public/img/msg/default_user.png'" userId="{{userId}}"  msgId="{{msgId}}"/>{{else}} <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/> {{/if}}</div> <div class="right-msg-body  text-align-left " > {{if roomType == "MessageRoomGroup"}} <div class="msg-nickname-time">  {{if isMaster}} <div  style="align-items: center; display: flex;justify-content: center;"> <span class="chat_master_tip">站长</span> </div> {{/if}}<div class="msg-nickname nickname_{{userId}}">{{nickname}}</div> </div> <div class="msg-content hint--bottom msg_content_for_click msg_content_for_click_{{msgId}}" msgId="{{msgId}}" msgType="{{msgType}}" aria-label="{{msgTime}}"> {{else}} <div class="msg-content hint--bottom msg_content_for_click" msgId="{{msgId}}" msgType="{{msgType}}" aria-label="{{msgTime}}" style="margin-top: 1rem;"> {{/if}} <div class="text-align-left msgContent text-align-right-text"><pre class="msg_content_for_handle" msg_content_for_handle="msg_content_for_handle">{{msgContent}}</div> </div> </div> </div>
 </script>
 
 
 <script id="tpl-receive-msg-audio" type="text/html">
-    <div class="msg-row msg-left msg-text msg-id-{{msgId}}" id="msg-row-{{msgId}}"> <div class="msg-avatar "> {{if avatar}}<img class="{{groupUserImg}} user-info-avatar" src="{{avatar}}" onerror="this.src='../../public/img/msg/default_user.png'" userId="{{userId}}"  msgId="{{msgId}}"/>{{else}}<img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/>{{/if}} </div> <div class="right-msg-body  text-align-left " > {{if roomType == "MessageRoomGroup"}} <div class="msg-nickname-time">  {{if isMaster}} <div class="chat_master_tip" style="align-items: center;padding-bottom: 2px;"> 站长 </div> {{/if}}<div class="msg-nickname nickname_{{userId}}">{{nickname}}</div> </div> <div class="msg-content hint--bottom" aria-label="{{msgTime}}"> {{else}} <div class="msg-content hint--bottom" aria-label="{{msgTime}}" style="margin-top: 1rem;"> {{/if}} <div class="text-align-left msgContent text-align-right-text">[你收到一条语音消息，<span style="color: #4C3BB1;cursor: pointer" onclick="displayDownloadApp()">下载客户端</span>收听语音消息吧！]</div> </div> </div> </div>
+    <div class="msg-row msg-left msg-text msg-id-{{msgId}}" id="msg-row-{{msgId}}"> <div class="msg-avatar "> {{if avatar}}<img class="{{groupUserImg}} user-info-avatar" src="{{avatar}}" onerror="this.src='../../public/img/msg/default_user.png'" userId="{{userId}}"  msgId="{{msgId}}"/>{{else}}<img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/>{{/if}} </div> <div class="right-msg-body  text-align-left " > {{if roomType == "MessageRoomGroup"}} <div class="msg-nickname-time"> {{if isMaster}} <div  style="align-items: center; display: flex;justify-content: center;"> <span class="chat_master_tip">站长</span> </div> {{/if}}<div class="msg-nickname nickname_{{userId}}">{{nickname}}</div> </div> <div class="msg-content hint--bottom" aria-label="{{msgTime}}"> {{else}} <div class="msg-content hint--bottom" aria-label="{{msgTime}}" style="margin-top: 1rem;"> {{/if}} <div class="text-align-left msgContent text-align-right-text">[你收到一条语音消息，<span style="color: #4C3BB1;cursor: pointer" onclick="displayDownloadApp()">下载客户端</span>收听语音消息吧！]</div> </div> </div> </div>
 </script>
 
 
 <script id="tpl-receive-msg-default" type="text/html">
-    <div class="msg-row msg-left msg-text msg-id-{{msgId}}" id="msg-row-{{msgId}}"> <div class="msg-avatar "> {{if avatar}}<img class="{{groupUserImg}} user-info-avatar " src="{{avatar}}" onerror="this.src='../../public/img/msg/default_user.png'" userId="{{userId}}"  msgId="{{msgId}}"/>{{else}}<img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/>{{/if}} </div> <div class="right-msg-body  text-align-left " > {{if roomType == "MessageRoomGroup"}} <div class="msg-nickname-time">  {{if isMaster}} <div class="chat_master_tip" style="align-items: center;padding-bottom: 2px;"> 站长 </div> {{/if}}<div class="msg-nickname nickname_{{userId}}">{{nickname}}</div> </div> <div class="msg-content hint--bottom" aria-label="{{msgTime}}"> {{else}} <div class="msg-content hint--bottom" aria-label="{{msgTime}}" style="margin-top: 1rem;"> {{/if}} <div class="text-align-left msgContent text-align-right-text">{{msgContent}}</div> </div> </div> </div>
+    <div class="msg-row msg-left msg-text msg-id-{{msgId}}" id="msg-row-{{msgId}}"> <div class="msg-avatar "> {{if avatar}}<img class="{{groupUserImg}} user-info-avatar " src="{{avatar}}" onerror="this.src='../../public/img/msg/default_user.png'" userId="{{userId}}"  msgId="{{msgId}}"/>{{else}}<img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/>{{/if}} </div> <div class="right-msg-body  text-align-left " > {{if roomType == "MessageRoomGroup"}} <div class="msg-nickname-time"> {{if isMaster}} <div  style="align-items: center; display: flex;justify-content: center;"> <span class="chat_master_tip">站长</span> </div> {{/if}}<div class="msg-nickname nickname_{{userId}}">{{nickname}}</div> </div> <div class="msg-content hint--bottom" aria-label="{{msgTime}}"> {{else}} <div class="msg-content hint--bottom" aria-label="{{msgTime}}" style="margin-top: 1rem;"> {{/if}} <div class="text-align-left msgContent text-align-right-text">{{msgContent}}</div> </div> </div> </div>
 </script>
 
 <script id="tpl-chatSession" type="text/html">
@@ -330,7 +330,7 @@
             <div class="chatsession-row-title ">
                 <div style="display: flex;justify-content: center;align-items: center">
                     {{if isSiteMaster }}
-                    <div style="width:28px;height:14px;background:rgba(249,183,38,1); text-align:center; border-radius:2px;font-size:10px; font-family:PingFangSC-Regular; font-weight:400; color:rgba(255,255,255,0.87); line-height:14px;">站长</div>
+                    <div style="width:28px;height:14px;background:rgba(249,183,38,1); text-align:center; border-radius:2px;font-size:10px; font-family:PingFangSC-Regular; font-weight:400; color:rgba(255,255,255,0.87); line-height:14px;margin-right: 0.5rem;">站长</div>
                     {{/if}}
                     <span class="nickname_{{chatSessionId}}"> {{name}}</span>
 
@@ -445,29 +445,33 @@
 
 <script id="tpl-msg-menu" type="text/html">
     <div id="msg-menu" style="position: absolute;top:{{top}}px; left:{{left}}px"  msgId="{{msgId}}">
-        {{ if isCopy }}
-        <div class="item p-2"  onclick="copyMsg('{{msgId}}', event)" data-local-value="openChatTip">复制</div>
-        {{/if}}
-        {{if isSee }}
-        <div class="item p-2" onclick="seeMsg('{{msgId}}', event)" data-local-value="openChatTip">查看大图</div>
-        {{/if}}
-        {{ if isSave }}
-        <div class="item p-2" onclick="downloadMsg('{{msgId}}', event)" data-local-value="openChatTip">下载</div>
-        {{/if}}
-        {{ if isRecall }}
-            {{if recallDisabled }}
-                <div class="item p-2" style="background-color: #cccccc" disabled  data-local-value="撤回">撤回</div>
-            {{else}}
-                <div class="item p-2" onclick="recallMsg('{{msgId}}', event)"   data-local-value="撤回">撤回</div>
+
+        <div style="margin-top:1rem;margin-bottom: 1rem;">
+            {{ if isCopy }}
+            <div class="item p-2"  onclick="copyMsg('{{msgId}}', event)" data-local-value="copyTip">复制</div>
             {{/if}}
-        {{/if}}
+            {{if isSee }}
+            <div class="item p-2" onclick="seeMsg('{{msgId}}', event)" data-local-value="seeBigImgTip">查看大图</div>
+            {{/if}}
+            {{ if isSave }}
+            <div class="item p-2" onclick="downloadMsg('{{msgId}}', event)" data-local-value="downloadTip">下载</div>
+            {{/if}}
+            {{ if isRecall }}
+            {{if recallDisabled }}
+            <div class="item p-2" style="color:rgba(180,180,180,1);" disabled  data-local-value="disableRecallTip">撤回</div>
+            {{else}}
+            <div class="item p-2" onclick="recallMsg('{{msgId}}', event)"   data-local-value="recallTip">撤回</div>
+            {{/if}}
+            {{/if}}
+        </div>
     </div>
+
 
 </script>
 
 
 <script id="tpl-self-info" type="text/html">
-<div id="selfInfo" >
+<div id="selfInfo" style="z-index: 10001;">
     <div id="triangle_left"></div>
     <div id="selfInfoDiv" class="selfInfoDiv siteSelfInfo" style="position: absolute;width: 100%;">
         <div id="selfAvatarUploadDiv" class="d-flex flex-row justify-content-center" style="margin-top: 3rem; text-align: center;position: relative" >
@@ -488,7 +492,7 @@
              <input type="text"    style="padding: 0rem;" class="loginName create_group_box_div_input siteSelfInfo"  value="ID: {{loginName}}" disabled>
         </div>
         {{if isMaster}}
-            <div class="d-flex flex-row siteSelfInfo" style="display: flex;justify-content: center;align-items: center;text-align: center;" >
+            <div class="d-flex flex-row siteSelfInfo" style="display: flex;justify-content: center;align-items: center;text-align: center;margin-bottom: 0.5rem;" >
                 <div class="siteSelfInfo master_tip">
                     站长
                 </div>

@@ -478,7 +478,7 @@ function handleSyncMsg(msg)
         if(msg.type == MessageType.MessageRecall) {
             try{
                 var msgId = msg['recall'].msgId;
-                var msgContent = msg["recall"].msgText ? msg["recall"].msgText : loginName +" recall msg";
+                var msgContent = msg["recall"].msgText ? msg["recall"].msgText :  +"此消息被撤回";
                 var html = template("tpl-receive-msg-notice", {
                     msgContent:msgContent,
                     timeServer:msg.timeServer
@@ -1056,6 +1056,15 @@ function trimMsgContentBr(html)
     html = html.replace(new RegExp('^\\<br>+', 'g'), '');
     html = html.replace(new RegExp('\\<br>+$', 'g'), '');
     html = html.replace(new RegExp('&#38;','g'),"&");
+    return html;
+}
+
+
+//replace \n from html
+function trimMsgContentNewLine(html)
+{
+    html = html.replace(new RegExp('<br>','g'),"\n");
+    html = html.replace(new RegExp('&amp;','g'),"&");
     return html;
 }
 

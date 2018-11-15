@@ -8,7 +8,7 @@
 
 class Manage_Security_LogController extends Manage_CommonController
 {
-    private $defaultPageSize = 20;
+    private $defaultPageSize = 200;
     public function doRequest()
     {
         $method = strtolower($_SERVER['REQUEST_METHOD']);
@@ -28,8 +28,6 @@ class Manage_Security_LogController extends Manage_CommonController
                    echo $this->truncateLogs();
                    break;
            }
-
-
         }
         return;
     }

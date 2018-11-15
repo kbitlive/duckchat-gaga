@@ -249,4 +249,3 @@ isPreSyncingMsgTime="";
 
 
 soundNotificationKey = "sound_notification";
-

@@ -25,15 +25,8 @@ class Api_Passport_PasswordUpdateInvitationCodeController extends BaseController
         $tag = __CLASS__ . '-' . __FUNCTION__;
         try{
             $invitationCode = $request->getInvitationCode();
-            $sitePubkPem = $request->getSitePubkPem();
             $preSessionId = $request->getPreSessionId();
-
-            if(!$sitePubkPem || strlen($sitePubkPem) < 0) {
-                $errorCode = $this->zalyError->errorSitePubkPem;
-                $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("sitePubkPem  is  not exists");
-            }
+            $sitePubkPem =  $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_ID_PUBK_PEM);
 
             if(strlen($invitationCode) < 0 ) {
                 $errorCode = $this->zalyError->errorUpdateInvitation;

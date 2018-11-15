@@ -28,14 +28,6 @@ class Api_Passport_PasswordLoginController extends Api_Passport_PasswordBase
             $loginName = $request->getLoginName();
             $password = $request->getPassword();
             $sitePubkPem =  $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_ID_PUBK_PEM);
-
-            if (!$sitePubkPem || strlen($sitePubkPem) < 0) {
-                $errorCode = $this->zalyError->errorSitePubkPem;
-                $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("sitePubkPem  is  not exists");
-            }
-
             $user = $this->verifyUserInfo($loginName, $password);
             $preSessionId = $this->generatePreSessionId($user, $sitePubkPem);
 

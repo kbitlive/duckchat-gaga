@@ -72,43 +72,48 @@ function showOtherWebNotification()
         }
     }
 }
-
+var isDisplayFrontPage = false;
 
 function displayFrontPage()
 {
     try{
-        var configStr = localStorage.getItem(siteConfigKey);
-        var config = JSON.parse(configStr);
-        if(config.hasOwnProperty("hiddenHomePage") && config['hiddenHomePage'] == true) {
-            var isMaster = isJudgeSiteMasters(token);
-            if(!isMaster) {
-                $(".l-sb-item[data='home']")[0].style.display="none";
-            }
-        } else {
-            //1:Home 2:Chats 3:Contacts friend 4:Me
-            if(config.hasOwnProperty('frontPage')) {
-                var frontPage = config['frontPage'];
-                switch (frontPage) {
-                    case "FrontPageChats":
-                        $(".l-sb-item[data='chatSession']").click();
-                        break;
-                    case "FrontPageContacts":
-                        $(".l-sb-item[data='friend']").click();
-                        break;
-                    default:
-                        $(".l-sb-item[data='home']").click();
+        if(isDisplayFrontPage == false) {
+            isDisplayFrontPage = true;
+            var configStr = localStorage.getItem(siteConfigKey);
+            var config = JSON.parse(configStr);
+            if(config.hasOwnProperty("hiddenHomePage") && config['hiddenHomePage'] == true) {
+                var isMaster = isJudgeSiteMasters(token);
+                if(!isMaster) {
+                    $(".l-sb-item[data='home']")[0].style.display="none";
                 }
             } else {
-                $(".l-sb-item[data='home']").click();
+                //1:Home 2:Chats 3:Contacts friend 4:Me
+                if(config.hasOwnProperty('frontPage')) {
+                    var frontPage = config['frontPage'];
+                    switch (frontPage) {
+                        case "FrontPageChats":
+                            $(".l-sb-item[data='chatSession']").click();
+                            break;
+                        case "FrontPageContacts":
+                            $(".l-sb-item[data='friend']").click();
+                            break;
+                        default:
+                            $(".l-sb-item[data='home']").click();
+                    }
+                } else {
+                    $(".l-sb-item[data='home']").click();
+                }
+                $(".l-sb-item[data='home']")[0].style.display="flex";
             }
-            $(".l-sb-item[data='home']")[0].style.display="flex";
         }
+
     }catch (error){
         $(".l-sb-item[data='chatSession']").click();
     }
 
     jump();
 }
+
 
 
 uploadSelfAvatar = false;
@@ -558,10 +563,27 @@ $(document).on("click", ".plugin-info", function () {
     localStorage.setItem(defaultPluginDisplay, pluginId);
     $(".title").html(name);
     $(".plugin-src").attr("src", landingPageUrl);
+    $(".plugin-src").attr("id", "plugin_id_"+pluginId);
+    setPluginTitle(pluginId);
     $(".open_new_page").attr("landingPageUrl", landingPageUrl);
     deleteCookie("duckchat_page_url");
     setCookie("duckchat_sessionid", duckchatSessionId, 1 );
 });
+
+
+function setPluginTitle(pluginId)
+{
+    var iframe = document.getElementById("plugin_id_"+pluginId);
+    try{
+        iframe.onload = function (ev) {
+            var pluginTitle = iframe.contentWindow.document.title;
+            $(".plugin-title").html(pluginTitle);
+        }
+    }catch (error){
+
+    }
+
+}
 
 $(document).on("click", ".open_new_page", function () {
     var landingPageUrl = $(this).attr("landingPageUrl");
@@ -634,12 +656,21 @@ $(document).on("click", ".chat_plugin", function () {
 });
 
 
+
 $(document).on("click", ".plugin_back", function () {
     try{
+        var pluginId =  $(".plugin-iframe").attr("id");
         $(".plugin-iframe")[0].contentWindow.history.go(-1); // back
-        $(".plugin-iframe")[0].contentWindow.onload();
+        setPluginTitle(pluginId);
+        var onReload = false;
+        $(".plugin-iframe")[0].onload = function() {
+            if( onReload == false) {
+                $(".plugin-iframe")[0].contentWindow.self.location.reload(true);
+                onReload = true;
+            }
+        }
     }catch (error){
-
+        console.log(error);
     }
 });
 
@@ -851,7 +882,6 @@ function setDocumentTitle()
                     if(Number(iconNum%2) == 0) {
                         $(".icon").attr("href", "favicon.ico?_v="+intervalId);
                     } else {
-                        console.log("tip.png?_v="+intervalId)
                         $(".icon").attr("href", "tip.png?_v="+intervalId);
                     }
                     iconNum = Number(iconNum+1);
@@ -3761,8 +3791,15 @@ $(document).on("click", ".clear_room_chat", function () {
     var roomId = localStorage.getItem(chatSessionIdKey);
     var tip = languageNum == UserClientLangZH ?  "将删除聊天记录，确认？" : "Sure?" ;
     if(confirm(tip)) {
-        $(".right-chatbox").html("");
         clearRoomMsgFromRoomList(roomId);
+
+       try{
+           $(".msg-row").each(function (index, target) {
+               $(target).remove();
+           });
+       }catch (error) {
+
+       }
     }
 });
 
@@ -3991,8 +4028,6 @@ function sortRoomList(jqElement)
 }
 
 $(document).bind("contextmenu", ".msg_content_for_click", function(event){
-
-
     var msgId = $(event.target).attr("msgId");
     var msgType = $(event.target).attr("msgType");
     var sendtime = $(event.target).attr("sendtime");
@@ -4057,7 +4092,7 @@ $(document).bind("contextmenu", ".msg_content_for_click", function(event){
         top:clientY,
         recallDisabled:recallDisabled
     });
-
+    html = handleHtmlLanguage(html);
     $(trueTarget).append(html);
     return false;
 });
@@ -4078,6 +4113,7 @@ function copyMsg( msgId, event) {
 
         $(".msg_content_for_click_"+msgId)[0].addEventListener('copy', function (e) {
             var value = $(this).find("pre").html();
+            value = trimMsgContentNewLine(value);
             e.preventDefault();
             if (e.clipboardData) {
                 e.clipboardData.setData('text/plain', value);
@@ -4121,7 +4157,7 @@ function recallMsg(msgId,event) {
     event.stopPropagation();
     var chatSessionId = localStorage.getItem(chatSessionIdKey);
     var chatSessionType = localStorage.getItem(chatSessionId)
-    var msgText = loginName + " recall msg";
+    var msgText = "此消息被撤回";
     sendRecallMsg(msgId, msgText, chatSessionId, chatSessionType);
 }
 
