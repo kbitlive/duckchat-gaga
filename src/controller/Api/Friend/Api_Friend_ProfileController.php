@@ -101,8 +101,8 @@ class Api_Friend_ProfileController extends BaseController
             $customProfiles = $this->ctx->SiteUserCustomTable->queryOpenCustomProfile($friendId);
             $customKeyNames = $this->ctx->SiteUserCustomTable->getColumnNames();
             if ($customProfiles) {
-                $userCustom = new Zaly\Proto\Core\CustomUserProfile();
                 foreach ($customProfiles as $customKey => $customValue) {
+                    $userCustom = new Zaly\Proto\Core\CustomUserProfile();
                     $userCustom->setCustomKey($customKey);
                     $userCustom->setCustomName($customKeyNames[$customKey]);
                     $userCustom->setCustomValue($customValue);
