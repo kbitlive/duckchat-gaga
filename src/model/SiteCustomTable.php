@@ -95,6 +95,8 @@ class SiteCustomTable extends BaseTable
             $sql .= " and isOpen=:isOpen ";
         }
 
+        $sql .= " order by keySort ASC;";
+
         try {
             $prepare = $this->dbSlave->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
