@@ -467,7 +467,7 @@
 
 
 <script id="tpl-self-info" type="text/html">
-<div id="selfInfo" >
+<div id="selfInfo" style="z-index: 10001;">
     <div id="triangle_left"></div>
     <div id="selfInfoDiv" class="selfInfoDiv siteSelfInfo" style="position: absolute;width: 100%;">
         <div id="selfAvatarUploadDiv" class="d-flex flex-row justify-content-center" style="margin-top: 3rem; text-align: center;position: relative" >

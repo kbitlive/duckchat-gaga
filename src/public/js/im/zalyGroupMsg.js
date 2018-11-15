@@ -3766,8 +3766,15 @@ $(document).on("click", ".clear_room_chat", function () {
     var roomId = localStorage.getItem(chatSessionIdKey);
     var tip = languageNum == UserClientLangZH ?  "将删除聊天记录，确认？" : "Sure?" ;
     if(confirm(tip)) {
-        $(".right-chatbox").html("");
         clearRoomMsgFromRoomList(roomId);
+
+       try{
+           $(".msg-row").each(function (index, target) {
+               $(target).remove();
+           });
+       }catch (error) {
+           
+       }
     }
 });
 
