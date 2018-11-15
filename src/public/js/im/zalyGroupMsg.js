@@ -915,8 +915,6 @@ function logout(event)
 }
 
 
-
-
 //------------------------------------*********Group function*********--------------------------------------------
 
 
@@ -3915,10 +3913,10 @@ function displayWaterMark()
    try{
        var configStr = localStorage.getItem(siteConfigKey);
        var config = JSON.parse(configStr);
-
+        var chatSessionId = localStorage.getItem(chatSessionIdKey);
        if(config.hasOwnProperty("openWaterMark") && config['openWaterMark']) {
-           var time  = Date.parse(new Date());
-           var params =  loginName +" "+crc32UserId+" "+time;
+           var time   = Date.parse(new Date());
+           var params =  loginName +" "+chatSessionId+" "+time;
            var data = { watermark_txt:params }
            watermark.load(data, $(".right-chatbox"));
        }
