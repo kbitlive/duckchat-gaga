@@ -4092,7 +4092,7 @@ $(document).bind("contextmenu", ".msg_content_for_click", function(event){
         top:clientY,
         recallDisabled:recallDisabled
     });
-
+    html = handleHtmlLanguage(html);
     $(trueTarget).append(html);
     return false;
 });

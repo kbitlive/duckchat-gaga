@@ -448,19 +448,19 @@
 
         <div style="margin-top:1rem;margin-bottom: 1rem;">
             {{ if isCopy }}
-            <div class="item p-2"  onclick="copyMsg('{{msgId}}', event)" data-local-value="openChatTip">复制</div>
+            <div class="item p-2"  onclick="copyMsg('{{msgId}}', event)" data-local-value="copyTip">复制</div>
             {{/if}}
             {{if isSee }}
-            <div class="item p-2" onclick="seeMsg('{{msgId}}', event)" data-local-value="openChatTip">查看大图</div>
+            <div class="item p-2" onclick="seeMsg('{{msgId}}', event)" data-local-value="seeBigImgTip">查看大图</div>
             {{/if}}
             {{ if isSave }}
-            <div class="item p-2" onclick="downloadMsg('{{msgId}}', event)" data-local-value="openChatTip">下载</div>
+            <div class="item p-2" onclick="downloadMsg('{{msgId}}', event)" data-local-value="downloadTip">下载</div>
             {{/if}}
             {{ if isRecall }}
             {{if recallDisabled }}
-            <div class="item p-2" style="color:rgba(180,180,180,1);" disabled  data-local-value="撤回">撤回</div>
+            <div class="item p-2" style="color:rgba(180,180,180,1);" disabled  data-local-value="disableRecallTip">撤回</div>
             {{else}}
-            <div class="item p-2" onclick="recallMsg('{{msgId}}', event)"   data-local-value="撤回">撤回</div>
+            <div class="item p-2" onclick="recallMsg('{{msgId}}', event)"   data-local-value="recallTip">撤回</div>
             {{/if}}
             {{/if}}
         </div>
