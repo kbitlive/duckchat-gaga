@@ -1059,6 +1059,15 @@ function trimMsgContentBr(html)
     return html;
 }
 
+
+//replace \n from html
+function trimMsgContentNewLine(html)
+{
+    html = html.replace(new RegExp('<br>','g'),"\n");
+    html = html.replace(new RegExp('&amp;','g'),"&");
+    return html;
+}
+
 function handleMsgContentText(str)
 {
     html = trimMsgContentBr(str);

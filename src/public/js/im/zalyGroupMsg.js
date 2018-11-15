@@ -72,43 +72,48 @@ function showOtherWebNotification()
         }
     }
 }
-
+var isDisplayFrontPage = false;
 
 function displayFrontPage()
 {
     try{
-        var configStr = localStorage.getItem(siteConfigKey);
-        var config = JSON.parse(configStr);
-        if(config.hasOwnProperty("hiddenHomePage") && config['hiddenHomePage'] == true) {
-            var isMaster = isJudgeSiteMasters(token);
-            if(!isMaster) {
-                $(".l-sb-item[data='home']")[0].style.display="none";
-            }
-        } else {
-            //1:Home 2:Chats 3:Contacts friend 4:Me
-            if(config.hasOwnProperty('frontPage')) {
-                var frontPage = config['frontPage'];
-                switch (frontPage) {
-                    case "FrontPageChats":
-                        $(".l-sb-item[data='chatSession']").click();
-                        break;
-                    case "FrontPageContacts":
-                        $(".l-sb-item[data='friend']").click();
-                        break;
-                    default:
-                        $(".l-sb-item[data='home']").click();
+        if(isDisplayFrontPage == false) {
+            isDisplayFrontPage = true;
+            var configStr = localStorage.getItem(siteConfigKey);
+            var config = JSON.parse(configStr);
+            if(config.hasOwnProperty("hiddenHomePage") && config['hiddenHomePage'] == true) {
+                var isMaster = isJudgeSiteMasters(token);
+                if(!isMaster) {
+                    $(".l-sb-item[data='home']")[0].style.display="none";
                 }
             } else {
-                $(".l-sb-item[data='home']").click();
+                //1:Home 2:Chats 3:Contacts friend 4:Me
+                if(config.hasOwnProperty('frontPage')) {
+                    var frontPage = config['frontPage'];
+                    switch (frontPage) {
+                        case "FrontPageChats":
+                            $(".l-sb-item[data='chatSession']").click();
+                            break;
+                        case "FrontPageContacts":
+                            $(".l-sb-item[data='friend']").click();
+                            break;
+                        default:
+                            $(".l-sb-item[data='home']").click();
+                    }
+                } else {
+                    $(".l-sb-item[data='home']").click();
+                }
+                $(".l-sb-item[data='home']")[0].style.display="flex";
             }
-            $(".l-sb-item[data='home']")[0].style.display="flex";
         }
+
     }catch (error){
         $(".l-sb-item[data='chatSession']").click();
     }
 
     jump();
 }
+
 
 
 uploadSelfAvatar = false;
@@ -4078,6 +4083,7 @@ function copyMsg( msgId, event) {
 
         $(".msg_content_for_click_"+msgId)[0].addEventListener('copy', function (e) {
             var value = $(this).find("pre").html();
+            value = trimMsgContentNewLine(value);
             e.preventDefault();
             if (e.clipboardData) {
                 e.clipboardData.setData('text/plain', value);
