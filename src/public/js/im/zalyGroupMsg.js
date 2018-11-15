@@ -2798,23 +2798,32 @@ function handleGetFriendProfile(result)
     var profile = result.profile;
 
     if(profile != undefined && profile["profile"]) {
-        var userProfile = profile["profile"];
+        try{
+            var userProfile = profile["profile"];
 
-        sessionStorage.removeItem(reqProfile+userProfile["userId"]);
+            sessionStorage.removeItem(reqProfile+userProfile["userId"]);
 
-        var userProfilekey = profileKey + userProfile["userId"];
-        userProfile['updateTime'] = Date.parse(new Date());
-        localStorage.setItem(userProfilekey, JSON.stringify(userProfile));
+            var userProfilekey = profileKey + userProfile["userId"];
+            userProfile['updateTime'] = Date.parse(new Date());
+            localStorage.setItem(userProfilekey, JSON.stringify(userProfile));
 
-        var muteKey = msgMuteKey + userProfile["userId"];
-        var mute = profile.mute ? 1 : 0;
-        localStorage.setItem(muteKey, mute);
+            var muteKey = msgMuteKey + userProfile["userId"];
+            var mute = profile.mute ? 1 : 0;
+            localStorage.setItem(muteKey, mute);
 
-        var relationKey = friendRelationKey + userProfile["userId"];
-        var relation = profile.relation == undefined ? FriendRelation.FriendRelationInvalid : profile.relation;
-        localStorage.setItem(relationKey, relation);
+            var relationKey = friendRelationKey + userProfile["userId"];
+            var relation = profile.relation == undefined ? FriendRelation.FriendRelationInvalid : profile.relation;
+            localStorage.setItem(relationKey, relation);
 
-        displayProfile(userProfile.userId, U2_MSG);
+            var customKey = friendCustomKey + userProfile["userId"];
+            if(profile.hasOwnProperty("custom")) {
+                localStorage.setItem(customKey, JSON.stringify(profile['custom']));
+            }
+            displayProfile(userProfile.userId, U2_MSG);
+
+        }catch (error) {
+
+        }
     }
 }
 
@@ -2920,18 +2929,22 @@ function displayCurrentProfile()
                 $(".nickname_"+chatSessionId).html(nickname);
                 $(".chatsession-title").html(nickname);
                 var isMaster = isJudgeSiteMasters(chatSessionId);
+                var customStr = localStorage.getItem(friendCustomKey+chatSessionId);
+                var customs = new Array();
+                if(customStr) {
+                    customs = JSON.parse(customStr);
+                }
                 var html = template("tpl-friend-profile", {
                     isMaster:isMaster,
                     nickname:nickname,
-                    loginName:friendProfile.loginName
+                    loginName:friendProfile.loginName,
+                    customs:customs
                 });
                 $(".user-desc-body").html(html);
             } else {
                 $(".chatsession-title").html("");
                 $(".user-desc-body").html("");
             }
-
-
 
             $(".chat_session_id_"+chatSessionId).addClass("chatsession-row-active");
             var relationKey = friendRelationKey + chatSessionId;
@@ -3181,6 +3194,7 @@ $(document).on("click", ".permission-join", function () {
 });
 
 $(document).on("click", ".mark_down", function () {
+    
     var isMarkDown = $(".mark_down").attr("is_on");
     if(isMarkDown == "on") {
         $(".mark_down").attr("is_on", "off");
@@ -3202,6 +3216,11 @@ $(document).on("click", ".imgDiv", function () {
     $(this).attr("src",  "../../public/img/msg/member_select.png");
     $(this).addClass("permission-join-select");
 });
+
+$(document).on("click", ".more-info", function () {
+    showWindow($("#more-info"));
+});
+
 
 
 //添加好友

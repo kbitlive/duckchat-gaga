@@ -219,6 +219,13 @@
                         </div>
                     </div>
 
+                    <div class="action-row action-row-disclosure more-info">
+                        <div class="action-title" data-local-value="moreInfoTip">更多资料</div>
+                        <div class="action-btn ">
+                            <img src="./public/img/msg/icon_disclosure.png" class="icon_discosure" />
+                        </div>
+                    </div>
+
                     <div class="action-row mute-friend">
                         <div class="action-title" data-local-value="muteTip">静音</div>
                         <div class="action-btn ">

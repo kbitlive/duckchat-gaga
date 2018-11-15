@@ -430,10 +430,14 @@
             url:"./index.php?action=miniProgram.gif.index&lang="+languageNum,
             data: reqData,
             success:function (data) {
-                data = JSON.parse(data);
-                if(data.errorCode == 'error.alert') {
-                    alert(data.errorInfo);
-                    return false;
+                try{
+                    data = JSON.parse(data);
+                    if(data.errorCode == 'error.alert') {
+                        alert(data.errorInfo);
+                        return false;
+                    }
+                }catch (error) {
+
                 }
                 if(type == addGifType) {
                     window.location.reload();

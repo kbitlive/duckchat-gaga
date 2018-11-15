@@ -250,7 +250,7 @@ function zalyjsApiSiteLogin() {
     var body = {
         "@type":  "type.googleapis.com/site.ApiSiteLoginRequest",
         "userCustoms" : zalyjsSiteLoginMessageBody['userCustoms'],
-        "devicePubkPem" :"11111",
+        "devicePubkPem" :"",
         "preSessionId":zalyjsSiteLoginMessageBody['sessionid'],
         "loginName":zalyjsSiteLoginMessageBody['loginName'],
         "isRegister":zalyjsSiteLoginMessageBody['isRegister'],

@@ -837,6 +837,26 @@ html, body{
     position: relative;
 }
 
+#more-info {
+    height:59rem;
+    width:39rem;
+    background:rgba(255,255,255,1);
+    box-shadow:0rem 0.19rem 2.53rem 0rem rgba(0,0,0,0.3);
+    cursor: pointer;
+}
+
+#more-info-title {
+    width:39.4rem;
+    height:4.69rem;
+    background:rgba(255,255,255,1);
+    box-shadow:0rem 0.09rem 0.38rem 0rem rgba(223,223,223,1);
+    font-size:1.88rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(27,27,27,1);
+    line-height:4.69rem;
+}
+
 #selfInfo {
     width:38.37rem;
     height:20rem;

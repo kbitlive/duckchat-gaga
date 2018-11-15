@@ -191,6 +191,7 @@ chatSessionIdKey = "chat_session_id";
 localPotiner    = "group_pointer_";
 profileKey = "profile_";
 friendRelationKey = "user_id_relation_";
+friendCustomKey = "user_custom_";
 msgMuteKey = "msg_mute_";
 msgUnReadMuteKey = "msg_unread_mute_";
 roomListMsgMuteUnReadNumKey = "room_list_msg_mute_unread_num";

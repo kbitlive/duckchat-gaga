@@ -94,6 +94,12 @@
         </div>
     </div>
 
+
+    <div id="more-info">
+
+    </div>
+
+
     <div id="add-friend-div">
 
     </div>
