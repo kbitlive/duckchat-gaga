@@ -138,7 +138,6 @@ jumpPage = $(".jumpPage").attr("data");
 jumpRoomType = $(".jumpRoomType").attr("data");
 jumpRoomId = $(".jumpRoomId").attr("data");
 jumpRelation = $(".jumpRelation").attr("data");
-crc32UserId = $(".crc32UserId").attr("data");
 
 function jump()
 {

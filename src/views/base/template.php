@@ -9,7 +9,6 @@
     <input type="hidden" data="<?php echo $jumpRoomId;?>" class="jumpRoomId" />
     <input type="hidden" data="<?php echo $jumpRoomType;?>" class="jumpRoomType" />
     <input type="hidden" data="<?php echo $jumpRelation;?>" class="jumpRelation" />
-    <input type="hidden" data="<?php echo $crc32UserId;?>" class="crc32UserId" />
 
     <div id="group-invite-people" class="pop-window pop-window-invite-people">
         <div class="pw-left">

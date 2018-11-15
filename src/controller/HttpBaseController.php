@@ -257,7 +257,6 @@ abstract class HttpBaseController extends \Wpf_Controller
         $params['versionCode'] = ZalyConfig::getConfig("siteVersionCode");
         $params['siteName'] = $siteName;
         $params['siteAddress'] = ZalyHelper::getRequestAddressPath();
-        $params['crc32UserId'] = crc32($this->userId);
         return parent::display($viewName, $params);
     }
 
