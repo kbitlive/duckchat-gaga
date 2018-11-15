@@ -563,10 +563,24 @@ $(document).on("click", ".plugin-info", function () {
     localStorage.setItem(defaultPluginDisplay, pluginId);
     $(".title").html(name);
     $(".plugin-src").attr("src", landingPageUrl);
+    $(".plugin-src").attr("id", "plugin_id_"+pluginId);
+    setPluginTitle(pluginId);
     $(".open_new_page").attr("landingPageUrl", landingPageUrl);
     deleteCookie("duckchat_page_url");
     setCookie("duckchat_sessionid", duckchatSessionId, 1 );
 });
+
+
+function setPluginTitle(pluginId)
+{
+    var iframe = document.getElementById("plugin_id_"+pluginId);
+    iframe.onload = function (ev) {
+        iframe.contentDocument.addEventListener("click", function (ev2) {
+            var pluginTitle = iframe.contentWindow.document.title;
+            $(".plugin-title").html(pluginTitle);
+        }, false);
+    }
+}
 
 $(document).on("click", ".open_new_page", function () {
     var landingPageUrl = $(this).attr("landingPageUrl");
@@ -639,12 +653,16 @@ $(document).on("click", ".chat_plugin", function () {
 });
 
 
+
 $(document).on("click", ".plugin_back", function () {
     try{
+        console.log();
+        var pluginId =  $(".plugin-iframe").attr("id");
         $(".plugin-iframe")[0].contentWindow.history.go(-1); // back
-        $(".plugin-iframe")[0].contentWindow.onload();
+        setPluginTitle(pluginId);
+        document.getElementById(pluginId).contentWindow.onload(1);
     }catch (error){
-
+        console.log(error);
     }
 });
 
@@ -3773,7 +3791,7 @@ $(document).on("click", ".clear_room_chat", function () {
                $(target).remove();
            });
        }catch (error) {
-           
+
        }
     }
 });
