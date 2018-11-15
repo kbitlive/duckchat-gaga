@@ -83,6 +83,9 @@ class SiteUserCustomTable extends BaseTable
             $this->handlePrepareError($tag, $prepare);
             $prepare->bindValue("userId", $userId);
             $result = $prepare->fetch(PDO::FETCH_ASSOC);
+
+            error_log("============get user custom profile=" . var_export($result, true));
+
             return $result;
         } finally {
             $this->logger->writeSqlLog($tag, $sql, [$userId], $startTime);
