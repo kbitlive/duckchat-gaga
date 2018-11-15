@@ -51,7 +51,7 @@
         </div>
         <div class="speaker-line"></div>
         <div class="speaker-content">
-            <div class="speaker-people-div" style="width: 100%;display: none;">
+            <div class="speaker-people-div" style="width: 100%;">
             </div>
         </div>
     </div>

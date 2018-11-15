@@ -1874,7 +1874,6 @@ function handelGroupSpeakerList(result)
         $(".speaker-people-div").html('');
         if(isSelfAdminRole == true) {
             $(".remove-all-speaker")[0].style.display = "flex";
-            $(".speaker-people-div")[0].style.display = "block";
             $(".set_group_speakers")[0].style.display = "flex";
         }
 
