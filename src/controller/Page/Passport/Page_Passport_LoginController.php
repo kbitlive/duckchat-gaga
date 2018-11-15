@@ -113,7 +113,7 @@ class Page_Passport_LoginController extends HttpBaseController
 
             'enableInvitationCode' => $enableInvitationCode,
             'enableRealName' => $enableRealName,
-            '$registerCustoms' => $this->getRegisterCustoms(),
+            'registerCustoms' => $this->getRegisterCustoms(),
         ];
         echo $this->display("passport_login", $params);
         return;

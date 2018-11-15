@@ -574,12 +574,15 @@ $(document).on("click", ".plugin-info", function () {
 function setPluginTitle(pluginId)
 {
     var iframe = document.getElementById("plugin_id_"+pluginId);
-    iframe.onload = function (ev) {
-        iframe.contentDocument.addEventListener("click", function (ev2) {
+    try{
+        iframe.onload = function (ev) {
             var pluginTitle = iframe.contentWindow.document.title;
             $(".plugin-title").html(pluginTitle);
-        }, false);
+        }
+    }catch (error){
+
     }
+
 }
 
 $(document).on("click", ".open_new_page", function () {
@@ -656,11 +659,16 @@ $(document).on("click", ".chat_plugin", function () {
 
 $(document).on("click", ".plugin_back", function () {
     try{
-        console.log();
         var pluginId =  $(".plugin-iframe").attr("id");
         $(".plugin-iframe")[0].contentWindow.history.go(-1); // back
         setPluginTitle(pluginId);
-        document.getElementById(pluginId).contentWindow.onload(1);
+        var onReload = false;
+        $(".plugin-iframe")[0].onload = function() {
+            if( onReload == false) {
+                $(".plugin-iframe")[0].contentWindow.self.location.reload(true);
+                onReload = true;
+            }
+        }
     }catch (error){
         console.log(error);
     }
