@@ -167,7 +167,7 @@
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <input id="custom-key-status-switch" class="weui_switch" type="checkbox">
+                            <input id="custom-key-status-switch" class="weui_switch" type="checkbox" checked>
                         </div>
                     </div>
 
@@ -203,7 +203,24 @@
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <input id="custom-key-open-switch" class="weui_switch" type="checkbox">
+                            <input id="custom-key-open-switch" class="weui_switch" type="checkbox" checked>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+            <div class="item-row">
+                <div class="item-body">
+                    <div class="item-body-display custom-key-constraint">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">是否创建搜索索引</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Create Search Index</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <input id="custom-key-constraint-switch" class="weui_switch" type="checkbox" checked>
                         </div>
                     </div>
                 </div>
@@ -427,6 +444,8 @@
         var requiredIsChecked = $("#custom-key-required-switch").is(':checked');
         var openIsChecked = $("#custom-key-open-switch").is(':checked');
 
+        var keyConstraint = $("#custom-key-constraint").is(':checked');
+
         //"customKey",
         //        "keyName",
         //        "keyDesc",
@@ -447,6 +466,7 @@
             'status': statusIsChecked ? 2 : 1,
             'isOpen': openIsChecked ? 1 : 0,
             'isRequired': requiredIsChecked ? 1 : 0,
+            'keyConstraint': keyConstraint ? 1 : 0
         };
 
         var url = "./index.php?action=manage.custom.userAdd&lang=" + getLanguage();
