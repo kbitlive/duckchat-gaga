@@ -2822,7 +2822,7 @@ function handleGetFriendProfile(result)
             displayProfile(userProfile.userId, U2_MSG);
 
         }catch (error) {
-
+            console.log(error);
         }
     }
 }
@@ -2929,16 +2929,11 @@ function displayCurrentProfile()
                 $(".nickname_"+chatSessionId).html(nickname);
                 $(".chatsession-title").html(nickname);
                 var isMaster = isJudgeSiteMasters(chatSessionId);
-                var customStr = localStorage.getItem(friendCustomKey+chatSessionId);
-                var customs = new Array();
-                if(customStr) {
-                    customs = JSON.parse(customStr);
-                }
+
                 var html = template("tpl-friend-profile", {
                     isMaster:isMaster,
                     nickname:nickname,
                     loginName:friendProfile.loginName,
-                    customs:customs
                 });
                 $(".user-desc-body").html(html);
             } else {
@@ -3194,7 +3189,7 @@ $(document).on("click", ".permission-join", function () {
 });
 
 $(document).on("click", ".mark_down", function () {
-    
+
     var isMarkDown = $(".mark_down").attr("is_on");
     if(isMarkDown == "on") {
         $(".mark_down").attr("is_on", "off");
@@ -3218,9 +3213,27 @@ $(document).on("click", ".imgDiv", function () {
 });
 
 $(document).on("click", ".more-info", function () {
+    var chatSessionId = localStorage.getItem(chatSessionIdKey);
+    var customKey = friendCustomKey+chatSessionId;
+    var customStr = localStorage.getItem(customKey);
+
+    try{
+        var customs = new Array();
+        if(customStr != undefined && customStr != false && customStr != null) {
+            customs = JSON.parse(customStr);
+        }
+    }catch (error) {
+        console.log(error)
+        var customs = new Array();
+    }
+
+    var html = template("tpl-friend-profile-more-info" , {
+        customs:customs
+    });
+    html = handleHtmlLanguage(html);
+    $("#more-info").html(html);
     showWindow($("#more-info"));
 });
-
 
 
 //添加好友
