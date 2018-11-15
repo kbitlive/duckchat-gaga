@@ -131,6 +131,9 @@ function getMsgContentForChatSession(msg)
             msgContent = msg["notice"].body;
             msgContent = msgContent && msgContent.length > 10 ? msgContent.substr(0,10)+"..." : msgContent;
             break;
+        case MessageType.MessageRecall:
+            msgContent = "[通知]";
+            break;
         case MessageType.MessageWebNotice:
             msgContent = msg["webNotice"].title;
             break
@@ -425,6 +428,7 @@ function handleSyncMsgForRoom(results)
                 }
                 handleSyncMsg(msg);
             }
+
             isSyncingMsg = false;
 
             if(isNeewUpdatePointer == true) {
@@ -472,11 +476,18 @@ function handleSyncMsg(msg)
         setDocumentTitle();
     } else if(msg.chatSessionId  == currentChatSessionId && !isNewMsg) {
         if(msg.type == MessageType.MessageRecall) {
-            var msgId = msg['recall'].msgId;
-            $(".msg-id-"+msgId).replace();
-            $(".msg-id-"+msgId)[0].parentNode.replaceChild(ol,$(".msg-id-"+msgId)[0]);
-
-
+            try{
+                var msgId = msg['recall'].msgId;
+                var msgContent = msg["recall"].msgText ? msg["recall"].msgText : loginName +" recall msg";
+                var html = template("tpl-receive-msg-notice", {
+                    msgContent:msgContent,
+                    timeServer:msg.timeServer
+                });
+                var tagId = "msg-row-"+msgId;
+                var oldNode = document.getElementById(tagId);
+                oldNode.parentNode.replaceChild($(html)[0],oldNode);
+            }catch (error) {
+            }
         }
     } else if(msg.chatSessionId != currentChatSessionId && isNewMsg) {
         if(msg.chatSessionId != token) {
@@ -559,26 +570,30 @@ function handleMsgForMsgRoom(chatSessionId, pushMsg)
         while(msgList.length>=300) {
             msgList.shift();
         }
-
-        if(pushMsg != undefined) {
-            if(pushMsg.type == MessageType.MessageRecall) {
-                var msgListLength = msgList.length;
-                for(var i=0;i<msgListLength; i++) {
-                    var msg = msgList[i];
-                    if(msg.msgId == pushMsg.recall['msgId']) {
-                        msg.type = MessageType.MessageRecall;
-                        msg.recall = pushMsg.recall
-                        msg[i] = msg;
-                        break;
+        try{
+            if(pushMsg != undefined) {
+                if(pushMsg.type == MessageType.MessageRecall) {
+                    var msgListLength = msgList.length;
+                    for(var i=0;i<msgListLength; i++) {
+                        var msg = msgList[i];
+                        if(msg.msgId == pushMsg['recall'].msgId) {
+                            msg.type = MessageType.MessageRecall;
+                            msg.recall = pushMsg.recall;
+                            msgList[i] = msg;
+                        }
                     }
+                    var isNewMsg = false;
+                    localStorage.setItem(roomChatSessionKey, JSON.stringify(msgList));
+                } else {
+                    msgList.push(pushMsg);
+                    var isNewMsg = uniqueMsgAndCheckMsgId(msgList, pushMsg.msgId, roomChatSessionKey);
                 }
-                var isNewMsg = false;
-            } else {
-                msgList.push(pushMsg);
-                var isNewMsg = uniqueMsgAndCheckMsgId(msgList, pushMsg.msgId, roomChatSessionKey);
+                return isNewMsg;
             }
-            return isNewMsg;
+        }catch(error) {
+            console.log(error)
         }
+
         msgList.sort(compare);
         return msgList;
     }catch (error){
@@ -821,7 +836,7 @@ function sendMsg( chatSessionId, chatSessionType, msgContent, msgType, params)
 };
 
 
-function sendRecallMsg(msgId, msgText, chatSessionId, chatSessionType)
+function sendRecallMsg(recallMsgId, msgText, chatSessionId, chatSessionType)
 {
     var action = "im.cts.message";
     var msgId  = Date.now();
@@ -843,7 +858,7 @@ function sendRecallMsg(msgId, msgText, chatSessionId, chatSessionType)
 
     message['timeServer'] = Date.parse(new Date());
 
-    message['recall'] = {msgId:msgId, msgText:msgText};
+    message['recall'] = {msgId:recallMsgId, msgText:msgText};
     message['type'] = MessageType.MessageRecall;
 
     var reqData = {

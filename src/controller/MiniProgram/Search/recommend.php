@@ -10,7 +10,7 @@ return array(
     "groupIds" => array(
         "u5sdxyegkc",
         "h9txas5zrr",
-        "sai3b1lcjt",
+        "20xbmsqytw",
         "bpbu8xt0cb"
     ),
     'miniProgramId'    => "200",
