@@ -79,7 +79,9 @@ class Api_User_UpdateController extends BaseController
                     break;
                 case \Zaly\Proto\Site\ApiUserUpdateType::ApiUserUpdateCustom:
                     $custom = $v->getCustom();
-                    $updateCustomData[$custom->getCustomKey()] = $custom->getCustomValue();
+                    $customKey = trim($custom->getCustomKey());
+                    $customValue = trim($custom->getCustomValue());
+                    $updateCustomData[$customKey] = $customValue;
                     break;
                 default:
                     throw new Exception("api.user.update by error updateType");
@@ -99,11 +101,33 @@ class Api_User_UpdateController extends BaseController
 
     private function updateUserCustoms(array $customData, $userId)
     {
-        if (empty($customData)) {
-            return false;
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        try {
+            if (empty($customData)) {
+                return false;
+            }
+            error_log("========update user custom=" . var_export($customData, true));
+            $where = [
+                "userId" => $userId,
+            ];
+            return $this->ctx->SiteUserCustomTable->updateCustomProfile($customData, $where);
+        } catch (Exception $e) {
+            $this->logger->error($tag, $e);
+            return $this->insertUserCustoms($customData, $userId);
         }
+    }
 
-        return $this->ctx->SiteUserCustomTable->updateCustomProfile($customData, ["userId" => $userId]);
+    private function insertUserCustoms(array $customData, $userId)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        try {
+            $customData['userId'] = $userId;
+            $customData['addTime'] = ZalyHelper::getMsectime();
+            return $this->ctx->SiteUserCustomTable->insertCustomProfile($customData);
+        } catch (Exception $e) {
+            $this->logger->error($tag, $e);
+        }
+        return false;
     }
 
     protected function getUserProfileResponse($userId)
@@ -156,12 +180,15 @@ class Api_User_UpdateController extends BaseController
         try {
             $customProfiles = $this->ctx->SiteUserCustomTable->queryAllCustomProfile($userId);
             $customNameArray = $this->ctx->SiteUserCustomTable->getColumnNames();
-            if ($customProfiles) {
-                $userCustom = new Zaly\Proto\Core\CustomUserProfile();
-                foreach ($customProfiles as $customKey => $customValue) {
+
+            if ($customNameArray) {
+                foreach ($customNameArray as $customKey => $customName) {
+                    $userCustom = new Zaly\Proto\Core\CustomUserProfile();
                     $userCustom->setCustomKey($customKey);
-                    $userCustom->setCustomName($customNameArray[$customKey]);
+                    $userCustom->setCustomName($customName);
+                    $customValue = $customProfiles[$customKey];
                     $userCustom->setCustomValue(isset($customValue) ? $customValue : "");
+
                     $customs[] = $userCustom;
                 }
             }
@@ -171,4 +198,5 @@ class Api_User_UpdateController extends BaseController
 
         return $customs;
     }
+
 }

@@ -55,6 +55,7 @@ class SiteUserCustomTable extends BaseTable
     public function updateCustomProfile($data, $where)
     {
         $columns = $this->getAllColumns();
+        $columns = array_merge($columns, $this->defaultColumns);
         return $this->updateInfo($this->table, $where, $data, $columns);
     }
 

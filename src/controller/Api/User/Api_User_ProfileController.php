@@ -86,17 +86,17 @@ class Api_User_ProfileController extends BaseController
         try {
             $customProfiles = $this->ctx->SiteUserCustomTable->queryAllCustomProfile($userId);
             $customNameArray = $this->ctx->SiteUserCustomTable->getColumnNames();
-            if ($customProfiles) {
-
+            
+            if ($customNameArray) {
                 foreach ($customNameArray as $customKey => $customName) {
                     $userCustom = new Zaly\Proto\Core\CustomUserProfile();
                     $userCustom->setCustomKey($customKey);
                     $userCustom->setCustomName($customName);
                     $customValue = $customProfiles[$customKey];
                     $userCustom->setCustomValue(isset($customValue) ? $customValue : "");
+
                     $customs[] = $userCustom;
                 }
-
             }
         } catch (Exception $e) {
             $this->logger->error($tag, $e);
