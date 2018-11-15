@@ -82,9 +82,11 @@
                     <div class="item-body">
                         <div class="item-body-display add-user-column" onclick="addNewColumn()">
                             <div class="item-body-desc"><?php echo $userCustom['keyName']; ?></div>
-
                             <div class="item-body-tail">
                                 <div class="item-body-value">
+                                    <?php echo $userCustom['keySort']; ?>
+                                </div>
+                                <div class="item-body-value-more">
                                     <img class="more-img" src="../../public/img/manage/more.png"/>
                                 </div>
                             </div>

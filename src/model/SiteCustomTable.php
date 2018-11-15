@@ -95,6 +95,8 @@ class SiteCustomTable extends BaseTable
             $sql .= " and isOpen=:isOpen ";
         }
 
+        $sql .= " order by keySort ASC;";
+
         try {
             $prepare = $this->dbSlave->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
@@ -135,7 +137,6 @@ class SiteCustomTable extends BaseTable
 
             $prepare->execute();
             $result = $prepare->fetch(PDO::FETCH_ASSOC);
-            error_log("=====" . var_export($result, true));
             return $result;
         } finally {
             $this->logger->writeSqlLog($tag, $sql, [$customKey, $keyType], $startTime);
@@ -154,8 +155,10 @@ class SiteCustomTable extends BaseTable
         $sql = "select $this->queryColumns from $this->table where keyType=:keyType ";
 
         if ($status && $status >= 0) {
-            $sql .= " and status=:status;";
+            $sql .= " and status=:status ";
         }
+
+        $sql .= " order by keySort ASC;";
 
         try {
             $prepare = $this->dbSlave->prepare($sql);
