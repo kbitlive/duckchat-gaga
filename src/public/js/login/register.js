@@ -71,6 +71,7 @@ function checkRegisterInfo()
     ) {
         $("#register_input_loginName").focus();
         $(".register_input_loginName_failed")[0].style.display = "block";
+        $(".register_input_loginName_required")[0].style.display = "none";
         isFocus = true;
     }
     registerPassword = trimString(registerPassword);
@@ -81,9 +82,11 @@ function checkRegisterInfo()
 
     ) {
         $(".register_input_pwd_failed")[0].style.display = "block";
+        $(".register_input_pwd_required")[0].style.display = "none";
         if (isFocus == false) {
             $("#register_input_pwd").focus();
             $(".register_input_loginName_failed")[0].style.display = "none";
+            $(".register_input_loginName_required")[0].style.display = "block";
             isFocus = true;
         }
     }
@@ -92,9 +95,11 @@ function checkRegisterInfo()
         || repassword.length<0 || (repassword != registerPassword)
     ) {
         $(".register_input_repwd_failed")[0].style.display = "block";
+        $(".register_input_repwd_required")[0].style.display = "none";
         if(isFocus == false) {
             $("#register_input_repwd").focus();
             $(".register_input_pwd_failed")[0].style.display = "none";
+            $(".register_input_pwd_required")[0].style.display = "block";
             isFocus = true;
         }
     }
@@ -106,6 +111,7 @@ function checkRegisterInfo()
             || registerEmail.length<0)
     ) {
         $(".register_input_email_failed")[0].style.display = "block";
+        $(".register_input_email_required")[0].style.display = "none";
         if(isFocus == false) {
             $("#register_input_email").focus();
             isFocus = true;
@@ -120,11 +126,13 @@ function checkRegisterInfo()
         if(Number(isRequired) == 1) {
             if(trimString(value)<1) {
                 $(".register_input_"+customKey+"_failed")[0].style.display = "block";
+                $(".register_input_"+customKey+"_required")[0].style.display = "none";
                 if(isFocus == false) {
                     $("#register_input_"+customKey).focus();
                     isFocus = true;
                 }
             } else {
+                $(".register_input_"+customKey+"_required")[0].style.display = "block";
                 $(".register_input_"+customKey+"_failed")[0].style.display = "none";
             }
         }
@@ -139,10 +147,12 @@ function checkRegisterInfo()
     if(isFocus == true) {
         return false;
     }
-    $(".register_input_email_failed")[0].style.display = "none";
-    $(".register_input_loginName_failed")[0].style.display = "none";
-    $(".register_input_pwd_failed")[0].style.display = "none";
-    $(".register_input_repwd_failed")[0].style.display = "none";
+    $(".img-failed").each(function (index, target) {
+        $(target)[0].style.display = "none";
+    })
+    $(".img-required").each(function (index, target) {
+        $(target)[0].style.display = "block";
+    })
 
     if(registerPassword != repassword) {
         alert($.i18n.map["passwordIsNotSameJsTip"]);

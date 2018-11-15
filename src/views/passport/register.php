@@ -88,7 +88,7 @@
                                 <?php else:?>
                                     <input type="text" id="register_input_loginName"  datatype="s"  class="input_login_site  register_input_loginName" data-local-placeholder="registerLoginNamePlaceholder"  autocapitalize="off"   placeholder="用户名" >
                                 <?php endif;?>
-
+                                <img src="./public/img/login/required.png" class="img-required register_input_loginName_required">
                                 <img src="./public/img/msg/msg_failed.png" class="img-failed register_input_loginName_failed">
                             </div>
                             <div class="register_line"></div>
@@ -99,6 +99,7 @@
                                 <image src="./public/img/login/pwd.png" class="img"/>
                                 <input type="password" class="input_login_site register_input_pwd" autocapitalize="off"   id="register_input_pwd" data-local-placeholder="enterPasswordPlaceholder"  placeholder="输入密码"  >
                                 <div class="pwd_div" onclick="changeImgByClickPwd()"><image src="../../public/img/login/hide_pwd.png" class="pwd" img_type="hide"/></div>
+                                <img src="./public/img/login/required.png" class="img-required register_input_pwd_required">
                                 <img src="./public/img/msg/msg_failed.png" class="img-failed register_input_pwd_failed">
                             </div>
                             <div class="register_line"></div>
@@ -110,6 +111,7 @@
                                 <image src="./public/img/login/pwd.png" class="img"/>
                                 <input type="password" class="input_login_site register_input_repwd" autocapitalize="off"   id="register_input_repwd" data-local-placeholder="enterRepasswordPlaceholder"  placeholder="再次输入密码"  >
                                 <div class="repwd_div" onclick="changeImgByClickRepwd()"><image src="../../public/img/login/hide_pwd.png" class="repwd" img_type="hide"/></div>
+                                <img src="./public/img/login/required.png" class="img-required register_input_repwd_required">
                                 <img src="./public/img/msg/msg_failed.png" class="img-failed register_input_repwd_failed">
                             </div>
                             <div class="register_line" ></div>
@@ -118,12 +120,14 @@
 
                             <div class="login_name_div" style="margin-top: 1rem;">
                                 <image src="./public/img/login/find_pwd.png" class="img"/>
-
                                     <?php if ($passwordFindWay):?>
                                         <input type="text" class="input_login_site register_input_email" autocapitalize="off"  id="register_input_email"  placeholder="<?php echo $passwordFindWay;?>" >
                                     <?php else:?>
                                         <input type="text" class="input_login_site register_input_email" autocapitalize="off"  id="register_input_email" data-local-placeholder="enterEmailPlaceholder" placeholder="输入邮箱" >
                                     <?php endif;?>
+                                <?php if($passwordResetRequired):?>
+                                    <img src="./public/img/login/required.png" class="img-required register_input_repwd_required">
+                                <?php endif;?>
                                 <img src="./public/img/msg/msg_failed.png" class="img-failed register_input_email_failed">
                             </div>
                             <div class="register_line"></div>
@@ -135,6 +139,10 @@
                                     <div class="login_name_div" style="margin-top: 1rem;">
                                             <image src="./public/img/login/find_pwd.png" class="img"/>
                                             <input type="text" class="input_login_site register_input_<?php echo $registerCustom['customKey'];?> register_custom" autocapitalize="off" isRequired="<?php echo $registerCustom['isRequired'];?>" customKey = "<?php echo $registerCustom['customKey'];?>" id="register_input_<?php echo $registerCustom['customKey'];?>" customName="<?php echo $registerCustom['keyName'];?>" placeholder="<?php echo $registerCustom['keyName'];?>" >
+                                        <?php if($registerCustom['isRequired']):?>
+                                            <img src="./public/img/login/required.png" class="img-required register_input_<?php echo $registerCustom['customKey'];?>_required">
+                                        <?php endif;?>
+
                                         <img src="./public/img/msg/msg_failed.png" class="img-failed register_input_<?php echo $registerCustom['customKey'];?>_failed">
                                     </div>
                                     <div class="register_line"></div>
@@ -152,9 +160,7 @@
                             </div>
 
 
-
-
-                            <div class="d-flex flex-row register_span_div login_span_div" >
+                            <div class="d-flex flex-row register_span_div " >
                                 <span style="color:rgba(153,153,153,1);" data-local-value="hasAccountTip">已有账号？</span>
                                 <span onclick="registerForLogin()" data-local-value="loginBtnTip">登录</span>
                             </div>

@@ -284,6 +284,16 @@ body,html {
     margin-bottom:  1rem;
     display: none;
 }
+.img-required {
+     width: 2rem;
+     height:2rem;
+     position: absolute;
+     top: 0;
+     bottom: 0;
+     right: -3rem;
+     margin: auto 0;
+     margin-bottom:  1rem;
+ }
 
 .pwd, .repwd , .clearLoginName,.oldPwd{
     width: 2rem;
@@ -310,6 +320,7 @@ body,html {
     font-family:PingFangSC-Regular;
     color:rgba(76,59,177,1);
     cursor: pointer;
+    margin-bottom: 3rem;
 }
 
 .third_login_logo {
