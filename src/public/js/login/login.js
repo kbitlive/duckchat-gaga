@@ -43,7 +43,7 @@ function handlePassportPasswordUpdateInvationCode(results)
     isRegister = true;
     preSessionId = results.preSessionId;
     cancelLoadingBySelf();
-    zalyjsLoginSuccess(loginName, preSessionId, isRegister, failedCallBack);
+    zalyjsLoginSuccess(loginName, preSessionId, isRegister, "", failedCallBack);
 }
 
 ///更新邀请码，并且登录site
@@ -136,7 +136,6 @@ function clearLoginName()
 
 
 //--------------------------------------------------------------login---------------------------------------------------
-
 
 function registerForPassportPassword() {
     window.location.href = "./index.php?action=page.passport.register&lang="+getLanguage();
@@ -234,7 +233,7 @@ function displayInvitationCode()
             return false;
         }
         isRegister = true;
-        zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailed);
+        zalyjsLoginSuccess(loginName, preSessionId, isRegister, "", loginFailed);
     } else {
         $(".zaly_login_by_pwd")[0].style.display = "none";
         $(".zaly_site_update-invitecode")[0].style.display = "block";
@@ -251,7 +250,7 @@ function handleApiPassportPasswordLogin(results)
 {
     preSessionId = results.preSessionId;
     cancelLoadingBySelf();
-    zalyjsLoginSuccess(loginName, preSessionId, isRegister, loginFailNeedRegister);
+    zalyjsLoginSuccess(loginName, preSessionId, isRegister, "", loginFailNeedRegister);
 }
 
 $(document).on("click", ".login_button", function () {

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>登录-<?php echo $siteName;?></title>
+    <title><?php echo $title;?></title>
     <!-- Latest compiled and minified CSS -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -15,6 +15,11 @@
 </head>
 
 <body>
+<input type="hidden" value="<?php echo $loginWelcomeText;?>" class="loginWelcomeText">
+<input type="hidden" value="<?php echo $loginBackgroundColor;?>" class="loginBackgroundColor">
+<input type="hidden" value="<?php echo $loginBackgroundImage;?>" class="loginBackgroundImage">
+<input type="hidden" value="<?php echo $loginBackgroundImageDisplay;?>" class="loginBackgroundImageDisplay">
+<input type="hidden" value="<?php echo $passwordResetRequired;?>" class="passwordResetRequired">
 
 <div class="site-warning"></div>
 

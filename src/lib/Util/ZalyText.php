@@ -27,6 +27,8 @@ class ZalyText
         'text.pwd.maxLength' => ["The max num  length is 32", "密码最大长度为32"],
         'text.pwd.type' => ["Password does not meet requirements", "密码不符合要求"],
         "text.length" => ["length", "长度"],
+        "text.login" => ["Login", "登录"],
+        "text.register" => ["Register", "注册"],
     ];
 
     public static $keyGroupCreate = "{key.group.create}";

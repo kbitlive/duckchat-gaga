@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>登录-<?php echo $siteName;?></title>
+    <title><?php echo $title;?></title>
     <!-- Latest compiled and minified CSS -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -15,16 +15,10 @@
 </head>
 
 <body>
-<input type="hidden" value="<?php echo $siteName;?>" class="siteName">
-<input type="hidden" value="<?php echo $loginNameAlias;?>" class="loginNameAlias">
-<input type="hidden" value="<?php echo $passwordFindWay;?>" class="passwordFindWay">
 <input type="hidden" value="<?php echo $loginWelcomeText;?>" class="loginWelcomeText">
 <input type="hidden" value="<?php echo $loginBackgroundColor;?>" class="loginBackgroundColor">
 <input type="hidden" value="<?php echo $loginBackgroundImage;?>" class="loginBackgroundImage">
 <input type="hidden" value="<?php echo $loginBackgroundImageDisplay;?>" class="loginBackgroundImageDisplay">
-<input type="hidden" value="<?php echo $siteVersionName;?>" class="siteVersionName">
-<input type="hidden" value="<?php echo $siteName;?>" class="siteName">
-<input type="hidden" value="<?php echo $siteLogo;?>" class="siteLogo">
 <input type="hidden" value="<?php echo $passwordResetRequired;?>" class="passwordResetRequired">
 
 <input type="hidden" value="<?php echo $pwdContainCharacters;?>" class="pwdContainCharacters">
@@ -32,9 +26,6 @@
 <input type="hidden" value="<?php echo $loginNameMinLength;?>" class="loginNameMinLength">
 <input type="hidden" value="<?php echo $pwdMaxLength;?>" class="pwdMaxLength">
 <input type="hidden" value="<?php echo $pwdMinLength;?>" class="pwdMinLength">
-
-<input type="hidden" value='<?php echo $thirdPartyLoginOptions;?>' class="thirdPartyLoginOptions">
-<input type="hidden" value='<?php echo $siteAddress;?>' class="siteAddressPath">
 
 
 <div class="site-warning"></div>
@@ -83,7 +74,7 @@
 
                 </div>
                 <div  class="login_div">
-                    <div class="zaly_login zaly_site_register zaly_site_register-name" >
+                    <div class="zaly_register zaly_site_register zaly_site_register-name" >
                         <div class="login_input_div" >
                             <div class="d-flex flex-row justify-content-center login-header"style="text-align: center;margin-top: 2rem;margin-bottom: 1rem;">
                                 <span class="login_phone_tip_font" data-local-value="registerTip" >注册</span>
@@ -93,7 +84,7 @@
                                 <image src="./public/img/login/loginName.png" class="img"/>
 
                                 <?php if ($loginNameAlias):?>
-                                    <input type="text" id="register_input_loginName"  datatype="s"  class="input_login_site  register_input_loginName"   autocapitalize="off"   placeholder="{{loginNameAlias}}" >
+                                    <input type="text" id="register_input_loginName"  datatype="s"  class="input_login_site  register_input_loginName"   autocapitalize="off"   placeholder=" <?php echo $loginNameAlias; ?>" >
                                 <?php else:?>
                                     <input type="text" id="register_input_loginName"  datatype="s"  class="input_login_site  register_input_loginName" data-local-placeholder="registerLoginNamePlaceholder"  autocapitalize="off"   placeholder="用户名" >
                                 <?php endif;?>
@@ -114,6 +105,7 @@
                             <div style="font-size:1.31rem;font-family:PingFangSC-Regular;font-weight:400;color:rgba(153,153,153,1);" ><?php echo $pwdTip;?></div>
 
 
+
                             <div class="login_name_div" style="margin-top: 1rem;">
                                 <image src="./public/img/login/pwd.png" class="img"/>
                                 <input type="password" class="input_login_site register_input_repwd" autocapitalize="off"   id="register_input_repwd" data-local-placeholder="enterRepasswordPlaceholder"  placeholder="再次输入密码"  >
@@ -121,6 +113,8 @@
                                 <img src="./public/img/msg/msg_failed.png" class="img-failed register_input_repwd_failed">
                             </div>
                             <div class="register_line" ></div>
+
+
 
                             <div class="login_name_div" style="margin-top: 1rem;">
                                 <image src="./public/img/login/find_pwd.png" class="img"/>
@@ -135,6 +129,20 @@
                             <div class="register_line"></div>
                             <div style="font-size:1.31rem;font-family:PingFangSC-Regular;font-weight:400;color:rgba(153,153,153,1);"data-local-value="findPasswordTip" >通过此信息联系管理员找回密码。</div>
 
+
+                            <?php if(count($registerCustoms)) : ?>
+                                <?php foreach ($registerCustoms as $registerCustom): ?>
+                                    <div class="login_name_div" style="margin-top: 1rem;">
+                                            <image src="./public/img/login/find_pwd.png" class="img"/>
+                                            <input type="text" class="input_login_site register_input_<?php echo $registerCustom['customKey'];?> register_custom" autocapitalize="off" isRequired="<?php echo $registerCustom['isRequired'];?>" customKey = "<?php echo $registerCustom['customKey'];?>" id="register_input_<?php echo $registerCustom['customKey'];?>" customName="<?php echo $registerCustom['keyName'];?>" placeholder="<?php echo $registerCustom['keyName'];?>" >
+                                        <img src="./public/img/msg/msg_failed.png" class="img-failed register_input_<?php echo $registerCustom['customKey'];?>_failed">
+                                    </div>
+                                    <div class="register_line"></div>
+                                    <div style="font-size:1.31rem;font-family:PingFangSC-Regular;font-weight:400;color:rgba(153,153,153,1);"data-local-value="findPasswordTip" ><?php echo $registerCustom['keyDesc'];?></div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+
+
                             <div class="d-flex flex-row justify-content-center ">
                                 <?php if ($enableInvitationCode):?>
                                     <button type="button" class="btn register_code_button"><span class="span_btn_tip" data-local-value="registerBtnCodeTip">下一步</span></button>
@@ -143,12 +151,16 @@
                                 <?php endif;?>
                             </div>
 
+
+
+
                             <div class="d-flex flex-row register_span_div login_span_div" >
                                 <span style="color:rgba(153,153,153,1);" data-local-value="hasAccountTip">已有账号？</span>
                                 <span onclick="registerForLogin()" data-local-value="loginBtnTip">登录</span>
                             </div>
                         </div>
                     </div>
+
 
                     <div class="zaly_login zaly_site_register zaly_site_register-invitecode" style="display: none;">
                         <div class="back">

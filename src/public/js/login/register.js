@@ -6,13 +6,7 @@ $(document).on("click", ".register_button", function () {
     registerAndLogin();
 });
 
-function registerAndLoginByKeyDown(event)
-{
-    if(!checkIsEnterBack(event)){
-        return false;
-    }
-    registerAndLogin();
-}
+
 
 function registerAndLogin()
 {
@@ -45,8 +39,6 @@ function returnRegisterDiv() {
     $(".zaly_site_register-name")[0].style.display = "block";
 }
 
-
-
 $(document).on("click", ".register_code_button", function () {
     var flag = checkRegisterInfo();
     if(flag == false) {
@@ -63,6 +55,7 @@ var loginNameMinLength = $(".loginNameMinLength").val();
 var pwdMaxLength = $(".pwdMaxLength").val();
 var pwdMinLength = $(".pwdMinLength").val();
 
+var registerCustom = new Array();
 function checkRegisterInfo()
 {
     registerLoginName = $(".register_input_loginName").val();
@@ -118,7 +111,31 @@ function checkRegisterInfo()
             isFocus = true;
         }
     }
-
+    
+    $(".register_custom").each(function (index, custom) {
+        var isRequired = $(custom).attr("isRequired");
+        var customName = $(custom).attr("customName");
+        var customKey = $(custom).attr("customKey");
+        var value = $(custom).val();
+        if(Number(isRequired) == 1) {
+            if(trimString(value)<1) {
+                $(".register_input_"+customKey+"_failed")[0].style.display = "block";
+                if(isFocus == false) {
+                    $("#register_input_"+customKey).focus();
+                    isFocus = true;
+                }
+            } else {
+                $(".register_input_"+customKey+"_failed")[0].style.display = "none";
+            }
+        }
+        registerCustomProfile = {
+            "customKey":customKey,
+            "customValue":value,
+            "customeName":customName
+        }
+        registerCustom.push(registerCustomProfile);
+    });
+    
     if(isFocus == true) {
         return false;
     }
@@ -145,7 +162,7 @@ function handlePassportPasswordReg(results)
     isRegister = true;
     preSessionId = results.preSessionId;
     cancelLoadingBySelf();
-    zalyjsLoginSuccess(registerLoginName, preSessionId, isRegister, loginFailed);
+    zalyjsLoginSuccess(registerLoginName, preSessionId, isRegister,registerCustom,  loginFailed);
 }
 
 
@@ -167,7 +184,7 @@ function handlePassportPasswordUpdateInvationCode(results)
     isRegister = true;
     preSessionId = results.preSessionId;
     cancelLoadingBySelf();
-    zalyjsLoginSuccess(registerLoginName, preSessionId, isRegister, failedCallBack);
+    zalyjsLoginSuccess(registerLoginName, preSessionId, isRegister, registerCustom, failedCallBack);
 }
 
 ///更新邀请码，并且登录site

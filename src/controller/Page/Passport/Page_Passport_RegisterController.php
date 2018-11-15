@@ -82,8 +82,6 @@ class Page_Passport_RegisterController extends HttpBaseController
         $pwdContainCharactersConfig = isset($loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS]) ? $loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS] : "";
         $pwdContainCharacters = isset($pwdContainCharactersConfig["configValue"]) ? $pwdContainCharactersConfig["configValue"] : "";
 
-        $thirdPartyLoginOptions = ZalyLogin::getThirdPartyConfig();
-
         $enableInvitationCode = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_INVITATION_CODE);
         $enableRealName = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_REAL_NAME);
 
@@ -94,9 +92,11 @@ class Page_Passport_RegisterController extends HttpBaseController
             $pwdTip = $pwdContainCharacters . ",". ZalyText::getText("text.length", $this->language)." " .$pwdMinLength . "-" . $pwdMaxLength;
         }
         $pwdTip = str_replace(["letter", "number", "special_characters"], ["字母", "数字", "特殊字符"], $pwdTip);
+        $title = ZalyText::getText("text.register", $this->language)."-".$siteName;
 
+        $registerCustoms = $this->getRegisterCustoms();
         $params = [
-            'siteName' => $siteName,
+            'title' => $title,
             'siteLogo' => $this->ctx->File_Manager->getCustomPathByFileId($siteLogo),
             'siteVersionName' => $siteVersionName,
             'isDuckchat' => $isDuckchat,
@@ -123,32 +123,17 @@ class Page_Passport_RegisterController extends HttpBaseController
             'enableInvitationCode' => $enableInvitationCode,
             'enableRealName' => $enableRealName,
 
-            'customLoginItems' => [
-                //自定义的登陆项
-                [
-                    'email' => "邮箱",
-                    'icon' => "",
-                    'placeholder' => "",
-                    'isRequired' => $passwordResetRequired,
-                ],
-
-                [
-                    'phone' => "手机号",
-                    'icon' => "",
-                    'placeholder' => "",
-                    'isRequired' => $passwordResetRequired,
-                ],
-
-                [
-                    'name' => "姓名",
-                    'icon' => "",
-                    'placeholder' => "",
-                    'isRequired' => $passwordResetRequired,
-                ],
-            ],
+            'registerCustoms' => $registerCustoms
         ];
+
         echo $this->display("passport_register", $params);
         return;
     }
 
+    //获取注册
+    private function getRegisterCustoms()
+    {
+        $registerCustoms = $this->ctx->SiteUserCustomTable->getColumnInfosForRegister();
+        return $registerCustoms;
+    }
 }

@@ -4,7 +4,6 @@ enableInvitationCode=0;
 enableRealName=0;
 invitationCode='';
 allowShareRealname=0;
-siteName="";
 preSessionId="";
 secondNum  = 120;
 isSending  = false;
@@ -24,31 +23,6 @@ var siteName = $(".siteName").val();
 //------------------------------------------public---------------------------------------
 
 $(":input").attr("autocapitalize", "off");
-
-
-function setDocumentTitle(type)
-{
-    switch (type)
-    {
-        case "login":
-            document.title = "login";
-            if(languageName == "zh") {
-                document.title = "登录-"+siteName;
-            } else {
-                document.title = "login-"+siteName;
-            }
-            break;
-        case "register":
-            if(languageName == "zh") {
-                document.title = "注册-"+siteName;
-            } else {
-                document.title = "Register-"+siteName;
-            }
-            break;
-    }
-}
-
-setDocumentTitle("login");
 
 function isWeixinBrowser(){
     return /micromessenger/.test(navigator.userAgent.toLowerCase())
@@ -119,8 +93,6 @@ var loginWelcomeText = $(".loginWelcomeText").val();
 var loginBackgroundColor = $(".loginBackgroundColor").val();
 var loginBackgroundImage = $(".loginBackgroundImage").val();
 var loginBackgroundImageDisplay = $(".loginBackgroundImageDisplay").val();
-var siteVersionName = $(".siteVersionName").val();
-var siteName = $(".siteName").val();
 var passwordResetRequired = $(".passwordResetRequired").val();
 var x= $(".jumpRoomId").val();
 var page= $(".jumpRoomType").val();
@@ -337,3 +309,11 @@ function updatePassportPasswordInvitationCode(results)
     handleClientSendRequest(action, reqData, handlePassportPasswordUpdateInvationCode);
 }
 
+
+function registerAndLoginByKeyDown(event)
+{
+    if(!checkIsEnterBack(event)){
+        return false;
+    }
+    registerAndLogin();
+}

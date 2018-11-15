@@ -184,7 +184,7 @@ function zalyjsOpenNewPage(url) {
 }
 
 //-public
-function zalyjsLoginSuccess(loginName, sessionid, isRegister, callback) {
+function zalyjsLoginSuccess(loginName, sessionid, isRegister, userCustoms, callback) {
 
     var callbackId = zalyjsCallbackHelper.register(callback)
     var thirdLoginName = localStorage.getItem(thirdLoginNameKey);
@@ -192,12 +192,13 @@ function zalyjsLoginSuccess(loginName, sessionid, isRegister, callback) {
         thirdLoginName = ""
     }
     var messageBody = {}
-    messageBody["loginName"] = loginName
-    messageBody["sessionid"] = sessionid
-    messageBody["isRegister"] = (isRegister == true ? true : false)
-    messageBody['thirdPartyKey'] = thirdLoginName
-    messageBody[callbackIdParamName] = callbackId
-    messageBody = JSON.stringify(messageBody)
+    messageBody["loginName"] = loginName;
+    messageBody["sessionid"] = sessionid;
+    messageBody["isRegister"] = (isRegister == true ? true : false);
+    messageBody['thirdPartyKey'] = thirdLoginName;
+    messageBody[callbackIdParamName] = callbackId;
+    messageBody['userCustoms'] = userCustoms;
+    messageBody = JSON.stringify(messageBody);
 
     if (isAndroid()) {
         window.Android.zalyjsLoginSuccess(messageBody)
@@ -245,9 +246,10 @@ function zalyjsApiSiteLogin() {
     if (!refererUrl) {
         refererUrl = "./index.php";
     }
+
     var body = {
         "@type":  "type.googleapis.com/site.ApiSiteLoginRequest",
-        "userCustoms" : "",
+        "userCustoms" : zalyjsSiteLoginMessageBody['userCustoms'],
         "devicePubkPem" :"11111",
         "preSessionId":zalyjsSiteLoginMessageBody['sessionid'],
         "loginName":zalyjsSiteLoginMessageBody['loginName'],
@@ -290,7 +292,6 @@ function zalyjsApiSiteLogin() {
                     var result = {
                         "errorInfo" : results.header[HeaderErrorInfo]
                     }
-                    console.log('----result---'+JSON.stringify(result))
                     var callbackName = zalyjsSiteLoginMessageBody.callback(result)
                 }
             }
