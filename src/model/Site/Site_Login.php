@@ -47,10 +47,10 @@ class Site_Login
 
         if ($userProfile && !empty($userCustomArray)) {
             //login success, save custom
-            $this->saveUserCustoms($userCustomArray);
+            $this->saveUserCustoms($userProfile["userId"], $userCustomArray);
         }
 
-        setcookie( $this->siteCookieName, $userProfile["sessionId"], time() + $this->cookieTimeOut, "/", "", false, true);
+        setcookie($this->siteCookieName, $userProfile["sessionId"], time() + $this->cookieTimeOut, "/", "", false, true);
 
         return $userProfile;
     }
@@ -296,10 +296,11 @@ class Site_Login
 
 
     //support site admins add custom items for users
-    private function saveUserCustoms(array $userCustoms)
+    private function saveUserCustoms($userId, array $userCustoms)
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         try {
+            $userCustoms["userId"] = $userId;
             return $this->ctx->SiteUserCustomTable->insertCustomProfile($userCustoms);
         } catch (Exception $e) {
             $this->logger->error($tag, $e);

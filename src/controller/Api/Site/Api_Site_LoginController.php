@@ -43,7 +43,10 @@ class Api_Site_LoginController extends \BaseController
             $preSessionId = $request->getPreSessionId();
             $devicePubkPem = trim($request->getDevicePubkPem());
 
-            if (empty($preSessionId) || empty($devicePubkPem)) {
+            //get user profile from platform clientSiteType=1:mobile client
+            $clientType = $this->getUserClient();
+
+            if (empty($preSessionId) || (empty($devicePubkPem) && Zaly\Proto\Core\UserClientType::UserClientWeb != $clientType)) {
                 throw new Exception("with error parameters");
             }
 
@@ -62,16 +65,12 @@ class Api_Site_LoginController extends \BaseController
 
             $customData = [];
             if (!empty($userCustoms)) {
-                new Zaly\Proto\Core\CustomUserProfile();
                 foreach ($userCustoms as $custom) {
                     $key = $custom->getCustomKey();
                     $value = $custom->getCustomValue();
                     $customData[$key] = $value;
                 }
             }
-
-            //get user profile from platform clientSiteType=1:mobile client
-            $clientType = Zaly\Proto\Core\UserClientType::UserClientMobileApp;
 
             $userProfile = $this->ctx->Site_Login->doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $customData);
 
@@ -170,5 +169,15 @@ class Api_Site_LoginController extends \BaseController
 
     }
 
+    private function getUserClient()
+    {
+        $userAgent = $this->getUserAgent();
+        error_log("=================client userAgent=" . $userAgent);
+        if (empty($userAgent) || strstr($userAgent, "DuckChat")) {
+            return Zaly\Proto\Core\UserClientType::UserClientMobileApp;
+        } else {
+            return Zaly\Proto\Core\UserClientType::UserClientWeb;
+        }
+    }
 }
 

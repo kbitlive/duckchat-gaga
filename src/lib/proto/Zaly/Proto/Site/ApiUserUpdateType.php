@@ -21,5 +21,9 @@ class ApiUserUpdateType
      * Generated from protobuf enum <code>ApiUserUpdateNickname = 2;</code>
      */
     const ApiUserUpdateNickname = 2;
+    /**
+     * Generated from protobuf enum <code>ApiUserUpdateCustom = 3;</code>
+     */
+    const ApiUserUpdateCustom = 3;
 }
 

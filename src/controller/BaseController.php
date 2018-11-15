@@ -53,6 +53,8 @@ abstract class BaseController extends \Wpf_Controller
 
     protected $language = Zaly\Proto\Core\UserClientLangType::UserClientLangEN;
 
+    protected $clientType;
+
     /**
      * @var BaseCtx
      */
@@ -345,6 +347,13 @@ abstract class BaseController extends \Wpf_Controller
             return true;
         }
         return false;
+    }
+
+    public function getUserAgent()
+    {
+        $requestHeader = $this->requestTransportData->getHeader();
+        $userAgent = $requestHeader[TransportDataHeaderKey::HeaderUserAgent];
+        return $userAgent;
     }
 
     public function getPublicUserProfile($userInfo)
