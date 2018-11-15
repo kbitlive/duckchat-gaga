@@ -87,6 +87,7 @@ class Page_Passport_LoginController extends HttpBaseController
         $enableInvitationCode = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_INVITATION_CODE);
         $enableRealName = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_REAL_NAME);
 
+
         $params = [
             'siteName' => $siteName,
             'siteLogo' => $this->ctx->File_Manager->getCustomPathByFileId($siteLogo),
@@ -113,7 +114,7 @@ class Page_Passport_LoginController extends HttpBaseController
 
             'enableInvitationCode' => $enableInvitationCode,
             'enableRealName' => $enableRealName,
-            'registerCustoms' => $this->getRegisterCustoms(),
+            'thirdLoginOptions' => [],
         ];
         echo $this->display("passport_login", $params);
         return;

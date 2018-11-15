@@ -26,6 +26,7 @@ abstract class HttpBaseController extends \Wpf_Controller
         "page.js",
         "page.siteConfig",
         "page.passport.login",
+        "page.passport.register",
         "page.jump",
         "page.version.check",
     ];
@@ -78,9 +79,6 @@ abstract class HttpBaseController extends \Wpf_Controller
 
             $this->siteConfig = $this->ctx->Site_Config->getAllConfig();
 
-            if ($preSessionId) {
-                $this->handlePreSessionId();
-            }
             if (!in_array($action, $this->whiteAction)) {
                 $flag = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_OPEN_WEB_EDITION);
                 if ($flag != 1) {
@@ -119,35 +117,6 @@ abstract class HttpBaseController extends \Wpf_Controller
             $this->language = Zaly\Proto\Core\UserClientLangType::UserClientLangZH;
         } else {
             $this->language = Zaly\Proto\Core\UserClientLangType::UserClientLangEN;
-        }
-    }
-
-    public function handlePreSessionId()
-    {
-        try {
-            $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
-            $thirdPartyLoginKey = isset($_GET['thirdPartyKey']) ? $_GET['thirdPartyKey'] : "";
-            $thirdPartyLoginKey = trim($thirdPartyLoginKey);
-
-            $userCustomArray = [];
-            if ($preSessionId) {
-                $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
-                if ($preSessionId) {
-                    $clientType = Zaly\Proto\Core\UserClientType::UserClientWeb;
-                    $userProfile = $this->ctx->Site_Login->doLogin($thirdPartyLoginKey, $preSessionId, "", $clientType, $userCustomArray);
-                    $this->setCookie($userProfile["sessionId"], $this->siteCookieName);
-                }
-            }
-            header("Content-Type: application/javascript; charset=utf-8");
-            $successCallBack = $_GET['success_callback'] ? $_GET['success_callback'] : "";
-            echo "$successCallBack();";
-            die();
-        } catch (Exception $ex) {
-            $errorInfo = $ex->getMessage();
-            $failCallBack = $_GET['fail_callback'] ? $_GET['fail_callback'] : "";
-            header("Content-Type: application/javascript; charset=utf-8");
-            echo "$failCallBack('" . $errorInfo . "');";
-            die();
         }
     }
 

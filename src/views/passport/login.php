@@ -15,27 +15,6 @@
 </head>
 
 <body>
-<input type="hidden" value="<?php echo $siteName;?>" class="siteName">
-<input type="hidden" value="<?php echo $loginNameAlias;?>" class="loginNameAlias">
-<input type="hidden" value="<?php echo $passwordFindWay;?>" class="passwordFindWay">
-<input type="hidden" value="<?php echo $loginWelcomeText;?>" class="loginWelcomeText">
-<input type="hidden" value="<?php echo $loginBackgroundColor;?>" class="loginBackgroundColor">
-<input type="hidden" value="<?php echo $loginBackgroundImage;?>" class="loginBackgroundImage">
-<input type="hidden" value="<?php echo $loginBackgroundImageDisplay;?>" class="loginBackgroundImageDisplay">
-<input type="hidden" value="<?php echo $siteVersionName;?>" class="siteVersionName">
-<input type="hidden" value="<?php echo $siteName;?>" class="siteName">
-<input type="hidden" value="<?php echo $siteLogo;?>" class="siteLogo">
-<input type="hidden" value="<?php echo $passwordResetRequired;?>" class="passwordResetRequired">
-
-<input type="hidden" value="<?php echo $pwdContainCharacters;?>" class="pwdContainCharacters">
-<input type="hidden" value="<?php echo $loginNameMaxLength;?>" class="loginNameMaxLength">
-<input type="hidden" value="<?php echo $loginNameMinLength;?>" class="loginNameMinLength">
-<input type="hidden" value="<?php echo $pwdMaxLength;?>" class="pwdMaxLength">
-<input type="hidden" value="<?php echo $pwdMinLength;?>" class="pwdMinLength">
-
-<input type="hidden" value='<?php echo $thirdPartyLoginOptions;?>' class="thirdPartyLoginOptions">
-<input type="hidden" value='<?php echo $siteAddress;?>' class="siteAddressPath">
-
 
 <div class="site-warning"></div>
 
@@ -85,7 +64,71 @@
                         <div  class="login_div">
                             <div class="zaly_login zaly_login_by_pwd" >
                                 <div class="login_input_div login_for_size_div" >
+                                    <div style="position: relative; height: 100%;">
+                                        <div>
+                                            <div class="mobile_logo_div">
+                                                <?php if ($siteLogo):?>
+                                                    <img class="mobile_logo" src="<?php echo $siteLogo;?>">
+                                                <?php else:?>
+                                                    <img class="mobile_logo" src="./public/img/login/mobile_logo.png">
+                                                <?php endif;?>
+                                            </div>
+                                            <div class="d-flex flex-row justify-content-center login-header" style="text-align: center;">
+                                                <span class="login_phone_tip_font" data-local-value="loginTip">登录</span>
+                                            </div>
 
+                                            <div class=" d-flex flex-row justify-content-left login_name_div" >
+                                                <image src="./public/img/login/loginName.png" class="img"/>
+                                                <?php if ($loginNameAlias):?>
+                                                    <input type="text" class="input_login_site  login_input_loginName" datatype="s" autocapitalize="off"  placeholder=" <?php echo  $loginNameAlias;?>" >
+                                                <?php else:?>
+                                                    <input type="text" class="input_login_site  login_input_loginName" datatype="s" autocapitalize="off"  data-local-placeholder="loginNamePlaceholder" placeholder="输入登录名" >
+                                                <?php endif;?>
+
+                                                <div class="clearLoginName" onclick="clearLoginName()"><image src="./public/img/msg/btn-x.png" class="clearLoginName clear_img" /></div>
+                                                <img src="./public/img/msg/msg_failed.png" class="img-failed login_input_loginName_failed">
+                                            </div>
+                                            <div class="line"></div>
+
+                                            <div class="login_name_div margin-top2">
+                                                <image src="./public/img/login/pwd.png" class="img"/>
+                                                <input type="password" class="input_login_site phone_num  login_input_pwd" autocapitalize="off"  data-local-placeholder="enterPasswordPlaceholder"  onkeydown="loginPassportByKeyPress(event)"  placeholder="输入密码, 长度5到20个字符(无中文)" >
+                                                <div class="pwd_div" onclick="changeImgByClickPwd()"><image src="./public/img/login/hide_pwd.png" class="pwd" img_type="hide" /></div>
+                                                <img src="./public/img/msg/msg_failed.png" class="img-failed login_input_pwd_failed">
+                                            </div>
+                                            <div class="line"></div>
+
+                                            <div class="d-flex flex-row justify-content-center ">
+                                                <button type="button" class="btn login_button" ><span class="span_btn_tip" data-local-value="loginBtnTip">登 录</span></button>
+                                            </div>
+
+                                            <div class="d-flex flex-row register_span_div" >
+                                                <span onclick="registerForPassportPassword()" style="color: RGBA(0, 0, 0, 0.2);" data-local-value="noAccountTip">还没有账户？</span> <span onclick="registerForPassportPassword()" data-local-value="registerContentTip">去注册</span>
+                                            </div>
+
+                                        </div>
+
+                                        <!--   third party landing      -->
+                                        <?php if(count($thirdPartyLoginOptions)) : ?>
+                                        <div class="login-others">
+                                            <div class="landing-third-title">使用以下账号直接登录</div>
+                                            <div class="landing-third-content">
+                                                <?php foreach($thirdLoginOptions as $thirdLogin) : ?>
+                                                <img class="third_login_logo"  landingUrl="<?php echo $thirdLogin['landingUrl'];?>" src="<?php echo $thirdLogin['logo'];?>" name="<?php echo $thirdLogin['name'];?>" onerror="src='./public/img/plugin/default.png'">
+                                                <?php endforeach; ?>
+
+                                            </div>
+                                        </div>
+                                        <?php endif; ?>
+                                        <!--  for   -->
+                                        <div class="mobile_slogn_div" style="position: absolute;bottom:3rem;">
+                                            <?php if($loginWelcomeText) : ?>
+                                                <?php echo $loginWelcomeText; ?>
+                                            <?php else:?>
+                                            这是一个使用DuckChat系统搭建的聊天站点，此处的描述内容可以在管理后台进行修改配置。<br/>官网：<a target="_blank" href="https://duckchat.akaxin.com">https://duckchat.akaxin.com</a>
+                                            <?php endif;?>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -147,7 +190,6 @@
 
 <input type="hidden" value="<?php echo $jumpRoomId;?>" class="jumpRoomId">
 <input type="hidden" value="<?php echo $jumpRoomType;?>" class="jumpRoomType">
-<input type="hidden" value="." class="siteAddress">
 <input type="hidden" value="<?php echo $isDuckchat; ?>" class="isDuckchat">
 <input type="hidden" value="<?php echo $enableInvitationCode; ?>" class="enableInvitationCode">
 <input type="hidden" value="<?php echo $enableRealName; ?>" class="enableRealName">
@@ -159,6 +201,7 @@
 <script src="./public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
 <script src="./public/js/im/zalyClient.js?_version=<?php echo $versionCode?>"></script>
 <script src="./public/js/im/zalyBaseWs.js?_version=<?php echo $versionCode?>"></script>
+<script src="./public/js/login/base.js?_version=<?php echo $versionCode?>"></script>
 <script src="./public/js/login/login.js?_version=<?php echo $versionCode?>"></script>
 
 

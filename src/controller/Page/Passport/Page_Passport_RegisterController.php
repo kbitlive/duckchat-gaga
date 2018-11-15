@@ -84,6 +84,17 @@ class Page_Passport_RegisterController extends HttpBaseController
 
         $thirdPartyLoginOptions = ZalyLogin::getThirdPartyConfig();
 
+        $enableInvitationCode = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_INVITATION_CODE);
+        $enableRealName = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_REAL_NAME);
+
+
+        $loginNameTip =  ZalyText::getText("text.length", $this->language)." " .$loginNameMinLength."-".$loginNameMaxLength;
+        $pwdTip =  ZalyText::getText("text.length", $this->language)." " .$pwdMinLength."-".$pwdMaxLength;
+        if ($pwdContainCharacters) {
+            $pwdTip = $pwdContainCharacters . ",". ZalyText::getText("text.length", $this->language)." " .$pwdMinLength . "-" . $pwdMaxLength;
+        }
+        $pwdTip = str_replace(["letter", "number", "special_characters"], ["字母", "数字", "特殊字符"], $pwdTip);
+
         $params = [
             'siteName' => $siteName,
             'siteLogo' => $this->ctx->File_Manager->getCustomPathByFileId($siteLogo),
@@ -99,6 +110,8 @@ class Page_Passport_RegisterController extends HttpBaseController
             "loginNameMaxLength" => $loginNameMaxLength,
             'passwordResetRequired' => $passwordResetRequired,
             "pwdContainCharacters" => $pwdContainCharacters,
+            "loginNameTip" => $loginNameTip,
+            "pwdTip" => $pwdTip,
 
             'loginBackgroundImageDisplay' => $loginBackgroundImageDisplay,
 
@@ -106,6 +119,10 @@ class Page_Passport_RegisterController extends HttpBaseController
             'passwordFindWay' => $passwordRestWay,
             'passwordResetWay' => $passwordRestWay,
             'passwordResetRequired' => $passwordResetRequired,
+
+            'enableInvitationCode' => $enableInvitationCode,
+            'enableRealName' => $enableRealName,
+
             'customLoginItems' => [
                 //自定义的登陆项
                 [
@@ -130,7 +147,6 @@ class Page_Passport_RegisterController extends HttpBaseController
                 ],
             ],
         ];
-
         echo $this->display("passport_register", $params);
         return;
     }
