@@ -54,29 +54,6 @@
 
         <div class="list-item-center">
 
-            <div class="item-row" id="custom-key" onclick="showPopup('custom-key');">
-                <div class="item-body">
-                    <div class="item-body-display">
-
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">自定义字段</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Custom Key</div>
-                        <?php } ?>
-
-                        <div class="item-body-tail">
-                            <div class="item-body-value" id="custom-key-value"></div>
-                            <div class="item-body-value-more">
-                                <img class="more-img" src="../../public/img/manage/more.png"/>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
-
             <div class="item-row" id="custom-key-name" onclick="showPopup('custom-key-name');">
                 <div class="item-body">
                     <div class="item-body-display">
@@ -93,6 +70,27 @@
                             </div>
                         </div>
 
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+            <div class="item-row" id="custom-key-desc" onclick="showPopup('custom-key-desc');">
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">字段描述</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Custom Desc</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <div class="item-body-value" id="custom-desc-value"></div>
+                            <div class="item-body-value-more">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -420,8 +418,8 @@
 
 
     $("#addButton").click(function () {
-        var customKey = $("#custom-key").find(".item-body-value").html();
         var customKeyName = $("#custom-key-name").find(".item-body-value").html();
+        var customKeyDesc = $("#custom-key-desc").find(".item-body-value").html();
         var customKeyIconFileId = $("#custom-key-fileid").attr("fileId");
         var customKeySort = $("#custom-key-sort").find(".item-body-value").html();
 
@@ -442,8 +440,8 @@
         //        "dataVerify",
         //        "addTime",
         var data = {
-            'customKey': customKey,
             'keyName': customKeyName,
+            'keyDesc': customKeyDesc,
             'keyIcon': customKeyIconFileId,
             'keySort': customKeySort,
             'status': statusIsChecked ? 2 : 1,

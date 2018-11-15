@@ -26,22 +26,40 @@ class Manage_Custom_UserAddController extends Manage_ServletController
             'errCode' => "error",
         ];
 
-        error_log("================" . var_export($_POST, true));
+        $customName = trim($_POST['keyName']);
 
-
-        $keySort = trim($_POST['keySort']);
-        if (!is_numeric($keySort)) {
-            $keySort = 10;
+        if (empty($customName)) {
+            throw new Exception($this->language == 1 ? "字段名称不能为空" : "key name can't be empty");
         }
 
+        $keySort = trim($_POST['keySort']);
+        if (empty($keySort)) {
+            $keySort = 20;
+        }
+
+        if (!is_numeric($keySort)) {
+            throw new Exception($this->language == 1 ? "排序字段请输入数字" : "keySort is not numeric");
+        }
+
+        $status = trim($_POST['status']);
+
+        if (!is_numeric($status)) {
+            $status = Zaly\Proto\Core\UserCustomStatus::UserCustomNormal;
+        }
+
+        $isOpen = trim($_POST['isOpen']);
+        $isRequired = trim($_POST['isRequired']);
+
+        $pinyin = new \Overtrue\Pinyin\Pinyin();
+        $customKey = $pinyin->permalink($customName, "");
         $customs = [
-            'customKey' => $_POST['customKey'],
-            'keyName' => $_POST['keyName'],
-            'keyIcon' => $_POST['keyIcon'],
-            'keySort' => $_POST['keySort'],
-            'status' => $_POST['status'],
-            'isOpen' => $_POST['isOpen'],
-            'isRequired' => $_POST['isRequired'],
+            'customKey' => $customKey,
+            'keyName' => $customName,
+            'keyIcon' => trim($_POST['keyIcon']),
+            'keySort' => $keySort,
+            'status' => $status,
+            'isOpen' => $isOpen ? 1 : 0,
+            'isRequired' => $isRequired ? 1 : 0,
         ];
 
         if ($this->addUserCustomKey($customs)) {
