@@ -503,7 +503,7 @@
         <div style="width: 100%;">
             {{each customs custom}}
             <div class="siteSelfInfo self_custom_info">
-                <span>{{custom['customName']}}</span> <input type="text" value="{{custom['customValue']}}" onkeydown="updateUserCustomInfo(event, '{{custom[customKey]}}' )" class="customs self_custom_edit_{{custom['customKey']}} siteSelfInfo"customName = "{{custom['customName']}}" customKey="{{custom['customKey']}}" >
+                <span>{{custom['customName']}}</span> <input type="text" value="{{custom['customValue']}}" onkeydown="updateUserCustomInfo(event, this)" class="customs self_custom_edit_{{custom['customKey']}} siteSelfInfo"customName = "{{custom['customName']}}" customKey="{{custom['customKey']}}" >
             </div>
             {{/each}}
         </div>

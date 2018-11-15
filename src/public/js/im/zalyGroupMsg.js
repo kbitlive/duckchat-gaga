@@ -3466,10 +3466,9 @@ function handleGetUserProfile(result)
     var isMaster = isJudgeSiteMasters(token);
     var html = template("tpl-self-info", {
         userId:token,
-        nickname:nickname,
+        nickname:profile['public'].nickname,
         loginName:loginName,
         isMaster:isMaster,
-        siteAddress:siteAddress,
         customs:customs
     });
 
@@ -3566,7 +3565,7 @@ function updateUserInfo(values)
 
 function handleUpdateUserInfo(results)
 {
-    window.location.reload();
+    // window.location.reload();
 }
 
 $(document).on("click", ".nickNameDiv",function () {
@@ -3580,20 +3579,21 @@ $(document).on("click", ".nickNameDiv",function () {
 
 
 
-function updateUserCustomInfo(event, customKey)
+function updateUserCustomInfo(event, jqElement)
 {
     var isEnter = checkIsEnterBack(event);
     if(!isEnter) {
         return;
     }
 
-    var customValue = $("self_custom_edit_"+customKey).val();
-    var customName = $("self_custom_edit_"+customKey).attr("customName");
+    var customKey = $(jqElement).attr("customKey");
+    var customValue = $(jqElement).val();
+    var customName = $(jqElement).attr("customName");
 
     var customInfo = {
-        customKey:customKey,
-        customValue:customValue,
-        customName:customName
+        "customKey":customKey,
+        "customValue":customValue,
+        "customName":customName
     }
 
     var values = new Array();
