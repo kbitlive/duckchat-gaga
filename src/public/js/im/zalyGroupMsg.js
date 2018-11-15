@@ -4157,7 +4157,7 @@ function recallMsg(msgId,event) {
     event.stopPropagation();
     var chatSessionId = localStorage.getItem(chatSessionIdKey);
     var chatSessionType = localStorage.getItem(chatSessionId)
-    var msgText = loginName + " recall msg";
+    var msgText = "此消息被撤回";
     sendRecallMsg(msgId, msgText, chatSessionId, chatSessionType);
 }
 

@@ -478,7 +478,7 @@ function handleSyncMsg(msg)
         if(msg.type == MessageType.MessageRecall) {
             try{
                 var msgId = msg['recall'].msgId;
-                var msgContent = msg["recall"].msgText ? msg["recall"].msgText : loginName +" recall msg";
+                var msgContent = msg["recall"].msgText ? msg["recall"].msgText :  +"此消息被撤回";
                 var html = template("tpl-receive-msg-notice", {
                     msgContent:msgContent,
                     timeServer:msg.timeServer
