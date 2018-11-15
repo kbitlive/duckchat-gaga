@@ -903,7 +903,14 @@
 </script>
 
 
-
 <script type="text/html" id="tpl-friend-profile-more-info">
     <div class="more-info-title" data-local-value="moreInfoTip">更多资料</div>
+    <div style="height:100%;overflow-y: scroll;">
+        {{each customs custom}}
+        <div class="custom_info">
+            <div class="custom_name">{{custom['customKey']}}</div>
+            <div class="custom_value">{{custom['customName']}}</div>
+        </div>
+        {{/each}}
+    </div>
 </script>
