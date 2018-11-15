@@ -488,7 +488,6 @@
     }
 
     function createKeyResponse(url, data, result) {
-        console.log("ppppppppppppppppppppp")
         window.location.reload();
     }
 

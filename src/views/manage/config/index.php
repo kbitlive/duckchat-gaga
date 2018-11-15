@@ -766,7 +766,6 @@
     }
 
     $(".site-logo-image").each(function () {
-        console.log($(this).attr("avatar"));
         if (!isMobile()) {
             var avatar = $(this).attr("avatar");
             var src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";

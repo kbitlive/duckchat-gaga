@@ -442,8 +442,6 @@
         function showLocalImage(fileId) {
             var requestUrl = downloadFileUrl + "&fileId=" + fileId + "&returnBase64=0";
             var xhttp = new XMLHttpRequest();
-            console.log("showSiteLogo imageId ==" + fileId);
-
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && (this.status == 200 || this.status == 304)) {
                     var blob = this.response;

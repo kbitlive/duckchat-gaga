@@ -52,6 +52,15 @@ MessageStatus  = {
     MessageEventSyncEnd : "MessageEventSyncEnd",
 }
 
+
+ApiUserUpdateType  = {
+    ApiUserUpdateInvalid  : "ApiUserUpdateInvalid",
+    ApiUserUpdateAvatar   : "ApiUserUpdateAvatar",
+    ApiUserUpdateNickname :"ApiUserUpdateNickname",
+    ApiUserUpdateCustom :"ApiUserUpdateCustom",
+}
+
+
 DataWriteType = {
     WriteUpdate : "WriteUpdate",
     WriteAdd : "WriteAdd",

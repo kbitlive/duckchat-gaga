@@ -276,7 +276,6 @@
             try {
                 zalyjsGoto(null, "groupMsg", groupId);
             } catch (e) {
-                console.log(e)
                 alert("客户端暂不支持，请升级客户端");
             }
         } else {
