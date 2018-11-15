@@ -50,8 +50,6 @@ class Page_Passport_RegisterController extends HttpBaseController
         $passwordRestWay = isset($passwordResetWayConfig["configValue"]) ? $passwordResetWayConfig["configValue"] : "";
 
         $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
-        $passwordResetRequiredConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED]) ? $loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED] : "";
-        $passwordResetRequired = isset($passwordResetRequiredConfig["configValue"]) ? $passwordResetRequiredConfig["configValue"] : "";
 
         $loginWelcomeTextConfig = isset($loginConfig[LoginConfig::LOGIN_PAGE_WELCOME_TEXT]) ? $loginConfig[LoginConfig::LOGIN_PAGE_WELCOME_TEXT] : "";
         $loginWelcomeText = isset($loginWelcomeTextConfig["configValue"]) ? $loginWelcomeTextConfig["configValue"] : "";
@@ -108,7 +106,6 @@ class Page_Passport_RegisterController extends HttpBaseController
             "pwdMinLength" => $pwdMinLength,
             "loginNameMinLength" => $loginNameMinLength,
             "loginNameMaxLength" => $loginNameMaxLength,
-            'passwordResetRequired' => $passwordResetRequired,
             "pwdContainCharacters" => $pwdContainCharacters,
             "loginNameTip" => $loginNameTip,
             "pwdTip" => $pwdTip,
@@ -116,10 +113,6 @@ class Page_Passport_RegisterController extends HttpBaseController
             'loginBackgroundImageDisplay' => $loginBackgroundImageDisplay,
 
             'loginNameAlias' => $loginNameAlias,
-            'passwordFindWay' => $passwordRestWay,
-            'passwordResetWay' => $passwordRestWay,
-            'passwordResetRequired' => $passwordResetRequired,
-
             'enableInvitationCode' => $enableInvitationCode,
             'enableRealName' => $enableRealName,
 

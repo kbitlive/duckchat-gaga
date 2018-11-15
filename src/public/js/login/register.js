@@ -104,20 +104,6 @@ function checkRegisterInfo()
         }
     }
 
-    registerEmail = trimString(registerEmail);
-    if(passwordResetRequired == 1
-        && (
-            registerEmail == "" || registerEmail == undefined
-            || registerEmail.length<0)
-    ) {
-        $(".register_input_email_failed")[0].style.display = "block";
-        $(".register_input_email_required")[0].style.display = "none";
-        if(isFocus == false) {
-            $("#register_input_email").focus();
-            isFocus = true;
-        }
-    }
-    
     $(".register_custom").each(function (index, custom) {
         var isRequired = $(custom).attr("isRequired");
         var customName = $(custom).attr("customName");

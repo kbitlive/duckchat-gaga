@@ -909,6 +909,7 @@ function logout(event)
     event.stopPropagation();
     var tip = $.i18n.map['logoutJsTip'] != undefined ? $.i18n.map['logoutJsTip']: "退出账号，将会清空聊天记录";
     if(confirm(tip)) {
+        localStorage.clear();
         window.location.href = "./index.php?action=page.logout";
     }
 }
