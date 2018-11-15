@@ -181,7 +181,7 @@
                     </div>
 
                     <div class="action-row group_speakers" >
-                        <div class="action-title" data-local-value="groupSpeakersTip">群发言人</div>
+                        <div class="action-title" data-local-value="groupsBannedTip">禁言设置</div>
                         <div class="action-btn ">
                             <img src="./public/img/msg/icon_disclosure.png" class="icon_discosure"/>
                         </div>

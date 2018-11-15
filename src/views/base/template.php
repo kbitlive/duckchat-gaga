@@ -36,18 +36,25 @@
     </div>
 
     <div id="group-speaker-people" class="pop-window pop-window-speaker-people">
-        <div class="pw-right-header" style="justify-content: center" data-local-value="speakerTip" >群发言人</div>
+        <div class="pw-right-header" style="justify-content: center" data-local-value="groupsBannedTip" >禁言设置</div>
+        <div class="sub-speaker-div set_group_speakers" style="display: none;">
+            <div class="sub-speaker-title" data-local-value="currentSpeakerTip"> 开启禁言 </div>
+            <div class="group_speakers_set_div" >
+                <img src="../../public/img/msg/icon_switch_off.png" value="off" class="group_speakers_set" style="width: 5rem;height:3rem;">
+            </div>
+        </div>
+        <div class="speaker-line"></div>
+
         <div class="sub-speaker-div">
             <div class="sub-speaker-title" data-local-value="currentSpeakerTip"> 当前发言人 </div>
-            <div class="remove-all-speaker" data-local-value="removeAllSpeakerTip"> 移除所有发言人 </div>
+            <div class="remove-all-speaker" data-local-value="removeAllSpeakerTip" style="display: none;"> 移除所有发言人 </div>
         </div>
         <div class="speaker-line"></div>
         <div class="speaker-content">
-            <div class="speaker-people-div" style="width: 100%;">
+            <div class="speaker-people-div" style="width: 100%;display: none;">
             </div>
         </div>
     </div>
-
 
 
     <div id="group-member-list-div" class="pop-window pop-window-member-people">

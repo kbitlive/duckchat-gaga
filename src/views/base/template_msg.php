@@ -598,7 +598,7 @@
             <div class="sub-speaker-title" data-local-value="otherGroupMemberTip"> 其他成员 </div>
         </div>
         <div class="speaker-line"></div>
-        <div class="speaker-group-member-div" style="width: 100%;">
+        <div class="speaker-group-member-div" style="width: 100%;margin-bottom: 5rem;">
         </div>
     </div>
 </script>

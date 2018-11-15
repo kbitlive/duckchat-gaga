@@ -689,30 +689,31 @@ html, body{
     display: flex;
     justify-content: space-between;
     margin-left: 2rem;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
     overflow-y: scroll;
 }
 .sub-speaker-title {
-    height:1.88rem;
+    height:5rem;
     font-size:1.31rem;
     font-family:PingFangSC-Medium;
     font-weight:500;
     color:rgba(102,102,102,1);
-    line-height:1.88rem;
+    line-height:5rem;
     margin-left: 1rem;
     margin-right: 1rem;
 }
-.remove-all-speaker {
+.remove-all-speaker, .group_speakers_set_div {
     margin-right: 1rem;
     width:12.95rem;
-    height:1.88rem;
+    height:5rem;
     font-size:1.31rem;
     font-family:PingFangSC-Medium;
     font-weight:500;
     color:rgba(76,59,177,1);
-    line-height:1.88rem;
+    line-height:5rem;
     cursor: pointer;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 .speaker-line{
     width:35.18rem;

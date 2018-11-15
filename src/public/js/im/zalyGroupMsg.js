@@ -1872,9 +1872,10 @@ function handelGroupSpeakerList(result)
             isSelfAdminRole = true;
         }
         $(".speaker-people-div").html('');
-        if(isSelfAdminRole == false) {
-            $(".remove-all-speaker")[0].style.display = "none";
-            $(".speaker-group-member")[0].style.display = "none";
+        if(isSelfAdminRole == true) {
+            $(".remove-all-speaker")[0].style.display = "flex";
+            $(".speaker-people-div")[0].style.display = "block";
+            $(".set_group_speakers")[0].style.display = "flex";
         }
 
         if(groupProfile.hasOwnProperty("speakers")) {
@@ -1885,6 +1886,13 @@ function handelGroupSpeakerList(result)
                 var html =getSpeakerMemberHtml(speakerInfo,  true, "member", isSelfAdminRole);
                 $(".speaker-people-div").append(html);
             }
+            var openSrc = "./public/img/msg/icon_switch_on.png";
+            $(".group_speakers_set").attr("src", openSrc);
+            $(".group_speakers_set").attr("value", "on");
+        } else {
+            var closeSrc = "./public/img/msg/icon_switch_off.png";
+            $(".group_speakers_set").attr("src", closeSrc);
+            $(".group_speakers_set").attr("value", "off");
         }
         // group operation -- group speakers from group profile - init member html
         if(isSelfAdminRole) {
@@ -1898,6 +1906,27 @@ function handelGroupSpeakerList(result)
     }
     handleGetGroupProfile(result);
 }
+
+$(document).on("click", ".group_speakers_set", function(){
+    var value = $(this).attr("value");
+    if(value == "on") {
+        //off
+        var closeSrc = "./public/img/msg/icon_switch_off.png";
+        $(".group_speakers_set").attr("src", closeSrc);
+        $(".group_speakers_set").attr("value", "off");
+        $(".remove-all-speaker").click();
+    } else {
+        //on
+        var openSrc = "./public/img/msg/icon_switch_on.png";
+        $(".group_speakers_set").attr("src", openSrc);
+        $(".group_speakers_set").attr("value", "on");
+        var groupId = localStorage.getItem(chatSessionIdKey);
+        var speakerUserIds = new Array();
+        speakerUserIds.push(token);
+        updateGroupSpeaker(groupId, speakerUserIds, SetSpeakerType.AddSpeaker, handleSetSpeaker);
+    }
+
+});
 
 // group operation -- group speakers from group profile - init member html
 unselectSpeakerMemberOffset = 0;
@@ -1940,6 +1969,7 @@ function initSpeakerGroupMemberList(results)
             var html = getSpeakerMemberHtml(user,  false, "member", isSelfAdminRole);
             $(".speaker-group-member-div").append(html);
         }
+        $(".speaker-group-member-div")[0].style.height = $(".speaker-group-member-div")[0].clientHeight+"px";
     }
 }
 // group operation -- group speakers from group profile
@@ -2026,6 +2056,11 @@ addSpeakerInfo=[];
 
 function handleAddSpeaker()
 {
+    //开启禁言
+    var openSrc = "./public/img/msg/icon_switch_on.png";
+    $(".group_speakers_set").attr("src", openSrc);
+    $(".group_speakers_set").attr("value", "on");
+
     var groupId = localStorage.getItem(chatSessionIdKey);
     var groupProfile = getGroupProfile(groupId);
 
@@ -2080,6 +2115,7 @@ $(document).on("click", ".add_speaker_btn", function () {
 deleteSpeakerInfo=[];
 function handleRemoveSpeaker()
 {
+
     var delSpeakerLength=deleteSpeakerInfo.length;
 
     var groupId = localStorage.getItem(chatSessionIdKey);
@@ -2098,6 +2134,13 @@ function handleRemoveSpeaker()
         var html = getSpeakerMemberHtml(speakerInfo,  false, "member", isSelfAdminRole);
         $(".speaker-group-member-div").append(html);
     }
+    //关闭禁言
+    if($(".speaker_remove_people").length < 1) {
+        var closeSrc = "./public/img/msg/icon_switch_off.png";
+        $(".group_speakers_set").attr("src", closeSrc);
+        $(".group_speakers_set").attr("value", "off");
+    }
+
     deleteSpeakerInfo=[];
     sendGroupProfileReq(groupId, handleGetGroupProfile);
 }
