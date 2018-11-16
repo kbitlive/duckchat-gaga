@@ -6,7 +6,7 @@
  * Time: 6:37 PM
  */
 
-class MiniProgram_Test_ToolsController extends MiniProgramController
+class MiniProgram_Test_ToolsController extends MiniProgram_BaseController
 {
 
     private $testMiniProgramId = 106;
