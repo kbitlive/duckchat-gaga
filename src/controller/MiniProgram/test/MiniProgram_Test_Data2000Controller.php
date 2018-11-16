@@ -8,7 +8,7 @@
 
 class MiniProgram_Test_Data2000Controller extends MiniProgramController
 {
-    private $miniProgramId = 105;
+    private $miniProgramId = 107;
 
     protected function getMiniProgramId()
     {
