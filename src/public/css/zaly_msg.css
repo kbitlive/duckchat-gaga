@@ -1284,8 +1284,8 @@ html, body{
 .unread-num {
     top:1.5rem;
     right:1rem;
-    width: 2rem;
-    height: 2rem;
+    width: 1.8rem;
+    height: 1.8rem;
     background-color: red;
     position: absolute;
     border-radius: 50%;
@@ -1308,8 +1308,8 @@ html, body{
 }
 
 .chatsession-row-img .unread-num {
-    top:0rem;
-    right:-1rem;
+    top:-0.5rem;
+    right:-0.5rem;
 }
 .msg-notice {
     font-size:1.31rem;
@@ -1393,8 +1393,9 @@ html, body{
     height:1rem;
     border-radius: 50%;
     position: absolute;
-    top:0;
-    right:0;
+    top: -0.5rem;
+    right: -0.5rem;
+    margin: auto;
 }
 
 .apply_friend_list_num {
