@@ -117,14 +117,14 @@ function displayFrontPage()
 
 
 
-uploadSelfAvatar = false;
+isSelfInfoCanHidden = true;
 
 //点击触发一个对象的点击
 function uploadFile(obj, type)
 {
 
     if(type == 'user_avatar') {
-        uploadSelfAvatar = true
+        isSelfInfoCanHidden = false
     }
 
     $("#"+obj).val("");
@@ -3472,6 +3472,11 @@ function handleGetUserProfile(result)
             customs = profile.custom;
         }
     }
+    try{
+        $("#selfInfo").remove();
+    }catch (error) {
+
+    }
     var finishTip = getLanguage() == 1? '完成': "finish";
     var isMaster = isJudgeSiteMasters(token);
     var html = template("tpl-self-info", {
@@ -3521,12 +3526,11 @@ $(".selfInfo").mouseover(function(){
 
 });
 
-$(document).on("mouseleave","#selfInfo", function () {
-    if( uploadSelfAvatar == false) {
+$(document).on("mouseleave","#selfInfoDiv", function () {
+    if( isSelfInfoCanHidden == true) {
         removeWindow($("#selfInfo"));
     }
 });
-
 
 $(document).on("click", "#self-qrcode", function () {
     getSelfQrcode();
@@ -3630,8 +3634,10 @@ function updateUserCustomInfo(event, jqElement)
 function editSelfCustom(type)
 {
     if(type == 'edit') {
+        isSelfInfoCanHidden = false;
         $("#selfInfoDiv")[0].style.display = "none";
         $("#selfCutsomInfoDiv")[0].style.display = "block";
+        $("#selfInfo")[0].style.height="29rem";
     } else {
         var values = new Array();
 
@@ -3652,10 +3658,11 @@ function editSelfCustom(type)
             };
             values.push(value);
         });
-        console.log("---------"+JSON.stringify(values));
         updateUserInfo(values);
         $("#selfInfoDiv")[0].style.display = "block";
         $("#selfCutsomInfoDiv")[0].style.display = "none";
+        $("#selfInfo")[0].style.height="20rem";
+        isSelfInfoCanHidden = true;
     }
 }
 //------------------------------------api.friend.delete--------------------------------------------------------
@@ -3683,9 +3690,6 @@ function handleFriendDelete(userId)
 $(document).on("click", "#selfQrcode", function () {
     downloadImgFormQrcode("selfQrcode");
 });
-
-
-
 
 
 $(document).on("click", ".web-msg-click", function(){

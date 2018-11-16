@@ -884,7 +884,7 @@ html, body{
 
 #selfInfo {
     width:38.37rem;
-    height:29.83rem;
+    height:20.83rem;
     background:rgba(255,255,255,1);
     box-shadow:0rem 0.19rem 1.41rem 0.09rem rgba(153,153,153,1);
     border-radius:0.56rem;
@@ -2144,6 +2144,7 @@ button:active{
     border:0.09rem solid;
     outline: none;
     cursor: pointer;
+    border:1px solid #E5E5E5;
 }
 
 .edit_self_custom {
