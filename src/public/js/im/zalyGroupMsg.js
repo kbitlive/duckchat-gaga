@@ -561,8 +561,9 @@ $(document).on("click", ".plugin-info", function () {
     var pluginId = $(this).attr("plugin-id");
     localStorage.setItem(defaultPluginDisplay, pluginId);
     $(".title").html(name);
+    var pluginId = "plugin_id_"+pluginId;
     $(".plugin-src").attr("src", landingPageUrl);
-    $(".plugin-src").attr("id", "plugin_id_"+pluginId);
+    $(".plugin-src").attr("id",pluginId);
     setPluginTitle(pluginId);
     $(".open_new_page").attr("landingPageUrl", landingPageUrl);
     deleteCookie("duckchat_page_url");
@@ -572,11 +573,18 @@ $(document).on("click", ".plugin-info", function () {
 
 function setPluginTitle(pluginId)
 {
-    var iframe = document.getElementById("plugin_id_"+pluginId);
+    var iframe = document.getElementById(pluginId);
+    var pluginSrc = $("#"+pluginId).attr("src");
     try{
-        iframe.onload = function (ev) {
-            var pluginTitle = iframe.contentWindow.document.title;
-            $(".plugin-title").html(pluginTitle);
+        var host = location.host;
+        if(location.port) {
+            host = host + ":"+location.port;
+        }
+        if(pluginSrc.indexOf(host) != -1 || (( pluginSrc.indexOf("http") == -1) && ( pluginSrc.indexOf("https") == -1))) {
+            iframe.onload = function (ev) {
+                var pluginTitle = iframe.contentWindow.document.title;
+                $(".plugin-title").html(pluginTitle);
+            }
         }
     }catch (error){
 
@@ -660,11 +668,12 @@ $(document).on("click", ".plugin_back", function () {
     try{
         var pluginId =  $(".plugin-iframe").attr("id");
         $(".plugin-iframe")[0].contentWindow.history.go(-1); // back
-        setPluginTitle(pluginId);
         var onReload = false;
         $(".plugin-iframe")[0].onload = function() {
             if( onReload == false) {
-                $(".plugin-iframe")[0].contentWindow.self.location.reload(true);
+                $(".plugin-iframe")[0].contentWindow.self.location.href = $(".plugin-iframe")[0].contentWindow.self.location.href;
+                console.log("plugin---id---"+pluginId);
+                setPluginTitle(pluginId);
                 onReload = true;
             }
         }
@@ -3462,14 +3471,15 @@ function handleGetUserProfile(result)
             customs = profile.custom;
         }
     }
-
+    var finishTip = getLanguage() == 1? '完成': "finish";
     var isMaster = isJudgeSiteMasters(token);
     var html = template("tpl-self-info", {
         userId:token,
         nickname:profile['public'].nickname,
         loginName:loginName,
         isMaster:isMaster,
-        customs:customs
+        customs:customs,
+        finishTip:finishTip
     });
 
     html = handleHtmlLanguage(html);
