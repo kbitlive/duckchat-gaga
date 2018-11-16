@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS siteConfig(
                   configValue TEXT ,
                   UNIQUE (configKey));
 
-CREATE TABLE  IF NOT EXISTS siteUser (
+CREATE TABLE IF NOT EXISTS siteUser (
                    id INTEGER PRIMARY KEY AUTOINCREMENT,
                    userId VARCHAR(100) UNIQUE NOT NULL,
                    loginName VARCHAR(100) UNIQUE NOT NULL,
@@ -56,12 +56,13 @@ create table IF NOT EXISTS siteSession(
                 userAgentType INTEGER,
                 gatewayURL VARCHAR(100),
                 gatewaySocketId VARCHAR(100),
+                loginPluginId  VARCHAR(100),
                 UNIQUE(sessionId,userId),
                 UNIQUE(userId,deviceId));
 
 CREATE TABLE  IF NOT EXISTS siteGroup (
                id INTEGER PRIMARY KEY AUTOINCREMENT,
-               groupId VARCHAR(100) NOT NULL,/*6到16位*/
+               groupId VARCHAR(50) NOT NULL,/*6到16位*/
                `name` VARCHAR(100) NOT NULL,/*群名*/
                nameInLatin VARCHAR(100) NOT NULL,
                owner VARCHAR(100) NOT NULL,
@@ -81,7 +82,7 @@ CREATE TABLE  IF NOT EXISTS siteGroup (
 
 CREATE TABLE IF NOT EXISTS siteGroupUser(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-               groupId VARCHAR(100) NOT NULL,
+               groupId VARCHAR(50) NOT NULL,
                userId VARCHAR(100) NOT NULL,
                memberType INTEGER,
                isMute BOOLEAN default 0 ,/*是否静音 1表示静音，0表示没有静音*/
@@ -102,6 +103,7 @@ CREATE TABLE IF NOT EXISTS siteU2Message(
             );
 
 CREATE INDEX IF NOT EXISTS indexSiteU2MessageUserId ON siteU2Message(userId);
+CREATE INDEX IF NOT EXISTS indexSiteU2MessageFromUserId ON siteU2Message(fromUserId);
 
 CREATE TABLE IF NOT EXISTS siteU2MessagePointer(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -116,7 +118,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS indexSiteU2MessagePointerUd ON siteU2MessagePo
 CREATE TABLE IF NOT EXISTS siteGroupMessage(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             msgId VARCHAR(100) UNIQUE NOT NULL,
-            groupId VARCHAR(100) NOT NULL,
+            groupId VARCHAR(50) NOT NULL,
             fromUserId VARCHAR(100),
             msgType INTEGER,
             content TEXT,
@@ -125,18 +127,24 @@ CREATE TABLE IF NOT EXISTS siteGroupMessage(
 
 CREATE INDEX IF NOT EXISTS indexSiteGroupMessageGroupId ON siteGroupMessage(groupId);
 
+CREATE TABLE IF NOT EXISTS siteGroupMessagePointer(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            groupId VARCHAR(50) NOT NULL,
+            userId VARCHAR(100) NOT NULL,
+            deviceId VARCHAR(100),
+            clientSideType INTEGER, -- 0:无效，1:手机客户端  2:web客户端
+            pointer INTEGER);
 
 CREATE TABLE IF NOT EXISTS passportPassword(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 userId VARCHAR(100) NOT NULL,
-                email VARCHAR(100) NOT NULL,
-                password VARCHAR(100) NOT NULL,
-                nickname VARCHAR(100) NOT NULL,
                 loginName VARCHAR(100) NOT NULL,
+                nickname VARCHAR(100) NOT NULL,
+                password VARCHAR(100) NOT NULL,
+                email VARCHAR(100),
                 invitationCode VARCHAR(100),
                 timeReg BIGINT,
                 unique(userId),
-                unique(email),
                 unique(loginName)
             );
 
@@ -156,18 +164,10 @@ CREATE TABLE IF NOT EXISTS passportPasswordToken(
                 UNIQUE(loginName)
             );
 
-CREATE TABLE IF NOT EXISTS siteGroupMessagePointer(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            groupId VARCHAR(100) NOT NULL,
-            userId VARCHAR(100) NOT NULL,
-            deviceId VARCHAR(100),
-            clientSideType INTEGER, -- 0:无效，1:手机客户端  2:web客户端
-            pointer INTEGER);
-
 CREATE INDEX IF NOT EXISTS indexSiteGroupMessagePointerGud ON siteGroupMessagePointer(groupId,userId,deviceId);
 
 
-CREATE TABLE sitePlugin(
+CREATE TABLE IF NOT EXISTS sitePlugin(
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               pluginId INTEGER NOT NULL,
               name VARCHAR(100) NOT NULL, /*名字*/
@@ -212,6 +212,50 @@ CREATE TABLE IF NOT EXISTS siteUserGif(
                       userId VARCHAR(100) NOT NULL,
                       addTime BIGINT);
 
+CREATE TABLE IF NOT EXISTS passportPasswordCountLog(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId VARCHAR(100) NOT NULL,
+    num INTEGER ,--次数
+    operateDate DATE ,
+    operateTime  BIGINT,
+    UNIQUE (userId, operateDate));
+
+CREATE TABLE IF NOT EXISTS passportPasswordLog(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId VARCHAR(100) NOT NULL,
+    loginName VARCHAR(100) NOT NULL,
+    operation INTEGER ,--0:无效 1:登录 2:注册
+    ip VARCHAR(100),
+    operateDate DATE ,
+    operateTime  BIGINT);
+
+CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      userId varchar(100) unique not null,
+                      loginKey varchar(50) not null,
+                      loginUserId varchar(100) not null,
+                      loginTime BIGINT);
+
+CREATE INDEX IF NOT EXISTS indexSiteThirdPartyLoginSourceUserId on siteThirdPartyLogin(loginUserId);
+
+CREATE TABLE IF NOT EXISTS siteCustom(
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      customKey varchar(50) not null,
+                      keyName varchar(100) not null,
+                      keyIcon varchar(100),
+                      keyDesc TEXT,
+                      keyType int,
+                      keySort int,
+                      keyConstraint varchar(100),
+                      isRequired boolean default false,
+                      isOpen boolean default true,
+                      status int,
+                      dataType int,
+                      dataVerify varchar(50),
+                      addTime BIGINT,
+                      unique(keyType,customKey));
+
+-- table name siteXXXCustom
 CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                       configKey VARCHAR(100) NOT NULL,
@@ -219,3 +263,11 @@ CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       configValueEN TEXT ,
                       updateUserId VARCHAR(100),
                       updateTime BIGINT);
+
+-- table name siteXXXCustom
+CREATE TABLE IF NOT EXISTS siteUserCustom(
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      userId VARCHAR(100) UNIQUE NOT NULL,
+                      phoneId VARCHAR(20),
+                      email VARCHAR(100),
+                      addTime BIGINT);

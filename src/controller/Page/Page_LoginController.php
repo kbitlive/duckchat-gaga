@@ -12,7 +12,29 @@ class Page_LoginController extends HttpBaseController
 
     public function index()
     {
-        echo $this->display("login_login");
-        return;
+        $tag = __CLASS__.'->'.__FUNCTION__;
+
+        try{
+            $this->checkUserCookie();
+            if($this->userId) {
+                $jumpPage = $this->getJumpUrlFromParams();
+                $apiPageIndex = ZalyConfig::getApiIndexUrl();
+                if($jumpPage) {
+                    if (strpos($apiPageIndex, "?")) {
+                        $apiPageIndex .= "&".$jumpPage;
+                    } else {
+                        header("Location:" . $apiPageIndex . "?".$jumpPage);
+                        $apiPageIndex .= "?".$jumpPage;
+                    }
+                }
+                header("Location:" . $apiPageIndex);
+                exit();
+            }
+        } catch (Exception $ex) {
+            $this->logger->error($tag, $ex);
+        }
+        $apiPageLogin = "./index.php?action=page.passport.login";
+        header("Location:" . $apiPageLogin);
+        exit();
     }
 }

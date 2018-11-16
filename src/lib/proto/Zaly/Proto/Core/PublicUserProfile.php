@@ -43,6 +43,10 @@ class PublicUserProfile extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string realNickname = 7;</code>
      */
     private $realNickname = '';
+    /**
+     * Generated from protobuf field <code>string loginPluginId = 8;</code>
+     */
+    private $loginPluginId = '';
 
     public function __construct() {
         \GPBMetadata\Core\User::initOnce();
@@ -203,6 +207,28 @@ class PublicUserProfile extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->realNickname = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string loginPluginId = 8;</code>
+     * @return string
+     */
+    public function getLoginPluginId()
+    {
+        return $this->loginPluginId;
+    }
+
+    /**
+     * Generated from protobuf field <code>string loginPluginId = 8;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setLoginPluginId($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->loginPluginId = $var;
 
         return $this;
     }

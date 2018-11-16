@@ -11,6 +11,19 @@
 
     <link rel="stylesheet" href="../../public/manage/config.css"/>
 
+    <style>
+        .item-row, .create_button, .weui-actionsheet__cell {
+            cursor: pointer;
+            outline: none;
+        }
+
+        .weui_switch {
+            margin-top: 0px;
+            cursor: pointer;
+        }
+
+    </style>
+
 </head>
 
 <body>
@@ -54,10 +67,24 @@
                             <div class="item-body-desc">Site Logo</div>
                         <?php } ?>
 
+                        <!--                        <div class="item-body-tail">-->
+                        <!--                            <div class="item-body-value" id="site-logo-fileid">-->
+                        <!--                                <img class="site-logo-image" onclick="uploadLogoImage()"-->
+                        <!--                                     src="/_api_file_download_/?fileId=-->
+                        <?php //echo $logo ?><!--"-->
+                        <!--                                     onerror="src='../../public/img/manage/site_default.png'">-->
+                        <!---->
+                        <!--                            </div>-->
+                        <!--                            <div class="item-body-value">-->
+                        <!--                                <img class="more-img" src="../../public/img/manage/more.png"/>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+
 
                         <div class="item-body-tail">
                             <div class="item-body-value" id="site-logo-fileid">
                                 <img class="site-logo-image" onclick="uploadFile('upload-site-logo')"
+                                     avatar="<?php echo $logo ?>"
                                      src="/_api_file_download_/?fileId=<?php echo $logo ?>"
                                      onerror="src='../../public/img/manage/site_default.png'">
 
@@ -65,8 +92,8 @@
                                        accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
                                        style="display: none;">
                             </div>
-                            <div class="item-body-value"><img class="more-img"
-                                                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
                         </div>
                     </div>
@@ -99,6 +126,28 @@
                             <div class="item-body-value"><img class="more-img"
                                                               src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
                             </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+            <div class="item-row">
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">登陆开启邀请码</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Login By Invite Code</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <?php if ($enableInvitationCode == 1) { ?>
+                                <input id="enableUicSwitch" class="weui_switch" type="checkbox" checked>
+                            <?php } else { ?>
+                                <input id="enableUicSwitch" class="weui_switch" type="checkbox">
+                            <?php } ?>
                         </div>
                     </div>
 
@@ -142,9 +191,9 @@
                 <div class="item-body">
                     <div class="item-body-display">
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">允许群组中加好友</div>
+                            <div class="item-body-desc">允许在群里互加好友</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Enable Add Friend In Group</div>
+                            <div class="item-body-desc">Enable friend-request from group</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
@@ -280,8 +329,8 @@
                                     <?php if ($lang == "1") { ?> 显示文本内容<?php } else { ?> Show Content <?php } ?>
                                 <?php } ?>
                             </div>
-                            <div class="item-body-value"><img class="more-img"
-                                                              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
                         </div>
                     </div>
@@ -395,30 +444,30 @@
 
             <!--            <div class="web-condition" style='-->
 
-            <div class="item-row" id="web-ws-port">
+            <div class="item-row" id="web-ws-address">
                 <div class="item-body">
                     <div class="item-body-display">
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">WebSocket端口</div>
+                            <div class="item-body-desc">WS地址</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">WebSocket Port</div>
+                            <div class="item-body-desc">WS Address</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <?php if (isset($wsPort) && $wsPort > 0) { ?>
-                                <div class="item-body-value"><?php echo $wsPort; ?></div>
+                            <?php if (!empty($wsAddress)) { ?>
+                                <div class="item-body-value"><?php echo $wsAddress; ?></div>
                             <?php } else { ?>
                                 <div class="item-body-desc"><?php
                                     if ($lang == 1) {
-                                        echo "未设置端口表示未开启";
+                                        echo "未设置表示未开启";
                                     } else {
-                                        echo "disable with empty port";
+                                        echo "disable with empty address";
                                     }
                                     ?></div>
                             <?php } ?>
 
-                            <div class="item-body-value-more"><img class="more-img"
-                                                                   src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <div class="item-body-value-more">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
                         </div>
 
@@ -427,37 +476,37 @@
             </div>
             <div class="division-line"></div>
 
-            <div class="item-row" id="web-zaly-port">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">Zaly端口</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Zaly Port</div>
-                        <?php } ?>
-
-                        <div class="item-body-tail">
-                            <?php if (isset($zalyPort) && $zalyPort > 0) { ?>
-                                <div class="item-body-value"><?php echo $zalyPort; ?></div>
-                            <?php } else { ?>
-                                <div class="item-body-desc"><?php
-                                    if ($lang == 1) {
-                                        echo "未设置端口表示未开启";
-                                    } else {
-                                        echo "disable with empty port";
-                                    }
-                                    ?></div>
-                            <?php } ?>
-
-                            <div class="item-body-value-more"><img class="more-img"
-                                                                   src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <div class="division-line"></div>
+            <!--            <div class="item-row" id="web-zaly-port">-->
+            <!--                <div class="item-body">-->
+            <!--                    <div class="item-body-display">-->
+            <!--                        --><?php //if ($lang == "1") { ?>
+            <!--                            <div class="item-body-desc">Zaly端口</div>-->
+            <!--                        --><?php //} else { ?>
+            <!--                            <div class="item-body-desc">Zaly Port</div>-->
+            <!--                        --><?php //} ?>
+            <!---->
+            <!--                        <div class="item-body-tail">-->
+            <!--                            --><?php //if (isset($zalyPort) && $zalyPort > 0) { ?>
+            <!--                                <div class="item-body-value">--><?php //echo $zalyPort; ?><!--</div>-->
+            <!--                            --><?php //} else { ?>
+            <!--                                <div class="item-body-desc">--><?php
+            //                                    if ($lang == 1) {
+            //                                        echo "未设置端口表示未开启";
+            //                                    } else {
+            //                                        echo "disable with empty port";
+            //                                    }
+            //                                    ?><!--</div>-->
+            <!--                            --><?php //} ?>
+            <!---->
+            <!--                            <div class="item-body-value-more"><img class="more-img"-->
+            <!--                                                                   src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!---->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--            <div class="division-line"></div>-->
 
             <!--                <div class="item-row" id="max-web-num">-->
             <!--                    <div class="item-body">-->
@@ -664,13 +713,35 @@
 
 <script type="text/javascript" src="../../public/manage/native.js"></script>
 
+<script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
+
 <script type="text/javascript">
 
     function uploadFile(obj) {
-        $("#" + obj).val("");
-        $("#" + obj).click();
+        if (isAndroid()) {
+            zalyjsImageUpload(uploadLogoImageResult);
+        } else {
+            $("#" + obj).val("");
+            $("#" + obj).click();
+        }
     }
 
+    function uploadLogoImageResult(result) {
+
+        var fileId = result.fileId;
+
+        //update site logo
+        updateSiteLogo(fileId);
+
+
+        if (isMobile()) {
+            var newSrc = "/_api_file_download_/?fileId=" + fileId;
+        } else {
+            var newSrc = "./index.php?action=http.file.downloadFile&fileId=" + fileId + "&returnBase64=0";
+        }
+
+        $(".site-logo-image").attr("src", newSrc);
+    }
 
     function uploadImageFile(obj) {
 
@@ -679,7 +750,7 @@
                 var formData = new FormData();
 
                 formData.append("file", obj.files.item(0));
-                formData.append("fileType", "FileImage");
+                formData.append("fileType", 1);
                 formData.append("isMessageAttachment", false);
 
                 var src = window.URL.createObjectURL(obj.files.item(0));
@@ -693,6 +764,15 @@
         }
 
     }
+
+    $(".site-logo-image").each(function () {
+        if (!isMobile()) {
+            var avatar = $(this).attr("avatar");
+            var src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+            $(this).attr("src", src);
+        }
+    });
+
 
     function uploadFileToServer(formData, src) {
 
@@ -711,11 +791,8 @@
             success: function (imageFileIdResult) {
 
                 if (imageFileIdResult) {
-                    var fileId = imageFileIdResult;
-                    if (isMobile()) {
-                        var res = JSON.parse(imageFileIdResult);
-                        fileId = res.fileId;
-                    }
+                    var res = JSON.parse(imageFileIdResult);
+                    var fileId = res.fileId;
                     updateSiteLogo(fileId);
                 } else {
                     alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");
@@ -739,6 +816,7 @@
     }
 
     function updateLogoResponse(url, data, result) {
+
         var res = JSON.parse(result);
 
         if (res.errCode) {
@@ -857,7 +935,7 @@
     }
 
 
-    $("#web-ws-port").click(function () {
+    $("#web-ws-address").click(function () {
         var title = $(this).find(".item-body-desc").html();
         var inputBody = $(this).find(".item-body-value").html();
 
@@ -865,7 +943,7 @@
 
         $(".popup-group-title").html(title);
         $(".popup-group-input").val(inputBody);
-        $("#updatePopupButton").attr("key-value", "wsPort");
+        $("#updatePopupButton").attr("key-value", "wsAddress");
     });
 
     $("#web-zaly-port").click(function () {
@@ -1254,6 +1332,36 @@
 
             if (!"success" == res.errCode) {
                 alert(getLanguage() == 1 ? "操作失败" : "update error");
+            }
+
+        } else {
+            alert(getLanguage() == 1 ? "操作失败" : "update error");
+        }
+    }
+
+    //update invitation code
+    $("#enableUicSwitch").change(function () {
+        var isChecked = $(this).is(':checked');
+        var url = "index.php?action=manage.config.update&key=enableInvitationCode";
+
+        var data = {
+            'key': 'enableInvitationCode',
+            'value': isChecked ? 1 : 0,
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, enableSwitchResponse);
+
+    });
+
+    function enableSwitchResponse(url, data, result) {
+        if (result) {
+
+            var res = JSON.parse(result);
+
+            if ("success" != res.errCode) {
+                var errInfo = res.errInfo;
+                var errMsg = (getLanguage() == 1 ? "操作失败,原因：" : "update error, cause:") + errInfo;
+                alert(errMsg);
             }
 
         } else {

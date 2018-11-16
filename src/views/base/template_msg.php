@@ -1,18 +1,18 @@
 
 <script id="tpl-send-msg-img" type="text/html">
-    <div class="msg-row msg-right msg-text msg-id-{{msgId}}">
+    <div class="msg-row msg-right msg-text msg-id-{{msgId}}" id="msg-row-{{msgId}}">
         <div class="msg-avatar user-info-avatar">
-            {{if userAvatarSrc}}
-                <img class="user-info-avatar info-avatar-{{userId}}"  src="{{userAvatarSrc}}" />
+            {{if avatar}}
+                <img class="user-info-avatar info-avatar-{{userId}}"  src="{{avatar}}" onerror="this.src='../../public/img/msg/default_user.png'" />
             {{else}}
                 <img class="user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png" />
             {{/if}}
         </div>
         <div class="right-msg-body text-align-right">
                  <div class="msg_status" style="margin-top: 1rem;">
-                    <div class="msg-content-img justify-content-end hint--bottom" aria-label="{{msgTime}}">
+                    <div class="msg-content-img justify-content-end hint--bottom msg_content_for_click msg_content_for_click_{{msgId}}"  msgType={{msgType}}   sendTime="{{timeServer}}"  msgId="{{msgId}}"  aria-label="{{msgTime}}">
                         <div class="text-align-left" style="width: {{width}}; height:{{height}}">
-                            <img class="msg_img msg-img-{{msgId}}" onload="autoMsgImgSize(this, 400, 300)" />
+                            <img class="msg_img msg-img-{{msgId}} " style="width: {{width}}; height:{{height}}"  src="{{msgImgUrl}}" />
                         </div>
                     </div>
                     {{ if msgStatus == "MessageStatusSending"}}
@@ -39,22 +39,22 @@
 
 
 <script id="tpl-send-msg-file" type="text/html">
-    <div class="msg-row msg-right msg-text msg-id-{{msgId}}">
+    <div class="msg-row msg-right msg-text msg-id-{{msgId}} " id="msg-row-{{msgId}}">
         <div class="msg-avatar user-info-avatar">
-            {{if userAvatarSrc}}
-            <img class="user-info-avatar info-avatar-{{userId}}"  src="{{userAvatarSrc}}" />
+            {{if avatar}}
+            <img class="user-info-avatar info-avatar-{{userId}}"  src="{{avatar}}" onerror="this.src='../../public/img/msg/default_user.png'"/>
             {{else}}
             <img class="user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png" />
             {{/if}}
         </div>
         <div class="right-msg-body text-align-right">
             <div class="msg_status" style="margin-top: 1rem;">
-                <div class="msg-content-img justify-content-end hint--bottom" aria-label="{{msgTime}}">
-                    <div class="text-align-left left_msg_file_div" url="{{url}}" msgId="{{msgId}}" originName="{{originName}}">
+                <div class="msg-content-img justify-content-end hint--bottom " aria-label="{{msgTime}}"">
+                    <div class="text-align-left left_msg_file_div msg_content_for_click_{{msgId}} msg_content_for_click"  msgType="{{msgType}}"   sendTime="{{timeServer}}"  url="{{url}}" msgId="{{msgId}}" originName="{{originName}}">
                         <div class="file_img">
                             <img src="../../public/img/msg/msg_file.png"/>
                         </div>
-                        <div class="msg_file_info">
+                        <div class="msg_file_info " >
                             <div class="msg_file_name">{{fileName}}</div>
                             <div class="msg_file_size">{{fileSize}}</div>
                         </div>
@@ -84,22 +84,22 @@
 
 
 <script id="tpl-send-msg-text" type="text/html">
-    <div class="msg-row msg-right msg-text msg-id-{{msgId}}" > <div class="msg-avatar"> {{if userAvatarSrc}}<img class="user-info-avatar info-avatar-{{userId}}"  src="{{userAvatarSrc}}" />{{else}}<img class="user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png" />{{/if}} </div> <div class="right-msg-body  text-align-right" > <div class="msg_status" style="margin-top: 1rem;"> <div class="msg-content hint--bottom" aria-label="{{msgTime}}"> <div class="text-align-left msgContent text-align-left-text"><pre>{{msgContent}}</pre></div> </div> {{ if msgStatus == "MessageStatusSending"}} <div class="showbox msg_status_loading msg_status_loading_{{msgId}}" sendTime="{{timeServer}}"  msgId="{{msgId}}"   is-display="yes"> <div class="loader"> <svg class="circular" viewBox="25 25 50 50"> <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/> </svg> </div> </div> <div  class="msg_status_img msg_status_failed_{{msgId}}" msgId="{{msgId}}" > <img src="../../public/img/msg/msg_failed.png"> </div> {{ else if msgStatus == "MessageStatusFailed"}} <div  class="msg_status_img msg_status_failed_{{msgId}}" msgId="{{msgId}}"  style="display: flex;"> <img src="../../public/img/msg/msg_failed.png"> </div> {{/if}} </div> </div> </div>
+    <div class="msg-row msg-right msg-text msg-id-{{msgId}} "id="msg-row-{{msgId}}" > <div class="msg-avatar"> {{if avatar}}<img class="user-info-avatar info-avatar-{{userId}}"  src="{{avatar}}"onerror="this.src='../../public/img/msg/default_user.png'" />{{else}}<img class="user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png" />{{/if}} </div> <div class="right-msg-body  text-align-right" > <div class="msg_status" style="margin-top: 1rem;"> <div class="msg-content hint--bottom msg_content_for_click msg_content_for_click_{{msgId}}" aria-label="{{msgTime}}" msgType={{msgType}} sendTime="{{timeServer}}"  msgId="{{msgId}}"> <div class="text-align-left msgContent text-align-left-text "><pre class="msg_content_for_handle" msg_content_for_handle="msg_content_for_handle">{{msgContent}}</pre></div> </div> {{ if msgStatus == "MessageStatusSending"}} <div class="showbox msg_status_loading msg_status_loading_{{msgId}}" sendTime="{{timeServer}}"  msgId="{{msgId}}"   is-display="yes"> <div class="loader"> <svg class="circular" viewBox="25 25 50 50"> <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/> </svg> </div> </div> <div  class="msg_status_img msg_status_failed_{{msgId}}" msgId="{{msgId}}" > <img src="../../public/img/msg/msg_failed.png"> </div> {{ else if msgStatus == "MessageStatusFailed"}} <div  class="msg_status_img msg_status_failed_{{msgId}}" msgId="{{msgId}}"  style="display: flex;"> <img src="../../public/img/msg/msg_failed.png"> </div> {{/if}} </div> </div> </div>
 </script>
 
 <script id="tpl-send-msg-audio" type="text/html">
-    <div class="msg-row msg-right msg-text msg-id-{{msgId}}" > <div class="msg-avatar"> {{if userAvatarSrc}}<img class="user-info-avatar info-avatar-{{userId}}"  src="{{userAvatarSrc}}" />{{else}}<img class="user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png" />{{/if}} </div> <div class="right-msg-body  text-align-right" > <div class="msg_status" style="margin-top: 1rem;"> <div class="msg-content hint--bottom" aria-label="{{msgTime}}"> <div class="text-align-left msgContent"> [你发了一条语音消息，<span style="color: #FFAF5D;cursor: pointer"onclick="displayDownloadApp()">下载客户端</span>收听语音消息吧！] </div> </div> {{ if msgStatus == "MessageStatusSending"}} <div class="showbox msg_status_loading msg_status_loading_{{msgId}}" sendTime="{{timeServer}}"  msgId="{{msgId}}"   is-display="yes"> <div class="loader"> <svg class="circular" viewBox="25 25 50 50"> <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/> </svg> </div> </div> <div  class="msg_status_img msg_status_failed_{{msgId}}" msgId="{{msgId}}" > <img src="../../public/img/msg/msg_failed.png"> </div> {{ else if msgStatus == "MessageStatusFailed"}} <div  class="msg_status_img msg_status_failed_{{msgId}}" msgId="{{msgId}}"  style="display: flex;"> <img src="../../public/img/msg/msg_failed.png"> </div> {{/if}} </div> </div> </div>
+    <div class="msg-row msg-right msg-text msg-id-{{msgId}}" id="msg-row-{{msgId}}"> <div class="msg-avatar"> {{if avatar}}<img class="user-info-avatar info-avatar-{{userId}}"  src="{{avatar}}" onerror="this.src='../../public/img/msg/default_user.png'"/>{{else}}<img class="user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png" />{{/if}} </div> <div class="right-msg-body  text-align-right" > <div class="msg_status" style="margin-top: 1rem;"> <div class="msg-content hint--bottom " aria-label="{{msgTime}}" sendTime="{{timeServer}}"  msgId="{{msgId}}"> <div class="text-align-left msgContent  "> [你发了一条语音消息，<span style="color: #FFAF5D;cursor: pointer"onclick="displayDownloadApp()">下载客户端</span>收听语音消息吧！] </div> </div> {{ if msgStatus == "MessageStatusSending"}} <div class="showbox msg_status_loading msg_status_loading_{{msgId}}" sendTime="{{timeServer}}"  msgId="{{msgId}}"   is-display="yes"> <div class="loader"> <svg class="circular" viewBox="25 25 50 50"> <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/> </svg> </div> </div> <div  class="msg_status_img msg_status_failed_{{msgId}}" msgId="{{msgId}}" > <img src="../../public/img/msg/msg_failed.png"> </div> {{ else if msgStatus == "MessageStatusFailed"}} <div  class="msg_status_img msg_status_failed_{{msgId}}" msgId="{{msgId}}"  style="display: flex;"> <img src="../../public/img/msg/msg_failed.png"> </div> {{/if}} </div> </div> </div>
 </script>
 
 <script id="tpl-send-msg-default" type="text/html">
-    <div class="msg-row msg-right msg-text msg-id-{{msgId}}" > <div class="msg-avatar"> {{if userAvatarSrc}}<img class="user-info-avatar info-avatar-{{userId}}"  src="{{userAvatarSrc}}" />{{else}}<img class="user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png" />{{/if}} </div> <div class="right-msg-body  text-align-right" > <div class="msg_status" style="margin-top: 1rem;"> <div class="msg-content hint--bottom" aria-label="{{msgTime}}"> <div class="text-align-left msgContent text-align-left-text">{{msgContent}}</div> </div> {{ if msgStatus == "MessageStatusSending"}} <div class="showbox msg_status_loading msg_status_loading_{{msgId}}" sendTime="{{timeServer}}"  msgId="{{msgId}}"   is-display="yes"> <div class="loader"> <svg class="circular" viewBox="25 25 50 50"> <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/> </svg> </div> </div> <div  class="msg_status_img msg_status_failed_{{msgId}}" msgId="{{msgId}}" > <img src="../../public/img/msg/msg_failed.png"> </div> {{ else if msgStatus == "MessageStatusFailed"}} <div  class="msg_status_img msg_status_failed_{{msgId}}" msgId="{{msgId}}"  style="display: flex;"> <img src="../../public/img/msg/msg_failed.png"> </div> {{/if}} </div> </div> </div>
+    <div class="msg-row msg-right msg-text msg-id-{{msgId}}"id="msg-row-{{msgId}}" > <div class="msg-avatar"> {{if avatar}}<img class="user-info-avatar info-avatar-{{userId}}"  src="{{avatar}}" onerror="this.src='../../public/img/msg/default_user.png'"/>{{else}}<img class="user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png" />{{/if}} </div> <div class="right-msg-body  text-align-right" > <div class="msg_status" style="margin-top: 1rem;"> <div class="msg-content hint--bottom " aria-label="{{msgTime}}" sendTime="{{timeServer}}"  msgId="{{msgId}}"> <div class="text-align-left msgContent text-align-left-text ">{{msgContent}}</div> </div> {{ if msgStatus == "MessageStatusSending"}} <div class="showbox msg_status_loading msg_status_loading_{{msgId}}" sendTime="{{timeServer}}"  msgId="{{msgId}}"   is-display="yes"> <div class="loader"> <svg class="circular" viewBox="25 25 50 50"> <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/> </svg> </div> </div> <div  class="msg_status_img msg_status_failed_{{msgId}}" msgId="{{msgId}}" > <img src="../../public/img/msg/msg_failed.png"> </div> {{ else if msgStatus == "MessageStatusFailed"}} <div  class="msg_status_img msg_status_failed_{{msgId}}" msgId="{{msgId}}"  style="display: flex;"> <img src="../../public/img/msg/msg_failed.png"> </div> {{/if}} </div> </div> </div>
 </script>
 
 <script id="tpl-send-msg-web" type="text/html">
-    <div class="msg-row msg-right msg-text msg-id-{{msgId}}" >
+    <div class="msg-row msg-right msg-text msg-id-{{msgId}}" id="msg-row-{{msgId}}">
         <div class="msg-avatar">
-            {{if userAvatarSrc}}
-                <img class="user-info-avatar info-avatar-{{userId}}"  src="{{userAvatarSrc}}" />
+            {{if avatar}}
+                <img class="user-info-avatar info-avatar-{{userId}}"  src="{{avatar}}"onerror="this.src='../../public/img/msg/default_user.png'" />
             {{else}}
                 <img class="user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png" />
             {{/if}}
@@ -107,7 +107,7 @@
         <div class="right-msg-body  text-align-right" >
 
             <div class="msg_status" style="margin-top: 1rem;">
-                <div class="msg-content hint--bottom" style="background-color:rgba(244,244,249,1); " aria-label="{{msgTime}}">
+                <div class="msg-content hint--bottom msg_content_for_click msg_content_for_click_{{msgId}}" sendTime="{{timeServer}}"    msgId="{{msgId}}"   style="background-color:rgba(244,244,249,1); " aria-label="{{msgTime}}">
                     <div class="text-align-left" style=" width: {{webWidth}}px; height:{{webHeight}}px;"><iframe src="{{linkUrl}}" frameborder="no" width="{{webWidth}}" height="{{webHeight}}"></iframe></div>
                 </div>
                 {{if hrefURL}}
@@ -121,7 +121,7 @@
                 {{/if}}
 
                 {{ if msgStatus == "MessageStatusSending"}}
-                <div class="showbox msg_status_loading msg_status_loading_{{msgId}}" sendTime="{{timeServer}}"   msgId="{{msgId}}"   is-display="yes">
+                <div class="showbox msg_status_loading msg_status_loading_{{msgId}}" sendTime="{{timeServer}}"    msgId="{{msgId}}"   is-display="yes">
                     <div class="loader">
                         <svg class="circular" viewBox="25 25 50 50">
                             <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
@@ -142,21 +142,30 @@
 
 
 <script id="tpl-receive-msg-img" type="text/html">
-    <div class="msg-row msg-left msg-text msg-id-{{msgId}}">
+    <div class="msg-row msg-left msg-text msg-id-{{msgId}}" id="msg-row-{{msgId}}">
         <div class="msg-avatar">
-            <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/>
+            {{if avatar}}
+                 <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}"  src="{{avatar}}" onerror="this.src='../../public/img/msg/default_user.png'" userId="{{userId}}"  msgId="{{msgId}}"/>
+            {{ else }}
+                <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/>
+            {{/if}}
         </div>
         <div class="right-msg-body text-align-left">
             {{if roomType == "MessageRoomGroup"}}
                 <div class="msg-nickname-time">
+                    {{if isMaster}}
+                        <div  style="align-items: center; display: flex;justify-content: center;">
+                            <span class="chat_master_tip">站长</span>
+                        </div>
+                    {{/if}}
                     <div class="msg-nickname nickname_{{userId}}">{{nickname}}</div>
                 </div>
-                <div class="msg-content-img justify-content-end hint--bottom" aria-label="{{msgTime}}" >
+                <div class="msg-content-img justify-content-end hint--bottom msg_content_for_click msg_content_for_click_{{msgId}}" msgId="{{msgId}}" imgUrl="{{msgImgUrl}}" msgType="{{msgType}}"aria-label="{{msgTime}}" >
             {{else}}
-                 <div class="msg-content-img justify-content-end hint--bottom" aria-label="{{msgTime}}" style="margin-top:1rem;" >
+                 <div class="msg-content-img justify-content-end hint--bottom msg_content_for_click msg_content_for_click_{{msgId}}" msgId="{{msgId}}"  imgUrl="{{msgImgUrl}}" msgType="{{msgType}}"  aria-label="{{msgTime}}" style="margin-top:1rem;" >
              {{/if}}
                 <div class="text-align-right" style="width: {{width}}; height:{{height}}">
-                    <img class="msg_img msg-img-{{msgId}}" onload="autoMsgImgSize(this, 400, 300)" />
+                    <img class="msg_img msg-img-{{msgId}} " style="width: {{width}}; height:{{height}}" src="{{msgImgUrl}}"  />
                 </div>
             </div>
         </div>
@@ -164,22 +173,31 @@
 </script>
 
 
-
 <script id="tpl-receive-msg-file" type="text/html">
-    <div class="msg-row msg-left msg-text msg-id-{{msgId}}">
+    <div class="msg-row msg-left msg-text msg-id-{{msgId}} msg-row-{{msgId}}" id="msg-row-{{msgId}}">
         <div class="msg-avatar">
-            <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/>
+            {{if avatar}}
+                <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}"  src="{{avatar}}" onerror="this.src='../../public/img/msg/default_user.png'" userId="{{userId}}"  msgId="{{msgId}}"/>
+            {{else}}
+                <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/>
+            {{/if}}
         </div>
         <div class="right-msg-body text-align-left">
             {{if roomType == "MessageRoomGroup"}}
+
             <div class="msg-nickname-time">
+                {{if isMaster}}
+                <div  style="align-items: center; display: flex;justify-content: center;">
+                    <span class="chat_master_tip">站长</span>
+                </div>
+                {{/if}}
                 <div class="msg-nickname nickname_{{userId}}">{{nickname}}</div>
             </div>
-            <div class="msg-content-img justify-content-end hint--bottom" aria-label="{{msgTime}}" >
+            <div class="msg-content-img justify-content-end hint--bottom" aria-label="{{msgTime}}"  >
                 {{else}}
-                <div class="msg-content-img justify-content-end hint--bottom" aria-label="{{msgTime}}" style="margin-top:1rem;" >
+                <div class="msg-content-img justify-content-end hint--bottom"  aria-label="{{msgTime}}" style="margin-top:1rem;" >
                     {{/if}}
-                    <div class="text-align-right right_msg_file_div"  url="{{url}}" msgId="{{msgId}}" originName="{{originName}}">
+                    <div class="text-align-right right_msg_file_div msg_content_for_click msg_content_for_click_{{msgId}}" msgType="{{msgType}}"  url="{{url}}" msgId="{{msgId}}" originName="{{originName}}">
                         <div class="file_img">
                             <img src="../../public/img/msg/msg_file.png"/>
                         </div>
@@ -195,13 +213,22 @@
 </script>
 
 <script id="tpl-receive-msg-web" type="text/html">
-        <div class="msg-row msg-left msg-text msg-id-{{msgId}}">
+        <div class="msg-row msg-left msg-text msg-id-{{msgId}}" id="msg-row-{{msgId}}">
             <div class="msg-avatar">
-                <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/>
+                {{if avatar}}
+                    <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}"  src="{{avatar}}" onerror="this.src='../../public/img/msg/default_user.png'" userId="{{userId}}"  msgId="{{msgId}}"/>
+                {{else}}
+                    <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/>
+                {{/if}}
             </div>
             <div class="right-msg-body text-align-left">
                 {{if roomType == "MessageRoomGroup"}}
                     <div class="msg-nickname-time">
+                        {{if isMaster}}
+                        <div  style="align-items: center; display: flex;justify-content: center;">
+                            <span class="chat_master_tip">站长</span>
+                        </div>
+                        {{/if}}
                         <div class="msg-nickname nickname_{{userId}}">{{nickname}}</div>
                     </div>
                     <div class="msg-content hint--bottom" aria-label="{{msgTime}}">
@@ -210,9 +237,8 @@
                         <div class="msg-content hint--bottom" aria-label="{{msgTime}}" style="margin-top: 1rem;">
                 {{/if}}
 
-                        <div class="text-align-right" style=" width: {{webWidth}}px; height:{{webHeight}}px"><iframe src="{{linkUrl}}" frameborder="no" width="{{webWidth}}" height="{{webHeight}}"></iframe></div>
+                        <div class="text-align-right msg_content_for_click" style=" width: {{webWidth}}px; height:{{webHeight}}px"><iframe src="{{linkUrl}}" frameborder="no" width="{{webWidth}}" height="{{webHeight}}"></iframe></div>
                     </div>
-
 
                     {{if hrefURL}}
                         <div  class="msg_status_img  web-msg-click" msgId="{{msgId}}" src-data="{{hrefURL}}" style="display: flex;">
@@ -229,7 +255,7 @@
 
 
 <script id="tpl-receive-msg-web-notice" type="text/html">
-    <div class="msg-row msg-text msg-id-{{msgId}}">
+    <div class="msg-row msg-text msg-id-{{msgId}}" id="msg-row-{{msgId}}">
         <div class="right-msg-body text-align-center">
             <div class="text-align-right msg-notice">
                 <iframe src="{{hrefUrl}}" frameborder="no" height="100%;" class="zalyiframe"></iframe>
@@ -239,7 +265,7 @@
 </script>
 
 <script id="tpl-receive-msg-notice" type="text/html">
-    <div class="msg-row msg-text msg-id-{{msgId}}">
+    <div class="msg-row msg-text msg-id-{{msgId}}" id="msg-row-{{msgId}}">
         <div class="right-msg-body text-align-center">
             <div class="text-align-right msg-notice">
                 {{msgContent}}
@@ -251,26 +277,34 @@
 
 
 <script id="tpl-receive-msg-text" type="text/html">
-    <div class="msg-row msg-left msg-text msg-id-{{msgId}}"> <div class="msg-avatar "> <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/> </div> <div class="right-msg-body  text-align-left" > {{if roomType == "MessageRoomGroup"}} <div class="msg-nickname-time"> <div class="msg-nickname nickname_{{userId}}">{{nickname}}</div> </div> <div class="msg-content hint--bottom" aria-label="{{msgTime}}"> {{else}} <div class="msg-content hint--bottom" aria-label="{{msgTime}}" style="margin-top: 1rem;"> {{/if}} <div class="text-align-left msgContent text-align-right-text"><pre>{{msgContent}}</div> </div> </div> </div>
+    <div class="msg-row msg-left msg-text msg-id-{{msgId}}" id="msg-row-{{msgId}}"> <div class="msg-avatar ">{{if avatar}} <img class="{{groupUserImg}} user-info-avatar " src="{{avatar}}" onerror="this.src='../../public/img/msg/default_user.png'" userId="{{userId}}"  msgId="{{msgId}}"/>{{else}} <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/> {{/if}}</div> <div class="right-msg-body  text-align-left " > {{if roomType == "MessageRoomGroup"}} <div class="msg-nickname-time">  {{if isMaster}} <div  style="align-items: center; display: flex;justify-content: center;"> <span class="chat_master_tip">站长</span> </div> {{/if}}<div class="msg-nickname nickname_{{userId}}">{{nickname}}</div> </div> <div class="msg-content hint--bottom msg_content_for_click msg_content_for_click_{{msgId}}" msgId="{{msgId}}" msgType="{{msgType}}" aria-label="{{msgTime}}"> {{else}} <div class="msg-content hint--bottom msg_content_for_click" msgId="{{msgId}}" msgType="{{msgType}}" aria-label="{{msgTime}}" style="margin-top: 1rem;"> {{/if}} <div class="text-align-left msgContent text-align-right-text"><pre class="msg_content_for_handle" msg_content_for_handle="msg_content_for_handle">{{msgContent}}</div> </div> </div> </div>
 </script>
 
 
 <script id="tpl-receive-msg-audio" type="text/html">
-    <div class="msg-row msg-left msg-text msg-id-{{msgId}}"> <div class="msg-avatar "> <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/> </div> <div class="right-msg-body  text-align-left" > {{if roomType == "MessageRoomGroup"}} <div class="msg-nickname-time"> <div class="msg-nickname nickname_{{userId}}">{{nickname}}</div> </div> <div class="msg-content hint--bottom" aria-label="{{msgTime}}"> {{else}} <div class="msg-content hint--bottom" aria-label="{{msgTime}}" style="margin-top: 1rem;"> {{/if}} <div class="text-align-left msgContent text-align-right-text">[你收到一条语音消息，<span style="color: #4C3BB1;cursor: pointer" onclick="displayDownloadApp()">下载客户端</span>收听语音消息吧！]</div> </div> </div> </div>
+    <div class="msg-row msg-left msg-text msg-id-{{msgId}}" id="msg-row-{{msgId}}"> <div class="msg-avatar "> {{if avatar}}<img class="{{groupUserImg}} user-info-avatar" src="{{avatar}}" onerror="this.src='../../public/img/msg/default_user.png'" userId="{{userId}}"  msgId="{{msgId}}"/>{{else}}<img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/>{{/if}} </div> <div class="right-msg-body  text-align-left " > {{if roomType == "MessageRoomGroup"}} <div class="msg-nickname-time"> {{if isMaster}} <div  style="align-items: center; display: flex;justify-content: center;"> <span class="chat_master_tip">站长</span> </div> {{/if}}<div class="msg-nickname nickname_{{userId}}">{{nickname}}</div> </div> <div class="msg-content hint--bottom" aria-label="{{msgTime}}"> {{else}} <div class="msg-content hint--bottom" aria-label="{{msgTime}}" style="margin-top: 1rem;"> {{/if}} <div class="text-align-left msgContent text-align-right-text">[你收到一条语音消息，<span style="color: #4C3BB1;cursor: pointer" onclick="displayDownloadApp()">下载客户端</span>收听语音消息吧！]</div> </div> </div> </div>
 </script>
 
 
 <script id="tpl-receive-msg-default" type="text/html">
-    <div class="msg-row msg-left msg-text msg-id-{{msgId}}"> <div class="msg-avatar "> <img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/> </div> <div class="right-msg-body  text-align-left" > {{if roomType == "MessageRoomGroup"}} <div class="msg-nickname-time"> <div class="msg-nickname nickname_{{userId}}">{{nickname}}</div> </div> <div class="msg-content hint--bottom" aria-label="{{msgTime}}"> {{else}} <div class="msg-content hint--bottom" aria-label="{{msgTime}}" style="margin-top: 1rem;"> {{/if}} <div class="text-align-left msgContent text-align-right-text">{{msgContent}}</div> </div> </div> </div>
+    <div class="msg-row msg-left msg-text msg-id-{{msgId}}" id="msg-row-{{msgId}}"> <div class="msg-avatar "> {{if avatar}}<img class="{{groupUserImg}} user-info-avatar " src="{{avatar}}" onerror="this.src='../../public/img/msg/default_user.png'" userId="{{userId}}"  msgId="{{msgId}}"/>{{else}}<img class="{{groupUserImg}} user-info-avatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png"  userId="{{userId}}"  msgId="{{msgId}}"/>{{/if}} </div> <div class="right-msg-body  text-align-left " > {{if roomType == "MessageRoomGroup"}} <div class="msg-nickname-time"> {{if isMaster}} <div  style="align-items: center; display: flex;justify-content: center;"> <span class="chat_master_tip">站长</span> </div> {{/if}}<div class="msg-nickname nickname_{{userId}}">{{nickname}}</div> </div> <div class="msg-content hint--bottom" aria-label="{{msgTime}}"> {{else}} <div class="msg-content hint--bottom" aria-label="{{msgTime}}" style="margin-top: 1rem;"> {{/if}} <div class="text-align-left msgContent text-align-right-text">{{msgContent}}</div> </div> </div> </div>
 </script>
 
 <script id="tpl-chatSession" type="text/html">
     <div class="chatsession-row  {{chatSessionId}}  chat_session_id_{{chatSessionId}}" chat-session-id="{{chatSessionId}}" msg_time="{{msgServerTime}}" roomType="{{roomType}}" >
         <div class="chatsession-row-img">
             {{if className == "group-profile"}}
-                <img class="user-info-avatar info-avatar-{{chatSessionId}}" groupId="{{chatSessionId}}"  src="../../public/img/msg/group_default_avatar.png"  />
+                {{if avatar}}
+                    <img class="user-info-avatar info-avatar-{{chatSessionId}}" groupId="{{chatSessionId}}"  src="{{avatar}}" onerror="this.src='../../public/img/msg/group_default_avatar.png'" />
+                {{else}}
+                    <img class="user-info-avatar info-avatar-{{chatSessionId}}" groupId="{{chatSessionId}}"  src="../../public/img/msg/group_default_avatar.png"  />
+                {{/if}}
             {{else}}
-                <img class="user-info-avatar info-avatar-{{chatSessionId}}"  userId="{{chatSessionId}}"  src="../../public/img/msg/default_user.png"  />
+                {{if avatar}}
+                    <img class="user-info-avatar info-avatar-{{chatSessionId}}"  userId="{{chatSessionId}}"  src="{{avatar}}"  onerror="this.src='../../public/img/msg/default_user.png'"/>
+                {{else}}
+                    <img class="user-info-avatar info-avatar-{{chatSessionId}}"  userId="{{chatSessionId}}"  src="../../public/img/msg/default_user.png"  />
+                {{/if}}
             {{/if}}
             {{ if isMute == 0 }}
                 {{ if unReadNum > 0}}
@@ -293,7 +327,16 @@
 
         </div>
         <div class="chatsession-row-header">
-            <div class="chatsession-row-title nickname_{{chatSessionId}}">{{name}}</div>
+            <div class="chatsession-row-title ">
+                <div style="display: flex;justify-content: center;align-items: center">
+                    {{if isSiteMaster }}
+                    <div style="width:28px;height:14px;background:rgba(249,183,38,1); text-align:center; border-radius:2px;font-size:10px; font-family:PingFangSC-Regular; font-weight:400; color:rgba(255,255,255,0.87); line-height:14px;margin-right: 0.5rem;">站长</div>
+                    {{/if}}
+                    <span class="nickname_{{chatSessionId}}"> {{name}}</span>
+
+                </div>
+
+            </div>
             <div class="chatsession-row-time" msgTime="{{msgServerTime}}">{{msgTime}}</div>
         </div>
         <div class="chatsession-row-desc chatsession-row-desc-{{chatSessionId}}">{{msgContent}}</div>
@@ -313,9 +356,13 @@
 
 
 <script id="tpl-group-contact" type="text/html">
-    <div class="pw-contact-row   contact-row-group-profile {{groupId}}" chat-session-id="{{groupId}}">
+    <div class="pw-contact-row   contact-row-group-profile {{groupId}}" chat-session-id="{{groupId}}" group-name="{{groupName}}" group-name-latin="{{nameInLatin}}">
         <div class="pw-contact-row-image">
-            <img class="user-info-avatar info-avatar-{{groupId}}" src="../../public/img/msg/group_default_avatar.png" groupId="{{groupId}}" />
+            {{if groupAvatarImg}}
+                <img class="user-info-avatar " src="{{groupAvatarImg}}"  onerror="this.src='../../public/img/msg/group_default_avatar.png'"/>
+            {{else}}
+                <img class="user-info-avatar " src="../../public/img/msg/group_default_avatar.png" />
+            {{/if}}
         </div>
         <div class="pw-contact-row-name">{{groupName}}</div>
     </div>
@@ -323,11 +370,15 @@
 
 
 <script id="tpl-friend-contact" type="text/html">
-    <div class="pw-contact-row  contact-row-u2-profile {{userId}}" chat-session-id="{{userId}}">
+    <div class="pw-contact-row  contact-row-u2-profile {{userId}}" chat-session-id="{{userId}}" friend-name="{{nickname}}" friend-name-latin="{{nicknameInLatin}}">
         <div class="pw-contact-row-image">
-            <img class="user-info-avatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png"  userId="{{userId}}" />
+            {{if friendAvatarImg}}
+                <img class="user-info-avatar"  src="{{friendAvatarImg}}"  onerror="this.src='../../public/img/msg/default_user.png'"/>
+            {{else}}
+                <img class="user-info-avatar"  src="../../public/img/msg/default_user.png" />
+            {{/if}}
         </div>
-        <div class="pw-contact-row-name nickname_{{userId}}">{{nickname}}</div>
+        <div class="pw-contact-row-name nickname_{{userId}} profile_nickname_{{userId}}">{{nickname}}</div>
     </div>
 </script>
 
@@ -382,12 +433,6 @@
                  <div class="item p-2" id="remove-admin" data-local-value="removeAdminTip">移除管理员</div>
             {{/if}}
 
-            {{if (!memberIsSpeaker && !memberIsOwner  && !memberIsAdmin)}}
-                    <div class="item p-2" id="set-speaker" data-local-value="setSpeakerTip">设为发言人</div>
-            {{else if (memberIsSpeaker != false && !memberIsOwner  && !memberIsAdmin)}}
-                    <div class="item p-2" id="remove-speaker" data-local-value="removeSpeakerTip">移除发言人</div>
-            {{/if}}
-
             {{if (isOwner == 1 || (!memberIsAdmin && !memberIsOwner))}}
                 <div class="item p-2" id="remove-group-chat" data-local-value="removeGroupMemberTip">移除成员</div>
             {{/if}}
@@ -398,38 +443,105 @@
 </script>
 
 
-<script id="tpl-self-info" type="text/html">
-<div id="selfInfo" >
-    <div id="triangle_left"></div>
-    <div id="selfInfoDiv" class="selfInfoDiv" style="position: absolute;width: 100%;">
-        <div id="selfAvatarUploadDiv" class="d-flex flex-row justify-content-center" style="margin-top: 3rem; text-align: center;position: relative" >
-            <img id="user-image-upload" class="user-image-upload info-avatar-{{userId}}" src="../../public/img/msg/default_user.png" style="width: 5rem; height: 5rem;" onclick="uploadFile('file2')" />
-            <img id="user-img-carmera" class="user-img-carmera" src="../../public/img/camera.png" style="width: 5rem; height: 5rem; position: absolute;
-                     margin-left: -5rem;" onclick="uploadFile('file2')" />
-            <input type="file" id="file2" style="display:none" onchange="uploadUserImgFromInput(this)" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg">
-        </div>
-        <div class="d-flex flex-row justify-content-center selfNickNameDiv"  >
-            {{if !nickname }}
-                <div style="margin-left: 1rem;" class="nickNameDiv"> <img src="../../public/img/edit.png" style="width: 1rem;height:1rem"/></div>
+<script id="tpl-msg-menu" type="text/html">
+    <div id="msg-menu" style="position: absolute;top:{{top}}px; left:{{left}}px"  msgId="{{msgId}}">
+
+        <div style="margin-top:1rem;margin-bottom: 1rem;">
+            {{ if isCopy }}
+            <div class="item p-2"  onclick="copyMsg('{{msgId}}', event)" data-local-value="copyTip">复制</div>
+            {{/if}}
+            {{if isSee }}
+            <div class="item p-2" onclick="seeMsg('{{msgId}}', event)" data-local-value="seeBigImgTip">查看大图</div>
+            {{/if}}
+            {{ if isSave }}
+            <div class="item p-2" onclick="downloadMsg('{{msgId}}', event)" data-local-value="downloadTip">下载</div>
+            {{/if}}
+            {{ if isRecall }}
+            {{if recallDisabled }}
+            <div class="item p-2" style="color:rgba(180,180,180,1);" disabled  data-local-value="disableRecallTip">撤回</div>
             {{else}}
-            <div style="margin-left: 1rem;" class="nickNameDiv">{{nickname}} <img src="../../public/img/edit.png" style="width: 1rem;height:1rem"/></div>
+            <div class="item p-2" onclick="recallMsg('{{msgId}}', event)"   data-local-value="recallTip">撤回</div>
+            {{/if}}
             {{/if}}
         </div>
+    </div>
 
+
+</script>
+
+
+<script id="tpl-self-info" type="text/html">
+<div id="selfInfo" style="z-index: 10001;">
+    <div id="triangle_left"></div>
+    <div id="selfInfoDiv" class="selfInfoDiv siteSelfInfo" style="position: absolute;width: 100%;">
+        <div class="edit_self_custom siteSelfInfo" onclick="editSelfCustom('edit')" data-local-value="editTip" type="edit">编辑</div>
+
+        <div id="selfAvatarUploadDiv" class="d-flex flex-row justify-content-center" style="margin-top: 3rem; text-align: center;position: relative" >
+            <img id="user-image-upload" class="user-image-upload info-avatar-{{userId}} siteSelfInfo" src="../../public/img/msg/default_user.png" style="width: 5rem; height: 5rem;" onclick="uploadFile('file2', 'user_avatar')" />
+        </div>
         <div class="d-flex flex-row justify-content-center selfNickNameDiv"  >
-            <input type="text"    style="padding: 0rem;" class="loginName create_group_box_div_input"  value="{{loginName}}" disabled>
+            <div style="margin-left: 1rem;" class="siteSelfInfo nickname_{{userId}}">{{nickname}}</div>
         </div>
 
-        <div style="text-align: center;margin:0 auto;width: 34rem; height:1px;background:rgba(223,223,223,1);" ></div>
+        <div class="d-flex flex-row justify-content-center selfNickNameDiv siteSelfInfo"  >
+             <input type="text"    style="padding: 0rem;" class="loginName create_group_box_div_input siteSelfInfo"  value="ID: {{loginName}}" disabled>
+        </div>
+        {{if isMaster}}
+            <div class="d-flex flex-row siteSelfInfo" style="display: flex;justify-content: center;align-items: center;text-align: center;margin-bottom: 0.5rem;" >
+                <div class="siteSelfInfo master_tip">
+                    站长
+                </div>
+            </div>
+        {{/if}}
+
+        <div style="text-align: center;margin:0.12rem auto;width: 34rem; height:1px;background:rgba(223,223,223,1);margin-top: 1rem" ></div>
+
         <div class="d-flex flex-row justify-content-center">
-            <div class="self-qrcode" id="logout" >
-                <span class="logout-span" id="logout-span" data-local-value="logoutTip" onclick="logout(event)">退出</span>
+            <div class="self_profile_item self-qrcode siteSelfInfo" id="logout" >
+                <span class="logout-span siteSelfInfo" id="logout-span" data-local-value="logoutTip" onclick="logout(event)">退出</span>
             </div>
         </div>
     </div>
+    <div id="selfCutsomInfoDiv" class="selfInfoDiv siteSelfInfo" style="position: absolute;width: 100%; display: none">
+        <div class="edit_self_custom siteSelfInfo" onclick="editSelfCustom('finish')" data-local-value="finishTip" type="finsh">{{finishTip}}</div>
+        <div id="selfAvatarUploadDiv" class="d-flex flex-row justify-content-center" style="margin-top: 3rem; text-align: center;position: relative" >
+                        <img id="user-image-upload" class="user-image-upload info-avatar-{{userId}} siteSelfInfo" src="../../public/img/msg/default_user.png" style="width: 5rem; height: 5rem;" onclick="uploadFile('file2', 'user_avatar')" />
+                        <img id="user-img-carmera" class="user-img-carmera siteSelfInfo" src="../../public/img/camera.png" style="width: 5rem; height: 5rem; position: absolute;
+                                 margin-left: -5rem;" onclick="uploadFile('file2', 'user_avatar')" />
+                        <input type="file" id="file2" style="display:none" onchange="uploadUserImgFromInput(this)" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg">
+        </div>
+        <div class="d-flex flex-row justify-content-center selfNickNameDiv editSelfNickNameDiv"  >
+            {{if !nickname }}
+            <div style="margin-left: 1rem;" class="nickNameDiv siteSelfInfo "> <img src="../../public/img/edit.png" class="siteSelfInfo" style="width: 1rem;height:1rem"/></div>
+            {{else}}
+                        <div style="margin-left: 1rem;" class="nickNameDiv siteSelfInfo">{{nickname}} <img src="../../public/img/edit.png" style="width: 1rem;height:1rem"/></div>
+            {{/if}}
+        </div>
+
+        <div class="d-flex flex-row justify-content-center selfNickNameDiv siteSelfInfo"  >
+            <input type="text"    style="padding: 0rem;" class="loginName create_group_box_div_input siteSelfInfo"  value="ID: {{loginName}}" disabled>
+        </div>
+        {{if isMaster}}
+        <div class="d-flex flex-row siteSelfInfo" style="display: flex;justify-content: center;align-items: center;text-align: center;margin-bottom: 0.5rem;" >
+            <div class="siteSelfInfo master_tip">
+                站长
+            </div>
+        </div>
+        {{/if}}
+        <div style="text-align: center;margin:0.12rem auto;width: 34rem; height:1px;background:rgba(223,223,223,1);" ></div>
+
+        <div style="width: 100%;margin-bottom: 3rem;">
+            {{each customs custom}}
+            <div class="siteSelfInfo self_custom_info">
+                <div class="custom_name_tip">{{custom['customName']}}</div> <input type="text" value="{{custom['customValue']}}" onkeydown="updateUserCustomInfo(event, this)" class="edit_custom_info customs self_custom_edit_{{custom['customKey']}} siteSelfInfo" customName = "{{custom['customName']}}" customKey="{{custom['customKey']}}" >
+            </div>
+            {{/each}}
+        </div>
+
+    </div>
     <div id="selfQrcodeDiv" class="selfQrcodeDiv"  style="position: absolute;display: none;">
         <div id="selfQrcodeCanvas">
-            kkkkkkkk
+
         </div>
     </div>
 </div>
@@ -458,7 +570,11 @@
         <div class="pw-contact-row choose-member {{userId}} "  userId="{{userId}}"  nickname="{{nickname}}" avatar="{{avatar}}">
         {{/if}}
         <div class="pw-contact-row-image">
-            <img class="useravatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png" />
+            {{if memberAvatarImg }}
+                <img class="useravatar info-avatar-{{userId}}" src="{{memberAvatarImg}}"  onerror="this.src='../../public/img/msg/default_user.png'"/>
+            {{else}}
+                <img class="useravatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png" />
+            {{/if}}
         </div>
         <div class="pw-contact-row-name">{{nickname}}</div>
             {{if isMemberType == "member" && isSelfAdminRole == true}}
@@ -480,7 +596,11 @@
         <img style="width: 1rem;height:1rem; position: absolute;right: 2rem;top: 1rem;cursor: pointer" onclick="closeGroupMemberInfo()"  src="../../public/img/msg/btn-close.png">
     </div>
     <div class="group-member-img">
-        <img class="useravatar info-avatar-{{userId}}" src="{{avatar}}" />
+        {{if memberAvatarImg}}
+            <img  class="useravatar info-avatar-{{userId}}"  src="{{memberAvatarImg}}"  onerror="this.src='../../public/img/msg/default_user.png'"/>
+        {{else}}
+            <img  class="useravatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png" />
+        {{/if}}
     </div>
     <div class="group-member-nickname">
         {{nickname}}
@@ -494,8 +614,10 @@
         </div>
         {{if relation == "FriendRelationFollow"}}
             <button class="group-member-btn open_chat" data-local-value="openChatTip" userId="{{userId}}"> 发起聊天</button>
-        {{else relation != "FriendRelationFollow"}}
-         <button class="group-member-btn add-friend-by-group-member" data-local-value="addFriendTip" userId="{{userId}}">添加好友</button>
+        {{else relation != "FriendRelationFollow" }}
+            {{if isCanAddFriend || isAdmin}}
+                <button class="group-member-btn add-friend-by-group-member" data-local-value="addFriendTip" userId="{{userId}}">添加好友</button>
+            {{/if}}
         {{/if}}
     {{/if}}
 
@@ -509,7 +631,7 @@
             <div class="sub-speaker-title" data-local-value="otherGroupMemberTip"> 其他成员 </div>
         </div>
         <div class="speaker-line"></div>
-        <div class="speaker-group-member-div" style="width: 100%;">
+        <div class="speaker-group-member-div" style="width: 100%;margin-bottom: 5rem;">
         </div>
     </div>
 </script>
@@ -517,7 +639,11 @@
 <script id="tpl-group-member-list" type="text/html">
         <div class="pw-contact-row choose-member  group-member {{userId}} "  userId="{{userId}}" nickname="{{nickname}}"  loginName="{{loginName}}">
             <div class="pw-contact-row-image">
-                <img class="useravatar info-avatar-{{userId}}" src="../../public/img/msg/default_user.png" />
+                {{if  memberAvatarImg}}
+                <img  class="useravatar"  src="{{memberAvatarImg}}" onerror="this.src='../../public/img/msg/default_user.png'" />
+                {{else}}
+                <img  class="useravatar"  src="../../public/img/msg/default_user.png" />
+                {{/if}}
             </div>
             <div class="pw-contact-row-name">{{nickname}}</div>
             {{if isType == "owner"}}
@@ -544,7 +670,11 @@
 </script>
 <script id="tpl-group-member-body-detail" type="text/html">
     <div style="display: flex" class="hint--bottom-left" aria-label="{{nickname}}">
-        <img class="useravatar group-member-avatar info-avatar-{{userId}} group-member-avatar-{{userId}} " aria-label="{{nickname}}" src="../../public/img/msg/default_user.png" />
+        {{if memberAvatarImg}}
+            <img class="useravatar group-member-avatar " aria-label="{{nickname}}" src="{{memberAvatarImg}}" />
+        {{else}}
+            <img class="useravatar group-member-avatar " aria-label="{{nickname}}" src="../../public/img/msg/default_user.png" />
+        {{/if}}
     </div>
 </script>
 
@@ -553,11 +683,15 @@
 
     <div class="pw-contact-row choose-member {{userId}} "  user-id="{{userId}}">
         <div class="pw-contact-row-image">
-            <img  class="useravatar info-avatar-{{userId}}"  src="../../public/img/msg/default_user.png" />
+            {{if friendAvatarImg}}
+                <img  class="useravatar"  src="{{friendAvatarImg}}"  onerror="this.src='{{siteAddress}}/public/img/msg/default_user.png'"/>
+            {{else}}
+                <img  class="useravatar"  src="{{siteAddress}}/public/img/msg/default_user.png" />
+            {{/if}}
         </div>
         <div class="pw-contact-row-name">{{nickname}}</div>
         <div class="pw-contact-row-checkbox select_people">
-            <img src="../../public/img/msg/member_unselect.png" />
+            <img src="{{siteAddress}}/public/img/msg/member_unselect.png" />
         </div>
     </div>
 
@@ -568,7 +702,7 @@
     <div class="no_data">
         <div class="d-flex">
             <div class="p-2">
-                <img class="no_data_img" src="../../public/img/no_data.png"/>
+                <img class="no_data_img" src="{{siteAddress}}/public/img/no_data.png"/>
             </div>
             <div class="p-2 no_data_tip" data-local-value="noFriendDataTip">暂无好友</div>
         </div>
@@ -576,7 +710,7 @@
 </script>
 
 <script id="tpl-nickname-div" type="text/html">
-   <input type="text" id="selfNickname"  style="padding: 0rem;" class="nickname create_group_box_div_input"  value="{{nickname}}" onkeydown="updateSelfNickName(event);" />
+   <input type="text" id="selfNickname"  style="padding: 0rem;" class="nickname create_group_box_div_input siteSelfInfo"  value="{{nickname}}" onkeydown="updateSelfNickName(event);" />
 </script>
 
 <script id="tpl-group-name-div" type="text/html">
@@ -619,22 +753,27 @@
 </script>
 
 <script id="tpl-download-app-div" type="text/html">
-    <div class="app_download_header" data-local-value="shareSiteTip" >分享站点</div>
-    <div class="app_download_subheader" data-local-value="shareSiteCommentTip">随时随地享受畅聊体验，同时还有语音聊天功能等你来哦！</div>
-    <div id="qrcodeCanvas"></div>
-    <div class="download_button_div" style="margin-left:26rem;margin-top:2rem">
-        <div class="ios_info">
-            <img src="../../public/img/msg/ios.png" style="width: 2.1rem;height:2.8rem;margin-right:1rem;">iOS
+   <div>
+       <div class="app_download_header" data-local-value="shareSiteTip" >下载APP，随时随地保持联系</div>
+       <div class="app_download_subheader" data-local-value="shareSiteCommentTip">扫描安装APP，在APP内访问站点收发消息，体验更多功能！</div>
+       <div id="qrcodeCanvas"></div>
+       <div class="download_button_div" style="margin-left:26rem;margin-top:2rem">
+           <div class="ios_info">
+               <img src="../../public/img/msg/ios.png" style="width: 2.1rem;height:2.8rem;margin-right:1rem;">iOS
 
-        </div>
-        <div class="android_info">
-            <img src="../../public/img/msg/android.png" style="width: 2.3rem;height:2.8rem;margin-right: 1rem;">Android
-        </div>
-    </div>
+           </div>
+           <div class="android_info">
+               <img src="../../public/img/msg/android.png" style="width: 2.3rem;height:2.8rem;margin-right: 1rem;">Android
+           </div>
+       </div>
+   </div>
 </script>
 
 <script id="tpl-add-friend-div" type="text/html">
 
+        <div class="close_div">
+            <img src="../../public/img/close.png" onclick="closeMaskDiv('#add-friend-div');">
+        </div>
         <div class="flex-container justify-content-center" >
             <div class="header_tip_font  align-items-center" style="margin-top: 6rem;" data-local-value="addFriendTip">添加好友</div>
         </div>
@@ -756,4 +895,55 @@
 
 <script type="text/html" id="tpl-desc-group-textarea">
     <textarea class="textarea_desc">{{descBody}}</textarea>
+</script>
+
+
+<script type="text/html" id="tpl-plugin-item">
+    <div class="pw-home-row mini-program plugin-info pw-contact-row" plugin-name="{{name}}" plugin-id="{{id}}" plugin-landingPageUrl="{{landingPageUrl}}" plugin-duckchatSessionId="{{duckchatSessionId}}" plugin-loadingType="{{loadingType}}">
+        <div class="pw-home-row-image" style="position: relative;">
+            {{if logo}}
+                <img class="plugin_logo" src="{{logo}}" onerror="this.src='{{siteAddress}}/public/img/plugin/default.png'"/>
+            {{else}}
+                    <img class="plugin_logo" src="{{siteAddress}}/public/img/plugin/default.png"/>
+            {{/if}}
+        </div>
+        <div class="pw-home-row-name" data-local-value="miniProgramTip">{{name}}</div>
+    </div>
+</script>
+
+<script type="text/html" id="tpl-input-tools-item">
+
+        <img src="{{logo}}" class="chat_plugin plugin_logo" plugin-id="{{id}}" plugin-name="{{name}}"
+             plugin-duckchatSessionId="{{duckchatSessionId}}"
+             plugin-loadingType="{{loadingType}}"
+             plugin-landingPageUrl="{{landingPageUrl}}" onerror="this.src='../../public/img/plugin/default.png'">
+
+</script>
+
+<script type="text/html" id="tpl-friend-profile">
+    <div>
+        <div style="width: 100%;text-align: center">{{nickname}}</div>
+        <div class="user-desc-loginName">    ID: {{loginName}}</div>
+        {{if isMaster}}
+        <div style="width: 100%;text-align: center;display: flex;justify-content: center;align-items: center;margin-top:0.5rem;">
+            <div class="master_tip" style="align-items: center;padding-bottom: 2px;">
+                站长
+            </div>
+        </div>
+        {{/if}}
+    </div>
+
+</script>
+
+
+<script type="text/html" id="tpl-friend-profile-more-info">
+    <div class="more-info-title" data-local-value="moreInfoTip">更多资料</div>
+    <div style="height:100%;overflow-y: scroll;">
+        {{each customs custom}}
+        <div class="custom_info">
+            <div class="custom_name">{{custom['customName']}}</div>
+            <div class="custom_value">{{custom['customValue']}}</div>
+        </div>
+        {{/each}}
+    </div>
 </script>

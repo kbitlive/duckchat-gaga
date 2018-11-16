@@ -6,7 +6,7 @@
  * Time: 2:46 PM
  */
 
-class Api_Passport_PasswordRegController extends BaseController
+class Api_Passport_PasswordRegController  extends Api_Passport_PasswordBase
 {
     private $classNameForRequest = '\Zaly\Proto\Site\ApiPassportPasswordRegRequest';
     private $classNameForResponse = '\Zaly\Proto\Site\ApiPassportPasswordRegResponse';
@@ -24,76 +24,59 @@ class Api_Passport_PasswordRegController extends BaseController
     {
         $tag = __CLASS__ . '-' . __FUNCTION__;
         try {
+            header('Access-Control-Allow-Origin: *');
             $loginName = $request->getLoginName();
             $email     = $request->getEmail();
             $password  = $request->getPassword();
-            $nickname  = $request->getNickname();
-            $sitePubkPem = $request->getSitePubkPem();
+            $sitePubkPem =  $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_ID_PUBK_PEM);
+
             $invitationCode = $request->getInvitationCode();
 
-            if(!$loginName || strlen($loginName) > 16 ) {
+            $this->getCustomLoginConfig();
+
+            $loginName = trim($loginName);
+            if(!$loginName || mb_strlen($loginName)>$this->loginNameMaxLength || mb_strlen($loginName) < $this->loginNameMinLength ) {
                 $errorCode = $this->zalyError->errorLoginNameLength;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("loginName  is  not exists");
-            }
-            $isLoginName = ZalyHelper::isLoginName($loginName);
-            if(!$isLoginName) {
-                $errorCode = $this->zalyError->errorInvalidLoginName;
-                $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("loginName  is  not exists");
+                throw new Exception($errorInfo);
             }
 
-            if(!$password) {
+            if(!$password || (strlen($password) > $this->pwdMaxLength) || (strlen($password) < $this->pwdMinLength)) {
                 $errorCode = $this->zalyError->errorPassowrdLength;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("password  is  not exists");
+                throw new Exception($errorInfo);
             }
 
-            if(!$nickname || mb_strlen($nickname) > 16) {
-                $errorCode = $this->zalyError->errorNicknameLength;
-                $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("nickname  is  not exists");
+            $flag = ZalyHelper::verifyChars($password, $this->pwdContainCharacters);
+            if(!$flag) {
+                $errorInfo = ZalyText::getText("text.pwd.type", $this->language);
+                throw new Exception($errorInfo);
             }
+            $nickname = $loginName;
 
             if(!$sitePubkPem || strlen($sitePubkPem) < 0) {
                 $errorCode = $this->zalyError->errorSitePubkPem;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-                $this->setRpcError($errorCode, $errorInfo);
-                throw new Exception("sitePubkPem  is  not exists");
+                throw new Exception($errorInfo);
+            }
+
+            if($this->passwordResetRequired == 1 && mb_strlen(trim($email))<1) {
+                $tip = ZalyText::getText("text.param.void", $this->language);
+                $errorInfo = $this->passwordRestWay." " .$tip;
+                $this->setRpcError("error.alert", $errorInfo);
+                throw new Exception("$errorInfo  is  not exists");
             }
 
             $this->checkLoginName($loginName);
-            $this->checkEmail($email);
             $preSessionId = $this->registerUserForPassport($loginName, $email, $password, $nickname, $invitationCode, $sitePubkPem);
             $response = new \Zaly\Proto\Site\ApiPassportPasswordRegResponse();
             $response->setPreSessionId($preSessionId);
             $this->setRpcError($this->defaultErrorCode, "");
             $this->rpcReturn($transportData->getAction(), $response);
         } catch (Exception $ex) {
-            $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $ex->getMessage());
+            $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $ex);
+            $this->setRpcError("error.alert", $ex->getMessage());
             $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
-        }
-    }
-
-    private  function checkEmail($email)
-    {
-        $isEmail = ZalyHelper::isEmail($email);
-        if(!$isEmail) {
-            $errorCode = $this->zalyError->errorInvalidEmail;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            $this->setRpcError($errorCode, $errorInfo);
-            throw new Exception("email is useless");
-        }
-        $user = $this->ctx->PassportPasswordTable->getUserByEmail($email);
-        if($user){
-            $errorCode = $this->zalyError->errorExistEmail;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            $this->setRpcError($errorCode, $errorInfo);
-            throw new Exception("email is exists");
         }
     }
 
@@ -103,14 +86,15 @@ class Api_Passport_PasswordRegController extends BaseController
         if($user){
             $errorCode = $this->zalyError->errorExistLoginName;
             $errorInfo = $this->zalyError->getErrorInfo($errorCode);
-            $this->setRpcError($errorCode, $errorInfo);
-            throw new Exception("loginName is exists");
+            throw new Exception($errorInfo);
         }
     }
 
     private function registerUserForPassport($loginName, $email, $password, $nickname, $invitationCode, $sitePubkPem)
     {
        try{
+           $tag = __CLASS__ . '-' . __FUNCTION__;
+
            $this->ctx->BaseTable->db->beginTransaction();
            $userId   = ZalyHelper::generateStrId();
            $userInfo = [
@@ -135,10 +119,10 @@ class Api_Passport_PasswordRegController extends BaseController
            $this->ctx->BaseTable->db->commit();
            return $preSessionId;
        }catch (Exception $ex) {
+           $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $ex);
            $this->ctx->BaseTable->db->rollback();
+           throw new Exception($ex);
        }
     }
-
-
 
 }

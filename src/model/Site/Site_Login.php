@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 登陆站点操作
  * User: zhangjun
  * Date: 06/08/2018
  * Time: 11:45 PM
@@ -10,54 +10,117 @@ class Site_Login
 {
     private $ctx;
     private $zalyError;
-    private $sessionVerifyAction = "api.session.verify";
     private $pinyin;
     private $timeOut = 10;
+    private $logger;
 
     public function __construct(BaseCtx $ctx)
     {
         $this->ctx = $ctx;
+        $this->logger = $ctx->getLogger();
         $this->zalyError = $this->ctx->ZalyErrorZh;
         $this->pinyin = new \Overtrue\Pinyin\Pinyin();
     }
 
     /**
-     * 站点登陆逻辑
-     *  1. presessionId(客户端提供)，站点通过presessionId调用平台，获取用户信息
-     *  2. 获取用户登陆信息，进行站点本地登陆逻辑
-     *  3. 构建Response返回
+     * @param $thirdPartyKey loginKey to choose loginWay
+     * @param $preSessionId
+     * @param $devicePubkPem
+     * @param $clientType
+     * @param $userCustomArray
+     * @return array|void
+     * @throws Exception
      */
+    public function doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $userCustomArray)
+    {
+        $userProfile = false;
+
+        if (empty($thirdPartyKey)) {
+            //do site passport login
+            $userProfile = $this->loginBySitePassport($preSessionId, $devicePubkPem, $clientType);
+        } else {
+            //get third login by thirdPartyKey
+            $userProfile = $this->loginByThirdParty($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType);
+        }
+
+        if ($userProfile && !empty($userCustomArray)) {
+            //login success, save custom
+            $this->saveUserCustoms($userProfile["userId"], $userCustomArray);
+        }
+
+        return $userProfile;
+    }
+
+    //site passport login【本地登陆】
+    private function loginBySitePassport($preSessionId, $devicePubkPem, $clientSideType = Zaly\Proto\Core\UserClientType::UserClientMobileApp)
+    {
+        //实现本地api.session.verify 逻辑
+        $loginUserProfile = $this->ctx->Site_SessionVerify->doLocalVerify($preSessionId);
+
+        //if loginUserProfile exist
+        if (!$loginUserProfile || empty($loginUserProfile->getLoginName()) || empty($loginUserProfile->getLoginName())) {
+            throw new Exception("get user profile error from site passport");
+        }
+
+        //get intivation first
+        $uicInfo = $this->getIntivationCode($loginUserProfile->getInvitationCode());
+
+        $userProfile = $this->doSiteLoginAction(false, $loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType, "");
+
+        return $userProfile;
+    }
 
     /**
+     * third party login【第三方登陆】
+     *
+     * @param $thirdPartyLoginKey
      * @param $preSessionId
      * @param string $devicePubkPem
      * @param int $clientSideType
      * @return array
      * @throws Exception
      */
-    public function checkPreSessionIdFromPlatform($preSessionId, $devicePubkPem = "", $clientSideType = Zaly\Proto\Core\UserClientType::UserClientMobileApp)
+    public function loginByThirdParty($thirdPartyLoginKey, $preSessionId, $devicePubkPem = "", $clientSideType = Zaly\Proto\Core\UserClientType::UserClientMobileApp)
     {
-
         try {
             //get site config::publicKey
             $sitePriKeyPem = $this->getSiteConfigPriKeyFromDB();
 
+            $sessionVerifyUrl = ZalyLogin::getVerifyUrl($thirdPartyLoginKey);
+
             //get userProfile from platform
-            $loginUserProfile = $this->getUserProfileFromPlatform($preSessionId, $sitePriKeyPem);
+            $loginUserProfile = $this->getUserProfileFromThirdParty($preSessionId, $sitePriKeyPem, $sessionVerifyUrl);
+
+            //if loginUserProfile exist
+            if (!$loginUserProfile || empty($loginUserProfile->getUserId()) || empty($loginUserProfile->getLoginName())) {
+                throw new Exception("get user profile error from third party");
+            }
+
+            //update loginName
+            $loginUserProfile->setLoginName($thirdPartyLoginKey . "_" . $loginUserProfile->getLoginName());
+
+            $thirdPartyLoginUserId = $loginUserProfile->getUserId();
+            $thirdPartyInfo = $this->getThirdPartyAccount($thirdPartyLoginKey, $thirdPartyLoginUserId);
+
+            $siteUserId = false;
+
+            if ($thirdPartyInfo) {
+                $siteUserId = $thirdPartyInfo['userId'];
+            }
 
             //get intivation first
             $uicInfo = $this->getIntivationCode($loginUserProfile->getInvitationCode());
 
-            $userProfile = $this->doSiteLoginAction($loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType);
+            $userProfile = $this->doSiteLoginAction($siteUserId, $loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType, $thirdPartyLoginKey);
 
-            //set site owner
-            $this->checkAndSetSiteOwner($userProfile['userId'], $uicInfo);
+            //save to thirdParty login table
+            $this->bindThirdPartyAccount($siteUserId, $thirdPartyLoginKey, $userProfile);
 
             return $userProfile;
         } catch (Exception $ex) {
             $tag = __CLASS__ . "-" . __FUNCTION__;
-            $this->ctx->Wpf_Logger->error($tag, " errorMsg = " . $ex->getMessage());
-            throw new Exception($ex->getMessage());
+            $this->ctx->Wpf_Logger->error($tag, " errorMsg = " . $ex->getMessage() . $ex->getTraceAsString());
+            throw $ex;
         }
     }
 
@@ -68,8 +131,8 @@ class Site_Login
     private function getSiteConfigPriKeyFromDB()
     {
         try {
-            $results = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_ID_PRIK_PEM);
-            return $results[SiteConfig::SITE_ID_PRIK_PEM];
+            $prikKeyPem = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_ID_PRIK_PEM);
+            return $prikKeyPem;
         } catch (Exception $ex) {
             $tag = __CLASS__ . "-" . __FUNCTION__;
             $this->ctx->Wpf_Logger->error($tag, "errorMsg = " . $ex->getMessage());
@@ -77,17 +140,23 @@ class Site_Login
         }
     }
 
-    private function getUserProfileFromPlatform($preSessionId, $sitePrikPem)
+    /**
+     * @param $preSessionId
+     * @param $sitePrikPem
+     * @param $sessionVerifyUrl
+     * @return \Zaly\Proto\Platform\LoginUserProfile
+     * @throws Exception
+     */
+    private function getUserProfileFromThirdParty($preSessionId, $sitePrikPem, $sessionVerifyUrl)
     {
         $tag = __CLASS__ . '-' . __FUNCTION__;
         try {
             $sessionVerifyRequest = new \Zaly\Proto\Platform\ApiSessionVerifyRequest();
             $sessionVerifyRequest->setPreSessionId($preSessionId);
 
-            $pluginIds = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_LOGIN_PLUGIN_ID);
-            $pluginId = $pluginIds[SiteConfig::SITE_LOGIN_PLUGIN_ID];
-            $sessionVerifyUrl = ZalyConfig::getSessionVerifyUrl($pluginId);
             $sessionVerifyUrl = ZalyHelper::getFullReqUrl($sessionVerifyUrl);
+
+//            $this->logger->error("==============request to api.session.verify Url=", $sessionVerifyUrl);
 
             $response = $this->ctx->ZalyCurl->httpRequestByAction('POST', $sessionVerifyUrl, $sessionVerifyRequest, $this->timeOut);
 
@@ -114,41 +183,52 @@ class Site_Login
     /**
      * 处理站点登陆具体逻辑
      *
+     * @param $siteUserId
      * @param Zaly\Proto\Platform\LoginUserProfile $loginUserProfile
      * @param $devicePubkPem
      * @param $uicInfo
      * @param $clientSideType
+     * @param $loginKeyId
      * @return array
      * @throws Exception
      */
-    private function doSiteLoginAction($loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType)
+    private function doSiteLoginAction($siteUserId, $loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType, $loginKeyId)
     {
         if (!$loginUserProfile) {
             $errorCode = $this->zalyError->errorSession;
             $errorInfo = $this->zalyError->getErrorInfo($errorCode);
             throw new Exception($errorInfo);
         }
+
+        $sitePubkPem = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_ID_PUBK_PEM);
+        $sourceLoginUserId = $loginUserProfile->getUserId();
+        $userId = sha1($sourceLoginUserId . "@" . $sitePubkPem);
+
         $nameInLatin = $this->pinyin->permalink($loginUserProfile->getNickName(), "");
-
         $countryCode = $loginUserProfile->getPhoneCountryCode();
-
         if (!$countryCode) {
             $countryCode = "86";
         }
 
         $userProfile = [
-            "userId" => $loginUserProfile->getUserId(),
+            "userId" => $userId,
             "loginName" => $loginUserProfile->getLoginName(),
-            "nickname" => $loginUserProfile->getNickname(),
-            "countryCode" => $countryCode,
             "loginNameLowercase" => strtolower($loginUserProfile->getLoginName()),
+            "nickname" => $loginUserProfile->getNickname(),
             "nicknameInLatin" => $nameInLatin,
+            "countryCode" => $countryCode,
             "phoneId" => $loginUserProfile->getPhoneNumber(),
             "timeReg" => $this->ctx->ZalyHelper->getMsectime(),
         ];
 
-        $user = $this->checkUserExists($userProfile);
-        if (!$user) {
+        //if $siteUserId is empty, use $userId
+        if (empty($siteUserId)) {
+            $siteUserId = $userId;
+        }
+
+        $siteUser = $this->checkUserExists($siteUserId);
+
+        if (!$siteUser) {
             //no user ,register new user
             //check user invitation code and realName for phonenumber
             $this->verifyUicAndRealName($loginUserProfile->getUserId(), $loginUserProfile->getPhoneNumber(), $uicInfo);
@@ -162,17 +242,66 @@ class Site_Login
             if ($result) {
                 $this->ctx->Site_Default->addDefaultFriendsAndGroups($userProfile['userId']);
             } else {
-                // #TODO exception
-                throw new Exception("insert user profile to db error");
+                throw new Exception("save new user profile to db error");
             }
-
+        } else {
+            //user exists ,set user avatar
+            $userProfile['avatar'] = $siteUser['avatar'];
         }
 
         //这里
-        $sessionInfo = $this->insertOrUpdateUserSession($userProfile, $devicePubkPem, $clientSideType);
+        $sessionInfo = $this->insertOrUpdateUserSession($userProfile, $devicePubkPem, $clientSideType, $loginKeyId);
         $userProfile['sessionId'] = $sessionInfo['sessionId'];
         $userProfile['deviceId'] = $sessionInfo['deviceId'];
+        $userProfile['sourceLoginUserId'] = $sourceLoginUserId;
         return $userProfile;
+    }
+
+    private function getThirdPartyAccount($thirdPartyLoginKey, $thirdPartyLoginUserId)
+    {
+        return $this->ctx->SiteThirdPartyLoginTable->getAccountInfo($thirdPartyLoginKey, $thirdPartyLoginUserId);
+    }
+
+    private function bindThirdPartyAccount($siteUserId, $thirdPartyLoginKey, $userProfile)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+
+        if (!$userProfile) {
+            $this->logger->error($tag, "bind third party account error");
+            return false;
+        }
+
+        $this->logger->error('bind thirdParty account', "siteUserId=========" . $siteUserId);
+        if (!empty($siteUserId)) {
+            //if go here means 1.already bind account 2.already save account
+            return true;
+        }
+
+        try {
+            $data = [
+                "userId" => $userProfile["userId"],
+                "loginKey" => $thirdPartyLoginKey,
+                "loginUserId" => $userProfile["sourceLoginUserId"],
+            ];
+            return $this->ctx->SiteThirdPartyLoginTable->saveAccountInfo($data);
+        } catch (Exception $e) {
+            $this->logger->error($tag, $e);
+        }
+        return false;
+    }
+
+
+    //support site admins add custom items for users
+    private function saveUserCustoms($userId, array $userCustoms)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        try {
+            $userCustoms["userId"] = $userId;
+            return $this->ctx->SiteUserCustomTable->insertCustomProfile($userCustoms);
+        } catch (Exception $e) {
+            $this->logger->error($tag, $e);
+        }
+        return false;
     }
 
     private function getIntivationCode($invitationCode)
@@ -183,11 +312,16 @@ class Site_Login
         return $this->ctx->SiteUicTable->queryUicByCode($invitationCode);
     }
 
-    private function checkUserExists($userProfile)
+    private function checkUserExists($userId)
     {
         try {
-            $user = $this->ctx->SiteUserTable->getUserByUserId($userProfile["userId"]);
-            return $user;
+            $user = $this->ctx->SiteUserTable->getUserByUserId($userId);
+
+            if ($user && isset($user['userId']) && isset($user['loginName'])) {
+                return $user;
+            }
+
+            return false;
         } catch (Exception $ex) {
             throw new Exception("check user is fail");
         }
@@ -245,39 +379,46 @@ class Site_Login
      * @param $userProfile
      * @param $devicePubkPem
      * @param $clientSideType
-     * @return string
+     * @param $loginKeyId
+     * @return array
      */
-    private function insertOrUpdateUserSession($userProfile, $devicePubkPem, $clientSideType)
+    private function insertOrUpdateUserSession($userProfile, $devicePubkPem, $clientSideType, $loginKeyId)
     {
         $sessionId = $this->ctx->ZalyHelper->generateStrId();
         $deviceId = sha1($devicePubkPem);
+        //add session
+        $userId = $userProfile["userId"];
+
+        if (!empty($devicePubkPem)) {
+            //get session by deviceId
+            $this->ctx->SiteSessionTable->deleteSessionByDeviceId($deviceId);
+        } else {
+            $this->ctx->SiteSessionTable->deleteSessionByUserIdAndDeviceId($userId, $deviceId);
+        }
 
         try {
-            ///TODO 需要替换
-            $userId = $userProfile["userId"];
             $sessionInfo = [
                 "sessionId" => $sessionId,
                 "userId" => $userId,
                 "deviceId" => $deviceId,
                 "devicePubkPem" => $devicePubkPem,
                 "timeWhenCreated" => $this->ctx->ZalyHelper->getMsectime(),
-                "ipWhenCreated" => "",
+                "ipActive" => ZalyHelper::getIp(),
                 "timeActive" => $this->ctx->ZalyHelper->getMsectime(),
-                "ipActive" => "",
-//                "userAgent" => "",
-//                "userAgentType" => "",
+                "ipActive" => ZalyHelper::getIp(),
                 "clientSideType" => $clientSideType,
+                "loginPluginId" => $loginKeyId,//thirdParty key=loginKey=loginId, same meaning
             ];
             $this->ctx->SiteSessionTable->insertSessionInfo($sessionInfo);
         } catch (Exception $ex) {
+            //update session
             $userId = $userProfile["userId"];
             $sessionInfo = [
                 "sessionId" => $sessionId,
                 "timeActive" => $this->ctx->ZalyHelper->getMsectime(),
-                "ipActive" => "",
-//                "userAgent" => "",
-//                "userAgentType" => "",
+                "ipActive" => ZalyHelper::getIp(),
                 "clientSideType" => $clientSideType,
+                "loginPluginId" => $loginKeyId,
             ];
             $where = [
                 "userId" => $userId,
@@ -291,24 +432,4 @@ class Site_Login
         return $sessionInfo;
     }
 
-    /**
-     * @param $userId
-     * @param $uicInfo
-     */
-    private function checkAndSetSiteOwner($userId, $uicInfo)
-    {
-        $siteOwner = $this->ctx->Site_Config->getSiteOwner();
-
-        if (empty($siteOwner)) {
-            $this->ctx->Wpf_Logger->info("api.site.login", "uic info=" . json_encode($uicInfo));
-            if ($uicInfo && $uicInfo['status'] == 100) {
-                //set site owner
-                $this->ctx->SiteConfigTable->updateSiteConfig(SiteConfig::SITE_OWNER, $userId);
-
-                //update config realName = false
-                $this->ctx->SiteConfigTable->updateSiteConfig(SiteConfig::SITE_ENABLE_INVITATION_CODE, 0);
-            }
-
-        }
-    }
 }

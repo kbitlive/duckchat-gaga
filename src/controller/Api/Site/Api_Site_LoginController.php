@@ -13,6 +13,8 @@ class Api_Site_LoginController extends \BaseController
     private $classNameForResponse = '\Zaly\Proto\Site\ApiSiteLoginResponse';
     private $sessionVerifyAction = "api.session.verify";
     private $pinyin;
+    public $siteCookieName = "zaly_site_user";
+    private $cookieTimeOut = 2592000;//30天 单位s
 
     public function rpcRequestClassName()
     {
@@ -25,6 +27,8 @@ class Api_Site_LoginController extends \BaseController
      */
     public function rpc(\Google\Protobuf\Internal\Message $request, \Google\Protobuf\Internal\Message $transportData)
     {
+        header('Access-Control-Allow-Origin: *');
+
         ///处理request，
         $tag = __CLASS__ . '-' . __FUNCTION__;
         try {
@@ -43,7 +47,10 @@ class Api_Site_LoginController extends \BaseController
             $preSessionId = $request->getPreSessionId();
             $devicePubkPem = trim($request->getDevicePubkPem());
 
-            if (empty($preSessionId) || empty($devicePubkPem)) {
+            //get user profile from platform clientSiteType=1:mobile client
+            $clientType = $this->getUserClient($devicePubkPem);
+
+            if (empty($preSessionId) || (empty($devicePubkPem) && Zaly\Proto\Core\UserClientType::UserClientWeb != $clientType)) {
                 throw new Exception("with error parameters");
             }
 
@@ -56,25 +63,39 @@ class Api_Site_LoginController extends \BaseController
                 throw new Exception($errorInfo);
             }
 
-            //get user profile from platform clientSiteType=1:mobile client
-            $clientType = Zaly\Proto\Core\UserClientType::UserClientMobileApp;
-            $userProfile = $this->ctx->Site_Login->checkPreSessionIdFromPlatform($preSessionId, $devicePubkPem, $clientType);
+
+            $thirdPartyKey = trim($request->getThirdPartyKey());
+            $userCustoms = $request->getUserCustoms();
+
+            $customData = [];
+            if (!empty($userCustoms)) {
+                foreach ($userCustoms as $custom) {
+                    $key = trim($custom->getCustomKey());
+                    $customValue = $custom->getCustomValue();
+                    $value = isset($customValue) ? trim($customValue) : "";
+                    $customData[$key] = $value;
+                }
+            }
+
+            $userProfile = $this->ctx->Site_Login->doLogin($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType, $customData);
 
             $realSessionId = $userProfile['sessionId'];
             $response = $this->buildApiSiteLoginResponse($userProfile, $realSessionId);
 
-            $this->ctx->Wpf_Logger->info("api.site.login", "response=" . $response->serializeToJsonString());
-
-            //clearLimitSession
-            $this->clearLimitSession($userProfile['userId'], $userProfile['deviceId']);
+            if ($clientType == \Zaly\Proto\Core\UserClientType::UserClientWeb) {
+               setcookie($this->siteCookieName, $realSessionId, time() + $this->cookieTimeOut, "/", "", false, true);
+            } else {
+                //clearLimitSession
+                $this->clearLimitSession($userProfile['userId'], $userProfile['deviceId']);
+            }
             //back to request
             $this->setRpcError($this->defaultErrorCode, "");
             $this->rpcReturn($transportData->getAction(), $response);
         } catch (Exception $ex) {
-            $errorCode = $this->zalyError->errorSiteLogin;
-            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
             $this->ctx->Wpf_Logger->error($tag, "error=" . $ex);
-            $this->setRpcError($errorCode, $errorInfo);
+            $errorCode = $this->zalyError->errorSiteLogin;
+//                $errorInfo = $this->zalyError->getErrorInfo($errorCode);
+            $this->setRpcError($errorCode, $ex->getMessage());
             $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
         }
 
@@ -157,5 +178,20 @@ class Api_Site_LoginController extends \BaseController
 
     }
 
+    private function getUserClient($devicePubkPem)
+    {
+        if (empty($devicePubkPem)) {
+            return Zaly\Proto\Core\UserClientType::UserClientWeb;
+        } else {
+            return Zaly\Proto\Core\UserClientType::UserClientMobileApp;
+        }
+//        $userAgent = $this->getUserAgent();
+//        error_log("=================client userAgent=" . $userAgent);
+//        if (empty($userAgent) || strstr($userAgent, "DuckChat")) {
+//            return Zaly\Proto\Core\UserClientType::UserClientMobileApp;
+//        } else {
+//            return Zaly\Proto\Core\UserClientType::UserClientWeb;
+//        }
+    }
 }
 

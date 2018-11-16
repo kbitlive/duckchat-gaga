@@ -33,6 +33,7 @@ class SiteConfig
     const SITE_OPEN_SSL = "openSSL";
     const SITE_OPEN_WEB_EDITION = "openWebEdition";
     const SITE_ENABLE_WEB_WIDGET = "enableWebWidget";
+    const SITE_WS_ADDRESS = "wsAddress";
     const SITE_WS_HOST = "wsHost";
     const SITE_WS_PORT = "wsPort";
     const SITE_ZALY_HOST = "zalyHost";
@@ -62,6 +63,12 @@ class SiteConfig
     const SITE_WEB_NUM = "maxWebNum";//默认永远1，不可修改
 
     const SITE_FILE_SIZE = "maxFileSize";//文件支持的大小
+
+    const SITE_FRONT_PAGE = "frontPage";
+
+    const SITE_HIDDEN_HOME_PAGE = "hiddenHomePage";
+
+    const SITE_OPEN_WATERMARK = "openWaterMark";
 
     public static function getPubkAndPrikPem()
     {
@@ -98,7 +105,8 @@ class SiteConfig
         self::SITE_OPEN_SSL,
         self::SITE_OPEN_WEB_EDITION,
         self::SITE_ENABLE_WEB_WIDGET,
-        self::SITE_WS_PORT,
+        self::SITE_WS_ADDRESS,
+//        self::SITE_WS_PORT,
         self::SITE_ZALY_PORT,
 
         self::SITE_MANAGERS,
@@ -118,6 +126,10 @@ class SiteConfig
         self::SITE_MOBILE_NUM,
         self::SITE_WEB_NUM,
         self::SITE_FILE_SIZE,
+
+        self::SITE_FRONT_PAGE,
+        self::SITE_HIDDEN_HOME_PAGE,
+        self::SITE_OPEN_WATERMARK,
     ];
 
     public static $numericKeys = [
@@ -129,7 +141,7 @@ class SiteConfig
         self::SITE_FILE_SIZE,
     ];
 
-    public static $siteConfig = [
+    public static $initSiteConfig = [
         self::SITE_NAME => "duckchat-site",
         self::SITE_LOGO => "",
 
@@ -149,10 +161,10 @@ class SiteConfig
         self::SITE_OPEN_SSL => 0,
         self::SITE_OPEN_WEB_EDITION => 1,
         self::SITE_ENABLE_WEB_WIDGET => 0,
-        self::SITE_WS_HOST => "",
-        self::SITE_WS_PORT => 0,
-        self::SITE_ZALY_HOST => "",
-        self::SITE_ZALY_PORT => 0,
+//        self::SITE_WS_HOST => "",
+//        self::SITE_WS_PORT => 0,
+//        self::SITE_ZALY_HOST => "",
+//        self::SITE_ZALY_PORT => 0,
 
         self::SITE_ID_PUBK_PEM => "",
         self::SITE_ID_PRIK_PEM => "",
@@ -173,6 +185,8 @@ class SiteConfig
         self::SITE_MOBILE_NUM => 1,
         self::SITE_WEB_NUM => 1,
         self::SITE_FILE_SIZE => 10, //10M
+
+        self::SITE_OPEN_WATERMARK => 0,
     ];
 
 }

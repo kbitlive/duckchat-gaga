@@ -80,7 +80,7 @@ getStopDockerContainerId () {
 }
 
 checkDockerContainerIdExist () {
-	containers=` docker ps -af "name=duckchat" | awk '{print \$1}'`
+	containers=` docker ps -af "name=$duckchatName" | awk '{print \$1}'`
 	OLD_IFS="$IFS"
 	IFS=" "
 	IFS="$OLD_IFS"
@@ -205,6 +205,19 @@ case $operation in
 			fi
 
 			chmod -R 777 $originDirName/src
+
+			if [ -f $originDirName/.git/config ]; then
+                if [ "$sysOS" = "Linux"  ]; then
+                    sed -i  's/remote\"/remote \"/g'  $originDirName/.git/config
+                    sed -i  's/branch\"/branch \"/g'  $originDirName/.git/config
+                    sed -i  's/filemode = true/filemode = false/g'  $originDirName/.git/config
+                elif [ "$sysOS" = "Darwin" ]; then
+                    sed -i 'config'  's/remote\"/remote \"/g'  $originDirName/.git/config
+                    sed -i 'config' 's/branch\"/branch \"/g'  $originDirName/.git/config
+                    sed -i 'config' 's/filemode = true/filemode = false/g'  $originDirName/.git/config
+                fi
+			fi
+
 			echo "[DuckChat] 请稍后片刻"
 			sleep 9
 			echo "[DuckChat] 启动duckchat镜像成功"

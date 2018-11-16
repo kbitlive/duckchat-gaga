@@ -41,6 +41,13 @@ function ZalyIm(params)
     localStorage.setItem(siteConfigKey, JSON.stringify(config));
     localStorage.setItem(siteLoginPluginKey, JSON.stringify(loginPluginProfile))
     landingPageUrl = loginPluginProfile.landingPageUrl;
+
+    try{
+        displayFrontPage();
+    }catch (error) {
+
+    }
+
 }
 
 
@@ -51,5 +58,5 @@ function requestSiteConfig(callback)
     handleClientSendRequest(action, reqData, callback);
 }
 
-requestSiteConfig();
+requestSiteConfig(ZalyIm);
 

@@ -6,10 +6,12 @@
     <title><?php if ($lang == "1") { ?>用户资料<?php } else { ?>User Profile<?php } ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <link rel="stylesheet" href="../../public/jquery/weui.min.css"/>
+    <link rel="stylesheet" href="../../public/jquery/jquery-weui.min.css"/>
     <link rel="stylesheet" href="../../public/manage/config.css"/>
     <style>
 
-        .site-image {
+        .site-user-avatar {
             width: 30px;
             height: 30px;
             margin-top: 12px;
@@ -17,122 +19,11 @@
             cursor: pointer;
         }
 
+        .item-row, .weui_switch {
+            cursor: pointer;
+        }
     </style>
 
-    <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript">
-
-        function isAndroid() {
-
-            var userAgent = window.navigator.userAgent.toLowerCase();
-            if (userAgent.indexOf("android") != -1) {
-                return true;
-            }
-
-            return false;
-        }
-
-        function isMobile() {
-            if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-                return true;
-            }
-            return false;
-        }
-
-        function getLanguage() {
-            var nl = navigator.language;
-            if ("zh-cn" == nl || "zh-CN" == nl) {
-                return 1;
-            }
-            return 0;
-        }
-
-
-        function zalyjsAjaxPostJSON(url, body, callback) {
-            zalyjsAjaxPost(url, jsonToQueryString(body), function (data) {
-                var json = JSON.parse(data)
-                callback(json)
-            })
-        }
-
-
-        function zalyjsNavOpenPage(url) {
-            var messageBody = {}
-            messageBody["url"] = url
-            messageBody = JSON.stringify(messageBody)
-
-            if (isAndroid()) {
-                window.Android.zalyjsNavOpenPage(messageBody)
-            } else {
-                window.webkit.messageHandlers.zalyjsNavOpenPage.postMessage(messageBody)
-            }
-        }
-
-        function zalyjsCommonAjaxGet(url, callBack) {
-            $.ajax({
-                url: url,
-                method: "GET",
-                success: function (result) {
-
-                    callBack(url, result);
-
-                },
-                error: function (err) {
-                    alert("error");
-                }
-            });
-
-        }
-
-
-        function zalyjsCommonAjaxPost(url, value, callBack) {
-            $.ajax({
-                url: url,
-                method: "POST",
-                data: value,
-                success: function (result) {
-                    callBack(url, value, result);
-                },
-                error: function (err) {
-                    alert("error");
-                }
-            });
-
-        }
-
-        function zalyjsCommonAjaxPostJson(url, jsonBody, callBack) {
-            $.ajax({
-                url: url,
-                method: "POST",
-                data: jsonBody,
-                success: function (result) {
-
-                    callBack(url, jsonBody, result);
-
-                },
-                error: function (err) {
-                    alert("error");
-                }
-            });
-
-        }
-
-        /**
-         * _blank    在新窗口中打开被链接文档。
-         * _self    默认。在相同的框架中打开被链接文档。
-         * _parent    在父框架集中打开被链接文档。
-         * _top    在整个窗口中打开被链接文档。
-         * framename    在指定的框架中打开被链接文档。
-         *
-         * @param url
-         * @param target
-         */
-        function zalyjsCommonOpenPage(url) {
-            // window.open(url, target);
-            location.href = url;
-        }
-
-    </script>
 </head>
 
 <body>
@@ -159,8 +50,9 @@
                                     echo $subUserId;
                                 }
                                 ?></div>
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
                         </div>
                     </div>
 
@@ -180,8 +72,9 @@
 
                         <div class="item-body-tail" id="user-nickname-text">
                             <div class="item-body-value"><?php echo $nickname; ?></div>
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
                         </div>
                     </div>
 
@@ -204,8 +97,9 @@
 
                         <div class="item-body-tail" id="user-nickname-text">
                             <div class="item-body-value"><?php echo $loginName; ?></div>
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
                         </div>
 
                     </div>
@@ -227,17 +121,19 @@
 
                         <div class="item-body-tail" id="user-avatar-img-id" fileId="<?php echo $avatar ?>">
                             <div class="item-body-value">
-                                <img id="user-avatar-img" class="site-image"
+                                <img id="user-avatar-img" class="site-user-avatar"
                                      onclick="uploadFile('user-avatar-img-input')"
-                                     src="/_api_file_download_/?fileId=<?php echo $avatar ?>"
+                                     avatar="<?php echo $avatar ?>"
+                                     src=""
                                      onerror="src='../../public/img/msg/default_user.png'">
 
                                 <input id="user-avatar-img-input" type="file" onchange="uploadImageFile(this)"
                                        accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
                                        style="display: none;">
                             </div>
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
                         </div>
                     </div>
 
@@ -324,8 +220,9 @@
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
                         </div>
                     </div>
 
@@ -337,34 +234,56 @@
 
 
     <!--   part 4  -->
-    <!--    <div class="layout-all-row">-->
-    <!---->
-    <!--        <div class="list-item-center">-->
-    <!--            <div class="item-row" id="remove-user">-->
-    <!--                <div class="item-body">-->
-    <!--                    <div class="item-body-display">-->
-    <!---->
-    <!--                        --><?php //if ($lang == "1") { ?>
-    <!--                            <div class="item-body-desc">删除用户账号</div>-->
-    <!--                        --><?php //} else { ?>
-    <!--                            <div class="item-body-desc">Remove User Account</div>-->
-    <!--                        --><?php //} ?>
-    <!---->
-    <!--                        <div class="item-body-tail">-->
-    <!--                            <img class="more-img"-->
-    <!--                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>-->
-    <!--                        </div>-->
-    <!--                    </div>-->
-    <!---->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--            <div class="division-line"></div>-->
-    <!---->
-    <!--            <div class="item-bottom">-->
-    <!---->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
+    <div class="layout-all-row">
+        <div class="list-item-center">
+
+            <div class="item-row" id="change-user-password" onclick="changeUserPassword()">
+                <div class="item-body">
+                    <div class="item-body-display">
+
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">修改用户密码</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Change Password</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <div class="item-body-value"></div>
+
+                            <div class="item-body-value-more">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+
+            <div class="item-row" id="remove-user" onclick="deleteUserAccount()">
+                <div class="item-body">
+                    <div class="item-body-display">
+
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">删除用户账号</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Remove Account</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <div class="item-body-value">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+        </div>
+    </div>
 
 </div>
 
@@ -402,11 +321,39 @@
 </div>
 
 
+<script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../public/jquery/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../public/js/jquery-confirm.js"></script>
+
+<script type="text/javascript" src="../../public/manage/native.js"></script>
+
+<script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
+
 <script type="text/javascript">
 
     function uploadFile(obj) {
-        $("#" + obj).val("");
-        $("#" + obj).click();
+
+        if (isAndroid()) {
+            zalyjsImageUpload(uploadAvatarImageResult);
+        } else {
+            $("#" + obj).val("");
+            $("#" + obj).click();
+        }
+    }
+
+
+    function uploadAvatarImageResult(result) {
+
+        var fileId = result.fileId;
+
+        //update server image
+        updateServerImage(fileId);
+
+        var newSrc = "/_api_file_download_/?fileId=" + fileId;
+        if (!isMobile()) {
+            newSrc = "./index.php?action=http.file.downloadFile&fileId=" + fileId + "&returnBase64=0";
+        }
+        $(".site-user-avatar").attr("src", newSrc);
     }
 
     function uploadImageFile(obj) {
@@ -415,7 +362,7 @@
                 var formData = new FormData();
 
                 formData.append("file", obj.files.item(0));
-                formData.append("fileType", "FileImage");
+                formData.append("fileType", 1);
                 formData.append("isMessageAttachment", false);
 
                 var src = window.URL.createObjectURL(obj.files.item(0));
@@ -429,6 +376,16 @@
         }
 
     }
+
+    $(".site-user-avatar").each(function () {
+        var avatar = $(this).attr("avatar");
+        var src = " /_api_file_download_/?fileId=" + avatar;
+        if (!isMobile()) {
+            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        }
+        $(this).attr("src", src);
+    });
+
 
     function uploadFileToServer(formData, src) {
         var url = "./index.php?action=http.file.uploadWeb";
@@ -445,11 +402,8 @@
             processData: false,
             success: function (imageFileIdResult) {
                 if (imageFileIdResult) {
-                    var fileId = imageFileIdResult;
-                    if (isMobile()) {
-                        var res = JSON.parse(imageFileIdResult);
-                        fileId = res.fileId;
-                    }
+                    var res = JSON.parse(imageFileIdResult);
+                    var fileId = res.fileId;
                     updateServerImage(fileId);
                 } else {
                     alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");
@@ -554,6 +508,17 @@
     });
 
 
+    $("#change-user-password").click(function () {
+        var title = $(this).find(".item-body-desc").html();
+        var inputBody = $(this).find(".item-body-value").html();
+
+        $("#update-user-button").attr("data", "changePassword");
+        showWindow($(".config-hidden"));
+
+        $(".popup-group-title").html(title);
+        $(".popup-group-input").val(inputBody);
+    });
+
     function updateConfirm() {
         var userId = $("#user-id").attr("data");
         var value = $(".popup-group-input").val();
@@ -581,10 +546,15 @@
         var res = JSON.parse(result);
 
         if (res.errCode != "success") {
-            alert(getLanguage() == 1 ? "更新成功" : "update name error");
+            alert(getLanguage() == 1 ? "更新失败" : "update name error");
+            location.reload();
+        } else {
+            if (data.key == "changePassword") {
+                alert(getLanguage() == 1 ? "修改密码成功" : "change password success");
+            } else {
+                location.reload();
+            }
         }
-
-        location.reload();
     }
 
     //enable realName
@@ -609,8 +579,9 @@
         var res = JSON.parse(result);
 
         if (res.errCode != "success") {
-            alert(getLanguage() == 1 ? "更新成功" : "update error");
+            alert(getLanguage() == 1 ? "更新失败" : "update error");
         }
+
     }
 
 
@@ -634,7 +605,7 @@
         var res = JSON.parse(result);
 
         if (res.errCode != "success") {
-            alert(getLanguage() == 1 ? "更新成功" : "update error");
+            alert(getLanguage() == 1 ? "更新失败" : "update error");
         }
     }
 
@@ -647,18 +618,36 @@
         zalyjsCommonOpenPage(url);
     });
 
+    function deleteUserAccount() {
 
-    $("#remove-user").click(function () {
-        var userId = $("#user-id").attr("data");
+        var lang = getLanguage();
+        $.modal({
+            title: lang == 1 ? '删除用户' : 'Delete User',
+            text: lang == 1 ? '确定删除？' : 'Confirm Delete?',
+            buttons: [
+                {
+                    text: lang == 1 ? "取消" : "cancel", className: "default", onClick: function () {
+                        // alert("cancel");
+                    }
+                },
+                {
+                    text: lang == 1 ? "确定" : "confirm", className: "main-color", onClick: function () {
+                        var userId = $("#user-id").attr("data");
 
-        var url = "index.php?action=manage.user.delete&lang=" + getLanguage();
+                        var url = "index.php?action=manage.user.delete&lang=" + getLanguage();
 
-        var data = {
-            'userId': userId
-        };
+                        var data = {
+                            'deleteUserId': userId
+                        };
 
-        zalyjsCommonAjaxPostJson(url, data, removeUserResponse);
-    });
+                        zalyjsCommonAjaxPostJson(url, data, removeUserResponse);
+                    }
+                },
+
+            ]
+        });
+
+    }
 
     function removeUserResponse(url, data, result) {
         var res = JSON.parse(result);

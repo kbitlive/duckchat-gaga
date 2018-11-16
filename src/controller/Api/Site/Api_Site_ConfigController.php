@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 客户端获取站点相关配置.
  * User: childeYin<尹少爷>
  * Date: 13/07/2018
  * Time: 11:20 AM
@@ -45,11 +45,6 @@ class Api_Site_ConfigController extends \BaseController
             if (empty($host)) {
                 throw new Exception("api.site.config with error url");
             }
-            $siteName = $host;
-
-            $this->ctx->Wpf_Logger->info("api.site.config", "siteName =" . $siteName);
-            $this->ctx->Wpf_Logger->info("api.site.config", "siteHost =" . $host);
-            $this->ctx->Wpf_Logger->info("api.site.config", "sitePort =" . $port);
 
             if (empty($host)) {
                 throw new Exception("request config with no host");
@@ -130,15 +125,13 @@ class Api_Site_ConfigController extends \BaseController
 
     private function buildRandomBase64($random, $siteIdPrikBase64)
     {
-//        $this->ctx->Wpf_Logger->info("config.random.sign", 'random=' . $random);
         try {
             $signatureRandom = $this->ctx->ZalyRsa->sign($random, $siteIdPrikBase64);
             $base64Value = base64_encode($signatureRandom);
-//            $this->ctx->Wpf_Logger->info("config.random.base64", 'randomBase64Value=' . $base64Value);
             return $base64Value;
         } catch (Exception $e) {
-            # TODO 正式代码，这里 throw exception
             $this->ctx->Wpf_Logger->info("api.site.config", $e);
+            throw $e;
         }
         return '';
     }
@@ -187,24 +180,26 @@ class Api_Site_ConfigController extends \BaseController
                     $managersArray = explode(",", $managersValueStr);
                     $siteAdmins = array_merge($siteAdmins, $managersArray);
                     $siteAdmins = array_unique($siteAdmins);
+                    $siteAdmins = array_filter($siteAdmins);
                 }
-
                 $config->setMasters(json_encode($siteAdmins));
             }
 
-            $zalyPort = $configData[SiteConfig::SITE_ZALY_PORT];
-            $wsPort = $configData[SiteConfig::SITE_WS_PORT];
-
-            $this->ctx->Wpf_Logger->info("api.site.config", "zalyPort=" . $zalyPort . " wsPort=" . $wsPort);
-
+            $zalyPort = isset($configData[SiteConfig::SITE_ZALY_PORT]) ? $configData[SiteConfig::SITE_ZALY_PORT] : "";
+            $wsPort = isset($configData[SiteConfig::SITE_WS_PORT]) ? $configData[SiteConfig::SITE_WS_PORT] : "";
+            $wsAddress = isset($configData[SiteConfig::SITE_WS_ADDRESS]) ? $configData[SiteConfig::SITE_WS_ADDRESS] : "";
 
             $addressForAPi = "";
             $addressForIM = "";
-            if (isset($zalyPort) && $zalyPort > 0 && $zalyPort < 65535) {
+            if (!empty($zalyPort) && is_numeric($zalyPort) && $zalyPort > 0 && $zalyPort < 65535) {
                 //support zaly protocol
                 $addressForAPi = $this->buildAddress("zaly", $host, $zalyPort);
                 $addressForIM = $this->buildAddress("zaly", $host, $zalyPort);
-            } else if (isset($wsPort) && $wsPort > 0 && $wsPort < 65535) {
+            } elseif (!empty($wsAddress)) {
+                $addressForAPi = $this->buildAddress($scheme, $host, $port);
+                $addressForIM = $wsAddress;
+            } elseif (!empty($wsPort) && is_numeric($wsPort) && $wsPort > 0 && $wsPort < 65535) {
+                //兼容旧的设计模式，使用zalyPort自动组装
                 //support ws protocol
                 $addressForAPi = $this->buildAddress($scheme, $host, $port);
                 $addressForIM = $this->buildAddress("ws", $host, $wsPort);
@@ -230,7 +225,36 @@ class Api_Site_ConfigController extends \BaseController
             $config->setSiteIdPubkBase64($configData[SiteConfig::SITE_ID_PUBK_PEM]);
             $config->setAccountSafePluginId($configData[SiteConfig::SITE_PASSPORT_ACCOUNT_SAFE_PLUGIN_ID]);
 
+            if (isset($configData[SiteConfig::SITE_HIDDEN_HOME_PAGE])) {
+                $config->setHiddenHomePage($configData[SiteConfig::SITE_HIDDEN_HOME_PAGE]);
+            } else {
+                $config->setHiddenHomePage(false);
+            }
+
+            if (!$config->getHiddenHomePage()) {//show home page
+                if (isset($configData[SiteConfig::SITE_FRONT_PAGE])) {
+                    $config->setFrontPage($configData[SiteConfig::SITE_FRONT_PAGE]);
+                } else {
+                    $config->setFrontPage(\Zaly\Proto\Core\FrontPage::FrontPageDefault);
+                }
+            } else {
+                $frontPageValue = $configData[SiteConfig::SITE_FRONT_PAGE];
+                if (isset($frontPageValue) && $frontPageValue != \Zaly\Proto\Core\FrontPage::FrontPageHome) {
+                    $config->setFrontPage($configData[SiteConfig::SITE_FRONT_PAGE]);//不显示首页，一定显示第二页
+                } else {
+                    $config->setFrontPage(\Zaly\Proto\Core\FrontPage::FrontPageChats);//不显示首页，一定显示第二页
+                }
+            }
+
+            if (isset($configData[SiteConfig::SITE_OPEN_WATERMARK])) {
+                $config->setOpenWaterMark($configData[SiteConfig::SITE_OPEN_WATERMARK]);
+            } else {
+                $config->setOpenWaterMark(false);
+            }
+
             $config->setVersion($this->getSiteVersion());
+            $currentVersionCode = ZalyConfig::getConfig(ZalyConfig::$configSiteVersionCodeKey);
+            $config->setVersionCode($currentVersionCode);
 
             $response->setConfig($config);
 
@@ -267,7 +291,14 @@ class Api_Site_ConfigController extends \BaseController
     private function buildAddress($scheme, $host, $port)
     {
         if ("http" == $scheme && $port == 80) {
-            return $scheme . "://" . "$host";
+            $requestUri = isset($_SERVER['REQUEST_URI']) ? str_replace(array("\\", "//"), array("/", "/"), $_SERVER['REQUEST_URI']) : "";
+            $requestUris = explode("/", $requestUri);
+            array_pop($requestUris);
+            $requestUriPath = "";
+            if (count($requestUris)) {
+                $requestUriPath = implode("/", $requestUris);
+            }
+            return $scheme . "://" . "$host" . $requestUriPath;
         } elseif ("https" == $scheme && $port == 443) {
             return $scheme . "://" . "$host";
         }

@@ -6,30 +6,50 @@
  * Time: 6:45 PM
  */
 
-class ZalyError extends ZalyErrorBase
+class ZalyError
 {
+    const ErrorGroupCreateForbid = "error.group.create.forbid";
+    const ErrorGroupEmptyId = "error.group.emptyId";
+    const ErrorGroupPermission = "error.group.permission";
 
-    private static $defaultErrors = ["request error", "请求错误"];
+    const ErrorGroupAdmin = "error.group.admin";
+    const ErrorGroupMember = "error.group.member";
+    const ErrorGroupMemberCount = "error.group.maxMemberCount";
+    const ErrorGroupIsMember = "error.group.isMember";
+
+    private static $defaultErrors = ["error", "request error", "请求错误"];
+
 
     public static $errors = [
-        "error.group.emptyId" => ["groupId is empty", "群Id为空"],
-        "error.group.permission" => ["no permission for group", "无当前群组操作权限"],
+        "error.group.emptyId" => ["error.alert", "groupId is empty", "群Id为空"],
+        "error.group.permission" => ["error.alert", "no permission for group", "无当前群组操作权限"],
+        "error.group.create.forbid" => ["error.alert", "create group forbidden", "站点禁止创建群组"],
+
+        "error.group.admin" => ["error.alert", "No permission to operate", "只允许群主或者管理员邀请好友入群"],
+        "error.group.member" => ["error.alert", "No permission to operate", "不是群成员，无权限操作"],
+        "error.group.maxMemberCount" => ["error.alert", "The group member is full", "群已满员"],
+        "error.group.isMember" => ["error.group.isMember", "user is already group member", "当前用户已经是群成员"],
     ];
 
-    public function getErrorInfo($errorCode)
+    public static function getErrCode($error)
     {
-//        if (isset(self::errors[$errorCode])) {
-//            return self::errors[$errorCode][$lang];
-//        }
-//        return self::$defaultErrors[$lang];
+        if (isset(self::$errors[$error])) {
+            return self::$errors[$error][0];
+        }
+        return self::$defaultErrors[0];
     }
 
-    public static function getErrorInfo2($errorCode, $lang = Zaly\Proto\Core\UserClientLangType::UserClientLangZH)
+    public static function getErrorInfo($error, $lang)
     {
-        if (isset(self::$errors[$errorCode])) {
-            return self::$errors[$errorCode][$lang];
+        return self::getErrorInfo2($error, $lang);
+    }
+
+    public static function getErrorInfo2($error, $lang = Zaly\Proto\Core\UserClientLangType::UserClientLangZH)
+    {
+        if (isset(self::$errors[$error])) {
+            return self::$errors[$error][$lang + 1];
         }
-        return self::$defaultErrors[$lang];
+        return self::$defaultErrors[$lang + 1];
     }
 
 }

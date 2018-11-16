@@ -15,6 +15,8 @@
     display: none;
 }
 
+
+
 .loader:before {
 
 }
@@ -27,6 +29,8 @@
     display: flex;
     justify-content: center;
 }
+
+
 .circular {
     animation: rotate 2s linear infinite;
     height: 4rem;
@@ -75,4 +79,23 @@
     80%, 90% {
         stroke: white;
     }
+}
+
+
+.mini_circular_div {
+    width: 4rem;
+    height: 4rem;
+    background:rgba(0,0,0,0.6);
+    border-radius:0.56rem;
+    display: flex;
+    justify-content: center;
+}
+
+.mini_circular {
+    animation: rotate 2s linear infinite;
+    height: 2rem;
+    transform-origin: center center;
+    width: 2rem;
+    margin: auto;
+    bottom:0;
 }

@@ -53,6 +53,8 @@ abstract class BaseController extends \Wpf_Controller
 
     protected $language = Zaly\Proto\Core\UserClientLangType::UserClientLangEN;
 
+    protected $clientType;
+
     /**
      * @var BaseCtx
      */
@@ -80,6 +82,24 @@ abstract class BaseController extends \Wpf_Controller
         header("KeepSocket: true");
     }
 
+    //set errCode && errInfo by error
+    public function setZalyError($error)
+    {
+        $errCode = ZalyError::getErrCode($error);
+        $errInfo = ZalyError::getErrorInfo($error, $this->language);
+        $this->setRpcError($errCode, $errInfo);
+    }
+
+    //set errCode && errInfo by error && throw exception
+    public function throwZalyException($error)
+    {
+        $errCode = ZalyError::getErrCode($error);
+        $errInfo = ZalyError::getErrorInfo($error, $this->language);
+        $this->setRpcError($errCode, $errInfo);
+        throw new ZalyException($errCode, $errInfo);
+    }
+
+    //only set errCode ,errInfo
     public function setRpcError($errorCode, $errorInfo)
     {
         $this->setTransDataHeaders(TransportDataHeaderKey::HeaderErrorCode, $errorCode);
@@ -88,7 +108,7 @@ abstract class BaseController extends \Wpf_Controller
 
     public function getRpcError()
     {
-        return $this->headers[TransportDataHeaderKey::HeaderErrorCode];
+        return isset($this->headers[TransportDataHeaderKey::HeaderErrorCode]) ? $this->headers[TransportDataHeaderKey::HeaderErrorCode] : false;
     }
 
     public function getRequestAction()
@@ -130,12 +150,14 @@ abstract class BaseController extends \Wpf_Controller
         return;
     }
 
+    //rpc response return success
     public function returnSuccessRPC($response)
     {
         $this->setRpcError($this->defaultErrorCode, "");
         $this->rpcReturn($this->action, $response);
     }
 
+    //return rpc exception
     public function returnErrorRPC($response, $e)
     {
         $this->setRpcError("error.alert", $e->getMessage());
@@ -325,6 +347,13 @@ abstract class BaseController extends \Wpf_Controller
             return true;
         }
         return false;
+    }
+
+    public function getUserAgent()
+    {
+        $requestHeader = $this->requestTransportData->getHeader();
+        $userAgent = $requestHeader[TransportDataHeaderKey::HeaderUserAgent];
+        return $userAgent;
     }
 
     public function getPublicUserProfile($userInfo)

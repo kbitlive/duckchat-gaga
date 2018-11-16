@@ -70,6 +70,8 @@ class PublicSiteConfig extends \Google\Protobuf\Internal\Message
      */
     private $enableWidgetWeb = false;
     /**
+     *pem instead of Base64，only use Base64 name
+     *
      * Generated from protobuf field <code>string siteIdPubkBase64 = 14;</code>
      */
     private $siteIdPubkBase64 = '';
@@ -77,6 +79,36 @@ class PublicSiteConfig extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>.core.Version version = 15;</code>
      */
     private $version = null;
+    /**
+     *replace Version=15 in new version >=1.1.3
+     *
+     * Generated from protobuf field <code>int32 versionCode = 16;</code>
+     */
+    private $versionCode = 0;
+    /**
+     *site administrators,need to replace masters,contains site owner & managers
+     *
+     * Generated from protobuf field <code>repeated string administrators = 17;</code>
+     */
+    private $administrators;
+    /**
+     * 1:Home 2:Chats 3:Contacts 4:Me
+     *
+     * Generated from protobuf field <code>.core.FrontPage frontPage = 18;</code>
+     */
+    private $frontPage = 0;
+    /**
+     *false:show home page ,true hidden home page
+     *
+     * Generated from protobuf field <code>bool hiddenHomePage = 19;</code>
+     */
+    private $hiddenHomePage = false;
+    /**
+     *true : show watermark ,false: hidden water mark(default)
+     *
+     * Generated from protobuf field <code>bool openWaterMark = 20;</code>
+     */
+    private $openWaterMark = false;
 
     public function __construct() {
         \GPBMetadata\Core\Site::initOnce();
@@ -374,6 +406,8 @@ class PublicSiteConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     *pem instead of Base64，only use Base64 name
+     *
      * Generated from protobuf field <code>string siteIdPubkBase64 = 14;</code>
      * @return string
      */
@@ -383,6 +417,8 @@ class PublicSiteConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     *pem instead of Base64，only use Base64 name
+     *
      * Generated from protobuf field <code>string siteIdPubkBase64 = 14;</code>
      * @param string $var
      * @return $this
@@ -413,6 +449,136 @@ class PublicSiteConfig extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkMessage($var, \Zaly\Proto\Core\Version::class);
         $this->version = $var;
+
+        return $this;
+    }
+
+    /**
+     *replace Version=15 in new version >=1.1.3
+     *
+     * Generated from protobuf field <code>int32 versionCode = 16;</code>
+     * @return int
+     */
+    public function getVersionCode()
+    {
+        return $this->versionCode;
+    }
+
+    /**
+     *replace Version=15 in new version >=1.1.3
+     *
+     * Generated from protobuf field <code>int32 versionCode = 16;</code>
+     * @param int $var
+     * @return $this
+     */
+    public function setVersionCode($var)
+    {
+        GPBUtil::checkInt32($var);
+        $this->versionCode = $var;
+
+        return $this;
+    }
+
+    /**
+     *site administrators,need to replace masters,contains site owner & managers
+     *
+     * Generated from protobuf field <code>repeated string administrators = 17;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getAdministrators()
+    {
+        return $this->administrators;
+    }
+
+    /**
+     *site administrators,need to replace masters,contains site owner & managers
+     *
+     * Generated from protobuf field <code>repeated string administrators = 17;</code>
+     * @param string[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setAdministrators($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::STRING);
+        $this->administrators = $arr;
+
+        return $this;
+    }
+
+    /**
+     * 1:Home 2:Chats 3:Contacts 4:Me
+     *
+     * Generated from protobuf field <code>.core.FrontPage frontPage = 18;</code>
+     * @return int
+     */
+    public function getFrontPage()
+    {
+        return $this->frontPage;
+    }
+
+    /**
+     * 1:Home 2:Chats 3:Contacts 4:Me
+     *
+     * Generated from protobuf field <code>.core.FrontPage frontPage = 18;</code>
+     * @param int $var
+     * @return $this
+     */
+    public function setFrontPage($var)
+    {
+        GPBUtil::checkEnum($var, \Zaly\Proto\Core\FrontPage::class);
+        $this->frontPage = $var;
+
+        return $this;
+    }
+
+    /**
+     *false:show home page ,true hidden home page
+     *
+     * Generated from protobuf field <code>bool hiddenHomePage = 19;</code>
+     * @return bool
+     */
+    public function getHiddenHomePage()
+    {
+        return $this->hiddenHomePage;
+    }
+
+    /**
+     *false:show home page ,true hidden home page
+     *
+     * Generated from protobuf field <code>bool hiddenHomePage = 19;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setHiddenHomePage($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->hiddenHomePage = $var;
+
+        return $this;
+    }
+
+    /**
+     *true : show watermark ,false: hidden water mark(default)
+     *
+     * Generated from protobuf field <code>bool openWaterMark = 20;</code>
+     * @return bool
+     */
+    public function getOpenWaterMark()
+    {
+        return $this->openWaterMark;
+    }
+
+    /**
+     *true : show watermark ,false: hidden water mark(default)
+     *
+     * Generated from protobuf field <code>bool openWaterMark = 20;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setOpenWaterMark($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->openWaterMark = $var;
 
         return $this;
     }

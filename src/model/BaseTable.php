@@ -182,7 +182,7 @@ class BaseTable
                 "error_info" => $this->db->errorInfo(),
             ];
             if ($this->db->errorCode() == 'HY000') {
-                $this->ctx->Wpf_Logger->error("===================table result ==", var_export($this->db->errorInfo(), true));
+                $this->ctx->Wpf_Logger->error("db.error", var_export($this->db->errorInfo(), true));
             }
             $this->ctx->Wpf_Logger->error($tag, json_encode($error));
             throw new Exception("execute prepare fail" . json_encode($error));
@@ -192,6 +192,11 @@ class BaseTable
     protected function getCurrentTimeMills()
     {
         return $this->ctx->ZalyHelper->getMsectime();
+    }
+
+    protected function getTimeHMS()
+    {
+        return date("y_m_d_h_i_s", time());
     }
 
     /**
@@ -236,4 +241,47 @@ class BaseTable
         return false;
     }
 
+    protected function getMysqlTableColumns($tableName)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $mysqlConfig = ZalyConfig::getConfig("mysql");
+        $dbName = $mysqlConfig['dbName'];
+        $prepare = false;
+        $sql = "SELECT COLUMN_NAME FROM information_schema.columns WHERE TABLE_NAME=$tableName AND TABLE_SCHEMA=$dbName;";
+        $prepare = $this->db->prepare($sql);
+
+        $flag = $prepare->execute();
+
+        $columns = $prepare->fetchAll(PDO::FETCH_COLUMN);
+
+        $this->handlerResult($flag, $prepare, $tag);
+
+        return $columns;
+    }
+
+    protected function getSqliteTableColumns($tableName)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $prepare = false;
+        $sql = "PRAGMA table_info($tableName);";
+
+        $prepare = $this->db->prepare($sql);
+
+        $flag = $prepare->execute();
+
+        $columns = $prepare->fetchAll(PDO::FETCH_COLUMN, 1);
+
+        $this->handlerResult($flag, $prepare, $tag);
+
+        return $columns;
+    }
+
+    protected function dropDBTable($tableName)
+    {
+        if (empty($tableName)) {
+            return false;
+        }
+        $sql = "drop table $tableName";
+        return $this->db->exec($sql) !== false;
+    }
 }

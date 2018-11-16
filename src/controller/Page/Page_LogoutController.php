@@ -12,8 +12,8 @@ class Page_LogoutController extends HttpBaseController
     public function index()
     {
         setcookie ($this->siteCookieName, "", time()-3600, "/", "", false, true);
-        $apiPageIndex = ZalyConfig::getConfig("apiPageIndex");
-        header("Location:".$apiPageIndex);
+        $apiPageLogin = "./index.php?action=page.passport.login";
+        header("Location:" . $apiPageLogin);
         exit();
     }
 }

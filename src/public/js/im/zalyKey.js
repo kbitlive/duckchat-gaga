@@ -19,6 +19,7 @@ MessageType = {
     MessageWebNotice : "MessageWebNotice",
     MessageDocument:"MessageDocument",
     MessageVideo:"MessageVideo",
+    MessageRecall:"MessageRecall",
 
     // event message start
     MessageEventFriendRequest : "MessageEventFriendRequest",
@@ -50,6 +51,15 @@ MessageStatus  = {
     MessageStatusServer : "MessageStatusServer",
     MessageEventSyncEnd : "MessageEventSyncEnd",
 }
+
+
+ApiUserUpdateType  = {
+    ApiUserUpdateInvalid  : "ApiUserUpdateInvalid",
+    ApiUserUpdateAvatar   : "ApiUserUpdateAvatar",
+    ApiUserUpdateNickname :"ApiUserUpdateNickname",
+    ApiUserUpdateCustom :"ApiUserUpdateCustom",
+}
+
 
 DataWriteType = {
     WriteUpdate : "WriteUpdate",
@@ -100,6 +110,26 @@ ApiFriendUpdateType =  {
     ApiFriendUpdateIsMute   : "ApiFriendUpdateIsMute",
 }
 
+
+PluginUsageType = {
+    PluginUsageNone:"PluginUsageNone",
+    PluginUsageIndex:"PluginUsageIndex",
+    PluginUsageLogin:"PluginUsageLogin",
+    PluginUsageU2Message:"PluginUsageU2Message",
+    PluginUsageTmpMessage:"PluginUsageTmpMessage",
+    PluginUsageGroupMessage:"PluginUsageGroupMessage",
+    PluginUsageAccountSafe:"PluginUsageAccountSafe",
+}
+
+
+PluginLoadingType = {
+    PluginLoadingNewPage:"PluginLoadingNewPage",
+    PluginLoadingFloat:"PluginLoadingFloat",
+    PluginLoadingMask:"PluginLoadingMask",
+    PluginLoadingChatbox:"PluginLoadingChatbox",
+    PluginLoadingFullScreen:"PluginLoadingFullScreen"
+
+};
 
 KeepSocket  = "KeepSocket";
 websocketGW = "enable_websocket_gw";
@@ -155,6 +185,13 @@ roomListMsgUnReadNum = "room_list_msg_unread_num";
 roomListKey = "room_list";
 MaxStorageStore=3;
 
+
+JUMP_U2Profile = "u2Profile";
+JUMP_U2Msg = "u2Msg";
+JUMP_GroupProfile = "groupProfile";
+JUMP_GroupMsg = "groupMsg";
+
+DISPLAY_HOME = "home";
 DISPLAY_CHAT = "chat";
 DISPLAY_APPLY_FRIEND_LIST = "apply_friend_list";
 
@@ -163,6 +200,7 @@ chatSessionIdKey = "chat_session_id";
 localPotiner    = "group_pointer_";
 profileKey = "profile_";
 friendRelationKey = "user_id_relation_";
+friendCustomKey = "user_custom_";
 msgMuteKey = "msg_mute_";
 msgUnReadMuteKey = "msg_unread_mute_";
 roomListMsgMuteUnReadNumKey = "room_list_msg_mute_unread_num";
@@ -173,6 +211,7 @@ DefaultChat = "default_chat";
 MobileChat = "mobile_chat";
 speakerUserIdsKey="speaker_userIds_";
 newSiteTipKey = "site_tip";
+defaultPluginDisplay="display_plugin";
 
 DefaultTitle = "DuckChat 聊天室";
 
@@ -218,3 +257,6 @@ uploadFileUrl = './index.php?action=http.file.uploadWeb';
 isSyncingMsg = false;
 isPreSyncingMsgTime="";
 
+
+soundNotificationKey = "sound_notification";
+isDisplayFrontPageKey = "is_display_front_page";

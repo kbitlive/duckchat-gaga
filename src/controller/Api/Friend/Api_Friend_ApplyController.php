@@ -63,16 +63,21 @@ class  Api_Friend_ApplyController extends BaseController
                     throw new Exception("apply friend error");
                 }
             } else {
+
                 //save data
-                $this->addApplyData($toUserId, $greetings);
+                $firstApply = $this->addApplyData($toUserId, $greetings);
 
                 $this->setRpcError($this->defaultErrorCode, "");
                 $this->rpcReturn($transportData->getAction(), new $this->classNameForResponse());
 
                 $this->finish_request();
 
-                //代发消息 && push
-                $this->ctx->Message_Client->proxyNewFriendApplyMessage($toUserId, $this->userId, $toUserId);
+                if ($firstApply) {
+                    //代发消息 && push
+                    $this->ctx->Message_Client->proxyNewFriendApplyMessage($toUserId, $this->userId, $toUserId);
+                }
+
+
             }
         } catch (Exception $ex) {
             $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $ex->getMessage());
@@ -124,12 +129,15 @@ class  Api_Friend_ApplyController extends BaseController
                 "applyTime" => ZalyHelper::getMsectime(),
             ];
             $this->ctx->SiteFriendApplyTable->insertApplyData($data);
+
+            return true;
         } catch (Exception $ex) {
             $where = [
                 "userId" => $this->userId,
                 "friendId" => $toUserId,
             ];
             $data = [
+                "greetings" => $greetings,
                 "applyTime" => ZalyHelper::getMsectime(),
             ];
 
@@ -137,6 +145,7 @@ class  Api_Friend_ApplyController extends BaseController
                 $data['greetings'] = $greetings;
             }
             $this->ctx->SiteFriendApplyTable->updateApplyData($where, $data);
+            return false;
         }
     }
 

@@ -167,6 +167,30 @@ class ZalyHelper
         return preg_match("/^1[3456789]{1}\d{9}$/", $phoneNumber);
     }
 
+    public static function verifyChars($verifyChars, $containsChars)
+    {
+        if($containsChars == "") {
+            return true;
+        }
+        $flagLetter = true;
+        $flagNum = true;
+        $flagSpecialCharacters = true;
+
+        if(strpos($containsChars, "letter") !== false) {
+            $flagLetter = preg_match("/[a-zA-Z]/", $verifyChars, $matches);
+        }
+        if(strpos($containsChars, "number") !== false) {
+            $flagNum = preg_match("/\d/", $verifyChars, $matches);
+        }
+        if(strpos($containsChars, "special_characters") !== false) {
+            $flagSpecialCharacters = preg_match("/[\^%#`@&*$\(\){}!\.~:,\<\>_\-\+\=|;:\'\"]/", $verifyChars, $matches);
+        }
+        if($flagLetter && $flagNum && $flagSpecialCharacters) {
+            return true;
+        }
+        return false;
+    }
+
     public static function getFullReqUrl($reqUrl)
     {
         try {
@@ -212,6 +236,26 @@ class ZalyHelper
         }
     }
 
+    public static function getRequestAddressPath()
+    {
+        $defaultScheme = "http";
+        if ((!empty($_SERVER['REQUEST_SCHEME']) && $_SERVER['REQUEST_SCHEME'] == 'https') ||
+            (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ||
+            (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443')) {
+            $defaultScheme = 'https';
+        }
+
+        $defaultHost = $_SERVER['HTTP_HOST'];
+        $requestUri = isset($_SERVER['REQUEST_URI']) ? str_replace(array("\\", "//"), array("/", "/"), $_SERVER['REQUEST_URI']) : "";
+        $requestUris = explode("/", $requestUri);
+        array_pop($requestUris);
+        $requestUriPath = "";
+        if(count($requestUris)) {
+            $requestUriPath = implode("/", $requestUris);
+        }
+        return $defaultScheme."://".$defaultHost.$requestUriPath;
+    }
+
     public static function isUicNumber($str)
     {
         return preg_match("/^[0-9]{6,20}$/", $str);
@@ -220,5 +264,16 @@ class ZalyHelper
     public static function isLoginName($str)
     {
         return preg_match("/^[A-Za-z0-9_]+$/", $str);
+    }
+    public static function getIp()
+    {
+        $ip = "";
+        if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }elseif(isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
+
     }
 }

@@ -71,12 +71,24 @@
 }
 
 .user-desc-body {
-    height:1.5rem;
     font-size:1.5rem;
     color:rgba(20,16,48,1);
     line-height:1.5rem;
     padding-bottom: 3rem;
-    padding-top:1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.user-desc-loginName {
+    width: 100%;
+    text-align: center;
+    height:1.31rem;
+    font-size:1.31rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(153,153,153,1);
+    line-height:1.31rem;
+    margin-top: 0.5rem;
 }
 
 .save_group_introduce {
@@ -109,6 +121,7 @@
     height:56.29rem;
     background:rgba(255,255,255,1);
     box-shadow:0rem 0.19rem 2.53rem 0rem rgba(0,0,0,0.3);
+    position: relative;
 }
 
 .group-desc-header {
@@ -149,6 +162,9 @@
 .group-desc-footer {
     display: flex;
     justify-content: center;
+    bottom: 6rem;
+    position: absolute;
+    left: 2rem;
 }
 
 .group-desc-line {
@@ -158,7 +174,7 @@
 }
 
 .group-desc-area {
-    margin: 2rem;
+    margin: 1.5rem;
     font-size:1.13rem;
     font-family:PingFangSC-Regular;
     font-weight:400;
@@ -167,6 +183,9 @@
 .textarea_desc {
     outline: none;
     resize: none;
+    width: 35.65rem;
+    height: 41.28rem;
+    border: none;
 }
 .edit_img {
     width: 1rem;

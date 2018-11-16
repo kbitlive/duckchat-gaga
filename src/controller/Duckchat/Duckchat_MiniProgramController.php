@@ -1,7 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: childeYin<尹少爷>
+ * duckchat小程序访问公共类
+ * User: SAM<an.guoyue254@gmail.com>
  * Date: 13/07/2018
  * Time: 6:32 PM
  */
@@ -342,5 +342,29 @@ abstract class Duckchat_MiniProgramController extends \Wpf_Controller
     {
         $this->setRpcError("error.alert", $e->getMessage());
         $this->rpcReturn($this->action, $response);
+    }
+
+    protected function getPublicUserProfile($userInfo)
+    {
+        try {
+            $publicUserProfile = new \Zaly\Proto\Core\PublicUserProfile();
+            $avatar = isset($userInfo['avatar']) ? $userInfo['avatar'] : "";
+            $publicUserProfile->setAvatar($avatar);
+            $publicUserProfile->setUserId($userInfo['userId']);
+            $publicUserProfile->setLoginname($userInfo['loginName']);
+            $publicUserProfile->setNickname($userInfo['nickname']);
+            $publicUserProfile->setNicknameInLatin($userInfo['nicknameInLatin']);
+
+            if (isset($userInfo['availableType'])) {
+                $publicUserProfile->setAvailableType($userInfo['availableType']);
+            } else {
+                $publicUserProfile->setAvailableType(\Zaly\Proto\Core\UserAvailableType::UserAvailableNormal);
+            }
+            return $publicUserProfile;
+        } catch (Exception $ex) {
+            $this->ctx->Wpf_Logger->error("get public user profile", $ex);
+            $publicUserProfile = new \Zaly\Proto\Core\PublicUserProfile();
+            return $publicUserProfile;
+        }
     }
 }

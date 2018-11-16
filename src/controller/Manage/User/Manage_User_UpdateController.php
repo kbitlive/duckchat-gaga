@@ -70,6 +70,14 @@ class Manage_User_UpdateController extends Manage_CommonController
                         $response['errCode'] = "success";
                     }
                     break;
+                case "changePassword"://update user password
+                    $updateValue = trim($updateValue);
+                    if (empty($updateValue)) {
+                        throw new Exception($this->language == 1 ? "请输入修改的新密码" : "please input new password");
+                    }
+
+                    $response['errCode'] = $this->updateUserPassword($userId, $updateValue) ? "success" : "error";
+                    break;
                 default:
                     throw new Exception("known update field:" . $updateKey);
             }
@@ -123,74 +131,36 @@ class Manage_User_UpdateController extends Manage_CommonController
         return $this->ctx->SiteUserTable->updateUserData($where, $data);
     }
 
-    private function updateSiteDefaultFriends($userId, $updateValue)
-    {
-
-        $config = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_DEFAULT_FRIENDS);
-
-        $defaultFriendStr = $config[SiteConfig::SITE_DEFAULT_FRIENDS];
-        if ($updateValue == 1) {
-            //add
-            if (empty($defaultFriendStr)) {
-                $defaultFriendStr = $userId;
-            } else {
-                $defaultFriendList = explode(",", $defaultFriendStr);
-                if (!in_array($userId, $defaultFriendList)) {
-                    $defaultFriendList[] = $userId;
-                }
-                $defaultFriendStr = implode(",", $defaultFriendList);
-            }
-
-        } else {
-            //delete
-            if (!empty($defaultFriendStr)) {
-                $defaultFriendList2 = explode(",", $defaultFriendStr);
-
-                if (in_array($userId, $defaultFriendList2)) {
-                    $defaultFriendList2 = array_diff($defaultFriendList2, [$userId]);
-                }
-
-                $defaultFriendStr = implode(",", $defaultFriendList2);
-
-            }
-        }
-
-        return $this->ctx->SiteConfigTable->updateSiteConfig(SiteConfig::SITE_DEFAULT_FRIENDS, $defaultFriendStr);
-    }
-
     private function updateSiteManagers($userId, $updateValue)
     {
-
-        $config = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_MANAGERS);
-
-        $siteManagerStr = $config[SiteConfig::SITE_MANAGERS];
-
         if ($updateValue == 1) {
-            //add
-            if (empty($siteManagerStr)) {
-                $siteManagerStr = $userId;
-            } else {
-                $siteManagerList = explode(",", $siteManagerStr);
-                if (!in_array($userId, $siteManagerList)) {
-                    $siteManagerList[] = $userId;
-                }
-                $siteManagerStr = implode(",", $siteManagerList);
-            }
-
+            return $this->ctx->Site_Config->addSiteManager($userId);
         } else {
-            //delete
-            if (!empty($siteManagerStr)) {
-                $siteManagerList2 = explode(",", $siteManagerStr);
-
-                if (in_array($userId, $siteManagerList2)) {
-                    $siteManagerList2 = array_diff($siteManagerList2, [$userId]);
-                }
-
-                $siteManagerStr = implode(",", $siteManagerList2);
-
-            }
+            return $this->ctx->Site_Config->removeSiteManager($userId);
         }
-
-        return $this->ctx->SiteConfigTable->updateSiteConfig(SiteConfig::SITE_MANAGERS, $siteManagerStr);
     }
+
+    private function updateSiteDefaultFriends($userId, $updateValue)
+    {
+        if ($updateValue == 1) {
+            return $this->ctx->Site_Config->addDefaultFriend($userId);
+        } else {
+            return $this->ctx->Site_Config->removeDefaultFriend($userId);
+        }
+    }
+
+    private function updateUserPassword($userId, $newPassword)
+    {
+        $userProfile = $this->ctx->SiteUserTable->getUserByUserId($userId);
+
+        $where = [
+            "loginName" => $userProfile['loginName']
+        ];
+
+        $data = [
+            "password" => password_hash($newPassword, PASSWORD_BCRYPT)
+        ];
+        return $this->ctx->PassportPasswordTable->updateUserData($where, $data);
+    }
+
 }

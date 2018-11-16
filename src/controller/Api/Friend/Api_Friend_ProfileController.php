@@ -63,6 +63,8 @@ class Api_Friend_ProfileController extends BaseController
                     $friendProfile->setRelation($friend['relation']);
                 }
 
+                $friendProfile->setCustom($this->getFriendCustomProfile($friendUserId));
+
                 $response->setProfile($friendProfile);
 
                 $this->setRpcError($this->defaultErrorCode, "");
@@ -90,4 +92,27 @@ class Api_Friend_ProfileController extends BaseController
         return [];
     }
 
+    private function getFriendCustomProfile($friendId)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $customs = [];
+
+        try {
+            $customProfiles = $this->ctx->SiteUserCustomTable->queryOpenCustomProfile($friendId);
+            $customKeyNames = $this->ctx->SiteUserCustomTable->getColumnNames();
+            if ($customProfiles) {
+                foreach ($customProfiles as $customKey => $customValue) {
+                    $userCustom = new Zaly\Proto\Core\CustomUserProfile();
+                    $userCustom->setCustomKey($customKey);
+                    $userCustom->setCustomName($customKeyNames[$customKey]);
+                    $userCustom->setCustomValue($customValue);
+                    $customs[] = $userCustom;
+                }
+            }
+        } catch (Exception $e) {
+            $this->logger->error($tag, $e);
+        }
+
+        return $customs;
+    }
 }

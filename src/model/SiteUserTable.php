@@ -43,6 +43,23 @@ class SiteUserTable extends BaseTable
         return $this->insertData($this->table, $userInfo, $this->columns);
     }
 
+    public function deleteUserProfile($userId)
+    {
+        $tag = __CLASS__ . "-" . __FILE__;
+        $startTime = $this->getCurrentTimeMills();
+
+        $sql = "delete from $this->table where userId=:userId";
+        try {
+            $prepare = $this->db->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->bindValue(":userId", $userId);
+            $flag = $prepare->execute();
+            return $flag;
+        } finally {
+            $this->logger->writeSqlLog($tag, $sql, [$userId], $startTime);
+        }
+    }
+
     public function getUserByUserId($userId)
     {
         $tag = __CLASS__ . "-" . __FILE__;
@@ -263,8 +280,7 @@ class SiteUserTable extends BaseTable
         return false;
     }
 
-    public
-    function getUserListNotInGroup($groupId, $offset, $pageSize)
+    public function getUserListNotInGroup($groupId, $offset, $pageSize)
     {
         try {
             $startTime = microtime(true);
@@ -301,8 +317,7 @@ class SiteUserTable extends BaseTable
         }
     }
 
-    public
-    function getUserCount($groupId)
+    public function getUserCount($groupId)
     {
         try {
             $startTime = microtime(true);
@@ -346,8 +361,7 @@ class SiteUserTable extends BaseTable
         }
     }
 
-    public
-    function getUserByUserIds($userIds)
+    public function getUserByUserIds($userIds)
     {
         $tag = __CLASS__ . "-" . __FILE__;
         $startTime = microtime(true);
@@ -367,8 +381,7 @@ class SiteUserTable extends BaseTable
         }
     }
 
-    public
-    function getUserFriendVersion($userId)
+    public function getUserFriendVersion($userId)
     {
         $tag = __CLASS__ . "-" . __FILE__;
         $startTime = microtime(true);
@@ -389,14 +402,12 @@ class SiteUserTable extends BaseTable
         }
     }
 
-    public
-    function updateUserData($where, $data)
+    public function updateUserData($where, $data)
     {
         return $this->updateInfo($this->table, $where, $data, $this->columns);
     }
 
-    public
-    function updateUserFriendVersion($userId, $friendVersion)
+    public function updateUserFriendVersion($userId, $friendVersion)
     {
         $where = ['userId' => $userId];
         $data = ['friendVersion' => $friendVersion];
@@ -404,8 +415,7 @@ class SiteUserTable extends BaseTable
 
     }
 
-    public
-    function updateNextFriendVersion($userId)
+    public function updateNextFriendVersion($userId)
     {
         $version = $this->getUserFriendVersion($userId);
 
@@ -416,4 +426,91 @@ class SiteUserTable extends BaseTable
         return $this->updateUserFriendVersion($userId, $friendVersion);
     }
 
+    /**
+     * 根据条件查找站点用户profile
+     *
+     * @param $userId
+     * @param $pageNum
+     * @param $pageSize
+     * @return array|bool
+     * @throws Exception
+     */
+    public function getSiteUserListWithRelationByLoginName($userId, $loginName, $pageNum, $pageSize)
+    {
+        $startTime = $this->getCurrentTimeMills();
+        try {
+            $tag = __CLASS__ . "->" . __FUNCTION__;
+            $sql = "SELECT 
+                        a.userId as userId ,
+                        a.nickname as nickname,
+                        a.loginName as loginName,
+                        a.nicknameInLatin as nicknameInLatin,
+                        a.avatar as avatar,
+                        a.availableType as availableType,
+                        b.friendId as friendId 
+                    FROM 
+                        siteUser AS a 
+                    LEFT JOIN 
+                        (SELECT userId,friendId FROM siteUserFriend WHERE userId=:userId) AS b 
+                    ON a.userId=b.friendId 
+                    WHERE  (a.loginName like :loginName or a.loginNameLowercase like :loginName)
+                    ORDER BY a.id DESC LIMIT :pageNum,:pageSize;";
+            $prepare = $this->db->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->bindValue(":userId", $userId);
+            $prepare->bindValue(":pageNum", (int)(($pageNum - 1) * $pageSize), PDO::PARAM_INT);
+            $prepare->bindValue(":pageSize", (int)$pageSize, PDO::PARAM_INT);
+            $prepare->bindValue(":loginName", "%$loginName%");
+            $prepare->execute();
+
+//            $this->logger->error($tag, "result=" . var_export($prepare->errorInfo(), true));
+
+            $result = $prepare->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } finally {
+            $this->logger->writeSqlLog($tag, $sql, [$userId, $pageNum, $pageSize], $startTime);
+        }
+        return false;
+    }
+
+    /**
+     * 根据条件查找站点用户profile
+     *
+     * @param $userId
+     * @param $pageNum
+     * @param $pageSize
+     * @return array|bool
+     * @throws Exception
+     */
+    public function getSiteUserListWithRelationByUserId($userId, $searchUserIds)
+    {
+        $startTime = $this->getCurrentTimeMills();
+        $searchUserIdStr = implode("','", $searchUserIds);
+        try {
+            $tag = __CLASS__ . "->" . __FUNCTION__;
+            $sql = "SELECT 
+                        a.userId as userId ,
+                        a.nickname as nickname,
+                        a.loginName as loginName,
+                        a.nicknameInLatin as nicknameInLatin,
+                        a.avatar as avatar,
+                        a.availableType as availableType,
+                        b.friendId as friendId 
+                    FROM 
+                        siteUser AS a 
+                    LEFT JOIN 
+                        (SELECT userId,friendId FROM siteUserFriend WHERE userId=:userId) AS b 
+                    ON a.userId=b.friendId 
+                    WHERE  (a.userId in ('{$searchUserIdStr}')) ";
+            $prepare = $this->db->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->bindValue(":userId", $userId);
+            $prepare->execute();
+            $result = $prepare->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } finally {
+            $this->logger->writeSqlLog($tag, $sql, [$userId, $searchUserIdStr], $startTime);
+        }
+        return false;
+    }
 }

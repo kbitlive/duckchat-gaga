@@ -1,7 +1,7 @@
 <?php
 /**
  * check current version need to upgrade
- * User: anguoyue
+ * User: SAM<an.guoyue254@gmail.com>
  * Date: 13/10/2018
  * Time: 3:54 PM
  */
@@ -9,12 +9,16 @@
 abstract class Page_VersionController extends UpgradeController
 {
     protected $needUpgrade = false;
+    protected $upgradeFilePath = WPF_ROOT_DIR . "/upgrade.php";
     protected $versions = [
         10011 => "1.0.11",
-
         10012 => "1.0.12",
-
         10013 => "1.0.13",
+        10014 => "1.0.14",
+        10100 => "1.1.0",
+        10101 => "1.1.1",
+        10102 => "1.1.2",
+        10103 => "1.1.3",
     ];
 
     abstract function doRequest();
@@ -50,33 +54,54 @@ abstract class Page_VersionController extends UpgradeController
         $siteVersion = [
             "versionCode" => 10011, //默认第一个版本，从1.0.11版本开始支持升级
             "versionName" => "",
+            "password" => ZalyHelper::generateNumberKey(),//升级密钥
             "upgradeErrCode" => "",
             "upgradeErrInfo" => "",
-            "passwordFileName" => $this->generatePasswordFileName(),//升级口令文件名称
         ];
 
-        $fileName = dirname(__FILE__) . "/../../upgrade.php";
-
-        if (!file_exists($fileName)) {
+        if (!file_exists($this->upgradeFilePath)) {
             $contents = var_export($siteVersion, true);
-            file_put_contents($fileName, "<?php\n return {$contents};\n ");
-
-            $passwordFileName = dirname(__FILE__) . "/../../" . $siteVersion['passwordFileName'];
-            file_put_contents($passwordFileName, ZalyHelper::generateNumberKey());
+            file_put_contents($this->upgradeFilePath, "<?php\n return {$contents};\n ");
+            $this->resetOpcache();
         } else {
-            //upgrade.php 存在，但是 ***.upgrade 不存在
-            $passwordFilePath = $this->getPasswordFilePath();
 
-            if (!file_exists($passwordFilePath)) {
-                $newPasswordFileName = $this->generatePasswordFileName();
-                $passwordFilePath = dirname(__FILE__) . "/../../" . $newPasswordFileName;
-                file_put_contents($passwordFilePath, ZalyHelper::generateNumberKey());
-                //update upgrade.php
-                $this->updateUpgradePasswordFileName($newPasswordFileName);
+            $password = $this->getUpgradePassword();
+
+            if (empty($password)) {
+                //update new password
+                $this->updatePassword();
             }
 
         }
 
+    }
+
+    //update  src/upgrade.php file
+    private function updateUpgradeFile(array $upgradeInfo)
+    {
+        if (empty($upgradeInfo)) {
+            return false;
+        }
+        $fileName = dirname(__FILE__) . "/../../upgrade.php";
+        $contents = var_export($upgradeInfo, true);
+        file_put_contents($fileName, "<?php\n return {$contents};\n ");
+
+        $this->resetOpcache();
+    }
+
+    protected function updateUpgradeInfo($newInfo)
+    {
+        $oldInfo = $this->getUpgradeVersion();
+        $newInfo = array_merge($oldInfo, $newInfo);
+        $this->updateUpgradeFile($newInfo);
+    }
+
+    protected function updatePassword()
+    {
+        $upgradeInfo = $this->getUpgradeVersion();
+        $upgradeInfo['password'] = ZalyHelper::generateNumberKey();
+
+        $this->updateUpgradeFile($upgradeInfo);
     }
 
     protected function getUpgradeVersion()
@@ -90,41 +115,11 @@ abstract class Page_VersionController extends UpgradeController
         return $versionArrays;
     }
 
-    private function generatePasswordFileName()
-    {
-        $dateDir = date("Ymd");
-        $fileName = ZalyHelper::generateStrKey(10) . "-" . $dateDir . ".upgrade";
-
-        return $fileName;
-    }
-
-    protected function getPasswordFilePath()
+    protected function getUpgradePassword()
     {
         $versionInfos = $this->getUpgradeVersion();
-
-        $fileName = $versionInfos['passwordFileName'];
-
-        $filePath = dirname(__FILE__) . "/../../" . $fileName;
-        return $filePath;
-    }
-
-    protected function getPasswordFileName()
-    {
-        $versionInfos = $this->getUpgradeVersion();
-
-        $fileName = $versionInfos['passwordFileName'];
-        return $fileName;
-    }
-
-    protected function deleteUpgradePasswordFile()
-    {
-        $fileName = $this->getPasswordFileName();
-
-        $passwordFileName = dirname(__FILE__) . "/../../" . $fileName;
-
-        $result = unlink($passwordFileName);
-
-        $this->logger->error("==================", "delete file=" . $passwordFileName . " result=" . $result);
+        $password = $versionInfos['password'];
+        return $password;
     }
 
     /**
@@ -138,16 +133,17 @@ abstract class Page_VersionController extends UpgradeController
         $siteVersion = [
             "versionCode" => $versionCode,
             "versionName" => $versionName,
+            "password" => $this->getUpgradePassword(),//升级口令文件名称
             "upgradeErrCode" => $upgradeErrCode,
             "upgradeErrInfo" => $upgradeErrInfo,
-            "passwordFileName" => $this->getPasswordFileName(),//升级口令文件名称
         ];
 
         $fileName = dirname(__FILE__) . "/../../upgrade.php";
         $contents = var_export($siteVersion, true);
         file_put_contents($fileName, "<?php\n return {$contents};\n ");
-    }
 
+        $this->resetOpcache();
+    }
 
     protected function setUpgradeErrInfo($upgradeErrCode, $upgradeErrInfo)
     {
@@ -156,25 +152,16 @@ abstract class Page_VersionController extends UpgradeController
         $siteVersion = [
             "versionCode" => $currentVersion["versionCode"],
             "versionName" => $currentVersion['versionName'],
+            "password" => $this->getUpgradePassword(),//升级口令文件名称
             "upgradeErrCode" => $upgradeErrCode,
             "upgradeErrInfo" => $upgradeErrInfo,
-            "passwordFileName" => $this->getPasswordFileName(),//升级口令文件名称
         ];
 
         $fileName = dirname(__FILE__) . "/../../upgrade.php";
         $contents = var_export($siteVersion, true);
         file_put_contents($fileName, "<?php\n return {$contents};\n ");
-    }
 
-    protected function updateUpgradePasswordFileName($passwordFileName)
-    {
-        $versionInfos = $this->getUpgradeVersion();
-
-        $versionInfos['passwordFileName'] = $passwordFileName;
-
-        $fileName = dirname(__FILE__) . "/../../upgrade.php";
-        $contents = var_export($versionInfos, true);
-        file_put_contents($fileName, "<?php\n return {$contents};\n ");
+        $this->resetOpcache();
     }
 
     protected function executeMysqlScript()
@@ -182,10 +169,9 @@ abstract class Page_VersionController extends UpgradeController
         $tag = __CLASS__ . "->" . __FUNCTION__;
         $mysqlScriptPath = dirname(__DIR__) . "/../model/database-sql/site_mysql.sql";
 
-        $this->logger->error("site.install.db", "mysql script=" . $mysqlScriptPath);
-
         $_sqlContent = file_get_contents($mysqlScriptPath);//写自己的.sql文件
         $_sqlArr = explode(';', $_sqlContent);
+        $_sqlArr = array_filter($_sqlArr);
 
         try {
             $this->ctx->db->beginTransaction();
@@ -207,6 +193,7 @@ abstract class Page_VersionController extends UpgradeController
         $mysqlScriptPath = dirname(__DIR__) . "/../model/database-sql/site_sqlite.sql";
         $_sqlContent = file_get_contents($mysqlScriptPath);//写自己的.sql文件
         $_sqlArr = explode(';', $_sqlContent);
+        $_sqlArr = array_filter($_sqlArr);
 
         try {
             $this->ctx->db->beginTransaction();
@@ -222,13 +209,56 @@ abstract class Page_VersionController extends UpgradeController
 
     }
 
+    //升级config.php,只升级 siteVersionCode & siteVersionName
     protected function updateSiteConfigAsUpgrade($newVersionCode, $newVersionName)
     {
         $siteConfig = ZalyConfig::getAllConfig();
-
         $siteConfig["siteVersionCode"] = $newVersionCode;
         $siteConfig["siteVersionName"] = $newVersionName;
-
         ZalyConfig::updateConfigFile($siteConfig);
     }
+
+    //升级config.php，升级$config中所有数据
+    protected function updateSiteConfig($config)
+    {
+        if (!is_array($config)) {
+            return false;
+        }
+        $siteConfig = ZalyConfig::getAllConfig();
+        $siteConfig = array_merge($siteConfig, $config);
+        ZalyConfig::updateConfigFile($siteConfig);
+    }
+
+    protected function updateSiteConfigKey($keys)
+    {
+        if (!is_array($keys)) {
+            return false;
+        }
+        $this->resetOpcache();
+        $siteConfig = ZalyConfig::getAllConfig();
+        foreach ($keys as $oKey => $nKey) {
+            foreach ($siteConfig as $oldKey => $val) {
+                if ($oldKey == $oKey || strpos($oldKey, $oKey) !== false) {
+                    $repKey = str_replace($oKey, $nKey, $oldKey);
+                    $siteConfig[$repKey] = $val;
+                    unset($siteConfig[$oldKey]);
+                }
+            }
+        }
+        ZalyConfig::updateConfigFile($siteConfig);
+    }
+
+    protected function dropDBTable($tableName)
+    {
+        $sql = "drop table $tableName";
+        $this->ctx->db->exec($sql);
+    }
+
+    private function resetOpcache()
+    {
+        if (function_exists("opcache_reset")) {
+            opcache_reset();
+        }
+    }
+
 }

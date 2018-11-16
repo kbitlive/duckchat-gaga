@@ -15,7 +15,7 @@
             <div class="no_data">
                 <div class="d-flex" style="text-align: center">
                     <div class="p-2">
-                        <img class="no_data_img" src="../../public/img/no_data.png"/>
+                        <img class="no_data_img" src="./public/img/no_data.png"/>
                     </div>
                     <div class="p-2 no_data_tip" data-local-value="noFriendDataTip">No Friends For Invite</div>
                 </div>
@@ -35,10 +35,18 @@
     </div>
 
     <div id="group-speaker-people" class="pop-window pop-window-speaker-people">
-        <div class="pw-right-header" style="justify-content: center" data-local-value="speakerTip" >群发言人</div>
+        <div class="pw-right-header" style="justify-content: center" data-local-value="groupsBannedTip" >禁言设置</div>
+        <div class="sub-speaker-div set_group_speakers" style="display: none;">
+            <div class="sub-speaker-title" data-local-value="currentSpeakerTip"> 开启禁言 </div>
+            <div class="group_speakers_set_div" >
+                <img src="../../public/img/msg/icon_switch_off.png" value="off" class="group_speakers_set" style="width: 5rem;height:3rem;">
+            </div>
+        </div>
+        <div class="speaker-line"></div>
+
         <div class="sub-speaker-div">
             <div class="sub-speaker-title" data-local-value="currentSpeakerTip"> 当前发言人 </div>
-            <div class="remove-all-speaker" data-local-value="removeAllSpeakerTip"> 移除所有发言人 </div>
+            <div class="remove-all-speaker" data-local-value="removeAllSpeakerTip" style="display: none;"> 移除所有发言人 </div>
         </div>
         <div class="speaker-line"></div>
         <div class="speaker-content">
@@ -46,7 +54,6 @@
             </div>
         </div>
     </div>
-
 
 
     <div id="group-member-list-div" class="pop-window pop-window-member-people">
@@ -70,7 +77,7 @@
 
     <div id="edit-remark">
         <div class="close_div">
-            <img src="../../public/img/close.png" onclick="closeMaskDiv('#edit-remark');">
+            <img src="./public/img/close.png" onclick="closeMaskDiv('#edit-remark');">
         </div>
         <div class="flex-container" style="display: flex;justify-content: center;">
             <div class="header_tip_font align-items-center" data-local-value="editRemarkTip">修改备注</div>
@@ -87,6 +94,12 @@
         </div>
     </div>
 
+
+    <div id="more-info">
+
+    </div>
+
+
     <div id="add-friend-div">
 
     </div>
@@ -95,10 +108,9 @@
 
     </div>
 
-
     <div id="permission-join">
         <div class="close_div">
-            <img src="../../public/img/close.png" onclick="closeMaskDiv('#permission-join');">
+            <img src="./public/img/close.png" onclick="closeMaskDiv('#permission-join');">
         </div>
         <div class="flex-container" style="display: flex;justify-content: center;">
             <div class="header_tip_line_left "></div>
@@ -106,25 +118,27 @@
             <div class="header_tip_line_right"></div>
         </div>
 
-        <div class="d-flex flex-row" style="margin-top: 5rem; margin-left:23rem;">
-            <div class="permission-join-operation join-by-admin">
-                <div class="d-flex flex-row" style="width: 50%"  data-local-value="groupAdminInvitationTip">管理员邀请</div>
-                <div  class="d-flex flex-row ">
-                    <img class="imgDiv" src="../../public/img/msg/member_unselect.png"  permissionJoin="GroupJoinPermissionAdmin">
+        <div class="d-flex flex-row" style="margin-top: 5rem;display: flex;justify-content: center;align-items: center;">
+            <div style="    width: 28rem;">
+                <div class="permission-join-operation join-by-admin">
+                    <div class="d-flex flex-row" style="width: 50%"  data-local-value="groupAdminInvitationTip">管理员邀请</div>
+                    <div  class="d-flex flex-row ">
+                        <img class="imgDiv" src="./public/img/msg/member_unselect.png"  permissionJoin="GroupJoinPermissionAdmin">
+                    </div>
                 </div>
-            </div>
-            <div class="permission-join-operation join-by-member">
-                <div class="d-flex flex-row" style="width: 50%" data-local-value="groupMemberTip">
-                    Members Invitation
+                <div class="permission-join-operation join-by-member">
+                    <div class="d-flex flex-row" style="width: 50%" data-local-value="groupMemberTip">
+                        Members Invitation
+                    </div>
+                    <div class="d-flex flex-row ">
+                        <img class="imgDiv"src="./public/img/msg/member_unselect.png" permissionJoin="GroupJoinPermissionMember">
+                    </div>
                 </div>
-                <div class="d-flex flex-row ">
-                    <img class="imgDiv"src="../../public/img/msg/member_unselect.png" permissionJoin="GroupJoinPermissionMember">
-                </div>
-            </div>
-            <div class="permission-join-operation join-by-public">
-                <div class="d-flex flex-row" style="width: 50%" data-local-value="groupPublicTip"> 公开</div>
-                <div class="d-flex flex-row ">
-                    <img class="imgDiv" src="../../public/img/msg/member_unselect.png" permissionJoin="GroupJoinPermissionPublic">
+                <div class="permission-join-operation join-by-public">
+                    <div class="d-flex flex-row" style="width: 50%" data-local-value="groupPublicTip"> 公开</div>
+                    <div class="d-flex flex-row ">
+                        <img class="imgDiv" src="<?php echo $siteAddress; ?>/public/img/msg/member_unselect.png" permissionJoin="GroupJoinPermissionPublic">
+                    </div>
                 </div>
             </div>
         </div>

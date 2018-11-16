@@ -7,7 +7,7 @@
  */
 
 
-class Api_Passport_PasswordModifyPasswordController extends BaseController
+class Api_Passport_PasswordModifyPasswordController extends Api_Passport_PasswordBase
 {
     private $classNameForRequest = '\Zaly\Proto\Site\ApiPassportPasswordModifyPasswordRequest';
     private $classNameForResponse = '\Zaly\Proto\Site\ApiPassportPasswordModifyPasswordResponse';
@@ -28,7 +28,7 @@ class Api_Passport_PasswordModifyPasswordController extends BaseController
             $newPassword = $request->getNewPassword();
             $password = $request->getPassword();
             $loginName = $request->getLoginName();
-            $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $request->serializeToJsonString());
+            $this->checkPassword($newPassword);
             $this->checkOldPassword($loginName, $password);
             $this->updatePasswordByLoginName($loginName, $newPassword);
             $this->setRpcError($this->defaultErrorCode, "");
@@ -36,6 +36,24 @@ class Api_Passport_PasswordModifyPasswordController extends BaseController
             $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $ex->getMessage());
         }
         $this->rpcReturn($transportData->getAction(),  new $this->classNameForResponse());
+    }
+
+    private function checkPassword($password)
+    {
+        $this->getCustomLoginConfig();
+        if(!$password || (strlen($password) > $this->pwdMaxLength) || (strlen($password) < $this->pwdMinLength)) {
+            $errorCode = $this->zalyError->errorPassowrdLength;
+            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
+            $this->setRpcError("error.alert", $errorInfo);
+            throw new Exception($errorInfo);
+        }
+
+        $flag = ZalyHelper::verifyChars($password, $this->pwdContainCharacters);
+        if(!$flag) {
+            $errorInfo = ZalyText::getText("text.pwd.type", $this->language);
+            $this->setRpcError("error.alert", $errorInfo);
+            throw new Exception($errorInfo);
+        }
     }
 
     private function  checkOldPassword($loginName, $password)
@@ -48,12 +66,17 @@ class Api_Passport_PasswordModifyPasswordController extends BaseController
             throw new Exception("user is not exists");
         }
 
+        $this->checkPasswordErrorNum($userInfo['userId']);
+
         if(!password_verify($password, $userInfo['password'])) {
+            $this->insertPassportPasswordLog($userInfo, 2);
             $errorCode = $this->zalyError->errorMatchLogin;
             $errorInfo = $this->zalyError->getErrorInfo($errorCode);
             $this->setRpcError($errorCode, $errorInfo);
             throw new Exception("loginName password is not match");
         }
+        $operateDate = date("Y-m-d", time());
+        $this->ctx->PassportPasswordCountLogTable->deleteCountLogDataByUserId($userInfo['userId'], $operateDate);
     }
 
     private function updatePasswordByLoginName($loginName, $password)

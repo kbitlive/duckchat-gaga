@@ -33,7 +33,26 @@ class Manage_MiniProgram_UpdateController extends Manage_CommonController
                 return;
             }
 
-            $isOk = $this->updateMiniProgramProfile($pluginId, $name, $value);
+            $isOk = false;
+            if ($name == "usageType") {
+
+                if (!empty($value)) {
+                    $value = explode(",", $value);
+
+                    $isAvailable = true;
+                    if (in_array(7, $value)) {
+                        $isAvailable = false;
+                        $value = [7];
+                    }
+
+                    $isOk = $this->updateMiniProgramUsageTypes($pluginId, $value, $isAvailable);
+                }
+
+            } else {
+                //update useType
+                $isOk = $this->updateMiniProgramProfile($pluginId, $name, $value);
+            }
+
 
             if ($isOk) {
                 $result['errCode'] = "success";
@@ -48,6 +67,32 @@ class Manage_MiniProgram_UpdateController extends Manage_CommonController
 
         echo json_encode($result);
         return;
+    }
+
+    /**
+     * 小程序和usageType关系为 1：N关系
+     *
+     * 更新N的关系，每次删除所有的N，在重新插入新的N
+     *
+     * @param $pluginId
+     * @param array $usageTypes
+     * @param $isAvailable
+     * @return bool
+     */
+    private function updateMiniProgramUsageTypes($pluginId, array $usageTypes, $isAvailable)
+    {
+        $pluginProfile = $this->ctx->SitePluginTable->getPluginById($pluginId);
+
+        //delete all
+        $this->ctx->SitePluginTable->deletePlugin($pluginId);
+
+        foreach ($usageTypes as $usageType) {
+            $pluginProfile["usageType"] = $usageType;
+
+            $result = $this->ctx->SitePluginTable->insertMiniProgram($pluginProfile);
+        }
+
+        return true;
     }
 
     private function updateMiniProgramProfile($pluginId, $name, $value)

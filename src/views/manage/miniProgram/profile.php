@@ -28,122 +28,23 @@
             color: #4C3BB1;
         }
 
+        .item-row, .weui-actionsheet__cell {
+            cursor: pointer;
+        }
+
+        .usage-select {
+            width: 100%;
+            height: 30px;
+            font-size: 14px;
+            border-width: 0;
+            size: 14px;
+        }
+
+        .usage-select-option {
+            font-size: 14px;
+        }
+
     </style>
-
-
-    <script type="text/javascript">
-
-        function isAndroid() {
-
-            var userAgent = window.navigator.userAgent.toLowerCase();
-            if (userAgent.indexOf("android") != -1) {
-                return true;
-            }
-
-            return false;
-        }
-
-        function isMobile() {
-            if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-                return true;
-            }
-            return false;
-        }
-
-        function getLanguage() {
-            var nl = navigator.language;
-            if ("zh-cn" == nl || "zh-CN" == nl) {
-                return 1;
-            }
-            return 0;
-        }
-
-
-        function zalyjsAjaxPostJSON(url, body, callback) {
-            zalyjsAjaxPost(url, jsonToQueryString(body), function (data) {
-                var json = JSON.parse(data)
-                callback(json)
-            })
-        }
-
-
-        function zalyjsNavOpenPage(url) {
-            var messageBody = {}
-            messageBody["url"] = url
-            messageBody = JSON.stringify(messageBody)
-
-            if (isAndroid()) {
-                window.Android.zalyjsNavOpenPage(messageBody)
-            } else {
-                window.webkit.messageHandlers.zalyjsNavOpenPage.postMessage(messageBody)
-            }
-        }
-
-        function zalyjsCommonAjaxGet(url, callBack) {
-            $.ajax({
-                url: url,
-                method: "GET",
-                success: function (result) {
-
-                    callBack(url, result);
-
-                },
-                error: function (err) {
-                    alert("error");
-                }
-            });
-
-        }
-
-
-        function zalyjsCommonAjaxPost(url, value, callBack) {
-            $.ajax({
-                url: url,
-                method: "POST",
-                data: value,
-                success: function (result) {
-                    callBack(url, value, result);
-                },
-                error: function (err) {
-                    alert("error");
-                }
-            });
-
-        }
-
-        function zalyjsCommonAjaxPostJson(url, jsonBody, callBack) {
-            $.ajax({
-                url: url,
-                method: "POST",
-                data: jsonBody,
-                success: function (result) {
-
-                    callBack(url, jsonBody, result);
-
-                },
-                error: function (err) {
-                    alert("error");
-                }
-            });
-
-        }
-
-        /**
-         * _blank    在新窗口中打开被链接文档。
-         * _self    默认。在相同的框架中打开被链接文档。
-         * _parent    在父框架集中打开被链接文档。
-         * _top    在整个窗口中打开被链接文档。
-         * framename    在指定的框架中打开被链接文档。
-         *
-         * @param url
-         * @param target
-         */
-        function zalyjsCommonOpenPage(url) {
-            // window.open(url, target);
-            location.href = url;
-        }
-
-    </script>
 
 </head>
 
@@ -216,7 +117,8 @@
                             <div class="item-body-value" id="mini-program-img-id" fileId="<?php echo $logo ?>">
                                 <img id="mini-program-img" class="site-image"
                                      onclick="uploadFile('mini-program-img-input')"
-                                     src="/_api_file_download_/?fileId=<?php echo $logo ?>"
+                                     avatar="<?php echo $logo ?>"
+                                     src=""
                                      onerror="src='../../public/img/manage/plugin_default.png'">
 
                                 <input id="mini-program-img-input" type="file" onchange="uploadImageFile(this)"
@@ -265,27 +167,27 @@
             </div>
             <div class="division-line"></div>
 
-            <div class="item-row">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">是否开启站点代理请求</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Open Site HTTP Proxy</div>
-                        <?php } ?>
-
-                        <div class="item-body-tail">
-                            <?php if ($landingPageWithProxy == "1") { ?>
-                                <input id="openProxySwitch-text" class="weui_switch" type="checkbox" checked>
-                            <?php } else { ?>
-                                <input id="openProxySwitch-text" class="weui_switch" type="checkbox">
-                            <?php } ?>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="division-line"></div>
+            <!--            <div class="item-row">-->
+            <!--                <div class="item-body">-->
+            <!--                    <div class="item-body-display">-->
+            <!--                        --><?php //if ($lang == "1") { ?>
+            <!--                            <div class="item-body-desc">是否开启站点代理请求</div>-->
+            <!--                        --><?php //} else { ?>
+            <!--                            <div class="item-body-desc">Open Site HTTP Proxy</div>-->
+            <!--                        --><?php //} ?>
+            <!---->
+            <!--                        <div class="item-body-tail">-->
+            <!--                            --><?php //if ($landingPageWithProxy == "1") { ?>
+            <!--                                <input id="openProxySwitch-text" class="weui_switch" type="checkbox" checked>-->
+            <!--                            --><?php //} else { ?>
+            <!--                                <input id="openProxySwitch-text" class="weui_switch" type="checkbox">-->
+            <!--                            --><?php //} ?>
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!---->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--            <div class="division-line"></div>-->
 
         </div>
 
@@ -295,10 +197,10 @@
     <div class="layout-all-row">
 
         <div class="list-item-center">
+            
             <div class="item-row">
                 <div class="item-body">
-                    <div class="item-body-display mini-program-usage" data="<?php echo $usageType ?>"
-                         onclick="selectMiniProgramUsage();">
+                    <div class="item-body-display">
                         <?php if ($lang == "1") { ?>
                             <div class="item-body-desc">小程序使用类别</div>
                         <?php } else { ?>
@@ -306,25 +208,31 @@
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <div id="mini-program-usage-text" style="margin-right: 4px">
-                                <?php if ($usageType == "1") { ?>
-                                    <?php if ($lang == "1") { ?> 首页小程序<?php } else { ?> Home Mini Program <?php } ?>
-                                <?php } else if ($usageType == "2") { ?>
-                                    <?php if ($lang == "1") { ?> 登陆小程序<?php } else { ?>  "Login Mini Program" <?php } ?>
-                                <?php } else if ($usageType == "3") { ?>
-                                    <?php if ($lang == "1") { ?> 二人聊天小程序<?php } else { ?> U2 Chat Mini Program <?php } ?>
-                                <?php } else if ($usageType == "4") { ?>
-                                    <?php if ($lang == "1") { ?> 临时会话小程序<?php } else { ?> Tmp Chat Mini Program <?php } ?>
-                                <?php } else if ($usageType == "5") { ?>
-                                    <?php if ($lang == "1") { ?>群组聊天小程序<?php } else { ?> Group Chat Mini Program <?php } ?>
-                                <?php } else if ($usageType == "6") { ?>
+                            <select class="usage-select mini-program-usage-select" multiple="multiple" size="2">
+                                <option class="usage-select-option" value="1" <?php if ($usageType_1 == "1") {
+                                    echo 'selected';
+                                } ?> ><?php if ($lang == "1") { ?> 首页小程序<?php } else { ?> Home Mini Program <?php } ?></option>
+                                <option value="2" <?php if ($usageType_2 == "2") {
+                                    echo 'selected';
+                                } ?> ><?php if ($lang == "1") { ?> 登陆小程序<?php } else { ?>  "Login Mini Program" <?php } ?></option>
+                                <option value="3" <?php if ($usageType_3 == "3") {
+                                    echo 'selected';
+                                } ?> ><?php if ($lang == "1") { ?> 二人聊天小程序<?php } else { ?> U2 Chat Mini Program <?php } ?></option>
+                                <option value="4" <?php if ($usageType_4 == "4") {
+                                    echo 'selected';
+                                } ?> ><?php if ($lang == "1") { ?> 临时会话小程序<?php } else { ?> Tmp Chat Mini Program <?php } ?></option>
+                                <option value="5" <?php if ($usageType_5 == "5") {
+                                    echo 'selected';
+                                } ?> ><?php if ($lang == "1") { ?>群组聊天小程序<?php } else { ?> Group Chat Mini Program <?php } ?></option>
+                                <option value="6" <?php if ($usageType_6 == "6") {
+                                    echo 'selected';
+                                } ?> >
                                     <?php if ($lang == "1") { ?>账户安全小程序<?php } else { ?> Account Mini Program <?php } ?>
-                                <?php } else { ?>
-                                    <?php if ($lang == "1") { ?>无效小程序<?php } else { ?> Invalid Mini Program <?php } ?>
-                                <?php } ?>
-                            </div>
-                            <img class="more-img"
-                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                                </option>
+                                <option value="7" <?php if ($usageType_7 == "7") {
+                                    echo 'selected';
+                                } ?> ><?php if ($lang == "1") { ?>无效小程序<?php } else { ?> Invalid Mini Program <?php } ?></option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -355,7 +263,7 @@
                     <div class="item-body-display mini-program-display" data="<?php echo $loadingType ?>"
                          onclick="selectMiniProgramDisplay();">
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">展示方式</div>
+                            <div class="item-body-desc">打开方式</div>
                         <?php } else { ?>
                             <div class="item-body-desc">Display Mode</div>
                         <?php } ?>
@@ -478,7 +386,7 @@
                         <?php if ($lang == "1") { ?>
                             <div class="item-body-desc">删除小程序</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Delte Mini Program</div>
+                            <div class="item-body-desc">Delete Mini Program</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
@@ -528,14 +436,45 @@
 <script type="text/javascript" src="../../public/js/jquery-confirm.js"></script>
 <script type="text/javascript" src="../../public/manage/native.js"></script>
 
+<script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
+
 <script type="text/javascript">
 
     function uploadFile(obj) {
-        $("#" + obj).val("");
-        $("#" + obj).click();
+
+        if (isAndroid()) {
+            zalyjsImageUpload(uploadImageResult);
+        } else {
+            $("#" + obj).val("");
+            $("#" + obj).click();
+        }
+
+    }
+
+    function uploadImageResult(result) {
+
+        var fileId = result.fileId;
+
+        //update server image
+        updateMiniProgramProfile("logo", fileId);
+
+        var newSrc = "/_api_file_download_/?fileId=" + fileId;
+
+        $(".site-image").attr("src", newSrc);
     }
 
     downloadFileUrl = "./index.php?action=http.file.downloadFile";
+
+
+    $("#mini-program-img").each(function () {
+        var avatar = $(this).attr("avatar");
+        var src = " /_api_file_download_/?fileId=" + avatar;
+        if (!isMobile()) {
+            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
+        }
+        $(this).attr("src", src);
+    });
+
 
     function uploadImageFile(obj) {
         if (obj) {
@@ -543,7 +482,7 @@
                 var formData = new FormData();
 
                 formData.append("file", obj.files.item(0));
-                formData.append("fileType", "FileImage");
+                formData.append("fileType", 1);
                 formData.append("isMessageAttachment", false);
 
                 var src = window.URL.createObjectURL(obj.files.item(0));
@@ -575,11 +514,8 @@
             success: function (imageFileIdResult) {
 
                 if (imageFileIdResult) {
-                    var fileId = imageFileIdResult;
-                    if (isMobile()) {
-                        var res = JSON.parse(imageFileIdResult);
-                        fileId = res.fileId;
-                    }
+                    var res = JSON.parse(imageFileIdResult);
+                    var fileId = res.fileId;
                     updateMiniProgramProfile("logo", fileId);
                 } else {
                     alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");
@@ -656,80 +592,20 @@
     });
 
 
-    function selectMiniProgramUsage() {
-        // PluginUsageIndex = 0; 禁用
-        // PluginUsageIndex = 1;
-        // PluginUsageLogin = 2;
-        //
-        // PluginUsageU2Message = 3;
-        // PluginUsageTmpMessage = 4;
-        // PluginUsageGroupMessage = 5;
-        var language = getLanguage();
-        var url = "index.php?action=manage.miniProgram.update&type=usageType&lang=" + language;
-        $.actions({
-            title: language == 0 ? "select mini program type" : "请选择小程序类别",
-            onClose: function () {
-                console.log("close");
-            },
-            actions: [{
-                text: language == 0 ? "Home Mini Program" : "首页小程序",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-usage-text").html(language == 0 ? "Home Page" : "首页小程序");
-                    $(".mini-program-usage").attr("data", "1");
-                    updateMiniProgramProfile("usageType", "1");
-                }
-            }, {
-                text: language == 0 ? "U2 Chat Mini Program" : "二人聊天小程序",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-usage-text").html(language == 0 ? "U2 Chat Mini Program" : "二人聊天小程序");
-                    $(".mini-program-usage").attr("data", "3");
-                    updateMiniProgramProfile("usageType", "3");
-                }
-            }, {
-                text: language == 0 ? "Tmp Chat Mini Program" : "临时会话小程序",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-usage-text").html(language == 0 ? "Tmp Chat Mini Program" : "临时会话小程序");
-                    $(".mini-program-usage").attr("data", "4");
-                    updateMiniProgramProfile("usageType", "4");
-                }
-            }, {
-                text: language == 0 ? "Group Chat Mini Program" : "群组聊天小程序",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-usage-text").html(language == 0 ? "Chat Page Bottom" : "聊天界面底部");
-                    $(".mini-program-usage").attr("data", "5");
-                    updateMiniProgramProfile("usageType", "5");
-                }
-            }, {
-                text: language == 0 ? "Login Mini Program" : "登陆小程序",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-usage-text").html(language == 0 ? "Login Mini Program" : "登陆小程序");
-                    $(".mini-program-usage").attr("data", "2");
-                    updateMiniProgramProfile("usageType", "2");
-                }
-            }, {
-                text: language == 0 ? "Account Mini Program" : "账户安全小程序",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-usage-text").html(language == 0 ? "Account Mini Program" : "账户安全小程序");
-                    $(".mini-program-usage").attr("data", "6");
-                    updateMiniProgramProfile("usageType", "6");
-                }
-            }, {
-                text: language == 0 ? "Invalid Mini Program" : "无效小程序",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-usage-text").html(language == 0 ? "Invalid Mini Program" : "无效小程序");
-                    $(".mini-program-usage").attr("data", "0");
-                    updateMiniProgramProfile("usageType", "0");
-                }
-            }]
+    $(".mini-program-usage-select").change(function () {
+
+        var selectValues = [];
+
+        $(".mini-program-usage-select option:selected").each(function () {
+            // selectValues.add($(this).val());
+            selectValues.push($(this).val());
         });
-    }
+
+        var values = selectValues.join(",");
+
+        updateMiniProgramProfile("usageType", values);
+    });
+
 
     function selectMiniProgramDisplay() {
         var language = getLanguage();
@@ -760,31 +636,35 @@
                     $(".mini-program-display").attr("data", "1");
                     updateMiniProgramProfile("loadingType", "1");
                 }
-            }, {
-                text: language == 0 ? "Mask Page" : "Mask打开",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-display-text").html(language == 0 ? "Mask Page" : "Mask打开");
-                    $(".mini-program-display").attr("data", "2");
-                    updateMiniProgramProfile("loadingType", "2");
-                }
-            }, {
-                text: language == 0 ? "Chatbox Page" : "Chatbox打开",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-display-text").html(language == 0 ? "Chatbox Page" : "Chatbox打开");
-                    $(".mini-program-display").attr("data", "3");
-                    updateMiniProgramProfile("loadingType", "3");
-                }
-            }, {
-                text: language == 0 ? "FullScreen" : "全屏打开",
-                className: "select-color-primary",
-                onClick: function () {
-                    $("#mini-program-display-text").html(language == 0 ? "FullScreen" : "全屏打开");
-                    $(".mini-program-display").attr("data", "4");
-                    updateMiniProgramProfile("loadingType", "4");
-                }
-            }]
+            },
+                // {
+                //     text: language == 0 ? "Mask Page" : "Mask打开",
+                //     className: "select-color-primary",
+                //     onClick: function () {
+                //         $("#mini-program-display-text").html(language == 0 ? "Mask Page" : "Mask打开");
+                //         $(".mini-program-display").attr("data", "2");
+                //         updateMiniProgramProfile("loadingType", "2");
+                //     }
+                // },
+                {
+                    text: language == 0 ? "Chatbox Page" : "Chatbox打开",
+                    className: "select-color-primary",
+                    onClick: function () {
+                        $("#mini-program-display-text").html(language == 0 ? "Chatbox Page" : "Chatbox打开");
+                        $(".mini-program-display").attr("data", "3");
+                        updateMiniProgramProfile("loadingType", "3");
+                    }
+                },
+                // {
+                //     text: language == 0 ? "FullScreen" : "全屏打开",
+                //     className: "select-color-primary",
+                //     onClick: function () {
+                //         $("#mini-program-display-text").html(language == 0 ? "FullScreen" : "全屏打开");
+                //         $(".mini-program-display").attr("data", "4");
+                //         updateMiniProgramProfile("loadingType", "4");
+                //     }
+                // }
+            ]
         });
     }
 
@@ -866,7 +746,7 @@
     function deleteMiniProgram() {
         var lang = getLanguage();
         $.modal({
-            title: lang == 1 ? '删除小程序' : 'Delte Mini Program',
+            title: lang == 1 ? '删除小程序' : 'Delete Mini Program',
             text: lang == 1 ? '确定删除？' : 'Confirm Delete?',
             buttons: [
                 {

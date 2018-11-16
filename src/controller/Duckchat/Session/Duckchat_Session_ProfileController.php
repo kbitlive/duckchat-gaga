@@ -1,7 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: anguoyue
+ * 通过duckchat_sessionid 校验用户身份
+ * User: SAM<an.guoyue254@gmail.com>
  * Date: 04/09/2018
  * Time: 4:27 PM
  */
@@ -10,7 +10,6 @@ class Duckchat_Session_ProfileController extends Duckchat_MiniProgramController
 {
     private $classNameForRequest = '\Zaly\Proto\Plugin\DuckChatSessionProfileRequest';
     private $classNameForResponse = '\Zaly\Proto\Plugin\DuckChatSessionProfileResponse';
-    private $requestAction = "duckchat.session.profile";
 
     public function rpcRequestClassName()
     {
@@ -24,81 +23,16 @@ class Duckchat_Session_ProfileController extends Duckchat_MiniProgramController
     public function rpc(\Google\Protobuf\Internal\Message $request, \Google\Protobuf\Internal\Message $transportData)
     {
         try {
-            $duckchatSessionId = $request->getEncryptedSessionId();
-
             $pluginId = $this->pluginMiniProgramId;
-            $pluginProfile = $this->getPluginProfile($pluginId);
 
-            if (empty($duckchatSessionId)) {
-                throw new Exception("encrypted sessionId is empty");
-            }
+            $response = $this->ctx->DuckChat_Session->getProfile($pluginId, $request);
 
-            $duckchatSessionId = ZalyBase64::base64url_decode($duckchatSessionId);
-
-            $authKey = $pluginProfile['authKey'];
-
-            if (empty($authKey)) {
-                $config = $this->ctx->SiteConfigTable->selectSiteConfig(SiteConfig::SITE_PLUGIN_PLBLIC_KEY);
-                $authKey = $config[SiteConfig::SITE_PLUGIN_PLBLIC_KEY];
-            }
-
-            $sessionId = $this->ctx->ZalyAes->decrypt($duckchatSessionId, $authKey);
-
-            if (empty($sessionId)) {
-                throw new Exception("decrypt user sesssionId is empty");
-            }
-
-            //sessionId -> userId
-            $sessionInfo = $this->ctx->SiteSessionTable->getSessionInfoBySessionId($sessionId);
-
-            if (empty($sessionInfo)) {
-                throw new Exception("check user sesssionId is empty");
-            }
-
-
-            $userId = $sessionInfo['userId'];
-            $userProfile = $this->ctx->SiteUserTable->getUserByUserId($userId);
-
-            $response = $this->buildRequestResponse($userProfile);
-
-            $this->setRpcError($this->defaultErrorCode, "");
-            $this->rpcReturn($this->requestAction, $response);
+            $this->returnSuccessRPC($response);
         } catch (Exception $e) {
-            $this->setRpcError("error.alert", $e->getMessage());
-            $response = new $this->classNameForResponse();
-            $this->ctx->Wpf_Logger->error($this->requestAction, $e);
-            $this->rpcReturn($this->requestAction, new Zaly\Proto\Plugin\DuckChatSessionProfileResponse());
+            $this->setRpcError("error.alert", $e->getMessage() . $e->getTraceAsString());
+            $this->returnErrorRPC(new Zaly\Proto\Plugin\DuckChatSessionProfileResponse(), $e);
         }
         return;
     }
 
-    private function getPluginProfile($pluginId)
-    {
-        return $this->ctx->SitePluginTable->getPluginById($pluginId);
-    }
-
-    private function buildRequestResponse($userProfile)
-    {
-        $publicProfile = new \Zaly\Proto\Core\PublicUserProfile();
-        $publicProfile->setUserId($userProfile['userId']);
-        $publicProfile->setAvatar(isset($userProfile['avatar']) ? $userProfile['avatar'] : "");
-        $publicProfile->setLoginname($userProfile['loginName']);
-        $publicProfile->setNickname($userProfile['nickname']);
-        $publicProfile->setNicknameInLatin($userProfile['nicknameInLatin']);
-
-        if (isset($userProfile['availableType'])) {
-            $publicProfile->setAvailableType($userProfile['availableType']);
-        } else {
-            $publicProfile->setAvailableType(\Zaly\Proto\Core\UserAvailableType::UserAvailableNormal);
-        }
-
-        $profile = new Zaly\Proto\Core\AllUserProfile();
-        $profile->setPublic($publicProfile);
-        $profile->setTimeReg($userProfile['timeReg']);
-
-        $response = new Zaly\Proto\Plugin\DuckChatSessionProfileResponse();
-        $response->setProfile($profile);
-
-        return $response;
-    }
 }

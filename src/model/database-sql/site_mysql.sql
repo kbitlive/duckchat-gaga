@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS siteConfig(
                   id INTEGER PRIMARY KEY AUTO_INCREMENT,
                   configKey VARCHAR(100) NOT NULL,
                   configValue TEXT ,
-                  UNIQUE (configKey))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                  UNIQUE (configKey)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE  IF NOT EXISTS siteUser (
                    id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -18,7 +18,7 @@ CREATE TABLE  IF NOT EXISTS siteUser (
                    countryCode VARCHAR(10),
                    phoneId VARCHAR(11),
                    friendVersion INTEGER,
-                   timeReg BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                   timeReg BIGINT) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteUser CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -28,7 +28,7 @@ CREATE TABLE if not EXISTS siteFriendApply(
               friendId VARCHAR(100) NOT NULL,
               greetings VARCHAR(100),
               applyTime BIGINT,
-              UNIQUE(userId, friendId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+              UNIQUE(userId, friendId)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteFriendApply CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS siteUserFriend(
                     mute BOOLEAN,/*1互为好友 2我删除了对方 3临时会话 */
                     version INTEGER,
                     addTime BIGINT,/*是否静音 1表示静音，0表示没有静音*/
-                    UNIQUE(userId, friendId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                    UNIQUE(userId, friendId)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteUserFriend CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -61,14 +61,15 @@ create table IF NOT EXISTS siteSession(
                 userAgentType INTEGER,
                 gatewayURL VARCHAR(100),
                 gatewaySocketId VARCHAR(100),
+                loginPluginId  VARCHAR(100),
                 UNIQUE(sessionId,userId),
-                UNIQUE(userId,deviceId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                UNIQUE(userId,deviceId)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteSession CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE  IF NOT EXISTS siteGroup (
                id INTEGER PRIMARY KEY AUTO_INCREMENT,
-               groupId VARCHAR(100) NOT NULL,/*6到16位*/
+               groupId VARCHAR(50) NOT NULL,/*6到16位*/
                `name` VARCHAR(100) NOT NULL,/*群名*/
                nameInLatin VARCHAR(100) NOT NULL,
                owner VARCHAR(100) NOT NULL,
@@ -83,18 +84,18 @@ CREATE TABLE  IF NOT EXISTS siteGroup (
                status INTEGER default 1,/*表示群的状态， 1表示正常*/
                isWidget INTEGER default 0, /*表示1是挂件，0不是挂件*/
                timeCreate BIGINT,
-               UNIQUE(groupId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+               UNIQUE(groupId)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteGroup CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS siteGroupUser(
                 id INTEGER PRIMARY KEY AUTO_INCREMENT,
-               groupId VARCHAR(100) NOT NULL,
+               groupId VARCHAR(50) NOT NULL,
                userId VARCHAR(100) NOT NULL,
                memberType INTEGER,
                isMute BOOLEAN default 0 ,/*是否静音 1表示静音，0表示没有静音*/
                timeJoin BIGINT,
-               UNIQUE(groupId, userId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+               UNIQUE(groupId, userId)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteGroupUser CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -108,50 +109,57 @@ CREATE TABLE IF NOT EXISTS siteU2Message(
             msgType INTEGER,
             content TEXT,   -- 可能是一个json，可能是一个proto toString
             msgTime BIGINT,
-            INDEX(userId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+            INDEX(userId),
+            INDEX(fromUserId)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteU2Message CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteU2Message MODIFY COLUMN content TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-
-
 CREATE TABLE IF NOT EXISTS siteU2MessagePointer(
             id INTEGER PRIMARY KEY AUTO_INCREMENT,
             userId VARCHAR(100) NOT NULL,
             deviceId VARCHAR(100),
-            clientSideType INTEGER,     -- 0:无效，1:手机客户端  2:web客户端
+            clientSideType INTEGER,
             pointer INTEGER,
-            UNIQUE(userId,deviceId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+            UNIQUE(userId,deviceId));
 
 ALTER TABLE siteU2MessagePointer CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS siteGroupMessage(
             id INTEGER PRIMARY KEY AUTO_INCREMENT,
             msgId VARCHAR(100) UNIQUE NOT NULL,
-            groupId VARCHAR(100) NOT NULL,
+            groupId VARCHAR(50) NOT NULL,
             fromUserId VARCHAR(100),
             msgType INTEGER,
             content TEXT,
             msgTime BIGINT,
-            INDEX(groupId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+            INDEX(groupId)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteGroupMessage CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteGroupMessage MODIFY COLUMN content TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
+CREATE TABLE IF NOT EXISTS siteGroupMessagePointer(
+            id INTEGER PRIMARY KEY AUTO_INCREMENT,
+            groupId VARCHAR(50) NOT NULL,
+            userId VARCHAR(100) NOT NULL,
+            deviceId VARCHAR(100),
+            clientSideType INTEGER,
+            pointer INTEGER,
+            UNIQUE(groupId,userId,deviceId));
+
 CREATE TABLE IF NOT EXISTS passportPassword(
                 id INTEGER PRIMARY KEY AUTO_INCREMENT,
                 userId VARCHAR(100) NOT NULL,
-                email VARCHAR(100) NOT NULL,
-                password VARCHAR(100) NOT NULL,
-                nickname VARCHAR(100) NOT NULL,
                 loginName VARCHAR(100) NOT NULL,
+                nickname VARCHAR(100) NOT NULL,
+                password VARCHAR(100) NOT NULL,
+                email VARCHAR(100),
                 invitationCode VARCHAR(100),
                 timeReg BIGINT,
                 unique(userId),
-                unique(email),
-                unique(loginName))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                unique(loginName)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE passportPassword CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -160,7 +168,7 @@ CREATE TABLE IF NOT EXISTS passportPasswordPreSession(
                 userId VARCHAR(100) NOT NULL,
                 preSessionId VARCHAR(100) NOT NULL,
                 sitePubkPem TEXT,
-                unique(userId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                unique(userId)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE passportPasswordPreSession CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -169,22 +177,11 @@ CREATE TABLE IF NOT EXISTS passportPasswordToken(
                 loginName VARCHAR(100) NOT NULL,
                 token VARCHAR(100) NOT NULL,
                 timeReg BIGINT,
-                UNIQUE(loginName))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                UNIQUE(loginName)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE passportPasswordToken CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-CREATE TABLE IF NOT EXISTS siteGroupMessagePointer(
-            id INTEGER PRIMARY KEY AUTO_INCREMENT,
-            groupId VARCHAR(100) NOT NULL,
-            userId VARCHAR(100) NOT NULL,
-            deviceId VARCHAR(100),
-            clientSideType INTEGER, -- 0:无效，1:手机客户端  2:web客户端
-            pointer INTEGER,
-            UNIQUE(groupId,userId,deviceId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
-
-ALTER TABLE siteGroupMessagePointer CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-
-CREATE TABLE sitePlugin(
+CREATE TABLE IF NOT EXISTS sitePlugin(
               id INTEGER PRIMARY KEY AUTO_INCREMENT,
               pluginId INTEGER NOT NULL,
               name VARCHAR(100) NOT NULL, /*名字*/
@@ -198,7 +195,7 @@ CREATE TABLE sitePlugin(
               authKey VARCHAR(32) NOT NULL,
               addTime BIGINT,
               management TEXT,
-              UNIQUE(pluginId,usageType))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+              UNIQUE(pluginId,usageType)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE sitePlugin CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -209,7 +206,7 @@ CREATE TABLE IF NOT EXISTS siteUic(
             status INTEGER, -- 0：无效，1：所有人可用 2：会员可用等
             createTime BIGINT,
             useTime BIGINT,
-            INDEX(userId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+            INDEX(userId)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteUic CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -221,7 +218,7 @@ CREATE TABLE IF NOT EXISTS siteGif(
                       width INTEGER not null default 0,
                       height INTEGER not null default 0,
                       addTime BIGINT,
-                      UNIQUE (gifUrl))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                      UNIQUE (gifUrl)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteGif CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -229,9 +226,52 @@ CREATE TABLE IF NOT EXISTS siteUserGif(
                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
                       gifId VARCHAR(100) NOT NULL,
                       userId VARCHAR(100) NOT NULL,
-                      addTime BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                      addTime BIGINT) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 ALTER TABLE siteUserGif CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS passportPasswordCountLog(
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    userId VARCHAR(100) NOT NULL,
+    num INTEGER ,
+    operateDate DATE ,
+    operateTime  BIGINT,
+    UNIQUE userIdAndOperDate(userId, operateDate)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS passportPasswordLog(
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    userId VARCHAR(100) NOT NULL,
+    loginName VARCHAR(100) NOT NULL,
+    operation INTEGER ,
+    ip VARCHAR(100),
+    operateDate DATE ,
+    operateTime  BIGINT)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS siteThirdPartyLogin(
+                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                      userId varchar(100) unique not null,
+                      loginKey varchar(50) not null,
+                      loginUserId varchar(100) not null,
+                      loginTime BIGINT,
+                      INDEX(loginUserId)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+
+-- client custom item keys
+CREATE TABLE IF NOT EXISTS siteCustom(
+                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                      customKey varchar(50) not null,
+                      keyName varchar(100) not null,
+                      keyIcon varchar(100),
+                      keyDesc TEXT,
+                      keyType int,
+                      keySort int,
+                      keyConstraint varchar(100),
+                      isRequired boolean default false,
+                      isOpen boolean default true,
+                      status int,
+                      dataType int,
+                      dataVerify varchar(100),
+                      addTime BIGINT,
+                      unique(keyType,customKey)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -239,6 +279,11 @@ CREATE TABLE IF NOT EXISTS siteLoginCustom(
                       configValue TEXT,
                       configValueEN TEXT ,
                       updateUserId VARCHAR(100),
-                      updateTime BIGINT)DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+                      updateTime BIGINT) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
-ALTER TABLE siteLoginCustom CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE TABLE IF NOT EXISTS siteUserCustom(
+                      id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                      userId VARCHAR(100) UNIQUE NOT NULL,
+                      phoneId VARCHAR(20),
+                      email VARCHAR(100),
+                      addTime BIGINT) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;

@@ -1,15 +1,16 @@
 <?php
 /**
  * WEB应用程序初始化
- * 
+ *
  * 应用程序必须自己预先在model文件夹定义一个BaseCtx的类
  */
 
+define("WPF_ROOT_DIR", dirname(__FILE__) . '/../../');
 define("WPF_START_TIME", microtime(true));
 define("WPF_LIB_DIR", dirname(__FILE__) . '/../');
 
 //设置配置项
-$_ENV['WPF_CONTROLLER_NAME_SUFFIX'] = "Controller";	//Controller类名的后缀，默认为Controller
+$_ENV['WPF_CONTROLLER_NAME_SUFFIX'] = "Controller";    //Controller类名的后缀，默认为Controller
 //$_ENV['WPF_URL_PATH_SUFFIX']，URL目录部分的前缀，前缀不参与路由
 
 //防止服务器没有设置默认时间而报错
@@ -28,10 +29,10 @@ require_once(WPF_LIB_DIR . '/wpf/Wpf_Logger.php');
 $autoloader = new Wpf_Autoloader();
 $autoloader->addDir(WPF_LIB_DIR . '/../model/');
 $autoloader->addDir(WPF_LIB_DIR);
-$autoloader->addDir(WPF_LIB_DIR."/proto/");
-$autoloader->addDir(WPF_LIB_DIR."/Util/");
-$autoloader->addDir(WPF_LIB_DIR."/Overtrue/");
-$autoloader->addDir(WPF_LIB_DIR."/PHPMailer/");
+$autoloader->addDir(WPF_LIB_DIR . "/proto/");
+$autoloader->addDir(WPF_LIB_DIR . "/Util/");
+$autoloader->addDir(WPF_LIB_DIR . "/Overtrue/");
+$autoloader->addDir(WPF_LIB_DIR . "/PHPMailer/");
 $autoloader->addDir(WPF_LIB_DIR . '/../config/');
 $autoloader->addDir(WPF_LIB_DIR . '/../controller/');
 spl_autoload_register(array($autoloader, 'load'));
@@ -94,6 +95,21 @@ $preAutoloadFiles = array(
 );
 $autoloader->registerClass($preAutoloadFiles);
 
+
+if (!ini_get("error_log")) {
+    $phpErrorLog = ZalyConfig::getConfig("errorLog");
+
+    $logDirName = WPF_ROOT_DIR . "/logs";
+    if (!is_dir($logDirName)) {
+        mkdir($logDirName, 0755, true);
+    }
+
+    if ($phpErrorLog) {
+        ini_set("error_log", $logDirName . "/" . $phpErrorLog);
+    } else {
+//        ini_set("error_log", $logDirName . "/duckchat_install.php");
+    }
+}
 //生成WEB程序管理器，开始执行逻辑
 $web = new Wpf_Web();
 $web->run();

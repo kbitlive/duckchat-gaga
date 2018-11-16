@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>login</title>
     <!-- Latest compiled and minified CSS -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -19,7 +19,7 @@
             justify-content: center;
         }
         .zaly_jump {
-            width:35.18rem;
+            width:100%;
             text-align: center;
         }
         .zaly_header_tip {
@@ -119,7 +119,7 @@
         </div>
     </div>
     <div class="zaly_jump zaly_jump_browser" style="">
-        <img style="width:35rem; height:31rem;" src="../../public/img/app_download_bg.png">
+        <img style="width:100%; height:31rem;" src="../../public/img/app_download_bg.png">
         <img src="../../public/img/app_download.png" style="width:14rem; height:29rem;position: absolute; top:9rem;left:0;right:0;margin: 0 auto;">
         <button class="download_app">下载</button>
         <button class="open_app">打开</button>
@@ -156,7 +156,7 @@
     function getOsType() {
         var clientType;
         var u = navigator.userAgent;
-        if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+        if (u.indexOf('Android') > -1) {
             clientType =  'Android';
         } else if (u.indexOf('iPhone') > -1) {
             clientType = 'IOS';

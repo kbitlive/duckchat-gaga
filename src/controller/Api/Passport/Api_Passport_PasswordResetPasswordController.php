@@ -28,6 +28,7 @@ class Api_Passport_PasswordResetPasswordController extends BaseController
             $token = $request->getToken();
             $password = $request->getPassword();
             $loginName = $request->getLoginName();
+            $this->checkPassword($password);
             $this->checkToken($loginName, $token);
             $this->updatePasswordByLoginName($loginName, $password);
             $this->setRpcError($this->defaultErrorCode, "");
@@ -37,6 +38,24 @@ class Api_Passport_PasswordResetPasswordController extends BaseController
         $this->rpcReturn($transportData->getAction(),  new $this->classNameForResponse());
     }
 
+
+    private function checkPassword($password)
+    {
+        $this->getCustomLoginConfig();
+        if(!$password || (strlen($password) > $this->pwdMaxLength) || (strlen($password) < $this->pwdMinLength)) {
+            $errorCode = $this->zalyError->errorPassowrdLength;
+            $errorInfo = $this->zalyError->getErrorInfo($errorCode);
+            $this->setRpcError("error.alert", $errorInfo);
+            throw new Exception($errorInfo);
+        }
+
+        $flag = ZalyHelper::verifyChars($password, $this->pwdContainCharacters);
+        if(!$flag) {
+            $errorInfo = ZalyText::getText("text.pwd.type", $this->language);
+            $this->setRpcError("error.alert", $errorInfo);
+            throw new Exception($errorInfo);
+        }
+    }
     private function  checkToken($loginName, $token)
     {
         $codeInfo = $this->ctx->PassportPasswordTokenTable->getCodeInfoByLoginName($loginName);
@@ -56,7 +75,6 @@ class Api_Passport_PasswordResetPasswordController extends BaseController
     private function updatePasswordByLoginName($loginName, $password)
     {
         $tag = __CLASS__ . '-' . __FUNCTION__;
-
         try{
            $where = [
                "loginName" => $loginName

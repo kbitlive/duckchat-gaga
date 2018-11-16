@@ -1,15 +1,11 @@
 <?php
 /**
- * Created by PhpStorm.
+ * upgrade server
+ * User: SAM<an.guoyue254@gmail.com>
  * User: childeYin<尹少爷>
  * Date: 13/07/2018
  * Time: 6:32 PM
  */
-
-use Google\Protobuf\Any;
-use Zaly\Proto\Core\TransportData;
-use Zaly\Proto\Core\TransportDataHeaderKey;
-use Google\Protobuf\Internal\Message;
 
 abstract class UpgradeController extends \Wpf_Controller
 {
@@ -39,8 +35,6 @@ abstract class UpgradeController extends \Wpf_Controller
     {
         $tag = __CLASS__ . "-" . __FUNCTION__;
         try {
-//            parent::doIndex();
-
             $this->index();
         } catch (Exception $ex) {
             $this->ctx->Wpf_Logger->error($tag, "error msg =" . $ex->getMessage());

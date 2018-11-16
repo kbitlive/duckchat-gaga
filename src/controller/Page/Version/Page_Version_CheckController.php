@@ -14,15 +14,8 @@ class Page_Version_CheckController extends Page_VersionController
 
         $method = $_SERVER['REQUEST_METHOD'];
         if ($method == 'GET') {
-            //给所有的版本
 
-            $fileName = $this->getPasswordFileName();
-
-            $hiddenStr = substr($fileName, -17);
-
-            $fileName = "*****" . $hiddenStr;
-
-            $params["passwordFileName"] = $fileName;
+            $params["passwordFileName"] = "src/upgrade.php文件中的password字段";
             //tell client if need upgrade
             $params["needUpgrade"] = $this->needUpgrade;
 
@@ -32,6 +25,8 @@ class Page_Version_CheckController extends Page_VersionController
         } elseif ($method == 'POST') {
             //检测当前版本是否已经升级完
             $upgradeInfo = $this->getUpgradeVersion();
+
+            unset($upgradeInfo["password"]);
 
             $this->logger->error("page.version.check", var_export($upgradeInfo, true));
 

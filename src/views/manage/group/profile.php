@@ -13,11 +13,17 @@
     <link rel="stylesheet" href="../../public/manage/config.css"/>
 
     <style>
-        .site-image {
+        .site-group-avatar {
             width: 30px;
             height: 30px;
             margin-top: 12px;
             border-radius: 50%;
+            cursor: pointer;
+        }
+        .item-row {
+            cursor: pointer;
+        }
+        .weui_switch {
             cursor: pointer;
         }
 
@@ -92,9 +98,8 @@
                         <div class="item-body-tail" id="group-avatar-img-id" fileId="<?php echo $avatar ?>">
 
                             <div class="item-body-value">
-                                <img id="group-avatar-img" class="site-image"
-                                     onclick="uploadFile('group-avatar-img-input')"
-                                     src="/_api_file_download_/?fileId=<?php echo $avatar ?>"
+                                <img id="group-avatar-img" class="site-group-avatar" avatar="<?php echo $avatar ?>"
+                                     src=""
                                      onerror="src='./../public/img/msg/group_default_avatar.png'">
 
                                 <input id="group-avatar-img-input" type="file"
@@ -244,8 +249,7 @@
 
                         <div class="item-body-tail">
                             <div class="item-body-value">
-                                <img class="more-img"
-                                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
                         </div>
                     </div>
@@ -304,50 +308,27 @@
 
 <script type="text/javascript">
 
-    $(function () {
-        var fileId = $("#group-avatar-img-id").attr("fileId");
-        showImage(fileId, 'group-avatar-img');
-    });
-
-    function uploadFile(obj) {
-        // $("#" + obj).val("");
-        // $("#" + obj).click();
-    }
-
-    downloadFileUrl = "./index.php?action=http.file.downloadFile";
-
-
-    function showImage(fileId, htmlImgId) {
-
-        var requestUrl = "./_api_file_download_/test?fileId=" + fileId;
-
-        if (!isMobile()) {
-            requestUrl = downloadFileUrl + "&fileId=" + fileId + "&returnBase64=0";
-        }
-
-        var xhttp = new XMLHttpRequest();
-
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && (this.status == 200 || this.status == 304)) {
-                var blob = this.response;
-                var src = window.URL.createObjectURL(blob);
-                $("#" + htmlImgId).attr("src", src);
-            }
-        };
-        xhttp.open("GET", requestUrl, true);
-        xhttp.responseType = "blob";
-        // xhttp.setRequestHeader('Cache-Control', "max-age=2592000, public");
-        xhttp.send();
-    }
-
-</script>
-
-<script type="text/javascript">
-
     function showWindow(jqElement) {
         jqElement.css("visibility", "visible");
         $(".wrapper-mask").css("visibility", "visible").append(jqElement);
     }
+
+
+    function isMobile() {
+        if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+            return true;
+        }
+        return false;
+    }
+
+    $(".site-group-avatar").each(function () {
+        var avatar = $(this).attr("avatar");
+        var src = " /_api_file_download_/?fileId="+avatar;
+        if(!isMobile()) {
+           src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
+        }
+        $(this).attr("src", src);
+    });
 
 
     function removeWindow(jqElement) {
@@ -507,7 +488,7 @@
 
         var lang = getLanguage();
         $.modal({
-            title: lang == 1 ? '删除群组' : 'Delte Group',
+            title: lang == 1 ? '删除群组' : 'Delete Group',
             text: lang == 1 ? '确定删除？' : 'Confirm Delete?',
             buttons: [
                 {

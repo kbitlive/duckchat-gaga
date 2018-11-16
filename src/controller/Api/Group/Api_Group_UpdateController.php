@@ -68,7 +68,6 @@ class Api_Group_UpdateController extends Api_Group_BaseController
                     case \Zaly\Proto\Site\ApiGroupUpdateType::ApiGroupUpdateName:
                         $name = $v->getName();
                         $groupName = trim($name);
-                        $this->ctx->Wpf_Logger->error($tag, " group profile groupName  =". $groupName);
                         if(mb_strlen($groupName) > $this->groupNameLength || mb_strlen($groupName)<1) {
                             $errorCode = $this->zalyError->errorGroupNameLength;
                             $errorInfo = $this->zalyError->getErrorInfo($errorCode);

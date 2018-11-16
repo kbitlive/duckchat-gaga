@@ -171,6 +171,25 @@ class SitePluginTable extends BaseTable
         }
     }
 
+    public function getPluginsById($pluginId)
+    {
+        $tag = __CLASS__ . "_" . __FUNCTION__;
+        try {
+            $startTime = microtime(true);
+            $sql = "select $this->queryColumns from $this->tableName where pluginId=:pluginId;";
+            $prepare = $this->dbSlave->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->bindValue(":pluginId", $pluginId);
+            $prepare->execute();
+            $results = $prepare->fetchAll(\PDO::FETCH_ASSOC);
+            $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, $pluginId, $startTime);
+            return $results;
+        } catch (Exception $ex) {
+            $this->ctx->Wpf_Logger->error($tag, " error_msg = " . $ex->getMessage());
+            return [];
+        }
+    }
+
     /**
      * get plugin list by usageType
      *
@@ -236,4 +255,30 @@ class SitePluginTable extends BaseTable
 
     }
 
+
+    //获取站点小程序列表，忽略usageType其他的数据，这里不存在重复的pluginId
+    public function getNonRepeatedPluginList()
+    {
+        $tag = __CLASS__ . "_" . __FUNCTION__;
+        $startTime = microtime(true);
+        try {
+            $sql = "select a.id, a.pluginId,a.name,a.logo,a.management as adminPageUrl,a.sort as sort
+                    from sitePlugin as a 
+                    inner join (select min(id) as id, pluginId from sitePlugin group by pluginId) as b 
+                    where a.id=b.id
+                    order by a.id ASC;";
+
+            $prepare = $this->dbSlave->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->execute();
+            $results = $prepare->fetchAll(\PDO::FETCH_ASSOC);
+            $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, [], $startTime);
+
+            return $results;
+        } catch (Exception $ex) {
+            $this->ctx->Wpf_Logger->error($tag, " error_msg = " . $ex->getMessage());
+            return [];
+        }
+
+    }
 }

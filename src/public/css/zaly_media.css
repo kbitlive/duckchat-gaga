@@ -1,6 +1,5 @@
 @media all and (min-height:100px) and (max-height: 450px){
     #create-group, #edit-remark, #add-friend-div, #permission-join {
-         width: 75rem;
          height: 90%;
          background: rgba(255,255,255,1);
          border-radius: 0.94rem;
@@ -16,7 +15,6 @@
     }
 
     #group-invite-people {
-        width: 62rem;
         height: 90%;
         display: flex;
         align-items: stretch;
@@ -45,7 +43,7 @@
     .apply-friend-reason {
         margin-top: 2rem;
     }
-    .apply-friend {
+    .create_button, .create_button:hover, .create_button:focus, .create_button:active {
         margin-top:2rem;
     }
 

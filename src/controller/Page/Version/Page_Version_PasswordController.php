@@ -20,13 +20,11 @@ class Page_Version_PasswordController extends Page_VersionController
             $oldVersionCode = 10011;
         }
 
-
-        //check password for upgrade
-        $fileName = $this->getPasswordFileName();
-        $passwordFileName = dirname(__FILE__) . "/../../../" . $fileName;
-        $this->logger->error("page.version.password", $passwordFileName);
-        $serverPassword = file_get_contents($passwordFileName);
+        $serverPassword = $this->getUpgradePassword();
+        $serverPassword = trim($serverPassword);
         $this->logger->error("page.version.password", "clientPwd=" . $password . " serverPwd=" . $serverPassword);
+
+
         if ($password == $serverPassword) {
             setcookie("upgradePassword", sha1($serverPassword), time() + 1800); //半个小时
 

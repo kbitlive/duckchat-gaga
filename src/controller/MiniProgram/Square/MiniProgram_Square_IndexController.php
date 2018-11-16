@@ -1,12 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 用户广场
  * User: zhangjun
  * Date: 05/09/2018
  * Time: 2:27 PM
  */
 
-class MiniProgram_Square_IndexController extends MiniProgramController
+class MiniProgram_Square_IndexController extends MiniProgram_BaseController
 {
 
     private $squarePluginId = 199;

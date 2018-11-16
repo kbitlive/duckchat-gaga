@@ -35,7 +35,7 @@ class Manage_MiniProgram_ListController extends Manage_CommonController
 
     private function getMiniProgramList($offset, $count)
     {
-        $list = $this->ctx->SitePluginTable->getAllPluginList();
+        $list = $this->ctx->SitePluginTable->getNonRepeatedPluginList();
 
         return $list;
     }

@@ -18,7 +18,7 @@ class Manage_Config_UpdateController extends Manage_CommonController
             $config['lang'] = $this->language;
 
             $configKey = $_POST['key'];
-            $configValue = $_POST['value'];
+            $configValue = trim($_POST['value']);
 
             $this->ctx->Wpf_Logger->error("manage.config.update", "ke=" . $configKey . " value=" . $configValue);
 
@@ -28,7 +28,7 @@ class Manage_Config_UpdateController extends Manage_CommonController
 
             if (SiteConfig::SITE_PLUGIN_PLBLIC_KEY == $configKey) {
                 $configValue = $this->ctx->ZalyHelper->generateStrKey(32);
-            } elseif (SiteConfig::SITE_ZALY_PORT == $configKey || SiteConfig::SITE_WS_PORT == $configKey) {
+            } elseif (SiteConfig::SITE_ZALY_PORT == $configKey) {
                 if (empty($configValue)) {
                     $configValue = 0;
                 }
@@ -41,7 +41,21 @@ class Manage_Config_UpdateController extends Manage_CommonController
                 }
             }
 
-            $result = $this->updateSiteConfig($configKey, $configValue);
+            if ($configKey == SiteConfig::SITE_LOGO) {
+                $fileId = $configValue;
+                $imageDir = WPF_LIB_DIR . "../public/site/image/";
+                $this->ctx->File_Manager->moveImage($fileId, $imageDir);
+            }
+
+            if ($configKey == SiteConfig::SITE_WS_ADDRESS) {
+                $this->checkWsAddress($configValue);
+
+                //清理 sitePort && siteHost
+                $this->ctx->Site_Config->deleteConfig([SiteConfig::SITE_WS_HOST, SiteConfig::SITE_WS_PORT]);
+            }
+
+            $result = $this->ctx->Site_Config->updateConfigValue($configKey, $configValue);
+
             if ($result) {
                 $response["errCode"] = "success";
             } else {
@@ -58,44 +72,30 @@ class Manage_Config_UpdateController extends Manage_CommonController
         return;
     }
 
-
-    private function updateSiteConfig($configKey, $configValue)
+    private function checkWsAddress($wsAddressUrl)
     {
-        $tag = __CLASS__ . "->" . __FUNCTION__;
+        if (empty($wsAddressUrl)) {
+            return;
+        }
 
-        try {
-            $result = $this->ctx->SiteConfigTable->updateSiteConfig($configKey, $configValue);
-            $this->ctx->Wpf_Logger->error("manage.config.update", "key=" . $configKey
-                . " configValue=" . $configValue . " result=" . $result);
+        $wsAddress = parse_url($wsAddressUrl);
 
-            if (!$result) {
-                return $this->saveSiteConfig($configKey, $configValue);
+        $schema = $wsAddress["scheme"];
+
+        if (empty($schema)) {
+            throw new Exception($this->language == 1 ? "wsAddress格式错误" : "ws address formatting error");
+        } else {
+            if ($schema != "ws" && $schema != "WS" && $schema != "wss" && $schema != "WSS") {
+                throw new Exception($this->language == 1 ? "wsAddress格式错误" : "ws address formatting error");
             }
-
-            return true;
-        } catch (Exception $e) {
-            $this->ctx->Wpf_Logger->error($tag, $e);
-            return $this->saveSiteConfig($configKey, $configValue);
         }
 
-
-        return false;
-    }
-
-    private function saveSiteConfig($configKey, $configValue)
-    {
-        $tag = __CLASS__ . "->" . __FUNCTION__;
-        try {
-            $result = $this->ctx->SiteConfigTable->insertSiteConfig($configKey, $configValue);
-
-            $this->ctx->Wpf_Logger->error("manage.config.save", "key=" . $configKey
-                . " configValue=" . $configValue . " result=" . $result);
-
-            return $result;
-        } catch (Exception $e) {
-            $this->ctx->Wpf_Logger->error($tag, $e);
+        $host = $wsAddress["host"];
+        $port = $wsAddress["port"];
+        if (empty($host) || empty($port)) {
+            throw new Exception($this->language == 1 ? "wsAddress格式错误" : "ws address formatting error");
         }
-        return false;
-    }
 
+        return;
+    }
 }

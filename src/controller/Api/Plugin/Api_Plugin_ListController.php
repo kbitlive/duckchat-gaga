@@ -38,18 +38,18 @@ class Api_Plugin_ListController extends \BaseController
                 Zaly\Proto\Core\PluginPermissionType::PluginPermissionGroupMaster,
             ];
 
-            $siteManagers = $this->ctx->Site_Config->getSiteManagers();
-
-            if (in_array($this->userId, $siteManagers)) {
+            $isManager = $this->ctx->Site_Config->isManager($this->userId);
+            if ($isManager) {
                 $permissionTypes[] = Zaly\Proto\Core\PluginPermissionType::PluginPermissionAdminOnly;
             }
 
             switch ($pluginUsageType) {
+                case Zaly\Proto\Core\PluginUsageType::PluginUsageNone:
                 case Zaly\Proto\Core\PluginUsageType::PluginUsageIndex:
                 case Zaly\Proto\Core\PluginUsageType::PluginUsageU2Message:
                 case Zaly\Proto\Core\PluginUsageType::PluginUsageTmpMessage:
                 case Zaly\Proto\Core\PluginUsageType::PluginUsageGroupMessage:
-                case \Zaly\Proto\Core\PluginUsageType::PluginUsageAccountSafe:
+                case Zaly\Proto\Core\PluginUsageType::PluginUsageAccountSafe:
                     break;
                 case Zaly\Proto\Core\PluginUsageType::PluginUsageLogin:
                 default:

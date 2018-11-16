@@ -9,40 +9,60 @@
 class ZalyAvatar
 {
     private static $logger;
-    public static $avatars = [];
+    private static $avatars = [];
 
     private static function writeAvatars()
     {
-        $avatarFileName = dirname(__FILE__) . "/../../avatar.php";
-        for ($i = 1; $i <= 74; $i++) {
-            $defaultAva = dirname(__FILE__) . "/../../public/avatar/" . $i . "@3x.png";
+        $cacheDir = WPF_ROOT_DIR . "/cache";
+
+        if (!is_dir($cacheDir)) {
+            mkdir($cacheDir, 0755, true);
+        }
+
+        $avatarPhpName = $cacheDir . "/avatar.php";
+
+        $sceneryAvatar = [];
+        for ($j = 1; $j <= 125; $j++) {
+            $defaultAva = dirname(__FILE__) . "/../../public/avatar/scenery/" . $j . ".png";
+
             if (!file_exists($defaultAva)) {
-                break;
+                continue;
             }
 
             $defaultAvatarData = file_get_contents($defaultAva);
             $fileManager = new File_Manager();
             $fileId = $fileManager->saveFile($defaultAvatarData, "20180101");
-            self::$avatars[] = $fileId;
+            $sceneryAvatar[] = $fileId;
         }
 
         $allAvatars = [
-            "emojiAvatar" => self::$avatars,
+            "sceneryAvatar" => $sceneryAvatar,
         ];
 
+        self::$avatars = $sceneryAvatar;
+
         $contents = var_export($allAvatars, true);
-        file_put_contents($avatarFileName, "<?php\n return {$contents};\n ");
+        file_put_contents($avatarPhpName, "<?php\n return {$contents};\n ");
+
+        self::resetOpcache();
     }
 
     private static function getAvatars()
     {
-        $fileName = dirname(__FILE__) . "/../../avatar.php";
+        $fileName = WPF_ROOT_DIR . "/cache/avatar.php";
         if (!file_exists($fileName)) {
             return;
         }
         $allAvatars = require($fileName);
         if (!empty($allAvatars)) {
-            self::$avatars = $allAvatars['emojiAvatar'];
+            $sceneryAvatars = $allAvatars['sceneryAvatar'];
+
+            if (empty($sceneryAvatars)) {
+                self::writeAvatars();
+                return;
+            }
+
+            self::$avatars = $sceneryAvatars;
         }
     }
 
@@ -56,7 +76,6 @@ class ZalyAvatar
     public static function getRandomAvatar()
     {
         self::setLogger();
-
         $tag = __CLASS__ . "->" . __FUNCTION__;
         try {
             if (empty(self::$avatars)) {
@@ -79,4 +98,10 @@ class ZalyAvatar
         return '';
     }
 
+    private static function resetOpcache()
+    {
+        if (function_exists("opcache_reset")) {
+            opcache_reset();
+        }
+    }
 }
