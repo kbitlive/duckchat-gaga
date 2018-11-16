@@ -106,11 +106,16 @@ class Api_User_UpdateController extends BaseController
             if (empty($customData)) {
                 return false;
             }
-            error_log("========update user custom=" . var_export($customData, true));
             $where = [
                 "userId" => $userId,
             ];
-            return $this->ctx->SiteUserCustomTable->updateCustomProfile($customData, $where);
+            $result = $this->ctx->SiteUserCustomTable->updateCustomProfile($customData, $where);
+
+            if (!$result) {
+                return $this->insertUserCustoms($customData, $userId);
+            }
+
+            return true;
         } catch (Exception $e) {
             $this->logger->error($tag, $e);
             return $this->insertUserCustoms($customData, $userId);
