@@ -37,7 +37,7 @@
     <div id="group-speaker-people" class="pop-window pop-window-speaker-people">
         <div class="pw-right-header" style="justify-content: center" data-local-value="groupsBannedTip" >禁言设置</div>
         <div class="sub-speaker-div set_group_speakers" style="display: none;">
-            <div class="sub-speaker-title" data-local-value="currentSpeakerTip"> 开启禁言 </div>
+            <div class="sub-speaker-title" data-local-value="openBannedTip"> 开启禁言 </div>
             <div class="group_speakers_set_div" >
                 <img src="../../public/img/msg/icon_switch_off.png" value="off" class="group_speakers_set" style="width: 5rem;height:3rem;">
             </div>

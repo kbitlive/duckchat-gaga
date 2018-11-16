@@ -4046,6 +4046,11 @@ function displayWaterMark()
            var time   = Date.parse(new Date());
            var params =  loginName +" "+chatSessionId+" "+time;
            var data = { watermark_txt:params }
+           try{
+               $("#otdivid").remove();
+           }catch (error) {
+
+           }
            watermark.load(data, $(".right-chatbox"));
        }
 
