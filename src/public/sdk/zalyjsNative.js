@@ -361,6 +361,14 @@ function zalyjsGoto(siteAddress, page, xarg) {
         window.webkit.messageHandlers.zalyjsGoto.postMessage(gotoUrl);
     } else {
         var gotoUrl = siteAddress + "/index.php?page=" + page + "&x=" + xarg;
+        var host = location.host;
+        if(location.port) {
+            host = host+":"+location.port;
+        }
+        if(siteAddress.indexOf(host) != -1) {
+            window.open(gotoUrl, "_top");
+            return;
+        }
         window.open(gotoUrl, "_blank");
     }
 }
