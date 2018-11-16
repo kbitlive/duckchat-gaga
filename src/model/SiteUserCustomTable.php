@@ -137,9 +137,10 @@ class SiteUserCustomTable extends BaseTable
                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                       userId VARCHAR(100) UNIQUE NOT NULL,
                       phoneId VARCHAR(20),
-                      email VARCHAR(100),";
+                      email VARCHAR(100),
+                      ";
         foreach ($columns as $column) {
-            $sql .= "$column VARCHAR(100),";
+            $sql .= "$column VARCHAR(100), \n";
         }
 
         $sql .= "addTime BIGINT);";

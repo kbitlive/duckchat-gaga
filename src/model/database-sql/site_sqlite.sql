@@ -245,14 +245,14 @@ CREATE TABLE IF NOT EXISTS siteCustom(
                       keyName varchar(100) not null,
                       keyIcon varchar(100),
                       keyDesc TEXT,
-                      keyType int,-- 登陆自定义类型，用户自定义类型
+                      keyType int,
                       keySort int,
-                      keyConstraint varchar(100),--约束条件
+                      keyConstraint varchar(100),
                       isRequired boolean default false,
                       isOpen boolean default true,
-                      status int, --  -1：无效，0：正常/可见，1：不公开/自己可见
-                      dataType int, -- text，number，手机号码，其他
-                      dataVerify varchar(50),-- 校验数据类型类型,可能是一个正则
+                      status int,
+                      dataType int,
+                      dataVerify varchar(50),
                       addTime BIGINT,
                       unique(keyType,customKey));
 
