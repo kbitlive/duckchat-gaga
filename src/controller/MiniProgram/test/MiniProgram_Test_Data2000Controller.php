@@ -87,7 +87,7 @@ class MiniProgram_Test_Data2000Controller extends MiniProgram_BaseController
     {
         $userIds = [];
 
-        for ($i = 0; $i < 2000; $i++) {
+        for ($i = 0; $i < 1000; $i++) {
 
             try {
                 $loginName = "user-test" . $key . "-" . $i;
@@ -123,7 +123,7 @@ class MiniProgram_Test_Data2000Controller extends MiniProgram_BaseController
 
         $groupIds = [];
 
-        for ($i = 0; $i < 2000; $i++) {
+        for ($i = 0; $i < 1000; $i++) {
 
             try {
                 $groupName = "group-test-" . $key . "-" . $i;
@@ -209,7 +209,7 @@ class MiniProgram_Test_Data2000Controller extends MiniProgram_BaseController
             $groupId = $groupIds[0];
 
 
-            $siteUserProfileList = $this->ctx->SiteUserTable->getSiteUserListByOffset(0, 2020);
+            $siteUserProfileList = $this->ctx->SiteUserTable->getSiteUserListByOffset(0, 1000);
 
             foreach ($siteUserProfileList as $userProfile) {
 
@@ -278,7 +278,7 @@ class MiniProgram_Test_Data2000Controller extends MiniProgram_BaseController
     {
         $groupId = $this->getGroupId();
 
-        $groupMembers = $this->ctx->SiteGroupUserTable->getGroupUserList($groupId, 0, 2000);
+        $groupMembers = $this->ctx->SiteGroupUserTable->getGroupUserList($groupId, 0, 1000);
 
         $speakers = [];
 
@@ -303,7 +303,7 @@ class MiniProgram_Test_Data2000Controller extends MiniProgram_BaseController
 
     private function doAdd2000FriendApply()
     {
-        $userIdList = $this->ctx->SiteUserTable->getSiteUserListByOffset(0, 2020);
+        $userIdList = $this->ctx->SiteUserTable->getSiteUserListByOffset(0, 1000);
 
         foreach ($userIdList as $userProfile) {
 
@@ -328,7 +328,7 @@ class MiniProgram_Test_Data2000Controller extends MiniProgram_BaseController
     private function doAdd2000ChatList()
     {
 
-        $userFriends = $this->ctx->SiteUserFriendTable->queryUserFriendByPage($this->userId, 0, 2000);
+        $userFriends = $this->ctx->SiteUserFriendTable->queryUserFriendByPage($this->userId, 0, 1000);
 
         $this->logger->error("=========================", "userFriends count=" . count($userFriends));
 
