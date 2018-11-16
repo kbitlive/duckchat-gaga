@@ -13,7 +13,7 @@ class Page_Passport_LoginController extends HttpBaseController
     {
         $tag = __CLASS__ . '->' . __FUNCTION__;
         try {
-            $this->checkUserCookie();
+            isset($_GET['token']) ? $this->checkUserToken($_GET['token']) : $this->checkUserCookie(); ;
             if ($this->userId) {
                 $jumpPage = $this->getJumpUrlFromParams();
                 $apiPageIndex = ZalyConfig::getApiIndexUrl();

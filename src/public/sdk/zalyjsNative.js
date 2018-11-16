@@ -32,30 +32,6 @@ function getUrlParam(key) {
     return false;
 }
 
-function removeUrlParam(key) {
-
-   try{
-       var pathParams = window.location.search.substring(1).split('&');
-       var paramsLength = pathParams.length;
-       for (var i = 0; i < paramsLength; i++) {
-          try{
-              var param = pathParams[i].split('=');
-
-              if (param[0] == key) {
-                  pathParams.splice(i, 1);
-              }
-          }catch (error) {
-
-          }
-       }
-       console.log("------"+JSON.stringify(pathParams));
-       var pathParamsStr = pathParams.join("&");
-       return pathParamsStr;
-   }catch (error){
-       console.log(error)
-   }
-}
-
 var redirectUrl = getUrlParam("redirect_url");
 if (redirectUrl) {
     localStorage.setItem(refererUrlKey, redirectUrl);
@@ -221,7 +197,9 @@ function zalyjsLoginSuccess(loginName, sessionid, isRegister, userCustoms, callb
     messageBody["isRegister"] = (isRegister == true ? true : false);
     messageBody['thirdPartyKey'] = thirdLoginName;
     messageBody[callbackIdParamName] = callbackId;
-    messageBody['userCustoms'] = userCustoms;
+    if(userCustoms) {
+        messageBody['userCustoms'] = userCustoms;
+    }
     messageBody = JSON.stringify(messageBody);
 
     if (isAndroid()) {
@@ -260,9 +238,9 @@ function loginPcClient(messageBody, callback) {
 function getLanguage() {
     var nl = navigator.language;
     if ("zh-cn" == nl || "zh-CN" == nl) {
-        return 1;
+        return "1";
     }
-    return 0;
+    return "0";
 }
 // -private 登录成功后，web回调
 function zalyjsApiSiteLogin() {
@@ -273,18 +251,19 @@ function zalyjsApiSiteLogin() {
 
     var body = {
         "@type":  "type.googleapis.com/site.ApiSiteLoginRequest",
-        "userCustoms" : zalyjsSiteLoginMessageBody['userCustoms'],
-        "devicePubkPem" :"",
         "preSessionId":zalyjsSiteLoginMessageBody['sessionid'],
         "loginName":zalyjsSiteLoginMessageBody['loginName'],
         "isRegister":zalyjsSiteLoginMessageBody['isRegister'],
         "thirdPartyKey":zalyjsSiteLoginMessageBody['thirdPartyKey']
     };
+    if(zalyjsSiteLoginMessageBody.hasOwnProperty("userCustoms")) {
+        body["userCustoms"] =  zalyjsSiteLoginMessageBody['userCustoms'];
+    }
     var header = {};
     header[HeaderHostUrl] = refererUrl;
     header[HeaderUserClientLang] = getLanguage();
     header[HeaderUserAgent] = navigator.userAgent;
-    var packageId = localStorage.getItem(PACKAGE_ID);
+    var packageId = localStorage.getItem("packageId");
 
     var transportData = {
         "action" : "api.site.login",
@@ -299,32 +278,41 @@ function zalyjsApiSiteLogin() {
     } else {
         var url = refererUrl + "?action=api.site.login&body_format=json";
     }
-    $.ajax({
-        method: "POST",
-        url:url,
-        data: transportDataJson,
-        success:function (resp, status, request) {
-            if(resp) {
-                var results = JSON.parse(resp);
-                if(results.hasOwnProperty("header") && results.header[HeaderErrorCode] == "success") {
-                    try {
-                        window.parent.location.href = refererUrl
-                    } catch (error) {
-                        window.location.href = refererUrl;
-                    }
+
+    var http = new XMLHttpRequest();
+    http.open('POST', url, true);
+
+    //Send the proper header information along with the request
+    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    http.onreadystatechange = function() {//Call a function when the state changes.
+        if(http.readyState == 4 && http.status == 200) {
+            var results = JSON.parse(http.responseText);
+
+            if(results.hasOwnProperty("header") && results.header[HeaderErrorCode] == "success") {
+                var sessionId = results.body['sessionId'];
+
+                if(refererUrl.indexOf("?") !=-1 ) {
+                    refererUrl = refererUrl+"&token="+sessionId
                 } else {
-                    var result = {
-                        "errorInfo" : results.header[HeaderErrorInfo]
-                    }
-                    var callbackName = zalyjsSiteLoginMessageBody.callback(result)
+                    refererUrl = refererUrl+"?token="+sessionId
                 }
+                try {
+                    window.parent.location.href = refererUrl
+                } catch (error) {
+                    window.location.href = refererUrl;
+                }
+            } else {
+                var result = {
+                    "errorInfo" : results.header[HeaderErrorInfo]
+                }
+                var callbackName = zalyjsSiteLoginMessageBody.callback(result)
             }
-        },
-        fail: function () {
-            alert("登录失败");
         }
-    });
+    }
+    http.send(transportDataJson);
 }
+
 
 //// -private web 检查用户是否已经被注册
 function zalyjsWebCheckUserExists(failedCallback, successCallback) {

@@ -27,6 +27,8 @@ class Api_Site_LoginController extends \BaseController
      */
     public function rpc(\Google\Protobuf\Internal\Message $request, \Google\Protobuf\Internal\Message $transportData)
     {
+        header('Access-Control-Allow-Origin: *');
+
         ///处理request，
         $tag = __CLASS__ . '-' . __FUNCTION__;
         try {
@@ -81,7 +83,7 @@ class Api_Site_LoginController extends \BaseController
             $response = $this->buildApiSiteLoginResponse($userProfile, $realSessionId);
 
             if ($clientType == \Zaly\Proto\Core\UserClientType::UserClientWeb) {
-                setcookie($this->siteCookieName, $userProfile["sessionId"], time() + $this->cookieTimeOut, "/", "", false, true);
+               setcookie($this->siteCookieName, $realSessionId, time() + $this->cookieTimeOut, "/", "", false, true);
             } else {
                 //clearLimitSession
                 $this->clearLimitSession($userProfile['userId'], $userProfile['deviceId']);

@@ -29,7 +29,6 @@ jQuery.i18n.properties({
     }
 });
 
-
 $(document).on("click", ".update_code_btn", function () {
     invitationCode = $(".update_input_code").val();
     showLoading($(".site_login_div"));
@@ -144,7 +143,7 @@ function registerForPassportPassword() {
 $(document).on("click", ".third_login_logo", function () {
     var name = $(this).attr("name");
     var landingUrl = $(this).attr("landingUrl");
-    var siteAddressUrl = encodeURIComponent(siteAddress);
+    var siteAddressUrl = encodeURIComponent(location.href);
     if(landingUrl.indexOf("?") != -1) {
         landingUrl +="&duckchat_third_login_name="+name+"&from=duckchat&redirect_url="+siteAddressUrl;
     } else {
@@ -270,4 +269,6 @@ function  returnLoginDiv() {
     $(".zaly_site_update-invitecode")[0].style.display="none";
     $(".zaly_login_by_pwd")[0].style.display = "block";
 }
+
+
 

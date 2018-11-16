@@ -42,6 +42,7 @@ abstract class HttpBaseController extends \Wpf_Controller
     private $jumpRelation = "";
     public $siteCookieName = "zaly_site_user";
     public $language = "";
+    private $cookieTimeOut = 2592000;//30天 单位s
 
     protected $siteConfig;
 
@@ -70,8 +71,9 @@ abstract class HttpBaseController extends \Wpf_Controller
         $tag = __CLASS__ . "-" . __FUNCTION__;
         try {
             parent::doIndex();
-            $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
+
             $action = isset($_GET['action']) ? $_GET['action'] : "";
+
             $this->getAndSetClientLang();
             if (!in_array($action, $this->upgradeAction)) {
                 $this->checkIsNeedUpgrade();
@@ -186,6 +188,29 @@ abstract class HttpBaseController extends \Wpf_Controller
         $this->sessionId = $this->sessionInfo['sessionId'];
         $this->userId = $this->userInfo['userId'];
 
+    }
+
+    protected function checkUserToken($token)
+    {
+        $this->sessionInfo = $this->ctx->SiteSessionTable->getSessionInfoBySessionId($token);
+        if (!$this->sessionInfo) {
+            throw new Exception("session is not ok");
+        }
+        $timeActive = $this->sessionInfo['timeActive'];
+
+        $nowTime = $this->ctx->ZalyHelper->getMsectime();
+
+        if (($nowTime - $timeActive) > $this->sessionIdTimeOut * 24 * 365) {
+            throw new Exception("session expired");
+        }
+
+        $this->userInfo = $this->ctx->SiteUserTable->getUserByUserId($this->sessionInfo['userId']);
+        if (!$this->userInfo) {
+            throw new Exception("user is not ok");
+        }
+        setcookie($this->siteCookieName, $token, time() + $this->cookieTimeOut, "/", "", false, true);
+        $this->sessionId = $this->sessionInfo['sessionId'];
+        $this->userId = $this->userInfo['userId'];
     }
 
     public function setLogout()

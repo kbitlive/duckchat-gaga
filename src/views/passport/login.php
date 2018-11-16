@@ -117,7 +117,7 @@
                                         <div class="login-others">
                                             <div class="landing-third-title">使用以下账号直接登录</div>
                                             <div class="landing-third-content">
-                                                <?php foreach($thirdLoginOptions as $thirdLogin) : ?>
+                                                <?php foreach($thirdPartyLoginOptions as $thirdLogin) : ?>
                                                 <img class="third_login_logo"  landingUrl="<?php echo $thirdLogin['landingUrl'];?>" src="<?php echo $thirdLogin['logo'];?>" name="<?php echo $thirdLogin['name'];?>" onerror="src='./public/img/plugin/default.png'">
                                                 <?php endforeach; ?>
 
