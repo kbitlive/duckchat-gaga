@@ -3637,7 +3637,9 @@ function editSelfCustom(type)
         isSelfInfoCanHidden = false;
         $("#selfInfoDiv")[0].style.display = "none";
         $("#selfCutsomInfoDiv")[0].style.display = "block";
-        $("#selfInfo")[0].style.height="29rem";
+        console.log('-$("#selfCutsomInfoDiv")[0].scrollHeight+"px"----' + $("#selfCutsomInfoDiv")[0].scrollHeight+"px");
+        $("#selfCutsomInfoDiv")[0].style.height = $("#selfCutsomInfoDiv")[0].scrollHeight+"px";
+        $("#selfInfo")[0].style.height = $("#selfCutsomInfoDiv")[0].scrollHeight+"px";
     } else {
         var values = new Array();
 
@@ -3660,8 +3662,9 @@ function editSelfCustom(type)
         });
         updateUserInfo(values);
         $("#selfInfoDiv")[0].style.display = "block";
+        $("#selfInfoDiv")[0].style.height = "20rem";
+        $("#selfInfo")[0].style.height = "20rem";
         $("#selfCutsomInfoDiv")[0].style.display = "none";
-        $("#selfInfo")[0].style.height="20rem";
         isSelfInfoCanHidden = true;
     }
 }
