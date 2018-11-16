@@ -523,6 +523,18 @@ class InstallDBController
 //                'authKey' => "",
 //            ],
             [
+                'pluginId' => 107,
+                'name' => "Test2000",
+                'logo' => "",
+                'sort' => 107,
+                'landingPageUrl' => "index.php?action=miniProgram.test.data2000",
+                'landingPageWithProxy' => 1, //1 表示走site代理
+                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageIndex,
+                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingNewPage,
+                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAll,
+                'authKey' => "",
+            ],
+            [
                 'pluginId' => 199,  //200+ for user
                 'name' => "用户广场",
                 'logo' => $this->getSiteSquareIcon(),
