@@ -39,6 +39,7 @@ class Im_Cts_SyncController extends Im_BaseController
     public function doRequest(\Google\Protobuf\Internal\Message $request, Zaly\Proto\Core\TransportData $transportData)
     {
         $userId = $this->userId;
+        error_log("im.cts.sync userId=" . $userId);
         $sessionId = $this->sessionId;
         $deviceId = $this->deviceId;
 
