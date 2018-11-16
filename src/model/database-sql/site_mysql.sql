@@ -69,7 +69,7 @@ ALTER TABLE siteSession CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general
 
 CREATE TABLE  IF NOT EXISTS siteGroup (
                id INTEGER PRIMARY KEY AUTO_INCREMENT,
-               groupId VARCHAR(100) NOT NULL,/*6到16位*/
+               groupId VARCHAR(50) NOT NULL,/*6到16位*/
                `name` VARCHAR(100) NOT NULL,/*群名*/
                nameInLatin VARCHAR(100) NOT NULL,
                owner VARCHAR(100) NOT NULL,
@@ -90,7 +90,7 @@ ALTER TABLE siteGroup CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_c
 
 CREATE TABLE IF NOT EXISTS siteGroupUser(
                 id INTEGER PRIMARY KEY AUTO_INCREMENT,
-               groupId VARCHAR(100) NOT NULL,
+               groupId VARCHAR(50) NOT NULL,
                userId VARCHAR(100) NOT NULL,
                memberType INTEGER,
                isMute BOOLEAN default 0 ,/*是否静音 1表示静音，0表示没有静音*/
@@ -129,7 +129,7 @@ ALTER TABLE siteU2MessagePointer CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb
 CREATE TABLE IF NOT EXISTS siteGroupMessage(
             id INTEGER PRIMARY KEY AUTO_INCREMENT,
             msgId VARCHAR(100) UNIQUE NOT NULL,
-            groupId VARCHAR(100) NOT NULL,
+            groupId VARCHAR(50) NOT NULL,
             fromUserId VARCHAR(100),
             msgType INTEGER,
             content TEXT,
@@ -142,7 +142,7 @@ ALTER TABLE siteGroupMessage MODIFY COLUMN content TEXT CHARACTER SET utf8mb4 CO
 
 CREATE TABLE IF NOT EXISTS siteGroupMessagePointer(
             id INTEGER PRIMARY KEY AUTO_INCREMENT,
-            groupId VARCHAR(100) NOT NULL,
+            groupId VARCHAR(50) NOT NULL,
             userId VARCHAR(100) NOT NULL,
             deviceId VARCHAR(100),
             clientSideType INTEGER,
