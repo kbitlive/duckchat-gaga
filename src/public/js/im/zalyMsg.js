@@ -1525,7 +1525,7 @@ function updateUserAvatar(fileName)
 {
     var values = new Array();
     var value = {
-        type : "ApiUserUpdateAvatar",
+        type : ApiUserUpdateType.ApiUserUpdateAvatar,
         avatar : fileName,
     };
     values.push(value);

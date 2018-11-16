@@ -2130,11 +2130,32 @@ button:active{
     justify-content: space-between;
     margin-right: 10rem;
 }
+.custom_name_tip {
+    height: 2.5rem;
+    line-height: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .self_custom_info input {
     width:18.76rem;
     height:2.25rem;
     border-radius:0.19rem;
     border:0.09rem solid;
     outline: none;
+    cursor: pointer;
+}
+
+.edit_self_custom {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    margin: auto;
+    height: 1.31rem;
+    font-size: 1.31rem;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(27,27,27,1);
+    line-height: 1.31rem;
     cursor: pointer;
 }

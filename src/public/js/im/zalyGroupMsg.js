@@ -3512,7 +3512,7 @@ $(".selfInfo").mouseover(function(){
 
 $(document).on("mouseleave","#selfInfo", function () {
     if( uploadSelfAvatar == false) {
-        // removeWindow($("#selfInfo"));
+        removeWindow($("#selfInfo"));
     }
 });
 
@@ -3565,7 +3565,21 @@ function updateUserInfo(values)
 
 function handleUpdateUserInfo(results)
 {
-    // window.location.reload();
+    console.log(results);
+    if(results && results.hasOwnProperty("profile")) {
+        var public = results['profile'].public;
+        avatar = public['avatar'];
+        var url = getNotMsgImgUrl(avatar);
+        $(".info-avatar-"+public['userId']).attr("src", url);
+        nickname = public['nickname'];
+        var nicknameHtml = template("tpl-string", {
+            string:nickname
+        });
+        var html ='<div style="margin-left: 1rem;" class="nickNameDiv siteSelfInfo">'+nicknameHtml+'<img src="./public/img/edit.png" style="width: 1rem;height:1rem"></div>';
+
+        $(".nickname_"+public['userId']).html(nicknameHtml);
+        $(".editSelfNickNameDiv").html(html);
+    }
 }
 
 $(document).on("click", ".nickNameDiv",function () {
@@ -3576,8 +3590,6 @@ $(document).on("click", ".nickNameDiv",function () {
 });
 
 // self_custom_edit_info
-
-
 
 function updateUserCustomInfo(event, jqElement)
 {
@@ -3605,7 +3617,36 @@ function updateUserCustomInfo(event, jqElement)
     updateUserInfo(values);
 }
 
+function editSelfCustom(type)
+{
+    if(type == 'edit') {
+        $("#selfInfoDiv")[0].style.display = "none";
+        $("#selfCutsomInfoDiv")[0].style.display = "block";
+    } else {
+        var values = new Array();
 
+        $(".edit_custom_info").each(function (index, target) {
+            var customKey = $(target).attr("customKey");
+            var customValue = $(target).val();
+            var customName = $(target).attr("customName");
+
+            var customInfo = {
+                "customKey":customKey,
+                "customValue":customValue,
+                "customName":customName
+            }
+
+            var value = {
+                type : ApiUserUpdateType.ApiUserUpdateCustom,
+                custom : customInfo,
+            };
+            values.push(value);
+        });
+        updateUserInfo(values);
+        $("#selfInfoDiv")[0].style.display = "block";
+        $("#selfCutsomInfoDiv")[0].style.display = "none";
+    }
+}
 //------------------------------------api.friend.delete--------------------------------------------------------
 
 $(document).on("click", ".delete-friend", function () {
