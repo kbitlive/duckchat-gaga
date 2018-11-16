@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS siteConfig(
                   configValue TEXT ,
                   UNIQUE (configKey));
 
-CREATE TABLE  IF NOT EXISTS siteUser (
+CREATE TABLE IF NOT EXISTS siteUser (
                    id INTEGER PRIMARY KEY AUTOINCREMENT,
                    userId VARCHAR(100) UNIQUE NOT NULL,
                    loginName VARCHAR(100) UNIQUE NOT NULL,
