@@ -32,6 +32,30 @@ function getUrlParam(key) {
     return false;
 }
 
+function removeUrlParam(key) {
+
+   try{
+       var pathParams = window.location.search.substring(1).split('&');
+       var paramsLength = pathParams.length;
+       for (var i = 0; i < paramsLength; i++) {
+          try{
+              var param = pathParams[i].split('=');
+
+              if (param[0] == key) {
+                  pathParams.splice(i, 1);
+              }
+          }catch (error) {
+
+          }
+       }
+       console.log("------"+JSON.stringify(pathParams));
+       var pathParamsStr = pathParams.join("&");
+       return pathParamsStr;
+   }catch (error){
+       console.log(error)
+   }
+}
+
 var redirectUrl = getUrlParam("redirect_url");
 if (redirectUrl) {
     localStorage.setItem(refererUrlKey, redirectUrl);
@@ -360,7 +384,18 @@ function zalyjsGoto(siteAddress, page, xarg) {
     } else if (isIOS()) {
         window.webkit.messageHandlers.zalyjsGoto.postMessage(gotoUrl);
     } else {
-        var gotoUrl = siteAddress + "/index.php?page=" + page + "&x=" + xarg;
+        if(siteAddress =="0.0.0.0") {
+            try{
+                siteAddress = parent.location.href;
+            }catch (error) {
+                siteAddress = location.href;
+            }
+        }
+        if(siteAddress.indexOf("?") != -1) {
+            var gotoUrl = siteAddress + "&page=" + page + "&x=" + xarg;
+        } else {
+            var gotoUrl = siteAddress + "?page=" + page + "&x=" + xarg;
+        }
         var host = location.host;
         if(location.port) {
             host = host+":"+location.port;

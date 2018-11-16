@@ -366,15 +366,12 @@
     $("#square-body").on("click", ".chatButton", function () {
         var friendId = $(this).attr("userId");
         var url = "duckchat://0.0.0.0/goto?page=u2Msg&x=" + friendId;
-        if(isMobile()) {
-            try {
-                zalyjsGoto(null, "u2Msg", friendId);
-            } catch (e) {
-                alert(getLanguage() == 1 ? "客户端暂不支持，请升级客户端" : "Please upgrade the client version.");
-            }
-            return;
+        try {
+            zalyjsGoto(null, "u2Msg", friendId);
+        } catch (e) {
+            alert(getLanguage() == 1 ? "客户端暂不支持，请升级客户端" : "Please upgrade the client version.");
         }
-        alert(getLanguage() == 1 ? "web端暂不支持，请使用客户端" : "Please use the client app.");
+        return;
     });
 
 

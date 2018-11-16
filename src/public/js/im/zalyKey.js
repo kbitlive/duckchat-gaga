@@ -259,3 +259,4 @@ isPreSyncingMsgTime="";
 
 
 soundNotificationKey = "sound_notification";
+isDisplayFrontPageKey = "is_display_front_page";

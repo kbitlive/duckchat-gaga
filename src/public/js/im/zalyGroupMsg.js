@@ -72,13 +72,14 @@ function showOtherWebNotification()
         }
     }
 }
-var isDisplayFrontPage = false;
 
 function displayFrontPage()
 {
     try{
-        if(isDisplayFrontPage == false) {
-            isDisplayFrontPage = true;
+        var isDisplayFrontPage = localStorage.getItem(isDisplayFrontPageKey);
+
+        if(isDisplayFrontPage != "is_display") {
+            localStorage.setItem(isDisplayFrontPageKey, "is_display");
             var configStr = localStorage.getItem(siteConfigKey);
             var config = JSON.parse(configStr);
             if(config.hasOwnProperty("hiddenHomePage") && config['hiddenHomePage'] == true) {
@@ -144,7 +145,7 @@ function jump()
     //群，好友
     // http://127.0.0.1/index.php?page=u2Msg&x=
     // http://127.0.0.1/index.php?page=groupMsg&x=
-
+    getRoomList();
     if(jumpRoomType != "" && jumpRoomId != "") {
         if(jumpRoomType == JUMP_GroupMsg ) {
             if(jumpRelation == 1) {
