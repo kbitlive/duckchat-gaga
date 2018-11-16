@@ -19,7 +19,6 @@
 <input type="hidden" value="<?php echo $loginBackgroundColor;?>" class="loginBackgroundColor">
 <input type="hidden" value="<?php echo $loginBackgroundImage;?>" class="loginBackgroundImage">
 <input type="hidden" value="<?php echo $loginBackgroundImageDisplay;?>" class="loginBackgroundImageDisplay">
-<input type="hidden" value="<?php echo $passwordResetRequired;?>" class="passwordResetRequired">
 
 <div class="site-warning"></div>
 

@@ -3576,7 +3576,6 @@ function updateUserInfo(values)
 
 function handleUpdateUserInfo(results)
 {
-    console.log(results);
     if(results && results.hasOwnProperty("profile")) {
         var public = results['profile'].public;
         avatar = public['avatar'];
@@ -3604,28 +3603,28 @@ $(document).on("click", ".nickNameDiv",function () {
 
 function updateUserCustomInfo(event, jqElement)
 {
-    var isEnter = checkIsEnterBack(event);
-    if(!isEnter) {
-        return;
-    }
-
-    var customKey = $(jqElement).attr("customKey");
-    var customValue = $(jqElement).val();
-    var customName = $(jqElement).attr("customName");
-
-    var customInfo = {
-        "customKey":customKey,
-        "customValue":customValue,
-        "customName":customName
-    }
-
-    var values = new Array();
-    var value = {
-        type : ApiUserUpdateType.ApiUserUpdateCustom,
-        custom : customInfo,
-    };
-    values.push(value);
-    updateUserInfo(values);
+    // var isEnter = checkIsEnterBack(event);
+    // if(!isEnter) {
+    //     return;
+    // }
+    //
+    // var customKey = $(jqElement).attr("customKey");
+    // var customValue = $(jqElement).val();
+    // var customName = $(jqElement).attr("customName");
+    //
+    // var customInfo = {
+    //     "customKey":customKey,
+    //     "customValue":customValue,
+    //     "customName":customName
+    // }
+    //
+    // var values = new Array();
+    // var value = {
+    //     type : ApiUserUpdateType.ApiUserUpdateCustom,
+    //     custom : customInfo,
+    // };
+    // values.push(value);
+    // updateUserInfo(values);
 }
 
 function editSelfCustom(type)
@@ -3653,6 +3652,7 @@ function editSelfCustom(type)
             };
             values.push(value);
         });
+        console.log("---------"+JSON.stringify(values));
         updateUserInfo(values);
         $("#selfInfoDiv")[0].style.display = "block";
         $("#selfCutsomInfoDiv")[0].style.display = "none";
