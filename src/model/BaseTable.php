@@ -51,7 +51,7 @@ class BaseTable
             $dbDsn = "mysql:host=$dbHost;port=$dbPort;dbname=$dbName;";
             $options = array(
                 PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4',
-//                PDO::ATTR_PERSISTENT => true,
+                PDO::ATTR_PERSISTENT => true,
             );
             $this->dbSlave = new PDO($dbDsn, $dbUserName, $dbPwssword, $options);//创建一个pdo对象
         }
