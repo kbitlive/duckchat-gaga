@@ -137,9 +137,10 @@ class SiteUserCustomTable extends BaseTable
                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                       userId VARCHAR(100) UNIQUE NOT NULL,
                       phoneId VARCHAR(20),
-                      email VARCHAR(100),";
+                      email VARCHAR(100),
+                      ";
         foreach ($columns as $column) {
-            $sql .= "$column VARCHAR(100),";
+            $sql .= "$column VARCHAR(100), \n";
         }
 
         $sql .= "addTime BIGINT);";
@@ -213,13 +214,13 @@ class SiteUserCustomTable extends BaseTable
 
         //alter table
         $dbFlag = $this->getTimeHMS();
-        $newTableName = $this->table . "_" . $dbFlag;
-        $sql = "alter table $this->table rename to $newTableName";
+        $tempTableName = $this->table . "_" . $dbFlag;
+        $sql = "alter table $this->table rename to $tempTableName";
         $result = $this->db->exec($sql);
 
         error_log("==========================rename result=" . $result);
         if ($result === false) {
-            throw new Exception("rename table:$this->table to $newTableName error");
+            throw new Exception("rename table:$this->table to $tempTableName error");
         }
 
         try {
@@ -242,7 +243,7 @@ class SiteUserCustomTable extends BaseTable
             $columns = array_unique($columns);
 
             $queryColumnString = implode(",", $columns);//migrate data to new table
-            $sql = "insert into $this->table($queryColumnString) select $queryColumnString from $newTableName";
+            $sql = "insert into $this->table($queryColumnString) select $queryColumnString from $tempTableName";
 
             error_log("=========prepare sql= " . $sql);
             $prepare = false;//reset prepare
@@ -251,11 +252,12 @@ class SiteUserCustomTable extends BaseTable
             $flag = $prepare->execute();
             $errCode = $prepare->errorCode();
             if ($flag && $errCode == "00000") {
+                $this->dropDBTable($tempTableName);
                 return true;
             }
         } catch (Exception $e) {
             $this->logger->error($tag, $e);
-            $this->rollbackSqliteRebuild($newTableName, $this->table);
+            $this->rollbackSqliteRebuild($tempTableName, $this->table);
         }
         return false;
     }

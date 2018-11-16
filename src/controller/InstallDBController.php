@@ -550,9 +550,9 @@ class InstallDBController
                 "keyType" => Zaly\Proto\Core\CustomType::CustomTypeUser,
                 "keySort" => 1,
                 "keyConstraint" => "",
-                "isRequired" => false,
+                "isRequired" => 0,
                 "isOpen" => 1,
-                "status" => Zaly\Proto\Core\UserCustomStatus::UserCustomNormal,
+                "status" => Zaly\Proto\Core\UserCustomStatus::UserCustomRegisterRequired,
 //                "dataType" => "",
                 "dataVerify" => "",
                 "addTime" => ZalyHelper::getMsectime(),
@@ -564,9 +564,9 @@ class InstallDBController
                 "keyType" => Zaly\Proto\Core\CustomType::CustomTypeUser,
                 "keySort" => 2,
                 "keyConstraint" => "",
-                "isRequired" => false,
+                "isRequired" => 0,
                 "isOpen" => 1,
-                "status" => Zaly\Proto\Core\UserCustomStatus::UserCustomNormal,
+                "status" => Zaly\Proto\Core\UserCustomStatus::UserCustomRegisterRequired,
 //                "dataType" => "",
                 "dataVerify" => "",
                 "addTime" => ZalyHelper::getMsectime(),
@@ -636,7 +636,7 @@ class InstallDBController
         $count = $prepare->rowCount();
 
         $this->logger->error("site.install.db",
-            "miniProgram name=" . $data['name'] .
+            "init mimiProgram or custom, name=" . $data['name'] .
             " count=" . $count .
             " errCode=" . $prepare->errorCode() .
             " errInfo=" . json_encode($prepare->errorInfo()));

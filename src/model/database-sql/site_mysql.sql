@@ -264,14 +264,14 @@ CREATE TABLE IF NOT EXISTS siteCustom(
                       keyName varchar(100) not null,
                       keyIcon varchar(100),
                       keyDesc TEXT,
-                      keyType int,-- 登陆自定义类型，用户自定义类型
+                      keyType int,
                       keySort int,
-                      keyConstraint varchar(100),--约束条件
+                      keyConstraint varchar(100),
                       isRequired boolean default false,
                       isOpen boolean default true,
-                      status int, --  0：无效，1：正常
-                      dataType int, -- text，number，手机号码，其他
-                      dataVerify varchar(100),-- 校验数据类型类型,可能是一个正则
+                      status int,
+                      dataType int,
+                      dataVerify varchar(100),
                       addTime BIGINT,
                       unique(keyType,customKey))ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 

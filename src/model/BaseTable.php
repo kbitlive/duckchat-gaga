@@ -276,4 +276,12 @@ class BaseTable
         return $columns;
     }
 
+    protected function dropDBTable($tableName)
+    {
+        if (empty($tableName)) {
+            return false;
+        }
+        $sql = "drop table $tableName";
+        return $this->db->exec($sql) !== false;
+    }
 }
