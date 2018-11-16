@@ -62,7 +62,7 @@ create table IF NOT EXISTS siteSession(
 
 CREATE TABLE  IF NOT EXISTS siteGroup (
                id INTEGER PRIMARY KEY AUTOINCREMENT,
-               groupId VARCHAR(100) NOT NULL,/*6到16位*/
+               groupId VARCHAR(50) NOT NULL,/*6到16位*/
                `name` VARCHAR(100) NOT NULL,/*群名*/
                nameInLatin VARCHAR(100) NOT NULL,
                owner VARCHAR(100) NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE  IF NOT EXISTS siteGroup (
 
 CREATE TABLE IF NOT EXISTS siteGroupUser(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-               groupId VARCHAR(100) NOT NULL,
+               groupId VARCHAR(50) NOT NULL,
                userId VARCHAR(100) NOT NULL,
                memberType INTEGER,
                isMute BOOLEAN default 0 ,/*是否静音 1表示静音，0表示没有静音*/
@@ -118,7 +118,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS indexSiteU2MessagePointerUd ON siteU2MessagePo
 CREATE TABLE IF NOT EXISTS siteGroupMessage(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             msgId VARCHAR(100) UNIQUE NOT NULL,
-            groupId VARCHAR(100) NOT NULL,
+            groupId VARCHAR(50) NOT NULL,
             fromUserId VARCHAR(100),
             msgType INTEGER,
             content TEXT,
@@ -127,6 +127,13 @@ CREATE TABLE IF NOT EXISTS siteGroupMessage(
 
 CREATE INDEX IF NOT EXISTS indexSiteGroupMessageGroupId ON siteGroupMessage(groupId);
 
+CREATE TABLE IF NOT EXISTS siteGroupMessagePointer(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            groupId VARCHAR(50) NOT NULL,
+            userId VARCHAR(100) NOT NULL,
+            deviceId VARCHAR(100),
+            clientSideType INTEGER, -- 0:无效，1:手机客户端  2:web客户端
+            pointer INTEGER);
 
 CREATE TABLE IF NOT EXISTS passportPassword(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -156,14 +163,6 @@ CREATE TABLE IF NOT EXISTS passportPasswordToken(
                 timeReg BIGINT,
                 UNIQUE(loginName)
             );
-
-CREATE TABLE IF NOT EXISTS siteGroupMessagePointer(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            groupId VARCHAR(100) NOT NULL,
-            userId VARCHAR(100) NOT NULL,
-            deviceId VARCHAR(100),
-            clientSideType INTEGER, -- 0:无效，1:手机客户端  2:web客户端
-            pointer INTEGER);
 
 CREATE INDEX IF NOT EXISTS indexSiteGroupMessagePointerGud ON siteGroupMessagePointer(groupId,userId,deviceId);
 
