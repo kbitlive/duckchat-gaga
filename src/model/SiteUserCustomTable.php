@@ -144,7 +144,7 @@ class SiteUserCustomTable extends BaseTable
         }
 
         $sql .= "addTime BIGINT);";
-        error_log("======new sqlit table sql=" . $sql);
+//        error_log("======new sqlit table sql=" . $sql);
         return $this->db->exec($sql) !== false;
     }
 
@@ -173,7 +173,7 @@ class SiteUserCustomTable extends BaseTable
             }
         }
 
-        error_log("======custom columns = " . var_export($columns, true));
+//        error_log("======custom columns = " . var_export($columns, true));
         return $columns;
     }
 
@@ -190,7 +190,7 @@ class SiteUserCustomTable extends BaseTable
         }
 
         $prepare = $this->ctx->db->prepare($sql);
-        error_log("=========prepare errorInfo= " . var_export($prepare->errorInfo(), true));
+//        error_log("=========prepare errorInfo= " . var_export($prepare->errorInfo(), true));
         $flag = $prepare->execute();
 
         if ($prepare) {
@@ -210,7 +210,7 @@ class SiteUserCustomTable extends BaseTable
         $tag = __CLASS__ . "->" . __FUNCTION__;
         $columns = $this->getSqliteTableColumns($this->table);
 
-        error_log("get sqlit table columns=" . var_export($columns, true));
+//        error_log("get sqlit table columns=" . var_export($columns, true));
 
         //alter table
         $dbFlag = $this->getTimeHMS();
@@ -218,7 +218,7 @@ class SiteUserCustomTable extends BaseTable
         $sql = "alter table $this->table rename to $tempTableName";
         $result = $this->db->exec($sql);
 
-        error_log("==========================rename result=" . $result);
+//        error_log("==========================rename result=" . $result);
         if ($result === false) {
             throw new Exception("rename table:$this->table to $tempTableName error");
         }
@@ -233,7 +233,7 @@ class SiteUserCustomTable extends BaseTable
                 $columns[] = $alterColumnName;
             }
 
-            error_log("==========================unset columns=" . var_export($columns, true));
+//            error_log("==========================unset columns=" . var_export($columns, true));
 
             if (!$this->createSqliteTable($this->table, $columns)) {
                 throw new Exception("rebuild sqlite table=" . $this->table . " error");
@@ -245,10 +245,10 @@ class SiteUserCustomTable extends BaseTable
             $queryColumnString = implode(",", $columns);//migrate data to new table
             $sql = "insert into $this->table($queryColumnString) select $queryColumnString from $tempTableName";
 
-            error_log("=========prepare sql= " . $sql);
+//            error_log("=========prepare sql= " . $sql);
             $prepare = false;//reset prepare
             $prepare = $this->ctx->db->prepare($sql);
-            error_log("=========prepare errorInfo= " . var_export($prepare->errorInfo(), true));
+//            error_log("=========prepare errorInfo= " . var_export($prepare->errorInfo(), true));
             $flag = $prepare->execute();
             $errCode = $prepare->errorCode();
             if ($flag && $errCode == "00000") {
@@ -280,7 +280,7 @@ class SiteUserCustomTable extends BaseTable
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         $columns = $this->ctx->SiteCustomTable->queryCustomKeys($this->customKeyType, false, false, $tag);
-        $this->logger->error("==============", "all custom keys for user=" . var_export($columns, true));
+//        $this->logger->error("==============", "all custom keys for user=" . var_export($columns, true));
         return $columns;
     }
 
@@ -288,7 +288,7 @@ class SiteUserCustomTable extends BaseTable
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         $columns = $this->ctx->SiteCustomTable->queryCustomKeys($this->customKeyType, false, true, $tag);
-        $this->logger->error("==============", "custom keys for user open=" . var_export($columns, true));
+//        $this->logger->error("==============", "custom keys for user open=" . var_export($columns, true));
         return $columns;
     }
 
@@ -303,7 +303,7 @@ class SiteUserCustomTable extends BaseTable
         $columnInfos = $this->getAllColumnInfos();
         $columnNames = array_column($columnInfos, "keyName", "customKey");
 
-        error_log("==========get column Names=" . var_export($columnNames, true));
+//        error_log("==========get column Names=" . var_export($columnNames, true));
         return $columnNames;
     }
 

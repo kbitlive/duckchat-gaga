@@ -106,7 +106,6 @@ class Api_User_UpdateController extends BaseController
             if (empty($customData)) {
                 return false;
             }
-            error_log("========update user custom=" . var_export($customData, true));
             $where = [
                 "userId" => $userId,
             ];
