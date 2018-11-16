@@ -159,6 +159,23 @@
 
             <div class="item-row">
                 <div class="item-body">
+                    <div class="item-body-display custom-key-open">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">是否公开显示</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Public Display</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <input id="custom-key-open-switch" class="weui_switch" type="checkbox" checked>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+            <div class="item-row">
+                <div class="item-body">
                     <div class="item-body-display custom-key-status">
                         <?php if ($lang == "1") { ?>
                             <div class="item-body-desc">是否注册时填写</div>
@@ -195,23 +212,6 @@
 
             <div class="item-row">
                 <div class="item-body">
-                    <div class="item-body-display custom-key-open">
-                        <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">是否公开显示</div>
-                        <?php } else { ?>
-                            <div class="item-body-desc">Public Display</div>
-                        <?php } ?>
-
-                        <div class="item-body-tail">
-                            <input id="custom-key-open-switch" class="weui_switch" type="checkbox" checked>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="division-line"></div>
-
-            <div class="item-row">
-                <div class="item-body">
                     <div class="item-body-display custom-key-constraint">
                         <?php if ($lang == "1") { ?>
                             <div class="item-body-desc">是否创建搜索索引</div>
@@ -220,7 +220,7 @@
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <input id="custom-key-constraint-switch" class="weui_switch" type="checkbox" checked>
+                            <input id="custom-key-constraint-switch" class="weui_switch" type="checkbox">
                         </div>
                     </div>
                 </div>
