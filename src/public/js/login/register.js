@@ -7,6 +7,57 @@ $(document).on("click", ".register_button", function () {
 });
 
 
+function loginNameNotExist()
+{
+
+    var action = "api.passport.passwordReg";
+    var reqData = {
+        loginName:registerLoginName,
+        password:registerPassword,
+        email:registerEmail,
+        invitationCode:invitationCode,
+    }
+    handleClientSendRequest(action, reqData, handlePassportPasswordReg);
+}
+
+function loginNameExist()
+{
+    hideLoading();
+    alert("用户名已经在站点被注册");
+}
+
+function loginFailed(result)
+{
+    hideLoading();
+    if(result.hasOwnProperty('errorInfo')) {
+        alert(result.errorInfo);
+    } else {
+        if(result != undefined && result !='') {
+            alert(result);
+        }
+    }
+    if(isRegister == true && enableInvitationCode == 1) {
+        $(".register_button").attr("is_type", updateInvitationCodeType);
+    }
+}
+
+///更新邀请码，并且登录site
+function failedCallBack(result) {
+    try{
+        hideLoading();
+        if(result.hasOwnProperty("errorInfo")) {
+            alert(result.errorInfo);
+        }else {
+            if(result != undefined && result !='') {
+                alert(result);
+            }
+        }
+        $(".register_button").attr("is_type", updateInvitationCodeType);
+    }catch (error){
+        $(".register_button").attr("is_type", updateInvitationCodeType);
+    }
+}
+
 
 function registerAndLogin()
 {
@@ -149,18 +200,12 @@ function checkRegisterInfo()
     return true;
 }
 
-function loginNameExist()
-{
-    hideLoading();
-    alert("用户名已经在站点被注册");
-}
-
 function handlePassportPasswordReg(results)
 {
     isRegister = true;
     preSessionId = results.preSessionId;
     cancelLoadingBySelf();
-    zalyjsLoginSuccess(registerLoginName, preSessionId, isRegister,registerCustom,  loginFailed);
+    zalyjsLoginSuccess(registerLoginName, preSessionId, isRegister, registerCustom,  loginFailed);
 }
 
 
@@ -185,19 +230,3 @@ function handlePassportPasswordUpdateInvationCode(results)
     zalyjsLoginSuccess(registerLoginName, preSessionId, isRegister, registerCustom, failedCallBack);
 }
 
-///更新邀请码，并且登录site
-function failedCallBack(result) {
-    try{
-        hideLoading();
-        if(result.hasOwnProperty("errorInfo")) {
-            alert(result.errorInfo);
-        }else {
-            if(result != undefined && result !='') {
-                alert(result);
-            }
-        }
-        $(".register_button").attr("is_type", updateInvitationCodeType);
-    }catch (error){
-        $(".register_button").attr("is_type", updateInvitationCodeType);
-    }
-}

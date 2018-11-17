@@ -32,6 +32,24 @@ function getUrlParam(key) {
     return false;
 }
 
+try{
+    //IE not defined
+    if ( 'name' in Function.prototype === false ) {
+        Object.defineProperty(Function.prototype, 'name', {
+            get: function() {
+                var name = (this.toString().match(/^function\s*([^\s(]+)/) || [])[1];
+                // For better performance only parse once, and then cache the
+                // result through a new accessor for repeated access.
+                Object.defineProperty(this, 'name', { value: name });
+                return name;
+            }
+        });
+    }
+}catch (error) {
+
+}
+
+
 var redirectUrl = getUrlParam("redirect_url");
 if (redirectUrl) {
     localStorage.setItem(refererUrlKey, redirectUrl);
@@ -185,7 +203,6 @@ function zalyjsOpenNewPage(url) {
 
 //-public
 function zalyjsLoginSuccess(loginName, sessionid, isRegister, userCustoms, callback) {
-
     var callbackId = zalyjsCallbackHelper.register(callback)
     var thirdLoginName = localStorage.getItem(thirdLoginNameKey);
     if (thirdLoginName == null || thirdLoginName == undefined) {
@@ -217,7 +234,6 @@ function loginPcClient(messageBody, callback) {
     var refererUrl = localStorage.getItem(refererUrlKey);
     zalyjsSiteLoginMessageBody = messageBody;
     zalyjsSiteLoginMessageBody.callback = callback;
-
     if (!refererUrl) {
         refererUrl = "./index.php";
     }
@@ -313,9 +329,13 @@ function zalyjsApiSiteLogin() {
     http.send(transportDataJson);
 }
 
-
 //// -private web 检查用户是否已经被注册
 function zalyjsWebCheckUserExists(failedCallback, successCallback) {
+
+
+
+
+
     var refererUrl = localStorage.getItem(refererUrlKey);
     if (!refererUrl) {
         refererUrl = "./index.php";

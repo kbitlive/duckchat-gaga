@@ -82,22 +82,22 @@
                                             </div>
 
                                             <div class=" d-flex flex-row justify-content-left login_name_div" >
-                                                <image src="./public/img/login/loginName.png" class="img"/>
+                                                <img src="./public/img/login/loginName.png" class="img"/>
                                                 <?php if ($loginNameAlias):?>
                                                     <input type="text" class="input_login_site  login_input_loginName" datatype="s" autocapitalize="off"  placeholder=" <?php echo  $loginNameAlias;?>" >
                                                 <?php else:?>
                                                     <input type="text" class="input_login_site  login_input_loginName" datatype="s" autocapitalize="off"  data-local-placeholder="loginNamePlaceholder" placeholder="输入用户名" >
                                                 <?php endif;?>
 
-                                                <div class="clearLoginName" onclick="clearLoginName()"><image src="./public/img/msg/btn-x.png" class="clearLoginName clear_img" /></div>
+                                                <div class="clearLoginName" onclick="clearLoginName()"><img src="./public/img/msg/btn-x.png" class="clearLoginName clear_img" /></div>
                                                 <img src="./public/img/msg/msg_failed.png" class="img-failed login_input_loginName_failed">
                                             </div>
                                             <div class="line"></div>
 
                                             <div class="login_name_div margin-top2">
-                                                <image src="./public/img/login/pwd.png" class="img"/>
+                                                <img src="./public/img/login/pwd.png" class="img"/>
                                                 <input type="password" class="input_login_site phone_num  login_input_pwd" autocapitalize="off"  data-local-placeholder="enterPasswordPlaceholder"  onkeydown="loginPassportByKeyPress(event)"  placeholder="输入密码, 长度5到20个字符(无中文)" >
-                                                <div class="pwd_div" onclick="changeImgByClickPwd()"><image src="./public/img/login/hide_pwd.png" class="pwd" img_type="hide" /></div>
+                                                <div class="pwd_div" onclick="changeImgByClickPwd()"><img src="./public/img/login/hide_pwd.png" class="pwd" img_type="hide" /></div>
                                                 <img src="./public/img/msg/msg_failed.png" class="img-failed login_input_pwd_failed">
                                             </div>
                                             <div class="line"></div>
@@ -145,7 +145,7 @@
                                     <img src="../../public/img/back.png" style="margin-left: 2rem; width: 3rem;height:3rem; margin-top: 2rem;cursor: pointer;" onclick="returnRegisterDiv(); return false;"/>
                                 </div>
                                 <div class="login_input_div" >
-                                    <div class="d-flex flex-row justify-content-center login-header"style="text-align: center;margin-top: 8rem;margin-bottom: 1rem;">
+                                    <div class="d-flex flex-row justify-content-center login-header" style="text-align: center;margin-top: 8rem;margin-bottom: 1rem;">
                                         <span class="login_phone_tip_font" data-local-value="registerInvitationCodeTip" >输入邀请码</span>
                                     </div>
 
@@ -165,7 +165,7 @@
                                     <img src="../../public/img/back.png" style="margin-left: 2rem; width: 3rem;height:3rem; margin-top: 2rem;cursor: pointer;" onclick="returnLoginDiv(); return false;"/>
                                 </div>
                                 <div class="login_input_div" >
-                                    <div class="d-flex flex-row justify-content-center login-header "style="text-align: center;margin-top: 8rem;margin-bottom: 1rem;">
+                                    <div class="d-flex flex-row justify-content-center login-header" style="text-align: center;margin-top: 8rem;margin-bottom: 1rem;">
                                         <span class="login_phone_tip_font" data-local-value="registerInvitationCodeTip" >输入邀请码</span>
                                     </div>
 

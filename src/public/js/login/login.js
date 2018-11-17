@@ -37,13 +37,6 @@ $(document).on("click", ".update_code_btn", function () {
 });
 
 
-function handlePassportPasswordUpdateInvationCode(results)
-{
-    isRegister = true;
-    preSessionId = results.preSessionId;
-    cancelLoadingBySelf();
-    zalyjsLoginSuccess(loginName, preSessionId, isRegister, "", failedCallBack);
-}
 
 ///更新邀请码，并且登录site
 function failedCallBack(result) {
@@ -59,6 +52,15 @@ function failedCallBack(result) {
     }catch (error){
     }
 }
+
+function handlePassportPasswordUpdateInvationCode(results)
+{
+    isRegister = true;
+    preSessionId = results.preSessionId;
+    cancelLoadingBySelf();
+    zalyjsLoginSuccess(loginName, preSessionId, isRegister, "", failedCallBack);
+}
+
 
 $(document).on("click", ".reset_pwd_button", function () {
     var action = "api.passport.passwordResetPassword";
@@ -222,6 +224,24 @@ function apiPassportPasswordLogin(callback)
     };
     handleClientSendRequest(action, reqData, callback);
 }
+
+
+function loginFailed(result)
+{
+    hideLoading();
+    if(result.hasOwnProperty('errorInfo')) {
+        alert(result.errorInfo);
+    } else {
+        if(result != undefined && result !='') {
+            alert(result);
+        }
+    }
+    if(isRegister == true && enableInvitationCode == 1) {
+        $(".register_button").attr("is_type", updateInvitationCodeType);
+    }
+}
+
+
 
 
 function displayInvitationCode()

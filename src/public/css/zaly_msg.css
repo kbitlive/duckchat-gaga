@@ -48,6 +48,14 @@ html, body{
 
 /**:focus {outline: none;}*/
 
+::-webkit-input-placeholder,
+::-moz-placeholder ,
+:-ms-input-placeholder,
+:-moz-placeholder {
+    color:rgba(153,153,153,1);
+}
+
+
 
 /* Basic Layout**/
 .wrapper {

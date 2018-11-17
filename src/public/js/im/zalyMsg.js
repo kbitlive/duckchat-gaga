@@ -1531,3 +1531,4 @@ function updateUserAvatar(fileName)
     values.push(value);
     updateUserInfo(values);
 }
+

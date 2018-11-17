@@ -477,7 +477,7 @@
         <div class="edit_self_custom siteSelfInfo" onclick="editSelfCustom('edit')" data-local-value="editTip" type="edit">编辑</div>
 
         <div id="selfAvatarUploadDiv" class="d-flex flex-row justify-content-center siteSelfInfo" style="margin-top: 3rem; text-align: center;position: relative" >
-            <img id="user-image-upload" class="user-image-upload info-avatar-{{userId}} siteSelfInfo" src="../../public/img/msg/default_user.png" style="width: 5rem; height: 5rem;" onclick="uploadFile('file2', 'user_avatar')" />
+            <img id="user-image-upload" class="user-image-upload info-avatar-{{userId}} siteSelfInfo" src="{{avatar}}" onerror="src='./public/img/msg/default_user.png'"  style="width: 5rem; height: 5rem;" onclick="uploadFile('file2', 'user_avatar')" />
         </div>
         <div class="d-flex flex-row justify-content-center selfNickNameDiv"  >
             <div style="margin-left: 1rem;" class="siteSelfInfo nickname_{{userId}}">{{nickname}}</div>
@@ -505,16 +505,16 @@
     <div id="selfCutsomInfoDiv" class="selfInfoDiv siteSelfInfo" >
         <div class="edit_self_custom siteSelfInfo" onclick="editSelfCustom('finish')" data-local-value="finishTip" type="finsh">{{finishTip}}</div>
         <div id="selfAvatarUploadDiv" class="d-flex flex-row justify-content-center siteSelfInfo" style="margin-top: 3rem; text-align: center;position: relative" >
-                        <img id="user-image-upload" class="user-image-upload info-avatar-{{userId}} siteSelfInfo" src="../../public/img/msg/default_user.png" style="width: 5rem; height: 5rem;" onclick="uploadFile('file2', 'user_avatar')" />
-                        <img id="user-img-carmera" class="user-img-carmera siteSelfInfo" src="../../public/img/camera.png" style="width: 5rem; height: 5rem; position: absolute;
+                        <img id="user-image-upload" class="user-image-upload info-avatar-{{userId}} siteSelfInfo" src="{{avatar}}" onerror="src='./public/img/msg/default_user.png'"  style="width: 5rem; height: 5rem;" onclick="uploadFile('file2', 'user_avatar')" />
+                        <img id="user-img-carmera" class="user-img-carmera siteSelfInfo" src="./public/img/camera.png" style="width: 5rem; height: 5rem; position: absolute;
                                  margin-left: -5rem;" onclick="uploadFile('file2', 'user_avatar')" />
                         <input type="file" id="file2" style="display:none" onchange="uploadUserImgFromInput(this)" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg">
         </div>
         <div class="d-flex flex-row justify-content-center selfNickNameDiv editSelfNickNameDiv siteSelfInfo"  >
             {{if !nickname }}
-            <div style="margin-left: 1rem;" class="nickNameDiv siteSelfInfo "> <img src="../../public/img/edit.png" class="siteSelfInfo" style="width: 1rem;height:1rem"/></div>
+            <div style="margin-left: 1rem;" class="nickNameDiv siteSelfInfo "> <img src="./public/img/edit.png" class="siteSelfInfo" style="width: 1rem;height:1rem"/></div>
             {{else}}
-                        <div style="margin-left: 1rem;" class="nickNameDiv siteSelfInfo">{{nickname}} <img src="../../public/img/edit.png" style="width: 1rem;height:1rem"/></div>
+                        <div style="margin-left: 1rem;" class="nickNameDiv siteSelfInfo">{{nickname}} <img src="./public/img/edit.png" style="width: 1rem;height:1rem"/></div>
             {{/if}}
         </div>
 

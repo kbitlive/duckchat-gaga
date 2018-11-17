@@ -3495,28 +3495,28 @@ function handleGetUserProfile(result)
     var isMaster = isJudgeSiteMasters(token);
     var html = template("tpl-self-info", {
         userId:token,
+        avatar:getNotMsgImgUrl(avatar),
         nickname:profile['public'].nickname,
         loginName:loginName,
         isMaster:isMaster,
         customs:customs,
         finishTip:finishTip
     });
-    try{
-        hideLoading();
-    }catch (error){
-    }
+    // try{
+    //     hideLoading();
+    // }catch (error){
+    // }
     html = handleHtmlLanguage(html);
     $(".wrapper").append(html);
-    getNotMsgImg(token, avatar);
 }
 
 ////展示个人消息
 function displaySelfInfo()
 {
-    try{
-        showMiniLoading($(".l-sb-item-selfInfo"));
-    }catch (error){
-    }
+    // try{
+    //     showMiniLoading($(".l-sb-item-selfInfo"));
+    // }catch (error){
+    // }
     var action = "api.user.profile"
     handleClientSendRequest(action, {}, handleGetUserProfile);
 }
@@ -3618,6 +3618,7 @@ function handleUpdateUserInfo(results)
 
         $(".nickname_"+public['userId']).html(nicknameHtml);
         $(".editSelfNickNameDiv").html(html);
+        getNotMsgImg(token, avatar);
     }
 }
 
