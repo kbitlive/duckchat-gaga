@@ -171,6 +171,49 @@ class siteU2MessageTable extends BaseTable
 
 
     /**
+     * @param $msgIdArrays
+     * @return array
+     * @throws Exception
+     */
+    public function queryColumnMsgIdByMsgId($msgIdArrays)
+    {
+        $tag = __CLASS__ . "." . __FUNCTION__;
+        $startTime = $this->getCurrentTimeMills();
+
+        $result = empty($msgIdArrays);
+
+        if ($result) {
+            return [];
+        }
+
+        $sql = "select msgId from $this->table ";
+
+        try {
+            $sql .= "where msgId in ('";
+            for ($i = 0; $i < count($msgIdArrays); $i++) {
+                if ($i == 0) {
+                    $sql .= $msgIdArrays[$i];
+                } else {
+                    $sql .= "','" + $msgIdArrays[$i];
+                }
+            }
+            $sql .= "') limit 100;";
+
+            $prepare = $this->db->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+
+            $prepare->execute();
+
+            return $prepare->fetchAll(\PDO::FETCH_COLUMN);
+        } finally {
+            $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, $msgIdArrays, $startTime);
+        }
+
+        return [];
+    }
+
+
+    /**
      * @param $userId
      * @param $deviceId
      * @param $clientSideType
