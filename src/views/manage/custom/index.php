@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?php if ($lang == "1") { ?>自定义设置<?php } else { ?>Custom Settings<?php } ?></title>
+    <title><?php if ($lang == "1") { ?>自定义配置<?php } else { ?>Custom Settings<?php } ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="stylesheet" href="../../public/jquery/weui.min.css"/>

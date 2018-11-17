@@ -4,11 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?php if ($lang == 1) {
-            echo "注册设置";
-        } else {
-            echo "Register Settings";
-        } ?></title>
+    <title><?php if ($lang == "1") { ?>注册配置<?php } else { ?>Register Settings<?php } ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
