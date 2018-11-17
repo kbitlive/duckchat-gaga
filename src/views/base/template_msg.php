@@ -519,7 +519,7 @@
         </div>
 
         <div class="d-flex flex-row justify-content-center selfNickNameDiv siteSelfInfo"  >
-            <input type="text"    style="padding: 0rem;" class="loginName create_group_box_div_input siteSelfInfo"  value="ID: {{loginName}}" disabled>
+            <input type="text" style="padding: 0rem;" class="loginName create_group_box_div_input siteSelfInfo"  value="ID: {{loginName}}" disabled>
         </div>
         {{if isMaster}}
         <div class="d-flex flex-row siteSelfInfo" style="display: flex;justify-content: center;align-items: center;text-align: center;margin-bottom: 0.5rem;" >

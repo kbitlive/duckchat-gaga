@@ -55,10 +55,11 @@
 
         <div class="left-body">
             <div class="search_group_friend">
-                <img src="<?php echo $siteAddress?>/public/img/msg/search_icon.png">
-                <input type="text" onkeydown="searchGroupAndFriendByKeyDown(event)" class="search_for_group_friend">
-                <img src="<?php echo $siteAddress?>/public/img/msg/btn-x.png" style="left:24rem;" onclick="deleteSearchInfo()">
-
+                <div style="width: 90%;">
+                    <img src="<?php echo $siteAddress?>/public/img/msg/search_icon.png">
+                    <input type="text" onkeydown="searchGroupAndFriendByKeyDown(event)" class="search_for_group_friend">
+                    <img src="<?php echo $siteAddress?>/public/img/msg/btn-x.png" style="left:90%;top:2.2rem;" onclick="deleteSearchInfo()">
+                </div>
             </div>
             <div class="left-body-container">
 
