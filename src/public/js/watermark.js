@@ -21,7 +21,7 @@
             watermark_rows:0,//水印行数
             watermark_cols:0,//水印列数
             watermark_x_space:30,//水印x轴间隔
-            watermark_y_space:40,//水印y轴间隔
+            watermark_y_space:30,//水印y轴间隔
             watermark_font:'微软雅黑',//水印字体
             watermark_color:'black',//水印字体颜色
             watermark_fontsize:'14px',//水印字体大小

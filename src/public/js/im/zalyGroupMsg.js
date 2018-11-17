@@ -3238,16 +3238,17 @@ function handleFriendMoreInfo(result) {
     if (profile != undefined && profile["profile"]) {
         try {
             if (profile.hasOwnProperty("custom")) {
-                customs = profile['custom'];
+                var customs = profile['custom'];
                 var html = template("tpl-friend-profile-more-info", {
                     customs: customs
                 });
                 html = handleHtmlLanguage(html);
                 $("#more-info").html(html);
+
                 showWindow($("#more-info"));
+                $(".friend_more_info")[0].style.height =  ($("#more-info")[0].clientHeight -  $(".more-info-title")[0].style.clientHeight)+"px";
             }
         } catch (error) {
-
         }
     }
 }
@@ -4051,7 +4052,9 @@ function displayWaterMark()
         var chatSessionId = localStorage.getItem(chatSessionIdKey);
        if(config.hasOwnProperty("openWaterMark") && config['openWaterMark']) {
            var time   = Date.parse(new Date());
-           var params =  loginName +" "+chatSessionId+" "+time;
+           //前10位
+           var suffixToken = token.substr(0, 10);
+           var params =  suffixToken +" "+chatSessionId+" "+time;
            var data = { watermark_txt:params }
            try{
                $("#otdivid").remove();

@@ -938,7 +938,7 @@
 
 <script type="text/html" id="tpl-friend-profile-more-info">
     <div class="more-info-title" data-local-value="moreInfoTip">更多资料</div>
-    <div style="height:100%;overflow-y: scroll;">
+    <div style="overflow-y: scroll;" class="friend_more_info">
         {{each customs custom}}
         <div class="custom_info">
             <div class="custom_name">{{custom['customName']}}</div>
