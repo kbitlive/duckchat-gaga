@@ -144,12 +144,12 @@
         <div class="initHeader" style="margin-top: 0rem;">
             数据初始化
         </div>
-        <div class="initHeader-setting">
-            请选择登录方式：
-            <select id="verifyPluginId">
-                <option class="selectOption" pluginId="102">本地账户密码校验</option>
-            </select>
-        </div>
+<!--        <div class="initHeader-setting">-->
+<!--            请选择登录方式：-->
+<!--            <select id="verifyPluginId">-->
+<!--                <option class="selectOption" pluginId="102">本地账户密码校验</option>-->
+<!--            </select>-->
+<!--        </div>-->
 
         <div class="initHeader-setting">
             安装程序支持的配置

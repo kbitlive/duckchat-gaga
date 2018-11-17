@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?php echo $title ?></title>
+    <title><?php if ($lang == "1") { ?>用户资料配置<?php } else { ?>User Profile Settings<?php } ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 

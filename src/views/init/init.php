@@ -346,8 +346,8 @@
             return false;
         }
 
-        var selector = document.getElementById('verifyPluginId');
-        var pluginId = $(selector[selector.selectedIndex]).attr("pluginId");
+        // var selector = document.getElementById('verifyPluginId');
+        // var pluginId = $(selector[selector.selectedIndex]).attr("pluginId");
         if (dbType == "") {
             alert("请选择数据库类型");
             return;
@@ -419,7 +419,7 @@
             showLoading($(".container"));
 
             var data = {
-                pluginId: pluginId,
+                // pluginId: pluginId,
                 dbHost: dbHost,
                 dbPort: dbPort,
                 dbUserName: dbUserName,

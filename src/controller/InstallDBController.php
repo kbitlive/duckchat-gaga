@@ -86,7 +86,7 @@ class InstallDBController
                 $scheme = isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : "http";
 
                 $siteAddress = $scheme . "://" . $serverHost;
-                $loginPluginId = $_POST['pluginId'];
+                $loginPluginId = 102;
 
                 if (isset($dbType) && "mysql" == $dbType) {
                     $config['dbType'] = "mysql";
@@ -552,7 +552,7 @@ class InstallDBController
                 "keyConstraint" => "",
                 "isRequired" => 0,
                 "isOpen" => 1,
-                "status" => Zaly\Proto\Core\UserCustomStatus::UserCustomRegisterRequired,
+                "status" => Zaly\Proto\Core\UserCustomStatus::UserCustomNormal,
 //                "dataType" => "",
                 "dataVerify" => "",
                 "addTime" => ZalyHelper::getMsectime(),
@@ -566,7 +566,7 @@ class InstallDBController
                 "keyConstraint" => "",
                 "isRequired" => 0,
                 "isOpen" => 1,
-                "status" => Zaly\Proto\Core\UserCustomStatus::UserCustomRegisterRequired,
+                "status" => Zaly\Proto\Core\UserCustomStatus::UserCustomNormal,
 //                "dataType" => "",
                 "dataVerify" => "",
                 "addTime" => ZalyHelper::getMsectime(),

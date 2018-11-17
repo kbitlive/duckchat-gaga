@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?php echo $title ?></title>
+    <title><?php if ($lang == "1") { ?>用户资料字段<?php } else { ?> User Profile Column<?php } ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="stylesheet" href="../../public/jquery/weui.min.css"/>
