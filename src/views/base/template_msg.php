@@ -471,12 +471,12 @@
 
 
 <script id="tpl-self-info" type="text/html">
-<div id="selfInfo" style="z-index: 10001;">
+<div id="selfInfo" class="siteSelfInfo" style="z-index: 10001;">
     <div id="triangle_left"></div>
     <div id="selfInfoDiv" class="selfInfoDiv siteSelfInfo" style="position: absolute;width: 100%;">
         <div class="edit_self_custom siteSelfInfo" onclick="editSelfCustom('edit')" data-local-value="editTip" type="edit">编辑</div>
 
-        <div id="selfAvatarUploadDiv" class="d-flex flex-row justify-content-center" style="margin-top: 3rem; text-align: center;position: relative" >
+        <div id="selfAvatarUploadDiv" class="d-flex flex-row justify-content-center siteSelfInfo" style="margin-top: 3rem; text-align: center;position: relative" >
             <img id="user-image-upload" class="user-image-upload info-avatar-{{userId}} siteSelfInfo" src="../../public/img/msg/default_user.png" style="width: 5rem; height: 5rem;" onclick="uploadFile('file2', 'user_avatar')" />
         </div>
         <div class="d-flex flex-row justify-content-center selfNickNameDiv"  >
@@ -504,13 +504,13 @@
     </div>
     <div id="selfCutsomInfoDiv" class="selfInfoDiv siteSelfInfo" style="position: absolute;width: 100%; display: none">
         <div class="edit_self_custom siteSelfInfo" onclick="editSelfCustom('finish')" data-local-value="finishTip" type="finsh">{{finishTip}}</div>
-        <div id="selfAvatarUploadDiv" class="d-flex flex-row justify-content-center" style="margin-top: 3rem; text-align: center;position: relative" >
+        <div id="selfAvatarUploadDiv" class="d-flex flex-row justify-content-center siteSelfInfo" style="margin-top: 3rem; text-align: center;position: relative" >
                         <img id="user-image-upload" class="user-image-upload info-avatar-{{userId}} siteSelfInfo" src="../../public/img/msg/default_user.png" style="width: 5rem; height: 5rem;" onclick="uploadFile('file2', 'user_avatar')" />
                         <img id="user-img-carmera" class="user-img-carmera siteSelfInfo" src="../../public/img/camera.png" style="width: 5rem; height: 5rem; position: absolute;
                                  margin-left: -5rem;" onclick="uploadFile('file2', 'user_avatar')" />
                         <input type="file" id="file2" style="display:none" onchange="uploadUserImgFromInput(this)" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg">
         </div>
-        <div class="d-flex flex-row justify-content-center selfNickNameDiv editSelfNickNameDiv"  >
+        <div class="d-flex flex-row justify-content-center selfNickNameDiv editSelfNickNameDiv siteSelfInfo"  >
             {{if !nickname }}
             <div style="margin-left: 1rem;" class="nickNameDiv siteSelfInfo "> <img src="../../public/img/edit.png" class="siteSelfInfo" style="width: 1rem;height:1rem"/></div>
             {{else}}
@@ -530,10 +530,10 @@
         {{/if}}
         <div style="text-align: center;margin:0.12rem auto;width: 34rem; height:1px;background:rgba(223,223,223,1);" ></div>
 
-        <div style="width: 100%;margin-bottom: 3rem;">
+        <div style="width: 100%;margin-bottom: 3rem;siteSelfInfo">
             {{each customs custom}}
             <div class="siteSelfInfo self_custom_info">
-                <div class="custom_name_tip">{{custom['customName']}}</div> <input type="text" value="{{custom['customValue']}}" onkeydown="updateUserCustomInfo(event, this)" class="edit_custom_info customs self_custom_edit_{{custom['customKey']}} siteSelfInfo" customName = "{{custom['customName']}}" customKey="{{custom['customKey']}}" >
+                <div class="custom_name_tip siteSelfInfo">{{custom['customName']}}</div> <input type="text" value="{{custom['customValue']}}" onkeydown="updateUserCustomInfo(event, this)" class="siteSelfInfo edit_custom_info customs self_custom_edit_{{custom['customKey']}} siteSelfInfo" customName = "{{custom['customName']}}" customKey="{{custom['customKey']}}" >
             </div>
             {{/each}}
         </div>

@@ -2003,10 +2003,11 @@ button:active{
 .plugin-iframe {
     height: 100%;
     width: 100%;
-    overflow: scroll;
+    overflow: hidden;
     outline: none;
     border: none;
 }
+
 .open_new_page, .close_plugin,.chat_plugin {
     cursor: pointer;
 }
@@ -2130,7 +2131,6 @@ button:active{
     line-height: 2rem;
     display: flex;
     justify-content: space-between;
-    margin-right: 10rem;
 }
 .custom_name_tip {
     height: 2.5rem;
@@ -2147,6 +2147,7 @@ button:active{
     outline: none;
     cursor: pointer;
     border:1px solid #E5E5E5;
+    margin-right: 10rem;
 }
 
 .edit_self_custom {
