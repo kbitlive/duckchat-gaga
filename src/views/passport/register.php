@@ -80,7 +80,7 @@
                             </div>
 
                             <div class="d-flex flex-row justify-content-left login_name_div margin-top2 login_name_div_mobile" >
-                                <image src="./public/img/login/loginName.png" class="img"/>
+                                <img src="./public/img/login/loginName.png" class="img"/>
 
                                 <?php if ($loginNameAlias):?>
                                     <input type="text" id="register_input_loginName"  datatype="s"  class="input_login_site  register_input_loginName"   autocapitalize="off"   placeholder=" <?php echo $loginNameAlias; ?>" >
@@ -95,9 +95,9 @@
 
 
                             <div class="login_name_div" style="margin-top: 1rem;">
-                                <image src="./public/img/login/pwd.png" class="img"/>
+                                <img src="./public/img/login/pwd.png" class="img"/>
                                 <input type="password" class="input_login_site register_input_pwd" autocapitalize="off"   id="register_input_pwd" data-local-placeholder="enterPasswordPlaceholder"  placeholder="输入密码"  >
-                                <div class="pwd_div" onclick="changeImgByClickPwd()"><image src="../../public/img/login/hide_pwd.png" class="pwd" img_type="hide"/></div>
+                                <div class="pwd_div" onclick="changeImgByClickPwd()"><img src="../../public/img/login/hide_pwd.png" class="pwd" img_type="hide"/></div>
                                 <span class="img-required register_input_pwd_required" >*</span>
                                 <img src="./public/img/msg/msg_failed.png" class="img-failed register_input_pwd_failed">
                             </div>
@@ -107,9 +107,9 @@
 
 
                             <div class="login_name_div" style="margin-top: 1rem;">
-                                <image src="./public/img/login/pwd.png" class="img"/>
+                                <img src="./public/img/login/pwd.png" class="img"/>
                                 <input type="password" class="input_login_site register_input_repwd" autocapitalize="off"   id="register_input_repwd" data-local-placeholder="enterRepasswordPlaceholder"  placeholder="再次输入密码"  >
-                                <div class="repwd_div" onclick="changeImgByClickRepwd()"><image src="../../public/img/login/hide_pwd.png" class="repwd" img_type="hide"/></div>
+                                <div class="repwd_div" onclick="changeImgByClickRepwd()"><img src="../../public/img/login/hide_pwd.png" class="repwd" img_type="hide"/></div>
                                 <span class="img-required register_input_repwd_required" >*</span>
                                 <img src="./public/img/msg/msg_failed.png" class="img-failed register_input_repwd_failed">
                             </div>
@@ -118,7 +118,7 @@
                             <?php if(count($registerCustoms)) : ?>
                                 <?php foreach ($registerCustoms as $registerCustom): ?>
                                     <div class="login_name_div" style="margin-top: 1rem;">
-                                            <image src="./index.php?action=http.file.downloadFile&fileId=<?php echo  $registerCustom['keyIcon'];?>&returnBase64=0" class="img" onerror="src='./public/img/login/custom_default.png'"/>
+                                            <img src="./index.php?action=http.file.downloadFile&fileId=<?php echo  $registerCustom['keyIcon'];?>&returnBase64=0" class="img" onerror="src='./public/img/login/custom_default.png'"/>
                                             <input type="text" class="input_login_site register_input_<?php echo $registerCustom['customKey'];?> register_custom" autocapitalize="off" isRequired="<?php echo $registerCustom['isRequired'];?>" customKey = "<?php echo $registerCustom['customKey'];?>" id="register_input_<?php echo $registerCustom['customKey'];?>" customName="<?php echo $registerCustom['keyName'];?>" placeholder="<?php echo $registerCustom['keyName'];?>" >
                                         <?php if($registerCustom['isRequired']):?>
                                             <span class="img-required register_input_<?php echo $registerCustom['customKey'];?>_required" >*</span>

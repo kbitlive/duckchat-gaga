@@ -48,6 +48,14 @@ html, body{
 
 /**:focus {outline: none;}*/
 
+::-webkit-input-placeholder,
+::-moz-placeholder ,
+:-ms-input-placeholder,
+:-moz-placeholder {
+    color:rgba(153,153,153,1);
+}
+
+
 
 /* Basic Layout**/
 .wrapper {
@@ -2102,7 +2110,7 @@ button:active{
     cursor: pointer;
 }
 .search_group_friend input{
-    width:26.27rem;
+    width:90%;
     height:2.81rem;
     background:rgba(244,244,246,1);
     border-radius:0.19rem;

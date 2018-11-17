@@ -72,20 +72,7 @@ if(isPhoneFlag == false) {
 enableInvitationCode = $(".enableInvitationCode").val();
 enableRealName=$(".enableRealName").val();
 
-function loginFailed(result)
-{
-    hideLoading();
-    if(result.hasOwnProperty('errorInfo')) {
-        alert(result.errorInfo);
-    } else {
-        if(result != undefined && result !='') {
-            alert(result);
-        }
-    }
-    if(isRegister == true && enableInvitationCode == 1) {
-        $(".register_button").attr("is_type", updateInvitationCodeType);
-    }
-}
+
 
 getOsType();
 
@@ -279,21 +266,6 @@ function checkIsEnterBack(event)
     }
     return true;
 }
-
-
-function loginNameNotExist()
-{
-
-    var action = "api.passport.passwordReg";
-    var reqData = {
-        loginName:registerLoginName,
-        password:registerPassword,
-        email:registerEmail,
-        invitationCode:invitationCode,
-    }
-    handleClientSendRequest(action, reqData, handlePassportPasswordReg);
-}
-
 
 
 function updatePassportPasswordInvitationCode(results)

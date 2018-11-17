@@ -419,7 +419,6 @@
             showLoading($(".container"));
 
             var data = {
-                // pluginId: pluginId,
                 dbHost: dbHost,
                 dbPort: dbPort,
                 dbUserName: dbUserName,
@@ -446,7 +445,6 @@
         var selector = document.getElementById('sqlite-file');
         sqliteFileName = $(selector[selector.selectedIndex]).attr("fileName");
         var data = {
-            pluginId: pluginId,
             dbType: dbType,
             sqliteDbFile: sqliteFileName,
             adminLoginName:adminName,
