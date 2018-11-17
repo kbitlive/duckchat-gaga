@@ -502,7 +502,7 @@
             </div>
         </div>
     </div>
-    <div id="selfCutsomInfoDiv" class="selfInfoDiv siteSelfInfo" style="position: absolute;width: 100%; display: none">
+    <div id="selfCutsomInfoDiv" class="selfInfoDiv siteSelfInfo" >
         <div class="edit_self_custom siteSelfInfo" onclick="editSelfCustom('finish')" data-local-value="finishTip" type="finsh">{{finishTip}}</div>
         <div id="selfAvatarUploadDiv" class="d-flex flex-row justify-content-center siteSelfInfo" style="margin-top: 3rem; text-align: center;position: relative" >
                         <img id="user-image-upload" class="user-image-upload info-avatar-{{userId}} siteSelfInfo" src="../../public/img/msg/default_user.png" style="width: 5rem; height: 5rem;" onclick="uploadFile('file2', 'user_avatar')" />

@@ -884,6 +884,7 @@ html, body{
 
 #selfInfo {
     width:38.37rem;
+    min-width: 38rem;
     height:auto;
     min-height: 20rem;
     background:rgba(255,255,255,1);
@@ -893,8 +894,15 @@ html, body{
     position: absolute;
     top:2rem;
     left:8rem;
-    overflow-y: scroll;
 }
+
+#selfCutsomInfoDiv {
+    overflow-y: scroll;
+    position: absolute;
+    width: 100%;
+    display: none
+}
+
 .self_profile_item {
     text-align:left;
     height: 5rem;

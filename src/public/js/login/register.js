@@ -110,6 +110,8 @@ function checkRegisterInfo()
         var customKey = $(custom).attr("customKey");
         var value = $(custom).val();
         if(Number(isRequired) == 1) {
+            console.log(".register_input_"+customKey+"_required");
+
             if(trimString(value)<1) {
                 $(".register_input_"+customKey+"_failed")[0].style.display = "block";
                 $(".register_input_"+customKey+"_required")[0].style.display = "none";
