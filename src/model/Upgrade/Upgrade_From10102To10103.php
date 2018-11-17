@@ -70,16 +70,17 @@ class Upgrade_From10102To10103 extends Upgrade_Version
             ],
         ];
 
-        $result = true;
+        $result = false;
         foreach ($customs as $customArray) {
             try {
-                $result = $this->ctx->SiteCustomTable->insertUserCustomInfo($customArray) && $result;
+                //用 || 判断结果，兼容上次失败
+                $result = $this->ctx->SiteCustomTable->insertUserCustomInfo($customArray) || $result;
             } catch (Exception $e) {
                 $this->logger->error($tag, $e);
             }
         }
 
-        return true;
+        return $result;
     }
 
     private function dropSiteCustomItemTable()
