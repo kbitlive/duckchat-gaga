@@ -1890,12 +1890,14 @@ function handelGroupSpeakerList(result)
             var speakersLength = speakers.length;
             for(var i=0; i<speakersLength;i++){
                 var speakerInfo = speakers[i];
-                var html =getSpeakerMemberHtml(speakerInfo,  true, "member", isSelfAdminRole);
+                var html = getSpeakerMemberHtml(speakerInfo,  true, "member", isSelfAdminRole);
                 $(".speaker-people-div").append(html);
             }
             var openSrc = "./public/img/msg/icon_switch_on.png";
             $(".group_speakers_set").attr("src", openSrc);
             $(".group_speakers_set").attr("value", "on");
+
+
         } else {
             var closeSrc = "./public/img/msg/icon_switch_off.png";
             $(".group_speakers_set").attr("src", closeSrc);
@@ -1931,6 +1933,7 @@ $(document).on("click", ".group_speakers_set", function(){
         var speakerUserIds = new Array();
         speakerUserIds.push(token);
         updateGroupSpeaker(groupId, speakerUserIds, SetSpeakerType.AddSpeaker, handleSetSpeaker);
+
     }
 
 });
@@ -1960,15 +1963,6 @@ function initSpeakerGroupMemberList(results)
             var user = list[i].profile;
             var userId = user.userId;
             var isType = "member";
-
-            if(groupOwnerId == userId) {
-                isType = "owner";
-                continue;
-            }
-            if(groupAdminIds && groupAdminIds.indexOf(userId) != -1) {
-                isType = "admin";
-                continue;
-            }
 
             if(speakerListMemberIds && speakerListMemberIds.indexOf(userId) != -1) {
                 continue;
@@ -2050,10 +2044,13 @@ function updateGroupSpeaker(groupId, speakerUserIds, type, callback)
 function handleSetSpeaker(result)
 {
     try{
+        $(".add_speaker_btn[userId="+token+"]").click();
+
         var speakerUserIds = result.speakerUserIds;
         var speakerKey = speakerUserIdsKey+localStorage.getItem(chatSessionIdKey);
         localStorage.setItem(speakerKey, JSON.stringify(speakerUserIds));
         var groupId = localStorage.getItem(chatSessionIdKey);
+
         sendGroupProfileReq(groupId, handleGetGroupProfile);
     }catch (error) {
 
@@ -2124,7 +2121,6 @@ function handleRemoveSpeaker()
 {
 
     var delSpeakerLength=deleteSpeakerInfo.length;
-
     var groupId = localStorage.getItem(chatSessionIdKey);
     var groupProfile = getGroupProfile(groupId);
 
@@ -2141,6 +2137,8 @@ function handleRemoveSpeaker()
         var html = getSpeakerMemberHtml(speakerInfo,  false, "member", isSelfAdminRole);
         $(".speaker-group-member-div").append(html);
     }
+    $(".speaker-group-member-div")[0].style.height = $(".speaker-group-member-div")[0].scrollHeight+"px";
+
     //关闭禁言
     if($(".speaker_remove_people").length < 1) {
         var closeSrc = "./public/img/msg/icon_switch_off.png";
@@ -3510,6 +3508,14 @@ function handleGetUserProfile(result)
     $(".wrapper").append(html);
 }
 
+function getSelfInfo()
+{
+    var action = "api.user.profile"
+    handleClientSendRequest(action, {}, handleGetFriendProfile);
+}
+
+getSelfInfo();
+
 ////展示个人消息
 function displaySelfInfo()
 {
@@ -3520,6 +3526,7 @@ function displaySelfInfo()
     var action = "api.user.profile"
     handleClientSendRequest(action, {}, handleGetUserProfile);
 }
+
 
 $(document).on("click", ".sound_mute", function () {
     var type = $(this).attr("is_on");
