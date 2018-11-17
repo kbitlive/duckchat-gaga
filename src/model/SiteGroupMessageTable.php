@@ -145,15 +145,8 @@ class SiteGroupMessageTable extends BaseTable
         $sql = "select $queryFields from $this->table ";
 
         try {
-            $sql .= "where msgId in (";
-            for ($i = 0; $i < count($msgIdArrays); $i++) {
-                if ($i == 0) {
-                    $sql .= $msgIdArrays[$i];
-                } else {
-                    $sql .= "," + $msgIdArrays[$i];
-                }
-            }
-            $sql .= ");";
+            $inSql = implode("','", $msgIdArrays);
+            $sql .= "where msgId in ('$inSql') limit 100;";
 
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
@@ -182,21 +175,13 @@ class SiteGroupMessageTable extends BaseTable
         $sql = "select msgId from $this->table ";
 
         try {
-            $sql .= "where msgId in (";
-            for ($i = 0; $i < count($msgIdArrays); $i++) {
-                if ($i == 0) {
-                    $sql .= $msgIdArrays[$i];
-                } else {
-                    $sql .= "," + $msgIdArrays[$i];
-                }
-            }
-            $sql .= ");";
+            $inSql = implode("','", $msgIdArrays);
+            $sql .= "where msgId in ('$inSql') limit 50;";
 
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
 
             $prepare->execute();
-
             return $prepare->fetchAll(\PDO::FETCH_COLUMN);
         } finally {
             $this->logger->writeSqlLog($tag, $sql, "", $startTime);
@@ -236,13 +221,6 @@ class SiteGroupMessageTable extends BaseTable
             $prepare->bindValue(":deviceId", $deviceId);
 
             $result = $prepare->execute();
-
-//            if ($result) {
-//                $count = $prepare->rowCount();
-//                $this->logger->error('=============', $prepare->errorCode());
-//                $this->logger->error('=============', $prepare->errorInfo());
-//                return $count > 0;
-//            }
 
             return $this->handlerUpdateResult($result, $prepare, $tag);
         } finally {

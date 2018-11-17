@@ -631,6 +631,7 @@
                     }
                 },
                 {
+                    className: "select-color-primary",
                     text: lang == 1 ? "确定" : "confirm", className: "main-color", onClick: function () {
                         var userId = $("#user-id").attr("data");
 

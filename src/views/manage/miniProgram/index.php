@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" href="../../public/jquery/weui.min.css"/>
     <link rel="stylesheet" href="../../public/jquery/jquery-weui.min.css"/>
-
+    <link rel="stylesheet" href="../../public/manage/config.css"/>
     <style>
 
         html, body {
@@ -258,9 +258,11 @@
             cursor: pointer;
             outline: none;
         }
+
         .item-row {
             cursor: pointer;
         }
+
         .weui_switch {
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -324,6 +326,10 @@
         .weui_switch:checked:after {
             -webkit-transform: translateX(20px);
             transform: translateX(20px);
+        }
+
+        .select-color-primary {
+            color: #4C3BB1;
         }
 
     </style>
@@ -470,6 +476,7 @@
                     }
                 },
                 {
+                    className: "select-color-primary",
                     text: lang == 1 ? "确定" : "confirm", onClick: function () {
                         // alert("ok");
                         var url = "index.php?action=manage.config.update";
