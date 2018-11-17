@@ -120,7 +120,7 @@
             <div class="division-line"></div>
 
 
-            <div class="item-row" id="mini-program-icon-id">
+            <div class="item-row" id="custom-key-icon">
                 <div class="item-body">
                     <div class="item-body-display">
 
@@ -131,8 +131,7 @@
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <div class="item-body-value" id="custom-key-fileid"
-                                 fileId="<?php echo $userCustomInfo["keyIcon"]; ?>">
+                            <div class="item-body-value">
                                 <img class="site-image" id="custom-key-image" onclick="uploadImage('custom-key-logo');"
                                      fileId="<?php echo $userCustomInfo["keyIcon"]; ?>"
                                      src="../../public/img/manage/plugin_default.png">
@@ -368,6 +367,7 @@
         var newSrc = "/_api_file_download_/?fileId=" + fileId;
 
         $(".site-image").attr("src", newSrc);
+        $(".site-image").attr("fileId", fileId);
     }
 
     downloadFileUrl = "./index.php?action=http.file.downloadFile";
@@ -379,7 +379,7 @@
                 var formData = new FormData();
 
                 formData.append("file", obj.files.item(0));
-                formData.append("fileType", "FileImage");
+                formData.append("fileType", 1);
                 formData.append("isMessageAttachment", false);
 
                 var src = window.URL.createObjectURL(obj.files.item(0));
@@ -396,10 +396,6 @@
 
         var url = "./index.php?action=http.file.uploadWeb";
 
-        if (isMobile()) {
-            url = "/_api_file_upload_/?fileType=1";  //fileType=1,表示文件
-        }
-
         $.ajax({
             url: url,
             type: "post",
@@ -408,11 +404,8 @@
             processData: false,
             success: function (imageFileIdResult) {
                 if (imageFileIdResult) {
-                    var fileId = imageFileIdResult;
-                    if (isMobile()) {
-                        var res = JSON.parse(imageFileIdResult);
-                        fileId = res.fileId;
-                    }
+                    var res = JSON.parse(imageFileIdResult);
+                    var fileId = res.fileId;
                     updateServerImage(fileId);
                 } else {
                     alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");

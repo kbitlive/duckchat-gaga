@@ -97,7 +97,7 @@
             </div>
             <div class="division-line"></div>
 
-            <div class="item-row" id="mini-program-icon-id">
+            <div class="item-row" id="custom-key-icon" fileId="">
                 <div class="item-body">
                     <div class="item-body-display">
 
@@ -108,7 +108,7 @@
                         <?php } ?>
 
                         <div class="item-body-tail">
-                            <div class="item-body-value" id="custom-key-fileid">
+                            <div class="item-body-value">
                                 <img class="site-image" id="custom-key-image" onclick="uploadImage('custom-key-logo');"
                                      src="../../public/img/manage/plugin_default.png">
 
@@ -300,7 +300,8 @@
 
         var newSrc = "/_api_file_download_/?fileId=" + fileId;
 
-        $(".site-image").attr("src", newSrc);
+        $("#custom-key-image").attr("src", newSrc);
+        $("#custom-key-icon").attr("fileId", fileId);
     }
 
     downloadFileUrl = "./index.php?action=http.file.downloadFile";
@@ -312,14 +313,13 @@
                 var formData = new FormData();
 
                 formData.append("file", obj.files.item(0));
-                formData.append("fileType", "FileImage");
+                formData.append("fileType", 1);
                 formData.append("isMessageAttachment", false);
 
                 var src = window.URL.createObjectURL(obj.files.item(0));
-
                 uploadFileToServer(formData, src);
 
-                $("#mini-program-image").attr("src", src);
+                $("#custom-key-image").attr("src", src);
             }
             return obj.value;
         }
@@ -329,10 +329,6 @@
 
         var url = "./index.php?action=http.file.uploadWeb";
 
-        if (isMobile()) {
-            url = "/_api_file_upload_/?fileType=1";  //fileType=1,表示文件
-        }
-
         $.ajax({
             url: url,
             type: "post",
@@ -340,41 +336,21 @@
             contentType: false,
             processData: false,
             success: function (imageFileIdResult) {
+
                 if (imageFileIdResult) {
-                    var fileId = imageFileIdResult;
-                    if (isMobile()) {
-                        var res = JSON.parse(imageFileIdResult);
-                        fileId = res.fileId;
-                    }
-                    // updateServerImage(fileId);
+                    var res = JSON.parse(imageFileIdResult);
+                    var fileId = res.fileId;
+                    $("#custom-key-icon").attr("fileId", fileId);
                 } else {
                     alert(getLanguage() == 1 ? "上传返回结果空 " : "empty response");
                 }
+
             },
             error: function (err) {
                 alert("update image error");
                 return false;
             }
         });
-    }
-
-    function showLocalImage(fileId) {
-        var requestUrl = downloadFileUrl + "&fileId=" + fileId + "&returnBase64=0";
-        var xhttp = new XMLHttpRequest();
-        console.log("showSiteLogo imageId ==" + fileId);
-
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && (this.status == 200 || this.status == 304)) {
-                var blob = this.response;
-                var src = window.URL.createObjectURL(blob);
-                console.log("showSiteLogo imageId response src=" + src);
-                $("#mini-program-image").attr("src", src);
-            }
-        };
-        xhttp.open("GET", requestUrl, true);
-        xhttp.responseType = "blob";
-        // xhttp.setRequestHeader('Cache-Control', "max-age=2592000, public");
-        xhttp.send();
     }
 
 
@@ -437,7 +413,7 @@
     $("#addButton").click(function () {
         var customKeyName = $("#custom-key-name").find(".item-body-value").html();
         var customKeyDesc = $("#custom-key-desc").find(".item-body-value").html();
-        var customKeyIconFileId = $("#custom-key-fileid").attr("fileId");
+        var customKeyIconFileId = $("#custom-key-icon").attr("fileId");
         var customKeySort = $("#custom-key-sort").find(".item-body-value").html();
 
         var statusIsChecked = $("#custom-key-status-switch").is(':checked');
@@ -446,18 +422,6 @@
 
         var keyConstraint = $("#custom-key-constraint").is(':checked');
 
-        //"customKey",
-        //        "keyName",
-        //        "keyDesc",
-        //        "keyType",
-        //        "keySort",
-        //        "keyConstraint",
-        //        "isRequired",
-        //        "isOpen",
-        //        "status",
-        //        "dataType",
-        //        "dataVerify",
-        //        "addTime",
         var data = {
             'keyName': customKeyName,
             'keyDesc': customKeyDesc,
