@@ -3225,7 +3225,6 @@ $(document).on("click", ".imgDiv", function () {
 $(document).on("click", ".more-info", function () {
 
     var chatSessionId = localStorage.getItem(chatSessionIdKey);
-
     sendFriendProfileReq(chatSessionId, handleFriendMoreInfo);
 });
 
@@ -3234,27 +3233,30 @@ function handleFriendMoreInfo(result) {
         return;
     }
     var profile = result.profile;
+    var customs = [];
 
     if (profile != undefined && profile["profile"]) {
         try {
             if (profile.hasOwnProperty("custom")) {
-                var customs = profile['custom'];
-                var html = template("tpl-friend-profile-more-info", {
-                    customs: customs
-                });
-                html = handleHtmlLanguage(html);
-                $("#more-info").html(html);
-
-                showWindow($("#more-info"));
-                var trueFriendMoreInfoHeight = $("#more-info")[0].clientHeight -  $(".more-info-title")[0].style.clientHeight;
-                if($(".friend_more_info")[0].clientHeight < trueFriendMoreInfoHeight) {
-                    $(".friend_more_info")[0].style.overflowY = "hidden";
-                }
-                $(".friend_more_info")[0].style.height =  trueFriendMoreInfoHeight+"px";
+                 customs = profile['custom'];
             }
         } catch (error) {
         }
     }
+
+    var html = template("tpl-friend-profile-more-info", {
+        customs: customs
+    });
+    html = handleHtmlLanguage(html);
+    $("#more-info").html(html);
+
+    showWindow($("#more-info"));
+    var trueFriendMoreInfoHeight = $("#more-info")[0].clientHeight -  $(".more-info-title")[0].style.clientHeight;
+    if($(".friend_more_info")[0].clientHeight < trueFriendMoreInfoHeight) {
+        $(".friend_more_info")[0].style.overflowY = "hidden";
+    }
+    $(".friend_more_info")[0].style.height =  trueFriendMoreInfoHeight+"px";
+
 }
 
 
@@ -3499,7 +3501,10 @@ function handleGetUserProfile(result)
         customs:customs,
         finishTip:finishTip
     });
-
+    try{
+        hideLoading();
+    }catch (error){
+    }
     html = handleHtmlLanguage(html);
     $(".wrapper").append(html);
     getNotMsgImg(token, avatar);
@@ -3508,6 +3513,10 @@ function handleGetUserProfile(result)
 ////展示个人消息
 function displaySelfInfo()
 {
+    try{
+        showMiniLoading($(".l-sb-item-selfInfo"));
+    }catch (error){
+    }
     var action = "api.user.profile"
     handleClientSendRequest(action, {}, handleGetUserProfile);
 }
@@ -3535,12 +3544,16 @@ $(document).on("click", ".selfInfo", function () {
 $(".selfInfo").mouseover(function(){
     displaySelfInfo();
 }).mouseout(function () {
+    try{
+        hideLoading();
+    }catch (error) {
 
+    }
 });
 
 $(document).on("mouseleave","#selfInfoDiv", function () {
     if( isSelfInfoCanHidden == true) {
-        // removeWindow($("#selfInfo"));
+        removeWindow($("#selfInfo"));
     }
 });
 
