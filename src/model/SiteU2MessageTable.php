@@ -189,15 +189,8 @@ class siteU2MessageTable extends BaseTable
         $sql = "select msgId from $this->table ";
 
         try {
-            $sql .= "where msgId in ('";
-            for ($i = 0; $i < count($msgIdArrays); $i++) {
-                if ($i == 0) {
-                    $sql .= $msgIdArrays[$i];
-                } else {
-                    $sql .= "','" + $msgIdArrays[$i];
-                }
-            }
-            $sql .= "') limit 100;";
+            $inSql = implode("','", $msgIdArrays);
+            $sql .= "where msgId in ('$inSql') limit 50;";
 
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);

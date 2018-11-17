@@ -61,12 +61,14 @@ class Api_Message_CheckStatusController extends BaseController
 
     private function getU2MsgIdList(array $msgIds)
     {
-        return $this->ctx->SiteU2MessageTable->queryColumnMsgIdByMsgId($msgIds);
+        $result = $this->ctx->SiteU2MessageTable->queryColumnMsgIdByMsgId($msgIds);
+        return $result;
     }
 
     private function getGroupMsgIdList(array $msgIds)
     {
-        return $this->ctx->SiteGroupMessageTable->queryColumnMsgIdByMsgId($msgIds);
+        $result = $this->ctx->SiteGroupMessageTable->queryColumnMsgIdByMsgId($msgIds);
+        return $result;
     }
 
     private function buildStatusMessageList(array $msgIdList)
