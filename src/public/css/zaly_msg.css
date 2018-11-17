@@ -900,7 +900,8 @@ html, body{
     overflow-y: scroll;
     position: absolute;
     width: 100%;
-    display: none
+    display: none;
+    overflow-x:hidden;
 }
 
 .self_profile_item {
@@ -1045,6 +1046,7 @@ html, body{
     text-align: left;
     position:relative;
     word-break: break-all;
+    cursor: pointer;
 }
 
 .text-align-left-text pre,

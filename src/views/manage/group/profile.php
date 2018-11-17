@@ -463,14 +463,18 @@
     });
 
     function addDefaultGroupResponse(url, data, result) {
-        if (result) {
-            var res = JSON.parse(res);
+        try{
+            if (result) {
+                var res = JSON.parse(res);
 
-            if ("success" != res.errCode) {
+                if ("success" != res.errCode) {
+                    alert(getLanguage() == 1 ? "操作失败" : "operate error");
+                }
+            } else {
                 alert(getLanguage() == 1 ? "操作失败" : "operate error");
             }
-        } else {
-            alert(getLanguage() == 1 ? "操作失败" : "operate error");
+        }catch (error){
+
         }
     }
 
