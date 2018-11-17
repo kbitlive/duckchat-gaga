@@ -86,7 +86,7 @@ class InstallDBController
                 $scheme = isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : "http";
 
                 $siteAddress = $scheme . "://" . $serverHost;
-                $loginPluginId = $_POST['pluginId'];
+                $loginPluginId = 102;
 
                 if (isset($dbType) && "mysql" == $dbType) {
                     $config['dbType'] = "mysql";
