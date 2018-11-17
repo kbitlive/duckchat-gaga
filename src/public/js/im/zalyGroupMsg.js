@@ -3246,7 +3246,11 @@ function handleFriendMoreInfo(result) {
                 $("#more-info").html(html);
 
                 showWindow($("#more-info"));
-                $(".friend_more_info")[0].style.height =  ($("#more-info")[0].clientHeight -  $(".more-info-title")[0].style.clientHeight)+"px";
+                var trueFriendMoreInfoHeight = $("#more-info")[0].clientHeight -  $(".more-info-title")[0].style.clientHeight;
+                if($(".friend_more_info")[0].clientHeight < trueFriendMoreInfoHeight) {
+                    $(".friend_more_info")[0].style.overflowY = "hidden";
+                }
+                $(".friend_more_info")[0].style.height =  trueFriendMoreInfoHeight+"px";
             }
         } catch (error) {
         }
@@ -3645,9 +3649,14 @@ function editSelfCustom(type)
         isSelfInfoCanHidden = false;
         $("#selfInfoDiv")[0].style.display = "none";
         $("#selfCutsomInfoDiv")[0].style.display = "block";
-        console.log('-$("#selfCutsomInfoDiv")[0].scrollHeight+"px"----' + $("#selfCutsomInfoDiv")[0].scrollHeight+"px");
-        $("#selfCutsomInfoDiv")[0].style.height = $("#selfCutsomInfoDiv")[0].scrollHeight+"px";
-        $("#selfInfo")[0].style.height = $("#selfCutsomInfoDiv")[0].scrollHeight+"px";
+        var customHeight =  $("#selfCutsomInfoDiv")[0].scrollHeight;
+        var layoutLeftHeight = $(".layout-left")[0].clientHeight;
+        if(layoutLeftHeight-customHeight>30) {
+            $("#selfCutsomInfoDiv")[0].style.overflowY = "hidden";
+        }
+        $("#selfCutsomInfoDiv")[0].style.height = customHeight+"px";
+        $("#selfInfo")[0].style.height = customHeight+"px";
+
     } else {
         var values = new Array();
 
@@ -4339,6 +4348,11 @@ function downloadMsg(msgId, event) {
 function recallMsg(msgId,event) {
     event.preventDefault();
     event.stopPropagation();
+    try{
+        $("#msg-menu")[0].remove();
+    }catch (error) {
+    }
+
     var chatSessionId = localStorage.getItem(chatSessionIdKey);
     var chatSessionType = localStorage.getItem(chatSessionId)
     var msgText = "此消息被撤回";
@@ -4348,6 +4362,12 @@ function recallMsg(msgId,event) {
 function seeMsg( msgId,event) {
     event.preventDefault();
     event.stopPropagation();
+
+    try{
+        $("#msg-menu")[0].remove();
+    }catch (error) {
+    }
+
     var src = $(".msg-img-"+msgId).attr("src");
     window.open(src);
 }

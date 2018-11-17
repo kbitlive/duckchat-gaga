@@ -22,7 +22,6 @@
 
         .wrapper_div {
             height: 100%;
-            overflow-y: scroll;
         }
 
         .wrapper {

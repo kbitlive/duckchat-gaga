@@ -219,7 +219,7 @@
             </div>
             <!--      sql password          -->
             <div class="sql-setting mysql-setting">
-                <span>数据库密码：</span><input type="text" class="sql-input sql-dbPassword" placeholder="数据库密码">
+                <span>数据库密码：</span><input type="password" class="sql-input sql-dbPassword" placeholder="数据库密码">
                 <img src="../../public/img/init/failed.png" class="failed_img dbPasswordFailed">
             </div>
         </div>
