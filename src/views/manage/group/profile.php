@@ -20,13 +20,18 @@
             border-radius: 50%;
             cursor: pointer;
         }
+
         .item-row {
             cursor: pointer;
         }
+
         .weui_switch {
             cursor: pointer;
         }
 
+        .select-color-primary {
+            color: #4C3BB1;
+        }
     </style>
 
 </head>
@@ -323,9 +328,9 @@
 
     $(".site-group-avatar").each(function () {
         var avatar = $(this).attr("avatar");
-        var src = " /_api_file_download_/?fileId="+avatar;
-        if(!isMobile()) {
-           src =  "./index.php?action=http.file.downloadFile&fileId="+ avatar+"&returnBase64=0";
+        var src = " /_api_file_download_/?fileId=" + avatar;
+        if (!isMobile()) {
+            src = "./index.php?action=http.file.downloadFile&fileId=" + avatar + "&returnBase64=0";
         }
         $(this).attr("src", src);
     });
@@ -463,7 +468,7 @@
     });
 
     function addDefaultGroupResponse(url, data, result) {
-        try{
+        try {
             if (result) {
                 var res = JSON.parse(res);
 
@@ -473,7 +478,7 @@
             } else {
                 alert(getLanguage() == 1 ? "操作失败" : "operate error");
             }
-        }catch (error){
+        } catch (error) {
 
         }
     }
@@ -501,6 +506,7 @@
                     }
                 },
                 {
+                    className: "select-color-primary",
                     text: lang == 1 ? "确定" : "confirm", className: "main-color", onClick: function () {
                         var groupId = $("#group-id").attr("data");
 

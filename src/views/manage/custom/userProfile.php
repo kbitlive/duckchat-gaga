@@ -334,6 +334,7 @@
 
 <script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../../public/jquery/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../public/js/jquery-confirm.js"></script>
 <script type="text/javascript" src="../../public/manage/native.js"></script>
 
 <script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
@@ -592,14 +593,34 @@
     }
 
     function deleteUserCostom() {
-        var customKey = $("#custom-key").attr("data");
-        var url = "index.php?action=manage.custom.userDelete";
 
-        var data = {
-            'customKey': customKey,
-        };
+        var lang = getLanguage();
+        $.modal({
+            title: lang == 1 ? '删除字段' : 'Delete Column',
+            text: lang == 1 ? '确定删除？' : 'Confirm Delete?',
+            buttons: [
+                {
+                    text: lang == 1 ? "取消" : "cancel", className: "default", onClick: function () {
+                        // alert("cancel");
+                    }
+                },
+                {
+                    className: "select-color-primary",
+                    text: lang == 1 ? "确定" : "confirm", onClick: function () {
+                        var customKey = $("#custom-key").attr("data");
+                        var url = "index.php?action=manage.custom.userDelete";
 
-        zalyjsCommonAjaxPostJson(url, data, deleteResponse);
+                        var data = {
+                            'customKey': customKey,
+                        };
+
+                        zalyjsCommonAjaxPostJson(url, data, deleteResponse);
+                    }
+                },
+
+            ]
+        });
+
     }
 
     function deleteResponse(url, data, result) {
