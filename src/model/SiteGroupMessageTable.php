@@ -162,12 +162,48 @@ class SiteGroupMessageTable extends BaseTable
 
             return $prepare->fetchAll(\PDO::FETCH_ASSOC);
         } finally {
-            $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, "", $startTime);
+            $this->logger->writeSqlLog($tag, $sql, "", $startTime);
         }
 
         return [];
     }
 
+    public function queryColumnMsgIdByMsgId($msgIdArrays)
+    {
+        $startTime = microtime(true);
+        $tag = __CLASS__ . "." . __FUNCTION__;
+
+        $result = empty($msgIdArrays);
+
+        if ($result) {
+            return [];
+        }
+
+        $sql = "select msgId from $this->table ";
+
+        try {
+            $sql .= "where msgId in (";
+            for ($i = 0; $i < count($msgIdArrays); $i++) {
+                if ($i == 0) {
+                    $sql .= $msgIdArrays[$i];
+                } else {
+                    $sql .= "," + $msgIdArrays[$i];
+                }
+            }
+            $sql .= ");";
+
+            $prepare = $this->db->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+
+            $prepare->execute();
+
+            return $prepare->fetchAll(\PDO::FETCH_COLUMN);
+        } finally {
+            $this->logger->writeSqlLog($tag, $sql, "", $startTime);
+        }
+
+        return [];
+    }
 
     public function updatePointer($groupId, $userId, $deviceId, $pointer)
     {
