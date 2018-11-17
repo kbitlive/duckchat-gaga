@@ -78,7 +78,7 @@
 
 
             <?php foreach ($userCustoms as $userCustom) { ?>
-                <div class="item-row" onclick="gotoUserCustomProfile('<?php echo $userCustom['customKey']; ?>')">
+                <div class="item-row" onclick="showUserCustomProfile('<?php echo $userCustom['customKey']; ?>')">
                     <div class="item-body">
                         <div class="item-body-display add-user-column" onclick="addNewColumn()">
                             <div class="item-body-desc"><?php echo $userCustom['keyName']; ?></div>
@@ -124,7 +124,7 @@
         }
     }
 
-    function gotoUserCustomProfile(customKey) {
+    function showUserCustomProfile(customKey) {
         var url = "index.php?action=manage.custom.userUpdate&lang=" + getLanguage() + "&customKey=" + customKey;
         zalyjsOpenPage(url);
     }
