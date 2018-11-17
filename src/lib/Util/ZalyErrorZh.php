@@ -47,8 +47,8 @@ class ZalyErrorZh extends ZalyErrorBase
 
         "error.invalid.email" => "无效邮箱",
         "error.exist.email"  => "邮箱已经存在",
-        "error.exist.loginName" => "登录名已经存在",
-        "error.invalid.loginName" => "登录名格式不正确",
+        "error.exist.loginName" => "用户名已经存在",
+        "error.invalid.loginName" => "用户名格式不正确",
 
         "error.match.login"  => "账号密码不匹配",
         "error.exist.user"   => "账号不存在",
@@ -59,14 +59,14 @@ class ZalyErrorZh extends ZalyErrorBase
         "error.update.pwd" => "更新密码失败",
         "error.update.invitationCode" => "更新邀请码失败",
 
-        "error.loginName.length" => "登录名长度不合法",
+        "error.loginName.length" => "用户名长度不合法",
         "error.password.length" => "密码长度不合法",
         "error.nickname.length" => "昵称长度不合法",
         "error.site.pubkPem" => "站点公钥不合法",
 
         "error.session.clear" => "删除失败",
 
-        "error.updatePassword.loginName" => "登录名不正确",
+        "error.updatePassword.loginName" => "用户名不正确",
 
         "error.invitation.code" => "邀请码不正确",
 

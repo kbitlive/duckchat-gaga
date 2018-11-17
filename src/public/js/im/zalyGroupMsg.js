@@ -3225,27 +3225,34 @@ $(document).on("click", ".imgDiv", function () {
 });
 
 $(document).on("click", ".more-info", function () {
+
     var chatSessionId = localStorage.getItem(chatSessionIdKey);
-    var customKey = friendCustomKey+chatSessionId;
-    var customStr = localStorage.getItem(customKey);
 
-    try{
-        var customs = new Array();
-        if(customStr != undefined && customStr != false && customStr != null) {
-            customs = JSON.parse(customStr);
-        }
-    }catch (error) {
-        console.log(error)
-        var customs = new Array();
-    }
-
-    var html = template("tpl-friend-profile-more-info" , {
-        customs:customs
-    });
-    html = handleHtmlLanguage(html);
-    $("#more-info").html(html);
-    showWindow($("#more-info"));
+    sendFriendProfileReq(chatSessionId, handleFriendMoreInfo);
 });
+
+function handleFriendMoreInfo(result) {
+    if (result == undefined) {
+        return;
+    }
+    var profile = result.profile;
+
+    if (profile != undefined && profile["profile"]) {
+        try {
+            if (profile.hasOwnProperty("custom")) {
+                customs = profile['custom'];
+                var html = template("tpl-friend-profile-more-info", {
+                    customs: customs
+                });
+                html = handleHtmlLanguage(html);
+                $("#more-info").html(html);
+                showWindow($("#more-info"));
+            }
+        } catch (error) {
+
+        }
+    }
+}
 
 
 //添加好友

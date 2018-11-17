@@ -38,7 +38,7 @@
         <img class="search-img" width="19px" height="19px" src="../../public/img/manage/search.png">
 
         <?php if ($lang == "1") { ?>
-            <input class="search-input" placeholder="通过登录名、昵称、用户ID 搜索用户">
+            <input class="search-input" placeholder="通过用户名、昵称、用户ID 搜索用户">
         <?php } else { ?>
             <input class="search-input" placeholder="search loginName,nickname,userId">
         <?php } ?>

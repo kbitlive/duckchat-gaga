@@ -30,7 +30,7 @@
 
             <div class="login_name_div login_name_div_mobile">
                 <image src="../../public/img/login/loginName.png" class="img"/>
-                <input type="text" class="input_login_site forget_input_loginName" datatype="s" autocapitalize="off"  data-local-placeholder="loginNamePlaceholder" placeholder="输入登录名">
+                <input type="text" class="input_login_site forget_input_loginName" datatype="s" autocapitalize="off"  data-local-placeholder="loginNamePlaceholder" placeholder="输入用户名">
                 <img src="../../../public/img/msg/msg_failed.png" class="img-failed forget_input_loginName_failed">
                 <div class="line"></div>
             </div>

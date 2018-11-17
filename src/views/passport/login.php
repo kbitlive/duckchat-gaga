@@ -86,7 +86,7 @@
                                                 <?php if ($loginNameAlias):?>
                                                     <input type="text" class="input_login_site  login_input_loginName" datatype="s" autocapitalize="off"  placeholder=" <?php echo  $loginNameAlias;?>" >
                                                 <?php else:?>
-                                                    <input type="text" class="input_login_site  login_input_loginName" datatype="s" autocapitalize="off"  data-local-placeholder="loginNamePlaceholder" placeholder="输入登录名" >
+                                                    <input type="text" class="input_login_site  login_input_loginName" datatype="s" autocapitalize="off"  data-local-placeholder="loginNamePlaceholder" placeholder="输入用户名" >
                                                 <?php endif;?>
 
                                                 <div class="clearLoginName" onclick="clearLoginName()"><image src="./public/img/msg/btn-x.png" class="clearLoginName clear_img" /></div>
