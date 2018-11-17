@@ -3110,8 +3110,6 @@ function displayCurrentProfile()
 $(document).mouseup(function(e){
     var targetId = e.target.id;
     var targetClassName = e.target.className;
-    console.log("---targetClassName---"+targetClassName)
-    console.log("---targetId---"+targetId)
 
    try{
        if(targetId == "wrapper-mask") {
