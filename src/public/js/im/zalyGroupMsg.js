@@ -4101,7 +4101,11 @@ function displayWaterMark()
            //前10位
            var suffixToken = token.substr(0, 10);
            var params =  suffixToken +" "+chatSessionId+" "+time;
-           var data = { watermark_txt:params }
+           if(chatSessionId.length<20) {
+               var data = { watermark_txt:params, watermark_width:100, watermark_y_space:30, watermark_x_space:30 }
+           } else {
+               var data = { watermark_txt:params }
+           }
            try{
                $("#otdivid").remove();
            }catch (error) {
