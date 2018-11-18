@@ -330,6 +330,8 @@ window.onresize = function(){
     }
 }
 
+
+
 function handleSendFriendApplyReq()
 {
     alert("已经发送好友请求");
@@ -876,10 +878,16 @@ function downloadImgFormQrcode(idName)
 
 //--------------------------------------set document tile---------------------------------------------
 intervalId = undefined
+
+isHidden = false;
+
 function setDocumentTitle()
 {
     iconNum = 0;
     if(document.hidden == true) {
+        isHidden = true;
+        console.log("---hidden-----isHidden---"+isHidden);
+
         var siteTip = localStorage.getItem(newSiteTipKey);
 
         if(intervalId == undefined && siteTip != "clear") {
@@ -899,11 +907,20 @@ function setDocumentTitle()
         }
         return ;
     }
+    console.log("---onfocus-----isHidden---"+isHidden);
+
+    if(isHidden) {
+        window.location.reload();
+        isHidden = false;
+    }
+
     $(".icon").attr("href", "favicon.ico");
     iconNum = 0;
     clearInterval(intervalId);
     intervalId = undefined
 }
+
+
 document.addEventListener('visibilitychange', function(){
    setDocumentTitle();
 }, false);
@@ -922,7 +939,6 @@ function logout(event)
         window.location.href = "./index.php?action=page.logout";
     }
 }
-
 
 //------------------------------------*********Group function*********--------------------------------------------
 
