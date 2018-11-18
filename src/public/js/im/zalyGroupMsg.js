@@ -887,20 +887,18 @@ function setDocumentTitle()
         iconNum = 0;
         if(document.hidden == true) {
             isHidden = true;
-            console.log("---hidden-----isHidden---"+isHidden);
-
             var siteTip = localStorage.getItem(newSiteTipKey);
 
             if(intervalId == undefined && siteTip != "clear") {
                 intervalId = setInterval(function () {
                     if(siteTip == "clear") {
-                        $(".icon").attr("href", "favicon.ico?_v="+intervalId);
+                        $(".icon").attr("href", "./favicon.ico?_v="+intervalId);
                         iconNum = 0;
                     } else {
                         if(Number(iconNum%2) == 0) {
-                            $(".icon").attr("href", "favicon.ico?_v="+intervalId);
+                            $(".icon").attr("href", "./favicon.ico?_v="+intervalId);
                         } else {
-                            $(".icon").attr("href", "tip.png?_v="+intervalId);
+                            $(".icon").attr("href", "./tip.png?_v="+intervalId);
                         }
                         iconNum = Number(iconNum+1);
                     }
@@ -913,7 +911,7 @@ function setDocumentTitle()
             isHidden = false;
         }
 
-        $(".icon").attr("href", "favicon.ico");
+        $(".icon").attr("href", "./favicon.ico");
         iconNum = 0;
         clearInterval(intervalId);
         intervalId = undefined
