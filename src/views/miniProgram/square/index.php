@@ -17,7 +17,6 @@
             background: rgba(245, 245, 245, 1);
             font-size: 14px;
             overflow-x: hidden;
-            overflow-y: scroll;
         }
 
         .wrapper {
@@ -25,6 +24,7 @@
             height: 100%;
             display: flex;
             align-items: stretch;
+            overflow-y: scroll;
         }
 
         .layout-all-row {
