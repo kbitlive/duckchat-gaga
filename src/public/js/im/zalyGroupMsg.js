@@ -1442,10 +1442,20 @@ function displayGroupMemberForGroupInfo(results)
                 $(".group-member-body").append(html);
             }
             var user = list[i].profile;
+            var stroageUserProfileStr = localStorage.getItem(profileKey+user.userId);
+            var nickname = user.nickname;
+            try{
+                nickname = user.nickname;
+                if(stroageUserProfileStr != undefined && stroageUserProfileStr != false) {
+                   var stroageUserProfile = JSON.parse(stroageUserProfileStr);
+                   nickname = stroageUserProfile.nickname;
+               }
+            }catch (error){
+            }
             var memberAvatarImg = getNotMsgImgUrl(user.avatar);
             html = template("tpl-group-member-body-detail", {
                 userId : user.userId,
-                nickname:user.nickname,
+                nickname:nickname,
                 memberAvatarImg:memberAvatarImg
             });
             html = handleHtmlLanguage(html);
@@ -2913,6 +2923,18 @@ function updateInfo(profileId, profileType)
 
     var muteKey= msgMuteKey+profileId;
     mute = localStorage.getItem(muteKey);
+    var chatSessionName = "";
+    try{
+        chatSessionName = name.substr(0, 8);
+        chatSessionName = template("tpl-string", {
+            string:chatSessionName
+        });
+        if(name.length>8) {
+            chatSessionName += "...";
+        }
+    }catch (error) {
+    }
+
     var name = template("tpl-string", {
         string : name
     });
@@ -2922,9 +2944,16 @@ function updateInfo(profileId, profileType)
     }catch (error) {
 
     }
+
+
     $(".nickname_"+profileId).html(name);
+    if(chatSessionName == "") {
+        chatSessionName = name;
+    }
+    $(".chatsession_nickname_"+profileId).html(chatSessionName);
 
     try{
+        $(".aria-lable-"+profileId).attr("aria-lable", name);
         if(mute>0) {
             $(".room-chatsession-mute_"+profileId)[0].style.display = "block";
         } else {
@@ -2955,17 +2984,19 @@ function displayCurrentProfile()
             var friendProfile = getFriendProfile(chatSessionId, false, handleGetFriendProfile);
 
             if(friendProfile) {
-                var nickname = friendProfile.nickname;
-                nickname = template("tpl-string", {
-                    string : nickname
+                var trueNickname = friendProfile.nickname;
+                var nickname = template("tpl-string", {
+                    string : trueNickname
                 });
                 $(".nickname_"+chatSessionId).html(nickname);
+
                 $(".chatsession-title").html(nickname);
+
                 var isMaster = isJudgeSiteMasters(chatSessionId);
 
                 var html = template("tpl-friend-profile", {
                     isMaster:isMaster,
-                    nickname:nickname,
+                    nickname:trueNickname,
                     loginName:friendProfile.loginName,
                 });
                 $(".user-desc-body").html(html);
@@ -4111,7 +4142,7 @@ function displayWaterMark()
            var suffixToken = token.substr(0, 10);
            var suffixChatsessionId = chatSessionId.substr(0,10)
            var params =  suffixToken +" "+suffixChatsessionId+" "+time;
-           var data = { watermark_txt:params, watermark_width:100, watermark_y_space:30, watermark_x_space:30 }
+           var data = { watermark_txt:params, watermark_width:60, watermark_y_space:30, watermark_x_space:30 }
 
            try{
                $("#otdivid").remove();
@@ -4269,72 +4300,95 @@ function sortRoomList(jqElement)
 }
 
 $(document).bind("contextmenu", ".msg_content_for_click", function(event){
-    var msgId = $(event.target).attr("msgId");
-    var msgType = $(event.target).attr("msgType");
-    var sendtime = $(event.target).attr("sendtime");
+   try{
+       var msgId = $(event.target).attr("msgId");
+       var msgType = $(event.target).attr("msgType");
+       var sendtime = $(event.target).attr("sendtime");
+       var userId = $(event.target).attr("userId");
 
-    var trueTarget = event.target;
-    if(msgId == undefined) {
-        var findNode = false;
-        var targets = $(event.target).parents();
-        targets.each(function (index, target) {
-            if($(target).hasClass("msg_content_for_click")) {
-                msgId = $(target).attr("msgId");
-                msgType = $(target).attr("msgType");
-                sendtime = $(target).attr("sendtime");
-                trueTarget = target;
-            }
-        });
-    }
 
-    try{
-       $("#msg-menu")[0].remove();
-    }catch (error) {
-    }
-    var clientX = event.offsetX;
-    var clientY = event.offsetY;
+       var trueTarget = "";
+       if(msgId == undefined) {
+           var findNode = false;
+           var targets = $(event.target).parents();
+           targets.each(function (index, target) {
+               if($(target).hasClass("msg_content_for_click")) {
+                   msgId = $(target).attr("msgId");
+                   msgType = $(target).attr("msgType");
+                   sendtime = $(target).attr("sendtime");
+                   userId = $(target).attr("userId");
+                   trueTarget = target;
+               }
+           });
+       }
+       if(!trueTarget) {
+           return false;
+       }
+       var currentChatSessionId = localStorage.getItem(chatSessionIdKey);
+       var chatSessionType = localStorage.getItem(currentChatSessionId);
 
-    if(msgId == undefined) {
-        return false;
-    }
-    var isCopy = false;
-    var isSave = false;
-    var isRecall = false;
-    var isSee = false;
-    var recallDisabled = false;
 
-    var nowTime =  Date.now();
-    //两分钟内的允许撤回
-    if(sendtime != undefined ) {
-        isRecall = true;
-        if(nowTime-sendtime > 120000) {
-            recallDisabled = true
-        }
-    }
-    switch (msgType) {
-        case MessageType.MessageText:
-            isCopy = true;
-            break;
-        case MessageType.MessageDocument:
-            isSave = true;
-            break;
-        case MessageType.MessageImage:
-            isSee = true;
-            break;
-    }
+       try{
+           $("#msg-menu")[0].remove();
+       }catch (error) {
+       }
+       var clientX = event.offsetX;
+       var clientY = event.offsetY;
 
-    var html = template("tpl-msg-menu", {
-        msgId : msgId,
-        isCopy:isCopy,
-        isSave:isSave,
-        isRecall:isRecall,
-        isSee:isSee,
-        left:clientX,
-        top:clientY,
-        recallDisabled:recallDisabled
-    });
-    html = handleHtmlLanguage(html);
-    $(trueTarget).append(html);
+       if(msgId == undefined) {
+           return false;
+       }
+       var isCopy = false;
+       var isSave = false;
+       var isRecall = false;
+       var isSee = false;
+       var recallDisabled = false;
+
+       var nowTime =  Date.now();
+
+       //两分钟内的允许撤回
+       if(userId == token ) {
+           isRecall = true;
+           if(nowTime-sendtime > 120000) {
+               recallDisabled = true
+           }
+       }else {
+           if(chatSessionType == GROUP_MSG) {
+               var groupProfileStr = localStorage.getItem(profileKey+currentChatSessionId);
+               var groupProfile = JSON.parse(groupProfileStr);
+               var isAdmin = checkGroupAdminContainOwner(token, groupProfile);
+               if(isAdmin) {
+                   isRecall = true;
+               }
+           }
+       }
+
+       switch (msgType) {
+           case MessageType.MessageText:
+               isCopy = true;
+               break;
+           case MessageType.MessageDocument:
+               isSave = true;
+               break;
+           case MessageType.MessageImage:
+               isSee = true;
+               break;
+       }
+
+       var html = template("tpl-msg-menu", {
+           msgId : msgId,
+           isCopy:isCopy,
+           isSave:isSave,
+           isRecall:isRecall,
+           isSee:isSee,
+           left:clientX,
+           top:clientY,
+           recallDisabled:recallDisabled
+       });
+       html = handleHtmlLanguage(html);
+       $(trueTarget).append(html);
+   }catch (error) {
+   }
     return false;
 });
 
@@ -4396,10 +4450,15 @@ function downloadMsg(msgId, event) {
 function recallMsg(msgId,event) {
     event.preventDefault();
     event.stopPropagation();
+
+    if(msgId == "") {
+        return;
+    }
     try{
         $("#msg-menu")[0].remove();
     }catch (error) {
     }
+
 
     var chatSessionId = localStorage.getItem(chatSessionIdKey);
     var chatSessionType = localStorage.getItem(chatSessionId)

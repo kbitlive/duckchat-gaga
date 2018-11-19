@@ -84,7 +84,7 @@
         </div>
 
         <div class="d-flex flex-row justify-content-center" style="">
-            <input type="text" class="form-control remark_name create_group_box_div_input " onkeydown="editFriendRemarkByKeyDown(event)" data-local-placeholder="remarkNamePlaceholder"  placeholder="请输入备注" >
+            <input type="text" class="form-control remark_name create_group_box_div_input" maxlength="16" onkeydown="editFriendRemarkByKeyDown(event)" data-local-placeholder="remarkNamePlaceholder"  placeholder="请输入备注" >
         </div>
 
         <div class="line"></div>

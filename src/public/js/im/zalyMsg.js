@@ -120,6 +120,7 @@ function getMsgContentForChatSession(msg)
         case MessageType.MessageText:
             msgContent = msg.hasOwnProperty("text") ? msg['text'].body: JSON.parse(msg['content']).body;
             msgContent = msgContent && msgContent.length > 10 ? msgContent.substr(0,10)+"..." : msgContent;
+
             break;
         case MessageType.MessageImage:
             msgContent = "[图片消息]";
@@ -173,6 +174,9 @@ function updateRoomChatSessionContentForMsg(msg, nodes, msgContent) {
             $(".room-chatsession-mute-num_"+msg.chatSessionId)[0].style.display = "none";
         }
     }
+    msgContent = template("tpl-string", {
+        string:msgContent
+    });
     if(msgContent != undefined && msgContent.length>0) {
         $(childrens[2]).html(msgContent);
     }
@@ -240,7 +244,7 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
         timeServer:msgTime,
         msgServerTime:msg.timeServer,
         isSiteMaster:isSiteMaster
-    })
+    });
 
     if($(".chatsession-row").length > 0 ) {
         $(html).insertBefore($(".chatsession-row")[0]);
