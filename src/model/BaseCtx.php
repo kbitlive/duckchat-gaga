@@ -72,16 +72,7 @@ class BaseCtx extends Wpf_Ctx
     public function __construct()
     {
         $this->logger = new Wpf_Logger();
-        try{
-            $configPath = dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'config.php';
-            if(file_exists($configPath)) {
-                $this->loadDatabase();
-            } else {
-                $this->dbType = "sqlite";
-            }
-        }catch (Exception $ex) {
-
-        }
+        $this->loadDatabase();
     }
 
     // 加载数据库
