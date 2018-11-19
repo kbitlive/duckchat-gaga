@@ -907,7 +907,16 @@ function setDocumentTitle()
             return ;
         }
         if(isHidden) {
-            window.location.reload();
+            try{
+                var chatSessionId = $(".chatsession-row-active").attr("chat-session-id");
+                var currentChatSessionId = localStorage.getItem(chatSessionIdKey);
+                if(chatSessionId != currentChatSessionId) {
+                    window.location.reload();
+                }
+            } catch (error) {
+
+            }
+
             isHidden = false;
         }
 
