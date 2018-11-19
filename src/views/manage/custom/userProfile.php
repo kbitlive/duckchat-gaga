@@ -490,7 +490,7 @@
         var key = $("#updatePopupButton").attr("key-value");
         var updateValue = $.trim($(".popup-group-input").val());
         var updateKey = $("#" + key).attr("update-key");
-        alert("updateKey=" + updateKey + " updateValue" + updateValue);
+        // alert("updateKey=" + updateKey + " updateValue" + updateValue);
 
         var data = {
             'customKey': customKey,
