@@ -4272,6 +4272,8 @@ $(document).bind("contextmenu", ".msg_content_for_click", function(event){
     var msgId = $(event.target).attr("msgId");
     var msgType = $(event.target).attr("msgType");
     var sendtime = $(event.target).attr("sendtime");
+    var userId = $(event.target).attr("userId");
+
 
     var trueTarget = event.target;
     if(msgId == undefined) {
@@ -4282,10 +4284,15 @@ $(document).bind("contextmenu", ".msg_content_for_click", function(event){
                 msgId = $(target).attr("msgId");
                 msgType = $(target).attr("msgType");
                 sendtime = $(target).attr("sendtime");
+                userId = $(target).attr("userId");
                 trueTarget = target;
             }
         });
     }
+
+    var currentChatSessionId = localStorage.getItem(chatSessionIdKey);
+    var chatSessionType = localStorage.getItem(currentChatSessionId);
+
 
     try{
        $("#msg-menu")[0].remove();
@@ -4304,13 +4311,24 @@ $(document).bind("contextmenu", ".msg_content_for_click", function(event){
     var recallDisabled = false;
 
     var nowTime =  Date.now();
+
     //两分钟内的允许撤回
-    if(sendtime != undefined ) {
+    if(userId == token ) {
         isRecall = true;
         if(nowTime-sendtime > 120000) {
             recallDisabled = true
         }
+    }else {
+        if(chatSessionType == GROUP_MSG) {
+            var groupProfileStr = localStorage.getItem(profileKey+currentChatSessionId);
+            var groupProfile = JSON.parse(groupProfileStr);
+            var isAdmin = checkGroupAdminContainOwner(token, groupProfile);
+            if(isAdmin) {
+                isRecall = true;
+            }
+        }
     }
+
     switch (msgType) {
         case MessageType.MessageText:
             isCopy = true;
@@ -4333,6 +4351,7 @@ $(document).bind("contextmenu", ".msg_content_for_click", function(event){
         top:clientY,
         recallDisabled:recallDisabled
     });
+    console.log(html);
     html = handleHtmlLanguage(html);
     $(trueTarget).append(html);
     return false;
