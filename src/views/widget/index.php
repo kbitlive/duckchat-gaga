@@ -122,7 +122,7 @@
         <?php if($user_id && $session_id) {?>
             <div class="input-box">
                 <div style="position: relative">
-                    <textarea id="msg_content" class="input-box-text msg_content" placeholder="Type a message…." id="msg_content"></textarea>
+                    <textarea id="msg_content" class="input-box-text msg_content" placeholder="Type a message…." id="msg_content" maxlength="1000"></textarea>
                     <div style="position: absolute; top:2rem;right:1rem;">
                         <img src="../../public/img/widget/emotions.png" class="emotions" style="width: 3rem;height:3rem;"/>
                         <img src="../../public/img/widget/msg_send.png" class="send_msg" style="width: 3rem;height:3rem;"/>

@@ -2913,6 +2913,18 @@ function updateInfo(profileId, profileType)
 
     var muteKey= msgMuteKey+profileId;
     mute = localStorage.getItem(muteKey);
+    var chatSessionName = "";
+    try{
+        chatSessionName = name.substr(0, 8);
+        chatSessionName = template("tpl-string", {
+            string:chatSessionName
+        });
+        if(name.length>8) {
+            chatSessionName += "...";
+        }
+    }catch (error) {
+    }
+
     var name = template("tpl-string", {
         string : name
     });
@@ -2922,7 +2934,13 @@ function updateInfo(profileId, profileType)
     }catch (error) {
 
     }
+
+
     $(".nickname_"+profileId).html(name);
+    if(chatSessionName == "") {
+        chatSessionName = name;
+    }
+    $(".chatsession_nickname_"+profileId).html(chatSessionName);
 
     try{
         $(".aria-lable-"+profileId).attr("aria-lable", name);
@@ -2956,17 +2974,19 @@ function displayCurrentProfile()
             var friendProfile = getFriendProfile(chatSessionId, false, handleGetFriendProfile);
 
             if(friendProfile) {
-                var nickname = friendProfile.nickname;
-                nickname = template("tpl-string", {
-                    string : nickname
+                var trueNickname = friendProfile.nickname;
+                var nickname = template("tpl-string", {
+                    string : trueNickname
                 });
                 $(".nickname_"+chatSessionId).html(nickname);
+
                 $(".chatsession-title").html(nickname);
+
                 var isMaster = isJudgeSiteMasters(chatSessionId);
 
                 var html = template("tpl-friend-profile", {
                     isMaster:isMaster,
-                    nickname:nickname,
+                    nickname:trueNickname,
                     loginName:friendProfile.loginName,
                 });
                 $(".user-desc-body").html(html);

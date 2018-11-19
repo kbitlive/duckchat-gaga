@@ -340,7 +340,7 @@
                     {{if isSiteMaster }}
                     <div style="width:28px;height:14px;background:rgba(249,183,38,1); text-align:center; border-radius:2px;font-size:10px; font-family:PingFangSC-Regular; font-weight:400; color:rgba(255,255,255,0.87); line-height:14px;margin-right: 0.5rem;">站长</div>
                     {{/if}}
-                    <span class="nickname_{{chatSessionId}}"> {{name}}</span>
+                    <span class="chatsession_nickname_{{chatSessionId}}"> {{name}}</span>
 
                 </div>
 
@@ -723,7 +723,7 @@
 
 <script id="tpl-group-name-div" type="text/html">
     {{if editor == 1 }}
-        <input type="text" id="groupName" style="padding: 0rem;height:2rem;outline:none;margin-top:1rem;"  value="{{groupName}}" onkeydown="updateGroupNameName(event);" />
+        <input type="text" id="groupName" maxlength="10" style="padding: 0rem;height:2rem;outline:none;margin-top:1rem;"  value="{{groupName}}" onkeydown="updateGroupNameName(event);" />
     {{else}}
             <div class="action-btn groupName">
         {{groupName}}
@@ -860,7 +860,7 @@
         </div>
 
         <div class="d-flex flex-row justify-content-center">
-            <input type="text" class="form-control group_name create_group_box_div_input"  onkeydown="createGroupByKeyDown(event)"  data-local-placeholder="enterGroupNamePlaceholder" placeholder="请输入群组名称" >
+            <input type="text" class="form-control group_name create_group_box_div_input" maxlength="10"  onkeydown="createGroupByKeyDown(event)"  data-local-placeholder="enterGroupNamePlaceholder" placeholder="请输入群组名称" >
         </div>
 
         <div class="line"></div>
