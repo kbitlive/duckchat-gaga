@@ -127,6 +127,12 @@ class Page_Passport_RegisterController extends HttpBaseController
     private function getRegisterCustoms()
     {
         $registerCustoms = $this->ctx->SiteUserCustomTable->getColumnInfosForRegister();
+        foreach ($registerCustoms as $key =>  $custom) {
+            if(isset($custom['keyIcon'])) {
+                $custom['keyIcon'] = $this->ctx->File_Manager->getCustomPathByFileId($custom['keyIcon']);
+            }
+            $registerCustoms[$key] = $custom;
+        }
         return $registerCustoms;
     }
 }

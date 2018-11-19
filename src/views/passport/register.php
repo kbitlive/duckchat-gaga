@@ -118,7 +118,7 @@
                             <?php if(count($registerCustoms)) : ?>
                                 <?php foreach ($registerCustoms as $registerCustom): ?>
                                     <div class="login_name_div" style="margin-top: 1rem;">
-                                            <img src="./index.php?action=http.file.downloadFile&fileId=<?php echo  $registerCustom['keyIcon'];?>&returnBase64=0" class="img" onerror="src='./public/img/login/custom_default.png'"/>
+                                            <img src="<?php echo  $registerCustom['keyIcon'];?>" class="img" onerror="src='./public/img/login/custom_default.png'"/>
                                             <input type="text" class="input_login_site register_input_<?php echo $registerCustom['customKey'];?> register_custom" autocapitalize="off" isRequired="<?php echo $registerCustom['isRequired'];?>" customKey = "<?php echo $registerCustom['customKey'];?>" id="register_input_<?php echo $registerCustom['customKey'];?>" customName="<?php echo $registerCustom['keyName'];?>" placeholder="<?php echo $registerCustom['keyName'];?>" >
                                         <?php if($registerCustom['isRequired']):?>
                                             <span class="img-required register_input_<?php echo $registerCustom['customKey'];?>_required" >*</span>
