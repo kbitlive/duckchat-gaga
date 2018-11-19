@@ -107,8 +107,12 @@
         <div class="right-msg-body  text-align-right" >
 
             <div class="msg_status" style="margin-top: 1rem;">
-                <div class="msg-content hint--bottom msg_content_for_click msg_content_for_click_{{msgId}}" sendTime="{{timeServer}}"    msgId="{{msgId}}"   style="background-color:rgba(244,244,249,1); " aria-label="{{msgTime}}">
-                    <div class="text-align-left" style=" width: {{webWidth}}px; height:{{webHeight}}px;"><iframe src="{{linkUrl}}" frameborder="no" width="{{webWidth}}" height="{{webHeight}}"></iframe></div>
+                <div class="msg-content hint--bottom " sendTime="{{timeServer}}"    msgId="{{msgId}}"   style="background-color:rgba(244,244,249,1); " aria-label="{{msgTime}}">
+                    <div class="text-align-left " style=" width: {{webWidth}}px; height:{{webHeight}}px;">
+                        <iframe src="{{linkUrl}}"   frameborder="no" width="{{webWidth}}" height="{{webHeight}}"></iframe>
+                        <div class="msg_content_for_click msg_content_for_click_{{msgId}}" sendTime="{{timeServer}}"  msgType="{{msgType}}" msgId="{{msgId}}"  style="position: absolute; width: 100%; height: 100%; top: 0rem; bottom: 0rem; margin: auto;">
+                        </div>
+                    </div>
                 </div>
                 {{if hrefURL}}
                     <div  class="msg_status_img" msgId="{{msgId}}"  style="display: flex;">
@@ -193,9 +197,9 @@
                 {{/if}}
                 <div class="msg-nickname nickname_{{userId}}">{{nickname}}</div>
             </div>
-            <div class="msg-content-img justify-content-end hint--bottom" aria-label="{{msgTime}}"  >
+            <div class="msg-content-img justify-content-end hint--bottom msg_content_for_click_{{msgId}}  msg_content_for_click" aria-label="{{msgTime}}"  >
                 {{else}}
-                <div class="msg-content-img justify-content-end hint--bottom"  aria-label="{{msgTime}}" style="margin-top:1rem;" >
+                <div class="msg-content-img justify-content-end hint--bottom msg_content_for_click_{{msgId}} msg_content_for_click"  aria-label="{{msgTime}}" style="margin-top:1rem;" >
                     {{/if}}
                     <div class="text-align-right right_msg_file_div msg_content_for_click msg_content_for_click_{{msgId}}" msgType="{{msgType}}"  url="{{url}}" msgId="{{msgId}}" originName="{{originName}}">
                         <div class="file_img">
@@ -234,10 +238,10 @@
                     <div class="msg-content hint--bottom" aria-label="{{msgTime}}">
                 {{else }}
                     <div>
-                        <div class="msg-content hint--bottom" aria-label="{{msgTime}}" style="margin-top: 1rem;">
+                        <div class="msg-content hint--bottom " aria-label="{{msgTime}}" style="margin-top: 1rem;">
                 {{/if}}
 
-                        <div class="text-align-right msg_content_for_click msg_content_for_click_{{msgId}}" style=" width: {{webWidth}}px; height:{{webHeight}}px"><iframe src="{{linkUrl}}" frameborder="no" width="{{webWidth}}" height="{{webHeight}}"></iframe></div>
+                        <div class="text-align-right " style=" width: {{webWidth}}px; height:{{webHeight}}px"><iframe src="{{linkUrl}}" frameborder="no" width="{{webWidth}}" height="{{webHeight}}"></iframe></div>
                     </div>
 
                     {{if hrefURL}}
