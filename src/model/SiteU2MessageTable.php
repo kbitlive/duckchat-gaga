@@ -143,27 +143,25 @@ class siteU2MessageTable extends BaseTable
         return [];
     }
 
-    public function queryMessageByUserIdAndMsgId($userId, $msgId)
+    public function queryMessageByFromUserIdAndMsgId($fromUserId, $msgId)
     {
         $startTime = microtime(true);
         $tag = __CLASS__ . "." . __FUNCTION__;
 
         $queryFields = implode(",", $this->columns);
-        $sql = "select $queryFields from $this->table ";
+        $sql = "select $queryFields from $this->table where msgId=:msgId and fromUserId=:fromUserId limit 1;";
 
         try {
-            $sql .= "where userId=:userId and msgId=:msgId limit 1;";
 
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
-            $prepare->bindValue(":userId", $userId);
+            $prepare->bindValue(":fromUserId", $fromUserId);
             $prepare->bindValue(":msgId", $msgId);
 
             $prepare->execute();
-
             return $prepare->fetch(\PDO::FETCH_ASSOC);
         } finally {
-            $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, [$userId, $msgId], $startTime);
+            $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, [$fromUserId, $msgId], $startTime);
         }
 
     }

@@ -104,10 +104,11 @@ class Message_Client
         return $result;
     }
 
-    private function checkU2RecallPermission($userId, $recallMsgId)
+    private function checkU2RecallPermission($recallUserId, $recallMsgId)
     {
-
-        $recallMessage = $this->ctx->SiteU2MessageTable->queryMessageByUserIdAndMsgId($userId, $recallMsgId);
+        error_log("===========userId=" . $recallUserId);
+        error_log("===========msgId=" . $recallMsgId);
+        $recallMessage = $this->ctx->SiteU2MessageTable->queryMessageByFromUserIdAndMsgId($recallUserId, $recallMsgId);
 
         if (empty($recallMessage)) {
             throw new ZalyException(ZalyError::ErrorMessageNotExist);

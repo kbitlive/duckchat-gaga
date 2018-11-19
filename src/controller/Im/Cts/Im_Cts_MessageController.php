@@ -99,7 +99,7 @@ class Im_Cts_MessageController extends Im_BaseController
             }
         } catch (ZalyException $ze) {
             $result = false;
-            $this->logger->error($this->action, $ze->getMessage() . "->" . $ze->getErrInfo());
+            $this->logger->error($this->action, $ze->getMessage() . "->" . $ze->getErrInfo($this->language));
         }
 
         $this->returnMessage($msgId, $msgRoomType, $msgType, $message, $fromUserId, $this->toId, $result);
