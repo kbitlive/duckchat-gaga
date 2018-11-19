@@ -36,7 +36,12 @@ class Upgrade_From10102To10103 extends Upgrade_Version
 
     private function dropSiteCustomItemTable()
     {
-        $this->dropDBTable("siteCustomItem");
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        try {
+            $this->dropDBTable("siteCustomItem");
+        } catch (Exception $e) {
+            $this->logger->error($tag, $e);
+        }
     }
 
 }
