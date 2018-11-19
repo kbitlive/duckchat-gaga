@@ -118,19 +118,39 @@ class SiteGroupTable extends BaseTable
         return null;
     }
 
-    public function getGroupProfileByNameInLatin($nameInLatin)
+    public function getGroupProfileByNameInLatin($nameInLatin, $pageNum = 1, $pageSize = 20)
     {
         $tag = __CLASS__ . "-" . __FUNCTION__;
         $startTime = microtime(true);
-        $sql = "select $this->selectColumns from $this->table where nameInLatin like :nameInLatin limit 20";
+        $sql = "select $this->selectColumns from $this->table where nameInLatin like :nameInLatin limit :offset,:num;";
         $prepare = $this->dbSlave->prepare($sql);
         $this->handlePrepareError($tag, $prepare);
         $prepare->bindValue(":nameInLatin", "%" . $nameInLatin . "%");
+        $prepare->bindValue(":offset", ($pageNum - 1) * $pageSize, PDO::PARAM_INT);
+        $prepare->bindValue(":num", $pageSize, PDO::PARAM_INT);
         $prepare->execute();
         $result = $prepare->fetchAll(\PDO::FETCH_ASSOC);
         $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, $nameInLatin, $startTime);
         return $result;
     }
+
+
+    public function getGroupProfileByName($name, $pageNum = 1, $pageSize = 20)
+    {
+        $tag = __CLASS__ . "-" . __FUNCTION__;
+        $startTime = microtime(true);
+        $sql = "select $this->selectColumns from $this->table where name like :name limit :offset,:num;";
+        $prepare = $this->dbSlave->prepare($sql);
+        $this->handlePrepareError($tag, $prepare);
+        $prepare->bindValue(":nameInLatin", "%" . $name . "%");
+        $prepare->bindValue(":offset", ($pageNum - 1) * $pageSize, PDO::PARAM_INT);
+        $prepare->bindValue(":num", $pageSize, PDO::PARAM_INT);
+        $prepare->execute();
+        $result = $prepare->fetchAll(\PDO::FETCH_ASSOC);
+        $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, $name, $startTime);
+        return $result;
+    }
+
 
     public function getGroupName($groupId)
     {

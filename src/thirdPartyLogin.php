@@ -1,12 +1,12 @@
 <?php
 return array(
-//    'demo' => array(
+//    '10001' => array(
 //        'name' => 'DemoName',
 //        'logo' => 'https://demo.XXX.com/demo.png',
 //        'landingUrl' => "http://demo.xxx.com/index.php?action=page.site.login",
 //        'verifyUrl' => "http://demo.xxx.com/index.php?action=api.session.verify&body_format=base64pb",
 //    ),
-//    'discuz' =>
+//    '10002' =>
 //        array(
 //            'name' => 'discuz',
 //            'logo' => '',

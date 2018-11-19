@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?php if ($lang == "1") { ?>页面配置<?php } else { ?>Page Config<?php } ?></title>
+    <title><?php if ($lang == "1") { ?>自定义配置<?php } else { ?>Custom Settings<?php } ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="stylesheet" href="../../public/jquery/weui.min.css"/>
@@ -24,9 +24,9 @@
                 <div class="item-body">
                     <div class="item-body-display">
                         <div class="item-body-desc"><?php if ($lang == "1") { ?>
-                                登录页
+                                登录
                             <?php } else { ?>
-                                Login Page
+                                Login
                             <?php } ?>
                         </div>
 
@@ -43,9 +43,9 @@
                 <div class="item-body">
                     <div class="item-body-display">
                         <div class="item-body-desc"><?php if ($lang == "1") { ?>
-                                注册页
+                                注册
                             <?php } else { ?>
-                                Register Page
+                                Register
                             <?php } ?>
                         </div>
 
@@ -57,6 +57,32 @@
                 </div>
             </div>
             <div class="division-line"></div>
+
+            <div class="item-row" id="custom_user">
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <div class="item-body-desc"><?php if ($lang == "1") { ?>
+                                用户资料
+                            <?php } else { ?>
+                                User Profile
+                            <?php } ?>
+                        </div>
+
+                        <div class="item-body-tail">
+                            <img class="more-img" src="../../public/img/manage/more.png"/>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
+        </div>
+
+    </div>
+
+    <div class="layout-all-row">
+
+        <div class="list-item-center">
 
             <div class="item-row" id="custom-front-page">
                 <div class="item-body">
@@ -147,6 +173,10 @@
             zalyjsCommonOpenNewPage(url);
         });
 
+        $("#custom_user").on("click", function () {
+            var url = "index.php?action=manage.custom.user&lang=" + getLanguage();
+            zalyjsOpenPage(url)
+        });
 
         $("#custom-front-page").click(function () {
             var language = getLanguage();

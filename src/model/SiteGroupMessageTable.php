@@ -90,6 +90,24 @@ class SiteGroupMessageTable extends BaseTable
         return $this->handlerResult($result, $prepare, $tag);
     }
 
+    function updateMessageType($msgId, $msgType)
+    {
+        $startTime = $this->getCurrentTimeMills();
+        $tag = __CLASS__ . '->' . __FUNCTION__;
+        $sql = "update $this->table set msgType=:msgType where msgId=:msgId;";
+
+        $prepare = $this->db->prepare($sql);
+        $this->handlePrepareError($tag, $prepare);
+        $prepare->bindValue(":msgType", $msgType);
+        $prepare->bindValue(":msgId", $msgId);
+
+        $result = $prepare->execute();
+
+        $this->logger->writeSqlLog($tag, $sql, [$msgId, $msgType], $startTime);
+
+        return $this->handlerUpdateResult($result, $prepare, $tag);
+    }
+
     /**
      * 查询群组消息
      * @param $groupId
@@ -123,13 +141,35 @@ class SiteGroupMessageTable extends BaseTable
         return [];
     }
 
+
+    public function queryMessageByMsgId($groupId, $msgId)
+    {
+        $startTime = microtime(true);
+        $tag = __CLASS__ . "." . __FUNCTION__;
+
+        $queryFields = implode(",", $this->columns);
+        $sql = "select $queryFields from $this->table where msgId=:msgId and groupId=:groupId limit 1;";
+
+        try {
+            $prepare = $this->db->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->bindValue(":msgId", $msgId);
+            $prepare->bindValue(":groupId", $groupId);
+            $prepare->execute();
+
+            return $prepare->fetch(\PDO::FETCH_ASSOC);
+        } finally {
+            $this->logger->writeSqlLog($tag, $sql, "", $startTime);
+        }
+    }
+
     /**
      * 通过msgid查询表中消息
      * @param $msgIdArrays
      * @return array
      * @throws Exception
      */
-    public function queryMessageByMsgId($msgIdArrays)
+    public function queryMessageByMsgIds($msgIdArrays)
     {
         $startTime = microtime(true);
         $tag = __CLASS__ . "." . __FUNCTION__;
@@ -145,15 +185,8 @@ class SiteGroupMessageTable extends BaseTable
         $sql = "select $queryFields from $this->table ";
 
         try {
-            $sql .= "where msgId in (";
-            for ($i = 0; $i < count($msgIdArrays); $i++) {
-                if ($i == 0) {
-                    $sql .= $msgIdArrays[$i];
-                } else {
-                    $sql .= "," + $msgIdArrays[$i];
-                }
-            }
-            $sql .= ");";
+            $inSql = implode("','", $msgIdArrays);
+            $sql .= "where msgId in ('$inSql') limit 100;";
 
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
@@ -162,12 +195,40 @@ class SiteGroupMessageTable extends BaseTable
 
             return $prepare->fetchAll(\PDO::FETCH_ASSOC);
         } finally {
-            $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, "", $startTime);
+            $this->logger->writeSqlLog($tag, $sql, "", $startTime);
         }
 
         return [];
     }
 
+    public function queryColumnMsgIdByMsgId($msgIdArrays)
+    {
+        $startTime = microtime(true);
+        $tag = __CLASS__ . "." . __FUNCTION__;
+
+        $result = empty($msgIdArrays);
+
+        if ($result) {
+            return [];
+        }
+
+        $sql = "select msgId from $this->table ";
+
+        try {
+            $inSql = implode("','", $msgIdArrays);
+            $sql .= "where msgId in ('$inSql') limit 50;";
+
+            $prepare = $this->db->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+
+            $prepare->execute();
+            return $prepare->fetchAll(\PDO::FETCH_COLUMN);
+        } finally {
+            $this->logger->writeSqlLog($tag, $sql, "", $startTime);
+        }
+
+        return [];
+    }
 
     public function updatePointer($groupId, $userId, $deviceId, $pointer)
     {
@@ -200,13 +261,6 @@ class SiteGroupMessageTable extends BaseTable
             $prepare->bindValue(":deviceId", $deviceId);
 
             $result = $prepare->execute();
-
-//            if ($result) {
-//                $count = $prepare->rowCount();
-//                $this->logger->error('=============', $prepare->errorCode());
-//                $this->logger->error('=============', $prepare->errorInfo());
-//                return $count > 0;
-//            }
 
             return $this->handlerUpdateResult($result, $prepare, $tag);
         } finally {

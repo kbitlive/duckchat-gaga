@@ -48,6 +48,14 @@ html, body{
 
 /**:focus {outline: none;}*/
 
+::-webkit-input-placeholder,
+::-moz-placeholder ,
+:-ms-input-placeholder,
+:-moz-placeholder {
+    color:rgba(153,153,153,1);
+}
+
+
 
 /* Basic Layout**/
 .wrapper {
@@ -137,9 +145,23 @@ html, body{
     height: 1;
     overflow-x: hidden;
 }
+
 .right-chatbox:focus{
     background-color: white;
 }
+
+.right-chatbox-div {
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow-y: scroll;
+    height: 1;
+    overflow-x: hidden;
+}
+
+.right-chatbox-div:focus{
+    background-color: white;
+}
+
 
 /* layout - Left */
 .l-sb-item {
@@ -306,6 +328,7 @@ html, body{
 .chatsession-row-title {
     font-size:1.5rem;
     color:#141030;
+    line-height: 1.5rem;
 }
 
 .chatsession-row-time {
@@ -369,6 +392,7 @@ html, body{
 .right-input {
     width: 100%;
     height: 12.1rem;
+    z-index: 100001;
 }
 
 /* chat message list   */
@@ -384,7 +408,6 @@ html, body{
 }
 
 .msg-nickname-time {
-    margin-top: 0.23rem;
     display: flex;
     flex-direction: row;
     align-items: baseline;
@@ -413,6 +436,7 @@ html, body{
     font-size:1.31rem;
     color:rgba(20,16,48,0.6);
     font-weight: bold;
+    line-height: 1.31rem;
 }
 
 .msg-time {
@@ -575,7 +599,7 @@ html, body{
     right: 0;
     bottom: 0;
     position: fixed;
-    z-index: 9999;
+    z-index: 100002;
     overflow: hidden;
     visibility: hidden;
 
@@ -688,30 +712,31 @@ html, body{
     display: flex;
     justify-content: space-between;
     margin-left: 2rem;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
     overflow-y: scroll;
 }
 .sub-speaker-title {
-    height:1.88rem;
+    height:5rem;
     font-size:1.31rem;
     font-family:PingFangSC-Medium;
     font-weight:500;
     color:rgba(102,102,102,1);
-    line-height:1.88rem;
+    line-height:5rem;
     margin-left: 1rem;
     margin-right: 1rem;
 }
-.remove-all-speaker {
+.remove-all-speaker, .group_speakers_set_div {
     margin-right: 1rem;
     width:12.95rem;
-    height:1.88rem;
+    height:5rem;
     font-size:1.31rem;
     font-family:PingFangSC-Medium;
     font-weight:500;
     color:rgba(76,59,177,1);
-    line-height:1.88rem;
+    line-height:5rem;
     cursor: pointer;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 .speaker-line{
     width:35.18rem;
@@ -835,9 +860,56 @@ html, body{
     position: relative;
 }
 
+#more-info {
+    height:59rem;
+    width:39rem;
+    background:rgba(255,255,255,1);
+    box-shadow:0rem 0.19rem 2.53rem 0rem rgba(0,0,0,0.3);
+}
+.more-info {
+    cursor: pointer;
+}
+
+.more-info-title {
+    height:4.69rem;
+    background:rgba(255,255,255,1);
+    box-shadow:0rem 0.09rem 0.38rem 0rem rgba(223,223,223,1);
+    font-size:1.88rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(27,27,27,1);
+    line-height:4.69rem;
+    display: flex;
+    justify-content: center;
+}
+.custom_info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin:2rem 3rem 0rem 3rem;
+}
+.custom_name {
+    height:1.5rem;
+    font-size:1.5rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(27,27,27,1);
+    line-height:1.5rem;
+}
+.custom_value {
+    height:1.5rem;
+    font-size:1.5rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(153,153,153,1);
+    line-height:1.5rem;
+}
+
 #selfInfo {
     width:38.37rem;
-    height:20rem;
+    min-width: 38rem;
+    height:auto;
+    min-height: 20rem;
     background:rgba(255,255,255,1);
     box-shadow:0rem 0.19rem 1.41rem 0.09rem rgba(153,153,153,1);
     border-radius:0.56rem;
@@ -846,6 +918,15 @@ html, body{
     top:2rem;
     left:8rem;
 }
+
+#selfCutsomInfoDiv {
+    overflow-y: scroll;
+    position: absolute;
+    width: 100%;
+    display: none;
+    overflow-x:hidden;
+}
+
 .self_profile_item {
     text-align:left;
     height: 5rem;
@@ -988,6 +1069,7 @@ html, body{
     text-align: left;
     position:relative;
     word-break: break-all;
+    cursor: pointer;
 }
 
 .text-align-left-text pre,
@@ -1038,7 +1120,7 @@ html, body{
     padding: 0.5rem;
 }
 
-#group-user-menu {
+#group-user-menu, #msg-menu {
     display: inline-block;
     justify-content: center;
     background:rgba(255,255,255,1);
@@ -1060,9 +1142,28 @@ html, body{
     line-height:2.83rem;
     padding-left: 1rem;
     padding-right: 1rem;
+    cursor: pointer;
 }
 
-#group-user-menu .item:hover {
+#msg-menu .item {
+    margin:0 auto;
+    height:2.25rem;
+    text-align: center;
+    font-size:1.17rem;
+    width: 8rem;
+    color:rgba(20,16,48,1);
+    line-height:2.25rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    cursor: pointer;
+}
+
+#group-user-menu .item:hover{
+    background:rgba(76,59,177,1);
+    color:rgba(255,255,255,1);
+}
+
+#msg-menu .item:hover{
     background:rgba(76,59,177,1);
     color:rgba(255,255,255,1);
 }
@@ -1216,8 +1317,8 @@ html, body{
 .unread-num {
     top:1.5rem;
     right:1rem;
-    width: 2rem;
-    height: 2rem;
+    width: 1.8rem;
+    height: 1.8rem;
     background-color: red;
     position: absolute;
     border-radius: 50%;
@@ -1240,8 +1341,8 @@ html, body{
 }
 
 .chatsession-row-img .unread-num {
-    top:0rem;
-    right:-1rem;
+    top:-0.5rem;
+    right:-0.5rem;
 }
 .msg-notice {
     font-size:1.31rem;
@@ -1325,8 +1426,9 @@ html, body{
     height:1rem;
     border-radius: 50%;
     position: absolute;
-    top:0;
-    right:0;
+    top: -0.5rem;
+    right: -0.5rem;
+    margin: auto;
 }
 
 .apply_friend_list_num {
@@ -1844,6 +1946,7 @@ button:active{
     border-radius:0.56rem 0rem 0.56rem 0.56rem;
     display: flex;
     cursor: pointer;
+    border: 1px solid #ccc;
 }
 
 .left_msg_file_div img {
@@ -1933,10 +2036,11 @@ button:active{
 .plugin-iframe {
     height: 100%;
     width: 100%;
-    overflow: scroll;
+    overflow: hidden;
     outline: none;
     border: none;
 }
+
 .open_new_page, .close_plugin,.chat_plugin {
     cursor: pointer;
 }
@@ -1991,7 +2095,6 @@ button:active{
 
 .chat_master_tip{
     width:2.63rem;
-    height: 1rem;
     background:rgba(249,183,38,1);
     border-radius:0.19rem;
     text-align: center;
@@ -1999,7 +2102,7 @@ button:active{
     font-family:PingFangSC-Regular;
     font-weight:400;
     color:rgba(255,255,255,0.87);
-    height: 1rem;
+    height: 1.3rem;
     margin-right: 5px;
 }
 
@@ -2018,20 +2121,20 @@ button:active{
     width: 1.5rem;
     height:1.5rem;
     position: absolute;
-    left:2rem;
+    left: 2rem;
+    top: 2.5rem;
+    margin: auto;
     cursor: pointer;
 }
 .search_group_friend input{
-    width:26.27rem;
+    width:90%;
+    padding-left: 3rem;
     height:2.81rem;
     background:rgba(244,244,246,1);
     border-radius:0.19rem;
     border:0.09rem solid #E9E8ED;
     outline: none;
     cursor: pointer;
-    padding-left:3rem;
-    margin-right: 1rem;
-    margin-left: 1rem;
 }
 .search_see_friend_all_tip,.search_see_group_all_tip {
     height:3rem;
@@ -2045,4 +2148,51 @@ button:active{
     cursor: pointer;
     display: flex;
     align-items: center;
+}
+
+.msg_content_for_click {
+    position: relative;
+}
+.self_custom_info {
+    height: 2.25rem;
+    margin-left: 2rem;
+    margin-top: 1rem;
+    font-size: 1.31rem;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(27,27,27,1);
+    line-height: 2rem;
+    display: flex;
+    justify-content: space-between;
+}
+.custom_name_tip {
+    height: 2.5rem;
+    line-height: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.self_custom_info input {
+    width:18.76rem;
+    height:2.25rem;
+    border-radius:0.19rem;
+    border:0.09rem solid;
+    outline: none;
+    cursor: pointer;
+    border:1px solid #E5E5E5;
+    margin-right: 10rem;
+}
+
+.edit_self_custom {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    margin: auto;
+    height: 1.31rem;
+    font-size: 1.31rem;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(27,27,27,1);
+    line-height: 1.31rem;
+    cursor: pointer;
 }

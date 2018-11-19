@@ -400,8 +400,13 @@ class File_Manager
         if (empty($fileId)) {
             return '';
         }
-        $path = "../../public/site/image/$fileId";
-        return $path;
+        $fileName = explode("-", $fileId);
+        $dirName = $fileName[0];
+        $fileId  = $fileName[1];
+        $fileId = str_replace("../", "", $fileId);
+        $dateDir = str_replace("../", "", $dirName);
+        $dirName =  "./{$this->attachmentDir}/$dateDir";
+        return $dirName . "/" . $fileId;
     }
 
     public function fileIsExists($fileId)

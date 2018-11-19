@@ -169,12 +169,16 @@
             url:"./index.php?action=miniProgram.gif.index&type="+saveGifType+"&lang="+languageNum,
             data: reqData,
             success:function (data) {
-                data = JSON.parse(data);
-                if(data.errorCode == 'error.alert') {
-                    alert(data.errorInfo);
-                    return false;
+                try{
+                    data = JSON.parse(data);
+                    if(data.errorCode == 'error.alert') {
+                        alert(data.errorInfo);
+                        return false;
+                    }
+                    $(".save_gif").html("已收藏");
+                }catch (error) {
+
                 }
-                $(".save_gif").html("已收藏");
             }
         });
     }

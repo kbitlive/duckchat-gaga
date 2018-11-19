@@ -86,7 +86,7 @@ class InstallDBController
                 $scheme = isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : "http";
 
                 $siteAddress = $scheme . "://" . $serverHost;
-                $loginPluginId = $_POST['pluginId'];
+                $loginPluginId = 102;
 
                 if (isset($dbType) && "mysql" == $dbType) {
                     $config['dbType'] = "mysql";
@@ -411,22 +411,6 @@ class InstallDBController
         $this->logger->error("site.install.db", "init config count=" . $count);
     }
 
-    private function _insertSiteOwnerUic($code = "000000")
-    {
-        try {
-            $timeStamp = $this->helper->getMsectime();
-            $sql = "insert into siteUic(code,status,createTime) values('$code',100,$timeStamp)";
-            $prepare = $this->db->prepare($sql);
-            $this->handelPrepareError($prepare);
-            $flag = $prepare->execute();
-            $count = $prepare->rowCount();
-            $this->logger->error("site.install.db", "init uic result=" . $flag . " count=" . $count);
-        } catch (Throwable $e) {
-            $this->logger->error("site.install.db", $e);
-        }
-    }
-
-
     /**
      * 增加默认扩展小程序
      */
@@ -539,7 +523,6 @@ class InstallDBController
 
     }
 
-
     private function _insertSitePlugin($miniPrograms)
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
@@ -582,7 +565,7 @@ class InstallDBController
         $count = $prepare->rowCount();
 
         $this->logger->error("site.install.db",
-            "miniProgram name=" . $data['name'] .
+            "init mimiProgram or custom, name=" . $data['name'] .
             " count=" . $count .
             " errCode=" . $prepare->errorCode() .
             " errInfo=" . json_encode($prepare->errorInfo()));

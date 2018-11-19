@@ -6,10 +6,10 @@
     <!-- Latest compiled and minified CSS -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="<?php echo $siteAddress;?>/public/css/init.css?_version=<?php echo $versionCode?>">
-    <script type="text/javascript" src="<?php echo $siteAddress;?>/public/js/jquery.min.js"></script>
-    <script src="<?php echo $siteAddress;?>/public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
-    <script src="<?php echo $siteAddress;?>/public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
+    <link rel="stylesheet" href="./public/css/init.css?_version=<?php echo $versionCode?>">
+    <script type="text/javascript" src="./public/js/jquery.min.js"></script>
+    <script src="./public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
+    <script src="./public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
     <script type="text/javascript">
         var latestVersion="0";
         function setLasteVersion(lasteVersion) {
@@ -50,7 +50,7 @@
     <input type="hidden" value='<?php echo $siteAddress;?>' class="siteAddress">
 
     <?php include (dirname(__DIR__) . '/init/template_init.php');?>
-    <script src="<?php echo $siteAddress;?>/public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
+    <script src="./public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
 
 <script>
 
@@ -346,8 +346,8 @@
             return false;
         }
 
-        var selector = document.getElementById('verifyPluginId');
-        var pluginId = $(selector[selector.selectedIndex]).attr("pluginId");
+        // var selector = document.getElementById('verifyPluginId');
+        // var pluginId = $(selector[selector.selectedIndex]).attr("pluginId");
         if (dbType == "") {
             alert("请选择数据库类型");
             return;
@@ -419,7 +419,6 @@
             showLoading($(".container"));
 
             var data = {
-                pluginId: pluginId,
                 dbHost: dbHost,
                 dbPort: dbPort,
                 dbUserName: dbUserName,
@@ -446,7 +445,6 @@
         var selector = document.getElementById('sqlite-file');
         sqliteFileName = $(selector[selector.selectedIndex]).attr("fileName");
         var data = {
-            pluginId: pluginId,
             dbType: dbType,
             sqliteDbFile: sqliteFileName,
             adminLoginName:adminName,

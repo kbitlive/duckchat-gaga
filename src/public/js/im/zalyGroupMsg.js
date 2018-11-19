@@ -73,36 +73,41 @@ function showOtherWebNotification()
     }
 }
 
-
 function displayFrontPage()
 {
     try{
-        var configStr = localStorage.getItem(siteConfigKey);
-        var config = JSON.parse(configStr);
-        if(config.hasOwnProperty("hiddenHomePage") && config['hiddenHomePage'] == true) {
-            var isMaster = isJudgeSiteMasters(token);
-            if(!isMaster) {
-                $(".l-sb-item[data='home']")[0].style.display="none";
-            }
-        } else {
-            //1:Home 2:Chats 3:Contacts friend 4:Me
-            if(config.hasOwnProperty('frontPage')) {
-                var frontPage = config['frontPage'];
-                switch (frontPage) {
-                    case "FrontPageChats":
-                        $(".l-sb-item[data='chatSession']").click();
-                        break;
-                    case "FrontPageContacts":
-                        $(".l-sb-item[data='friend']").click();
-                        break;
-                    default:
-                        $(".l-sb-item[data='home']").click();
+        var isDisplayFrontPage = localStorage.getItem(isDisplayFrontPageKey);
+
+        if(isDisplayFrontPage != "is_display") {
+            localStorage.setItem(isDisplayFrontPageKey, "is_display");
+            var configStr = localStorage.getItem(siteConfigKey);
+            var config = JSON.parse(configStr);
+            if(config.hasOwnProperty("hiddenHomePage") && config['hiddenHomePage'] == true) {
+                var isMaster = isJudgeSiteMasters(token);
+                if(!isMaster) {
+                    $(".l-sb-item[data='home']")[0].style.display="none";
                 }
             } else {
-                $(".l-sb-item[data='home']").click();
+                //1:Home 2:Chats 3:Contacts friend 4:Me
+                if(config.hasOwnProperty('frontPage')) {
+                    var frontPage = config['frontPage'];
+                    switch (frontPage) {
+                        case "FrontPageChats":
+                            $(".l-sb-item[data='chatSession']").click();
+                            break;
+                        case "FrontPageContacts":
+                            $(".l-sb-item[data='friend']").click();
+                            break;
+                        default:
+                            $(".l-sb-item[data='home']").click();
+                    }
+                } else {
+                    $(".l-sb-item[data='home']").click();
+                }
+                $(".l-sb-item[data='home']")[0].style.display="flex";
             }
-            $(".l-sb-item[data='home']")[0].style.display="flex";
         }
+
     }catch (error){
         $(".l-sb-item[data='chatSession']").click();
     }
@@ -111,14 +116,15 @@ function displayFrontPage()
 }
 
 
-uploadSelfAvatar = false;
+
+isSelfInfoCanHidden = true;
 
 //点击触发一个对象的点击
 function uploadFile(obj, type)
 {
 
     if(type == 'user_avatar') {
-        uploadSelfAvatar = true
+        isSelfInfoCanHidden = false
     }
 
     $("#"+obj).val("");
@@ -134,13 +140,12 @@ jumpRoomType = $(".jumpRoomType").attr("data");
 jumpRoomId = $(".jumpRoomId").attr("data");
 jumpRelation = $(".jumpRelation").attr("data");
 
-
 function jump()
 {
     //群，好友
     // http://127.0.0.1/index.php?page=u2Msg&x=
     // http://127.0.0.1/index.php?page=groupMsg&x=
-
+    getRoomList();
     if(jumpRoomType != "" && jumpRoomId != "") {
         if(jumpRoomType == JUMP_GroupMsg ) {
             if(jumpRelation == 1) {
@@ -325,6 +330,8 @@ window.onresize = function(){
     }
 }
 
+
+
 function handleSendFriendApplyReq()
 {
     alert("已经发送好友请求");
@@ -499,10 +506,10 @@ function handlePluginListHtml(results)
     if(results.hasOwnProperty("list") && results.list) {
         var list = results.list;
         var listLength = list.length;
-        var displayPlugin = localStorage.getItem(defaultPluginDisplay);
         for(var i=0;i<listLength;i++) {
             var plugin = list[i];
             var logo = false;
+            var displayPlugin = localStorage.getItem(defaultPluginDisplay);
             if(!displayPlugin || displayPlugin == null) {
                 localStorage.setItem(defaultPluginDisplay,plugin.id);
             }
@@ -557,11 +564,36 @@ $(document).on("click", ".plugin-info", function () {
     var pluginId = $(this).attr("plugin-id");
     localStorage.setItem(defaultPluginDisplay, pluginId);
     $(".title").html(name);
+    var pluginId = "plugin_id_"+pluginId;
     $(".plugin-src").attr("src", landingPageUrl);
+    $(".plugin-src").attr("id",pluginId);
+    setPluginTitle(pluginId);
     $(".open_new_page").attr("landingPageUrl", landingPageUrl);
     deleteCookie("duckchat_page_url");
     setCookie("duckchat_sessionid", duckchatSessionId, 1 );
 });
+
+
+function setPluginTitle(pluginId)
+{
+    var iframe = document.getElementById(pluginId);
+    var pluginSrc = $("#"+pluginId).attr("src");
+    try{
+        var host = location.host;
+        if(location.port) {
+            host = host + ":"+location.port;
+        }
+        if(pluginSrc.indexOf(host) != -1 || (( pluginSrc.indexOf("http") == -1) && ( pluginSrc.indexOf("https") == -1))) {
+            iframe.onload = function (ev) {
+                var pluginTitle = iframe.contentWindow.document.title;
+                $(".plugin-title").html(pluginTitle);
+            }
+        }
+    }catch (error){
+
+    }
+
+}
 
 $(document).on("click", ".open_new_page", function () {
     var landingPageUrl = $(this).attr("landingPageUrl");
@@ -634,12 +666,22 @@ $(document).on("click", ".chat_plugin", function () {
 });
 
 
+
 $(document).on("click", ".plugin_back", function () {
     try{
+        var pluginId =  $(".plugin-iframe").attr("id");
         $(".plugin-iframe")[0].contentWindow.history.go(-1); // back
-        $(".plugin-iframe")[0].contentWindow.onload();
+        var onReload = false;
+        $(".plugin-iframe")[0].onload = function() {
+            if( onReload == false) {
+                $(".plugin-iframe")[0].contentWindow.self.location.href = $(".plugin-iframe")[0].contentWindow.self.location.href;
+                console.log("plugin---id---"+pluginId);
+                setPluginTitle(pluginId);
+                onReload = true;
+            }
+        }
     }catch (error){
-
+        console.log(error);
     }
 });
 
@@ -836,35 +878,58 @@ function downloadImgFormQrcode(idName)
 
 //--------------------------------------set document tile---------------------------------------------
 intervalId = undefined
+
+isHidden = false;
+
 function setDocumentTitle()
 {
-    iconNum = 0;
-    if(document.hidden == true) {
-        var siteTip = localStorage.getItem(newSiteTipKey);
+    try{
+        iconNum = 0;
+        if(document.hidden == true) {
+            isHidden = true;
+            var siteTip = localStorage.getItem(newSiteTipKey);
 
-        if(intervalId == undefined && siteTip != "clear") {
-            intervalId = setInterval(function () {
-                if(siteTip == "clear") {
-                    $(".icon").attr("href", "favicon.ico?_v="+intervalId);
-                    iconNum = 0;
-                } else {
-                    if(Number(iconNum%2) == 0) {
-                        $(".icon").attr("href", "favicon.ico?_v="+intervalId);
+            if(intervalId == undefined && siteTip != "clear") {
+                intervalId = setInterval(function () {
+                    if(siteTip == "clear") {
+                        $(".icon").attr("href", "./favicon.ico?_v="+intervalId);
+                        iconNum = 0;
                     } else {
-                        console.log("tip.png?_v="+intervalId)
-                        $(".icon").attr("href", "tip.png?_v="+intervalId);
+                        if(Number(iconNum%2) == 0) {
+                            $(".icon").attr("href", "./favicon.ico?_v="+intervalId);
+                        } else {
+                            $(".icon").attr("href", "./tip.png?_v="+intervalId);
+                        }
+                        iconNum = Number(iconNum+1);
                     }
-                    iconNum = Number(iconNum+1);
-                }
-            }, 100);
+                }, 100);
+            }
+            return ;
         }
-        return ;
+        if(isHidden) {
+            try{
+                var chatSessionId = $(".chatsession-row-active").attr("chat-session-id");
+                var currentChatSessionId = localStorage.getItem(chatSessionIdKey);
+                if(chatSessionId != currentChatSessionId) {
+                    window.location.reload();
+                }
+            } catch (error) {
+
+            }
+
+            isHidden = false;
+        }
+
+        $(".icon").attr("href", "./favicon.ico");
+        iconNum = 0;
+        clearInterval(intervalId);
+        intervalId = undefined
+    }catch (error) {
+
     }
-    $(".icon").attr("href", "favicon.ico");
-    iconNum = 0;
-    clearInterval(intervalId);
-    intervalId = undefined
 }
+
+
 document.addEventListener('visibilitychange', function(){
    setDocumentTitle();
 }, false);
@@ -879,12 +944,10 @@ function logout(event)
     event.stopPropagation();
     var tip = $.i18n.map['logoutJsTip'] != undefined ? $.i18n.map['logoutJsTip']: "退出账号，将会清空聊天记录";
     if(confirm(tip)) {
+        localStorage.clear();
         window.location.href = "./index.php?action=page.logout";
     }
 }
-
-
-
 
 //------------------------------------*********Group function*********--------------------------------------------
 
@@ -1379,10 +1442,20 @@ function displayGroupMemberForGroupInfo(results)
                 $(".group-member-body").append(html);
             }
             var user = list[i].profile;
+            var stroageUserProfileStr = localStorage.getItem(profileKey+user.userId);
+            var nickname = user.nickname;
+            try{
+                nickname = user.nickname;
+                if(stroageUserProfileStr != undefined && stroageUserProfileStr != false) {
+                   var stroageUserProfile = JSON.parse(stroageUserProfileStr);
+                   nickname = stroageUserProfile.nickname;
+               }
+            }catch (error){
+            }
             var memberAvatarImg = getNotMsgImgUrl(user.avatar);
             html = template("tpl-group-member-body-detail", {
                 userId : user.userId,
-                nickname:user.nickname,
+                nickname:nickname,
                 memberAvatarImg:memberAvatarImg
             });
             html = handleHtmlLanguage(html);
@@ -1842,9 +1915,9 @@ function handelGroupSpeakerList(result)
             isSelfAdminRole = true;
         }
         $(".speaker-people-div").html('');
-        if(isSelfAdminRole == false) {
-            $(".remove-all-speaker")[0].style.display = "none";
-            $(".speaker-group-member")[0].style.display = "none";
+        if(isSelfAdminRole == true) {
+            $(".remove-all-speaker")[0].style.display = "flex";
+            $(".set_group_speakers")[0].style.display = "flex";
         }
 
         if(groupProfile.hasOwnProperty("speakers")) {
@@ -1852,9 +1925,18 @@ function handelGroupSpeakerList(result)
             var speakersLength = speakers.length;
             for(var i=0; i<speakersLength;i++){
                 var speakerInfo = speakers[i];
-                var html =getSpeakerMemberHtml(speakerInfo,  true, "member", isSelfAdminRole);
+                var html = getSpeakerMemberHtml(speakerInfo,  true, "member", isSelfAdminRole);
                 $(".speaker-people-div").append(html);
             }
+            var openSrc = "./public/img/msg/icon_switch_on.png";
+            $(".group_speakers_set").attr("src", openSrc);
+            $(".group_speakers_set").attr("value", "on");
+
+
+        } else {
+            var closeSrc = "./public/img/msg/icon_switch_off.png";
+            $(".group_speakers_set").attr("src", closeSrc);
+            $(".group_speakers_set").attr("value", "off");
         }
         // group operation -- group speakers from group profile - init member html
         if(isSelfAdminRole) {
@@ -1868,6 +1950,28 @@ function handelGroupSpeakerList(result)
     }
     handleGetGroupProfile(result);
 }
+
+$(document).on("click", ".group_speakers_set", function(){
+    var value = $(this).attr("value");
+    if(value == "on") {
+        //off
+        var closeSrc = "./public/img/msg/icon_switch_off.png";
+        $(".group_speakers_set").attr("src", closeSrc);
+        $(".group_speakers_set").attr("value", "off");
+        $(".remove-all-speaker").click();
+    } else {
+        //on
+        var openSrc = "./public/img/msg/icon_switch_on.png";
+        $(".group_speakers_set").attr("src", openSrc);
+        $(".group_speakers_set").attr("value", "on");
+        var groupId = localStorage.getItem(chatSessionIdKey);
+        var speakerUserIds = new Array();
+        speakerUserIds.push(token);
+        updateGroupSpeaker(groupId, speakerUserIds, SetSpeakerType.AddSpeaker, handleSetSpeaker);
+
+    }
+
+});
 
 // group operation -- group speakers from group profile - init member html
 unselectSpeakerMemberOffset = 0;
@@ -1895,21 +1999,13 @@ function initSpeakerGroupMemberList(results)
             var userId = user.userId;
             var isType = "member";
 
-            if(groupOwnerId == userId) {
-                isType = "owner";
-                continue;
-            }
-            if(groupAdminIds && groupAdminIds.indexOf(userId) != -1) {
-                isType = "admin";
-                continue;
-            }
-
             if(speakerListMemberIds && speakerListMemberIds.indexOf(userId) != -1) {
                 continue;
             }
             var html = getSpeakerMemberHtml(user,  false, "member", isSelfAdminRole);
             $(".speaker-group-member-div").append(html);
         }
+        $(".speaker-group-member-div")[0].style.height = $(".speaker-group-member-div")[0].clientHeight+"px";
     }
 }
 // group operation -- group speakers from group profile
@@ -1983,10 +2079,13 @@ function updateGroupSpeaker(groupId, speakerUserIds, type, callback)
 function handleSetSpeaker(result)
 {
     try{
+        $(".add_speaker_btn[userId="+token+"]").click();
+
         var speakerUserIds = result.speakerUserIds;
         var speakerKey = speakerUserIdsKey+localStorage.getItem(chatSessionIdKey);
         localStorage.setItem(speakerKey, JSON.stringify(speakerUserIds));
         var groupId = localStorage.getItem(chatSessionIdKey);
+
         sendGroupProfileReq(groupId, handleGetGroupProfile);
     }catch (error) {
 
@@ -1996,6 +2095,11 @@ addSpeakerInfo=[];
 
 function handleAddSpeaker()
 {
+    //开启禁言
+    var openSrc = "./public/img/msg/icon_switch_on.png";
+    $(".group_speakers_set").attr("src", openSrc);
+    $(".group_speakers_set").attr("value", "on");
+
     var groupId = localStorage.getItem(chatSessionIdKey);
     var groupProfile = getGroupProfile(groupId);
 
@@ -2050,8 +2154,8 @@ $(document).on("click", ".add_speaker_btn", function () {
 deleteSpeakerInfo=[];
 function handleRemoveSpeaker()
 {
-    var delSpeakerLength=deleteSpeakerInfo.length;
 
+    var delSpeakerLength=deleteSpeakerInfo.length;
     var groupId = localStorage.getItem(chatSessionIdKey);
     var groupProfile = getGroupProfile(groupId);
 
@@ -2068,6 +2172,15 @@ function handleRemoveSpeaker()
         var html = getSpeakerMemberHtml(speakerInfo,  false, "member", isSelfAdminRole);
         $(".speaker-group-member-div").append(html);
     }
+    $(".speaker-group-member-div")[0].style.height = $(".speaker-group-member-div")[0].scrollHeight+"px";
+
+    //关闭禁言
+    if($(".speaker_remove_people").length < 1) {
+        var closeSrc = "./public/img/msg/icon_switch_off.png";
+        $(".group_speakers_set").attr("src", closeSrc);
+        $(".group_speakers_set").attr("value", "off");
+    }
+
     deleteSpeakerInfo=[];
     sendGroupProfileReq(groupId, handleGetGroupProfile);
 }
@@ -2728,23 +2841,32 @@ function handleGetFriendProfile(result)
     var profile = result.profile;
 
     if(profile != undefined && profile["profile"]) {
-        var userProfile = profile["profile"];
+        try{
+            var userProfile = profile["profile"];
 
-        sessionStorage.removeItem(reqProfile+userProfile["userId"]);
+            sessionStorage.removeItem(reqProfile+userProfile["userId"]);
 
-        var userProfilekey = profileKey + userProfile["userId"];
-        userProfile['updateTime'] = Date.parse(new Date());
-        localStorage.setItem(userProfilekey, JSON.stringify(userProfile));
+            var userProfilekey = profileKey + userProfile["userId"];
+            userProfile['updateTime'] = Date.parse(new Date());
+            localStorage.setItem(userProfilekey, JSON.stringify(userProfile));
 
-        var muteKey = msgMuteKey + userProfile["userId"];
-        var mute = profile.mute ? 1 : 0;
-        localStorage.setItem(muteKey, mute);
+            var muteKey = msgMuteKey + userProfile["userId"];
+            var mute = profile.mute ? 1 : 0;
+            localStorage.setItem(muteKey, mute);
 
-        var relationKey = friendRelationKey + userProfile["userId"];
-        var relation = profile.relation == undefined ? FriendRelation.FriendRelationInvalid : profile.relation;
-        localStorage.setItem(relationKey, relation);
+            var relationKey = friendRelationKey + userProfile["userId"];
+            var relation = profile.relation == undefined ? FriendRelation.FriendRelationInvalid : profile.relation;
+            localStorage.setItem(relationKey, relation);
 
-        displayProfile(userProfile.userId, U2_MSG);
+            var customKey = friendCustomKey + userProfile["userId"];
+            if(profile.hasOwnProperty("custom")) {
+                localStorage.setItem(customKey, JSON.stringify(profile['custom']));
+            }
+            displayProfile(userProfile.userId, U2_MSG);
+
+        }catch (error) {
+            console.log(error);
+        }
     }
 }
 
@@ -2801,6 +2923,18 @@ function updateInfo(profileId, profileType)
 
     var muteKey= msgMuteKey+profileId;
     mute = localStorage.getItem(muteKey);
+    var chatSessionName = "";
+    try{
+        chatSessionName = name.substr(0, 8);
+        chatSessionName = template("tpl-string", {
+            string:chatSessionName
+        });
+        if(name.length>8) {
+            chatSessionName += "...";
+        }
+    }catch (error) {
+    }
+
     var name = template("tpl-string", {
         string : name
     });
@@ -2810,9 +2944,16 @@ function updateInfo(profileId, profileType)
     }catch (error) {
 
     }
+
+
     $(".nickname_"+profileId).html(name);
+    if(chatSessionName == "") {
+        chatSessionName = name;
+    }
+    $(".chatsession_nickname_"+profileId).html(chatSessionName);
 
     try{
+        $(".aria-lable-"+profileId).attr("aria-lable", name);
         if(mute>0) {
             $(".room-chatsession-mute_"+profileId)[0].style.display = "block";
         } else {
@@ -2843,25 +2984,26 @@ function displayCurrentProfile()
             var friendProfile = getFriendProfile(chatSessionId, false, handleGetFriendProfile);
 
             if(friendProfile) {
-                var nickname = friendProfile.nickname;
-                nickname = template("tpl-string", {
-                    string : nickname
+                var trueNickname = friendProfile.nickname;
+                var nickname = template("tpl-string", {
+                    string : trueNickname
                 });
                 $(".nickname_"+chatSessionId).html(nickname);
+
                 $(".chatsession-title").html(nickname);
+
                 var isMaster = isJudgeSiteMasters(chatSessionId);
+
                 var html = template("tpl-friend-profile", {
                     isMaster:isMaster,
-                    nickname:nickname,
-                    loginName:friendProfile.loginName
+                    nickname:trueNickname,
+                    loginName:friendProfile.loginName,
                 });
                 $(".user-desc-body").html(html);
             } else {
                 $(".chatsession-title").html("");
                 $(".user-desc-body").html("");
             }
-
-
 
             $(".chat_session_id_"+chatSessionId).addClass("chatsession-row-active");
             var relationKey = friendRelationKey + chatSessionId;
@@ -3023,32 +3165,50 @@ $(document).mouseup(function(e){
     var targetId = e.target.id;
     var targetClassName = e.target.className;
 
-    if(targetId == "wrapper-mask") {
-        var wrapperMask = document.getElementById("wrapper-mask");
-        var length = wrapperMask.children.length;
-        var i;
-        for(i=0;i<length; i++) {
-            var node  = wrapperMask.children[i];
-            node.remove();
-            addTemplate(node);
+   try{
+       if(targetId == "wrapper-mask") {
+           var wrapperMask = document.getElementById("wrapper-mask");
+           var length = wrapperMask.children.length;
+           var i;
+           for(i=0;i<length; i++) {
+               var node  = wrapperMask.children[i];
+               node.remove();
+               addTemplate(node);
+           }
+           wrapperMask.style.visibility = "hidden";
+       }
+       ////隐藏群组点击头像之后的弹出菜单
+       if(targetClassName != "group-user-img" && targetClassName != "item p-2") {
+           hideGroupUserMenu();
+       }
+
+       if(targetClassName != "emotion-item") {
+           document.getElementById("emojies").style.display = "none";
+       }
+       if(targetClassName != "gif") {
+           document.getElementById("chat_plugin").style.display = "none";
+       }
+       if(targetClassName.indexOf("siteSelfInfo") == -1) {
+           $("#selfInfo").remove();
+       }
+
+   }catch (error) {
+
+   }
+});
+
+$(document).mousedown(function (e) {
+    try{
+        if($("#msg-menu").length > 0 && e.target.className.indexOf("item") == -1) {
+            $("#msg-menu").remove();
+            return false;
         }
-        wrapperMask.style.visibility = "hidden";
-    }
-    ////隐藏群组点击头像之后的弹出菜单
-    if(targetClassName != "group-user-img" && targetClassName != "item p-2") {
-        hideGroupUserMenu();
+    }catch (error) {
+
     }
 
-    if(targetClassName != "emotion-item") {
-        document.getElementById("emojies").style.display = "none";
-    }
-    if(targetClassName != "gif") {
-        document.getElementById("chat_plugin").style.display = "none";
-    }
-    if(targetClassName.indexOf("siteSelfInfo") == -1) {
-        $("#selfInfo").remove();
-    }
 });
+
 
 function hideGroupUserMenu()
 {
@@ -3093,6 +3253,7 @@ $(document).on("click", ".permission-join", function () {
 });
 
 $(document).on("click", ".mark_down", function () {
+
     var isMarkDown = $(".mark_down").attr("is_on");
     if(isMarkDown == "on") {
         $(".mark_down").attr("is_on", "off");
@@ -3114,6 +3275,43 @@ $(document).on("click", ".imgDiv", function () {
     $(this).attr("src",  "../../public/img/msg/member_select.png");
     $(this).addClass("permission-join-select");
 });
+
+$(document).on("click", ".more-info", function () {
+
+    var chatSessionId = localStorage.getItem(chatSessionIdKey);
+    sendFriendProfileReq(chatSessionId, handleFriendMoreInfo);
+});
+
+function handleFriendMoreInfo(result) {
+    if (result == undefined) {
+        return;
+    }
+    var profile = result.profile;
+    var customs = [];
+
+    if (profile != undefined && profile["profile"]) {
+        try {
+            if (profile.hasOwnProperty("custom")) {
+                 customs = profile['custom'];
+            }
+        } catch (error) {
+        }
+    }
+
+    var html = template("tpl-friend-profile-more-info", {
+        customs: customs
+    });
+    html = handleHtmlLanguage(html);
+    $("#more-info").html(html);
+
+    showWindow($("#more-info"));
+    var trueFriendMoreInfoHeight = $("#more-info")[0].clientHeight -  $(".more-info-title")[0].style.clientHeight;
+    if($(".friend_more_info")[0].clientHeight < trueFriendMoreInfoHeight) {
+        $(".friend_more_info")[0].style.overflowY = "hidden";
+    }
+    $(".friend_more_info")[0].style.height =  trueFriendMoreInfoHeight+"px";
+
+}
 
 
 //添加好友
@@ -3333,25 +3531,58 @@ function editFriendRemark()
 
 //-------------------------------------self qrcode-------------------------------------------------------
 
+function handleGetUserProfile(result)
+{
+    var customs = new Array();
+    if(result && result.hasOwnProperty("profile") ) {
+        var profile = result['profile'];
+        if(profile.hasOwnProperty("custom")) {
+            customs = profile.custom;
+        }
+    }
+    try{
+        $("#selfInfo").remove();
+    }catch (error) {
+
+    }
+    var finishTip = getLanguage() == 1? '完成': "finish";
+    var isMaster = isJudgeSiteMasters(token);
+    var html = template("tpl-self-info", {
+        userId:token,
+        avatar:getNotMsgImgUrl(avatar),
+        nickname:profile['public'].nickname,
+        loginName:loginName,
+        isMaster:isMaster,
+        customs:customs,
+        finishTip:finishTip
+    });
+    // try{
+    //     hideLoading();
+    // }catch (error){
+    // }
+    html = handleHtmlLanguage(html);
+    $(".wrapper").append(html);
+}
+
+function getSelfInfo()
+{
+    var action = "api.user.profile"
+    handleClientSendRequest(action, {}, handleGetFriendProfile);
+}
+
+getSelfInfo();
 
 ////展示个人消息
 function displaySelfInfo()
 {
-    var soundNotification = localStorage.getItem(soundNotificationKey);
-
-    var isMaster = isJudgeSiteMasters(token);
-    var html = template("tpl-self-info", {
-        userId:token,
-        nickname:nickname,
-        loginName:loginName,
-        isMaster:isMaster,
-        siteAddress:siteAddress,
-        soundNotification:soundNotification
-    });
-    html = handleHtmlLanguage(html);
-    $(".wrapper").append(html);
-    getNotMsgImg(token, avatar);
+    // try{
+    //     showMiniLoading($(".l-sb-item-selfInfo"));
+    // }catch (error){
+    // }
+    var action = "api.user.profile"
+    handleClientSendRequest(action, {}, handleGetUserProfile);
 }
+
 
 $(document).on("click", ".sound_mute", function () {
     var type = $(this).attr("is_on");
@@ -3376,15 +3607,18 @@ $(document).on("click", ".selfInfo", function () {
 $(".selfInfo").mouseover(function(){
     displaySelfInfo();
 }).mouseout(function () {
+    try{
+        hideLoading();
+    }catch (error) {
 
-});
-
-$(document).on("mouseleave","#selfInfo", function () {
-    if( uploadSelfAvatar == false) {
-        removeWindow($("#selfInfo"));
     }
 });
 
+$(document).on("mouseleave","#selfInfoDiv", function () {
+    if( isSelfInfoCanHidden == true) {
+        removeWindow($("#selfInfo"));
+    }
+});
 
 $(document).on("click", "#self-qrcode", function () {
     getSelfQrcode();
@@ -3415,7 +3649,7 @@ function updateSelfNickName(event)
     }
     var values = new Array();
     var value = {
-        type : "ApiUserUpdateNickname",
+        type : ApiUserUpdateType.ApiUserUpdateNickname,
         nickname : nickname,
     };
     values.push(value);
@@ -3431,9 +3665,24 @@ function updateUserInfo(values)
     handleClientSendRequest(action, reqData, handleUpdateUserInfo);
 }
 
+
 function handleUpdateUserInfo(results)
 {
-    window.location.reload();
+    if(results && results.hasOwnProperty("profile")) {
+        var public = results['profile'].public;
+        avatar = public['avatar'];
+        var url = getNotMsgImgUrl(avatar);
+        $(".info-avatar-"+public['userId']).attr("src", url);
+        nickname = public['nickname'];
+        var nicknameHtml = template("tpl-string", {
+            string:nickname
+        });
+        var html ='<div style="margin-left: 1rem;" class="nickNameDiv siteSelfInfo">'+nicknameHtml+'<img src="./public/img/edit.png" style="width: 1rem;height:1rem"></div>';
+
+        $(".nickname_"+public['userId']).html(nicknameHtml);
+        $(".editSelfNickNameDiv").html(html);
+        getNotMsgImg(token, avatar);
+    }
 }
 
 $(document).on("click", ".nickNameDiv",function () {
@@ -3443,11 +3692,76 @@ $(document).on("click", ".nickNameDiv",function () {
     $(this)[0].parentNode.replaceChild($(html)[0], $(this)[0]);
 });
 
-function handleApiSiteMute() {
+// self_custom_edit_info
 
+function updateUserCustomInfo(event, jqElement)
+{
+    // var isEnter = checkIsEnterBack(event);
+    // if(!isEnter) {
+    //     return;
+    // }
+    //
+    // var customKey = $(jqElement).attr("customKey");
+    // var customValue = $(jqElement).val();
+    // var customName = $(jqElement).attr("customName");
+    //
+    // var customInfo = {
+    //     "customKey":customKey,
+    //     "customValue":customValue,
+    //     "customName":customName
+    // }
+    //
+    // var values = new Array();
+    // var value = {
+    //     type : ApiUserUpdateType.ApiUserUpdateCustom,
+    //     custom : customInfo,
+    // };
+    // values.push(value);
+    // updateUserInfo(values);
 }
 
+function editSelfCustom(type)
+{
+    if(type == 'edit') {
+        isSelfInfoCanHidden = false;
+        $("#selfInfoDiv")[0].style.display = "none";
+        $("#selfCutsomInfoDiv")[0].style.display = "block";
+        var customHeight =  $("#selfCutsomInfoDiv")[0].scrollHeight;
+        var layoutLeftHeight = $(".layout-left")[0].clientHeight;
+        if(layoutLeftHeight-customHeight>30) {
+            $("#selfCutsomInfoDiv")[0].style.overflowY = "hidden";
+        }
+        $("#selfCutsomInfoDiv")[0].style.height = customHeight+"px";
+        $("#selfInfo")[0].style.height = customHeight+"px";
 
+    } else {
+        var values = new Array();
+
+        $(".edit_custom_info").each(function (index, target) {
+            var customKey = $(target).attr("customKey");
+            var customValue = $(target).val();
+            var customName = $(target).attr("customName");
+
+            var customInfo = {
+                "customKey":customKey,
+                "customValue":customValue,
+                "customName":customName
+            }
+
+            var value = {
+                type : ApiUserUpdateType.ApiUserUpdateCustom,
+                custom : customInfo,
+            };
+            values.push(value);
+        });
+        updateUserInfo(values);
+        $("#selfInfoDiv")[0].style.display = "block";
+        $("#selfInfoDiv")[0].style.height = "20rem";
+        $("#selfInfo")[0].style.height = "20rem";
+        $("#selfCutsomInfoDiv")[0].style.display = "none";
+        isSelfInfoCanHidden = true;
+    }
+}
 //------------------------------------api.friend.delete--------------------------------------------------------
 
 $(document).on("click", ".delete-friend", function () {
@@ -3473,9 +3787,6 @@ function handleFriendDelete(userId)
 $(document).on("click", "#selfQrcode", function () {
     downloadImgFormQrcode("selfQrcode");
 });
-
-
-
 
 
 $(document).on("click", ".web-msg-click", function(){
@@ -3743,8 +4054,15 @@ $(document).on("click", ".clear_room_chat", function () {
     var roomId = localStorage.getItem(chatSessionIdKey);
     var tip = languageNum == UserClientLangZH ?  "将删除聊天记录，确认？" : "Sure?" ;
     if(confirm(tip)) {
-        $(".right-chatbox").html("");
         clearRoomMsgFromRoomList(roomId);
+
+       try{
+           $(".msg-row").each(function (index, target) {
+               $(target).remove();
+           });
+       }catch (error) {
+
+       }
     }
 });
 
@@ -3794,8 +4112,9 @@ function displayRightPage(displayType)
                     $(".no-chat-dialog-div")[0].style.display = "block";
                     $(".chat-dialog")[0].style.display = "none";
                 }
-                $(".msg_content").focus()
+                $(".msg_content").focus();
 
+                displayWaterMark();
                 checkOsVersion();
                 break;
             case DISPLAY_APPLY_FRIEND_LIST:
@@ -3808,6 +4127,33 @@ function displayRightPage(displayType)
     }catch (error) {
         // console.log(error.message);
     }
+}
+
+function displayWaterMark()
+{
+
+   try{
+       var configStr = localStorage.getItem(siteConfigKey);
+       var config = JSON.parse(configStr);
+        var chatSessionId = localStorage.getItem(chatSessionIdKey);
+       if(config.hasOwnProperty("openWaterMark") && config['openWaterMark']) {
+           var time = Date.parse(new Date()) / 1000;
+           //前10位
+           var suffixToken = token.substr(0, 10);
+           var suffixChatsessionId = chatSessionId.substr(0,10)
+           var params =  suffixToken +" "+suffixChatsessionId+" "+time;
+           var data = { watermark_txt:params, watermark_width:60, watermark_y_space:30, watermark_x_space:30 }
+
+           try{
+               $("#otdivid").remove();
+           }catch (error) {
+
+           }
+           watermark.load(data, $(".right-body-chat"), $(".right-chatbox"));
+       }
+
+   }catch (error)  {
+   }
 }
 
 $(".input-box").on("click",function () {
@@ -3953,3 +4299,182 @@ function sortRoomList(jqElement)
     }
 }
 
+$(document).bind("contextmenu", ".msg_content_for_click", function(event){
+   try{
+       var msgId = $(event.target).attr("msgId");
+       var msgType = $(event.target).attr("msgType");
+       var sendtime = $(event.target).attr("sendtime");
+       var userId = $(event.target).attr("userId");
+
+
+       var trueTarget = "";
+       if(msgId == undefined) {
+           var findNode = false;
+           var targets = $(event.target).parents();
+           targets.each(function (index, target) {
+               if($(target).hasClass("msg_content_for_click")) {
+                   msgId = $(target).attr("msgId");
+                   msgType = $(target).attr("msgType");
+                   sendtime = $(target).attr("sendtime");
+                   userId = $(target).attr("userId");
+                   trueTarget = target;
+               }
+           });
+       }
+       if(!trueTarget) {
+           return false;
+       }
+       var currentChatSessionId = localStorage.getItem(chatSessionIdKey);
+       var chatSessionType = localStorage.getItem(currentChatSessionId);
+
+
+       try{
+           $("#msg-menu")[0].remove();
+       }catch (error) {
+       }
+       var clientX = event.offsetX;
+       var clientY = event.offsetY;
+
+       if(msgId == undefined) {
+           return false;
+       }
+       var isCopy = false;
+       var isSave = false;
+       var isRecall = false;
+       var isSee = false;
+       var recallDisabled = false;
+
+       var nowTime =  Date.now();
+
+       //两分钟内的允许撤回
+       if(userId == token ) {
+           isRecall = true;
+           if(nowTime-sendtime > 120000) {
+               recallDisabled = true
+           }
+       }else {
+           if(chatSessionType == GROUP_MSG) {
+               var groupProfileStr = localStorage.getItem(profileKey+currentChatSessionId);
+               var groupProfile = JSON.parse(groupProfileStr);
+               var isAdmin = checkGroupAdminContainOwner(token, groupProfile);
+               if(isAdmin) {
+                   isRecall = true;
+               }
+           }
+       }
+
+       switch (msgType) {
+           case MessageType.MessageText:
+               isCopy = true;
+               break;
+           case MessageType.MessageDocument:
+               isSave = true;
+               break;
+           case MessageType.MessageImage:
+               isSee = true;
+               break;
+       }
+
+       var html = template("tpl-msg-menu", {
+           msgId : msgId,
+           isCopy:isCopy,
+           isSave:isSave,
+           isRecall:isRecall,
+           isSee:isSee,
+           left:clientX,
+           top:clientY,
+           recallDisabled:recallDisabled
+       });
+       html = handleHtmlLanguage(html);
+       $(trueTarget).append(html);
+   }catch (error) {
+   }
+    return false;
+});
+
+function copyMsg( msgId, event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    try{
+        $("#msg-menu")[0].remove();
+    }catch (error) {
+    }
+
+    try{
+        $(".msg_content_for_click_"+msgId)[0].onclick = function () {
+            document.execCommand('copy');
+        }
+
+        $(".msg_content_for_click_"+msgId)[0].addEventListener('copy', function (e) {
+            var value = $(this).find("pre").html();
+            value = trimMsgContentNewLine(value);
+            e.preventDefault();
+            if (e.clipboardData) {
+                e.clipboardData.setData('text/plain', value);
+            } else if (window.clipboardData) {
+                window.clipboardData.setData('Text', value);
+            }
+        });
+
+        $(".msg_content_for_click_"+msgId).click();
+    }catch (error) {
+
+    }
+}
+
+
+function downloadMsg(msgId, event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var msgType = $(".msg_content_for_click_"+msgId).attr("msgType");
+    var msgTime = $(".msg_content_for_click_"+msgId).attr("msgTime");
+
+    try{
+        $("#msg-menu")[0].remove();
+    }catch (error) {
+    }
+
+    switch (msgType) {
+        case MessageType.MessageImage:
+            break;
+        case MessageType.MessageDocument:
+            if($(".msg_content_for_click_"+msgId).hasClass("right_msg_file_div")) {
+                $(".right_msg_file_div[msgId="+msgId+"]").click();
+            } else {
+                $(".left_msg_file_div[msgId="+msgId+"]").click();
+            }
+    }
+}
+
+function recallMsg(msgId,event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if(msgId == "") {
+        return;
+    }
+    try{
+        $("#msg-menu")[0].remove();
+    }catch (error) {
+    }
+
+
+    var chatSessionId = localStorage.getItem(chatSessionIdKey);
+    var chatSessionType = localStorage.getItem(chatSessionId)
+    var msgText = "此消息被撤回";
+    sendRecallMsg(msgId, msgText, chatSessionId, chatSessionType);
+}
+
+function seeMsg( msgId,event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    try{
+        $("#msg-menu")[0].remove();
+    }catch (error) {
+    }
+
+    var src = $(".msg-img-"+msgId).attr("src");
+    window.open(src);
+}

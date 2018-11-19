@@ -144,12 +144,12 @@
         <div class="initHeader" style="margin-top: 0rem;">
             数据初始化
         </div>
-        <div class="initHeader-setting">
-            请选择登录方式：
-            <select id="verifyPluginId">
-                <option class="selectOption" pluginId="102">本地账户密码校验</option>
-            </select>
-        </div>
+<!--        <div class="initHeader-setting">-->
+<!--            请选择登录方式：-->
+<!--            <select id="verifyPluginId">-->
+<!--                <option class="selectOption" pluginId="102">本地账户密码校验</option>-->
+<!--            </select>-->
+<!--        </div>-->
 
         <div class="initHeader-setting">
             安装程序支持的配置
@@ -219,7 +219,7 @@
             </div>
             <!--      sql password          -->
             <div class="sql-setting mysql-setting">
-                <span>数据库密码：</span><input type="text" class="sql-input sql-dbPassword" placeholder="数据库密码">
+                <span>数据库密码：</span><input type="password" class="sql-input sql-dbPassword" placeholder="数据库密码">
                 <img src="../../public/img/init/failed.png" class="failed_img dbPasswordFailed">
             </div>
         </div>

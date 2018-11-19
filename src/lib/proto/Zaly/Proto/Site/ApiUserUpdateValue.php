@@ -91,6 +91,28 @@ class ApiUserUpdateValue extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * Generated from protobuf field <code>.core.CustomUserProfile custom = 4;</code>
+     * @return \Zaly\Proto\Core\CustomUserProfile
+     */
+    public function getCustom()
+    {
+        return $this->readOneof(4);
+    }
+
+    /**
+     * Generated from protobuf field <code>.core.CustomUserProfile custom = 4;</code>
+     * @param \Zaly\Proto\Core\CustomUserProfile $var
+     * @return $this
+     */
+    public function setCustom($var)
+    {
+        GPBUtil::checkMessage($var, \Zaly\Proto\Core\CustomUserProfile::class);
+        $this->writeOneof(4, $var);
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getFields()

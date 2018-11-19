@@ -51,8 +51,14 @@ class Page_Version_UpgradeController extends Page_VersionController
                 $this->versionCode = 10102;
                 $this->versionName = "1.1.2";
                 $this->checkoutPreviousUpgrade($currentCode, "1.1.2");
+            } elseif ($currentCode == 10102) {
+                $this->versionCode = 10103;
+                $this->versionName = "1.1.3";
+                $this->checkoutPreviousUpgrade($currentCode, "1.1.3");
                 // change upgrade password
                 $this->updatePassword();
+            } else {
+                throw new Exception("unsupport site version code = " . $currentCode);
             }
 
             $result = Upgrade_Client::doUpgrade($currentCode, $this->versionCode);

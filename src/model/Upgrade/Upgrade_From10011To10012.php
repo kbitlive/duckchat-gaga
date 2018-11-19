@@ -51,7 +51,7 @@ class Upgrade_From10011To10012 extends Upgrade_Version
           select id,pluginId,name,logo,sort,landingPageUrl,landingPageWithProxy,usageType,loadingType,permissionType,authKey,addTime from sitePlugin_temp_10011";
 
         $prepare = $this->ctx->db->prepare($insertSql);
-        error_log("=========prepare errorInfo= " . var_export($prepare->errorInfo(), true));
+
         $flag = $prepare->execute();
         $errCode = $prepare->errorCode();
 

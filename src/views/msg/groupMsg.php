@@ -4,18 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <title><?php echo $siteName;?></title>
-    <link rel="stylesheet" href="<?php echo $siteAddress;?>/public/css/zaly_home.css?_version=<?php echo $versionCode?>" />
-    <link rel="stylesheet" href="<?php echo $siteAddress;?>/public/css/zaly-action-row.css?_version=<?php echo $versionCode?>" />
-    <link rel="stylesheet" href="<?php echo $siteAddress;?>/public/css/zaly_contact.css?_version=<?php echo $versionCode?>" />
-    <link rel="stylesheet" href="<?php echo $siteAddress;?>/public/css/zaly_apply_friend_list.css?_version=<?php echo $versionCode?>" />
-    <link rel="stylesheet" href="<?php echo $siteAddress;?>/public/css/hint.min.css?_version=<?php echo $versionCode?>">
-    <link rel="stylesheet" href="<?php echo $siteAddress;?>/public/css/zaly_msg.css?_version=<?php echo $versionCode?>" />
-    <link rel="stylesheet" media="(max-height: 650px)" href="<?php echo $siteAddress;?>/public/css/zaly_media.css?_version=<?php echo $versionCode?>" />
-    <script src="<?php echo $siteAddress;?>/public/js/jquery.min.js?_version=<?php echo $versionCode?>"></script>
-    <script src="<?php echo $siteAddress;?>/public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
-    <script src="<?php echo $siteAddress;?>/public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
-    <script src="<?php echo $siteAddress;?>/public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
-    <link class="icon" rel="icon" href="<?php echo $siteAddress;?>/favicon.ico?_version=<?php echo $versionCode?>" type="image/png" />
+    <link rel="stylesheet" href="./public/css/zaly_home.css?_version=<?php echo $versionCode?>" />
+    <link rel="stylesheet" href="./public/css/zaly-action-row.css?_version=<?php echo $versionCode?>" />
+    <link rel="stylesheet" href="./public/css/zaly_contact.css?_version=<?php echo $versionCode?>" />
+    <link rel="stylesheet" href="./public/css/zaly_apply_friend_list.css?_version=<?php echo $versionCode?>" />
+    <link rel="stylesheet" href="./public/css/hint.min.css?_version=<?php echo $versionCode?>">
+    <link rel="stylesheet" href="./public/css/zaly_msg.css?_version=<?php echo $versionCode?>" />
+    <link rel="stylesheet" media="(max-height: 650px)" href="./public/css/zaly_media.css?_version=<?php echo $versionCode?>" />
+    <script src="./public/js/jquery.min.js?_version=<?php echo $versionCode?>"></script>
+    <script src="./public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
+    <script src="./public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
+    <script src="./public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
+    <link class="icon" rel="icon" href="./favicon.ico?_version=<?php echo $versionCode?>" type="image/x-icon" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -56,18 +56,19 @@
 <?php include(dirname(__DIR__) . '/base/template.php'); ?>
 <?php include(dirname(__DIR__) . '/base/template_msg.php'); ?>
 
-<script src="<?php echo $siteAddress;?>/public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
-<script src="<?php echo $siteAddress;?>/public/js/im/zalyClient.js?_version=<?php echo $versionCode?>"></script>
-<script src="<?php echo $siteAddress;?>/public/js/im/zalyBaseWs.js?_version=<?php echo $versionCode?>"></script>
-<script src="<?php echo $siteAddress;?>/public/js/im/zalyIm.js?_version=<?php echo $versionCode?>"></script>
-<script src="<?php echo $siteAddress;?>/public/js/im/zalyMsg.js?_version=<?php echo $versionCode?>"></script>
-<script src="<?php echo $siteAddress;?>/public/js/im/zalyGroupMsg.js?_version=<?php echo $versionCode?>"></script>
-<script src="<?php echo $siteAddress;?>/public/js/home/zalyMiniProgram.js?_version=<?php echo $versionCode?>"></script>
-<script src="<?php echo $siteAddress;?>/public/sdk/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
-<script src="<?php echo $siteAddress;?>/public/js/qrcode.js?_version=<?php echo $versionCode?>" ></script>
-<script src="<?php echo $siteAddress;?>/public/js/utf.js?_version=<?php echo $versionCode?>" ></script>
-<script src="<?php echo $siteAddress;?>/public/js/jquery.qrcode.js?_version=<?php echo $versionCode?>"></script>
-    <script src="<?php echo $siteAddress;?>/public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
+<script src="./public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
+<script src="./public/js/im/zalyClient.js?_version=<?php echo $versionCode?>"></script>
+<script src="./public/js/im/zalyBaseWs.js?_version=<?php echo $versionCode?>"></script>
+<script src="./public/js/im/zalyIm.js?_version=<?php echo $versionCode?>"></script>
+<script src="./public/js/im/zalyMsg.js?_version=<?php echo $versionCode?>"></script>
+<script src="./public/js/im/zalyGroupMsg.js?_version=<?php echo $versionCode?>"></script>
+<script src="./public/js/home/zalyMiniProgram.js?_version=<?php echo $versionCode?>"></script>
+<script src="./public/sdk/zalyjsNative.js?_version=<?php echo $versionCode?>"></script>
+<script src="./public/js/qrcode.js?_version=<?php echo $versionCode?>" ></script>
+<script src="./public/js/utf.js?_version=<?php echo $versionCode?>" ></script>
+<script src="./public/js/jquery.qrcode.js?_version=<?php echo $versionCode?>"></script>
+    <script src="./public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
+    <script src="./public/js/watermark.js?_version=<?php echo $versionCode?>"></script>
 
 <script type="text/javascript">
 
@@ -171,6 +172,7 @@
     }
 
 </script>
+
 
 </body>
 </html>

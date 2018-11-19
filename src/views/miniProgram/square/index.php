@@ -17,7 +17,6 @@
             background: rgba(245, 245, 245, 1);
             font-size: 14px;
             overflow-x: hidden;
-            overflow-y: scroll;
         }
 
         .wrapper {
@@ -25,6 +24,7 @@
             height: 100%;
             display: flex;
             align-items: stretch;
+            overflow-y: scroll;
         }
 
         .layout-all-row {
@@ -371,6 +371,7 @@
         } catch (e) {
             alert(getLanguage() == 1 ? "客户端暂不支持，请升级客户端" : "Please upgrade the client version.");
         }
+        return;
     });
 
 
