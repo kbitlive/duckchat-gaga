@@ -137,9 +137,9 @@
                 <div class="item-body">
                     <div class="item-body-display">
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">登陆开启邀请码</div>
+                            <div class="item-body-desc">注册开启邀请码</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">Login By Invite Code</div>
+                            <div class="item-body-desc">Register By Invite Code</div>
                         <?php } ?>
 
                         <div class="item-body-tail">
