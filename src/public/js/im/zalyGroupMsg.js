@@ -4270,91 +4270,95 @@ function sortRoomList(jqElement)
 }
 
 $(document).bind("contextmenu", ".msg_content_for_click", function(event){
-    var msgId = $(event.target).attr("msgId");
-    var msgType = $(event.target).attr("msgType");
-    var sendtime = $(event.target).attr("sendtime");
-    var userId = $(event.target).attr("userId");
+   try{
+       var msgId = $(event.target).attr("msgId");
+       var msgType = $(event.target).attr("msgType");
+       var sendtime = $(event.target).attr("sendtime");
+       var userId = $(event.target).attr("userId");
 
 
-    var trueTarget = event.target;
-    if(msgId == undefined) {
-        var findNode = false;
-        var targets = $(event.target).parents();
-        targets.each(function (index, target) {
-            if($(target).hasClass("msg_content_for_click")) {
-                msgId = $(target).attr("msgId");
-                msgType = $(target).attr("msgType");
-                sendtime = $(target).attr("sendtime");
-                userId = $(target).attr("userId");
-                trueTarget = target;
-            }
-        });
-    }
+       var trueTarget = "";
+       if(msgId == undefined) {
+           var findNode = false;
+           var targets = $(event.target).parents();
+           targets.each(function (index, target) {
+               if($(target).hasClass("msg_content_for_click")) {
+                   msgId = $(target).attr("msgId");
+                   msgType = $(target).attr("msgType");
+                   sendtime = $(target).attr("sendtime");
+                   userId = $(target).attr("userId");
+                   trueTarget = target;
+               }
+           });
+       }
+       if(!trueTarget) {
+           return false;
+       }
+       var currentChatSessionId = localStorage.getItem(chatSessionIdKey);
+       var chatSessionType = localStorage.getItem(currentChatSessionId);
 
-    var currentChatSessionId = localStorage.getItem(chatSessionIdKey);
-    var chatSessionType = localStorage.getItem(currentChatSessionId);
 
+       try{
+           $("#msg-menu")[0].remove();
+       }catch (error) {
+       }
+       var clientX = event.offsetX;
+       var clientY = event.offsetY;
 
-    try{
-       $("#msg-menu")[0].remove();
-    }catch (error) {
-    }
-    var clientX = event.offsetX;
-    var clientY = event.offsetY;
+       if(msgId == undefined) {
+           return false;
+       }
+       var isCopy = false;
+       var isSave = false;
+       var isRecall = false;
+       var isSee = false;
+       var recallDisabled = false;
 
-    if(msgId == undefined) {
-        return false;
-    }
-    var isCopy = false;
-    var isSave = false;
-    var isRecall = false;
-    var isSee = false;
-    var recallDisabled = false;
+       var nowTime =  Date.now();
 
-    var nowTime =  Date.now();
+       //两分钟内的允许撤回
+       if(userId == token ) {
+           isRecall = true;
+           if(nowTime-sendtime > 120000) {
+               recallDisabled = true
+           }
+       }else {
+           if(chatSessionType == GROUP_MSG) {
+               var groupProfileStr = localStorage.getItem(profileKey+currentChatSessionId);
+               var groupProfile = JSON.parse(groupProfileStr);
+               var isAdmin = checkGroupAdminContainOwner(token, groupProfile);
+               if(isAdmin) {
+                   isRecall = true;
+               }
+           }
+       }
 
-    //两分钟内的允许撤回
-    if(userId == token ) {
-        isRecall = true;
-        if(nowTime-sendtime > 120000) {
-            recallDisabled = true
-        }
-    }else {
-        if(chatSessionType == GROUP_MSG) {
-            var groupProfileStr = localStorage.getItem(profileKey+currentChatSessionId);
-            var groupProfile = JSON.parse(groupProfileStr);
-            var isAdmin = checkGroupAdminContainOwner(token, groupProfile);
-            if(isAdmin) {
-                isRecall = true;
-            }
-        }
-    }
+       switch (msgType) {
+           case MessageType.MessageText:
+               isCopy = true;
+               break;
+           case MessageType.MessageDocument:
+               isSave = true;
+               break;
+           case MessageType.MessageImage:
+               isSee = true;
+               break;
+       }
 
-    switch (msgType) {
-        case MessageType.MessageText:
-            isCopy = true;
-            break;
-        case MessageType.MessageDocument:
-            isSave = true;
-            break;
-        case MessageType.MessageImage:
-            isSee = true;
-            break;
-    }
-
-    var html = template("tpl-msg-menu", {
-        msgId : msgId,
-        isCopy:isCopy,
-        isSave:isSave,
-        isRecall:isRecall,
-        isSee:isSee,
-        left:clientX,
-        top:clientY,
-        recallDisabled:recallDisabled
-    });
-    console.log(html);
-    html = handleHtmlLanguage(html);
-    $(trueTarget).append(html);
+       var html = template("tpl-msg-menu", {
+           msgId : msgId,
+           isCopy:isCopy,
+           isSave:isSave,
+           isRecall:isRecall,
+           isSee:isSee,
+           left:clientX,
+           top:clientY,
+           recallDisabled:recallDisabled
+       });
+       html = handleHtmlLanguage(html);
+       $(trueTarget).append(html);
+   }catch (error) {
+   }
     return false;
 });
 
