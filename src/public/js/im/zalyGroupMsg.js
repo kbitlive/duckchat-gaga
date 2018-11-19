@@ -330,6 +330,8 @@ window.onresize = function(){
     }
 }
 
+
+
 function handleSendFriendApplyReq()
 {
     alert("已经发送好友请求");
@@ -876,34 +878,58 @@ function downloadImgFormQrcode(idName)
 
 //--------------------------------------set document tile---------------------------------------------
 intervalId = undefined
+
+isHidden = false;
+
 function setDocumentTitle()
 {
-    iconNum = 0;
-    if(document.hidden == true) {
-        var siteTip = localStorage.getItem(newSiteTipKey);
+    try{
+        iconNum = 0;
+        if(document.hidden == true) {
+            isHidden = true;
+            var siteTip = localStorage.getItem(newSiteTipKey);
 
-        if(intervalId == undefined && siteTip != "clear") {
-            intervalId = setInterval(function () {
-                if(siteTip == "clear") {
-                    $(".icon").attr("href", "favicon.ico?_v="+intervalId);
-                    iconNum = 0;
-                } else {
-                    if(Number(iconNum%2) == 0) {
-                        $(".icon").attr("href", "favicon.ico?_v="+intervalId);
+            if(intervalId == undefined && siteTip != "clear") {
+                intervalId = setInterval(function () {
+                    if(siteTip == "clear") {
+                        $(".icon").attr("href", "./favicon.ico?_v="+intervalId);
+                        iconNum = 0;
                     } else {
-                        $(".icon").attr("href", "tip.png?_v="+intervalId);
+                        if(Number(iconNum%2) == 0) {
+                            $(".icon").attr("href", "./favicon.ico?_v="+intervalId);
+                        } else {
+                            $(".icon").attr("href", "./tip.png?_v="+intervalId);
+                        }
+                        iconNum = Number(iconNum+1);
                     }
-                    iconNum = Number(iconNum+1);
-                }
-            }, 100);
+                }, 100);
+            }
+            return ;
         }
-        return ;
+        if(isHidden) {
+            try{
+                var chatSessionId = $(".chatsession-row-active").attr("chat-session-id");
+                var currentChatSessionId = localStorage.getItem(chatSessionIdKey);
+                if(chatSessionId != currentChatSessionId) {
+                    window.location.reload();
+                }
+            } catch (error) {
+
+            }
+
+            isHidden = false;
+        }
+
+        $(".icon").attr("href", "./favicon.ico");
+        iconNum = 0;
+        clearInterval(intervalId);
+        intervalId = undefined
+    }catch (error) {
+
     }
-    $(".icon").attr("href", "favicon.ico");
-    iconNum = 0;
-    clearInterval(intervalId);
-    intervalId = undefined
 }
+
+
 document.addEventListener('visibilitychange', function(){
    setDocumentTitle();
 }, false);
@@ -922,7 +948,6 @@ function logout(event)
         window.location.href = "./index.php?action=page.logout";
     }
 }
-
 
 //------------------------------------*********Group function*********--------------------------------------------
 
@@ -1890,12 +1915,14 @@ function handelGroupSpeakerList(result)
             var speakersLength = speakers.length;
             for(var i=0; i<speakersLength;i++){
                 var speakerInfo = speakers[i];
-                var html =getSpeakerMemberHtml(speakerInfo,  true, "member", isSelfAdminRole);
+                var html = getSpeakerMemberHtml(speakerInfo,  true, "member", isSelfAdminRole);
                 $(".speaker-people-div").append(html);
             }
             var openSrc = "./public/img/msg/icon_switch_on.png";
             $(".group_speakers_set").attr("src", openSrc);
             $(".group_speakers_set").attr("value", "on");
+
+
         } else {
             var closeSrc = "./public/img/msg/icon_switch_off.png";
             $(".group_speakers_set").attr("src", closeSrc);
@@ -1931,6 +1958,7 @@ $(document).on("click", ".group_speakers_set", function(){
         var speakerUserIds = new Array();
         speakerUserIds.push(token);
         updateGroupSpeaker(groupId, speakerUserIds, SetSpeakerType.AddSpeaker, handleSetSpeaker);
+
     }
 
 });
@@ -1960,15 +1988,6 @@ function initSpeakerGroupMemberList(results)
             var user = list[i].profile;
             var userId = user.userId;
             var isType = "member";
-
-            if(groupOwnerId == userId) {
-                isType = "owner";
-                continue;
-            }
-            if(groupAdminIds && groupAdminIds.indexOf(userId) != -1) {
-                isType = "admin";
-                continue;
-            }
 
             if(speakerListMemberIds && speakerListMemberIds.indexOf(userId) != -1) {
                 continue;
@@ -2050,10 +2069,13 @@ function updateGroupSpeaker(groupId, speakerUserIds, type, callback)
 function handleSetSpeaker(result)
 {
     try{
+        $(".add_speaker_btn[userId="+token+"]").click();
+
         var speakerUserIds = result.speakerUserIds;
         var speakerKey = speakerUserIdsKey+localStorage.getItem(chatSessionIdKey);
         localStorage.setItem(speakerKey, JSON.stringify(speakerUserIds));
         var groupId = localStorage.getItem(chatSessionIdKey);
+
         sendGroupProfileReq(groupId, handleGetGroupProfile);
     }catch (error) {
 
@@ -2124,7 +2146,6 @@ function handleRemoveSpeaker()
 {
 
     var delSpeakerLength=deleteSpeakerInfo.length;
-
     var groupId = localStorage.getItem(chatSessionIdKey);
     var groupProfile = getGroupProfile(groupId);
 
@@ -2141,6 +2162,8 @@ function handleRemoveSpeaker()
         var html = getSpeakerMemberHtml(speakerInfo,  false, "member", isSelfAdminRole);
         $(".speaker-group-member-div").append(html);
     }
+    $(".speaker-group-member-div")[0].style.height = $(".speaker-group-member-div")[0].scrollHeight+"px";
+
     //关闭禁言
     if($(".speaker_remove_people").length < 1) {
         var closeSrc = "./public/img/msg/icon_switch_off.png";
@@ -3510,6 +3533,14 @@ function handleGetUserProfile(result)
     $(".wrapper").append(html);
 }
 
+function getSelfInfo()
+{
+    var action = "api.user.profile"
+    handleClientSendRequest(action, {}, handleGetFriendProfile);
+}
+
+getSelfInfo();
+
 ////展示个人消息
 function displaySelfInfo()
 {
@@ -3520,6 +3551,7 @@ function displaySelfInfo()
     var action = "api.user.profile"
     handleClientSendRequest(action, {}, handleGetUserProfile);
 }
+
 
 $(document).on("click", ".sound_mute", function () {
     var type = $(this).attr("is_on");
@@ -4077,8 +4109,10 @@ function displayWaterMark()
            var time   = Date.parse(new Date());
            //前10位
            var suffixToken = token.substr(0, 10);
-           var params =  suffixToken +" "+chatSessionId+" "+time;
-           var data = { watermark_txt:params }
+           var suffixChatsessionId = chatSessionId.substr(0,10)
+           var params =  suffixToken +" "+suffixChatsessionId+" "+time;
+           var data = { watermark_txt:params, watermark_width:100, watermark_y_space:30, watermark_x_space:30 }
+
            try{
                $("#otdivid").remove();
            }catch (error) {

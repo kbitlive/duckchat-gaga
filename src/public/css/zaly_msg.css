@@ -145,9 +145,23 @@ html, body{
     height: 1;
     overflow-x: hidden;
 }
+
 .right-chatbox:focus{
     background-color: white;
 }
+
+.right-chatbox-div {
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow-y: scroll;
+    height: 1;
+    overflow-x: hidden;
+}
+
+.right-chatbox-div:focus{
+    background-color: white;
+}
+
 
 /* layout - Left */
 .l-sb-item {
@@ -378,6 +392,7 @@ html, body{
 .right-input {
     width: 100%;
     height: 12.1rem;
+    z-index: 100001;
 }
 
 /* chat message list   */
@@ -584,7 +599,7 @@ html, body{
     right: 0;
     bottom: 0;
     position: fixed;
-    z-index: 100001;
+    z-index: 100002;
     overflow: hidden;
     visibility: hidden;
 
@@ -2106,20 +2121,20 @@ button:active{
     width: 1.5rem;
     height:1.5rem;
     position: absolute;
-    left:2rem;
+    left: 2rem;
+    top: 2rem;
+    margin: auto;
     cursor: pointer;
 }
 .search_group_friend input{
     width:90%;
+    padding-left: 3rem;
     height:2.81rem;
     background:rgba(244,244,246,1);
     border-radius:0.19rem;
     border:0.09rem solid #E9E8ED;
     outline: none;
     cursor: pointer;
-    padding-left:3rem;
-    margin-right: 1rem;
-    margin-left: 1rem;
 }
 .search_see_friend_all_tip,.search_see_group_all_tip {
     height:3rem;

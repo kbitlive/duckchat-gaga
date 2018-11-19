@@ -20,14 +20,14 @@
             watermark_y:0,//水印起始位置Y轴坐标
             watermark_rows:0,//水印行数
             watermark_cols:0,//水印列数
-            watermark_x_space:30,//水印x轴间隔
-            watermark_y_space:30,//水印y轴间隔
+            watermark_x_space:20,//水印x轴间隔
+            watermark_y_space:20,//水印y轴间隔
             watermark_font:'微软雅黑',//水印字体
             watermark_color:'black',//水印字体颜色
-            watermark_fontsize:'14px',//水印字体大小
+            watermark_fontsize:'12px',//水印字体大小
             watermark_alpha:0.1,//水印透明度，要求设置在大于等于0.003
-            watermark_width:60,//水印宽度
-            watermark_height:60,//水印长度
+            watermark_width:240,//水印宽度
+            watermark_height:50,//水印长度
             watermark_angle:45,//水印倾斜度数
         };
 
@@ -46,12 +46,10 @@
         }catch (error) {
         }
         //获取页面最大宽度
-        var page_width = Math.max(jqElement[0].scrollWidth, jqElement[0].clientWidth);
+        var page_width = jqElement[0].clientWidth;
 
         //获取页面最大长度
-        //
-
-        var page_height = jqElement[0].clientHeight;
+        var page_height = jqElement[0].scrollHeight;
 
         // 创建文档碎片
         var oTemp = document.createDocumentFragment();

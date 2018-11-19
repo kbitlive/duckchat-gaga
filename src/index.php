@@ -29,10 +29,6 @@ if (!empty($_GET['action'])) {
 
 
 if(!isset($_ENV['WPF_URL_CONTROLLER_NAME'])) {
-    if($_SERVER["REQUEST_URI"] == "/favicon.ico") {
-        header("HTTP/1.0 404 Not Found");
-        die();
-    }
     $_ENV['WPF_URL_CONTROLLER_NAME'] = "Page_Index";
     $_ENV['WPF_URL_CONTROLLER_METHOD_PARAM_NAME'] = isset($_GET['method'] ) ? $_GET['method']  : "doIndex" ;
 }

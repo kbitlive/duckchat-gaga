@@ -11,7 +11,7 @@
 <div class="right-body">
 
     <div class="right-body-chat" style="position: relative;">
-        <div class="right-chatbox">
+        <div class="right-chatbox" style="position: relative">
 
         </div>
 
@@ -112,27 +112,26 @@
             <iframe class="chat_plugin_iframe" src=""> </iframe>
         </div>
         <div class="right-input">
-            <div class="input-tools">
-                <img src="./public/img/msg/emotions.png" class="emotions"/>
-                <img src="./public/img/msg/images.png" style="height: 2.06rem;" onclick="uploadFile('file1')" class="upload-img" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"/>
-                <input type="file" id="file1" style="display:none" onchange="uploadMsgFileFromInput(this, FileType.FileImage)" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg">
-                <img src="./public/img/msg/file.png" style="height: 2.06rem;" onclick="uploadFile('file3')" class="upload-img" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"/>
-                <input type="file" id="file3" style="display:none" onchange="uploadMsgFileFromInput(this, FileType.FileDocument)">
-                <div class="input-plugin-tools">
+                <div class="input-tools">
+                    <img src="./public/img/msg/emotions.png" class="emotions"/>
+                    <img src="./public/img/msg/images.png" style="height: 2.06rem;" onclick="uploadFile('file1')" class="upload-img" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"/>
+                    <input type="file" id="file1" style="display:none" onchange="uploadMsgFileFromInput(this, FileType.FileImage)" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg">
+                    <img src="./public/img/msg/file.png" style="height: 2.06rem;" onclick="uploadFile('file3')" class="upload-img" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"/>
+                    <input type="file" id="file3" style="display:none" onchange="uploadMsgFileFromInput(this, FileType.FileDocument)">
+                    <div class="input-plugin-tools">
+                    </div>
                 </div>
-            </div>
 
-            <div class="input-box">
-                <div id="msgImage">
+                <div class="input-box">
+                    <div id="msgImage">
+                    </div>
+                    <textarea class="input-box-text msg_content" placeholder="输入消息…."data-local-placeholder="enterMsgContentPlaceholder"  id="msg_content"></textarea>
+
+                    <div class="input-btn">
+                        <button class="send_msg" data-local-value="sendTip">发送</button>
+                    </div>
                 </div>
-                <textarea class="input-box-text msg_content" placeholder="输入消息…."data-local-placeholder="enterMsgContentPlaceholder"  id="msg_content"></textarea>
-
-                <div class="input-btn">
-                    <button class="send_msg" data-local-value="sendTip">发送</button>
-                </div>
-            </div>
-            <div class="input-line"></div>
-
+                <div class="input-line"></div>
         </div>
     </div>
     <div class="right-body-sidebar" style="display: none;" >
