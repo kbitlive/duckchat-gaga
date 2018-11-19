@@ -68,6 +68,7 @@ class siteU2MessageTable extends BaseTable
 
     function deleteMessagePointer($userId)
     {
+        $startTime = $this->getCurrentTimeMills();
         $tag = __CLASS__ . '->' . __FUNCTION__;
         $sql = "delete from $this->pointerTable where userId=:userId;";
 
@@ -76,9 +77,27 @@ class siteU2MessageTable extends BaseTable
 
         $result = $prepare->execute();
 
-        $this->logger->writeSqlLog($tag, $sql, [$userId], $this->getCurrentTimeMills());
+        $this->logger->writeSqlLog($tag, $sql, [$userId], $startTime);
 
         return $this->handlerResult($result, $prepare, $tag);
+    }
+
+    function updateMessageType($msgId, $msgType)
+    {
+        $startTime = $this->getCurrentTimeMills();
+        $tag = __CLASS__ . '->' . __FUNCTION__;
+        $sql = "update $this->table set msgType=:msgType where msgId=:msgId;";
+
+        $prepare = $this->db->prepare($sql);
+        $this->handlePrepareError($tag, $prepare);
+        $prepare->bindValue(":msgType", $msgType);
+        $prepare->bindValue(":msgId", $msgId);
+
+        $result = $prepare->execute();
+
+        $this->logger->writeSqlLog($tag, $sql, [$msgId, $msgType], $startTime);
+
+        return $this->handlerUpdateResult($result, $prepare, $tag);
     }
 
     /**
@@ -122,6 +141,31 @@ class siteU2MessageTable extends BaseTable
         }
 
         return [];
+    }
+
+    public function queryMessageByUserIdAndMsgId($userId, $msgId)
+    {
+        $startTime = microtime(true);
+        $tag = __CLASS__ . "." . __FUNCTION__;
+
+        $queryFields = implode(",", $this->columns);
+        $sql = "select $queryFields from $this->table ";
+
+        try {
+            $sql .= "where userId=:userId and msgId=:msgId limit 1;";
+
+            $prepare = $this->db->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->bindValue(":userId", $userId);
+            $prepare->bindValue(":msgId", $msgId);
+
+            $prepare->execute();
+
+            return $prepare->fetch(\PDO::FETCH_ASSOC);
+        } finally {
+            $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, [$userId, $msgId], $startTime);
+        }
+
     }
 
     /**

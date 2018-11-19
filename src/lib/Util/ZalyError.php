@@ -17,6 +17,10 @@ class ZalyError
     const ErrorGroupMemberCount = "error.group.maxMemberCount";
     const ErrorGroupIsMember = "error.group.isMember";
 
+    const ErrorMessageRecallNoPermission = "error.message.recallNoPermission";
+    const ErrorMessageNotExist = "error.message.recallNotExist";
+    const ErrorMessageRecallOvertime = "error.message.recallOvertime";
+
     private static $defaultErrors = ["error", "request error", "请求错误"];
 
 
@@ -29,6 +33,11 @@ class ZalyError
         "error.group.member" => ["error.alert", "No permission to operate", "不是群成员，无权限操作"],
         "error.group.maxMemberCount" => ["error.alert", "The group member is full", "群已满员"],
         "error.group.isMember" => ["error.group.isMember", "user is already group member", "当前用户已经是群成员"],
+
+        "error.message.recallNotExist" => ["error.alter", "no permission to recall ", "无权限撤回消息"],
+        "error.message.recallOvertime" => ["error.alter", "message recall overtime", "消息撤回超过2分钟"],
+
+        "error.message.recallNoPermission" => ["error.alter", "no permission", "无权限操作"],
     ];
 
     public static function getErrCode($error)
