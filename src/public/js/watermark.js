@@ -13,7 +13,7 @@
 (function(watermark){
     window.watermarkdivs = [];
     // 加载水印
-    var loadMark = function(settings, jqElement) {
+    var loadMark = function(settings, jqElementForAdd, jqElementForCall) {
         var defaultSettings={
             watermark_txt:"测试水印",
             watermark_x:0,//水印起始位置x轴坐标
@@ -25,7 +25,7 @@
             watermark_font:'微软雅黑',//水印字体
             watermark_color:'black',//水印字体颜色
             watermark_fontsize:'12px',//水印字体大小
-            watermark_alpha:0.1,//水印透明度，要求设置在大于等于0.003
+            watermark_alpha:0.2,//水印透明度，要求设置在大于等于0.003
             watermark_width:240,//水印宽度
             watermark_height:50,//水印长度
             watermark_angle:45,//水印倾斜度数
@@ -46,10 +46,10 @@
         }catch (error) {
         }
         //获取页面最大宽度
-        var page_width = jqElement[0].clientWidth;
+        var page_width = jqElementForCall[0].clientWidth;
 
         //获取页面最大长度
-        var page_height = jqElement[0].scrollHeight;
+        var page_height = jqElementForCall[0].clientHeight;
 
         // 创建文档碎片
         var oTemp = document.createDocumentFragment();
@@ -59,7 +59,7 @@
             otdiv = document.createElement('div');
             otdiv.id="otdivid";
             otdiv.style.pointerEvents = "none";
-            jqElement.append(otdiv);
+            jqElementForAdd.append(otdiv);
         }
 
         //如果将水印列数设置为0，或水印列数设置过大，超过页面最大宽度，则重新计算水印列数和水印x轴间隔
@@ -130,8 +130,8 @@
         };
     };
 
-    watermark.load = function(settings, jqElement){
-        loadMark(settings, jqElement);
+    watermark.load = function(settings, jqElementForAdd, jqElementForCall){
+        loadMark(settings, jqElementForAdd, jqElementForCall);
     };
 
 })(window.watermark = {} );

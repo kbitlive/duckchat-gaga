@@ -4118,7 +4118,7 @@ function displayWaterMark()
            }catch (error) {
 
            }
-           watermark.load(data, $(".right-chatbox"));
+           watermark.load(data, $(".right-body-chat"), $(".right-chatbox"));
        }
 
    }catch (error)  {
