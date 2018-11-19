@@ -4111,7 +4111,7 @@ function displayWaterMark()
            var suffixToken = token.substr(0, 10);
            var suffixChatsessionId = chatSessionId.substr(0,10)
            var params =  suffixToken +" "+suffixChatsessionId+" "+time;
-           var data = { watermark_txt:params, watermark_width:100, watermark_y_space:30, watermark_x_space:30 }
+           var data = { watermark_txt:params, watermark_width:60, watermark_y_space:30, watermark_x_space:30 }
 
            try{
                $("#otdivid").remove();

@@ -49,7 +49,7 @@
         var page_width = jqElementForCall[0].clientWidth;
 
         //获取页面最大长度
-        var page_height = jqElementForCall[0].clientHeight;
+        var page_height = jqElementForCall[0].clientHeight-10;
 
         // 创建文档碎片
         var oTemp = document.createDocumentFragment();
