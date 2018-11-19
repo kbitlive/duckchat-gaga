@@ -96,8 +96,9 @@ class Site_Login
                 throw new Exception("get user profile error from third party");
             }
 
+            $newLoginName = $thirdPartyLoginKey . "_" . $loginUserProfile->getLoginName();
             //update loginName
-            $loginUserProfile->setLoginName($thirdPartyLoginKey . "_" . $loginUserProfile->getLoginName());
+            $loginUserProfile->setLoginName($newLoginName);
 
             $thirdPartyLoginUserId = $loginUserProfile->getUserId();
             $thirdPartyInfo = $this->getThirdPartyAccount($thirdPartyLoginKey, $thirdPartyLoginUserId);
@@ -202,7 +203,14 @@ class Site_Login
 
         $sitePubkPem = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_ID_PUBK_PEM);
         $sourceLoginUserId = $loginUserProfile->getUserId();
-        $userId = sha1($sourceLoginUserId . "@" . $sitePubkPem);
+
+        $tmpUserId = $sourceLoginUserId . "@" . $sitePubkPem;
+
+        if (!empty($loginKeyId)) {
+            $tmpUserId .= "@" . $loginKeyId;
+        }
+
+        $userId = sha1($tmpUserId);
 
         $nameInLatin = $this->pinyin->permalink($loginUserProfile->getNickName(), "");
         $countryCode = $loginUserProfile->getPhoneCountryCode();
