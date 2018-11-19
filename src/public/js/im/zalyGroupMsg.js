@@ -2925,6 +2925,7 @@ function updateInfo(profileId, profileType)
     $(".nickname_"+profileId).html(name);
 
     try{
+        $(".aria-lable-"+profileId).attr("aria-lable", name);
         if(mute>0) {
             $(".room-chatsession-mute_"+profileId)[0].style.display = "block";
         } else {
@@ -4415,10 +4416,15 @@ function downloadMsg(msgId, event) {
 function recallMsg(msgId,event) {
     event.preventDefault();
     event.stopPropagation();
+
+    if(msgId == "") {
+        return;
+    }
     try{
         $("#msg-menu")[0].remove();
     }catch (error) {
     }
+
 
     var chatSessionId = localStorage.getItem(chatSessionIdKey);
     var chatSessionType = localStorage.getItem(chatSessionId)

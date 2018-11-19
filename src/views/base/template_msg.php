@@ -466,7 +466,7 @@
             {{/if}}
             {{ if isRecall }}
             {{if recallDisabled }}
-            <div class="item p-2" style="color:rgba(180,180,180,1);" disabled  data-local-value="disableRecallTip">撤回</div>
+            <div class="item p-2" onclick="recallMsg('', event)"  style="color:rgba(180,180,180,1);"  data-local-value="disableRecallTip">撤回</div>
             {{else}}
             <div class="item p-2" onclick="recallMsg('{{msgId}}', event)"   data-local-value="recallTip">撤回</div>
             {{/if}}
@@ -677,11 +677,11 @@
     </div>
 </script>
 <script id="tpl-group-member-body-detail" type="text/html">
-    <div style="display: flex" class="hint--bottom-left" aria-label="{{nickname}}">
+    <div style="display: flex" class="hint--bottom-left aria-lable-{{userId}}" aria-label="{{nickname}}">
         {{if memberAvatarImg}}
-            <img class="useravatar group-member-avatar " aria-label="{{nickname}}" src="{{memberAvatarImg}}" />
+            <img class="useravatar group-member-avatar "  src="{{memberAvatarImg}}" />
         {{else}}
-            <img class="useravatar group-member-avatar " aria-label="{{nickname}}" src="../../public/img/msg/default_user.png" />
+            <img class="useravatar group-member-avatar "  src="../../public/img/msg/default_user.png" />
         {{/if}}
     </div>
 </script>
