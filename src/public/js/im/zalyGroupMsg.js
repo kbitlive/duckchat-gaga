@@ -1442,10 +1442,20 @@ function displayGroupMemberForGroupInfo(results)
                 $(".group-member-body").append(html);
             }
             var user = list[i].profile;
+            var stroageUserProfileStr = localStorage.getItem(profileKey+user.userId);
+            var nickname = user.nickname;
+            try{
+                nickname = user.nickname;
+                if(stroageUserProfileStr != undefined && stroageUserProfileStr != false) {
+                   var stroageUserProfile = JSON.parse(stroageUserProfileStr);
+                   nickname = stroageUserProfile.nickname;
+               }
+            }catch (error){
+            }
             var memberAvatarImg = getNotMsgImgUrl(user.avatar);
             html = template("tpl-group-member-body-detail", {
                 userId : user.userId,
-                nickname:user.nickname,
+                nickname:nickname,
                 memberAvatarImg:memberAvatarImg
             });
             html = handleHtmlLanguage(html);
