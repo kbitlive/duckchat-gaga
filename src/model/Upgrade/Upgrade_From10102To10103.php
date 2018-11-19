@@ -18,7 +18,6 @@ class Upgrade_From10102To10103 extends Upgrade_Version
     {
         $this->dropSiteCustomItemTable();
         $result = $this->executeSqliteScript();
-        $result = $this->insertDefaultCustomItem() && $result;
         return $result;
     }
 
@@ -26,7 +25,6 @@ class Upgrade_From10102To10103 extends Upgrade_Version
     {
         $this->dropSiteCustomItemTable();
         $result = $this->executeMysqlScript();
-        $result = $this->insertDefaultCustomItem() && $result;
         return $result;
     }
 
@@ -34,53 +32,6 @@ class Upgrade_From10102To10103 extends Upgrade_Version
     {
 
         return true;
-    }
-
-    private function insertDefaultCustomItem()
-    {
-        $tag = __CLASS__ . "->" . __FUNCTION__;
-        $customs = [
-            0 => [
-                "customKey" => "phoneId",
-                "keyName" => "手机号码",
-                "keyDesc" => "手机号码",
-                "keyType" => Zaly\Proto\Core\CustomType::CustomTypeUser,
-                "keySort" => 1,
-                "keyConstraint" => "",
-                "isRequired" => 0,
-                "isOpen" => 1,
-                "status" => Zaly\Proto\Core\UserCustomStatus::UserCustomNormal,
-//                "dataType" => "",
-                "dataVerify" => "",
-                "addTime" => ZalyHelper::getMsectime(),
-            ],
-            1 => [
-                "customKey" => "email",
-                "keyName" => "邮箱",
-                "keyDesc" => "邮箱",
-                "keyType" => Zaly\Proto\Core\CustomType::CustomTypeUser,
-                "keySort" => 2,
-                "keyConstraint" => "",
-                "isRequired" => 0,
-                "isOpen" => 1,
-                "status" => Zaly\Proto\Core\UserCustomStatus::UserCustomNormal,
-//                "dataType" => "",
-                "dataVerify" => "",
-                "addTime" => ZalyHelper::getMsectime(),
-            ],
-        ];
-
-        $result = false;
-        foreach ($customs as $customArray) {
-            try {
-                //用 || 判断结果，兼容上次失败
-                $result = $this->ctx->SiteCustomTable->insertUserCustomInfo($customArray) || $result;
-            } catch (Exception $e) {
-                $this->logger->error($tag, $e);
-            }
-        }
-
-        return $result;
     }
 
     private function dropSiteCustomItemTable()

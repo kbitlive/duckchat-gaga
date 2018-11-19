@@ -378,7 +378,6 @@ class InstallDBController
         $this->_insertSiteConfig($siteName, $loginPluginId);
 
         $this->initPluginMiniProgram();
-        $this->initSiteCustom();
         return;
     }
 
@@ -411,22 +410,6 @@ class InstallDBController
 
         $this->logger->error("site.install.db", "init config count=" . $count);
     }
-
-    private function _insertSiteOwnerUic($code = "000000")
-    {
-        try {
-            $timeStamp = $this->helper->getMsectime();
-            $sql = "insert into siteUic(code,status,createTime) values('$code',100,$timeStamp)";
-            $prepare = $this->db->prepare($sql);
-            $this->handelPrepareError($prepare);
-            $flag = $prepare->execute();
-            $count = $prepare->rowCount();
-            $this->logger->error("site.install.db", "init uic result=" . $flag . " count=" . $count);
-        } catch (Throwable $e) {
-            $this->logger->error("site.install.db", $e);
-        }
-    }
-
 
     /**
      * 增加默认扩展小程序
@@ -540,43 +523,6 @@ class InstallDBController
 
     }
 
-    private function initSiteCustom()
-    {
-        $customs = [
-            [
-                "customKey" => "phoneId",
-                "keyName" => "手机号码",
-                "keyDesc" => "手机号码",
-                "keyType" => Zaly\Proto\Core\CustomType::CustomTypeUser,
-                "keySort" => 1,
-                "keyConstraint" => "",
-                "isRequired" => 0,
-                "isOpen" => 1,
-                "status" => Zaly\Proto\Core\UserCustomStatus::UserCustomNormal,
-//                "dataType" => "",
-                "dataVerify" => "",
-                "addTime" => ZalyHelper::getMsectime(),
-            ],
-            [
-                "customKey" => "email",
-                "keyName" => "邮箱",
-                "keyDesc" => "邮箱",
-                "keyType" => Zaly\Proto\Core\CustomType::CustomTypeUser,
-                "keySort" => 2,
-                "keyConstraint" => "",
-                "isRequired" => 0,
-                "isOpen" => 1,
-                "status" => Zaly\Proto\Core\UserCustomStatus::UserCustomNormal,
-//                "dataType" => "",
-                "dataVerify" => "",
-                "addTime" => ZalyHelper::getMsectime(),
-            ],
-        ];
-
-        $this->_insertSiteCustom($customs);
-    }
-
-
     private function _insertSitePlugin($miniPrograms)
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
@@ -592,23 +538,6 @@ class InstallDBController
             }
         }
         $this->logger->info("site.install.db", "init miniPrograms finish success=" . json_encode($successParams));
-    }
-
-    private function _insertSiteCustom(array $customs)
-    {
-        $tag = __CLASS__ . "->" . __FUNCTION__;
-        $successParams = [];
-        foreach ($customs as $custom) {
-            try {
-                $success = $this->insertData("siteCustom", $custom);
-                if ($success) {
-                    $successParams[] = $custom['keyName'];
-                }
-            } catch (Throwable $e) {
-                $this->logger->error($tag, $e);
-            }
-        }
-        $this->logger->info("site.install.db", "init site Custom finish success=" . json_encode($successParams));
     }
 
     public function insertData($tableName, $data)
