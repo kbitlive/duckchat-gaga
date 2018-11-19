@@ -4109,12 +4109,10 @@ function displayWaterMark()
            var time   = Date.parse(new Date());
            //前10位
            var suffixToken = token.substr(0, 10);
-           var params =  suffixToken +" "+chatSessionId+" "+time;
-           if(chatSessionId.length<20) {
-               var data = { watermark_txt:params, watermark_width:100, watermark_y_space:30, watermark_x_space:30 }
-           } else {
-               var data = { watermark_txt:params }
-           }
+           var suffixChatsessionId = chatSessionId.substr(0,10)
+           var params =  suffixToken +" "+suffixChatsessionId+" "+time;
+           var data = { watermark_txt:params, watermark_width:100, watermark_y_space:30, watermark_x_space:30 }
+
            try{
                $("#otdivid").remove();
            }catch (error) {
