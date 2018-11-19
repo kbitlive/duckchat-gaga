@@ -4106,7 +4106,7 @@ function displayWaterMark()
        var config = JSON.parse(configStr);
         var chatSessionId = localStorage.getItem(chatSessionIdKey);
        if(config.hasOwnProperty("openWaterMark") && config['openWaterMark']) {
-           var time   = Date.parse(new Date());
+           var time = Date.parse(new Date()) / 1000;
            //前10位
            var suffixToken = token.substr(0, 10);
            var suffixChatsessionId = chatSessionId.substr(0,10)

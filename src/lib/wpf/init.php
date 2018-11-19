@@ -37,6 +37,8 @@ $autoloader->addDir(WPF_LIB_DIR . '/../config/');
 $autoloader->addDir(WPF_LIB_DIR . '/../controller/');
 spl_autoload_register(array($autoloader, 'load'));
 
+
+
 // For performance
 //
 // autoload: the most commonly used files from autoload "file_exists" Stat.
@@ -107,13 +109,15 @@ if (!ini_get("error_log")) {
     if ($phpErrorLog) {
         ini_set("error_log", $logDirName . "/" . $phpErrorLog);
     } else {
-//        ini_set("error_log", $logDirName . "/duckchat_install.php");
+        $strPrefix = ZalyHelper::generateStrKey(10);
+        ini_set("error_log", $logDirName . $strPrefix."_error_logs.log");
     }
 }
-//生成WEB程序管理器，开始执行逻辑
+
+////生成WEB程序管理器，开始执行逻辑
 $web = new Wpf_Web();
 $web->run();
-
-//其他
+//
+////其他
 define("WPF_END_TIME", microtime(true));
-//printf("\n<br />request time:%fms\n", (WPF_END_TIME-WPF_START_TIME)*1000);
+////printf("\n<br />request time:%fms\n", (WPF_END_TIME-WPF_START_TIME)*1000);

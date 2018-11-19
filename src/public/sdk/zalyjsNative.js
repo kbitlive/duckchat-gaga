@@ -313,6 +313,7 @@ function zalyjsApiSiteLogin() {
                 } else {
                     refererUrl = refererUrl+"?token="+sessionId
                 }
+                localStorage.clear();
                 try {
                     window.parent.location.href = refererUrl
                 } catch (error) {
