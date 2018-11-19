@@ -51,7 +51,7 @@ class BaseTable
             $dbDsn = "mysql:host=$dbHost;port=$dbPort;dbname=$dbName;";
             $options = array(
                 PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4',
-//                PDO::ATTR_PERSISTENT => true,
+                PDO::ATTR_PERSISTENT => true,
             );
             $this->dbSlave = new PDO($dbDsn, $dbUserName, $dbPwssword, $options);//创建一个pdo对象
         }
@@ -194,6 +194,11 @@ class BaseTable
         return $this->ctx->ZalyHelper->getMsectime();
     }
 
+    protected function getTimeHMS()
+    {
+        return date("y_m_d_h_i_s", time());
+    }
+
     /**
      * 处理 增，删 情况
      * @param $tag
@@ -236,4 +241,47 @@ class BaseTable
         return false;
     }
 
+    protected function getMysqlTableColumns($tableName)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $mysqlConfig = ZalyConfig::getConfig("mysql");
+        $dbName = $mysqlConfig['dbName'];
+        $prepare = false;
+        $sql = "SELECT COLUMN_NAME FROM information_schema.columns WHERE TABLE_NAME=$tableName AND TABLE_SCHEMA=$dbName;";
+        $prepare = $this->db->prepare($sql);
+
+        $flag = $prepare->execute();
+
+        $columns = $prepare->fetchAll(PDO::FETCH_COLUMN);
+
+        $this->handlerResult($flag, $prepare, $tag);
+
+        return $columns;
+    }
+
+    protected function getSqliteTableColumns($tableName)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $prepare = false;
+        $sql = "PRAGMA table_info($tableName);";
+
+        $prepare = $this->db->prepare($sql);
+
+        $flag = $prepare->execute();
+
+        $columns = $prepare->fetchAll(PDO::FETCH_COLUMN, 1);
+
+        $this->handlerResult($flag, $prepare, $tag);
+
+        return $columns;
+    }
+
+    protected function dropDBTable($tableName)
+    {
+        if (empty($tableName)) {
+            return false;
+        }
+        $sql = "drop table $tableName";
+        return $this->db->exec($sql) !== false;
+    }
 }

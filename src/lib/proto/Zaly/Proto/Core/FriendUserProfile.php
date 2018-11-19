@@ -31,6 +31,12 @@ class FriendUserProfile extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>.core.FriendRelationType relation = 3;</code>
      */
     private $relation = 0;
+    /**
+     *friend custom profile
+     *
+     * Generated from protobuf field <code>repeated .core.CustomUserProfile custom = 4;</code>
+     */
+    private $custom;
 
     public function __construct() {
         \GPBMetadata\Core\User::initOnce();
@@ -111,6 +117,32 @@ class FriendUserProfile extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkEnum($var, \Zaly\Proto\Core\FriendRelationType::class);
         $this->relation = $var;
+
+        return $this;
+    }
+
+    /**
+     *friend custom profile
+     *
+     * Generated from protobuf field <code>repeated .core.CustomUserProfile custom = 4;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getCustom()
+    {
+        return $this->custom;
+    }
+
+    /**
+     *friend custom profile
+     *
+     * Generated from protobuf field <code>repeated .core.CustomUserProfile custom = 4;</code>
+     * @param \Zaly\Proto\Core\CustomUserProfile[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setCustom($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Zaly\Proto\Core\CustomUserProfile::class);
+        $this->custom = $arr;
 
         return $this;
     }

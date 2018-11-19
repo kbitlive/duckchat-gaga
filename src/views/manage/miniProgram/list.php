@@ -24,6 +24,7 @@
         #search-group-div {
             text-align: center;
         }
+
         .item-row {
             cursor: pointer;
         }
@@ -58,7 +59,12 @@
                             <div class="item-body-desc"><?php echo($value["name"]) ?></div>
 
                             <div class="item-body-tail">
-                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                                <div class="item-body-value">
+                                    <?php echo $value['sort']; ?>
+                                </div>
+                                <div class="item-body-value">
+                                    <img class="more-img" src="../../public/img/manage/more.png"/>
+                                </div>
                             </div>
                         </div>
 

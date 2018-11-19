@@ -262,7 +262,7 @@ class SitePluginTable extends BaseTable
         $tag = __CLASS__ . "_" . __FUNCTION__;
         $startTime = microtime(true);
         try {
-            $sql = "select a.id, a.pluginId,a.name,a.logo,a.management as adminPageUrl 
+            $sql = "select a.id, a.pluginId,a.name,a.logo,a.management as adminPageUrl,a.sort as sort
                     from sitePlugin as a 
                     inner join (select min(id) as id, pluginId from sitePlugin group by pluginId) as b 
                     where a.id=b.id

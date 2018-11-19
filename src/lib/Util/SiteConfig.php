@@ -68,6 +68,8 @@ class SiteConfig
 
     const SITE_HIDDEN_HOME_PAGE = "hiddenHomePage";
 
+    const SITE_OPEN_WATERMARK = "openWaterMark";
+
     public static function getPubkAndPrikPem()
     {
         $pair = ZalyRsa::newRsaKeyPair(2048);
@@ -127,6 +129,7 @@ class SiteConfig
 
         self::SITE_FRONT_PAGE,
         self::SITE_HIDDEN_HOME_PAGE,
+        self::SITE_OPEN_WATERMARK,
     ];
 
     public static $numericKeys = [
@@ -182,6 +185,8 @@ class SiteConfig
         self::SITE_MOBILE_NUM => 1,
         self::SITE_WEB_NUM => 1,
         self::SITE_FILE_SIZE => 10, //10M
+
+        self::SITE_OPEN_WATERMARK => 0,
     ];
 
 }

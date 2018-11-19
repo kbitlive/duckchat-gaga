@@ -26,6 +26,7 @@ abstract class HttpBaseController extends \Wpf_Controller
         "page.js",
         "page.siteConfig",
         "page.passport.login",
+        "page.passport.register",
         "page.jump",
         "page.version.check",
     ];
@@ -41,6 +42,7 @@ abstract class HttpBaseController extends \Wpf_Controller
     private $jumpRelation = "";
     public $siteCookieName = "zaly_site_user";
     public $language = "";
+    private $cookieTimeOut = 2592000;//30天 单位s
 
     protected $siteConfig;
 
@@ -69,8 +71,9 @@ abstract class HttpBaseController extends \Wpf_Controller
         $tag = __CLASS__ . "-" . __FUNCTION__;
         try {
             parent::doIndex();
-            $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
+
             $action = isset($_GET['action']) ? $_GET['action'] : "";
+
             $this->getAndSetClientLang();
             if (!in_array($action, $this->upgradeAction)) {
                 $this->checkIsNeedUpgrade();
@@ -78,9 +81,6 @@ abstract class HttpBaseController extends \Wpf_Controller
 
             $this->siteConfig = $this->ctx->Site_Config->getAllConfig();
 
-            if ($preSessionId) {
-                $this->handlePreSessionId();
-            }
             if (!in_array($action, $this->whiteAction)) {
                 $flag = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_OPEN_WEB_EDITION);
                 if ($flag != 1) {
@@ -119,35 +119,6 @@ abstract class HttpBaseController extends \Wpf_Controller
             $this->language = Zaly\Proto\Core\UserClientLangType::UserClientLangZH;
         } else {
             $this->language = Zaly\Proto\Core\UserClientLangType::UserClientLangEN;
-        }
-    }
-
-    public function handlePreSessionId()
-    {
-        try {
-            $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
-            $thirdPartyLoginKey = isset($_GET['thirdPartyKey']) ? $_GET['thirdPartyKey'] : "";
-            $thirdPartyLoginKey = trim($thirdPartyLoginKey);
-
-            $userCustomArray = [];
-            if ($preSessionId) {
-                $preSessionId = isset($_GET['preSessionId']) ? $_GET['preSessionId'] : "";
-                if ($preSessionId) {
-                    $clientType = Zaly\Proto\Core\UserClientType::UserClientWeb;
-                    $userProfile = $this->ctx->Site_Login->doLogin($thirdPartyLoginKey, $preSessionId, "", $clientType, $userCustomArray);
-                    $this->setCookie($userProfile["sessionId"], $this->siteCookieName);
-                }
-            }
-            header("Content-Type: application/javascript; charset=utf-8");
-            $successCallBack = $_GET['success_callback'] ? $_GET['success_callback'] : "";
-            echo "$successCallBack();";
-            die();
-        } catch (Exception $ex) {
-            $errorInfo = $ex->getMessage();
-            $failCallBack = $_GET['fail_callback'] ? $_GET['fail_callback'] : "";
-            header("Content-Type: application/javascript; charset=utf-8");
-            echo "$failCallBack('" . $errorInfo . "');";
-            die();
         }
     }
 
@@ -217,6 +188,29 @@ abstract class HttpBaseController extends \Wpf_Controller
         $this->sessionId = $this->sessionInfo['sessionId'];
         $this->userId = $this->userInfo['userId'];
 
+    }
+
+    protected function checkUserToken($token)
+    {
+        $this->sessionInfo = $this->ctx->SiteSessionTable->getSessionInfoBySessionId($token);
+        if (!$this->sessionInfo) {
+            throw new Exception("session is not ok");
+        }
+        $timeActive = $this->sessionInfo['timeActive'];
+
+        $nowTime = $this->ctx->ZalyHelper->getMsectime();
+
+        if (($nowTime - $timeActive) > $this->sessionIdTimeOut * 24 * 365) {
+            throw new Exception("session expired");
+        }
+
+        $this->userInfo = $this->ctx->SiteUserTable->getUserByUserId($this->sessionInfo['userId']);
+        if (!$this->userInfo) {
+            throw new Exception("user is not ok");
+        }
+        setcookie($this->siteCookieName, $token, time() + $this->cookieTimeOut, "/", "", false, true);
+        $this->sessionId = $this->sessionInfo['sessionId'];
+        $this->userId = $this->userInfo['userId'];
     }
 
     public function setLogout()

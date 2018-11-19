@@ -348,11 +348,9 @@
 
     function loadMoreResponse(url, data, result) {
 
-
         if (result) {
             var res = JSON.parse(result);
-            var isloading = res['loading'];
-            loading = isloading;
+
             var data = res['data'];
 
             // alert(result);
@@ -375,9 +373,11 @@
                     html += '</div><div class="row-head cell">'+log.ip+'</div> <div class="data cell">'+getDateByTime(log.operateTime)+'</div> </div>'
                     $(".table").append(html);
                 });
+                loading = true;
+                return;
             }
-
         }
+        loading = false;
 
     }
 

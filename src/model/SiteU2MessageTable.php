@@ -68,6 +68,7 @@ class siteU2MessageTable extends BaseTable
 
     function deleteMessagePointer($userId)
     {
+        $startTime = $this->getCurrentTimeMills();
         $tag = __CLASS__ . '->' . __FUNCTION__;
         $sql = "delete from $this->pointerTable where userId=:userId;";
 
@@ -76,9 +77,27 @@ class siteU2MessageTable extends BaseTable
 
         $result = $prepare->execute();
 
-        $this->logger->writeSqlLog($tag, $sql, [$userId], $this->getCurrentTimeMills());
+        $this->logger->writeSqlLog($tag, $sql, [$userId], $startTime);
 
         return $this->handlerResult($result, $prepare, $tag);
+    }
+
+    function updateMessageType($msgId, $msgType)
+    {
+        $startTime = $this->getCurrentTimeMills();
+        $tag = __CLASS__ . '->' . __FUNCTION__;
+        $sql = "update $this->table set msgType=:msgType where msgId=:msgId;";
+
+        $prepare = $this->db->prepare($sql);
+        $this->handlePrepareError($tag, $prepare);
+        $prepare->bindValue(":msgType", $msgType);
+        $prepare->bindValue(":msgId", $msgId);
+
+        $result = $prepare->execute();
+
+        $this->logger->writeSqlLog($tag, $sql, [$msgId, $msgType], $startTime);
+
+        return $this->handlerUpdateResult($result, $prepare, $tag);
     }
 
     /**
@@ -124,6 +143,29 @@ class siteU2MessageTable extends BaseTable
         return [];
     }
 
+    public function queryMessageByFromUserIdAndMsgId($fromUserId, $msgId)
+    {
+        $startTime = microtime(true);
+        $tag = __CLASS__ . "." . __FUNCTION__;
+
+        $queryFields = implode(",", $this->columns);
+        $sql = "select $queryFields from $this->table where msgId=:msgId and fromUserId=:fromUserId limit 1;";
+
+        try {
+
+            $prepare = $this->db->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->bindValue(":fromUserId", $fromUserId);
+            $prepare->bindValue(":msgId", $msgId);
+
+            $prepare->execute();
+            return $prepare->fetch(\PDO::FETCH_ASSOC);
+        } finally {
+            $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, [$fromUserId, $msgId], $startTime);
+        }
+
+    }
+
     /**
      * 通过msgId查询表中消息
      *
@@ -146,15 +188,8 @@ class siteU2MessageTable extends BaseTable
         $sql = "select $queryFields from $this->table ";
 
         try {
-            $sql .= "where msgId in ('";
-            for ($i = 0; $i < count($msgIdArrays); $i++) {
-                if ($i == 0) {
-                    $sql .= $msgIdArrays[$i];
-                } else {
-                    $sql .= "','" + $msgIdArrays[$i];
-                }
-            }
-            $sql .= "') limit 100;";
+            $inSql = implode("','", $msgIdArrays);
+            $sql .= "where msgId in ('$inSql') limit 100;";
 
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
@@ -162,6 +197,42 @@ class siteU2MessageTable extends BaseTable
             $prepare->execute();
 
             return $prepare->fetchAll(\PDO::FETCH_ASSOC);
+        } finally {
+            $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, $msgIdArrays, $startTime);
+        }
+
+        return [];
+    }
+
+
+    /**
+     * @param $msgIdArrays
+     * @return array
+     * @throws Exception
+     */
+    public function queryColumnMsgIdByMsgId($msgIdArrays)
+    {
+        $tag = __CLASS__ . "." . __FUNCTION__;
+        $startTime = $this->getCurrentTimeMills();
+
+        $result = empty($msgIdArrays);
+
+        if ($result) {
+            return [];
+        }
+
+        $sql = "select msgId from $this->table ";
+
+        try {
+            $inSql = implode("','", $msgIdArrays);
+            $sql .= "where msgId in ('$inSql') limit 50;";
+
+            $prepare = $this->db->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+
+            $prepare->execute();
+
+            return $prepare->fetchAll(\PDO::FETCH_COLUMN);
         } finally {
             $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, $msgIdArrays, $startTime);
         }

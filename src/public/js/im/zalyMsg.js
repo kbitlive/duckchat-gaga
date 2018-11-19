@@ -120,6 +120,7 @@ function getMsgContentForChatSession(msg)
         case MessageType.MessageText:
             msgContent = msg.hasOwnProperty("text") ? msg['text'].body: JSON.parse(msg['content']).body;
             msgContent = msgContent && msgContent.length > 10 ? msgContent.substr(0,10)+"..." : msgContent;
+
             break;
         case MessageType.MessageImage:
             msgContent = "[图片消息]";
@@ -130,6 +131,9 @@ function getMsgContentForChatSession(msg)
         case MessageType.MessageNotice:
             msgContent = msg["notice"].body;
             msgContent = msgContent && msgContent.length > 10 ? msgContent.substr(0,10)+"..." : msgContent;
+            break;
+        case MessageType.MessageRecall:
+            msgContent = "[通知]";
             break;
         case MessageType.MessageWebNotice:
             msgContent = msg["webNotice"].title;
@@ -170,6 +174,9 @@ function updateRoomChatSessionContentForMsg(msg, nodes, msgContent) {
             $(".room-chatsession-mute-num_"+msg.chatSessionId)[0].style.display = "none";
         }
     }
+    msgContent = template("tpl-string", {
+        string:msgContent
+    });
     if(msgContent != undefined && msgContent.length>0) {
         $(childrens[2]).html(msgContent);
     }
@@ -221,6 +228,8 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
         name = name.substr(0, 8) + "...";
     }
 
+    var isSiteMaster = isJudgeSiteMasters(msg.chatSessionId);
+
     var html = template("tpl-chatSession", {
         className:msg.roomType == U2_MSG ? "u2-profile" : "group-profile",
         isMute:msg.isMute,
@@ -234,7 +243,8 @@ function appendOrInsertRoomList(msg, isInsert, showNotification)
         avatar:avatar,
         timeServer:msgTime,
         msgServerTime:msg.timeServer,
-    })
+        isSiteMaster:isSiteMaster
+    });
 
     if($(".chatsession-row").length > 0 ) {
         $(html).insertBefore($(".chatsession-row")[0]);
@@ -422,6 +432,7 @@ function handleSyncMsgForRoom(results)
                 }
                 handleSyncMsg(msg);
             }
+
             isSyncingMsg = false;
 
             if(isNeewUpdatePointer == true) {
@@ -467,6 +478,21 @@ function handleSyncMsg(msg)
         }
         localStorage.setItem(newSiteTipKey, "new_msg");
         setDocumentTitle();
+    } else if(msg.chatSessionId  == currentChatSessionId && !isNewMsg) {
+        if(msg.type == MessageType.MessageRecall) {
+            try{
+                var msgId = msg['recall'].msgId;
+                var msgContent = msg["recall"].msgText !== undefined && msg["recall"].msgText != null ? msg["recall"].msgText : "此消息被撤回";
+                var html = template("tpl-receive-msg-notice", {
+                    msgContent:msgContent,
+                    timeServer:msg.timeServer
+                });
+                var tagId = "msg-row-"+msgId;
+                var oldNode = document.getElementById(tagId);
+                oldNode.parentNode.replaceChild($(html)[0],oldNode);
+            }catch (error) {
+            }
+        }
     } else if(msg.chatSessionId != currentChatSessionId && isNewMsg) {
         if(msg.chatSessionId != token) {
             setRoomMsgUnreadNum(msg.chatSessionId);
@@ -548,14 +574,30 @@ function handleMsgForMsgRoom(chatSessionId, pushMsg)
         while(msgList.length>=300) {
             msgList.shift();
         }
-
-        if(pushMsg != undefined) {
-            msgList.push(pushMsg);
-
-            var isNewMsg = uniqueMsgAndCheckMsgId(msgList, pushMsg.msgId, roomChatSessionKey);
-
-            return isNewMsg;
+        try{
+            if(pushMsg != undefined) {
+                if(pushMsg.type == MessageType.MessageRecall) {
+                    var msgListLength = msgList.length;
+                    for(var i=0;i<msgListLength; i++) {
+                        var msg = msgList[i];
+                        if(msg.msgId == pushMsg['recall'].msgId) {
+                            msg.type = MessageType.MessageRecall;
+                            msg.recall = pushMsg.recall;
+                            msgList[i] = msg;
+                        }
+                    }
+                    var isNewMsg = false;
+                    localStorage.setItem(roomChatSessionKey, JSON.stringify(msgList));
+                } else {
+                    msgList.push(pushMsg);
+                    var isNewMsg = uniqueMsgAndCheckMsgId(msgList, pushMsg.msgId, roomChatSessionKey);
+                }
+                return isNewMsg;
+            }
+        }catch(error) {
+            console.log(error)
         }
+
         msgList.sort(compare);
         return msgList;
     }catch (error){
@@ -798,6 +840,41 @@ function sendMsg( chatSessionId, chatSessionType, msgContent, msgType, params)
 };
 
 
+function sendRecallMsg(recallMsgId, msgText, chatSessionId, chatSessionType)
+{
+    var action = "im.cts.message";
+    var msgId  = Date.now();
+
+    var message = {};
+    message['fromUserId'] = token;
+    var msgIdSuffix = "";
+    if(chatSessionType == U2_MSG) {
+        message['roomType'] = U2_MSG;
+        message['toUserId'] = chatSessionId
+        msgIdSuffix = "U2-";
+    } else {
+        message['roomType'] = GROUP_MSG;
+        message['toGroupId'] = chatSessionId;
+        msgIdSuffix = "GROUP-";
+    }
+    var msgId = msgIdSuffix + msgId+"";
+    message['msgId'] = msgId;
+
+    message['timeServer'] = Date.parse(new Date());
+
+    message['recall'] = {msgId:recallMsgId, msgText:msgText};
+    message['type'] = MessageType.MessageRecall;
+
+    var reqData = {
+        "message" : message
+    };
+    var msgIdInChatSession = msgIdInChatSessionKey + msgId;
+    sessionStorage.setItem(msgIdInChatSession, chatSessionId);
+
+    handleImSendRequest(action, reqData, "");
+}
+
+
 //---------------------------------------------msg realtion function-------------------------------------------------
 
 //get msg  document size
@@ -986,6 +1063,15 @@ function trimMsgContentBr(html)
     return html;
 }
 
+
+//replace \n from html
+function trimMsgContentNewLine(html)
+{
+    html = html.replace(new RegExp('<br>','g'),"\n");
+    html = html.replace(new RegExp('&amp;','g'),"&");
+    return html;
+}
+
 function handleMsgContentText(str)
 {
     html = trimMsgContentBr(str);
@@ -1085,7 +1171,8 @@ function appendMsgHtmlToChatDialog(msg)
                     msgStatus:msgStatus,
                     avatar:userAvatar,
                     userId:msg.fromUserId,
-                    timeServer:msg.timeServer
+                    timeServer:msg.timeServer,
+                    msgType:msgType,
                 });
                 break;
             case MessageType.MessageDocument:
@@ -1105,6 +1192,7 @@ function appendMsgHtmlToChatDialog(msg)
                     fileSize:size,
                     fileName:fileName,
                     originName:originName,
+                    msgType:msgType,
                     timeServer:msg.timeServer
                 });
                 break;
@@ -1123,7 +1211,8 @@ function appendMsgHtmlToChatDialog(msg)
                     height:imgObject.height,
                     userId:msg.fromUserId,
                     timeServer:msg.timeServer,
-                    msgImgUrl:msgImgUrl
+                    msgImgUrl:msgImgUrl,
+                    msgType:msgType,
                 });
                 break;
             case MessageType.MessageAudio:
@@ -1135,6 +1224,13 @@ function appendMsgHtmlToChatDialog(msg)
                     msgStatus:msgStatus,
                     avatar:userAvatar,
                     userId:msg.fromUserId,
+                    msgType:msgType,
+                    timeServer:msg.timeServer
+                });
+            case MessageType.MessageRecall:
+                var msgContent = msg["recall"].msgText !== undefined && msg["recall"].msgText != null ? msg["recall"].msgText : "此消息被撤回";
+                html = template("tpl-receive-msg-notice", {
+                    msgContent:msgContent,
                     timeServer:msg.timeServer
                 });
                 break;
@@ -1181,6 +1277,7 @@ function appendMsgHtmlToChatDialog(msg)
                     msgContent:msgContent,
                     avatar:userAvatar,
                     userId:msg.fromUserId,
+                    msgType:msgType,
                     timeServer:msg.timeServer
                 });
                 break;
@@ -1199,6 +1296,7 @@ function appendMsgHtmlToChatDialog(msg)
                     msgContent:msgContent,
                     groupUserImg : groupUserImageClassName,
                     avatar:userAvatar,
+                    msgType:msgType,
                     isMaster:isMaster
                 });
                 break;
@@ -1219,6 +1317,7 @@ function appendMsgHtmlToChatDialog(msg)
                     width:imgObject.width,
                     height:imgObject.height,
                     msgImgUrl:msgImgUrl,
+                    msgType:msgType,
                     isMaster:isMaster
                 });
                 break;
@@ -1252,6 +1351,7 @@ function appendMsgHtmlToChatDialog(msg)
                     fileName:fileName,
                     originName:originName,
                     timeServer:msg.timeServer,
+                    msgType:msgType,
                     isMaster:isMaster
                 });
                 break;
@@ -1298,6 +1398,12 @@ function appendMsgHtmlToChatDialog(msg)
                     msgContent:msgContent,
                     avatar:userAvatar,
                     userId :msg.fromUserId,
+                    timeServer:msg.timeServer
+                });
+            case MessageType.MessageRecall:
+                var msgContent = msg["recall"].msgText !== undefined && msg["recall"].msgText != null ? msg["recall"].msgText : "此消息被撤回";
+                html = template("tpl-receive-msg-notice", {
+                    msgContent:msgContent,
                     timeServer:msg.timeServer
                 });
                 break;
@@ -1423,9 +1529,10 @@ function updateUserAvatar(fileName)
 {
     var values = new Array();
     var value = {
-        type : "ApiUserUpdateAvatar",
+        type : ApiUserUpdateType.ApiUserUpdateAvatar,
         avatar : fileName,
     };
     values.push(value);
     updateUserInfo(values);
 }
+

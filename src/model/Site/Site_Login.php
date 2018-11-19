@@ -45,7 +45,7 @@ class Site_Login
 
         if ($userProfile && !empty($userCustomArray)) {
             //login success, save custom
-            $this->saveUserCustoms($userCustomArray);
+            $this->saveUserCustoms($userProfile["userId"], $userCustomArray);
         }
 
         return $userProfile;
@@ -96,8 +96,9 @@ class Site_Login
                 throw new Exception("get user profile error from third party");
             }
 
+            $newLoginName = $thirdPartyLoginKey . "_" . $loginUserProfile->getLoginName();
             //update loginName
-            $loginUserProfile->setLoginName($thirdPartyLoginKey . "_" . $loginUserProfile->getLoginName());
+            $loginUserProfile->setLoginName($newLoginName);
 
             $thirdPartyLoginUserId = $loginUserProfile->getUserId();
             $thirdPartyInfo = $this->getThirdPartyAccount($thirdPartyLoginKey, $thirdPartyLoginUserId);
@@ -202,7 +203,14 @@ class Site_Login
 
         $sitePubkPem = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_ID_PUBK_PEM);
         $sourceLoginUserId = $loginUserProfile->getUserId();
-        $userId = sha1($sourceLoginUserId . "@" . $sitePubkPem);
+
+        $tmpUserId = $sourceLoginUserId . "@" . $sitePubkPem;
+
+        if (!empty($loginKeyId)) {
+            $tmpUserId .= "@" . $loginKeyId;
+        }
+
+        $userId = sha1($tmpUserId);
 
         $nameInLatin = $this->pinyin->permalink($loginUserProfile->getNickName(), "");
         $countryCode = $loginUserProfile->getPhoneCountryCode();
@@ -292,10 +300,11 @@ class Site_Login
 
 
     //support site admins add custom items for users
-    private function saveUserCustoms(array $userCustoms)
+    private function saveUserCustoms($userId, array $userCustoms)
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         try {
+            $userCustoms["userId"] = $userId;
             return $this->ctx->SiteUserCustomTable->insertCustomProfile($userCustoms);
         } catch (Exception $e) {
             $this->logger->error($tag, $e);

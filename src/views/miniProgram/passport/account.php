@@ -29,25 +29,25 @@
             </div>
 
             <div class="login_name_div login_name_div_mobile">
-                <image src="../../public/img/login/loginName.png" class="img"/>
-                <input type="text" class="input_login_site forget_input_loginName" datatype="s" autocapitalize="off"  data-local-placeholder="loginNamePlaceholder" placeholder="输入登录名">
+                <img src="../../public/img/login/loginName.png" class="img"/>
+                <input type="text" class="input_login_site forget_input_loginName" datatype="s" autocapitalize="off"  data-local-placeholder="loginNamePlaceholder" placeholder="输入用户名">
                 <img src="../../../public/img/msg/msg_failed.png" class="img-failed forget_input_loginName_failed">
                 <div class="line"></div>
             </div>
 
 
             <div class="login_name_div forget_input_pwd_div margin-top2"  >
-                <image src="../../public/img/login/pwd.png" class="img"/>
+                <img src="../../public/img/login/pwd.png" class="img"/>
                 <input type="password" class="input_login_site forget_input_oldPwd" autocapitalize="off"  data-local-placeholder="enterOldPasswordPlaceholder"  placeholder="输入旧密码" >
-                <div class="pwd_div" onclick="changeImgByClickOldPwd()"><image src="../../public/img/login/hide_pwd.png" class="oldPwd" img_type="hide"/></div>
+                <div class="pwd_div" onclick="changeImgByClickOldPwd()"><img src="../../public/img/login/hide_pwd.png" class="oldPwd" img_type="hide"/></div>
                 <img src="../../../public/img/msg/msg_failed.png" class="img-failed forget_input_oldPwd_failed">
                 <div class="line"></div>
             </div>
 
             <div class="login_name_div forget_input_pwd_div margin-top2"  >
-                <image src="../../public/img/login/pwd.png" class="img"/>
+                <img src="../../public/img/login/pwd.png" class="img"/>
                 <input type="password" class="input_login_site forget_input_pwd"  autocapitalize="off"  data-local-placeholder="enterPasswordPlaceholder"  placeholder="输入密码" >
-                <div class="pwd_div" onclick="changeImgByClickPwd()"><image src="../../public/img/login/hide_pwd.png" class="pwd" img_type="hide"/></div>
+                <div class="pwd_div" onclick="changeImgByClickPwd()"><img src="../../public/img/login/hide_pwd.png" class="pwd" img_type="hide"/></div>
                 <img src="../../../public/img/msg/msg_failed.png" class="img-failed forget_input_pwd_failed">
                 <div class="line"></div>
             </div>
@@ -55,9 +55,9 @@
 
 
             <div class="login_name_div forget_input_repwd_div margin-top2" >
-                <image src="../../public/img/login/re_pwd.png" class="img"/>
+                <img src="../../public/img/login/re_pwd.png" class="img"/>
                 <input type="password" class="input_login_site forget_input_repwd" autocapitalize="off"   data-local-placeholder="enterRepasswordPlaceholder"  placeholder="再次输入密码"  >
-                <div class="repwd_div" onclick="changeImgByClickRepwd()"><image src="../../public/img/login/hide_pwd.png" class="repwd" img_type="hide"/></div>
+                <div class="repwd_div" onclick="changeImgByClickRepwd()"><img src="../../public/img/login/hide_pwd.png" class="repwd" img_type="hide"/></div>
                 <img src="../../../public/img/msg/msg_failed.png" class="img-failed forget_input_repwd_failed">
 
                 <div class="line" ></div>

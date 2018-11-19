@@ -4,7 +4,7 @@
     <div class="layout-left" >
         <div class="left-sidebar" style="position: relative;">
                 <div style="position: relative;height: 100%;">
-                    <div class="l-sb-item" style="border: none;" >
+                    <div class="l-sb-item l-sb-item-selfInfo" style="border: none;position: relative" >
                         <?php if($avatar) { ?>
                             <img class="useravatar selfInfo info-avatar-<?php echo $user_id;?>"  src="./index.php?action=http.file.downloadFile&fileId=<?php echo $avatar;?>&returnBase64=0" style="background-color: #c9c9c9;" />
                         <?php } else { ?>
@@ -55,10 +55,11 @@
 
         <div class="left-body">
             <div class="search_group_friend">
-                <img src="<?php echo $siteAddress?>/public/img/msg/search_icon.png">
-                <input type="text" onkeydown="searchGroupAndFriendByKeyDown(event)" class="search_for_group_friend">
-                <img src="<?php echo $siteAddress?>/public/img/msg/btn-x.png" style="left:24rem;" onclick="deleteSearchInfo()">
-
+                <div style="width: 90%;">
+                    <img src="<?php echo $siteAddress?>/public/img/msg/search_icon.png">
+                    <input type="text" onkeydown="searchGroupAndFriendByKeyDown(event)" class="search_for_group_friend">
+                    <img src="<?php echo $siteAddress?>/public/img/msg/btn-x.png" style="left:90%;top:2.2rem;" onclick="deleteSearchInfo()">
+                </div>
             </div>
             <div class="left-body-container">
 

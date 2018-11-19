@@ -7,7 +7,7 @@
  */
 
 
-class MiniProgram_Test_IndexController extends  MiniProgramController
+class MiniProgram_Test_IndexController extends  MiniProgram_BaseController
 {
 
     private $testMiniProgramId = 115;

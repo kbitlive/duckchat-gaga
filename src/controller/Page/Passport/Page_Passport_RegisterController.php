@@ -13,7 +13,7 @@ class Page_Passport_RegisterController extends HttpBaseController
     {
         $tag = __CLASS__ . '->' . __FUNCTION__;
         try {
-            $this->checkUserCookie();
+            isset($_GET['token']) ? $this->checkUserToken($_GET['token']) : $this->checkUserCookie(); ;
             if ($this->userId) {
                 $jumpPage = $this->getJumpUrlFromParams();
                 $apiPageIndex = ZalyConfig::getApiIndexUrl();
@@ -50,8 +50,6 @@ class Page_Passport_RegisterController extends HttpBaseController
         $passwordRestWay = isset($passwordResetWayConfig["configValue"]) ? $passwordResetWayConfig["configValue"] : "";
 
         $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
-        $passwordResetRequiredConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED]) ? $loginConfig[LoginConfig::PASSWORD_RESET_REQUIRED] : "";
-        $passwordResetRequired = isset($passwordResetRequiredConfig["configValue"]) ? $passwordResetRequiredConfig["configValue"] : "";
 
         $loginWelcomeTextConfig = isset($loginConfig[LoginConfig::LOGIN_PAGE_WELCOME_TEXT]) ? $loginConfig[LoginConfig::LOGIN_PAGE_WELCOME_TEXT] : "";
         $loginWelcomeText = isset($loginWelcomeTextConfig["configValue"]) ? $loginWelcomeTextConfig["configValue"] : "";
@@ -82,10 +80,21 @@ class Page_Passport_RegisterController extends HttpBaseController
         $pwdContainCharactersConfig = isset($loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS]) ? $loginConfig[LoginConfig::PASSWORD_CONTAIN_CHARACTERS] : "";
         $pwdContainCharacters = isset($pwdContainCharactersConfig["configValue"]) ? $pwdContainCharactersConfig["configValue"] : "";
 
-        $thirdPartyLoginOptions = ZalyLogin::getThirdPartyConfig();
+        $enableInvitationCode = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_INVITATION_CODE);
+        $enableRealName = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_REAL_NAME);
 
+
+        $loginNameTip =  ZalyText::getText("text.length", $this->language)." " .$loginNameMinLength."-".$loginNameMaxLength;
+        $pwdTip =  ZalyText::getText("text.length", $this->language)." " .$pwdMinLength."-".$pwdMaxLength;
+        if ($pwdContainCharacters) {
+            $pwdTip = $pwdContainCharacters . ",". ZalyText::getText("text.length", $this->language)." " .$pwdMinLength . "-" . $pwdMaxLength;
+        }
+        $pwdTip = str_replace(["letter", "number", "special_characters"], ["字母", "数字", "特殊字符"], $pwdTip);
+        $title = ZalyText::getText("text.register", $this->language)."-".$siteName;
+
+        $registerCustoms = $this->getRegisterCustoms();
         $params = [
-            'siteName' => $siteName,
+            'title' => $title,
             'siteLogo' => $this->ctx->File_Manager->getCustomPathByFileId($siteLogo),
             'siteVersionName' => $siteVersionName,
             'isDuckchat' => $isDuckchat,
@@ -97,42 +106,33 @@ class Page_Passport_RegisterController extends HttpBaseController
             "pwdMinLength" => $pwdMinLength,
             "loginNameMinLength" => $loginNameMinLength,
             "loginNameMaxLength" => $loginNameMaxLength,
-            'passwordResetRequired' => $passwordResetRequired,
             "pwdContainCharacters" => $pwdContainCharacters,
+            "loginNameTip" => $loginNameTip,
+            "pwdTip" => $pwdTip,
 
             'loginBackgroundImageDisplay' => $loginBackgroundImageDisplay,
 
             'loginNameAlias' => $loginNameAlias,
-            'passwordFindWay' => $passwordRestWay,
-            'passwordResetWay' => $passwordRestWay,
-            'passwordResetRequired' => $passwordResetRequired,
-            'customLoginItems' => [
-                //自定义的登陆项
-                [
-                    'email' => "邮箱",
-                    'icon' => "",
-                    'placeholder' => "",
-                    'isRequired' => $passwordResetRequired,
-                ],
+            'enableInvitationCode' => $enableInvitationCode,
+            'enableRealName' => $enableRealName,
 
-                [
-                    'phone' => "手机号",
-                    'icon' => "",
-                    'placeholder' => "",
-                    'isRequired' => $passwordResetRequired,
-                ],
-
-                [
-                    'name' => "姓名",
-                    'icon' => "",
-                    'placeholder' => "",
-                    'isRequired' => $passwordResetRequired,
-                ],
-            ],
+            'registerCustoms' => $registerCustoms
         ];
 
         echo $this->display("passport_register", $params);
         return;
     }
 
+    //获取注册
+    private function getRegisterCustoms()
+    {
+        $registerCustoms = $this->ctx->SiteUserCustomTable->getColumnInfosForRegister();
+        foreach ($registerCustoms as $key =>  $custom) {
+            if(isset($custom['keyIcon'])) {
+                $custom['keyIcon'] = $this->ctx->File_Manager->getCustomPathByFileId($custom['keyIcon']);
+            }
+            $registerCustoms[$key] = $custom;
+        }
+        return $registerCustoms;
+    }
 }

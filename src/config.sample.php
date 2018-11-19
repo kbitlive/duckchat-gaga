@@ -7,8 +7,8 @@
  */
 
 return array(
-    'siteVersionName' => '1.1.2',
-    'siteVersionCode' => '10102',
+    'siteVersionName' => '1.1.3',
+    'siteVersionCode' => '10103',
     'siteId' => "",//sha1(pubk),获取此值，请从Site_Config中获取
     'apiPageIndex' => './index.php?action=page.index',
     'apiPageLogin' => './index.php?action=page.login',
@@ -30,11 +30,11 @@ return array(
         ),
     'mysql' =>
         array(
-            'dbName' => 'duckchat_site',
+            'dbName' => '',
             'dbHost' => '127.0.0.1',
             'dbPort' => '3306',
-            'dbUserName' => 'duckchat',
-            'dbPassword' => '1234567890',
+            'dbUserName' => '',
+            'dbPassword' => '',
         ),
     'mysqlSlave' => array(
 //        'slave_0' => array(

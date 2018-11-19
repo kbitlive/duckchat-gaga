@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?php if ($lang == "1") { ?>站点设置<?php } else { ?>Site Config<?php } ?></title>
+    <title><?php if ($lang == "1") { ?>登陆配置<?php } else { ?>Login Settings<?php } ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="stylesheet" href="../../public/jquery/weui.min.css"/>
@@ -133,7 +133,8 @@
                 </div>
             </div>
 
-            <div class="login-background-image-<?php echo $loginBackgroundImageDisplay ?> image-bg"
+            <div id="login-background-id"
+                 class="login-background-image-<?php echo $loginBackgroundImageDisplay ?> image-bg"
                  style="background-image: url('/_api_file_download_/?fileId=<?php echo $loginBackgroundImage ?>');"
                  bgImgId="<?php echo $loginBackgroundImage ?>">
                 <input id="upload-background-image" type="file" onchange="uploadImageFile(this)"
@@ -217,12 +218,28 @@
 <script type="text/javascript" src="../../public/js/jquery-confirm.js"></script>
 
 <script type="text/javascript" src="../../public/manage/native.js"></script>
+<script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
 
 <script type="text/javascript">
 
     function uploadFile(obj) {
-        $("#" + obj).val("");
-        $("#" + obj).click();
+        if (isMobile()) {
+            zalyjsImageUpload(uploadImageResult);
+        } else {
+            $("#" + obj).val("");
+            $("#" + obj).click();
+        }
+    }
+
+    function uploadImageResult(result) {
+
+        var fileId = result.fileId;
+
+        //update server image
+        updateLoginBackgroundImage(fileId);
+
+        var url = "/_api_file_download_/?fileId=" + fileId;
+        $("#login-background-id").css("background-image", "url('" + url + "')")
     }
 
 

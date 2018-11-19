@@ -7,9 +7,9 @@
     </div>
 </div>
 
-<div class="plugin-right-body">
+<div class="plugin-right-body" style="overflow: hidden">
 
-    <iframe src="" class="plugin-src plugin-iframe "></iframe>
+    <iframe src="" class="plugin-src plugin-iframe"   onload="window.name=self.document.title" ></iframe>
 
 </div >
 

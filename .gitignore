@@ -8,3 +8,8 @@ logs/
 .idea/vcs.xml
 .DS_Store
 avatar.php
+src/logs/
+src/cache/
+upgrade.php
+.rnd
+src/public/site/image/

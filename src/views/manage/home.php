@@ -22,7 +22,6 @@
 
         .wrapper_div {
             height: 100%;
-            overflow-y: scroll;
         }
 
         .wrapper {
@@ -274,9 +273,9 @@
                         <div class="item-body-display">
                             <div class="item-body-desc">
                                 <?php if ($lang == "1") { ?>
-                                    页面配置
+                                    自定义配置
                                 <?php } else { ?>
-                                    Page Settings
+                                    Custom Settings
                                 <?php } ?></div>
 
                             <div class="item-body-tail">

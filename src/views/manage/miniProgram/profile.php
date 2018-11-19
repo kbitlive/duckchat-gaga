@@ -197,7 +197,7 @@
     <div class="layout-all-row">
 
         <div class="list-item-center">
-            
+
             <div class="item-row">
                 <div class="item-body">
                     <div class="item-body-display">
@@ -755,6 +755,7 @@
                     }
                 },
                 {
+                    className: "select-color-primary",
                     text: lang == 1 ? "确定" : "confirm", onClick: function () {
                         var pluginId = $("#mini-program-id").attr("data");
                         var data = {

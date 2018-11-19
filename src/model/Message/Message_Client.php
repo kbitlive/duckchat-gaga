@@ -13,10 +13,12 @@ class Message_Client
 {
 
     private $ctx;
+    private $logger;
 
     public function __construct(BaseCtx $ctx)
     {
         $this->ctx = $ctx;
+        $this->logger = $ctx->getLogger();
     }
 
     /**
@@ -28,6 +30,7 @@ class Message_Client
      * @param \Zaly\Proto\Core\Message $message
      * @param int $roomType
      * @return bool
+     * @throws ZalyException
      */
     public function sendU2Message($msgId, $userId, $fromUserId, $toUserId, $msgType, $message, $roomType = Zaly\Proto\Core\MessageRoomType::MessageRoomU2)
     {
@@ -87,15 +90,82 @@ class Message_Client
                 $vedio = $message->getVideo();
                 $result = $this->saveU2Message($msgId, $userId, $fromUserId, $toUserId, $msgType, $vedio, $roomType);
                 break;
+            case \Zaly\Proto\Core\MessageType::MessageRecall:
+                $recall = $message->getRecall();
+                $this->checkU2RecallPermission($fromUserId, $recall->getMsgId());
+                $result = $this->saveU2Message($msgId, $userId, $fromUserId, $toUserId, $msgType, $recall, $roomType);
+                break;
             default:
                 $this->ctx->Wpf_Logger->error("u2-message", "unsupport message type");
                 break;
 
         }
 
-//        $this->tellClientNews(false, $toUserId);
-
         return $result;
+    }
+
+    private function checkU2RecallPermission($recallUserId, $recallMsgId)
+    {
+        error_log("===========userId=" . $recallUserId);
+        error_log("===========msgId=" . $recallMsgId);
+        $recallMessage = $this->ctx->SiteU2MessageTable->queryMessageByFromUserIdAndMsgId($recallUserId, $recallMsgId);
+
+        if (empty($recallMessage)) {
+            throw new ZalyException(ZalyError::ErrorMessageNotExist);
+        }
+
+        $msgTime = $recallMessage['msgTime'];
+        if (($this->getCurrentTimeMills() - $msgTime) > 2 * 60 * 1000) {
+            throw new ZalyException(ZalyError::ErrorMessageRecallOvertime);
+        }
+
+        $this->updateMessageTypeToInvalid(false, $recallMsgId);
+        return true;
+
+    }
+
+    private function checkGroupRecallMessage($recallGroupId, $recallUserId, $recallMsgId)
+    {
+        $recallMessage = $this->ctx->SiteGroupMessageTable->queryMessageByMsgId($recallGroupId, $recallMsgId);
+
+        if (empty($recallMessage)) {
+            throw new ZalyException(ZalyError::ErrorMessageNotExist);
+        }
+
+        $fromUserId = $recallMessage['fromUserId'];
+
+        if ($fromUserId == $recallUserId) {
+            //自己撤回自己的消息
+            $msgTime = $recallMessage['msgTime'];
+            if (($this->getCurrentTimeMills() - $msgTime) > 2 * 60 * 1000) {
+                throw new ZalyException(ZalyError::ErrorMessageRecallOvertime);
+            }
+        } else {
+            //管理员撤回
+            //check is group managers
+            $ownerType = \Zaly\Proto\Core\GroupMemberType::GroupMemberOwner;
+            $adminType = \Zaly\Proto\Core\GroupMemberType::GroupMemberAdmin;
+            $groupAdmin = $this->ctx->SiteGroupUserTable->getGroupAdmin($recallGroupId, $recallUserId, $adminType, $ownerType);
+
+            if (empty($groupAdmin)) {
+                throw new ZalyException(ZalyError::ErrorMessageRecallOvertime);
+            }
+        }
+
+        $this->updateMessageTypeToInvalid(true, $recallMsgId);
+        return true;
+    }
+
+    private function updateMessageTypeToInvalid($isGroup, $msgId)
+    {
+        $tag = __CLASS__ . '->' . __FUNCTION__;
+        try {
+            $invalidType = Zaly\Proto\Core\MessageType::MessageInvalid;
+            return $isGroup ? $this->ctx->SiteGroupMessageTable->updateMessageType($msgId, $invalidType)
+                : $this->ctx->SiteU2MessageTable->updateMessageType($msgId, $invalidType);
+        } catch (Exception $e) {
+            $this->logger->error($tag, $e);
+        }
     }
 
     /**
@@ -105,6 +175,7 @@ class Message_Client
      * @param int $msgType
      * @param \Zaly\Proto\Core\Message $message
      * @return bool
+     * @throws ZalyException
      */
     public function sendGroupMessage($msgId, $fromUserId, $groupId, $msgType, $message)
     {
@@ -114,7 +185,6 @@ class Message_Client
             case \Zaly\Proto\Core\MessageType::MessageNotice:
                 $notice = $message->getNotice();
                 $noticeBody = $notice->getBody();
-                //# TODO limit body length 2KB = 2048 Byte
                 $noticeBody = substr($noticeBody, 0, 2048);
                 $notice->setBody(trim($noticeBody));
                 $result = $this->saveGroupMessage($msgId, $fromUserId, $groupId, $msgType, $notice);
@@ -160,6 +230,11 @@ class Message_Client
             case \Zaly\Proto\Core\MessageType::MessageVideo:
                 $vedio = $message->getVideo();
                 $result = $this->saveGroupMessage($msgId, $fromUserId, $groupId, $msgType, $vedio);
+                break;
+            case \Zaly\Proto\Core\MessageType::MessageRecall:
+                $recall = $message->getRecall();
+                $this->checkGroupRecallMessage($groupId, $fromUserId, $recall->getMsgId());
+                $result = $this->saveGroupMessage($msgId, $fromUserId, $groupId, $msgType, $recall);
                 break;
             default:
                 $this->ctx->Wpf_Logger->error($tag, "do error group Message with unsupport msgType=" . $msgType);
@@ -491,11 +566,7 @@ class Message_Client
             $message->setType($msgType);
             $message->setTimeServer($this->getCurrentTimeMills());
 
-//            $this->ctx->Wpf_Logger->info("friendApplyEvent =======>", "message=" . $message->serializeToString());
-
             $result = $this->sendU2Message($msgId, $userId, $fromUserId, $toUserId, $msgType, $message);
-
-//            $this->ctx->Wpf_Logger->info("friendApplyEvent =======>", "result=" . $result);
 
             $this->ctx->Message_News->tellClientNews(false, $toUserId);
 

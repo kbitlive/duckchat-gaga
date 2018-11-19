@@ -19,6 +19,7 @@ MessageType = {
     MessageWebNotice : "MessageWebNotice",
     MessageDocument:"MessageDocument",
     MessageVideo:"MessageVideo",
+    MessageRecall:"MessageRecall",
 
     // event message start
     MessageEventFriendRequest : "MessageEventFriendRequest",
@@ -50,6 +51,15 @@ MessageStatus  = {
     MessageStatusServer : "MessageStatusServer",
     MessageEventSyncEnd : "MessageEventSyncEnd",
 }
+
+
+ApiUserUpdateType  = {
+    ApiUserUpdateInvalid  : "ApiUserUpdateInvalid",
+    ApiUserUpdateAvatar   : "ApiUserUpdateAvatar",
+    ApiUserUpdateNickname :"ApiUserUpdateNickname",
+    ApiUserUpdateCustom :"ApiUserUpdateCustom",
+}
+
 
 DataWriteType = {
     WriteUpdate : "WriteUpdate",
@@ -190,6 +200,7 @@ chatSessionIdKey = "chat_session_id";
 localPotiner    = "group_pointer_";
 profileKey = "profile_";
 friendRelationKey = "user_id_relation_";
+friendCustomKey = "user_custom_";
 msgMuteKey = "msg_mute_";
 msgUnReadMuteKey = "msg_unread_mute_";
 roomListMsgMuteUnReadNumKey = "room_list_msg_mute_unread_num";
@@ -248,4 +259,4 @@ isPreSyncingMsgTime="";
 
 
 soundNotificationKey = "sound_notification";
-
+isDisplayFrontPageKey = "is_display_front_page";
