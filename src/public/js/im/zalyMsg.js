@@ -5,6 +5,7 @@ webObject={};
 
 function getRoomList()
 {
+
     var roomList = handleRoomListFromLocalStorage(undefined);
     $(".chatsession-lists").html("");
     if(roomList == undefined || roomList.length == 0) {
@@ -187,6 +188,9 @@ function updateRoomChatSessionContentForMsg(msg, nodes, msgContent) {
 
 function appendOrInsertRoomList(msg, isInsert, showNotification)
 {
+    if(localStorage.getItem(chatTypeKey) != DefaultChat) {
+        return;
+    }
     if(msg != undefined && msg.hasOwnProperty("type") && msg.type == MessageStatus.MessageEventSyncEnd) {
         return ;
     }
@@ -346,6 +350,7 @@ function handleSetItemError(error)
         console.log("error ==" + error.message);
     }
 }
+
 enableWebsocketGw = localStorage.getItem(websocketGW);
 
 if(enableWebsocketGw == "false" || enableWebsocketGw == null) {
@@ -656,7 +661,6 @@ function updateMsgPointer(reqData)
 
 function getMsgFromRoom(chatSessionId)
 {
-
     clearRoomUnreadMsgNum(chatSessionId);
     var msgList = handleMsgForMsgRoom(chatSessionId, undefined);
 
@@ -762,7 +766,6 @@ function msgBoxScrollToBottom()
 function addMsgToChatDialog(chatSessionId, msg)
 {
     msg.status = MessageStatus.MessageStatusSending;
-
 
     setTimeout(function () {
         var msgLoadings = $("[is-display='yes']");
@@ -1157,7 +1160,7 @@ function appendMsgHtmlToChatDialog(msg)
     var groupUserImageClassName = msg.roomType == GROUP_MSG ? "group-user-img group-user-img-"+msg.msgId : "";
     var msgStatus = msg.status ? msg.status : "";
     var userAvatar =  getNotMsgImgUrl(msg.userAvatar);
-
+console.log("msg_type==="+msg.msgType);
     if(sendBySelf) {
         switch(msgType) {
             case MessageType.MessageText :

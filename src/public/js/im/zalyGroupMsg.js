@@ -1122,6 +1122,9 @@ function checkGroupCanAddFriend()
 /// group operation - api.group.list
 function getGroupList(callback)
 {
+    if(localStorage.getItem(chatTypeKey) != DefaultChat) {
+        return;
+    }
     var action = "api.group.list";
     var reqData = {
         "offset" : groupOffset,
@@ -2689,6 +2692,9 @@ function deleteFriendListTip()
 // friend operation -- api.friend.list
 function getFriendList(callback)
 {
+    if(localStorage.getItem(chatTypeKey) != DefaultChat) {
+        return;
+    }
     var action = "api.friend.list";
     var reqData = {
         "offset" : friendOffset,
