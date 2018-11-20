@@ -32,11 +32,11 @@ class Message_News
         } else {
             //group Message
             $groupUserIdList = $this->ctx->SiteGroupUserTable->getGroupAllMembersId($toId);
-            $this->ctx->Wpf_Logger->info($this->stc_news, "get group memberlist=" . json_encode($groupUserIdList));
+//            $this->ctx->Wpf_Logger->info($this->stc_news, "get group memberlist=" . json_encode($groupUserIdList));
             if (!empty($groupUserIdList)) {
                 foreach ($groupUserIdList as $memberIdMap) {
                     $userId = $memberIdMap["userId"];
-                    $this->ctx->Wpf_Logger->info($this->stc_news, "get group memberId=" . $userId);
+//                    $this->ctx->Wpf_Logger->info($this->stc_news, "get group memberId=" . $userId);
                     $this->ctx->Gateway_Client->sendMessageByUserId($userId, $this->stc_news, new Zaly\Proto\Client\ImStcNewsRequest());
                 }
             }
@@ -44,4 +44,15 @@ class Message_News
         }
 
     }
+
+    public function tellClientNewsBySession($sessionId)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        try {
+            $this->ctx->Gateway_Client->sendMessageBySessionId($sessionId, $this->stc_news, new Zaly\Proto\Client\ImStcNewsRequest());
+        } catch (Exception $e) {
+            $this->ctx->Wpf_Logger->error($tag, $e);
+        }
+    }
+
 }
