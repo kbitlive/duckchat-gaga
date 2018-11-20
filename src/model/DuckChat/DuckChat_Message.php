@@ -56,7 +56,7 @@ class DuckChat_Message extends DuckChat_Base
             $this->isGroupRoom = false;
             $this->toId = $message->getToUserId();
             $result = $this->ctx->Message_Client->sendU2Message($msgId, $this->toId, $fromUserId, $this->toId, $msgType, $message);
-            $this->ctx->Message_News->tellClientNews(false, $this->toId);
+            $this->ctx->Message_News->tellClientNews(false, $fromUserId);
         }
 
         $this->returnMessage($msgId, $msgRoomType, $msgType, $message, $fromUserId, $this->toId, $result);

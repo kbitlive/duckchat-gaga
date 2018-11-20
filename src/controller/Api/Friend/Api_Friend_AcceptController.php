@@ -122,7 +122,7 @@ class Api_Friend_AcceptController extends BaseController
 
             $text = ZalyText::$keyFriendAcceptFrom;
 
-            $this->ctx->Message_Client->proxyU2TextMessage($toUserId, $fromUserId, $toUserId, $text);
+            $this->ctx->Message_Client->proxyU2TextMessage($toUserId, $fromUserId, $toUserId, $text, true);
 
         } catch (Exception $e) {
             $this->ctx->Wpf_Logger->error($tag, $e);
@@ -132,7 +132,7 @@ class Api_Friend_AcceptController extends BaseController
             if (empty($greetings)) {
                 $greetings = $text = ZalyText::$keyFriendAcceptTo;
             }
-            $this->ctx->Message_Client->proxyU2TextMessage($fromUserId, $toUserId, $fromUserId, $greetings);
+            $this->ctx->Message_Client->proxyU2TextMessage($fromUserId, $toUserId, $fromUserId, $greetings, true);
         } catch (Exception $e) {
             $this->ctx->Wpf_Logger->error($tag, $e);
         }

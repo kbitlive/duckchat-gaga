@@ -630,9 +630,10 @@ class Message_Client
      * @param $fromUserId
      * @param $groupId
      * @param $noticeText
+     * @param bool $tellFrom
      * @return bool
      */
-    public function proxyGroupAsU2NoticeMessage($userId, $fromUserId, $groupId, $noticeText)
+    public function proxyGroupAsU2NoticeMessage($userId, $fromUserId, $groupId, $noticeText, $tellFrom = false)
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         try {
@@ -652,7 +653,7 @@ class Message_Client
             $result = $this->sendU2Message($msgId, $userId, $fromUserId, $groupId, $msgType, $message, $roomType);
 
 //            $this->ctx->Message_News->tellClientNews(true, $groupId);
-            $this->sendClientNews(false, $fromUserId, $userId, false);
+            $this->sendClientNews(false, $fromUserId, $userId, $tellFrom);
             return $result;
         } catch (Exception $e) {
             $this->ctx->Wpf_Logger->error($tag, $e);
