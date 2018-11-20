@@ -176,6 +176,7 @@ function updateUpgradeProgress(type,  upgradeVersionCode, info)
             var nextUpgradeVersionNum = Object.keys(versions)[nextUpgradeVersionNumKey];
 
             $("#v_line_"+upgradeVersionNum).attr("src", "../../public/img/upgrade/current_line.png");
+
             $("#v_"+nextUpgradeVersionNum).attr("src", "../../public/img/upgrade/current.png");
             $(".text_"+nextUpgradeVersionNum)[0].style.color = "RGBA(73, 205, 186, 1)";
             var versionCode = $("#v_"+nextUpgradeVersionNum).attr("version");
