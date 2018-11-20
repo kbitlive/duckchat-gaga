@@ -11,12 +11,15 @@
     <link rel="stylesheet" href="./public/css/hint.min.css?_version=<?php echo $versionCode?>">
     <link rel="stylesheet" href="./public/css/zaly_msg.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" media="(max-height: 650px)" href="./public/css/zaly_media.css?_version=<?php echo $versionCode?>" />
+
     <script src="./public/js/jquery.min.js?_version=<?php echo $versionCode?>"></script>
     <script src="./public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
     <script src="./public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
     <script src="./public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
     <link class="icon" rel="icon" href="./favicon.ico?_version=<?php echo $versionCode?>" type="image/x-icon" />
-
+    <script type="text/javascript">
+        localStorage.setItem(chatTypeKey, DefaultChat);
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 </head>
@@ -113,7 +116,6 @@
         }
         return rem;
     }
-    localStorage.setItem(chatTypeKey, DefaultChat);
 
 
 

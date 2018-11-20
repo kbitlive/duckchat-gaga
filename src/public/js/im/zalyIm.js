@@ -62,13 +62,18 @@ function handleImSendRequest(action, reqData, callback)
             body[key] = reqData[key];
         }
         var sessionId = $(".session_id").attr("data");
+        if(localStorage.getItem(chatTypeKey) == ServiceChat) {
+            sessionId = $(".service_session_id").attr("data");
+        }
 
         var header = {};
         header[HeaderSessionid] = sessionId;
-        if(sessionId == "" ) {
-            console.log("resessionid-null--action----"+action);
+        if(sessionId == "" && action !="api.site.config" ) {
             return;
         }
+        console.log('action---'+action);
+        console.log('sessionId---'+sessionId);
+
         header[HeaderHostUrl] = originDomain;
         header[HeaderUserClientLang] = getLanguage();
         header[HeaderUserAgent] = navigator.userAgent;
@@ -118,6 +123,8 @@ function handleImSendRequest(action, reqData, callback)
 
 function handleReceivedImMessage(resp, callback)
 {
+    console.log("json-----"+resp);
+
     try{
         var result = JSON.parse(resp);
         if(result.action == ZalyAction.im_stc_news) {
@@ -131,11 +138,9 @@ function handleReceivedImMessage(resp, callback)
                     if(wsImObj != "" && wsImObj != undefined) {
                         wsImObj.close();
                     }
-                    localStorage.clear();
-                    console.log(resp);
-                    if(localStorage.getItem(chatTypeKey) == DefaultChat) {
-                        console.log("resessionid-null--action-error.session---"+resp);
 
+                    if(localStorage.getItem(chatTypeKey) == DefaultChat) {
+                        localStorage.clear();
                         window.location.href = "./index.php?action=page.logout";
                     }
                     return;

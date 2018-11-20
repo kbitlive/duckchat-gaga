@@ -130,14 +130,30 @@ function uploadFile(obj, type)
     $("#"+obj).click();
 }
 
-token = $('.token').attr("data");
-nickname = $(".nickname").attr("data");
-loginName=$(".loginName").attr("data");
-avatar = $(".self_avatar").attr("data");
-jumpPage = $(".jumpPage").attr("data");
-jumpRoomType = $(".jumpRoomType").attr("data");
-jumpRoomId = $(".jumpRoomId").attr("data");
-jumpRelation = $(".jumpRelation").attr("data");
+
+
+function getSelfInfoByClassName()
+{
+    if(localStorage.getItem(chatTypeKey) == ServiceChat) {
+        token = $('.service_token').attr("data");
+        console.log("getSelfInfoByClassName----token---"+token);
+
+        nickname = $(".service_nickname").attr("data");
+        loginName=$(".service_loginName").attr("data");
+        avatar = $(".service_self_avatar").attr("data");
+    } else {
+        token = $('.token').attr("data");
+        nickname = $(".nickname").attr("data");
+        loginName=$(".loginName").attr("data");
+        avatar = $(".self_avatar").attr("data");
+        jumpPage = $(".jumpPage").attr("data");
+        jumpRoomType = $(".jumpRoomType").attr("data");
+        jumpRoomId = $(".jumpRoomId").attr("data");
+        jumpRelation = $(".jumpRelation").attr("data");
+    }
+}
+
+getSelfInfoByClassName();
 
 function jump()
 {
@@ -958,7 +974,7 @@ function logout(event)
     event.stopPropagation();
     var tip = $.i18n.map['logoutJsTip'] != undefined ? $.i18n.map['logoutJsTip']: "退出账号，将会清空聊天记录";
     if(confirm(tip)) {
-        localStorage.clear();
+        // localStorage.clear();
         window.location.href = "./index.php?action=page.logout";
     }
 }

@@ -13,6 +13,9 @@ function handleClientSendRequest(action, reqData, callback)
         }
 
         var sessionId = $(".session_id").attr("data");
+        if(localStorage.getItem(chatTypeKey) == ServiceChat) {
+            sessionId = $(".service_session_id").attr("data");
+        }
         var header = {};
         header[HeaderSessionid] = sessionId;
         header[HeaderHostUrl] = originDomain;
@@ -21,8 +24,7 @@ function handleClientSendRequest(action, reqData, callback)
         header[HeaderUserAgent] = navigator.userAgent;
         var packageId = localStorage.getItem(PACKAGE_ID);
 
-        if(sessionId == "" ) {
-            console.log("resessionid-null--action----"+action);
+        if(sessionId == "" && action !="api.site.config" ) {
             return;
         }
 
@@ -67,9 +69,8 @@ function handleClientReceivedMessage(resp, callback)
                     console.log(error)
                 }
                 if(result.header[HeaderErrorCode] == ErrorSessionCode || result.header[HeaderErrorCode] == ErrorSiteInit) {
-                    localStorage.clear();
-                    console.log("resessionid-null--action-error.session---"+resp);
                     if(localStorage.getItem(chatTypeKey) == DefaultChat) {
+                        localStorage.clear();
                         window.location.href = "./index.php?action=page.logout";
                     }
                     return ;

@@ -269,12 +269,19 @@
 
 
 <input type="hidden" value='<?php echo $thirdLoginKey;?>' class="thirdLoginKey">
-<input type="hidden" data='' class="token">
-<input type="hidden" data='' class="self_avatar">
-
-<input type="hidden" data='' class="session_id">
+<input type="hidden" data='' class="service_token">
+<input type="hidden" data='' class="service_self_avatar">
+<input type="hidden" data='' class="service_loginName">
+<input type="hidden" data='' class="service_nickname">
+<input type="hidden" data='' class="service_session_id">
 <input type="hidden" value='<?php echo $siteAddress;?>' class="siteAddress">
 <?php include(dirname(__DIR__) . '/customerService/template_service.php'); ?>
+
+<script type="text/javascript">
+    localStorage.setItem(chatTypeKey, ServiceChat);
+    chatSessionIdKey = "service_chat_session_id";
+    roomKey = "service_room_";
+</script>
 
 <script src="./public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
 <script src="./public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
@@ -285,15 +292,16 @@
 <script src="./public/js/im/zalyMsg.js"></script>
 <script src="./public/js/service/zalyService.js"></script>
 
-<script>
-
-    localStorage.setItem(chatTypeKey, ServiceChat);
+<script type="text/javascript">
 
     var serviceSessionKey = "serviceSessionKey";
-    var tokenKey = "tokenKey";
-    var avatarKey = 'avatarKey';
-    var thirdPartyKey = $(".thirdLoginKey").val();
+    var tokenKey    = "tokenKey";
+    var avatarKey   = 'avatarKey';
+    var nicknameKey = "nicknameKey";
     var fingerPrintVal = "";
+
+    var thirdPartyKey  = $(".thirdLoginKey").val();
+
     Fingerprint2.get({
         preprocessor: function(key, value) {
             if (key == "canvas") {
@@ -312,10 +320,12 @@
 
    var sessionLoginName = localStorage.getItem(sessionLoginNameKey);
    var isRegister = false;
-   if(sessionLoginName == false || sessionLoginName == undefined) {
+   if(sessionLoginName == false || sessionLoginName == undefined || sessionLoginName == null) {
        localStorage.setItem(sessionLoginNameKey, loginName);
        sessionLoginName = loginName;
        isRegister = true;
+   } else {
+       loginName = sessionLoginName;
    }
 
    function bin2hex (bin) {
@@ -329,18 +339,23 @@
 
     var token = localStorage.getItem(tokenKey);
     if(token) {
-        $(".token").attr("data", token);
+        $(".service_token").attr('data', token);
     }
+
     var sessionId = localStorage.getItem(serviceSessionKey);
 
     if(sessionId) {
-        $(".session_id").attr("data", sessionId);
+        $(".service_session_id").attr("data", sessionId);
     }
+
     var avatar = localStorage.getItem(avatarKey);
 
     if(avatar) {
-        $(".avatar").attr("data", avatar);
+        $(".service_avatar").attr("data", avatar);
     }
+    var nickname = loginName;
+    $(".service_loginName").attr("data", loginName );
+    $(".service_nickname").attr("data", nickname );
 
 
     $(".close_chat").on("click", function(){
@@ -361,14 +376,14 @@
     }
 
     $(".close_chat_png").on("click", function () {
-       var type = $(".chat_dialog_div").attr("type");
+       var type = $(this).attr("type");
        if(type == "hide") {
            showLoading($(".chat_dialog_div"));
-           $(".chat_dialog_div").attr("type", "display");
+           $(this).attr("type", "display");
            $(".chat_dialog_div")[0].style.display = "block";
            createCustomerServiceAccount();
        } else {
-           $(".chat_dialog_div").attr("type", "hide");
+           $(this).attr("type", "hide");
            $(".chat_dialog_div")[0].style.display = "none";
        }
     });
@@ -379,7 +394,7 @@
 
         if(chatSessionId == false || chatSessionId == undefined || chatSessionId == null) {
             var requestUrl = "./index.php?action=page.customerService.index";
-            token = $(".token").attr('data');
+            token = $(".service_token").attr('data');
             var data = {
                 "customerId":token,
                 "operation" :'addFriend'
@@ -390,23 +405,28 @@
         getStartChat(chatSessionId);
     }
 
+
     function getStartChat(chatSessionId) {
+        localStorage.setItem(chatTypeKey, ServiceChat);
+        getSelfInfoByClassName();
         $(".right-chatbox").attr("chat-session-id", chatSessionId);
-        console.log("chatSessionId---"+chatSessionId);
-        console.log("session_id---"+$(".session_id").attr('data'));
         hideLoading();
         getMsgFromRoom(chatSessionId);
         getSelfInfo();
     }
 
    function  handleAddCustomerService(result) {
-        hideLoading();
-        var result = JSON.parse(result);
-        var chatSessionId = result['customerServiceId'];
-        localStorage.removeItem(roomKey+chatSessionId);
-        localStorage.setItem(chatSessionIdKey, chatSessionId);
-        localStorage.setItem(chatSessionId, U2_MSG);
-        getStartChat(chatSessionId);
+        try{
+            hideLoading();
+            var result = JSON.parse(result);
+            var chatSessionId = result['customerServiceId'];
+            localStorage.removeItem(roomKey+chatSessionId);
+            localStorage.setItem(chatSessionIdKey, chatSessionId);
+            localStorage.setItem(chatSessionId, U2_MSG);
+            getStartChat(chatSessionId);
+        }catch (error) {
+            closeChatDialog();
+        }
    }
 
     function createCustomerServiceAccount()
@@ -483,27 +503,28 @@
        http.onreadystatechange = function() {//Call a function when the state changes.
            if(http.readyState == 4 && http.status == 200) {
                var results = JSON.parse(http.responseText);
-               console.log(results);
-
                if(results.hasOwnProperty("header") && results.header[HeaderErrorCode] == "success") {
                    var sessionId = results.body['sessionId'];
-                   $(".session_id").attr("data", sessionId);
+                   $(".service_session_id").attr("data", sessionId);
+
                    token = results.body.profile.public['userId'];
                    avatar = results.body.profile.public['avatar'];
                    loginName = results.body.profile.public['loginName'];
+                   nickname  = results.body.profile.public['nickname'];
 
                    localStorage.setItem(sessionLoginNameKey, loginName);
                    localStorage.setItem(serviceSessionKey, sessionId);
                    localStorage.setItem(tokenKey, token);
                    localStorage.setItem(avatarKey,avatar);
-                   $(".token").attr('data', token);
-                   $(".self_avatar").attr("data",avatar );
+                   localStorage.setItem(nicknameKey, nickname);
+
+                   $(".service_token").attr('data', token);
+                   $(".service_self_avatar").attr("data",avatar );
+                   $(".service_loginName").attr("data", loginName );
+                   $(".service_nickname").attr("data", nickname );
+
                    getMsgForCustomer();
                } else {
-                   var result = {
-                       "errorInfo" : results.header[HeaderErrorInfo]
-                   };
-
                    closeChatDialog();
                }
            }
@@ -516,6 +537,7 @@
        localStorage.removeItem(serviceSessionKey);
        localStorage.removeItem(tokenKey);
        localStorage.removeItem(avatarKey);
+       localStorage.removeItem(nicknameKey);
        alert("请稍候再试");
        hideLoading();
        $(".close_chat_png").click();
