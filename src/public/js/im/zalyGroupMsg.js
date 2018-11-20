@@ -40,7 +40,6 @@ function showMsgWebNotification(msg, msgContent)
         icon  =  downloadFileUrl + "&fileId="+msg.avatar+"&returnBase64=0&lang="+languageNum;
     }
 
-
     if(document.hidden && (mute == 0)) {
         if(window.Notification && Notification.permission !== "denied"){
             var notification = new Notification(notification, {
@@ -225,6 +224,9 @@ function displayRoomListMsgUnReadNum()
 
 function isJudgeSiteMasters(userId)
 {
+    if(!judgeDefaultChat()){
+        return false;
+    }
     var siteConfigJson = localStorage.getItem("site_config");
     var siteConfig = JSON.parse(siteConfigJson);
     var mastersStr = siteConfig.masters;
@@ -236,10 +238,15 @@ function isJudgeSiteMasters(userId)
 
 
 groupOffset = 0;
-getGroupList(initGroupList);
+if(judgeDefaultChat()){
+    getGroupList(initGroupList);
+}
 
 friendOffset = 0;
-getFriendList(initFriendList);
+if(judgeDefaultChat()){
+    getFriendList(initFriendList);
+}
+
 $(document).on("click", ".l-sb-item", function(){
     $(".search-friend-group-lists")[0].style.display="none";
     $(".search_for_group_friend").val("");
@@ -602,6 +609,10 @@ $(document).on("click", ".open_new_page", function () {
 
 function getInitChatPlugin(roomType)
 {
+    if(!judgeDefaultChat()){
+        return;
+    }
+
     if(roomType == U2_MSG) {
         pluginU2ChatOffset=0;
         getPluginList(pluginU2ChatOffset, PluginUsageType.PluginUsageU2Message, getChatPluginList);
@@ -883,6 +894,9 @@ isHidden = false;
 
 function setDocumentTitle()
 {
+    if(!judgeDefaultChat()){
+        return;
+    }
     try{
         iconNum = 0;
         if(document.hidden == true) {
@@ -1122,9 +1136,6 @@ function checkGroupCanAddFriend()
 /// group operation - api.group.list
 function getGroupList(callback)
 {
-    if(localStorage.getItem(chatTypeKey) != DefaultChat) {
-        return;
-    }
     var action = "api.group.list";
     var reqData = {
         "offset" : groupOffset,
@@ -2692,9 +2703,6 @@ function deleteFriendListTip()
 // friend operation -- api.friend.list
 function getFriendList(callback)
 {
-    if(localStorage.getItem(chatTypeKey) != DefaultChat) {
-        return;
-    }
     var action = "api.friend.list";
     var reqData = {
         "offset" : friendOffset,

@@ -12,10 +12,14 @@
     <script type="text/javascript" src="./public/js/jquery.min.js"></script>
     <script src="./public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
     <script src="./public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
+    <script src="./public/js/fingerprint2.js"></script>
+
+
     <style>
         html,body {
             height:100%;
             width:100%;
+            font-size: 10.66px;
         }
         .container {
             height:100%;
@@ -83,7 +87,7 @@
             right:60px;
             bottom:0px;
             margin:0 auto ;
-            /*display: none;*/
+            display: none;
         }
         .chat_title {
             width:320px;
@@ -227,6 +231,17 @@
             padding-right: 10px;
             margin-bottom: 20px;
         }
+
+        msg_status_img {
+            position: relative;
+            display: none;
+        }
+        .msg_status_img img {
+            position: absolute;
+            bottom:0;
+            right:1rem;
+        }
+
     </style>
 </head>
 <body>
@@ -241,7 +256,6 @@
     <div class="chat_dialog_div">
         <div class="chat_title">运营团队工作群<img src="./public/img/service/close.png" class="close_chat_png" type="hide"/></div>
         <div class="right-chatbox">
-            kkkk
         </div>
         <div class="chat_line"></div>
         <div class="chat_box">
@@ -253,7 +267,12 @@
     </div>
 </div>
 
-<input type="hidden" data='cd0582bb-fb67-463d-85fe-01f462f8a51b' class="session_id">
+
+<input type="hidden" value='<?php echo $thirdLoginKey;?>' class="thirdLoginKey">
+<input type="hidden" data='' class="token">
+<input type="hidden" data='' class="self_avatar">
+
+<input type="hidden" data='' class="session_id">
 <input type="hidden" value='<?php echo $siteAddress;?>' class="siteAddress">
 <?php include(dirname(__DIR__) . '/customerService/template_service.php'); ?>
 
@@ -267,42 +286,252 @@
 <script src="./public/js/service/zalyService.js"></script>
 
 <script>
+
+    localStorage.setItem(chatTypeKey, ServiceChat);
+
+    var serviceSessionKey = "serviceSessionKey";
+    var tokenKey = "tokenKey";
+    var avatarKey = 'avatarKey';
+    var thirdPartyKey = $(".thirdLoginKey").val();
+    var fingerPrintVal = "";
+    Fingerprint2.get({
+        preprocessor: function(key, value) {
+            if (key == "canvas") {
+                fingerPrintVal = value;
+            }
+        }
+    },function(components) {
+       // user_agent component will contain string processed with our function. For example: Windows Chrome
+   });
+   // var b64 = fingerPrintVal.toDataURL().replace("data:image/png;base64,","");
+   var fingerPrintValBase64 = fingerPrintVal[1].replace("canvas fp:data:image/png;base64,", "");
+   var bin = atob(fingerPrintValBase64);
+   var loginName = bin2hex(bin.slice(-16,-10));
+
+   var sessionLoginNameKey = "sessionLoginName";
+
+   var sessionLoginName = localStorage.getItem(sessionLoginNameKey);
+   var isRegister = false;
+   if(sessionLoginName == false || sessionLoginName == undefined) {
+       localStorage.setItem(sessionLoginNameKey, loginName);
+       sessionLoginName = loginName;
+       isRegister = true;
+   }
+
+   function bin2hex (bin) {
+       var i = 0, l = bin.length, chr, hex = '';
+       for (i; i < l; ++i) {
+           chr = bin.charCodeAt(i).toString(16);
+           hex += chr.length < 2 ? '0' + chr : chr
+       }
+       return hex;
+   }
+
+    var token = localStorage.getItem(tokenKey);
+    if(token) {
+        $(".token").attr("data", token);
+    }
+    var sessionId = localStorage.getItem(serviceSessionKey);
+
+    if(sessionId) {
+        $(".session_id").attr("data", sessionId);
+    }
+    var avatar = localStorage.getItem(avatarKey);
+
+    if(avatar) {
+        $(".avatar").attr("data", avatar);
+    }
+
+
     $(".close_chat").on("click", function(){
-        $(".chat_dialog_div").attr("type", "display");
-        $(".chat_dialog_div")[0].style.display = "block";
+        $(".close_chat_png").click();
     });
+
+    function getNotMsgImgUrl(avatarImgId) {
+        try{
+            var filePaths = avatarImgId.split('-');
+            var path = "./attachment/"+filePaths[0]+"/"+filePaths[1];
+            if(avatarImgId) {
+                return  path;
+            }
+            return false;
+        }catch (error) {
+            return false;
+        }
+    }
 
     $(".close_chat_png").on("click", function () {
        var type = $(".chat_dialog_div").attr("type");
        if(type == "hide") {
+           showLoading($(".chat_dialog_div"));
            $(".chat_dialog_div").attr("type", "display");
            $(".chat_dialog_div")[0].style.display = "block";
+           createCustomerServiceAccount();
        } else {
            $(".chat_dialog_div").attr("type", "hide");
            $(".chat_dialog_div")[0].style.display = "none";
        }
     });
 
+    function getMsgForCustomer()
+    {
+        var chatSessionId = localStorage.getItem(chatSessionIdKey);
 
-    function getNotMsgImgUrl(avatarImgId) {
-       try{
-           var filePaths = avatarImgId.split('-');
-           var path = "./attachment/"+filePaths[0]+"/"+filePaths[1];
-           if(avatarImgId) {
-               return  path;
-           }
-           return false;
-       }catch (error) {
-           return false;
-       }
+        if(chatSessionId == false || chatSessionId == undefined || chatSessionId == null) {
+            var requestUrl = "./index.php?action=page.customerService.index";
+            token = $(".token").attr('data');
+            var data = {
+                "customerId":token,
+                "operation" :'addFriend'
+            }
+            ajaxPost(requestUrl, data, handleAddCustomerService);
+            return;
+        }
+        getStartChat(chatSessionId);
     }
 
+    function getStartChat(chatSessionId) {
+        $(".right-chatbox").attr("chat-session-id", chatSessionId);
+        console.log("chatSessionId---"+chatSessionId);
+        console.log("session_id---"+$(".session_id").attr('data'));
+        hideLoading();
+        getMsgFromRoom(chatSessionId);
+        getSelfInfo();
+    }
 
-    localStorage.setItem(chatTypeKey, ServiceChat);
-    var roomId = "c7419b68eded7aa30f6af182b2d1f06fd3a0f84c";
-    localStorage.setItem(chatSessionIdKey, roomId);
-    localStorage.setItem(roomId, U2_MSG);
-    getMsgFromRoom(roomId);
+   function  handleAddCustomerService(result) {
+        hideLoading();
+        var result = JSON.parse(result);
+        var chatSessionId = result['customerServiceId'];
+        localStorage.removeItem(roomKey+chatSessionId);
+        localStorage.setItem(chatSessionIdKey, chatSessionId);
+        localStorage.setItem(chatSessionId, U2_MSG);
+        getStartChat(chatSessionId);
+   }
+
+    function createCustomerServiceAccount()
+    {
+        var chatSessionId = localStorage.getItem(chatSessionIdKey);
+        if(chatSessionId == undefined || chatSessionId == null && chatSessionId ==false) {
+            var operation = isRegister == true ? 'create' : "login";
+            var requestUrl = "./index.php?action=page.customerService.index";
+            var data = {
+                "loginName":sessionLoginName,
+                "operation" :operation
+            }
+
+            ajaxPost(requestUrl, data, handleCreateCustomerServiceAccount);
+            return;
+        }
+        getStartChat(chatSessionId);
+    }
+
+   function handleCreateCustomerServiceAccount(result)
+   {
+        var result = JSON.parse(result);
+       if(result['errorCode'] == 'success') {
+           zalyjsApiSiteLogin(result['preSessionId'], result['loginName']);
+       } else {
+           alert("链接失败，请稍候再试");
+       }
+   }
+
+    function getLanguage() {
+        var nl = navigator.language;
+        if ("zh-cn" == nl || "zh-CN" == nl) {
+            return "1";
+        }
+        return "0";
+    }
+
+    function zalyjsApiSiteLogin(preSessionId, loginName) {
+       var refererUrl = "./index.php";
+       var body = {
+           "@type":  "type.googleapis.com/site.ApiSiteLoginRequest",
+           "preSessionId":preSessionId,
+           "loginName":loginName,
+           "isRegister":true,
+           "thirdPartyKey":thirdPartyKey,
+       };
+
+       var header = {};
+       header[HeaderHostUrl] = refererUrl;
+       header[HeaderUserClientLang] = getLanguage();
+       header[HeaderUserAgent] = navigator.userAgent;
+       var packageId = localStorage.getItem("packageId");
+
+       var transportData = {
+           "action" : "api.site.login",
+           "body": body,
+           "header" : header,
+           "packageId" : Number(packageId),
+       };
+
+       var transportDataJson = JSON.stringify(transportData);
+       if (refererUrl.indexOf("?") > -1) {
+           var url = refererUrl + "&action=api.site.login&body_format=json";
+       } else {
+           var url = refererUrl + "?action=api.site.login&body_format=json";
+       }
+
+       var http = new XMLHttpRequest();
+       http.open('POST', url, true);
+
+       //Send the proper header information along with the request
+       http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+       http.onreadystatechange = function() {//Call a function when the state changes.
+           if(http.readyState == 4 && http.status == 200) {
+               var results = JSON.parse(http.responseText);
+               console.log(results);
+
+               if(results.hasOwnProperty("header") && results.header[HeaderErrorCode] == "success") {
+                   var sessionId = results.body['sessionId'];
+                   $(".session_id").attr("data", sessionId);
+                   token = results.body.profile.public['userId'];
+                   avatar = results.body.profile.public['avatar'];
+                   loginName = results.body.profile.public['loginName'];
+
+                   localStorage.setItem(sessionLoginNameKey, loginName);
+                   localStorage.setItem(serviceSessionKey, sessionId);
+                   localStorage.setItem(tokenKey, token);
+                   localStorage.setItem(avatarKey,avatar);
+                   $(".token").attr('data', token);
+                   $(".self_avatar").attr("data",avatar );
+                   getMsgForCustomer();
+               } else {
+                   var result = {
+                       "errorInfo" : results.header[HeaderErrorInfo]
+                   };
+
+                   closeChatDialog();
+               }
+           }
+       }
+       http.send(transportDataJson);
+   }
+    
+   function closeChatDialog() {
+       localStorage.removeItem(sessionLoginNameKey);
+       localStorage.removeItem(serviceSessionKey);
+       localStorage.removeItem(tokenKey);
+       localStorage.removeItem(avatarKey);
+       alert("请稍候再试");
+       hideLoading();
+       $(".close_chat_png").click();
+   }
+
+    function ajaxPost(requestUrl, data, callback){
+        $.ajax({
+            method: "POST",
+            url:requestUrl,
+            data: data,
+            success:function (resp, status, request) {
+                callback(resp);
+            }
+        });
+    }
+
 
 
 </script>

@@ -2,18 +2,16 @@
 /**
  * Created by PhpStorm.
  * User: zhangjun
- * Date: 23/08/2018
- * Time: 6:12 PM
+ * Date: 20/11/2018
+ * Time: 4:11 PM
  */
-
-class PassportPasswordPreSessionTable extends  BaseTable
+class PassportCustomerServicePreSessionTable extends BaseTable
 {
-    private $table = "passportPasswordPreSession";
+    private $table = "passportCustomerServicePreSession";
     private $columns = [
         "id",
         "userId",
         "preSessionId",
-        "sitePubkPem"
     ];
 
     private $selectColumns;
@@ -27,6 +25,7 @@ class PassportPasswordPreSessionTable extends  BaseTable
     {
         return $this->insertData($this->table, $info, $this->columns);
     }
+
     public function updatePreSessionData($where, $data)
     {
         return $this->updateInfo($this->table, $where, $data, $this->columns);
@@ -38,19 +37,16 @@ class PassportPasswordPreSessionTable extends  BaseTable
         $startTime = microtime(true);
         try {
             $sql = "select 
-                        passportPassword.userId,
-                        passportPassword.loginName,
-                        passportPassword.nickname,
-                        passportPassword.invitationCode,
-                        passportPasswordPreSession.sitePubkPem
+                        passportCustomerService.userId,
+                        passportCustomerService.loginName
                     from 
-                        passportPassword
+                        passportCustomerService
                     inner join 
-                        passportPasswordPreSession
+                        passportCustomerServicePreSession
                     on 
-                        passportPassword.userId = passportPasswordPreSession.userId
+                        passportCustomerService.userId = passportCustomerServicePreSession.userId
                     where 
-                        passportPasswordPreSession.preSessionId = :preSessionId";
+                        passportCustomerServicePreSession.preSessionId = :preSessionId";
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
             $prepare->bindValue(":preSessionId", $preSessionId);

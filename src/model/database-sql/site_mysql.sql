@@ -287,3 +287,25 @@ CREATE TABLE IF NOT EXISTS siteUserCustom(
                       phoneId VARCHAR(20),
                       email VARCHAR(100),
                       addTime BIGINT) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS passportCustomerService(
+                id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                userId VARCHAR(100) NOT NULL,/*咨询用户ID*/
+                loginName VARCHAR(100) NOT NULL,
+                password VARCHAR(100) NOT NULL,
+                timeReg BIGINT,
+                unique(userId),
+                UNIQUE(loginName)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS passportCustomerServicePreSession(
+                id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                userId VARCHAR(100) NOT NULL,
+                preSessionId VARCHAR(100) NOT NULL,
+                unique(userId)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS siteCustomerService(
+                id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                userId VARCHAR(100) NOT NULL,/*服务者ID*/
+                serviceTime BIGINT,
+                unique(userId)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+

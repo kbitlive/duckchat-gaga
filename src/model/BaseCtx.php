@@ -45,6 +45,10 @@
  * @property ZalyHelper ZalyHelper
  * @property SiteUserGifTable SiteUserGifTable
  *
+ * @property PassportCustomerServiceTable PassportCustomerServiceTable
+ * @property PassportCustomerServicePreSessionTable PassportCustomerServicePreSessionTable
+ * @property CustomerServiceTable CustomerServiceTable
+ *
  * @property Pinyin Pinyin
  *
  * @property DuckChat_Client DuckChat_Client
@@ -54,6 +58,7 @@
  * @property DuckChat_Group DuckChat_Group
  * @property Manual_User Manual_User
  * @property Manual_Group Manual_Group
+ * @property Manual_Friend Manual_Friend
  * @property Upgrade_Client Upgrade_Client
  *
  */

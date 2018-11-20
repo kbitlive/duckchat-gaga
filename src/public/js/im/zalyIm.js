@@ -65,6 +65,10 @@ function handleImSendRequest(action, reqData, callback)
 
         var header = {};
         header[HeaderSessionid] = sessionId;
+        if(sessionId == "" ) {
+            console.log("resessionid-null--action----"+action);
+            return;
+        }
         header[HeaderHostUrl] = originDomain;
         header[HeaderUserClientLang] = getLanguage();
         header[HeaderUserAgent] = navigator.userAgent;
@@ -82,7 +86,6 @@ function handleImSendRequest(action, reqData, callback)
         var transportDataJson = JSON.stringify(transportData);
 
         var enableWebsocketGw = localStorage.getItem(websocketGW);
-
         if(enableWebsocketGw == "true" && wsUrl != null && wsUrl) {
             websocketIm(transportDataJson, callback);
         } else {
@@ -129,7 +132,12 @@ function handleReceivedImMessage(resp, callback)
                         wsImObj.close();
                     }
                     localStorage.clear();
-                    window.location.href = "./index.php?action=page.logout";
+                    console.log(resp);
+                    if(localStorage.getItem(chatTypeKey) == DefaultChat) {
+                        console.log("resessionid-null--action-error.session---"+resp);
+
+                        window.location.href = "./index.php?action=page.logout";
+                    }
                     return;
                 }
                 alert(result.header[HeaderErrorInfo]);

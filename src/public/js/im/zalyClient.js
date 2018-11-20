@@ -21,6 +21,11 @@ function handleClientSendRequest(action, reqData, callback)
         header[HeaderUserAgent] = navigator.userAgent;
         var packageId = localStorage.getItem(PACKAGE_ID);
 
+        if(sessionId == "" ) {
+            console.log("resessionid-null--action----"+action);
+            return;
+        }
+
         var transportData = {
             "action" : action,
             "body": body,
@@ -63,7 +68,10 @@ function handleClientReceivedMessage(resp, callback)
                 }
                 if(result.header[HeaderErrorCode] == ErrorSessionCode || result.header[HeaderErrorCode] == ErrorSiteInit) {
                     localStorage.clear();
-                    window.location.href = "./index.php?action=page.logout";
+                    console.log("resessionid-null--action-error.session---"+resp);
+                    if(localStorage.getItem(chatTypeKey) == DefaultChat) {
+                        window.location.href = "./index.php?action=page.logout";
+                    }
                     return ;
                 }
 

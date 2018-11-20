@@ -121,7 +121,6 @@ function getMsgContentForChatSession(msg)
         case MessageType.MessageText:
             msgContent = msg.hasOwnProperty("text") ? msg['text'].body: JSON.parse(msg['content']).body;
             msgContent = msgContent && msgContent.length > 10 ? msgContent.substr(0,10)+"..." : msgContent;
-
             break;
         case MessageType.MessageImage:
             msgContent = "[图片消息]";
@@ -353,14 +352,14 @@ function handleSetItemError(error)
 
 enableWebsocketGw = localStorage.getItem(websocketGW);
 
-if(enableWebsocketGw == "false" || enableWebsocketGw == null) {
+if(enableWebsocketGw == "false" || enableWebsocketGw == null || enableWebsocketGw == false) {
     ///1秒 sync
-   setInterval(function (args) {
-       enableWebsocketGw = localStorage.getItem(websocketGW);
-       if(enableWebsocketGw == "false")  {
-           syncMsgForRoom();
-       }
-   }, 1000);
+    setInterval(function (args) {
+        enableWebsocketGw = localStorage.getItem(websocketGW);
+        if(enableWebsocketGw == "false")  {
+            syncMsgForRoom();
+        }
+    }, 1000);
 }
 
 if(enableWebsocketGw == "true") {
@@ -382,7 +381,6 @@ function handleAuth()
 
 function syncMsgForRoom()
 {
-
     if((Date.parse(new Date()) - isPreSyncingMsgTime) > 10000) {
         isSyncingMsg = false;
     }
@@ -795,6 +793,7 @@ function sendMsg( chatSessionId, chatSessionType, msgContent, msgType, params)
     var action = "im.cts.message";
     var msgId  = Date.now();
 
+    console.log("sendMsg----token---"+token);
     var message = {};
     message['fromUserId'] = token;
     var msgIdSuffix = "";
@@ -1160,7 +1159,6 @@ function appendMsgHtmlToChatDialog(msg)
     var groupUserImageClassName = msg.roomType == GROUP_MSG ? "group-user-img group-user-img-"+msg.msgId : "";
     var msgStatus = msg.status ? msg.status : "";
     var userAvatar =  getNotMsgImgUrl(msg.userAvatar);
-console.log("msg_type==="+msg.msgType);
     if(sendBySelf) {
         switch(msgType) {
             case MessageType.MessageText :
@@ -1416,7 +1414,6 @@ console.log("msg_type==="+msg.msgType);
     if(msgType == MessageType.MessageText) {
         html = handleMsgContentText(html);
     }
-
     var currentChatsessionId = localStorage.getItem(chatSessionIdKey);
     if(currentChatsessionId == msg.chatSessionId) {
         $(".right-chatbox[chat-session-id="+msg.chatSessionId+"]").append(html);

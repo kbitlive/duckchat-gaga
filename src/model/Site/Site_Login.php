@@ -39,8 +39,12 @@ class Site_Login
             //do site passport login
             $userProfile = $this->loginBySitePassport($preSessionId, $devicePubkPem, $clientType);
         } else {
-            //get third login by thirdPartyKey
-            $userProfile = $this->loginByThirdParty($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType);
+            if($thirdPartyKey == 'DuckChat_CustomerService') {
+                $userProfile = $this->loginByDuckChatCustomerService($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType);
+            } else {
+                //get third login by thirdPartyKey
+                $userProfile = $this->loginByThirdParty($thirdPartyKey, $preSessionId, $devicePubkPem, $clientType);
+            }
         }
 
         if ($userProfile && !empty($userCustomArray)) {
@@ -90,6 +94,64 @@ class Site_Login
 
             //get userProfile from platform
             $loginUserProfile = $this->getUserProfileFromThirdParty($preSessionId, $sitePriKeyPem, $sessionVerifyUrl);
+
+            //if loginUserProfile exist
+            if (!$loginUserProfile || empty($loginUserProfile->getUserId()) || empty($loginUserProfile->getLoginName())) {
+                throw new Exception("get user profile error from third party");
+            }
+
+            $newLoginName = $thirdPartyLoginKey . "_" . $loginUserProfile->getLoginName();
+            //update loginName
+            $loginUserProfile->setLoginName($newLoginName);
+
+            $thirdPartyLoginUserId = $loginUserProfile->getUserId();
+            $thirdPartyInfo = $this->getThirdPartyAccount($thirdPartyLoginKey, $thirdPartyLoginUserId);
+
+            $siteUserId = false;
+
+            if ($thirdPartyInfo) {
+                $siteUserId = $thirdPartyInfo['userId'];
+            }
+
+            //get intivation first
+            $uicInfo = $this->getIntivationCode($loginUserProfile->getInvitationCode());
+
+            $userProfile = $this->doSiteLoginAction($siteUserId, $loginUserProfile, $devicePubkPem, $uicInfo, $clientSideType, $thirdPartyLoginKey);
+
+            //save to thirdParty login table
+            $this->bindThirdPartyAccount($siteUserId, $thirdPartyLoginKey, $userProfile);
+
+            return $userProfile;
+        } catch (Exception $ex) {
+            $tag = __CLASS__ . "-" . __FUNCTION__;
+            $this->ctx->Wpf_Logger->error($tag, " errorMsg = " . $ex->getMessage() . $ex->getTraceAsString());
+            throw $ex;
+        }
+    }
+
+    /**
+     * third party login【第三方登陆】
+     *
+     * @param $thirdPartyLoginKey
+     * @param $preSessionId
+     * @param string $devicePubkPem
+     * @param int $clientSideType
+     * @return array
+     * @throws Exception
+     */
+    public function loginByDuckChatCustomerService($thirdPartyLoginKey, $preSessionId, $devicePubkPem = "", $clientSideType = Zaly\Proto\Core\UserClientType::UserClientMobileApp)
+    {
+        try {
+            //get site config::publicKey
+            $sitePriKeyPem = $this->getSiteConfigPriKeyFromDB();
+
+            //实现本地api.session.verify 逻辑
+            $loginUserProfile = $this->ctx->Site_CustomerSessionVerify->doLocalVerify($preSessionId);
+
+            //if loginUserProfile exist
+            if (!$loginUserProfile || empty($loginUserProfile->getLoginName()) || empty($loginUserProfile->getLoginName())) {
+                throw new Exception("get user profile error from site passport");
+            }
 
             //if loginUserProfile exist
             if (!$loginUserProfile || empty($loginUserProfile->getUserId()) || empty($loginUserProfile->getLoginName())) {
