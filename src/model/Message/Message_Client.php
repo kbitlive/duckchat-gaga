@@ -106,8 +106,6 @@ class Message_Client
 
     private function checkU2RecallPermission($recallUserId, $recallMsgId)
     {
-        error_log("===========userId=" . $recallUserId);
-        error_log("===========msgId=" . $recallMsgId);
         $recallMessage = $this->ctx->SiteU2MessageTable->queryMessageByFromUserIdAndMsgId($recallUserId, $recallMsgId);
 
         if (empty($recallMessage)) {

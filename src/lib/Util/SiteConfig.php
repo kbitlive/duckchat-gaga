@@ -36,6 +36,7 @@ class SiteConfig
     const SITE_WS_ADDRESS = "wsAddress";
     const SITE_WS_HOST = "wsHost";
     const SITE_WS_PORT = "wsPort";
+    const SITE_ZALY_ADDRESS = "zalyAddress";
     const SITE_ZALY_HOST = "zalyHost";
     const SITE_ZALY_PORT = "zalyPort";
 
