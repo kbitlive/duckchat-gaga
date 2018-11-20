@@ -1,10 +1,7 @@
 <?php
 /**
- *
- * cts Message && proxy Message
- *
- * Created by PhpStorm.
- * User: anguoyue
+ * Message client ,used in send message and proxy message
+ * Author: SAM<an.guoyue254@gmail.com>
  * Date: 31/07/2018
  * Time: 6:45 PM
  */
@@ -41,7 +38,6 @@ class Message_Client
             case \Zaly\Proto\Core\MessageType::MessageNotice:
                 $notice = $message->getNotice();
                 $noticeBody = $notice->getBody();
-                //# TODO limit body length 2KB = 2048 Byte
                 $noticeBody = substr($noticeBody, 0, 2048);
                 $notice->setBody($noticeBody);
                 $result = $this->saveU2Message($msgId, $userId, $fromUserId, $toUserId, $msgType, $notice, $roomType);
