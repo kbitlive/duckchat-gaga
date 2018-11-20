@@ -67,7 +67,11 @@ class Message_News
     {
         $zalyAddress = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_ZALY_ADDRESS);
         $wsAddress = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_WS_ADDRESS);
-        return !empty($zalyAddress) || !empty($wsAddress);
+
+        $enableForIm = !empty($zalyAddress) || !empty($wsAddress);
+
+        error_log($this->newsAction . "===============enable Persistent for IM = " . $enableForIm);
+        return $enableForIm;
     }
 
 }
