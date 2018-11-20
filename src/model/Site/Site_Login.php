@@ -149,15 +149,12 @@ class Site_Login
             $loginUserProfile = $this->ctx->Site_CustomerSessionVerify->doLocalVerify($preSessionId);
 
             //if loginUserProfile exist
-            if (!$loginUserProfile || empty($loginUserProfile->getLoginName()) || empty($loginUserProfile->getLoginName())) {
-                throw new Exception("get user profile error from site passport");
-            }
-
-            //if loginUserProfile exist
             if (!$loginUserProfile || empty($loginUserProfile->getUserId()) || empty($loginUserProfile->getLoginName())) {
                 throw new Exception("get user profile error from third party");
             }
 
+
+            error_log("loginName----------".$loginUserProfile->getLoginName());
             $newLoginName = $thirdPartyLoginKey . "_" . $loginUserProfile->getLoginName();
             //update loginName
             $loginUserProfile->setLoginName($newLoginName);

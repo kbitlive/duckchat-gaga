@@ -315,6 +315,7 @@
    var fingerPrintValBase64 = fingerPrintVal[1].replace("canvas fp:data:image/png;base64,", "");
    var bin = atob(fingerPrintValBase64);
    var loginName = bin2hex(bin.slice(-16,-10));
+   var binLoginName = loginName;
 
    var sessionLoginNameKey = "sessionLoginName";
 
@@ -434,6 +435,9 @@
         var chatSessionId = localStorage.getItem(chatSessionIdKey);
         if(chatSessionId == undefined || chatSessionId == null && chatSessionId ==false) {
             var operation = isRegister == true ? 'create' : "login";
+            if(operation == 'create' && sessionLoginName.length>12) {
+                sessionLoginName = binLoginName;
+            }
             var requestUrl = "./index.php?action=page.customerService.index";
             var data = {
                 "loginName":sessionLoginName,

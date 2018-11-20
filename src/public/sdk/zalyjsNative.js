@@ -333,10 +333,6 @@ function zalyjsApiSiteLogin() {
 //// -private web 检查用户是否已经被注册
 function zalyjsWebCheckUserExists(failedCallback, successCallback) {
 
-
-
-
-
     var refererUrl = localStorage.getItem(refererUrlKey);
     if (!refererUrl) {
         refererUrl = "./index.php";

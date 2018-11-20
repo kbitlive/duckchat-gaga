@@ -352,20 +352,15 @@ function handleSetItemError(error)
 
 enableWebsocketGw = localStorage.getItem(websocketGW);
 
-if(enableWebsocketGw == "false" || enableWebsocketGw == null || enableWebsocketGw == false) {
-    ///1秒 sync
-    setInterval(function (args) {
-        enableWebsocketGw = localStorage.getItem(websocketGW);
-        if(enableWebsocketGw == "false")  {
-            syncMsgForRoom();
-        }
-    }, 1000);
-}
-
 if(enableWebsocketGw == "true") {
     auth();
 } else {
-    syncMsgForRoom();
+    setInterval(function (args) {
+        enableWebsocketGw = localStorage.getItem(websocketGW);
+        if(enableWebsocketGw != "true") {
+            syncMsgForRoom();
+        }
+    }, 1000);
 }
 
 function auth()
@@ -447,6 +442,7 @@ function handleSyncMsgForRoom(results)
             }
         }
     }catch (error) {
+        console.log(error);
         isSyncingMsg = false;
     }
 }

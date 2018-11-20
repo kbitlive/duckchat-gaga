@@ -14,6 +14,8 @@ class Page_CustomerService_IndexController extends CustomerServiceController
         header('Access-Control-Allow-Origin: *');
         $method = strtolower($_SERVER['REQUEST_METHOD']);
         if($method == "post") {
+            error_log("loginName-----_POST-----".json_encode($_POST));
+
             $operation = $_POST['operation'];
             switch ($operation) {
                 case "create":
@@ -40,9 +42,8 @@ class Page_CustomerService_IndexController extends CustomerServiceController
             $loginName = $_POST['loginName'];
             $userInfo = $this->ctx->PassportCustomerServiceTable->getUserByLoginName($loginName, false);
             if($userInfo) {
-                $str = ZalyHelper::generateStrId();
-                $str = ZalyHelper::generateStrKey(6, $str);
-                $loginName = $loginName.'_'.$str;
+                $str = ZalyHelper::generateStrId().'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                $loginName = ZalyHelper::generateStrKey(8, $str);
             }
             $userInfo = [
                 'userId'    => $userId,
@@ -126,7 +127,6 @@ class Page_CustomerService_IndexController extends CustomerServiceController
         $serviceId = "";
         if($results) {
             $serviceInfo = $results[0];
-            error_log('----service----'.json_encode($serviceInfo));
             $where = [
                 'userId' => $serviceInfo['userId'],
             ];

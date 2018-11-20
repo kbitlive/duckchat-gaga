@@ -69,11 +69,9 @@ function handleImSendRequest(action, reqData, callback)
         var header = {};
         header[HeaderSessionid] = sessionId;
         if(sessionId == "" && action !="api.site.config" ) {
+            isSyncingMsg = false;
             return;
         }
-        console.log('action---'+action);
-        console.log('sessionId---'+sessionId);
-
         header[HeaderHostUrl] = originDomain;
         header[HeaderUserClientLang] = getLanguage();
         header[HeaderUserAgent] = navigator.userAgent;
