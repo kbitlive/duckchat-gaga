@@ -482,7 +482,12 @@ function handleSyncMsg(msg)
         if(msg.type == MessageType.MessageRecall) {
             try{
                 var msgId = msg['recall'].msgId;
-                var msgContent = msg["recall"].msgText !== undefined && msg["recall"].msgText != null ? msg["recall"].msgText : "此消息被撤回";
+                var msgContent = "";
+                try{
+                    msgContent = msg["recall"].msgText !== undefined && msg["recall"].msgText != null ? msg["recall"].msgText : "此消息被撤回";
+                }catch (error) {
+                    msgContent = "此消息被撤回";
+                }
                 var html = template("tpl-receive-msg-notice", {
                     msgContent:msgContent,
                     timeServer:msg.timeServer
@@ -1228,7 +1233,12 @@ function appendMsgHtmlToChatDialog(msg)
                     timeServer:msg.timeServer
                 });
             case MessageType.MessageRecall:
-                var msgContent = msg["recall"].msgText !== undefined && msg["recall"].msgText != null ? msg["recall"].msgText : "此消息被撤回";
+                var msgContent = "";
+                try{
+                     msgContent = msg["recall"].msgText !== undefined && msg["recall"].msgText != null ? msg["recall"].msgText : "此消息被撤回";
+                }catch (error) {
+                     msgContent = "此消息被撤回";
+                }
                 html = template("tpl-receive-msg-notice", {
                     msgContent:msgContent,
                     timeServer:msg.timeServer
