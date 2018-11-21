@@ -9,7 +9,7 @@
 class SiteCustomerServiceTable extends BaseTable
 {
 
-    private $table = "siteSustomerService";
+    private $table = "siteCustomerService";
     private $columns = [
         "id",
         "userId",

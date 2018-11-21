@@ -147,7 +147,7 @@ function handleSyncMsg(msg)
             }
         }
     } else if(msg.chatSessionId != currentChatSessionId && isNewMsg) {
-        if(msg.chatSessionId != token) {
+        if(msg.chatSessionId != serviceToken) {
             localStorage.setItem(newSiteTipKey, "new_msg");
         }
     }
@@ -156,10 +156,10 @@ function handleSyncMsg(msg)
 
 function isCheckEndMsgDialog()
 {
-    var rightchatBox = $(".right-chatbox")[0];
+    var rightchatBox = $(".service_right-chatbox")[0];
     var sh = rightchatBox.scrollHeight;
     var ch = rightchatBox.clientHeight;
-    var st = $(".right-chatbox").scrollTop();
+    var st = $(".service_right-chatbox").scrollTop();
     ///差值小于等于Math.ceil(ch*2) px末， 默认底部
     if(sh - ch - st <= Math.ceil(ch*2)) {
         return true
@@ -174,23 +174,24 @@ function updateMsgPointer(reqData)
     handleClientSendRequest(action, reqData, "");
 }
 
-
-
-
 function handleMsgStatusResult(msgId, msgStatus)
 {
-    var msgIdInChatSession = msgIdInChatSessionKey + msgId;
-    var chatSessionId = sessionStorage.getItem(msgIdInChatSession);
-    if(msgStatus == MessageStatus.MessageStatusFailed) {
-        $(".msg_status_failed_"+msgId)[0].style.display = "flex";
-        $(".msg_status_loading_"+msgId)[0].style.display = "none";
-        $(".msg_status_loading_"+msgId).attr("is-display", "none");
-        updateMsgStatus(msgId, chatSessionId, MessageStatus.MessageStatusFailed);
-    } else {
-        $(".msg_status_loading_"+msgId)[0].style.display = "none";
-        $(".msg_status_loading_"+msgId).attr("is-display", "none");
-    }
-    sessionStorage.removeItem(msgIdInChatSession);
+   try{
+       var msgIdInChatSession = msgIdInChatSessionKey + msgId;
+       var chatSessionId = sessionStorage.getItem(msgIdInChatSession);
+       if(msgStatus == MessageStatus.MessageStatusFailed) {
+           $(".msg_status_failed_"+msgId)[0].style.display = "flex";
+           $(".msg_status_loading_"+msgId)[0].style.display = "none";
+           $(".msg_status_loading_"+msgId).attr("is-display", "none");
+           updateMsgStatus(msgId, chatSessionId, MessageStatus.MessageStatusFailed);
+       } else {
+           $(".msg_status_loading_"+msgId)[0].style.display = "none";
+           $(".msg_status_loading_"+msgId).attr("is-display", "none");
+       }
+       sessionStorage.removeItem(msgIdInChatSession);
+   }catch (error) {
+
+   }
 }
 
 /**
@@ -272,11 +273,11 @@ function compare(msg1, msg2) {
 
 function msgBoxScrollToBottom()
 {
-    var rightchatBox = $(".right-chatbox")[0];
+    var rightchatBox = $(".service_right-chatbox")[0];
     var sh = rightchatBox.scrollHeight;
     var ch  = rightchatBox.clientHeight;
     var scrollTop = sh-ch;
-    $(".right-chatbox").scrollTop(scrollTop);
+    $(".service_right-chatbox").scrollTop(scrollTop);
 
 }
 
@@ -315,11 +316,12 @@ function appendMsgHtmlToChatDialog(msg)
     var msgId = msg.msgId;
 
     var sendBySelf;
-    if( msg.fromUserId != token) {
+
+    if( msg.fromUserId != serviceToken) {
         sendBySelf = false;
-    } else if(msg.fromUserId == token) {
+    } else if(msg.fromUserId == serviceToken) {
         sendBySelf = true;
-        msg.userAvatar = avatar;
+        msg.userAvatar = serviceAvatar;
     }
 
     var msgTime = getMsgTimeByMsg(msg.timeServer);
@@ -332,7 +334,7 @@ function appendMsgHtmlToChatDialog(msg)
                 var msgContent = msg['text'].body;
                 html = template("tpl-send-msg-text", {
                     roomType: msg.roomType,
-                    nickname:nickname,
+                    nickname:serviceNickname,
                     msgId : msgId,
                     msgTime : msgTime,
                     msgContent:msgContent,
@@ -360,7 +362,7 @@ function appendMsgHtmlToChatDialog(msg)
                 var msgContent = "[当前版本不支持此信息，请尝试升级客户端版本] ";
                 html = template("tpl-send-msg-default", {
                     roomType: msg.roomType,
-                    nickname:nickname,
+                    nickname:serviceNickname,
                     msgId : msgId,
                     msgTime : msgTime,
                     msgStatus:msgStatus,
@@ -388,13 +390,6 @@ function appendMsgHtmlToChatDialog(msg)
                     avatar:userAvatar,
                     msgType:msgType,
                     isMaster:isMaster
-                });
-                break;
-
-            case MessageType.MessageWebNotice :
-                var hrefUrl = getWebMsgHref(msg.msgId, msg.roomType);
-                html = template("tpl-receive-msg-web-notice", {
-                    hrefUrl:hrefUrl
                 });
                 break;
             case MessageType.MessageNotice:
@@ -425,7 +420,7 @@ function appendMsgHtmlToChatDialog(msg)
     var currentChatsessionId = localStorage.getItem(chatSessionIdKey);
 
     if(currentChatsessionId == msg.chatSessionId) {
-        $(".right-chatbox[chat-session-id="+msg.chatSessionId+"]").append(html);
+        $(".service_right-chatbox[chat-session-id="+msg.chatSessionId+"]").append(html);
     }
 }
 
@@ -491,7 +486,7 @@ function sendMsg( chatSessionId, chatSessionType, msgContent, msgType, params)
     var msgId  = Date.now();
 
     var message = {};
-    message['fromUserId'] = token;
+    message['fromUserId'] = serviceToken;
     var msgIdSuffix = "";
     if(chatSessionType == U2_MSG) {
         message['roomType'] = U2_MSG;
@@ -623,7 +618,7 @@ function getMsgFromRoom(chatSessionId)
 {
     var msgList = handleMsgForMsgRoom(chatSessionId, undefined);
 
-    $(".right-chatbox").html("");
+    $(".service_right-chatbox").html("");
     if(msgList == null) {
         return;
     }
@@ -725,7 +720,7 @@ function handleMsgInfo(msg)
         userId = msg.fromUserId;
     } else {
         msg.className = "u2-profile";
-        if(msg.fromUserId == token) {
+        if(msg.fromUserId == serviceToken) {
             msg.chatSessionId = msg.toUserId;
         } else {
             msg.chatSessionId = msg.fromUserId;
@@ -965,9 +960,11 @@ function handleGetUserProfile(result)
 {
     if(result && result.hasOwnProperty("profile") ) {
         var profile = result['profile'];
-        nickname = profile['public'].nickname;
-        loginName = profile['public'].loginName;
-        avatar = profile['public'].avatar;
+        serviceNickname = profile['public'].nickname;
+        serviceLoginName = profile['public'].loginName;
+        serviceAvatar = profile['public'].avatar;
+        var src = getNotMsgImgUrl(serviceAvatar);
+        $(".info-avatar-"+profile['public'].userId).attr("src", src);
     }
 }
 

@@ -113,7 +113,7 @@ class MiniProgram_CustomerService_ManageController extends MiniProgram_BaseContr
         $userInfo = $this->ctx->Manual_User->search($this->userId, $nickname, $page);
         $userIds = array_column($userInfo, 'userId');
 
-        $users = $this->ctx->CustomerServiceTable->getCustomerServiceByUserIds($userIds);
+        $users = $this->ctx->SiteCustomerServiceTable->getCustomerServiceByUserIds($userIds);
         $serviceUserId = array_column($users, "userId");
 
         foreach($userInfo as $key => $user) {

@@ -117,7 +117,7 @@
             margin:auto;
             cursor: pointer;
         }
-        .right-chatbox {
+        .service_right-chatbox {
             width: 100%;
             height:386px;
             flex-grow: 1;
@@ -261,7 +261,7 @@
     </div>
     <div class="chat_dialog_div">
         <div class="chat_title"><?php echo $chatTitle; ?><img src="./public/img/service/close.png" class="close_chat_png" type="hide"/></div>
-        <div class="right-chatbox">
+        <div class="service_right-chatbox">
         </div>
         <div class="chat_line"></div>
         <div class="chat_box">
@@ -290,7 +290,7 @@
     var avatarKey   = 'avatarKey';
     var nicknameKey = "nicknameKey";
     var fingerPrintVal = "";
-
+    var sessionLoginNameKey = "sessionLoginName";
     var thirdPartyKey  = $(".thirdLoginKey").val();
 
     Fingerprint2.get({
@@ -308,16 +308,15 @@
    var loginName = bin2hex(bin.slice(-16,-10));
    var binLoginName = loginName;
 
-   var sessionLoginNameKey = "sessionLoginName";
-
    var sessionLoginName = localStorage.getItem(sessionLoginNameKey);
    var isRegister = false;
+
    if(sessionLoginName == false || sessionLoginName == undefined || sessionLoginName == null) {
        localStorage.setItem(sessionLoginNameKey, loginName);
-       sessionLoginName = loginName;
+       serviceLoginName = loginName;
        isRegister = true;
    } else {
-       loginName = sessionLoginName;
+       serviceLoginName = sessionLoginName;
    }
 
    function bin2hex (bin) {
@@ -332,16 +331,16 @@
 
     function getSelfInfoByClassName()
     {
-        token = $('.service_token').attr("data");
-        nickname = $(".service_nickname").attr("data");
-        loginName=$(".service_loginName").attr("data");
-        avatar = $(".service_self_avatar").attr("data");
+        serviceToken = $('.service_token').attr("data");
+        serviceNickname = $(".service_nickname").attr("data");
+        serviceLoginName=$(".service_loginName").attr("data");
+        serviceAvatar = $(".service_self_avatar").attr("data");
     }
 
 
-    var token = localStorage.getItem(tokenKey);
-    if(token) {
-        $(".service_token").attr('data', token);
+    var serviceToken = localStorage.getItem(tokenKey);
+    if(serviceToken) {
+        $(".service_token").attr('data', serviceToken);
     }
 
     var sessionId = localStorage.getItem(serviceSessionKey);
@@ -350,14 +349,14 @@
         $(".service_session_id").attr("data", sessionId);
     }
 
-    var avatar = localStorage.getItem(avatarKey);
+    var serviceAvatar = localStorage.getItem(avatarKey);
 
-    if(avatar) {
-        $(".service_avatar").attr("data", avatar);
+    if(serviceAvatar) {
+        $(".service_avatar").attr("data", serviceAvatar);
     }
-    var nickname = loginName;
-    $(".service_loginName").attr("data", loginName );
-    $(".service_nickname").attr("data", nickname );
+    var serviceNickname = serviceLoginName;
+    $(".service_loginName").attr("data", serviceLoginName );
+    $(".service_nickname").attr("data", serviceNickname );
 
 
     $(".close_chat").on("click", function(){
@@ -376,29 +375,35 @@
            $(".chat_dialog_div")[0].style.display = "none";
        }
     });
+    console.log('sessionid----'+sessionId);
+    var chatSessionId = localStorage.getItem(chatSessionIdKey);
 
     function getMsgForCustomer()
     {
         var chatSessionId = localStorage.getItem(chatSessionIdKey);
 
         if(chatSessionId == false || chatSessionId == undefined || chatSessionId == null) {
+
+            console.log('getMsgForCustomer---chatSessionId----'+chatSessionId);
             var requestUrl = "./index.php?action=page.customerService.index";
-            token = $(".service_token").attr('data');
+            serviceToken = $(".service_token").attr('data');
             var data = {
-                "customerId":token,
+                "customerId":serviceToken,
                 "operation" :'addFriend'
             }
             ajaxPost(requestUrl, data, handleAddCustomerService);
             return;
         }
-        getStartChat(chatSessionId);
+        getStartChat(chatSessionId, 'getMsgForCustomer');
     }
 
 
-    function getStartChat(chatSessionId) {
+    function getStartChat(chatSessionId, type) {
+        console.log('getMsgForCustomer---type----'+type);
+
         localStorage.setItem(chatTypeKey, ServiceChat);
         getSelfInfoByClassName();
-        $(".right-chatbox").attr("chat-session-id", chatSessionId);
+        $(".service_right-chatbox").attr("chat-session-id", chatSessionId);
         hideLoading();
         getMsgFromRoom(chatSessionId);
         getSelfInfo();
@@ -407,12 +412,13 @@
    function  handleAddCustomerService(result) {
         try{
             hideLoading();
+            console.log('handleAddCustomerService----'+result);
             var result = JSON.parse(result);
             var chatSessionId = result['customerServiceId'];
             localStorage.removeItem(roomKey+chatSessionId);
             localStorage.setItem(chatSessionIdKey, chatSessionId);
             localStorage.setItem(chatSessionId, U2_MSG);
-            getStartChat(chatSessionId);
+            getStartChat(chatSessionId, 'handleAddCustomerService');
         }catch (error) {
             closeChatDialog();
         }
@@ -421,21 +427,21 @@
     function createCustomerServiceAccount()
     {
         var chatSessionId = localStorage.getItem(chatSessionIdKey);
-        if(chatSessionId == undefined || chatSessionId == null && chatSessionId ==false) {
+        if(chatSessionId == undefined || chatSessionId == null || chatSessionId ==false) {
             var operation = isRegister == true ? 'create' : "login";
-            if(operation == 'create' && sessionLoginName.length>12) {
-                sessionLoginName = binLoginName;
+            if(operation == 'create' && serviceLoginName.length>12) {
+                serviceLoginName = binLoginName;
             }
             var requestUrl = "./index.php?action=page.customerService.index";
             var data = {
-                "loginName":sessionLoginName,
+                "loginName":serviceLoginName,
                 "operation" :operation
             }
 
             ajaxPost(requestUrl, data, handleCreateCustomerServiceAccount);
             return;
         }
-        getStartChat(chatSessionId);
+        getStartChat(chatSessionId, 'createCustomerServiceAccount');
     }
 
    function handleCreateCustomerServiceAccount(result)
@@ -499,18 +505,19 @@
                    var sessionId = results.body['sessionId'];
                    $(".service_session_id").attr("data", sessionId);
 
-                   token = results.body.profile.public['userId'];
-                   avatar = results.body.profile.public['avatar'];
+                   console.log('sessionid----'+sessionId);
+                   serviceToken = results.body.profile.public['userId'];
+                   serviceAvatar = results.body.profile.public['avatar'];
                    loginName = results.body.profile.public['loginName'];
                    nickname  = results.body.profile.public['nickname'];
 
                    localStorage.setItem(serviceSessionKey, sessionId);
-                   localStorage.setItem(tokenKey, token);
-                   localStorage.setItem(avatarKey,avatar);
+                   localStorage.setItem(tokenKey, serviceToken);
+                   localStorage.setItem(avatarKey,serviceAvatar);
                    localStorage.setItem(nicknameKey, nickname);
 
-                   $(".service_token").attr('data', token);
-                   $(".service_self_avatar").attr("data",avatar );
+                   $(".service_token").attr('data', serviceToken);
+                   $(".service_self_avatar").attr("data",serviceAvatar );
                    $(".service_loginName").attr("data", loginName );
                    $(".service_nickname").attr("data", nickname );
 
