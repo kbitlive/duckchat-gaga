@@ -9,13 +9,21 @@
 class Page_CustomerService_IndexController extends CustomerServiceController
 {
     protected  $thirdLoginKey = 'DuckChat_CustomerService';
+    private $defaltGreeting = "您好，很高兴为您服务。";
+
+
     public function index()
     {
         header('Access-Control-Allow-Origin: *');
         $method = strtolower($_SERVER['REQUEST_METHOD']);
-        if($method == "post") {
-            error_log("loginName-----_POST-----".json_encode($_POST));
 
+        $setting = $this->getCustomerServiceSetting();
+        if(!isset($setting[MiniProgram_CustomerService_ConfigController::ENABLE_CUSTOMER_SERVICE]) || $setting[MiniProgram_CustomerService_ConfigController::ENABLE_CUSTOMER_SERVICE] != 1) {
+            echo json_encode(['errorCode' => 'failed']);
+            return;
+        }
+        $greetings = isset($setting[MiniProgram_CustomerService_ConfigController::GREETING]) ?$setting[MiniProgram_CustomerService_ConfigController::GREETING] : $this->defaltGreeting;
+        if($method == "post") {
             $operation = $_POST['operation'];
             switch ($operation) {
                 case "create":
@@ -25,7 +33,7 @@ class Page_CustomerService_IndexController extends CustomerServiceController
                     $this->getLoginGetPreSessionId();
                     break;
                 case "addFriend":
-                    $this->addCustomerServiceForFriend();
+                    $this->addCustomerServiceForFriend($greetings);
                     break;
             }
             return;
@@ -77,7 +85,6 @@ class Page_CustomerService_IndexController extends CustomerServiceController
             $userInfo = $this->ctx->PassportCustomerServiceTable->getUserByLoginName($loginName, false);
             if($userInfo) {
                 $flag =  password_verify($userInfo['userId'], $userInfo['password']);
-                error_log("password=====".$userInfo['password']."=====userId=====".$userInfo['userId'].'---flag---'.$flag);
                 if($flag) {
                     $preSessionId = $this->getPreSessionId($userInfo['userId']);
                     if($preSessionId) {
@@ -113,18 +120,31 @@ class Page_CustomerService_IndexController extends CustomerServiceController
         }
     }
 
-    public function addCustomerServiceForFriend()
+    public function addCustomerServiceForFriend($greetings)
     {
         $customerServiceId = $this->getCustomerServiceId();
         $customerId = $_POST['customerId'];
         $tag = __CLASS__.'->'.__FUNCTION__;
         try{
-            $greetings = '您好，很高兴为您服务';
             $this->ctx->Manual_Friend->addFriend($customerId, $customerServiceId,  $greetings);
             echo json_encode(['customerServiceId' => $customerServiceId]);
         }catch (Exception $ex) {
             $this->ctx->getLogger()->error($tag, $ex);
         }
+    }
+
+    protected function getCustomerServiceSetting()
+    {
+        $settingConfig = [
+            MiniProgram_CustomerService_ConfigController::ENABLE_CUSTOMER_SERVICE => "",
+            MiniProgram_CustomerService_ConfigController::GREETING => $this->defaltGreeting,
+        ];
+        $setting = $this->ctx->SiteCustomerServiceSettingTable->getCustomerServiceSettingLists();
+        if($setting) {
+            $settingCustomerServiceConfig = array_column($setting, 'serviceValue', 'serviceKey');
+            $settingConfig = array_merge($settingConfig, $settingCustomerServiceConfig);
+        }
+        return $settingConfig;
     }
 
     public function getCustomerServiceId()

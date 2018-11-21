@@ -59,13 +59,15 @@
             height:40px;
         }
         .cancelService {
+            width:50px;
             height:28px;
-            background:rgba(76,59,177,1);
-            border-radius:2px;
+            border-radius:4px;
+            border:1px solid;
+            background:rgba(255,255,255,1);
             font-size:12px;
             font-family:PingFangSC-Regular;
             font-weight:400;
-            color:rgba(255,255,255,1);
+            color:rgba(76,59,177,1);
             line-height: 28px;
             cursor: pointer;
             outline: none;
@@ -100,7 +102,7 @@
 
                                     <div class="item-body-tail">
                                         <button class="addButton cancelService" userId="<?php echo $user["userId"] ?>">
-                                            取消客服
+                                            取消
                                         </button>
                                     </div>
                                 </div>
