@@ -32,9 +32,15 @@ class MiniProgram_CustomerService_IndexController extends MiniProgram_BaseContro
         header('Access-Control-Allow-Origin: *');
         $method = strtolower($_SERVER['REQUEST_METHOD']);
         $tag = __CLASS__ . "-" . __FUNCTION__;
+        $url = ZalyHelper::getRequestAddressPath().'?action=page.customerService.index';
+        $customerServiceCode = <<<CODE
+<iframe src="$url" frameborder="no" height="100%" width="100%">
+CODE;
+
         if($method == 'get') {
             $settingConfig = $this->getCustomerServiceSetting();
             $settingConfig['lang'] = $this->language;
+            $settingConfig['code'] = $customerServiceCode;
             echo $this->display("miniProgram_customerService_index", $settingConfig);
         } else {
             $operation = $_POST['operation'];

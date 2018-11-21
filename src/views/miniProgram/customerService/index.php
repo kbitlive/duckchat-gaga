@@ -12,6 +12,11 @@
     <link rel="stylesheet" href="../../public/manage/config.css"/>
 
     <style>
+        body, html {
+            height:100%;
+
+        }
+
         .item-row, .create_button, .weui-actionsheet__cell {
             cursor: pointer;
             outline: none;
@@ -21,6 +26,15 @@
             margin-top: 0px;
             cursor: pointer;
         }
+        .site-rsa-pubk-pem {
+            height: 100%;
+        }
+        .service_code {
+            margin-left: 10px;
+        }
+        .wrapper {
+            height: 100%;
+        }
 
     </style>
 
@@ -29,7 +43,6 @@
 <body>
 
 <div class="wrapper" id="wrapper">
-
 
     <!-- part 3   -->
 
@@ -97,6 +110,31 @@
 
     </div>
 
+        <div class="layout-all-row service_code_div"     <?php if ($enableCustomerService != 1) { ?> style="display: none;"   <?php } ?> >
+            <div class="list-item-center">
+
+                <div class="item-row" id="site-rsa-pubk-pem" style="height: 29px;line-height: 29px;">
+                    <div class="item-body" style="height: 29px;line-height: 29px;">
+                        <div class="item-body-display" style="height: 29px;line-height: 29px;">
+
+                            <?php if ($lang == "1") { ?>
+                                <div class="item-body-desc">客服代码(长按复制)</div>
+                            <?php } else { ?>
+                                <div class="item-body-desc">Code(Long Click For Copy)</div>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="division-line"></div>
+                <div class="item-row" class="site-rsa-pubk-pem" style="height: 80px;line-height: 80px;" >
+                    <div class="item-body" style="height: 80px;line-height: 80px;" >
+                        <div class="item-body-display service_code" style="height: 80px;line-height: 80px;" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 </div>
 
 
@@ -132,24 +170,29 @@
     </div>
 
 </div>
+<input type="hidden" data='<?php echo $code;?>' class="customer_service_code">
 
-<script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="../../public/jquery/jquery-weui.min.js"></script>
-<script type="text/javascript" src="../../public/js/jquery-confirm.js"></script>
-
-<script type="text/javascript" src="../../public/manage/native.js"></script>
-
-<script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
+<script type="text/javascript" src="./public/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="./public/jquery/jquery-weui.min.js"></script>
+<script type="text/javascript" src="./public/js/jquery-confirm.js"></script>
+<script type="text/javascript" src="./public/manage/native.js"></script>
+<script type="text/javascript" src="./public/js/template-web.js"></script>
+<script id="tpl-code" type="text/html">
+    {{codeHtml}}
+</script>
 
 <script type="text/javascript">
-
-
 
     function showWindow(jqElement) {
         jqElement.css("visibility", "visible");
         $(".wrapper-mask").css("visibility", "visible").append(jqElement);
     }
-
+    var codeSrc = $('.customer_service_code').attr("data");
+    console.log(codeSrc);
+    var html = template("tpl-code", {
+        codeHtml : codeSrc
+    });
+    $(".service_code").html(html);
 
     function removeWindow(jqElement) {
         jqElement.remove();
@@ -236,11 +279,18 @@
     function enableCustomerServiceResponse(url, data, result) {
         if (result) {
             var res = JSON.parse(result);
-
             if (!"success" == res.errCode) {
                 alert(getLanguage() == 1 ? "操作失败" : "update error");
+                return;
             }
-
+            if(data.value == 1) {
+                var code = template("tpl-code", {
+                    code:code
+                })
+                $(".service_code_div")[0].style.display = 'block';
+            } else {
+                $(".service_code_div")[0].style.display = 'none';
+            }
         } else {
             alert(getLanguage() == 1 ? "操作失败" : "update error");
         }
