@@ -13,12 +13,15 @@ if(enableWebsocketGw == "true") {
         enableWebsocketGw = localStorage.getItem(websocketGW);
         if(enableWebsocketGw != "true") {
             syncMsgForRoom();
+        } else {
+            auth();
         }
     }, 1000);
 }
 
 function auth()
 {
+    console.log("auth");
     var action = "im.cts.auth";
     handleImSendRequest(action, "", handleAuth);
 }

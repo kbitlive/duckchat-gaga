@@ -33,7 +33,7 @@ class MiniProgram_CustomerService_IndexController extends MiniProgram_BaseContro
         header('Access-Control-Allow-Origin: *');
         $method = strtolower($_SERVER['REQUEST_METHOD']);
         $tag = __CLASS__ . "-" . __FUNCTION__;
-        $url = ZalyHelper::getRequestAddressPath().'?action=page.customerService.index';
+        $url = ZalyHelper::getRequestAddressPath().'/?action=page.customerService.index';
         $customerServiceCode = <<<CODE
 <div style="width:380px;position: absolute; top:0px; bottom:0px; right:0px;margin:auto;z-index:10000;">
     <iframe src="$url" frameborder="no" height="100%" width="100%">
