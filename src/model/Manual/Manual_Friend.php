@@ -53,7 +53,6 @@ class Manual_Friend extends Manual_Common implements Friend
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         try {
-            error_log('$greetings------'.$greetings);
             if (empty($greetings)) {
                 $greetings = $text = ZalyText::$keyFriendAcceptTo;
             }

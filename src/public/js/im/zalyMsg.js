@@ -870,9 +870,14 @@ function sendRecallMsg(recallMsgId, msgText, chatSessionId, chatSessionType)
     var msgIdInChatSession = msgIdInChatSessionKey + msgId;
     sessionStorage.setItem(msgIdInChatSession, chatSessionId);
 
-    handleImSendRequest(action, reqData, "");
+    handleImSendRequest(action, reqData, handleSendRecallMsgResponse);
 }
 
+function handleSendRecallMsgResponse ()
+{
+    isSyncingMsg = false;
+    syncMsgForRoom();
+}
 
 //---------------------------------------------msg realtion function-------------------------------------------------
 
@@ -1250,6 +1255,17 @@ function appendMsgHtmlToChatDialog(msg)
                     timeServer:msg.timeServer,
                 });
                 break;
+            case MessageType.MessageRecall:
+                try{
+                    var msgContent = msg["recall"].msgText !== undefined && msg["recall"].msgText != null ? msg["recall"].msgText : "此消息被撤回";
+                }catch (error) {
+                    var msgContent = "此消息被撤回";
+                }
+                html = template("tpl-receive-msg-notice", {
+                    msgContent:msgContent,
+                    timeServer:msg.timeServer
+                });
+                break;
             case MessageType.MessageNotice:
                 var msgContent = msg["notice"].body;
                 html = template("tpl-receive-msg-notice", {
@@ -1376,6 +1392,17 @@ function appendMsgHtmlToChatDialog(msg)
                 var msgContent = msg["notice"].body;
                 html = template("tpl-receive-msg-notice", {
                     msgContent:msgContent,
+                });
+                break;
+            case MessageType.MessageRecall:
+                try{
+                    var msgContent = msg["recall"].msgText !== undefined && msg["recall"].msgText != null ? msg["recall"].msgText : "此消息被撤回";
+                }catch (error) {
+                    var msgContent = "此消息被撤回";
+                }
+                html = template("tpl-receive-msg-notice", {
+                    msgContent:msgContent,
+                    timeServer:msg.timeServer
                 });
                 break;
             default:
