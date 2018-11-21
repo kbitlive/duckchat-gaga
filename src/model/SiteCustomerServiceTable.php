@@ -6,10 +6,10 @@
  * Time: 5:31 PM
  */
 
-class CustomerServiceTable extends BaseTable
+class SiteCustomerServiceTable extends BaseTable
 {
 
-    private $table = "customerService";
+    private $table = "siteSustomerService";
     private $columns = [
         "id",
         "userId",

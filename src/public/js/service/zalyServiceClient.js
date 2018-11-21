@@ -66,7 +66,7 @@ function handleClientReceivedMessage(resp, callback)
                     console.log(error)
                 }
                 if(result.header[HeaderErrorCode] == ErrorSessionCode || result.header[HeaderErrorCode] == ErrorSiteInit) {
-                    localStorage.clear();
+                    // localStorage.clear();
                     $(".close_chat").click();
                     return ;
                 }

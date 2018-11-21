@@ -134,7 +134,7 @@ function handleReceivedImMessage(resp, callback)
                     if(wsImObj != "" && wsImObj != undefined) {
                         wsImObj.close();
                     }
-                    localStorage.clear();
+                    // localStorage.clear();
                     $(".close_chat").click();
                     return;
                 }

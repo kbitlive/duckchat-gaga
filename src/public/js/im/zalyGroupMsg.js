@@ -185,9 +185,7 @@ function handleGetJumpFriendProfile(results)
 //display unread msg
 function displayRoomListMsgUnReadNum()
 {
-    if(!judgeDefaultChat()){
-        return false;
-    }
+
     var data = $(".l-sb-item-active").attr("data");
     if(data != "chatSession") {
         var unReadAllNum = localStorage.getItem(roomListMsgUnReadNum);
@@ -231,9 +229,6 @@ function displayRoomListMsgUnReadNum()
 
 function isJudgeSiteMasters(userId)
 {
-    if(!judgeDefaultChat()){
-        return false;
-    }
     try{
         var siteConfigJson = localStorage.getItem("site_config");
         var siteConfig = JSON.parse(siteConfigJson);
@@ -249,14 +244,11 @@ function isJudgeSiteMasters(userId)
 
 
 groupOffset = 0;
-if(judgeDefaultChat()){
-    getGroupList(initGroupList);
-}
+getGroupList(initGroupList);
 
 friendOffset = 0;
-if(judgeDefaultChat()){
-    getFriendList(initFriendList);
-}
+getFriendList(initFriendList);
+
 
 $(document).on("click", ".l-sb-item", function(){
     $(".search-friend-group-lists")[0].style.display="none";
@@ -336,9 +328,6 @@ $(document).on("click", ".l-sb-item", function(){
 });
 
 window.onresize = function(){
-    if(!judgeDefaultChat()) {
-        return ;
-    }
     try{
         if ($(".right-head")[0].clientWidth<680) {
             $(".right-body-sidebar").hide();
@@ -620,10 +609,6 @@ $(document).on("click", ".open_new_page", function () {
 
 function getInitChatPlugin(roomType)
 {
-    if(!judgeDefaultChat()){
-        return;
-    }
-
     if(roomType == U2_MSG) {
         pluginU2ChatOffset=0;
         getPluginList(pluginU2ChatOffset, PluginUsageType.PluginUsageU2Message, getChatPluginList);
@@ -796,22 +781,26 @@ function changeZalySchemeToDuckChat(chatSessionId, type)
 
 function getAddressDomain()
 {
-    var siteConfigJsonStr = localStorage.getItem(siteConfigKey);
-    if(siteConfigJsonStr ) {
-        siteConfig = JSON.parse(siteConfigJsonStr);
-    }
-    serverAddress = siteConfig.serverAddressForApi;
+    try{
+        var siteConfigJsonStr = localStorage.getItem(siteConfigKey);
+        if(siteConfigJsonStr ) {
+            siteConfig = JSON.parse(siteConfigJsonStr);
+        }
+        serverAddress = siteConfig.serverAddressForApi;
 
-    var parser = document.createElement('a');
-    parser.href = serverAddress;
-    var domain = serverAddress;
-    if(parser.protocol == 'zaly:') {
-        var protocol = "duckchat:";
-        var hostname = parser.hostname;
-        var pathname = parser.pathname;
-        domain =  protocol+"//"+hostname+pathname;
+        var parser = document.createElement('a');
+        parser.href = serverAddress;
+        var domain = serverAddress;
+        if(parser.protocol == 'zaly:') {
+            var protocol = "duckchat:";
+            var hostname = parser.hostname;
+            var pathname = parser.pathname;
+            domain =  protocol+"//"+hostname+pathname;
+        }
+        return domain;
+    }catch (error){
+
     }
-    return domain;
 }
 
 function getPluginDuckchatPageUrl(type, x)
@@ -905,9 +894,6 @@ isHidden = false;
 
 function setDocumentTitle()
 {
-    if(!judgeDefaultChat()){
-        return;
-    }
     try{
         iconNum = 0;
         if(document.hidden == true) {
@@ -2681,9 +2667,6 @@ $(document).on("click", ".delete-group", function () {
 // friend operation -- api.friend.list - display apply friend num
 function displayApplyFriendNum()
 {
-    if(!judgeDefaultChat()) {
-        return ;
-    }
     try{
         var friendListNum = localStorage.getItem(applyFriendListNumKey);
         if(friendListNum > 0 && friendListNum != undefined) {
@@ -3410,9 +3393,6 @@ $(document).on("click", ".search-user", function () {
 
 function getFriendApplyList()
 {
-    if(!judgeDefaultChat()) {
-        return ;
-    }
     var action = "api.friend.applyList";
     var reqData = {
         "offset" : 0,
@@ -3422,9 +3402,6 @@ function getFriendApplyList()
 }
 
 $(function () {
-    if(!judgeDefaultChat()) {
-        return ;
-    }
     $(".friend-right-body").scroll(function () {
         var pwLeft = $(".friend-right-body")[0];
         var ch  = pwLeft.clientHeight;
@@ -4123,19 +4100,8 @@ function judgeDefaultChat()
     return true;
 }
 
-function judgeOtherChat() {
-    var chatType = localStorage.getItem(chatTypeKey);
-    if(chatType != DefaultChat) {
-        return true;
-    }
-    return false;
-}
-
 function displayRightPage(displayType)
 {
-    if(!judgeDefaultChat()) {
-        return ;
-    }
     try{
         switch (displayType){
             case DISPLAY_HOME:

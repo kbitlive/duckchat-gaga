@@ -416,13 +416,6 @@ function appendMsgHtmlToChatDialog(msg)
                     userId :msg.fromUserId,
                     timeServer:msg.timeServer
                 });
-            case MessageType.MessageRecall:
-                var msgContent = msg["recall"].msgText !== undefined && msg["recall"].msgText != null ? msg["recall"].msgText : "此消息被撤回";
-                html = template("tpl-receive-msg-notice", {
-                    msgContent:msgContent,
-                    timeServer:msg.timeServer
-                });
-                break;
         }
     }
 
@@ -965,8 +958,19 @@ function displayProfile(profileId, profileType)
 function getSelfInfo()
 {
     var action = "api.user.profile"
-    handleClientSendRequest(action, {}, handleGetFriendProfile);
+    handleClientSendRequest(action, {}, handleGetUserProfile);
 }
+
+function handleGetUserProfile(result)
+{
+    if(result && result.hasOwnProperty("profile") ) {
+        var profile = result['profile'];
+        nickname = profile['public'].nickname;
+        loginName = profile['public'].loginName;
+        avatar = profile['public'].avatar;
+    }
+}
+
 
 function getNotMsgImgUrl(avatarImgId) {
     try{

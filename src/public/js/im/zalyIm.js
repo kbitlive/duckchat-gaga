@@ -62,16 +62,8 @@ function handleImSendRequest(action, reqData, callback)
             body[key] = reqData[key];
         }
         var sessionId = $(".session_id").attr("data");
-        if(localStorage.getItem(chatTypeKey) == ServiceChat) {
-            sessionId = $(".service_session_id").attr("data");
-        }
-
         var header = {};
         header[HeaderSessionid] = sessionId;
-        if((sessionId == "" || sessionId == undefined || sessionId == false) && action !="api.site.config" ) {
-            isSyncingMsg = false;
-            return;
-        }
         header[HeaderHostUrl] = originDomain;
         header[HeaderUserClientLang] = getLanguage();
         header[HeaderUserAgent] = navigator.userAgent;
@@ -135,11 +127,8 @@ function handleReceivedImMessage(resp, callback)
                     if(wsImObj != "" && wsImObj != undefined) {
                         wsImObj.close();
                     }
-
-                    if(localStorage.getItem(chatTypeKey) == DefaultChat) {
-                        localStorage.clear();
-                        window.location.href = "./index.php?action=page.logout";
-                    }
+                    // localStorage.clear();
+                    // window.location.href = "./index.php?action=page.logout";
                     return;
                 }
                 alert(result.header[HeaderErrorInfo]);

@@ -37,7 +37,7 @@ class Upgrade_From10103To10104 extends Upgrade_Version
             'sort' => 107,
             'landingPageUrl' => "index.php?action=miniProgram.customerService.index",
             'landingPageWithProxy' => 1, //1 表示走site代理
-            'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageIndex,
+            'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageNone,
             'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingNewPage,
             'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAdminOnly,
             'authKey' => "",

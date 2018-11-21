@@ -12,4 +12,6 @@ class MiniProgram_CustomerService_ConfigController
 
     const GREETING = "greeting";//第一句打招呼
 
+    const CHAT_TITLE = "chatTitle";
+
 }

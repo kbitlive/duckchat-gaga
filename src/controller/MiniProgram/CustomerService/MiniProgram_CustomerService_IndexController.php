@@ -12,6 +12,7 @@ class MiniProgram_CustomerService_IndexController extends MiniProgram_BaseContro
     private $gifMiniProgramId = 107;
     private $title = "客服小程序";
     private $defaltGreeting = "您好，很高兴为您服务。";
+    private $defaltChatTitle = "客服系统";
 
     public function getMiniProgramId()
     {
@@ -61,6 +62,7 @@ CODE;
     {
         $settingConfig = [
             MiniProgram_CustomerService_ConfigController::ENABLE_CUSTOMER_SERVICE => "",
+            MiniProgram_CustomerService_ConfigController::CHAT_TITLE => $this->defaltChatTitle,
             MiniProgram_CustomerService_ConfigController::GREETING => $this->defaltGreeting,
         ];
         $setting = $this->ctx->SiteCustomerServiceSettingTable->getCustomerServiceSettingLists();

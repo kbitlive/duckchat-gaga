@@ -97,14 +97,14 @@
         }
         .chat_title {
             width:320px;
-            height:60px;
+            height:40px;
             background:rgba(52,54,60,1);
             border-radius:10px 10px 0px 0px;
-            font-size:20px;
+            font-size:16px;
             font-family:PingFangSC-Medium;
             font-weight:500;
             color:rgba(255,255,255,1);
-            line-height: 60px;
+            line-height: 40px;
             text-align: center;
             position: relative;
         }
@@ -260,7 +260,7 @@
         </div>
     </div>
     <div class="chat_dialog_div">
-        <div class="chat_title">运营团队工作群<img src="./public/img/service/close.png" class="close_chat_png" type="hide"/></div>
+        <div class="chat_title"><?php echo $chatTitle; ?><img src="./public/img/service/close.png" class="close_chat_png" type="hide"/></div>
         <div class="right-chatbox">
         </div>
         <div class="chat_line"></div>
@@ -282,10 +282,6 @@
 <input type="hidden" data='' class="service_session_id">
 <input type="hidden" value='<?php echo $siteAddress;?>' class="siteAddress">
 <?php include(dirname(__DIR__) . '/customerService/template_service.php'); ?>
-
-
-
-
 
 <script type="text/javascript">
 

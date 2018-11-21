@@ -23,6 +23,9 @@ $(":input").attr("autocapitalize", "off");
 function ZalyIm(params)
 {
     var config = params.config;
+    console.log("json config ------"+JSON.stringify(config));
+    localStorage.setItem(siteConfigKey, JSON.stringify(config));
+
     DefaultTitle = config.name;
     document.title = config.name;
     var serverAddressForApi = config.serverAddressForApi;
@@ -38,7 +41,6 @@ function ZalyIm(params)
             localStorage.setItem(websocketGWUrl, webSocketGw);
         }
     }
-    localStorage.setItem(siteConfigKey, JSON.stringify(config));
     localStorage.setItem(siteLoginPluginKey, JSON.stringify(loginPluginProfile))
     landingPageUrl = loginPluginProfile.landingPageUrl;
 

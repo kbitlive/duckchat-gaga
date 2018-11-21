@@ -74,7 +74,7 @@ function handleRoomListFromLocalStorage(roomMsg)
             }
         }
         roomList.sort(compare);
-        localStorage.setItem(roomListKey, JSON.stringify(roomList));
+        // localStorage.setItem(roomListKey, JSON.stringify(roomList));
         return roomList;
     }catch (error) {
         storageError(error);
@@ -109,7 +109,7 @@ function clearRoomMsgFromRoomList(chatSessionId)
         }
         roomList[i] = msg;
     }
-    localStorage.setItem(roomListKey, JSON.stringify(roomList));
+    // localStorage.setItem(roomListKey, JSON.stringify(roomList));
 }
 
 function getMsgContentForChatSession(msg)
@@ -187,9 +187,6 @@ function updateRoomChatSessionContentForMsg(msg, nodes, msgContent) {
 
 function appendOrInsertRoomList(msg, isInsert, showNotification)
 {
-    if(!judgeDefaultChat()) {
-        return;
-    }
     if(msg != undefined && msg.hasOwnProperty("type") && msg.type == MessageStatus.MessageEventSyncEnd) {
         return ;
     }

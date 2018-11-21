@@ -10,7 +10,7 @@ class Page_CustomerService_IndexController extends CustomerServiceController
 {
     protected  $thirdLoginKey = 'DuckChat_CustomerService';
     private $defaltGreeting = "您好，很高兴为您服务。";
-
+    private $defaltChatTitle = "客服系统";
 
     public function index()
     {
@@ -38,6 +38,7 @@ class Page_CustomerService_IndexController extends CustomerServiceController
             }
             return;
         }
+        $params['chatTitle'] = isset($setting[MiniProgram_CustomerService_ConfigController::CHAT_TITLE]) ?$setting[MiniProgram_CustomerService_ConfigController::CHAT_TITLE] : $this->defaltChatTitle;
         $params['thirdLoginKey'] = $this->thirdLoginKey;
         echo $this->display("customerService_index", $params);
     }
@@ -149,7 +150,7 @@ class Page_CustomerService_IndexController extends CustomerServiceController
 
     public function getCustomerServiceId()
     {
-        $results = $this->ctx->CustomerServiceTable->getCustomerService();
+        $results = $this->ctx->SiteCustomerServiceTable->getCustomerService();
         $serviceId = "";
         if($results) {
             $serviceInfo = $results[0];
@@ -159,7 +160,7 @@ class Page_CustomerService_IndexController extends CustomerServiceController
             $data  = [
                'serviceTime' => ZalyHelper::getMsectime()
             ];
-            $this->ctx->CustomerServiceTable->updateCustomerServiceData($where, $data);
+            $this->ctx->SiteCustomerServiceTable->updateCustomerServiceData($where, $data);
             $serviceId = $serviceInfo['userId'];
         }
         return $serviceId;

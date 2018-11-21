@@ -137,6 +137,26 @@
 
             <div class="list-item-center">
 
+                <div class="item-row" id="enable_customer_service">
+                    <div class="item-body">
+                        <div class="item-body-display">
+                            <div class="item-body-desc"><?php if ($lang == "1") { ?>
+                                    开启客服功能
+                                <?php } else { ?>
+                                    Enable Customer Service
+                                <?php } ?>
+                            </div>
+
+                            <div class="item-body-tail">
+                                <img class="more-img" src="../../public/img/manage/more.png"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="division-line"></div>
+
+
                 <div class="item-row" id="see_customer_service_list">
                     <div class="item-body">
                         <div class="item-body-display">
@@ -212,6 +232,13 @@
         var url = "index.php?action=miniProgram.customerService.manage&operation=add&lang=" + getLanguage();
         openPage(url);
     });
+
+    $("#enable_customer_service").click(function () {
+        var url = "index.php?action=miniProgram.customerService.index&lang=" + getLanguage();
+        openPage(url);
+    });
+
+
 
 </script>
 

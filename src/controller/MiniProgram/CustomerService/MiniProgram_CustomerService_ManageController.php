@@ -73,7 +73,7 @@ class MiniProgram_CustomerService_ManageController extends MiniProgram_BaseContr
     protected function getServiceLists($offset)
     {
         $userInfos = [];
-        $results = $this->ctx->CustomerServiceTable->getCustomerServiceLists($offset, $this->pageSize);
+        $results = $this->ctx->SiteCustomerServiceTable->getCustomerServiceLists($offset, $this->pageSize);
         if($results) {
             $userIds  = array_column($results, "userId");
             $userInfos = $this->ctx->Manual_User->getProfiles($this->userId, $userIds);
@@ -83,7 +83,7 @@ class MiniProgram_CustomerService_ManageController extends MiniProgram_BaseContr
 
     protected function deleteCustomerService($userId)
     {
-       $flag =  $this->ctx->CustomerServiceTable->delInfoByUserId($userId);
+       $flag =  $this->ctx->SiteCustomerServiceTable->delInfoByUserId($userId);
        if($flag) {
            return json_encode(['errCode' => 'success']);
        }
@@ -92,7 +92,7 @@ class MiniProgram_CustomerService_ManageController extends MiniProgram_BaseContr
 
     protected function addCustomerService($userId)
     {
-        $user = $this->ctx->CustomerServiceTable->getCustomerServiceByUserId($userId);
+        $user = $this->ctx->SiteCustomerServiceTable->getCustomerServiceByUserId($userId);
         if($user) {
             return json_encode(['errCode' => 'success']);
         }
@@ -100,7 +100,7 @@ class MiniProgram_CustomerService_ManageController extends MiniProgram_BaseContr
             'userId' => $userId,
             'serviceTime' => ZalyHelper::getMsectime(),
         ];
-        $flag =  $this->ctx->CustomerServiceTable->insertCustomerServiceData($userInfo);
+        $flag =  $this->ctx->SiteCustomerServiceTable->insertCustomerServiceData($userInfo);
         if($flag) {
             return json_encode(['errCode' => 'success']);
         }
