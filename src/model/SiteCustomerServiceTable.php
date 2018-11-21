@@ -39,7 +39,7 @@ class SiteCustomerServiceTable extends BaseTable
         $tag = __CLASS__ . "-" . __FILE__;
         $startTime = microtime(true);
         try {
-            $sql = "select $this->selectColumns from $this->table order by serviceTime desc limit 0,1";
+            $sql = "select $this->selectColumns from $this->table order by serviceTime ASC limit 0,1";
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
             $prepare->execute();
