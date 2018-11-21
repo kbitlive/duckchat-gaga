@@ -127,8 +127,8 @@ function handleReceivedImMessage(resp, callback)
                     if(wsImObj != "" && wsImObj != undefined) {
                         wsImObj.close();
                     }
-                    // localStorage.clear();
-                    // window.location.href = "./index.php?action=page.logout";
+                    localStorage.clear();
+                    window.location.href = "./index.php?action=page.logout";
                     return;
                 }
                 alert(result.header[HeaderErrorInfo]);

@@ -134,12 +134,7 @@ function handleReceivedImMessage(resp, callback)
                     if(wsImObj != "" && wsImObj != undefined) {
                         wsImObj.close();
                     }
-                    localStorage.removeItem(sessionLoginNameKey);
-                    localStorage.removeItem(serviceSessionKey);
-                    localStorage.removeItem(tokenKey);
-                    localStorage.removeItem(avatarKey);
-                    localStorage.removeItem(nicknameKey);
-                    $(".close_chat").click();
+
                     return;
                 }
                 alert(result.header[HeaderErrorInfo]);

@@ -28,7 +28,6 @@ function handleAuth()
     syncMsgForRoom();
 }
 
-
 function syncMsgForRoom()
 {
     if((Date.parse(new Date()) - isPreSyncingMsgTime) > 10000) {
@@ -203,6 +202,7 @@ function handleMsgStatusResult(msgId, msgStatus)
 function handleMsgForMsgRoom(chatSessionId, pushMsg)
 {
     var roomChatSessionKey = roomKey + chatSessionId;
+
     var msgListJsonStr = localStorage.getItem(roomChatSessionKey);
     var isFlag = moreThanMaxStorageSore(roomChatSessionKey);
     if(isFlag) {
@@ -242,10 +242,10 @@ function handleMsgForMsgRoom(chatSessionId, pushMsg)
         }catch(error) {
             console.log(error)
         }
-
         msgList.sort(compare);
         return msgList;
     }catch (error){
+        console.lgo(error);
         if(error.name == "QuotaExceededError" || error.name == "ReferenceError") {
             msgList = new Array();
             if(pushMsg != undefined) {

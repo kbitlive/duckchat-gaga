@@ -62,8 +62,8 @@ function handleClientReceivedMessage(resp, callback)
                     console.log(error)
                 }
                 if(result.header[HeaderErrorCode] == ErrorSessionCode || result.header[HeaderErrorCode] == ErrorSiteInit) {
-                    // localStorage.clear();
-                    // window.location.href = "./index.php?action=page.logout";
+                    localStorage.clear();
+                    window.location.href = "./index.php?action=page.logout";
                     return ;
                 }
 

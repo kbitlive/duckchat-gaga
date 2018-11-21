@@ -357,22 +357,27 @@
     $(".service_nickname").attr("data", serviceNickname );
 
 
-    $(".close_chat").on("click", function(){
-        $(".close_chat_png").click();
+    $(document).on("click", ".close_chat", function(){
+        displayChatDialogByClick();
     });
 
-    $(".close_chat_png").on("click", function () {
-       var type = $(this).attr("type");
-       if(type == "hide") {
-           showLoading($(".chat_dialog_div"));
-           $(this).attr("type", "display");
-           $(".chat_dialog_div")[0].style.display = "block";
-           createCustomerServiceAccount();
-       } else {
-           $(this).attr("type", "hide");
-           $(".chat_dialog_div")[0].style.display = "none";
-       }
+    $(document).on("click", ".close_chat_png", function () {
+        displayChatDialogByClick();
     });
+
+    function displayChatDialogByClick()
+    {
+        var type = $(".close_chat_png").attr("type");
+        if(type == "hide") {
+            showLoading($(".chat_dialog_div"));
+            $(".close_chat_png").attr("type", "display");
+            $(".chat_dialog_div")[0].style.display = "block";
+            createCustomerServiceAccount();
+        } else {
+            $(".close_chat_png").attr("type", "hide");
+            $(".chat_dialog_div")[0].style.display = "none";
+        }
+    }
 
     function getMsgForCustomer()
     {
@@ -382,7 +387,7 @@
             "customerId":serviceToken,
             "operation" :'addFriend'
         }
-        ajaxPost(requestUrl, data, handleAddCustomerService);
+        serviceAjaxPost(requestUrl, data, handleAddCustomerService);
     }
 
 
@@ -390,6 +395,9 @@
         getSelfInfoByClassName();
         $(".service_right-chatbox").attr("chat-session-id", chatSessionId);
         hideLoading();
+        console.log(localStorage.getItem("service_room_1f2fbb65e62ace98e0e78d91d14c28aac5e4aa61"));
+
+
         getMsgFromRoom(chatSessionId);
         getSelfInfo();
     }
@@ -411,19 +419,24 @@
     function createCustomerServiceAccount()
     {
         var operation = isRegister == true ? 'create' : "login";
-        var requestUrl = "./index.php?action=page.customerService.index";
-        var data = {
-            "loginName":binLoginName,
-            "operation" :operation
+        var sessionId= localStorage.getItem(serviceSessionKey);
+        if(sessionId) {
+            var requestUrl = "./index.php?action=page.customerService.index";
+            var data = {
+                "loginName":binLoginName,
+                "operation" :operation
+            }
+            serviceAjaxPost(requestUrl, data, handleCreateCustomerServiceAccount);
+            return;
         }
-        ajaxPost(requestUrl, data, handleCreateCustomerServiceAccount);
+        getMsgForCustomer();
     }
 
    function handleCreateCustomerServiceAccount(result)
    {
         var result = JSON.parse(result);
        if(result['errorCode'] == 'success') {
-           zalyjsApiSiteLogin(result['preSessionId'], result['loginName']);
+           zalyjsServiceApiSiteLogin(result['preSessionId'], result['loginName']);
        } else {
            alert("链接失败，请稍候再试");
        }
@@ -437,8 +450,8 @@
         return "0";
     }
 
-    function zalyjsApiSiteLogin(preSessionId, loginName) {
-       var refererUrl = "./index.php";
+    function zalyjsServiceApiSiteLogin(preSessionId, loginName) {
+        var refererUrl = "./index.php";
        var body = {
            "@type":  "type.googleapis.com/site.ApiSiteLoginRequest",
            "preSessionId":preSessionId,
@@ -469,12 +482,12 @@
 
        var http = new XMLHttpRequest();
        http.open('POST', url, true);
-
-       //Send the proper header information along with the request
+       // Send the proper header information along with the request
        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
-       http.onreadystatechange = function() {//Call a function when the state changes.
+        http.onreadystatechange = function() {//Call a function when the state changes.
            if(http.readyState == 4 && http.status == 200) {
+
                var results = JSON.parse(http.responseText);
                if(results.hasOwnProperty("header") && results.header[HeaderErrorCode] == "success") {
                    var sessionId = results.body['sessionId'];
@@ -501,7 +514,7 @@
            }
        }
        http.send(transportDataJson);
-   }
+    }
     
    function closeChatDialog() {
        localStorage.removeItem(sessionLoginNameKey);
@@ -511,16 +524,16 @@
        localStorage.removeItem(nicknameKey);
        alert("请稍候再试");
        hideLoading();
-       $(".close_chat_png").click();
+       // $(".close_chat_png").click();
    }
 
-    function ajaxPost(requestUrl, data, callback){
+    function serviceAjaxPost(requestUrl, data, serviceCallBack){
         $.ajax({
             method: "POST",
             url:requestUrl,
             data: data,
             success:function (resp, status, request) {
-                callback(resp);
+                serviceCallBack(resp);
             }
         });
     }

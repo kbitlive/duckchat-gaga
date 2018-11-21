@@ -13,6 +13,13 @@ function handleClientSendRequest(action, reqData, callback)
         }
 
         sessionId = $(".service_session_id").attr("data");
+
+        if((sessionId == "" || sessionId == undefined || sessionId == false) && action !="api.site.config" ) {
+            isSyncingMsg = false;
+            return;
+        }
+
+
         var header = {};
         header[HeaderSessionid] = sessionId;
         header[HeaderHostUrl] = originDomain;
@@ -21,9 +28,6 @@ function handleClientSendRequest(action, reqData, callback)
         header[HeaderUserAgent] = navigator.userAgent;
         var packageId = localStorage.getItem(PACKAGE_ID);
 
-        if(sessionId == "" && action !="api.site.config" ) {
-            return;
-        }
 
         var transportData = {
             "action" : action,
@@ -66,12 +70,7 @@ function handleClientReceivedMessage(resp, callback)
                     console.log(error)
                 }
                 if(result.header[HeaderErrorCode] == ErrorSessionCode || result.header[HeaderErrorCode] == ErrorSiteInit) {
-                    localStorage.removeItem(sessionLoginNameKey);
-                    localStorage.removeItem(serviceSessionKey);
-                    localStorage.removeItem(tokenKey);
-                    localStorage.removeItem(avatarKey);
-                    localStorage.removeItem(nicknameKey);
-                    $(".close_chat").click();
+
                     return ;
                 }
 
