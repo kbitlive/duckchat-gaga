@@ -45,7 +45,7 @@ class MiniProgram_CustomerService_ManageController extends MiniProgram_BaseContr
                     echo $this->display("miniProgram_customerService_manageService", $params);
                     break;
                 case "add":
-                    echo $this->display("miniProgram_customerService_manage", $params);
+                    echo $this->display("miniProgram_customerService_searchUser", $params);
                     break;
                 default:
                     echo $this->display("miniProgram_customerService_manage", $params);
@@ -57,6 +57,14 @@ class MiniProgram_CustomerService_ManageController extends MiniProgram_BaseContr
                 case "delete":
                     $userId = $_POST['userId'];
                     echo $this->deleteCustomerService($userId);
+                    break;
+                case "search":
+                    $searchValue = $_POST['searchValue'];
+                    echo $this->getSearchUserInfo($searchValue, $page);
+                    break;
+                case "add":
+                    $userId = $_POST['userId'];
+                    echo $this->addCustomerService($userId);
                     break;
             }
         }
@@ -80,5 +88,41 @@ class MiniProgram_CustomerService_ManageController extends MiniProgram_BaseContr
            return json_encode(['errCode' => 'success']);
        }
        return json_encode(['errCode' => 'fail']);
+    }
+
+    protected function addCustomerService($userId)
+    {
+        $user = $this->ctx->CustomerServiceTable->getCustomerServiceByUserId($userId);
+        if($user) {
+            return json_encode(['errCode' => 'success']);
+        }
+        $userInfo = [
+            'userId' => $userId,
+            'serviceTime' => ZalyHelper::getMsectime(),
+        ];
+        $flag =  $this->ctx->CustomerServiceTable->insertCustomerServiceData($userInfo);
+        if($flag) {
+            return json_encode(['errCode' => 'success']);
+        }
+        return json_encode(['errCode' => 'fail']);
+    }
+
+
+    protected function getSearchUserInfo($nickname, $page)
+    {
+        $userInfo = $this->ctx->Manual_User->search($this->userId, $nickname, $page);
+        $userIds = array_column($userInfo, 'userId');
+
+        $users = $this->ctx->CustomerServiceTable->getCustomerServiceByUserIds($userIds);
+        $serviceUserId = array_column($users, "userId");
+
+        foreach($userInfo as $key => $user) {
+            if(in_array($user['userId'], $serviceUserId)) {
+                $user['isService'] = 1;
+                $userInfo[$key] = $user;
+            }
+        }
+
+        return  json_encode(['users' => $userInfo, 'errCode' => 'success']);
     }
 }
