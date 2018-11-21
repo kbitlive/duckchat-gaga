@@ -309,3 +309,9 @@ CREATE TABLE IF NOT EXISTS siteCustomerService(
                 serviceTime BIGINT,
                 unique(userId)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
+CREATE TABLE IF NOT EXISTS siteCustomerServiceSetting(
+                id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                serviceKey VARCHAR(100) NOT NULL,
+                serviceValue VARCHAR(100) NOT NULL,
+                unique(serviceKey)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
+

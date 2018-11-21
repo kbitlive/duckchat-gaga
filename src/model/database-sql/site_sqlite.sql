@@ -295,3 +295,11 @@ CREATE TABLE IF NOT EXISTS siteCustomerService(
                 userId VARCHAR(100) NOT NULL,
                 serviceTime BIGINT,
                 unique(userId));
+
+
+CREATE TABLE IF NOT EXISTS siteCustomerServiceSetting(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                serviceKey VARCHAR(100) NOT NULL,
+                serviceValue VARCHAR(100) NOT NULL,
+                 unique(serviceKey));
+

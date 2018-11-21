@@ -48,6 +48,7 @@
  * @property PassportCustomerServiceTable PassportCustomerServiceTable
  * @property PassportCustomerServicePreSessionTable PassportCustomerServicePreSessionTable
  * @property CustomerServiceTable CustomerServiceTable
+ * @property SiteCustomerServiceSettingTable SiteCustomerServiceSettingTable
  *
  * @property Pinyin Pinyin
  *
