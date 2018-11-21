@@ -34,7 +34,6 @@ function handleAuth()
 
 function syncMsgForRoom()
 {
-    console.log("isSyncingMsg---"+isSyncingMsg);
     if((Date.parse(new Date()) - isPreSyncingMsgTime) > 10000) {
         isSyncingMsg = false;
     }

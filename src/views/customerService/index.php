@@ -285,6 +285,10 @@
 <input type="hidden" value='<?php echo $siteAddress;?>' class="siteAddress">
 <?php include(dirname(__DIR__) . '/customerService/template_service.php'); ?>
 
+</body>
+</html>
+
+
 <script type="text/javascript">
 
     var serviceSessionKey = "serviceSessionKey";
@@ -302,33 +306,33 @@
             }
         }
     },function(components) {
-       // user_agent component will contain string processed with our function. For example: Windows Chrome
-   });
-   // var b64 = fingerPrintVal.toDataURL().replace("data:image/png;base64,","");
-   var fingerPrintValBase64 = fingerPrintVal[1].replace("canvas fp:data:image/png;base64,", "");
-   var bin = atob(fingerPrintValBase64);
-   var loginName = bin2hex(bin.slice(-16,-10));
-   var binLoginName = loginName;
+        // user_agent component will contain string processed with our function. For example: Windows Chrome
+    });
+    // var b64 = fingerPrintVal.toDataURL().replace("data:image/png;base64,","");
+    var fingerPrintValBase64 = fingerPrintVal[1].replace("canvas fp:data:image/png;base64,", "");
+    var bin = atob(fingerPrintValBase64);
+    var loginName = bin2hex(bin.slice(-16,-10));
+    var binLoginName = loginName;
 
-   var sessionLoginName = localStorage.getItem(sessionLoginNameKey);
-   var isRegister = false;
+    var sessionLoginName = localStorage.getItem(sessionLoginNameKey);
+    var isRegister = false;
 
-   if(sessionLoginName == false || sessionLoginName == undefined || sessionLoginName == null) {
-       localStorage.setItem(sessionLoginNameKey, loginName);
-       serviceLoginName = loginName;
-       isRegister = true;
-   } else {
-       serviceLoginName = sessionLoginName;
-   }
+    if(sessionLoginName == false || sessionLoginName == undefined || sessionLoginName == null) {
+        localStorage.setItem(sessionLoginNameKey, loginName);
+        serviceLoginName = loginName;
+        isRegister = true;
+    } else {
+        serviceLoginName = sessionLoginName;
+    }
 
-   function bin2hex (bin) {
-       var i = 0, l = bin.length, chr, hex = '';
-       for (i; i < l; ++i) {
-           chr = bin.charCodeAt(i).toString(16);
-           hex += chr.length < 2 ? '0' + chr : chr
-       }
-       return hex;
-   }
+    function bin2hex (bin) {
+        var i = 0, l = bin.length, chr, hex = '';
+        for (i; i < l; ++i) {
+            chr = bin.charCodeAt(i).toString(16);
+            hex += chr.length < 2 ? '0' + chr : chr
+        }
+        return hex;
+    }
 
     function getSelfInfoByClassName()
     {
@@ -401,7 +405,7 @@
         getSelfInfo();
     }
 
-   function  handleAddCustomerService(result) {
+    function  handleAddCustomerService(result) {
         try{
             hideLoading();
             var result = JSON.parse(result);
@@ -413,7 +417,7 @@
         }catch (error) {
             closeChatDialog();
         }
-   }
+    }
 
     function createCustomerServiceAccount()
     {
@@ -426,15 +430,15 @@
         serviceAjaxPost(requestUrl, data, handleCreateCustomerServiceAccount);
     }
 
-   function handleCreateCustomerServiceAccount(result)
-   {
+    function handleCreateCustomerServiceAccount(result)
+    {
         var result = JSON.parse(result);
-       if(result['errorCode'] == 'success') {
-           zalyjsServiceApiSiteLogin(result['preSessionId'], result['loginName']);
-       } else {
-           alert("链接失败，请稍候再试");
-       }
-   }
+        if(result['errorCode'] == 'success') {
+            zalyjsServiceApiSiteLogin(result['preSessionId'], result['loginName']);
+        } else {
+            alert("链接失败，请稍候再试");
+        }
+    }
 
     function getLanguage() {
         var nl = navigator.language;
@@ -446,79 +450,79 @@
 
     function zalyjsServiceApiSiteLogin(preSessionId, loginName) {
         var refererUrl = "./index.php";
-       var body = {
-           "@type":  "type.googleapis.com/site.ApiSiteLoginRequest",
-           "preSessionId":preSessionId,
-           "loginName":loginName,
-           "isRegister":true,
-           "thirdPartyKey":thirdPartyKey,
-       };
+        var body = {
+            "@type":  "type.googleapis.com/site.ApiSiteLoginRequest",
+            "preSessionId":preSessionId,
+            "loginName":loginName,
+            "isRegister":true,
+            "thirdPartyKey":thirdPartyKey,
+        };
 
-       var header = {};
-       header[HeaderHostUrl] = refererUrl;
-       header[HeaderUserClientLang] = getLanguage();
-       header[HeaderUserAgent] = navigator.userAgent;
-       var packageId = localStorage.getItem("packageId");
+        var header = {};
+        header[HeaderHostUrl] = refererUrl;
+        header[HeaderUserClientLang] = getLanguage();
+        header[HeaderUserAgent] = navigator.userAgent;
+        var packageId = localStorage.getItem("packageId");
 
-       var transportData = {
-           "action" : "api.site.login",
-           "body": body,
-           "header" : header,
-           "packageId" : Number(packageId),
-       };
+        var transportData = {
+            "action" : "api.site.login",
+            "body": body,
+            "header" : header,
+            "packageId" : Number(packageId),
+        };
 
-       var transportDataJson = JSON.stringify(transportData);
-       if (refererUrl.indexOf("?") > -1) {
-           var url = refererUrl + "&action=api.site.login&body_format=json";
-       } else {
-           var url = refererUrl + "?action=api.site.login&body_format=json";
-       }
+        var transportDataJson = JSON.stringify(transportData);
+        if (refererUrl.indexOf("?") > -1) {
+            var url = refererUrl + "&action=api.site.login&body_format=json";
+        } else {
+            var url = refererUrl + "?action=api.site.login&body_format=json";
+        }
 
-       var http = new XMLHttpRequest();
-       http.open('POST', url, true);
-       // Send the proper header information along with the request
-       http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        var http = new XMLHttpRequest();
+        http.open('POST', url, true);
+        // Send the proper header information along with the request
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
         http.onreadystatechange = function() {//Call a function when the state changes.
-           if(http.readyState == 4 && http.status == 200) {
+            if(http.readyState == 4 && http.status == 200) {
 
-               var results = JSON.parse(http.responseText);
-               if(results.hasOwnProperty("header") && results.header[HeaderErrorCode] == "success") {
-                   var sessionId = results.body['sessionId'];
-                   $(".service_session_id").attr("data", sessionId);
-                   serviceToken = results.body.profile.public['userId'];
-                   serviceAvatar = results.body.profile.public['avatar'];
-                   loginName = results.body.profile.public['loginName'];
-                   nickname  = results.body.profile.public['nickname'];
+                var results = JSON.parse(http.responseText);
+                if(results.hasOwnProperty("header") && results.header[HeaderErrorCode] == "success") {
+                    var sessionId = results.body['sessionId'];
+                    $(".service_session_id").attr("data", sessionId);
+                    serviceToken = results.body.profile.public['userId'];
+                    serviceAvatar = results.body.profile.public['avatar'];
+                    loginName = results.body.profile.public['loginName'];
+                    nickname  = results.body.profile.public['nickname'];
 
-                   localStorage.setItem(serviceSessionKey, sessionId);
-                   localStorage.setItem(tokenKey, serviceToken);
-                   localStorage.setItem(avatarKey,serviceAvatar);
-                   localStorage.setItem(nicknameKey, nickname);
+                    localStorage.setItem(serviceSessionKey, sessionId);
+                    localStorage.setItem(tokenKey, serviceToken);
+                    localStorage.setItem(avatarKey,serviceAvatar);
+                    localStorage.setItem(nicknameKey, nickname);
 
-                   $(".service_token").attr('data', serviceToken);
-                   $(".service_self_avatar").attr("data",serviceAvatar );
-                   $(".service_loginName").attr("data", loginName );
-                   $(".service_nickname").attr("data", nickname );
+                    $(".service_token").attr('data', serviceToken);
+                    $(".service_self_avatar").attr("data",serviceAvatar );
+                    $(".service_loginName").attr("data", loginName );
+                    $(".service_nickname").attr("data", nickname );
 
-                   getMsgForCustomer();
-               } else {
-                   closeChatDialog();
-               }
-           }
-       }
-       http.send(transportDataJson);
+                    getMsgForCustomer();
+                } else {
+                    closeChatDialog();
+                }
+            }
+        }
+        http.send(transportDataJson);
     }
-    
-   function closeChatDialog() {
-       localStorage.removeItem(sessionLoginNameKey);
-       localStorage.removeItem(serviceSessionKey);
-       localStorage.removeItem(tokenKey);
-       localStorage.removeItem(avatarKey);
-       localStorage.removeItem(nicknameKey);
-       alert("请稍候再试");
-       hideLoading();
-   }
+
+    function closeChatDialog() {
+        localStorage.removeItem(sessionLoginNameKey);
+        localStorage.removeItem(serviceSessionKey);
+        localStorage.removeItem(tokenKey);
+        localStorage.removeItem(avatarKey);
+        localStorage.removeItem(nicknameKey);
+        alert("请稍候再试");
+        hideLoading();
+    }
 
     function serviceAjaxPost(requestUrl, data, serviceCallBack){
         $.ajax({
@@ -531,8 +535,4 @@
         });
     }
 
-
-
 </script>
-</body>
-</html>

@@ -123,7 +123,6 @@ function handleReceivedImMessage(resp, callback)
 
     try{
         var result = JSON.parse(resp);
-        console.log("resp------"+resp);
         if(result.action == ZalyAction.im_stc_news) {
             syncMsgForRoom();
             return;
