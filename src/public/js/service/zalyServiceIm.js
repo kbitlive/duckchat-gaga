@@ -134,7 +134,7 @@ function handleReceivedImMessage(resp, callback)
                     if(wsImObj != "" && wsImObj != undefined) {
                         wsImObj.close();
                     }
-
+                    closeChatDialog();
                     return;
                 }
                 alert(result.header[HeaderErrorInfo]);

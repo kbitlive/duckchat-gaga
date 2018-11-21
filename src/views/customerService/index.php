@@ -395,9 +395,6 @@
         getSelfInfoByClassName();
         $(".service_right-chatbox").attr("chat-session-id", chatSessionId);
         hideLoading();
-        console.log(localStorage.getItem("service_room_1f2fbb65e62ace98e0e78d91d14c28aac5e4aa61"));
-
-
         getMsgFromRoom(chatSessionId);
         getSelfInfo();
     }
@@ -419,17 +416,12 @@
     function createCustomerServiceAccount()
     {
         var operation = isRegister == true ? 'create' : "login";
-        var sessionId= localStorage.getItem(serviceSessionKey);
-        if(sessionId) {
-            var requestUrl = "./index.php?action=page.customerService.index";
-            var data = {
-                "loginName":binLoginName,
-                "operation" :operation
-            }
-            serviceAjaxPost(requestUrl, data, handleCreateCustomerServiceAccount);
-            return;
+        var requestUrl = "./index.php?action=page.customerService.index";
+        var data = {
+            "loginName":binLoginName,
+            "operation" :operation
         }
-        getMsgForCustomer();
+        serviceAjaxPost(requestUrl, data, handleCreateCustomerServiceAccount);
     }
 
    function handleCreateCustomerServiceAccount(result)
@@ -524,7 +516,6 @@
        localStorage.removeItem(nicknameKey);
        alert("请稍候再试");
        hideLoading();
-       // $(".close_chat_png").click();
    }
 
     function serviceAjaxPost(requestUrl, data, serviceCallBack){

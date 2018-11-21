@@ -70,7 +70,7 @@ function handleClientReceivedMessage(resp, callback)
                     console.log(error)
                 }
                 if(result.header[HeaderErrorCode] == ErrorSessionCode || result.header[HeaderErrorCode] == ErrorSiteInit) {
-
+                    closeChatDialog();
                     return ;
                 }
 
