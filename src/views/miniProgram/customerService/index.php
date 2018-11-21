@@ -31,6 +31,9 @@
         }
         .service_code {
             margin-left: 10px;
+            height: 80px;
+            line-height: 20px;
+            text-align: left;
         }
         .wrapper {
             height: 100%;
@@ -128,7 +131,8 @@
                 <div class="division-line"></div>
                 <div class="item-row" class="site-rsa-pubk-pem" style="height: 80px;line-height: 80px;" >
                     <div class="item-body" style="height: 80px;line-height: 80px;" >
-                        <div class="item-body-display service_code" style="height: 80px;line-height: 80px;" >
+                        <div class="item-body-display service_code" >
+
                         </div>
                     </div>
                 </div>

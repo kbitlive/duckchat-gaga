@@ -474,7 +474,7 @@
            "@type":  "type.googleapis.com/site.ApiSiteLoginRequest",
            "preSessionId":preSessionId,
            "loginName":loginName,
-           "isRegister":isRegister,
+           "isRegister":true,
            "thirdPartyKey":thirdPartyKey,
        };
 

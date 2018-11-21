@@ -1410,8 +1410,6 @@ function appendMsgHtmlToChatDialog(msg)
         html = handleMsgContentText(html);
     }
     var currentChatsessionId = localStorage.getItem(chatSessionIdKey);
-    console.log('currentChatsessionId------'+currentChatsessionId);
-    console.log('currentChatsessionId------'+JSON.stringify(msg));
 
     if(currentChatsessionId == msg.chatSessionId) {
         $(".right-chatbox[chat-session-id="+msg.chatSessionId+"]").append(html);

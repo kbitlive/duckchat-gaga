@@ -2924,12 +2924,12 @@ function insertU2Room(jqElement, userId)
 function displayProfile(profileId, profileType)
 {
     var chatSessionId   = localStorage.getItem(chatSessionIdKey);
+    updateInfo(profileId, profileType);
 
     if(profileId == chatSessionId) {
         displayCurrentProfile();
         return;
     }
-   updateInfo(profileId, profileType);
 }
 
 function updateInfo(profileId, profileType)
@@ -2966,6 +2966,7 @@ function updateInfo(profileId, profileType)
             chatSessionName += "...";
         }
     }catch (error) {
+        console.log(error);
     }
 
     var name = template("tpl-string", {
@@ -2975,17 +2976,19 @@ function updateInfo(profileId, profileType)
     try{
         name = name.trim();
     }catch (error) {
-
+        console.log(error);
     }
-
 
     $(".nickname_"+profileId).html(name);
-    if(chatSessionName == "") {
-        chatSessionName = name;
-    }
-    $(".chatsession_nickname_"+profileId).html(chatSessionName);
+
 
     try{
+
+        if(chatSessionName == "") {
+            chatSessionName = name;
+        }
+        $(".chatsession_nickname_"+profileId).html(chatSessionName);
+
         $(".aria-lable-"+profileId).attr("aria-lable", name);
         if(mute>0) {
             $(".room-chatsession-mute_"+profileId)[0].style.display = "block";
@@ -2993,6 +2996,7 @@ function updateInfo(profileId, profileType)
             $(".room-chatsession-mute_"+profileId)[0].style.display = "none";
         }
     }catch (error) {
+        console.log(error);
     }
 }
 
@@ -3194,7 +3198,6 @@ function displayCurrentProfile()
         }catch (error) {
 
         }
-        updateInfo(chatSessionId, chatSessionType);
         displayRightPage(DISPLAY_CHAT);
     }catch (error){
         // console.log(error.message)
