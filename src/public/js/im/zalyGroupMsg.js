@@ -2437,8 +2437,9 @@ $(document).on("click", ".contact-row-group-profile", function () {
     localStorage.setItem(groupId, GROUP_MSG);
     $(".right-chatbox").attr("chat-session-id", groupId);
 
-    getInitChatPlugin(GROUP_MSG);
     handleClickRowGroupProfile(groupId);
+    getInitChatPlugin(GROUP_MSG);
+
 });
 
 
@@ -2451,7 +2452,7 @@ function handleClickGroupProfile(results)
             handleMsgRelation($(this), groupProfile.id);
         }
     }catch (error) {
-
+        console.log(error)
     }
     handleGetGroupProfile(results);
 
@@ -4069,7 +4070,6 @@ $(document).on("click", ".clear_room_chat", function () {
     var tip = languageNum == UserClientLangZH ?  "将删除聊天记录，确认？" : "Sure?" ;
     if(confirm(tip)) {
         clearRoomMsgFromRoomList(roomId);
-
        try{
            $(".msg-row").each(function (index, target) {
                $(target).remove();

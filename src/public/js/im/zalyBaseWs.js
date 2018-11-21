@@ -23,7 +23,6 @@ $(":input").attr("autocapitalize", "off");
 function ZalyIm(params)
 {
     var config = params.config;
-    console.log("json config ------"+JSON.stringify(config));
     localStorage.setItem(siteConfigKey, JSON.stringify(config));
 
     DefaultTitle = config.name;

@@ -2056,6 +2056,7 @@ button:active{
     background: rgba(255,255,255,1);
     box-shadow: 0rem 0.09rem 0.56rem 0.09rem rgba(223,223,223,1);
     margin: 1rem;
+    z-index: 10001;
 }
 .chat_plugin_iframe {
     width:100%;
