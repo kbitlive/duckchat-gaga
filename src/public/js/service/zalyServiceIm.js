@@ -50,6 +50,7 @@ function reConnectWs()
     }, 1000);
 }
 
+
 function handleImSendRequest(action, reqData, callback)
 {
     try {
@@ -61,9 +62,15 @@ function handleImSendRequest(action, reqData, callback)
         for(var key in reqData) {
             body[key] = reqData[key];
         }
-        var sessionId = $(".session_id").attr("data");
+
+        sessionId = $(".service_session_id").attr("data");
+
         var header = {};
         header[HeaderSessionid] = sessionId;
+        if((sessionId == "" || sessionId == undefined || sessionId == false) && action !="api.site.config" ) {
+            isSyncingMsg = false;
+            return;
+        }
         header[HeaderHostUrl] = originDomain;
         header[HeaderUserClientLang] = getLanguage();
         header[HeaderUserAgent] = navigator.userAgent;
@@ -127,8 +134,12 @@ function handleReceivedImMessage(resp, callback)
                     if(wsImObj != "" && wsImObj != undefined) {
                         wsImObj.close();
                     }
-                    // localStorage.clear();
-                    // window.location.href = "./index.php?action=page.logout";
+                    localStorage.removeItem(sessionLoginNameKey);
+                    localStorage.removeItem(serviceSessionKey);
+                    localStorage.removeItem(tokenKey);
+                    localStorage.removeItem(avatarKey);
+                    localStorage.removeItem(nicknameKey);
+                    $(".close_chat").click();
                     return;
                 }
                 alert(result.header[HeaderErrorInfo]);
@@ -137,7 +148,7 @@ function handleReceivedImMessage(resp, callback)
         }
 
         if(result.action == ZalyAction.im_stc_message_key) {
-            handleSyncMsgForRoom(result.body);
+            handleSyncServiceMsgForRoom(result.body);
             return;
         }
 

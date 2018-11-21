@@ -506,6 +506,19 @@ class InstallDBController
 //                'authKey' => "",
 //            ],
             [
+                'pluginId' => 107,
+                'name' => "客服小程序",
+                'logo' => "",
+                'sort' => 107,
+                'landingPageUrl' => "index.php?action=miniProgram.customerService.index",
+                'landingPageWithProxy' => 1, //1 表示走site代理
+                'usageType' => Zaly\Proto\Core\PluginUsageType::PluginUsageNone,
+                'loadingType' => Zaly\Proto\Core\PluginLoadingType::PluginLoadingNewPage,
+                'permissionType' => Zaly\Proto\Core\PluginPermissionType::PluginPermissionAdminOnly,
+                'authKey' => "",
+                "management" => "index.php?action=miniProgram.customerService.manage"
+            ],
+            [
                 'pluginId' => 199,  //200+ for user
                 'name' => "用户广场",
                 'logo' => $this->getSiteSquareIcon(),

@@ -120,7 +120,6 @@ function getMsgContentForChatSession(msg)
         case MessageType.MessageText:
             msgContent = msg.hasOwnProperty("text") ? msg['text'].body: JSON.parse(msg['content']).body;
             msgContent = msgContent && msgContent.length > 10 ? msgContent.substr(0,10)+"..." : msgContent;
-
             break;
         case MessageType.MessageImage:
             msgContent = "[图片消息]";
@@ -187,6 +186,7 @@ function updateRoomChatSessionContentForMsg(msg, nodes, msgContent) {
 
 function appendOrInsertRoomList(msg, isInsert, showNotification)
 {
+
     if(msg != undefined && msg.hasOwnProperty("type") && msg.type == MessageStatus.MessageEventSyncEnd) {
         return ;
     }
@@ -346,22 +346,18 @@ function handleSetItemError(error)
         console.log("error ==" + error.message);
     }
 }
-enableWebsocketGw = localStorage.getItem(websocketGW);
 
-if(enableWebsocketGw == "false" || enableWebsocketGw == null) {
-    ///1秒 sync
-   setInterval(function (args) {
-       enableWebsocketGw = localStorage.getItem(websocketGW);
-       if(enableWebsocketGw == "false")  {
-           syncMsgForRoom();
-       }
-   }, 1000);
-}
+enableWebsocketGw = localStorage.getItem(websocketGW);
 
 if(enableWebsocketGw == "true") {
     auth();
 } else {
-    syncMsgForRoom();
+    setInterval(function (args) {
+        enableWebsocketGw = localStorage.getItem(websocketGW);
+        if(enableWebsocketGw != "true") {
+            syncMsgForRoom();
+        }
+    }, 1000);
 }
 
 function auth()
@@ -377,7 +373,6 @@ function handleAuth()
 
 function syncMsgForRoom()
 {
-
     if((Date.parse(new Date()) - isPreSyncingMsgTime) > 10000) {
         isSyncingMsg = false;
     }
@@ -444,6 +439,7 @@ function handleSyncMsgForRoom(results)
             }
         }
     }catch (error) {
+        console.log(error);
         isSyncingMsg = false;
     }
 }
@@ -661,7 +657,6 @@ function updateMsgPointer(reqData)
 
 function getMsgFromRoom(chatSessionId)
 {
-
     clearRoomUnreadMsgNum(chatSessionId);
     var msgList = handleMsgForMsgRoom(chatSessionId, undefined);
 
@@ -767,7 +762,6 @@ function msgBoxScrollToBottom()
 function addMsgToChatDialog(chatSessionId, msg)
 {
     msg.status = MessageStatus.MessageStatusSending;
-
 
     setTimeout(function () {
         var msgLoadings = $("[is-display='yes']");
@@ -1162,7 +1156,6 @@ function appendMsgHtmlToChatDialog(msg)
     var groupUserImageClassName = msg.roomType == GROUP_MSG ? "group-user-img group-user-img-"+msg.msgId : "";
     var msgStatus = msg.status ? msg.status : "";
     var userAvatar =  getNotMsgImgUrl(msg.userAvatar);
-
     if(sendBySelf) {
         switch(msgType) {
             case MessageType.MessageText :
@@ -1232,18 +1225,6 @@ function appendMsgHtmlToChatDialog(msg)
                     msgType:msgType,
                     timeServer:msg.timeServer
                 });
-            case MessageType.MessageRecall:
-                var msgContent = "";
-                try{
-                     msgContent = msg["recall"].msgText !== undefined && msg["recall"].msgText != null ? msg["recall"].msgText : "此消息被撤回";
-                }catch (error) {
-                     msgContent = "此消息被撤回";
-                }
-                html = template("tpl-receive-msg-notice", {
-                    msgContent:msgContent,
-                    timeServer:msg.timeServer
-                });
-                break;
             case MessageType.MessageWebNotice:
                 var hrefUrl = getWebMsgHref(msg.msgId, msg.roomType);
                 html = template("tpl-receive-msg-web-notice", {
@@ -1410,21 +1391,14 @@ function appendMsgHtmlToChatDialog(msg)
                     userId :msg.fromUserId,
                     timeServer:msg.timeServer
                 });
-            case MessageType.MessageRecall:
-                var msgContent = msg["recall"].msgText !== undefined && msg["recall"].msgText != null ? msg["recall"].msgText : "此消息被撤回";
-                html = template("tpl-receive-msg-notice", {
-                    msgContent:msgContent,
-                    timeServer:msg.timeServer
-                });
-                break;
         }
     }
 
     if(msgType == MessageType.MessageText) {
         html = handleMsgContentText(html);
     }
-
     var currentChatsessionId = localStorage.getItem(chatSessionIdKey);
+
     if(currentChatsessionId == msg.chatSessionId) {
         $(".right-chatbox[chat-session-id="+msg.chatSessionId+"]").append(html);
     }

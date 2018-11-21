@@ -15,6 +15,7 @@ class Api_Site_LoginController extends \BaseController
     private $pinyin;
     public $siteCookieName = "zaly_site_user";
     private $cookieTimeOut = 2592000;//30天 单位s
+    private $customerServiceKey='DuckChat_CustomerService';
 
     public function rpcRequestClassName()
     {
@@ -83,7 +84,9 @@ class Api_Site_LoginController extends \BaseController
             $response = $this->buildApiSiteLoginResponse($userProfile, $realSessionId);
 
             if ($clientType == \Zaly\Proto\Core\UserClientType::UserClientWeb) {
-               setcookie($this->siteCookieName, $realSessionId, time() + $this->cookieTimeOut, "/", "", false, true);
+                if($thirdPartyKey != $this->customerServiceKey) {
+                    setcookie($this->siteCookieName, $realSessionId, time() + $this->cookieTimeOut, "/", "", false, true);
+                }
             } else {
                 //clearLimitSession
                 $this->clearLimitSession($userProfile['userId'], $userProfile['deviceId']);

@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="./public/css/hint.min.css?_version=<?php echo $versionCode?>">
     <link rel="stylesheet" href="./public/css/zaly_msg.css?_version=<?php echo $versionCode?>" />
     <link rel="stylesheet" media="(max-height: 650px)" href="./public/css/zaly_media.css?_version=<?php echo $versionCode?>" />
+
     <script src="./public/js/jquery.min.js?_version=<?php echo $versionCode?>"></script>
     <script src="./public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
     <script src="./public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
@@ -72,7 +73,7 @@
 
 <script type="text/javascript">
 
-    var siteAddress = $(".siteAddress").val();
+
     requestSiteConfig(ZalyIm);
 
     $(window).resize(function () {
@@ -113,8 +114,8 @@
         }
         return rem;
     }
-    localStorage.setItem(chatTypeKey, DefaultChat);
 
+    localStorage.setItem(chatTypeKey, DefaultChat);
 
 
     history.pushState(null, null, document.URL);
@@ -156,7 +157,6 @@
             var qqUrl = "https://jq.qq.com/?_wv=1027&k=5GBN4lJ";
             window.open(qqUrl);
         });
-
 
     if (window.Notification && Notification.permission !== "granted") {
         Notification.requestPermission().then(function(result) {

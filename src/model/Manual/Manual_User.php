@@ -9,7 +9,25 @@
  * Time: 11:00 AM
  */
 
-class Manual_User extends Manual_Common
+interface User {
+    /**
+     * @param $currentUserId
+     * @param $search
+     * @param int $pageNum
+     * @param int $pageSize
+     * @return mixed
+     */
+    public function search($currentUserId, $search, $pageNum = 1, $pageSize = 200);
+
+    /**
+     * @param $currentUserId
+     * @param array $userIds
+     * @return mixed
+     */
+    public function getProfiles($currentUserId, array $userIds);
+}
+
+class Manual_User extends Manual_Common implements User
 {
 
     /**
