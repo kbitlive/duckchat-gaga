@@ -474,7 +474,7 @@
            "@type":  "type.googleapis.com/site.ApiSiteLoginRequest",
            "preSessionId":preSessionId,
            "loginName":loginName,
-           "isRegister":true,
+           "isRegister":isRegister,
            "thirdPartyKey":thirdPartyKey,
        };
 
@@ -516,7 +516,6 @@
                    loginName = results.body.profile.public['loginName'];
                    nickname  = results.body.profile.public['nickname'];
 
-                   localStorage.setItem(sessionLoginNameKey, loginName);
                    localStorage.setItem(serviceSessionKey, sessionId);
                    localStorage.setItem(tokenKey, token);
                    localStorage.setItem(avatarKey,avatar);

@@ -153,8 +153,6 @@ class Site_Login
                 throw new Exception("get user profile error from third party");
             }
 
-
-            error_log("loginName----------".$loginUserProfile->getLoginName());
             $newLoginName = $thirdPartyLoginKey . "_" . $loginUserProfile->getLoginName();
             //update loginName
             $loginUserProfile->setLoginName($newLoginName);

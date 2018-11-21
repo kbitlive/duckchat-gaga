@@ -187,7 +187,7 @@ function updateRoomChatSessionContentForMsg(msg, nodes, msgContent) {
 
 function appendOrInsertRoomList(msg, isInsert, showNotification)
 {
-    if(localStorage.getItem(chatTypeKey) != DefaultChat) {
+    if(!judgeDefaultChat()) {
         return;
     }
     if(msg != undefined && msg.hasOwnProperty("type") && msg.type == MessageStatus.MessageEventSyncEnd) {
@@ -789,7 +789,6 @@ function sendMsg( chatSessionId, chatSessionType, msgContent, msgType, params)
     var action = "im.cts.message";
     var msgId  = Date.now();
 
-    console.log("sendMsg----token---"+token);
     var message = {};
     message['fromUserId'] = token;
     var msgIdSuffix = "";

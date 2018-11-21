@@ -17,9 +17,7 @@
     <script src="./public/js/jquery.i18n.properties.min.js?_version=<?php echo $versionCode?>"></script>
     <script src="./public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
     <link class="icon" rel="icon" href="./favicon.ico?_version=<?php echo $versionCode?>" type="image/x-icon" />
-    <script type="text/javascript">
-        localStorage.setItem(chatTypeKey, DefaultChat);
-    </script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 </head>
@@ -75,7 +73,7 @@
 
 <script type="text/javascript">
 
-    var siteAddress = $(".siteAddress").val();
+
     requestSiteConfig(ZalyIm);
 
     $(window).resize(function () {
@@ -117,6 +115,7 @@
         return rem;
     }
 
+    localStorage.setItem(chatTypeKey, DefaultChat);
 
 
     history.pushState(null, null, document.URL);
@@ -158,7 +157,6 @@
             var qqUrl = "https://jq.qq.com/?_wv=1027&k=5GBN4lJ";
             window.open(qqUrl);
         });
-
 
     if (window.Notification && Notification.permission !== "granted") {
         Notification.requestPermission().then(function(result) {

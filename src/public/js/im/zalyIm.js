@@ -68,7 +68,7 @@ function handleImSendRequest(action, reqData, callback)
 
         var header = {};
         header[HeaderSessionid] = sessionId;
-        if(sessionId == "" && action !="api.site.config" ) {
+        if((sessionId == "" || sessionId == undefined || sessionId == false) && action !="api.site.config" ) {
             isSyncingMsg = false;
             return;
         }
@@ -121,7 +121,6 @@ function handleImSendRequest(action, reqData, callback)
 
 function handleReceivedImMessage(resp, callback)
 {
-    console.log("json-----"+resp);
 
     try{
         var result = JSON.parse(resp);

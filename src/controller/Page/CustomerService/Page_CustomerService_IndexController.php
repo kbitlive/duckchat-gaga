@@ -42,21 +42,26 @@ class Page_CustomerService_IndexController extends CustomerServiceController
             $loginName = $_POST['loginName'];
             $userInfo = $this->ctx->PassportCustomerServiceTable->getUserByLoginName($loginName, false);
             if($userInfo) {
-                $str = ZalyHelper::generateStrId().'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                $loginName = ZalyHelper::generateStrKey(8, $str);
+                $preSessionId = $this->getPreSessionId($userInfo['userId']);
+                if($preSessionId) {
+                    echo json_encode(['errorCode' => 'success', 'preSessionId' => $preSessionId, 'loginName' => $loginName]);
+                    return;
+                }
+            } else {
+                $userInfo = [
+                    'userId'    => $userId,
+                    'loginName' => $loginName,
+                    'password'  => password_hash($userId, PASSWORD_BCRYPT),
+                    'timeReg'   => ZalyHelper::getMsectime(),
+                ];
+                $this->ctx->PassportCustomerServiceTable->insertUserInfo($userInfo);
+                $preSessionId = $this->getPreSessionId($userId);
+                if($preSessionId) {
+                    echo json_encode(['errorCode' => 'success', 'preSessionId' => $preSessionId, 'loginName' => $loginName]);
+                    return;
+                }
             }
-            $userInfo = [
-                'userId'    => $userId,
-                'loginName' => $loginName,
-                'password'  => password_hash($userId, PASSWORD_BCRYPT),
-                'timeReg'   => ZalyHelper::getMsectime(),
-            ];
-            $this->ctx->PassportCustomerServiceTable->insertUserInfo($userInfo);
-            $preSessionId = $this->getPreSessionId($userId);
-            if($preSessionId) {
-                echo json_encode(['errorCode' => 'success', 'preSessionId' => $preSessionId, 'loginName' => $loginName]);
-                return;
-            }
+
             echo json_encode(['errorCode' => 'failed']);
         }catch (Exception $ex) {
             echo json_encode(['errorCode' => 'failed']);
@@ -72,6 +77,7 @@ class Page_CustomerService_IndexController extends CustomerServiceController
             $userInfo = $this->ctx->PassportCustomerServiceTable->getUserByLoginName($loginName, false);
             if($userInfo) {
                 $flag =  password_verify($userInfo['userId'], $userInfo['password']);
+                error_log("password=====".$userInfo['password']."=====userId=====".$userInfo['userId'].'---flag---'.$flag);
                 if($flag) {
                     $preSessionId = $this->getPreSessionId($userInfo['userId']);
                     if($preSessionId) {

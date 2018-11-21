@@ -136,8 +136,6 @@ function getSelfInfoByClassName()
 {
     if(localStorage.getItem(chatTypeKey) == ServiceChat) {
         token = $('.service_token').attr("data");
-        console.log("getSelfInfoByClassName----token---"+token);
-
         nickname = $(".service_nickname").attr("data");
         loginName=$(".service_loginName").attr("data");
         avatar = $(".service_self_avatar").attr("data");
@@ -243,13 +241,17 @@ function isJudgeSiteMasters(userId)
     if(!judgeDefaultChat()){
         return false;
     }
-    var siteConfigJson = localStorage.getItem("site_config");
-    var siteConfig = JSON.parse(siteConfigJson);
-    var mastersStr = siteConfig.masters;
-    if(mastersStr.indexOf(userId) != -1) {
-        return true;
+    try{
+        var siteConfigJson = localStorage.getItem("site_config");
+        var siteConfig = JSON.parse(siteConfigJson);
+        var mastersStr = siteConfig.masters;
+        if(mastersStr.indexOf(userId) != -1) {
+            return true;
+        }
+        return false;
+    }catch (error) {
+        return false;
     }
-    return false;
 }
 
 
@@ -2864,7 +2866,6 @@ function sendFriendProfileReq(userId, callback)
 
 function handleGetFriendProfile(result)
 {
-
     if(result == undefined) {
         return;
     }
@@ -2923,6 +2924,7 @@ function insertU2Room(jqElement, userId)
 function displayProfile(profileId, profileType)
 {
     var chatSessionId   = localStorage.getItem(chatSessionIdKey);
+
     if(profileId == chatSessionId) {
         displayCurrentProfile();
         return;
@@ -2932,6 +2934,7 @@ function displayProfile(profileId, profileType)
 
 function updateInfo(profileId, profileType)
 {
+
     var name;
     var mute;
     if(profileType == U2_MSG) {
@@ -3004,60 +3007,64 @@ function displayCurrentProfile()
         var mute = localStorage.getItem(muteKey);
 
         if(chatSessionType == U2_MSG) {
-            $(".group-profile-desc")[0].style.visibility = "hidden";
-            $(".user-profile-desc")[0].style.visibility = "visible";
-            $(".user-profile-desc")[0].style.width = "100%";
-            $(".invite_people")[0].style.visibility="hidden";
-            $(".add_friend")[0].style.display="inline";
-            $(".user-image-for-add").addClass("info-avatar-"+chatSessionId);
+            try{
+                $(".group-profile-desc")[0].style.visibility = "hidden";
+                $(".user-profile-desc")[0].style.visibility = "visible";
+                $(".user-profile-desc")[0].style.width = "100%";
+                $(".invite_people")[0].style.visibility="hidden";
+                $(".add_friend")[0].style.display="inline";
+                $(".user-image-for-add").addClass("info-avatar-"+chatSessionId);
 
-            var friendProfile = getFriendProfile(chatSessionId, false, handleGetFriendProfile);
+                var friendProfile = getFriendProfile(chatSessionId, false, handleGetFriendProfile);
 
-            if(friendProfile) {
-                var trueNickname = friendProfile.nickname;
-                var nickname = template("tpl-string", {
-                    string : trueNickname
-                });
-                $(".nickname_"+chatSessionId).html(nickname);
+                if(friendProfile) {
+                    var trueNickname = friendProfile.nickname;
+                    var nickname = template("tpl-string", {
+                        string : trueNickname
+                    });
+                    $(".nickname_"+chatSessionId).html(nickname);
 
-                $(".chatsession-title").html(nickname);
+                    $(".chatsession-title").html(nickname);
 
-                var isMaster = isJudgeSiteMasters(chatSessionId);
+                    var isMaster = isJudgeSiteMasters(chatSessionId);
 
-                var html = template("tpl-friend-profile", {
-                    isMaster:isMaster,
-                    nickname:trueNickname,
-                    loginName:friendProfile.loginName,
-                });
-                $(".user-desc-body").html(html);
-            } else {
-                $(".chatsession-title").html("");
-                $(".user-desc-body").html("");
-            }
+                    var html = template("tpl-friend-profile", {
+                        isMaster:isMaster,
+                        nickname:trueNickname,
+                        loginName:friendProfile.loginName,
+                    });
+                    $(".user-desc-body").html(html);
+                } else {
+                    $(".chatsession-title").html("");
+                    $(".user-desc-body").html("");
+                }
 
-            $(".chat_session_id_"+chatSessionId).addClass("chatsession-row-active");
-            var relationKey = friendRelationKey + chatSessionId;
-            var relation = localStorage.getItem(relationKey) ;
-            if(relation == FriendRelation.FriendRelationFollow) {
-                $(".delete-friend")[0].style.display = "flex";
-                $(".add-friend")[0].style.display = "none";
-                $(".add_friend")[0].style.display = "none";
-                $(".edit-remark")[0].style.display = "flex";
-                $(".mute-friend")[0].style.display = "flex";
-            } else {
-                $(".delete-friend")[0].style.display = "none";
-                $(".add-friend")[0].style.display = "flex";
-                $(".edit-remark")[0].style.display = "none";
-                $(".mute-friend")[0].style.display = "none";
-                $(".add_friend")[0].style.display = "inline";
-            }
+                $(".chat_session_id_"+chatSessionId).addClass("chatsession-row-active");
+                var relationKey = friendRelationKey + chatSessionId;
+                var relation = localStorage.getItem(relationKey) ;
+                if(relation == FriendRelation.FriendRelationFollow) {
+                    $(".delete-friend")[0].style.display = "flex";
+                    $(".add-friend")[0].style.display = "none";
+                    $(".add_friend")[0].style.display = "none";
+                    $(".edit-remark")[0].style.display = "flex";
+                    $(".mute-friend")[0].style.display = "flex";
+                } else {
+                    $(".delete-friend")[0].style.display = "none";
+                    $(".add-friend")[0].style.display = "flex";
+                    $(".edit-remark")[0].style.display = "none";
+                    $(".mute-friend")[0].style.display = "none";
+                    $(".add_friend")[0].style.display = "inline";
+                }
 
-            if(mute == 1) {
-                $(".friend_mute").attr("src", "../../public/img/msg/icon_switch_on.png");
-                $(".friend_mute").attr("is_on", "on");
-            } else {
-                $(".friend_mute").attr("src", "../../public/img/msg/icon_switch_off.png");
-                $(".friend_mute").attr("is_on", "off");
+                if(mute == 1) {
+                    $(".friend_mute").attr("src", "../../public/img/msg/icon_switch_on.png");
+                    $(".friend_mute").attr("is_on", "on");
+                } else {
+                    $(".friend_mute").attr("src", "../../public/img/msg/icon_switch_off.png");
+                    $(".friend_mute").attr("is_on", "off");
+                }
+            }catch (error) {
+
             }
 
         } else if(chatSessionType == GROUP_MSG ) {
@@ -3182,7 +3189,11 @@ function displayCurrentProfile()
             }
 
         }
-        $("."+chatSessionId).addClass("chatsession-row-active");
+        try{
+            $("."+chatSessionId).addClass("chatsession-row-active");
+        }catch (error) {
+
+        }
         updateInfo(chatSessionId, chatSessionType);
         displayRightPage(DISPLAY_CHAT);
     }catch (error){
@@ -4110,10 +4121,18 @@ function handleMsgRelation(jqElement, chatSessionId)
 function judgeDefaultChat()
 {
     var chatType = localStorage.getItem(chatTypeKey);
-    if(chatType != DefaultChat) {
+    if(chatType != DefaultChat && chatType != null) {
         return false;
     }
     return true;
+}
+
+function judgeOtherChat() {
+    var chatType = localStorage.getItem(chatTypeKey);
+    if(chatType != DefaultChat) {
+        return true;
+    }
+    return false;
 }
 
 function displayRightPage(displayType)
