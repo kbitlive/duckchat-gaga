@@ -411,12 +411,9 @@
     function createCustomerServiceAccount()
     {
         var operation = isRegister == true ? 'create' : "login";
-        if(operation == 'create' && serviceLoginName.length>12) {
-            serviceLoginName = binLoginName;
-        }
         var requestUrl = "./index.php?action=page.customerService.index";
         var data = {
-            "loginName":serviceLoginName,
+            "loginName":binLoginName,
             "operation" :operation
         }
         ajaxPost(requestUrl, data, handleCreateCustomerServiceAccount);
