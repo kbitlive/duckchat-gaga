@@ -328,7 +328,6 @@
        return hex;
    }
 
-
     function getSelfInfoByClassName()
     {
         serviceToken = $('.service_token').attr("data");
@@ -336,7 +335,6 @@
         serviceLoginName=$(".service_loginName").attr("data");
         serviceAvatar = $(".service_self_avatar").attr("data");
     }
-
 
     var serviceToken = localStorage.getItem(tokenKey);
     if(serviceToken) {
@@ -375,33 +373,20 @@
            $(".chat_dialog_div")[0].style.display = "none";
        }
     });
-    console.log('sessionid----'+sessionId);
-    var chatSessionId = localStorage.getItem(chatSessionIdKey);
 
     function getMsgForCustomer()
     {
-        var chatSessionId = localStorage.getItem(chatSessionIdKey);
-
-        if(chatSessionId == false || chatSessionId == undefined || chatSessionId == null) {
-
-            console.log('getMsgForCustomer---chatSessionId----'+chatSessionId);
-            var requestUrl = "./index.php?action=page.customerService.index";
-            serviceToken = $(".service_token").attr('data');
-            var data = {
-                "customerId":serviceToken,
-                "operation" :'addFriend'
-            }
-            ajaxPost(requestUrl, data, handleAddCustomerService);
-            return;
+        var requestUrl = "./index.php?action=page.customerService.index";
+        serviceToken = $(".service_token").attr('data');
+        var data = {
+            "customerId":serviceToken,
+            "operation" :'addFriend'
         }
-        getStartChat(chatSessionId, 'getMsgForCustomer');
+        ajaxPost(requestUrl, data, handleAddCustomerService);
     }
 
 
     function getStartChat(chatSessionId, type) {
-        console.log('getMsgForCustomer---type----'+type);
-
-        localStorage.setItem(chatTypeKey, ServiceChat);
         getSelfInfoByClassName();
         $(".service_right-chatbox").attr("chat-session-id", chatSessionId);
         hideLoading();
@@ -412,7 +397,6 @@
    function  handleAddCustomerService(result) {
         try{
             hideLoading();
-            console.log('handleAddCustomerService----'+result);
             var result = JSON.parse(result);
             var chatSessionId = result['customerServiceId'];
             localStorage.removeItem(roomKey+chatSessionId);
@@ -426,22 +410,16 @@
 
     function createCustomerServiceAccount()
     {
-        var chatSessionId = localStorage.getItem(chatSessionIdKey);
-        if(chatSessionId == undefined || chatSessionId == null || chatSessionId ==false) {
-            var operation = isRegister == true ? 'create' : "login";
-            if(operation == 'create' && serviceLoginName.length>12) {
-                serviceLoginName = binLoginName;
-            }
-            var requestUrl = "./index.php?action=page.customerService.index";
-            var data = {
-                "loginName":serviceLoginName,
-                "operation" :operation
-            }
-
-            ajaxPost(requestUrl, data, handleCreateCustomerServiceAccount);
-            return;
+        var operation = isRegister == true ? 'create' : "login";
+        if(operation == 'create' && serviceLoginName.length>12) {
+            serviceLoginName = binLoginName;
         }
-        getStartChat(chatSessionId, 'createCustomerServiceAccount');
+        var requestUrl = "./index.php?action=page.customerService.index";
+        var data = {
+            "loginName":serviceLoginName,
+            "operation" :operation
+        }
+        ajaxPost(requestUrl, data, handleCreateCustomerServiceAccount);
     }
 
    function handleCreateCustomerServiceAccount(result)
@@ -504,8 +482,6 @@
                if(results.hasOwnProperty("header") && results.header[HeaderErrorCode] == "success") {
                    var sessionId = results.body['sessionId'];
                    $(".service_session_id").attr("data", sessionId);
-
-                   console.log('sessionid----'+sessionId);
                    serviceToken = results.body.profile.public['userId'];
                    serviceAvatar = results.body.profile.public['avatar'];
                    loginName = results.body.profile.public['loginName'];

@@ -66,7 +66,11 @@ function handleClientReceivedMessage(resp, callback)
                     console.log(error)
                 }
                 if(result.header[HeaderErrorCode] == ErrorSessionCode || result.header[HeaderErrorCode] == ErrorSiteInit) {
-                    // localStorage.clear();
+                    localStorage.removeItem(sessionLoginNameKey);
+                    localStorage.removeItem(serviceSessionKey);
+                    localStorage.removeItem(tokenKey);
+                    localStorage.removeItem(avatarKey);
+                    localStorage.removeItem(nicknameKey);
                     $(".close_chat").click();
                     return ;
                 }
