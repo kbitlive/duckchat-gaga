@@ -129,7 +129,7 @@ class Page_CustomerService_IndexController extends CustomerServiceController
 
     public function getCustomerServiceId()
     {
-        $results = $this->ctx->CustomerServiceTable->getCustomerServiceLists();
+        $results = $this->ctx->CustomerServiceTable->getCustomerService();
         $serviceId = "";
         if($results) {
             $serviceInfo = $results[0];
