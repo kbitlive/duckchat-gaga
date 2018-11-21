@@ -16,7 +16,6 @@ function getRoomList()
 
     var length = roomList.length;
     var currentChatSessionId  = localStorage.getItem(chatSessionIdKey);
-    $(".right-chatbox").attr("chat-session-id", currentChatSessionId);
 
     getMsgFromRoom(currentChatSessionId);
 
@@ -28,6 +27,7 @@ function getRoomList()
             localStorage.setItem(chatSessionIdKey, msg.chatSessionId);
             currentChatSessionId = msg.chatSessionId;
         }
+        $(".right-chatbox").attr("chat-session-id", currentChatSessionId);
         if( msg.chatSessionId == currentChatSessionId) {
             localStorage.setItem(msg.chatSessionId, msg.roomType);
         }
@@ -1253,6 +1253,7 @@ function appendMsgHtmlToChatDialog(msg)
                     linkUrl :linkUrl,
                     userId:msg.fromUserId,
                     timeServer:msg.timeServer,
+                    msgType:msgType,
                 });
                 break;
             case MessageType.MessageRecall:
@@ -1385,7 +1386,8 @@ function appendMsgHtmlToChatDialog(msg)
                     avatar:userAvatar,
                     hrefURL:hrefUrl,
                     linkUrl:linkUrl,
-                    isMaster:isMaster
+                    isMaster:isMaster,
+                    msgType:msgType,
                 });
                 break;
             case MessageType.MessageNotice:

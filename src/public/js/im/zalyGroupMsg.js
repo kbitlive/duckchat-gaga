@@ -4320,9 +4320,10 @@ $(document).bind("contextmenu", ".msg_content_for_click", function(event){
        var sendtime = $(event.target).attr("sendtime");
        var userId = $(event.target).attr("userId");
 
+       var trueTarget = $(event.target)
 
-       var trueTarget = "";
        if(msgId == undefined) {
+           trueTarget = '';
            var findNode = false;
            var targets = $(event.target).parents();
            targets.each(function (index, target) {
@@ -4335,6 +4336,7 @@ $(document).bind("contextmenu", ".msg_content_for_click", function(event){
                }
            });
        }
+
        if(!trueTarget) {
            return false;
        }
