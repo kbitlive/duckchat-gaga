@@ -13,7 +13,13 @@
     <script src="./public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
     <script src="./public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
     <script src="./public/js/fingerprint2.js"></script>
+    <script src="./public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
+    <script src="./public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
+    <script src="./public/js/service/zalyServiceClient.js?_version=<?php echo $versionCode?>"></script>
 
+    <script src="./public/js/im/zalyBaseWs.js?_version=<?php echo $versionCode?>"></script>
+    <script src="./public/js/service/zalyServiceIm.js?_version=<?php echo $versionCode?>"></script>
+    <script src="./public/js/service/zalyService.js"></script>
 
     <style>
         html,body {
@@ -262,7 +268,7 @@
             <img class="send_msg" src="./public/img/service/send.png">
             <div class="chat_bottom_line"></div>
             <div id="msgImage"></div>
-            <textarea class="input-box-text msg_content" placeholder="输入消息…."data-local-placeholder="enterMsgContentPlaceholder"  id="msg_content"></textarea>
+            <textarea class="input-box-text msg_content" onkeydown="sendMsgByKeyDown(event)"  placeholder="输入消息…."data-local-placeholder="enterMsgContentPlaceholder"  id="msg_content"></textarea>
         </div>
     </div>
 </div>
@@ -277,20 +283,9 @@
 <input type="hidden" value='<?php echo $siteAddress;?>' class="siteAddress">
 <?php include(dirname(__DIR__) . '/customerService/template_service.php'); ?>
 
-<script type="text/javascript">
-    localStorage.setItem(chatTypeKey, ServiceChat);
-    chatSessionIdKey = "service_chat_session_id";
-    roomKey = "service_room_";
-</script>
 
-<script src="./public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
-<script src="./public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
-<script src="./public/js/im/zalyClient.js?_version=<?php echo $versionCode?>"></script>
-<script src="./public/js/im/zalyBaseWs.js?_version=<?php echo $versionCode?>"></script>
-<script src="./public/js/im/zalyIm.js?_version=<?php echo $versionCode?>"></script>
-<script src="./public/js/im/zalyGroupMsg.js"></script>
-<script src="./public/js/im/zalyMsg.js"></script>
-<script src="./public/js/service/zalyService.js"></script>
+
+
 
 <script type="text/javascript">
 
@@ -338,6 +333,16 @@
        return hex;
    }
 
+
+    function getSelfInfoByClassName()
+    {
+        token = $('.service_token').attr("data");
+        nickname = $(".service_nickname").attr("data");
+        loginName=$(".service_loginName").attr("data");
+        avatar = $(".service_self_avatar").attr("data");
+    }
+
+
     var token = localStorage.getItem(tokenKey);
     if(token) {
         $(".service_token").attr('data', token);
@@ -362,19 +367,6 @@
     $(".close_chat").on("click", function(){
         $(".close_chat_png").click();
     });
-
-    function getNotMsgImgUrl(avatarImgId) {
-        try{
-            var filePaths = avatarImgId.split('-');
-            var path = "./attachment/"+filePaths[0]+"/"+filePaths[1];
-            if(avatarImgId) {
-                return  path;
-            }
-            return false;
-        }catch (error) {
-            return false;
-        }
-    }
 
     $(".close_chat_png").on("click", function () {
        var type = $(this).attr("type");

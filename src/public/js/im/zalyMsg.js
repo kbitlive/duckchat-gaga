@@ -1223,13 +1223,6 @@ function appendMsgHtmlToChatDialog(msg)
                     msgType:msgType,
                     timeServer:msg.timeServer
                 });
-            case MessageType.MessageRecall:
-                var msgContent = msg["recall"].msgText !== undefined && msg["recall"].msgText != null ? msg["recall"].msgText : "此消息被撤回";
-                html = template("tpl-receive-msg-notice", {
-                    msgContent:msgContent,
-                    timeServer:msg.timeServer
-                });
-                break;
             case MessageType.MessageWebNotice:
                 var hrefUrl = getWebMsgHref(msg.msgId, msg.roomType);
                 html = template("tpl-receive-msg-web-notice", {
@@ -1396,13 +1389,6 @@ function appendMsgHtmlToChatDialog(msg)
                     userId :msg.fromUserId,
                     timeServer:msg.timeServer
                 });
-            case MessageType.MessageRecall:
-                var msgContent = msg["recall"].msgText !== undefined && msg["recall"].msgText != null ? msg["recall"].msgText : "此消息被撤回";
-                html = template("tpl-receive-msg-notice", {
-                    msgContent:msgContent,
-                    timeServer:msg.timeServer
-                });
-                break;
         }
     }
 

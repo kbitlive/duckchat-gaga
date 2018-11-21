@@ -134,21 +134,14 @@ function uploadFile(obj, type)
 
 function getSelfInfoByClassName()
 {
-    if(localStorage.getItem(chatTypeKey) == ServiceChat) {
-        token = $('.service_token').attr("data");
-        nickname = $(".service_nickname").attr("data");
-        loginName=$(".service_loginName").attr("data");
-        avatar = $(".service_self_avatar").attr("data");
-    } else {
-        token = $('.token').attr("data");
-        nickname = $(".nickname").attr("data");
-        loginName=$(".loginName").attr("data");
-        avatar = $(".self_avatar").attr("data");
-        jumpPage = $(".jumpPage").attr("data");
-        jumpRoomType = $(".jumpRoomType").attr("data");
-        jumpRoomId = $(".jumpRoomId").attr("data");
-        jumpRelation = $(".jumpRelation").attr("data");
-    }
+    token = $('.token').attr("data");
+    nickname = $(".nickname").attr("data");
+    loginName=$(".loginName").attr("data");
+    avatar = $(".self_avatar").attr("data");
+    jumpPage = $(".jumpPage").attr("data");
+    jumpRoomType = $(".jumpRoomType").attr("data");
+    jumpRoomId = $(".jumpRoomId").attr("data");
+    jumpRelation = $(".jumpRelation").attr("data");
 }
 
 getSelfInfoByClassName();
@@ -4305,22 +4298,25 @@ document.getElementById("msg_content").addEventListener('paste', function(event)
    }
 });
 
-document.onkeydown=function(e){
+function sendMsgByKeyDown(event)
+{
+
     var isIE = (document.all) ? true : false;
     var key;
     if(isIE) {
         key = window.event.keyCode;
     } else {
-        key = e.which;
+        key = event.which;
     }
     if(key ==8 || key == 46) {
         $("#msgImage").html("");
     }
     if(key == 13) {
         sendMsgBySend();
-        e.preventDefault();
+        event.preventDefault();
     }
-};
+
+}
 
 function sortRoomList(jqElement)
 {

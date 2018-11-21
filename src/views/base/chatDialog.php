@@ -125,7 +125,7 @@
                 <div class="input-box">
                     <div id="msgImage">
                     </div>
-                    <textarea class="input-box-text msg_content" placeholder="输入消息…."data-local-placeholder="enterMsgContentPlaceholder"  id="msg_content"></textarea>
+                    <textarea class="input-box-text msg_content"  onkeydown="sendMsgByKeyDown(event)" placeholder="输入消息…."data-local-placeholder="enterMsgContentPlaceholder"  id="msg_content"></textarea>
 
                     <div class="input-btn">
                         <button class="send_msg" data-local-value="sendTip">发送</button>
