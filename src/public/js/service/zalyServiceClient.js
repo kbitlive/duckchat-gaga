@@ -27,7 +27,7 @@ function handleClientSendRequest(action, reqData, callback)
         header[HeaderUserAgent] = navigator.userAgent;
         header[HeaderUserAgent] = navigator.userAgent;
         var packageId = localStorage.getItem(PACKAGE_ID);
-        
+
         var transportData = {
             "action" : action,
             "body": body,

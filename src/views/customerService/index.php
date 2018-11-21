@@ -94,6 +94,8 @@
             bottom:0px;
             margin:0 auto ;
             display: none;
+            border:1px solid #cccc;
+
         }
         .chat_title {
             width:320px;
