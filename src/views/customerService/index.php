@@ -9,18 +9,6 @@
 <!--    <link rel=stylesheet href="../../public/css/zaly_msg.css" />-->
     <link rel=stylesheet href="../../public/css/loading.css" />
 
-    <script type="text/javascript" src="./public/js/jquery.min.js"></script>
-    <script src="./public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
-    <script src="./public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
-    <script src="./public/js/fingerprint2.js"></script>
-    <script src="./public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
-    <script src="./public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
-    <script src="./public/js/service/zalyServiceClient.js?_version=<?php echo $versionCode?>"></script>
-
-    <script src="./public/js/im/zalyBaseWs.js?_version=<?php echo $versionCode?>"></script>
-    <script src="./public/js/service/zalyServiceIm.js?_version=<?php echo $versionCode?>"></script>
-    <script src="./public/js/service/zalyService.js"></script>
-
     <style>
         html,body {
             height:100%;
@@ -249,6 +237,14 @@
             bottom:0;
             right:1rem;
         }
+        .warning_tip {
+            height:20px;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            display: none;
+            background: #f4f4f6;
+        }
 
     </style>
 </head>
@@ -263,6 +259,7 @@
     </div>
     <div class="chat_dialog_div">
         <div class="chat_title"><?php echo $chatTitle; ?><img src="./public/img/service/close.png" class="close_chat_png" type="hide"/></div>
+        <div class="warning_tip">当前无在线客服,请稍候再试</div>
         <div class="service_right-chatbox">
         </div>
         <div class="chat_line"></div>
@@ -284,6 +281,18 @@
 <input type="hidden" data='' class="service_session_id">
 <input type="hidden" value='<?php echo $siteAddress;?>' class="siteAddress">
 <?php include(dirname(__DIR__) . '/customerService/template_service.php'); ?>
+
+<script type="text/javascript" src="./public/js/jquery.min.js"></script>
+<script src="./public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
+<script src="./public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
+<script src="./public/js/fingerprint2.js"></script>
+<script src="./public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
+<script src="./public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
+<script src="./public/js/service/zalyServiceClient.js?_version=<?php echo $versionCode?>"></script>
+
+<script src="./public/js/im/zalyBaseWs.js?_version=<?php echo $versionCode?>"></script>
+<script src="./public/js/service/zalyServiceIm.js?_version=<?php echo $versionCode?>"></script>
+<script src="./public/js/service/zalyService.js"></script>
 
 </body>
 </html>
@@ -410,6 +419,9 @@
             hideLoading();
             var result = JSON.parse(result);
             var chatSessionId = result['customerServiceId'];
+            if(chatSessionId == "") {
+                $(".warning_tip")[0].style.display = "flex";
+            }
             localStorage.removeItem(roomKey+chatSessionId);
             localStorage.setItem(chatSessionIdKey, chatSessionId);
             localStorage.setItem(chatSessionId, U2_MSG);

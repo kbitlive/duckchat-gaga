@@ -35,7 +35,7 @@ class MiniProgram_CustomerService_IndexController extends MiniProgram_BaseContro
         $tag = __CLASS__ . "-" . __FUNCTION__;
         $url = ZalyHelper::getRequestAddressPath().'/?action=page.customerService.index';
         $customerServiceCode = <<<CODE
-<div style="width:380px;position: absolute; top:0px; bottom:0px; right:0px;margin:auto;z-index:10000;">
+<div style="width:380px;position: fixed; top:0; bottom:0;right:0px;z-index:9000;">
     <iframe src="$url" frameborder="no" height="100%" width="100%">
 </div>
 CODE;
