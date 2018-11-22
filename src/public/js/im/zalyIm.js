@@ -26,12 +26,16 @@ function websocketIm(transportDataJson, callback)
     };
 
     wsImObj.onclose = function(evt) {
+        console.log(wsImObj.readyState+" wsImObj onclose  reConnectWs");
         reConnectWs()
     };
     wsImObj.onerror = function (evt) {
+        console.log(wsImObj.readyState+" wsImObj onerror  reConnectWs");
         reConnectWs()
     };
 }
+var websocketIntervalId = false;
+
 
 function createWsConnect()
 {
@@ -42,12 +46,19 @@ function createWsConnect()
 
 function reConnectWs()
 {
-    if(lockReconnect == true) return;
-    lockReconnect = true;
-    setTimeout(function () {
+
+    if(websocketIntervalId != false) {
+        return;
+    }
+
+    websocketIntervalId = setInterval(function () {
+        if(wsImObj.readyState == WS_OPEN ) {
+            clearInterval(websocketIntervalId);
+            return;
+        }
         createWsConnect();
-        lockReconnect = false;
-    }, 1000);
+    },1000);
+
 }
 
 function handleImSendRequest(action, reqData, callback)
@@ -127,6 +138,7 @@ function handleReceivedImMessage(resp, callback)
                     if(wsImObj != "" && wsImObj != undefined) {
                         wsImObj.close();
                     }
+                    console.log("resp-----"+resp);
                     localStorage.clear();
                     window.location.href = "./index.php?action=page.logout";
                     return;

@@ -38,6 +38,11 @@ function ZalyIm(params)
         if(webSocketGwDomain.length > 1) {
             localStorage.setItem(websocketGW, "true");////是否开启
             localStorage.setItem(websocketGWUrl, webSocketGw);
+            try{
+                auth();
+            }catch(error) {
+
+            }
         }
     }
     localStorage.setItem(siteLoginPluginKey, JSON.stringify(loginPluginProfile))
@@ -45,6 +50,7 @@ function ZalyIm(params)
 
     try{
         displayFrontPage();
+
     }catch (error) {
 
     }

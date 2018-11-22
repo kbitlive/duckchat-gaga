@@ -32,6 +32,7 @@ function handleAuth()
     syncMsgForRoom();
 }
 
+isPreSyncingMsgTime = "";
 function syncMsgForRoom()
 {
     if((Date.parse(new Date()) - isPreSyncingMsgTime) > 10000) {

@@ -38,6 +38,12 @@ class Page_CustomerService_IndexController extends CustomerServiceController
             }
             return;
         }
+
+        try{
+            $this->getUserIdByServiceCookie();
+        }catch (Exception $ex) {
+        }
+
         $params['chatTitle'] = isset($setting[MiniProgram_CustomerService_ConfigController::CHAT_TITLE]) ?$setting[MiniProgram_CustomerService_ConfigController::CHAT_TITLE] : $this->defaltChatTitle;
         $params['thirdLoginKey'] = $this->thirdLoginKey;
         echo $this->display("customerService_index", $params);
@@ -48,27 +54,18 @@ class Page_CustomerService_IndexController extends CustomerServiceController
     {
         try{
             $userId = ZalyHelper::generateStrId();
-            $loginName = $_POST['loginName'];
-            $userInfo = $this->ctx->PassportCustomerServiceTable->getUserByLoginName($loginName, false);
-            if($userInfo) {
-                $preSessionId = $this->getPreSessionId($userInfo['userId']);
-                if($preSessionId) {
-                    echo json_encode(['errorCode' => 'success', 'preSessionId' => $preSessionId, 'loginName' => $loginName]);
-                    return;
-                }
-            } else {
-                $userInfo = [
-                    'userId'    => $userId,
-                    'loginName' => $loginName,
-                    'password'  => password_hash($userId, PASSWORD_BCRYPT),
-                    'timeReg'   => ZalyHelper::getMsectime(),
-                ];
-                $this->ctx->PassportCustomerServiceTable->insertUserInfo($userInfo);
-                $preSessionId = $this->getPreSessionId($userId);
-                if($preSessionId) {
-                    echo json_encode(['errorCode' => 'success', 'preSessionId' => $preSessionId, 'loginName' => $loginName]);
-                    return;
-                }
+            $loginName =  ZalyHelper::generateStrId();
+            $userInfo  = [
+                'userId'    => $userId,
+                'loginName' => $loginName,
+                'password'  => password_hash($userId, PASSWORD_BCRYPT),
+                'timeReg'   => ZalyHelper::getMsectime(),
+            ];
+            $this->ctx->PassportCustomerServiceTable->insertUserInfo($userInfo);
+            $preSessionId = $this->getPreSessionId($userId);
+            if($preSessionId) {
+                echo json_encode(['errorCode' => 'success', 'preSessionId' => $preSessionId, 'loginName' => $loginName]);
+                return;
             }
 
             echo json_encode(['errorCode' => 'failed']);
@@ -82,21 +79,12 @@ class Page_CustomerService_IndexController extends CustomerServiceController
         $tag = __CLASS__.'->'.__FUNCTION__;
 
         try{
-            $loginName = $_POST['loginName'];
-            $userInfo = $this->ctx->PassportCustomerServiceTable->getUserByLoginName($loginName, false);
-            if($userInfo) {
-                $flag =  password_verify($userInfo['userId'], $userInfo['password']);
-                if($flag) {
-                    $preSessionId = $this->getPreSessionId($userInfo['userId']);
-                    if($preSessionId) {
-                        echo json_encode(['errorCode' => 'success', 'preSessionId' => $preSessionId, 'loginName' => $loginName]);
-                        return;
-                    }
-                    echo json_encode(['errorCode' => 'failed']);
-                    return;
-                }
+            $this->getUserIdByServiceCookie();
+            if(!$this->userId) {
+                return $this->createCustomerAccount();
             }
-            $this->createCustomerAccount();
+            echo json_encode(['errorCode' => 'success', 'userId' => $this->userId, 'sessionId' => $this->sessionId]);
+            return;
         }catch (Exception $ex) {
             $this->ctx->getLogger()->error($tag, $ex);
             echo json_encode(['errorCode' => 'failed']);

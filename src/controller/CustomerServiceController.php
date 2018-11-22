@@ -20,7 +20,7 @@ abstract  class CustomerServiceController extends \Wpf_Controller
 
     ];
 
-    public $siteCookieName = "zaly_site_user";
+    public $siteCookieName = "duckchat_service_cookie";
     public $language = "";
     private $cookieTimeOut = 2592000;//30天 单位s
 
@@ -49,13 +49,7 @@ abstract  class CustomerServiceController extends \Wpf_Controller
         $tag = __CLASS__ . "-" . __FUNCTION__;
         try {
             parent::doIndex();
-
-            $action = isset($_GET['action']) ? $_GET['action'] : "";
-
             $this->getAndSetClientLang();
-
-//                $this->getUserIdByCookie();
-
             $this->index();
         } catch (Exception $ex) {
             $this->ctx->Wpf_Logger->error($tag, "error msg =" . $ex->getMessage());
@@ -75,21 +69,18 @@ abstract  class CustomerServiceController extends \Wpf_Controller
     }
 
 
-    public function getUserIdByCookie()
+    public function getUserIdByServiceCookie()
     {
         $tag = __CLASS__ . "-" . __FUNCTION__;
         try {
-            $this->checkUserCookie();
+            $this->checkUserServiceCookie();
         } catch (Exception $ex) {
             $this->ctx->Wpf_Logger->error($tag, "error msg =" . $ex->getMessage());
-            $this->setLogout();
         }
     }
 
-    public function checkUserCookie()
+    public function checkUserServiceCookie()
     {
-        $tag = __CLASS__ . "-" . __FUNCTION__;
-
         $this->sessionId = isset($_COOKIE[$this->siteCookieName]) ? $_COOKIE[$this->siteCookieName] : "";
         if (!$this->sessionId) {
             throw new Exception("cookie is not found");
@@ -117,30 +108,6 @@ abstract  class CustomerServiceController extends \Wpf_Controller
 
     }
 
-    protected function checkUserToken($token)
-    {
-        $this->sessionInfo = $this->ctx->SiteSessionTable->getSessionInfoBySessionId($token);
-        if (!$this->sessionInfo) {
-            throw new Exception("session is not ok");
-        }
-        $timeActive = $this->sessionInfo['timeActive'];
-
-        $nowTime = $this->ctx->ZalyHelper->getMsectime();
-
-        if (($nowTime - $timeActive) > $this->sessionIdTimeOut * 24 * 365) {
-            throw new Exception("session expired");
-        }
-
-        $this->userInfo = $this->ctx->SiteUserTable->getUserByUserId($this->sessionInfo['userId']);
-        if (!$this->userInfo) {
-            throw new Exception("user is not ok");
-        }
-        setcookie($this->siteCookieName, $token, time() + $this->cookieTimeOut, "/", "", false, true);
-        $this->sessionId = $this->sessionInfo['sessionId'];
-        $this->userId = $this->userInfo['userId'];
-    }
-
-
     public function setTransDataHeaders($key, $val)
     {
         $key = "_{$key}";
@@ -161,8 +128,8 @@ abstract  class CustomerServiceController extends \Wpf_Controller
             $siteName = "";
         }
         // 自己实现实现一下这个方法，加载view目录下的文件
-        $params['session_id'] = $this->sessionId;
-        $params['user_id'] = $this->userId;
+        $params['sessionId'] = $this->sessionId;
+        $params['userId'] = $this->userId;
         $params['versionCode'] = ZalyConfig::getConfig("siteVersionCode");
         $params['siteName'] = $siteName;
         $params['siteAddress'] = ZalyHelper::getRequestAddressPath();

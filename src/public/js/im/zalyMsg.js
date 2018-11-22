@@ -348,6 +348,7 @@ function handleSetItemError(error)
 }
 
 enableWebsocketGw = localStorage.getItem(websocketGW);
+var syncMsgIntervalId = false;
 
 if(enableWebsocketGw == "true") {
     auth();
@@ -507,18 +508,22 @@ function handleSyncMsg(msg)
 
 function handleMsgStatusResult(msgId, msgStatus)
 {
-    var msgIdInChatSession = msgIdInChatSessionKey + msgId;
-    var chatSessionId = sessionStorage.getItem(msgIdInChatSession);
-    if(msgStatus == MessageStatus.MessageStatusFailed) {
-        $(".msg_status_failed_"+msgId)[0].style.display = "flex";
-        $(".msg_status_loading_"+msgId)[0].style.display = "none";
-        $(".msg_status_loading_"+msgId).attr("is-display", "none");
-        updateMsgStatus(msgId, chatSessionId, MessageStatus.MessageStatusFailed);
-    } else {
-        $(".msg_status_loading_"+msgId)[0].style.display = "none";
-        $(".msg_status_loading_"+msgId).attr("is-display", "none");
+    try{
+        var msgIdInChatSession = msgIdInChatSessionKey + msgId;
+        var chatSessionId = sessionStorage.getItem(msgIdInChatSession);
+        if(msgStatus == MessageStatus.MessageStatusFailed) {
+            $(".msg_status_failed_"+msgId)[0].style.display = "flex";
+            $(".msg_status_loading_"+msgId)[0].style.display = "none";
+            $(".msg_status_loading_"+msgId).attr("is-display", "none");
+            updateMsgStatus(msgId, chatSessionId, MessageStatus.MessageStatusFailed);
+        } else {
+            $(".msg_status_loading_"+msgId)[0].style.display = "none";
+            $(".msg_status_loading_"+msgId).attr("is-display", "none");
+        }
+        sessionStorage.removeItem(msgIdInChatSession);
+    }catch (error) {
+
     }
-    sessionStorage.removeItem(msgIdInChatSession);
 }
 
 function setRoomMsgUnreadNum(chatSessionId)

@@ -340,18 +340,17 @@
 
 
 <input type="hidden" value='<?php echo $thirdLoginKey;?>' class="thirdLoginKey">
-<input type="hidden" data='' class="service_token">
+<input type="hidden" data='<?php echo $userId;?>' class="service_token">
 <input type="hidden" data='' class="service_self_avatar">
 <input type="hidden" data='' class="service_loginName">
 <input type="hidden" data='' class="service_nickname">
-<input type="hidden" data='' class="service_session_id">
+<input type="hidden" data='<?php echo $sessionId;?>' class="service_session_id">
 <input type="hidden" value='<?php echo $siteAddress;?>' class="siteAddress">
 <?php include(dirname(__DIR__) . '/customerService/template_service.php'); ?>
 
-<script type="text/javascript" src="./public/js/jquery.min.js"></script>
+<script src="./public/js/jquery.min.js"></script>
 <script src="./public/js/im/zalyKey.js?_version=<?php echo $versionCode?>"></script>
 <script src="./public/js/template-web.js?_version=<?php echo $versionCode?>"></script>
-<script src="./public/js/fingerprint2.js"></script>
 <script src="./public/js/zalyjsHelper.js?_version=<?php echo $versionCode?>"></script>
 <script src="./public/js/im/zalyAction.js?_version=<?php echo $versionCode?>"></script>
 <script src="./public/js/service/zalyServiceClient.js?_version=<?php echo $versionCode?>"></script>
@@ -366,77 +365,22 @@
 
 <script type="text/javascript">
 
-    var serviceSessionKey = "serviceSessionKey";
-    var tokenKey    = "tokenKey";
-    var avatarKey   = 'avatarKey';
-    var nicknameKey = "nicknameKey";
-    var fingerPrintVal = "";
-    var sessionLoginNameKey = "sessionLoginName";
+    var serviceToken = $(".service_token").attr('data');
+    var serviceSessionId =  $(".service_session_id").attr("data");
+    var serviceAvatar = $(".service_avatar").attr("data");
+    var serviceNickname = $(".service_nickname").attr("data");
+    var serviceLoginName = $(".service_loginName").attr("data");
     var thirdPartyKey  = $(".thirdLoginKey").val();
-
-    Fingerprint2.get({
-        preprocessor: function(key, value) {
-            if (key == "canvas") {
-                fingerPrintVal = value;
-            }
-        }
-    },function(components) {
-        // user_agent component will contain string processed with our function. For example: Windows Chrome
-    });
-    // var b64 = fingerPrintVal.toDataURL().replace("data:image/png;base64,","");
-    var fingerPrintValBase64 = fingerPrintVal[1].replace("canvas fp:data:image/png;base64,", "");
-    var bin = atob(fingerPrintValBase64);
-    var loginName = bin2hex(bin.slice(-16,-10));
-    var binLoginName = loginName;
-
-    var sessionLoginName = localStorage.getItem(sessionLoginNameKey);
     var isRegister = false;
-
-    if(sessionLoginName == false || sessionLoginName == undefined || sessionLoginName == null) {
-        localStorage.setItem(sessionLoginNameKey, loginName);
-        serviceLoginName = loginName;
-        isRegister = true;
-    } else {
-        serviceLoginName = sessionLoginName;
-    }
-
-    function bin2hex (bin) {
-        var i = 0, l = bin.length, chr, hex = '';
-        for (i; i < l; ++i) {
-            chr = bin.charCodeAt(i).toString(16);
-            hex += chr.length < 2 ? '0' + chr : chr
-        }
-        return hex;
-    }
 
     function getSelfInfoByClassName()
     {
-        serviceToken = $('.service_token').attr("data");
+        serviceToken    = $('.service_token').attr("data");
         serviceNickname = $(".service_nickname").attr("data");
-        serviceLoginName=$(".service_loginName").attr("data");
+        serviceLoginName = $(".service_loginName").attr("data");
         serviceAvatar = $(".service_self_avatar").attr("data");
+        serviceSessionId =  $(".service_session_id").attr("data");
     }
-
-    var serviceToken = localStorage.getItem(tokenKey);
-    if(serviceToken) {
-        $(".service_token").attr('data', serviceToken);
-    }
-
-    var sessionId = localStorage.getItem(serviceSessionKey);
-
-    if(sessionId) {
-        $(".service_session_id").attr("data", sessionId);
-    }
-
-    var serviceAvatar = localStorage.getItem(avatarKey);
-
-    if(serviceAvatar) {
-        $(".service_avatar").attr("data", serviceAvatar);
-    }
-    var serviceNickname = serviceLoginName;
-    $(".service_loginName").attr("data", serviceLoginName );
-    $(".service_nickname").attr("data", serviceNickname );
-
 
     $(document).on("click", ".close_chat", function(){
         displayChatDialogByClick();
@@ -453,7 +397,12 @@
             showLoading($(".chat_dialog_div"));
             $(".close_chat_png").attr("type", "display");
             $(".chat_dialog_div")[0].style.display = "block";
-            createCustomerServiceAccount();
+            if(serviceSessionId == undefined || serviceSessionId =="" || serviceSessionId == "") {
+                createCustomerServiceAccount();
+                return;
+            }
+            getMsgForCustomer();
+            return;
         } else {
             $(".close_chat_png").attr("type", "hide");
             $(".chat_dialog_div")[0].style.display = "none";
@@ -473,6 +422,7 @@
 
 
     function getStartChat(chatSessionId, type) {
+        // console.log("getStartChat--"+type);
         getSelfInfoByClassName();
         $(".service_right-chatbox").attr("chat-session-id", chatSessionId);
         hideLoading();
@@ -487,6 +437,7 @@
             var chatSessionId = result['customerServiceId'];
             if(chatSessionId == "") {
                 $(".warning_tip")[0].style.display = "flex";
+                return;
             }
             localStorage.removeItem(roomKey+chatSessionId);
             localStorage.setItem(chatSessionIdKey, chatSessionId);
@@ -502,7 +453,6 @@
         var operation = isRegister == true ? 'create' : "login";
         var requestUrl = "./index.php?action=page.customerService.index";
         var data = {
-            "loginName":binLoginName,
             "operation" :operation
         }
         serviceAjaxPost(requestUrl, data, handleCreateCustomerServiceAccount);
@@ -512,6 +462,12 @@
     {
         var result = JSON.parse(result);
         if(result['errorCode'] == 'success') {
+            if(result.hasOwnProperty("sessionId") && result['sessionId']) {
+                $(".service_session_id").attr("data", result['sessionId']);
+                $(".service_token").attr("data", result['userId']);
+                getMsgForCustomer();
+                return;
+            }
             zalyjsServiceApiSiteLogin(result['preSessionId'], result['loginName']);
         } else {
             alert("链接失败，请稍候再试");
@@ -567,21 +523,18 @@
                 var results = JSON.parse(http.responseText);
                 if(results.hasOwnProperty("header") && results.header[HeaderErrorCode] == "success") {
                     var sessionId = results.body['sessionId'];
-                    $(".service_session_id").attr("data", sessionId);
                     serviceToken = results.body.profile.public['userId'];
                     serviceAvatar = results.body.profile.public['avatar'];
                     loginName = results.body.profile.public['loginName'];
                     nickname  = results.body.profile.public['nickname'];
 
-                    localStorage.setItem(serviceSessionKey, sessionId);
-                    localStorage.setItem(tokenKey, serviceToken);
-                    localStorage.setItem(avatarKey,serviceAvatar);
-                    localStorage.setItem(nicknameKey, nickname);
+                    setCookie("duckchat_service_cookie", sessionId);
 
                     $(".service_token").attr('data', serviceToken);
                     $(".service_self_avatar").attr("data",serviceAvatar );
                     $(".service_loginName").attr("data", loginName );
                     $(".service_nickname").attr("data", nickname );
+                    $(".service_session_id").attr("data", sessionId);
 
                     getMsgForCustomer();
                 } else {
@@ -593,11 +546,6 @@
     }
 
     function closeChatDialog() {
-        localStorage.removeItem(sessionLoginNameKey);
-        localStorage.removeItem(serviceSessionKey);
-        localStorage.removeItem(tokenKey);
-        localStorage.removeItem(avatarKey);
-        localStorage.removeItem(nicknameKey);
         alert("请稍候再试");
         hideLoading();
     }
