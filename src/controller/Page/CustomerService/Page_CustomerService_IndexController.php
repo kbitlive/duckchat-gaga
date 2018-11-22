@@ -127,11 +127,15 @@ class Page_CustomerService_IndexController extends CustomerServiceController
         $customerId = $_POST['customerId'];
         $tag = __CLASS__.'->'.__FUNCTION__;
         try{
-            $this->ctx->Manual_Friend->addFriend($customerId, $customerServiceId,  $greetings);
+            if($customerServiceId) {
+                $this->ctx->Manual_Friend->addFriend($customerId, $customerServiceId,  $greetings);
+            }
             echo json_encode(['customerServiceId' => $customerServiceId]);
+            return;
         }catch (Exception $ex) {
             $this->ctx->getLogger()->error($tag, $ex);
         }
+        echo json_encode(['customerServiceId' => ""]);
     }
 
     protected function getCustomerServiceSetting()

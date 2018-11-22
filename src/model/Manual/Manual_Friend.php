@@ -19,6 +19,9 @@ class Manual_Friend extends Manual_Common implements Friend
 {
     public function addFriend($userId, $applyUserId, $greetings)
     {
+        if(!$userId || !$applyUserId) {
+            return false;
+        }
         //查询 version
         $relation1 = $this->ctx->SiteUserFriendTable->isFollow($userId, $applyUserId);
 

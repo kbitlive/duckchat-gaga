@@ -682,7 +682,6 @@ $(document).on("click", ".plugin_back", function () {
         $(".plugin-iframe")[0].onload = function() {
             if( onReload == false) {
                 $(".plugin-iframe")[0].contentWindow.self.location.href = $(".plugin-iframe")[0].contentWindow.self.location.href;
-                console.log("plugin---id---"+pluginId);
                 setPluginTitle(pluginId);
                 onReload = true;
             }
