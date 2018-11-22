@@ -399,7 +399,6 @@ notEnableCustomerService
 
         var type = $(".close_chat_png").attr("type");
         if(type == "hide") {
-
             $(".close_chat_png").attr("type", "display");
             $(".chat_dialog_div")[0].style.display = "block";
 
@@ -409,7 +408,9 @@ notEnableCustomerService
             }
             showLoading($(".chat_dialog_div"));
 
-            if(serviceSessionId == undefined || serviceSessionId =="" || serviceSessionId == "") {
+            if(serviceSessionId == undefined || serviceSessionId ==""
+                || serviceToken == "" || serviceToken == undefined
+            ) {
                 createCustomerServiceAccount();
                 return;
             }
