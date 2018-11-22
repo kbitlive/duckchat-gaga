@@ -898,6 +898,10 @@ function setDocumentTitle()
         if(document.hidden == true) {
             isHidden = true;
             var siteTip = localStorage.getItem(newSiteTipKey);
+            var unReadAllNum = localStorage.getItem(roomListMsgUnReadNum);
+            if(Number(unReadAllNum) == 0 || unReadAllNum == undefined || unReadAllNum == false)  {
+                siteTip = "clear";
+            }
 
             if(intervalId == undefined && siteTip != "clear") {
                 intervalId = setInterval(function () {
@@ -2942,7 +2946,6 @@ function updateInfo(profileId, profileType)
             chatSessionName += "...";
         }
     }catch (error) {
-        console.log(error);
     }
 
     var name = template("tpl-string", {
@@ -2952,7 +2955,6 @@ function updateInfo(profileId, profileType)
     try{
         name = name.trim();
     }catch (error) {
-        console.log(error);
     }
 
     $(".nickname_"+profileId).html(name);
@@ -2972,7 +2974,6 @@ function updateInfo(profileId, profileType)
             $(".room-chatsession-mute_"+profileId)[0].style.display = "none";
         }
     }catch (error) {
-        console.log(error);
     }
 }
 

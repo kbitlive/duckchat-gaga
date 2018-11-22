@@ -246,6 +246,72 @@
             background: #f4f4f6;
         }
 
+        .showbox {
+            position: relative;
+            margin-right: 3rem;
+        }
+
+        .loader {
+            position: absolute;
+            bottom:0;
+        }
+
+        .loader:before {
+            content: '';
+            display: block;
+            padding-top: 100%;
+        }
+
+        .circular {
+            animation: rotate 2s linear infinite;
+            height: 2rem;
+            transform-origin: center center;
+            width: 2rem;
+            margin: auto;
+            bottom:0;
+        }
+
+        .path {
+            stroke-dasharray: 1, 200;
+            stroke-dashoffset: 0;
+            animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+            stroke-linecap: round;
+        }
+
+        @keyframes rotate {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes dash {
+            0% {
+                stroke-dasharray: 1, 200;
+                stroke-dashoffset: 0;
+            }
+            50% {
+                stroke-dasharray: 89, 200;
+                stroke-dashoffset: -35px;
+            }
+            100% {
+                stroke-dasharray: 89, 200;
+                stroke-dashoffset: -124px;
+            }
+        }
+        @keyframes color {
+            100%, 0% {
+                stroke: #4C3BB1;
+            }
+            40% {
+                stroke: #4C3BB1;
+            }
+            66% {
+                stroke: #4C3BB1;
+            }
+            80%, 90% {
+                stroke: #4C3BB1;
+            }
+        }
+
     </style>
 </head>
 <body>
