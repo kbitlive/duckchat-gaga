@@ -434,13 +434,11 @@
     function showLocalImage(fileId) {
         var requestUrl = downloadFileUrl + "&fileId=" + fileId + "&returnBase64=0";
         var xhttp = new XMLHttpRequest();
-        console.log("showSiteLogo imageId ==" + fileId);
 
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && (this.status == 200 || this.status == 304)) {
                 var blob = this.response;
                 var src = window.URL.createObjectURL(blob);
-                console.log("showSiteLogo imageId response src=" + src);
                 $("#mini-program-image").attr("src", src);
             }
         };

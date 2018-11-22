@@ -26,12 +26,16 @@ function websocketIm(transportDataJson, callback)
     };
 
     wsImObj.onclose = function(evt) {
+        console.log(wsImObj.readyState+" wsImObj onclose  reConnectWs");
         reConnectWs()
     };
     wsImObj.onerror = function (evt) {
+        console.log(wsImObj.readyState+" wsImObj onerror  reConnectWs");
         reConnectWs()
     };
 }
+var websocketIntervalId = false;
+
 
 function createWsConnect()
 {
@@ -42,12 +46,19 @@ function createWsConnect()
 
 function reConnectWs()
 {
-    if(lockReconnect == true) return;
-    lockReconnect = true;
-    setTimeout(function () {
+
+    if(websocketIntervalId != false) {
+        return;
+    }
+
+    websocketIntervalId = setInterval(function () {
+        if(wsImObj.readyState == WS_OPEN ) {
+            clearInterval(websocketIntervalId);
+            return;
+        }
         createWsConnect();
-        lockReconnect = false;
-    }, 1000);
+    },1000);
+
 }
 
 function handleImSendRequest(action, reqData, callback)
@@ -62,7 +73,6 @@ function handleImSendRequest(action, reqData, callback)
             body[key] = reqData[key];
         }
         var sessionId = $(".session_id").attr("data");
-
         var header = {};
         header[HeaderSessionid] = sessionId;
         header[HeaderHostUrl] = originDomain;
@@ -82,7 +92,6 @@ function handleImSendRequest(action, reqData, callback)
         var transportDataJson = JSON.stringify(transportData);
 
         var enableWebsocketGw = localStorage.getItem(websocketGW);
-
         if(enableWebsocketGw == "true" && wsUrl != null && wsUrl) {
             websocketIm(transportDataJson, callback);
         } else {
@@ -115,6 +124,7 @@ function handleImSendRequest(action, reqData, callback)
 
 function handleReceivedImMessage(resp, callback)
 {
+
     try{
         var result = JSON.parse(resp);
         if(result.action == ZalyAction.im_stc_news) {
@@ -128,6 +138,7 @@ function handleReceivedImMessage(resp, callback)
                     if(wsImObj != "" && wsImObj != undefined) {
                         wsImObj.close();
                     }
+                    console.log("resp-----"+resp);
                     localStorage.clear();
                     window.location.href = "./index.php?action=page.logout";
                     return;

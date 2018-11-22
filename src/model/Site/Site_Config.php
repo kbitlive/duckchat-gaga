@@ -266,10 +266,6 @@ class Site_Config
 
         $siteManagerString = $this->buildRemoveDefaultString($userId, $siteManagerString);
 
-        if (empty($siteManagerString)) {
-            return true;
-        }
-
         return $this->updateConfigValue(SiteConfig::SITE_MANAGERS, $siteManagerString);
     }
 
@@ -280,10 +276,6 @@ class Site_Config
         }
 
         $siteDefaultFriendString = $this->buildRemoveDefaultString($userId, $siteDefaultFriendString);
-
-        if (empty($siteDefaultFriendString)) {
-            return true;
-        }
 
         return $this->updateConfigValue(SiteConfig::SITE_DEFAULT_FRIENDS, $siteDefaultFriendString);
     }
@@ -317,10 +309,6 @@ class Site_Config
         }
 
         $siteGroupString = $this->buildRemoveDefaultString($groupId, $siteGroupString);
-
-        if (empty($siteGroupString)) {
-            return true;
-        }
 
         return $this->updateConfigValue(SiteConfig::SITE_DEFAULT_GROUPS, $siteGroupString);
     }

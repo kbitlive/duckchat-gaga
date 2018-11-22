@@ -164,9 +164,8 @@ body,html {
 .upgrade_process {
     margin-top: 3rem;
     display: flex;
-    justify-content: center;
-    margin-left: 16rem;
     width:47rem;
+    overflow-x: scroll;
 }
 .upgrade_img{
     width:1.3rem;
@@ -177,7 +176,7 @@ body,html {
     height: 0.6rem;
 }
 .margin-right2{
-    margin-right: 2rem;
+    margin-right:2px;
 }
 .upgrade_info {
     height:18.76rem;
@@ -250,8 +249,7 @@ body,html {
     .upgrade_process {
         margin-top: 3rem;
         display: flex;
-        justify-content: center;
-        margin-left: 2rem;
+        margin-left: 2px;
         width: 90%;
     }
     .zaly_site_upgrade {

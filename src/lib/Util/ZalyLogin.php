@@ -35,8 +35,10 @@ class ZalyLogin
         $config = [];
         if (!empty(self::$loginConfig)) {
             foreach (self::$loginConfig as $key => $value) {
-                unset($value['verifyUrl']);
-                $config[$key] = $value;
+                if($value['is_display']) {
+                    unset($value['verifyUrl']);
+                    $config[$key] = $value;
+                }
             }
         }
         return $config;

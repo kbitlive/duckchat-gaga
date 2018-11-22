@@ -40,7 +40,6 @@ function showMsgWebNotification(msg, msgContent)
         icon  =  downloadFileUrl + "&fileId="+msg.avatar+"&returnBase64=0&lang="+languageNum;
     }
 
-
     if(document.hidden && (mute == 0)) {
         if(window.Notification && Notification.permission !== "denied"){
             var notification = new Notification(notification, {
@@ -131,14 +130,21 @@ function uploadFile(obj, type)
     $("#"+obj).click();
 }
 
-token = $('.token').attr("data");
-nickname = $(".nickname").attr("data");
-loginName=$(".loginName").attr("data");
-avatar = $(".self_avatar").attr("data");
-jumpPage = $(".jumpPage").attr("data");
-jumpRoomType = $(".jumpRoomType").attr("data");
-jumpRoomId = $(".jumpRoomId").attr("data");
-jumpRelation = $(".jumpRelation").attr("data");
+
+
+function getSelfInfoByClassName()
+{
+    token = $('.token').attr("data");
+    nickname = $(".nickname").attr("data");
+    loginName=$(".loginName").attr("data");
+    avatar = $(".self_avatar").attr("data");
+    jumpPage = $(".jumpPage").attr("data");
+    jumpRoomType = $(".jumpRoomType").attr("data");
+    jumpRoomId = $(".jumpRoomId").attr("data");
+    jumpRelation = $(".jumpRelation").attr("data");
+}
+
+getSelfInfoByClassName();
 
 function jump()
 {
@@ -179,9 +185,7 @@ function handleGetJumpFriendProfile(results)
 //display unread msg
 function displayRoomListMsgUnReadNum()
 {
-    if(!judgeDefaultChat()){
-        return false;
-    }
+
     var data = $(".l-sb-item-active").attr("data");
     if(data != "chatSession") {
         var unReadAllNum = localStorage.getItem(roomListMsgUnReadNum);
@@ -225,13 +229,17 @@ function displayRoomListMsgUnReadNum()
 
 function isJudgeSiteMasters(userId)
 {
-    var siteConfigJson = localStorage.getItem("site_config");
-    var siteConfig = JSON.parse(siteConfigJson);
-    var mastersStr = siteConfig.masters;
-    if(mastersStr.indexOf(userId) != -1) {
-        return true;
+    try{
+        var siteConfigJson = localStorage.getItem("site_config");
+        var siteConfig = JSON.parse(siteConfigJson);
+        var mastersStr = siteConfig.masters;
+        if(mastersStr.indexOf(userId) != -1) {
+            return true;
+        }
+        return false;
+    }catch (error) {
+        return false;
     }
-    return false;
 }
 
 
@@ -240,6 +248,8 @@ getGroupList(initGroupList);
 
 friendOffset = 0;
 getFriendList(initFriendList);
+
+
 $(document).on("click", ".l-sb-item", function(){
     $(".search-friend-group-lists")[0].style.display="none";
     $(".search_for_group_friend").val("");
@@ -318,9 +328,6 @@ $(document).on("click", ".l-sb-item", function(){
 });
 
 window.onresize = function(){
-    if(!judgeDefaultChat()) {
-        return ;
-    }
     try{
         if ($(".right-head")[0].clientWidth<680) {
             $(".right-body-sidebar").hide();
@@ -675,7 +682,6 @@ $(document).on("click", ".plugin_back", function () {
         $(".plugin-iframe")[0].onload = function() {
             if( onReload == false) {
                 $(".plugin-iframe")[0].contentWindow.self.location.href = $(".plugin-iframe")[0].contentWindow.self.location.href;
-                console.log("plugin---id---"+pluginId);
                 setPluginTitle(pluginId);
                 onReload = true;
             }
@@ -774,22 +780,26 @@ function changeZalySchemeToDuckChat(chatSessionId, type)
 
 function getAddressDomain()
 {
-    var siteConfigJsonStr = localStorage.getItem(siteConfigKey);
-    if(siteConfigJsonStr ) {
-        siteConfig = JSON.parse(siteConfigJsonStr);
-    }
-    serverAddress = siteConfig.serverAddressForApi;
+    try{
+        var siteConfigJsonStr = localStorage.getItem(siteConfigKey);
+        if(siteConfigJsonStr ) {
+            siteConfig = JSON.parse(siteConfigJsonStr);
+        }
+        serverAddress = siteConfig.serverAddressForApi;
 
-    var parser = document.createElement('a');
-    parser.href = serverAddress;
-    var domain = serverAddress;
-    if(parser.protocol == 'zaly:') {
-        var protocol = "duckchat:";
-        var hostname = parser.hostname;
-        var pathname = parser.pathname;
-        domain =  protocol+"//"+hostname+pathname;
+        var parser = document.createElement('a');
+        parser.href = serverAddress;
+        var domain = serverAddress;
+        if(parser.protocol == 'zaly:') {
+            var protocol = "duckchat:";
+            var hostname = parser.hostname;
+            var pathname = parser.pathname;
+            domain =  protocol+"//"+hostname+pathname;
+        }
+        return domain;
+    }catch (error){
+
     }
-    return domain;
 }
 
 function getPluginDuckchatPageUrl(type, x)
@@ -888,6 +898,10 @@ function setDocumentTitle()
         if(document.hidden == true) {
             isHidden = true;
             var siteTip = localStorage.getItem(newSiteTipKey);
+            var unReadAllNum = localStorage.getItem(roomListMsgUnReadNum);
+            if(Number(unReadAllNum) == 0 || unReadAllNum == undefined || unReadAllNum == false)  {
+                siteTip = "clear";
+            }
 
             if(intervalId == undefined && siteTip != "clear") {
                 intervalId = setInterval(function () {
@@ -2426,8 +2440,9 @@ $(document).on("click", ".contact-row-group-profile", function () {
     localStorage.setItem(groupId, GROUP_MSG);
     $(".right-chatbox").attr("chat-session-id", groupId);
 
-    getInitChatPlugin(GROUP_MSG);
     handleClickRowGroupProfile(groupId);
+    getInitChatPlugin(GROUP_MSG);
+
 });
 
 
@@ -2440,7 +2455,7 @@ function handleClickGroupProfile(results)
             handleMsgRelation($(this), groupProfile.id);
         }
     }catch (error) {
-
+        console.log(error)
     }
     handleGetGroupProfile(results);
 
@@ -2656,9 +2671,6 @@ $(document).on("click", ".delete-group", function () {
 // friend operation -- api.friend.list - display apply friend num
 function displayApplyFriendNum()
 {
-    if(!judgeDefaultChat()) {
-        return ;
-    }
     try{
         var friendListNum = localStorage.getItem(applyFriendListNumKey);
         if(friendListNum > 0 && friendListNum != undefined) {
@@ -2834,7 +2846,6 @@ function sendFriendProfileReq(userId, callback)
 
 function handleGetFriendProfile(result)
 {
-
     if(result == undefined) {
         return;
     }
@@ -2893,15 +2904,17 @@ function insertU2Room(jqElement, userId)
 function displayProfile(profileId, profileType)
 {
     var chatSessionId   = localStorage.getItem(chatSessionIdKey);
+    updateInfo(profileId, profileType);
+
     if(profileId == chatSessionId) {
         displayCurrentProfile();
         return;
     }
-   updateInfo(profileId, profileType);
 }
 
 function updateInfo(profileId, profileType)
 {
+
     var name;
     var mute;
     if(profileType == U2_MSG) {
@@ -2942,17 +2955,18 @@ function updateInfo(profileId, profileType)
     try{
         name = name.trim();
     }catch (error) {
-
     }
-
 
     $(".nickname_"+profileId).html(name);
-    if(chatSessionName == "") {
-        chatSessionName = name;
-    }
-    $(".chatsession_nickname_"+profileId).html(chatSessionName);
+
 
     try{
+
+        if(chatSessionName == "") {
+            chatSessionName = name;
+        }
+        $(".chatsession_nickname_"+profileId).html(chatSessionName);
+
         $(".aria-lable-"+profileId).attr("aria-lable", name);
         if(mute>0) {
             $(".room-chatsession-mute_"+profileId)[0].style.display = "block";
@@ -2974,60 +2988,64 @@ function displayCurrentProfile()
         var mute = localStorage.getItem(muteKey);
 
         if(chatSessionType == U2_MSG) {
-            $(".group-profile-desc")[0].style.visibility = "hidden";
-            $(".user-profile-desc")[0].style.visibility = "visible";
-            $(".user-profile-desc")[0].style.width = "100%";
-            $(".invite_people")[0].style.visibility="hidden";
-            $(".add_friend")[0].style.display="inline";
-            $(".user-image-for-add").addClass("info-avatar-"+chatSessionId);
+            try{
+                $(".group-profile-desc")[0].style.visibility = "hidden";
+                $(".user-profile-desc")[0].style.visibility = "visible";
+                $(".user-profile-desc")[0].style.width = "100%";
+                $(".invite_people")[0].style.visibility="hidden";
+                $(".add_friend")[0].style.display="inline";
+                $(".user-image-for-add").addClass("info-avatar-"+chatSessionId);
 
-            var friendProfile = getFriendProfile(chatSessionId, false, handleGetFriendProfile);
+                var friendProfile = getFriendProfile(chatSessionId, false, handleGetFriendProfile);
 
-            if(friendProfile) {
-                var trueNickname = friendProfile.nickname;
-                var nickname = template("tpl-string", {
-                    string : trueNickname
-                });
-                $(".nickname_"+chatSessionId).html(nickname);
+                if(friendProfile) {
+                    var trueNickname = friendProfile.nickname;
+                    var nickname = template("tpl-string", {
+                        string : trueNickname
+                    });
+                    $(".nickname_"+chatSessionId).html(nickname);
 
-                $(".chatsession-title").html(nickname);
+                    $(".chatsession-title").html(nickname);
 
-                var isMaster = isJudgeSiteMasters(chatSessionId);
+                    var isMaster = isJudgeSiteMasters(chatSessionId);
 
-                var html = template("tpl-friend-profile", {
-                    isMaster:isMaster,
-                    nickname:trueNickname,
-                    loginName:friendProfile.loginName,
-                });
-                $(".user-desc-body").html(html);
-            } else {
-                $(".chatsession-title").html("");
-                $(".user-desc-body").html("");
-            }
+                    var html = template("tpl-friend-profile", {
+                        isMaster:isMaster,
+                        nickname:trueNickname,
+                        loginName:friendProfile.loginName,
+                    });
+                    $(".user-desc-body").html(html);
+                } else {
+                    $(".chatsession-title").html("");
+                    $(".user-desc-body").html("");
+                }
 
-            $(".chat_session_id_"+chatSessionId).addClass("chatsession-row-active");
-            var relationKey = friendRelationKey + chatSessionId;
-            var relation = localStorage.getItem(relationKey) ;
-            if(relation == FriendRelation.FriendRelationFollow) {
-                $(".delete-friend")[0].style.display = "flex";
-                $(".add-friend")[0].style.display = "none";
-                $(".add_friend")[0].style.display = "none";
-                $(".edit-remark")[0].style.display = "flex";
-                $(".mute-friend")[0].style.display = "flex";
-            } else {
-                $(".delete-friend")[0].style.display = "none";
-                $(".add-friend")[0].style.display = "flex";
-                $(".edit-remark")[0].style.display = "none";
-                $(".mute-friend")[0].style.display = "none";
-                $(".add_friend")[0].style.display = "inline";
-            }
+                $(".chat_session_id_"+chatSessionId).addClass("chatsession-row-active");
+                var relationKey = friendRelationKey + chatSessionId;
+                var relation = localStorage.getItem(relationKey) ;
+                if(relation == FriendRelation.FriendRelationFollow) {
+                    $(".delete-friend")[0].style.display = "flex";
+                    $(".add-friend")[0].style.display = "none";
+                    $(".add_friend")[0].style.display = "none";
+                    $(".edit-remark")[0].style.display = "flex";
+                    $(".mute-friend")[0].style.display = "flex";
+                } else {
+                    $(".delete-friend")[0].style.display = "none";
+                    $(".add-friend")[0].style.display = "flex";
+                    $(".edit-remark")[0].style.display = "none";
+                    $(".mute-friend")[0].style.display = "none";
+                    $(".add_friend")[0].style.display = "inline";
+                }
 
-            if(mute == 1) {
-                $(".friend_mute").attr("src", "../../public/img/msg/icon_switch_on.png");
-                $(".friend_mute").attr("is_on", "on");
-            } else {
-                $(".friend_mute").attr("src", "../../public/img/msg/icon_switch_off.png");
-                $(".friend_mute").attr("is_on", "off");
+                if(mute == 1) {
+                    $(".friend_mute").attr("src", "../../public/img/msg/icon_switch_on.png");
+                    $(".friend_mute").attr("is_on", "on");
+                } else {
+                    $(".friend_mute").attr("src", "../../public/img/msg/icon_switch_off.png");
+                    $(".friend_mute").attr("is_on", "off");
+                }
+            }catch (error) {
+
             }
 
         } else if(chatSessionType == GROUP_MSG ) {
@@ -3152,8 +3170,11 @@ function displayCurrentProfile()
             }
 
         }
-        $("."+chatSessionId).addClass("chatsession-row-active");
-        updateInfo(chatSessionId, chatSessionType);
+        try{
+            $("."+chatSessionId).addClass("chatsession-row-active");
+        }catch (error) {
+
+        }
         displayRightPage(DISPLAY_CHAT);
     }catch (error){
         // console.log(error.message)
@@ -3373,9 +3394,6 @@ $(document).on("click", ".search-user", function () {
 
 function getFriendApplyList()
 {
-    if(!judgeDefaultChat()) {
-        return ;
-    }
     var action = "api.friend.applyList";
     var reqData = {
         "offset" : 0,
@@ -3385,9 +3403,6 @@ function getFriendApplyList()
 }
 
 $(function () {
-    if(!judgeDefaultChat()) {
-        return ;
-    }
     $(".friend-right-body").scroll(function () {
         var pwLeft = $(".friend-right-body")[0];
         var ch  = pwLeft.clientHeight;
@@ -4055,7 +4070,6 @@ $(document).on("click", ".clear_room_chat", function () {
     var tip = languageNum == UserClientLangZH ?  "将删除聊天记录，确认？" : "Sure?" ;
     if(confirm(tip)) {
         clearRoomMsgFromRoomList(roomId);
-
        try{
            $(".msg-row").each(function (index, target) {
                $(target).remove();
@@ -4080,7 +4094,7 @@ function handleMsgRelation(jqElement, chatSessionId)
 function judgeDefaultChat()
 {
     var chatType = localStorage.getItem(chatTypeKey);
-    if(chatType != DefaultChat) {
+    if(chatType != DefaultChat && chatType != null) {
         return false;
     }
     return true;
@@ -4088,9 +4102,6 @@ function judgeDefaultChat()
 
 function displayRightPage(displayType)
 {
-    if(!judgeDefaultChat()) {
-        return ;
-    }
     try{
         switch (displayType){
             case DISPLAY_HOME:
@@ -4253,22 +4264,25 @@ document.getElementById("msg_content").addEventListener('paste', function(event)
    }
 });
 
-document.onkeydown=function(e){
+function sendMsgByKeyDown(event)
+{
+
     var isIE = (document.all) ? true : false;
     var key;
     if(isIE) {
         key = window.event.keyCode;
     } else {
-        key = e.which;
+        key = event.which;
     }
     if(key ==8 || key == 46) {
         $("#msgImage").html("");
     }
     if(key == 13) {
         sendMsgBySend();
-        e.preventDefault();
+        event.preventDefault();
     }
-};
+
+}
 
 function sortRoomList(jqElement)
 {
@@ -4306,9 +4320,10 @@ $(document).bind("contextmenu", ".msg_content_for_click", function(event){
        var sendtime = $(event.target).attr("sendtime");
        var userId = $(event.target).attr("userId");
 
+       var trueTarget = $(event.target)
 
-       var trueTarget = "";
        if(msgId == undefined) {
+           trueTarget = '';
            var findNode = false;
            var targets = $(event.target).parents();
            targets.each(function (index, target) {
@@ -4321,6 +4336,7 @@ $(document).bind("contextmenu", ".msg_content_for_click", function(event){
                }
            });
        }
+
        if(!trueTarget) {
            return false;
        }

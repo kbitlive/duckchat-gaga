@@ -59,7 +59,9 @@ class SiteUserCustomTable extends BaseTable
     {
         $tag = __CLASS__ . '->' . __FUNCTION__;
         $columns = $this->getOpenColumns();
-
+        if(!$columns) {
+            return false;
+        }
         return $this->queryCustom($columns, $userId, $tag);
     }
 
@@ -68,6 +70,9 @@ class SiteUserCustomTable extends BaseTable
     {
         $tag = __CLASS__ . '->' . __FUNCTION__;
         $columns = $this->getAllColumns();
+        if(!$columns) {
+            return false;
+        }
         return $this->queryCustom($columns, $userId, $tag);
     }
 
@@ -81,7 +86,6 @@ class SiteUserCustomTable extends BaseTable
 
         try {
             $queryColumns = implode(",", $queryColumns);
-
             $sql = "select $queryColumns from $this->table where userId=:userId;";
             $prepare = $this->dbSlave->prepare($sql);
             $this->handlePrepareError($tag, $prepare);

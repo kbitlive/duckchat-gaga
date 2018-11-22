@@ -271,3 +271,35 @@ CREATE TABLE IF NOT EXISTS siteUserCustom(
                       phoneId VARCHAR(20),
                       email VARCHAR(100),
                       addTime BIGINT);
+
+
+CREATE TABLE IF NOT EXISTS passportCustomerService(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                userId VARCHAR(100) NOT NULL,
+                loginName VARCHAR(100) NOT NULL,
+                password VARCHAR(100) NOT NULL,
+                timeReg BIGINT,
+                unique(userId),
+                unique(loginName));
+
+CREATE TABLE IF NOT EXISTS passportCustomerServicePreSession(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                userId VARCHAR(100) NOT NULL,
+                preSessionId VARCHAR(100) NOT NULL,
+                unique(userId));
+
+
+
+CREATE TABLE IF NOT EXISTS siteCustomerService(
+                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                userId VARCHAR(100) NOT NULL,
+                serviceTime BIGINT,
+                unique(userId));
+
+
+CREATE TABLE IF NOT EXISTS siteCustomerServiceSetting(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                serviceKey VARCHAR(100) NOT NULL,
+                serviceValue VARCHAR(100) NOT NULL,
+                 unique(serviceKey));
+

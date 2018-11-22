@@ -64,14 +64,12 @@ function isMobile() {
 }
 
 
-function showWindow(jqElement)
-{
+function showWindow(jqElement) {
     jqElement.css("visibility", "visible");
     $(".wrapper-mask").css("visibility", "visible").append(jqElement);
 }
 
-function removeWindow(jqElement)
-{
+function removeWindow(jqElement) {
     jqElement.remove();
     $(".wrapper-mask").css("visibility", "hidden");
     $("#all-templates").append(jqElement);
@@ -79,59 +77,53 @@ function removeWindow(jqElement)
 
 
 
-function addTemplate(jqElement)
-{
+function addTemplate(jqElement) {
     $("#all-templates").append(jqElement);
 }
 
 
 function showLoading(jeElement) {
     try{
-        var html = "<div class=\"loader\" > <div class=\"circular_div\"> <svg class=\"circular\" viewBox=\"25 25 50 50\"> <circle class=\"path\" cx=\"50\" cy=\"50\" r=\"20\" fill=\"none\" stroke-width=\"2\" stroke-miterlimit=\"10\"/> </svg> </div> </div>";
+        var html = "<div class=\"helper_loader\" > <div class=\"helper_circular_div\"> <svg class=\"helper_mini_circular\" viewBox=\"25 25 50 50\"> <circle class=\"helper_path\" cx=\"50\" cy=\"50\" r=\"20\" fill=\"none\" stroke-width=\"2\" stroke-miterlimit=\"10\"/> </svg> </div> </div>";
         jeElement.append(html);
-        $(".loader")[0].style.display = "flex";
+        $(".helper_loader")[0].style.display = "flex";
     }catch (error) {
         console.log(error)
     }
 }
+getLoadingCss();
 
 function showMiniLoading(jeElement) {
     try{
-        var html = "<div class=\"loader\" > <div class=\"mini_circular_div\"> <svg class=\"mini_circular\" viewBox=\"25 25 50 50\"> <circle class=\"path\" cx=\"50\" cy=\"50\" r=\"20\" fill=\"none\" stroke-width=\"2\" stroke-miterlimit=\"10\"/> </svg> </div> </div>";
+        var html = "<div class=\"helper_loader\" > <div class=\"helper_mini_circular_div\"> <svg class=\"helper_mini_circular\" viewBox=\"25 25 50 50\"> <circle class=\"helper_path\" cx=\"50\" cy=\"50\" r=\"20\" fill=\"none\" stroke-width=\"2\" stroke-miterlimit=\"10\"/> </svg> </div> </div>";
         jeElement.append(html);
-        $(".loader")[0].style.display = "flex";
+        $(".helper_loader")[0].style.display = "flex";
     }catch (error) {
         console.log(error)
     }
 }
 function hideLoading() {
    try{
-       $(".loader").remove();
+       $(".helper_loader").remove();
    }catch (error) {
-       console.log(error)
    }
 }
 
 function getLoadingCss()
 {
-    var cssId = 'loading';  // you could encode the css path itself to generate id..
-    if (!document.getElementById(cssId))
-    {
-        if(siteAddress == undefined) {
-            siteAddress = "../..";
-        }
+    var cssId = 'loadingCss';  // you could encode the css path itself to generate id..
+    if (!document.getElementById(cssId)) {
         var head  = document.getElementsByTagName('head')[0];
         var link  = document.createElement('link');
         link.id   = cssId;
         link.rel  = 'stylesheet';
         link.type = 'text/css';
-        link.href = siteAddress + '/public/css/loading.css';
+        link.href = './public/css/loading.css';
         link.media = 'all';
         head.appendChild(link);
     }
 }
 
-getLoadingCss();
 
 
 function cancelLoadingBySelf()
@@ -203,8 +195,6 @@ function getOsType() {
     }
     return clientType;
 }
-
-
 
 function setCookie(name,value,days) {
     if (days) {

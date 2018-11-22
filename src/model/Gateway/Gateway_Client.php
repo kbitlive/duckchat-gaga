@@ -23,19 +23,22 @@ class Gateway_Client
         $this->ctx = $ctx;
     }
 
-    public function closeSocketByUserId($userId) {
+    public function closeSocketByUserId($userId)
+    {
         $sessionInfo = $this->ctx->SiteSessionTable->getSessionInfoByUserId($userId);
         $this->closeSocket($sessionInfo);
     }
 
 
-    public function closeSocketBySessionId($sessionId) {
+    public function closeSocketBySessionId($sessionId)
+    {
         $sessionInfo = $this->ctx->SiteSessionTable->getSessionInfoBySessionId($sessionId);
         $this->closeSocket($sessionInfo);
     }
 
 
-    public function closeSocket($sessionInfo) {
+    public function closeSocket($sessionInfo)
+    {
         $gatewayURL = $sessionInfo["gatewayURL"];
         $gatewaySocketId = $sessionInfo["gatewaySocketId"];
 
@@ -51,12 +54,14 @@ class Gateway_Client
         return;
     }
 
-    public function sendMessageByUserId($userId, $action, \Google\Protobuf\Internal\Message $request) {
+    public function sendMessageByUserId($userId, $action, \Google\Protobuf\Internal\Message $request)
+    {
         $list = $this->ctx->SiteSessionTable->getAllSessionInfoByUserId($userId);
         $this->sendMessageToMultiSessions($list, $action, $request);
     }
 
-    public function sendMessageByUserIds(array $userIds, $action, \Google\Protobuf\Internal\Message $request) {
+    public function sendMessageByUserIds(array $userIds, $action, \Google\Protobuf\Internal\Message $request)
+    {
         $list = array();
         foreach ($userIds as $userId) {
             $users = $this->ctx->SiteSessionTable->getAllSessionInfoByUserId($userId);
@@ -65,13 +70,15 @@ class Gateway_Client
         $this->sendMessageToMultiSessions($list, $action, $request);
     }
 
-    public function sendMessageBySessionId($sessionId, $action, \Google\Protobuf\Internal\Message $request) {
+    public function sendMessageBySessionId($sessionId, $action, \Google\Protobuf\Internal\Message $request)
+    {
         $sessionInfo = $this->ctx->SiteSessionTable->getSessionInfoBySessionId($sessionId);
-        $this->sendMessage($sessionInfo, $action, $request);
+        $this->sendMessageToMultiSessions([$sessionInfo], $action, $request);
     }
 
-    public function sendMessageToMultiSessions(array $sessionInfos, $action, \Google\Protobuf\Internal\Message $request) {
-        $tag = __CLASS__."-".__FUNCTION__;
+    public function sendMessageToMultiSessions(array $sessionInfos, $action, \Google\Protobuf\Internal\Message $request)
+    {
+        $tag = __CLASS__ . "-" . __FUNCTION__;
 
         $packages = array();
         foreach ($sessionInfos as $sessionInfo) {
@@ -89,9 +96,9 @@ class Gateway_Client
             $packages[$gatewayURL][$bodyFormat][] = $gatewaySocketId;
         }
 
-        try{
+        try {
 
-            foreach($packages as $url => $list) {
+            foreach ($packages as $url => $list) {
                 $gwRequestPackages = array();
                 foreach ($list as $bodyFormat => $socketIds) {
                     $tmpPackage = new \Zaly\Proto\Gateway\GwSocketWritePackage();
@@ -106,12 +113,13 @@ class Gateway_Client
                 // for debug.
             }
 
-        }catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->ctx->Wpf_Logger->error($tag, $ex->getMessage());
         }
     }
 
-    private function buildPackage($bodyFormat, $action, \Google\Protobuf\Internal\Message $request) {
+    private function buildPackage($bodyFormat, $action, \Google\Protobuf\Internal\Message $request)
+    {
         $any = new \Google\Protobuf\Any();
         $any->pack($request);
 
@@ -141,69 +149,74 @@ class Gateway_Client
     }
 
 
+//    public function sendMessage($sessionInfo, $action, \Google\Protobuf\Internal\Message $request)
+//    {
+//        $tag = __CLASS__ . "-" . __FUNCTION__;
+//        try {
+//            $gatewayURL = $sessionInfo["gatewayURL"];
+//            $gatewaySocketId = $sessionInfo["gatewaySocketId"];
+//
+//
+//            $clientSiteType = $sessionInfo["clientSideType"];
+//
+//            $bodyFormat = "json";
+//            if ($clientSiteType == \Zaly\Proto\Core\UserClientType::UserClientMobileApp) {
+//                $bodyFormat = "pb";
+//            }
+//
+//
+//            if ($gatewayURL == "" || $gatewaySocketId == "") {
+//                return;
+//            }
+//            $any = new \Google\Protobuf\Any();
+//            $any->pack($request);
+//
+//            $transportData = new \Zaly\Proto\Core\TransportData();
+//            $transportData->setAction($action);
+//            $transportData->setBody($any);
+//            $transportData->setPackageId(mt_rand(0, 1000000000));
+//
+//            // TODO: Fix header
+//            //$transportData->setHeader();
+//
+//            $dataForWrite = "";
+//            switch ($bodyFormat) {
+//                case "json":
+//                    $dataForWrite = $transportData->serializeToJsonString();
+//                    $dataForWrite = trim($dataForWrite);
+//                    break;
+//                case "pb":
+//                    $dataForWrite = $transportData->serializeToString();
+//                    break;
+//                case "base64pb":
+//                    $dataForWrite = $transportData->serializeToString();
+//                    $dataForWrite = base64_encode($dataForWrite);
+//                    break;
+//                default:
+//                    return;
+//            }
+//
+//            $tmpPackage = new \Zaly\Proto\Gateway\GwSocketWritePackage();
+//            $tmpPackage->setContent($this->buildPackage($bodyFormat, $action, $request));
+//            $tmpPackage->setSocketIds([$gatewaySocketId]);
+//
+//            $gwRequest = new GwSocketWriteRequest();
+//            $gwRequest->setPackages([$tmpPackage]);
+//            $gatewayURL = "http://{$gatewayURL}/gw/socket/write";
+//
+//
+//            $response = $this->curl($gatewayURL, $gwRequest->serializeToString());
+//            $responseProto = new \Zaly\Proto\Gateway\GwSocketWriteResponse();
+//            $responseProto->mergeFromString($response);
+//            $writeLength = $responseProto->getLength();
+//            return;
+//        } catch (Exception $ex) {
+//            $this->ctx->Wpf_Logger->error($tag, $ex->getMessage());
+//        }
+//    }
 
-
-    public function sendMessage($sessionInfo, $action, \Google\Protobuf\Internal\Message $request) {
-        $tag = __CLASS__."-".__FUNCTION__;
-        try{
-            $gatewayURL = $sessionInfo["gatewayURL"];
-            $gatewaySocketId = $sessionInfo["gatewaySocketId"];
-
-
-            $clientSiteType = $sessionInfo["clientSideType"];
-
-            $bodyFormat = "json";
-            if ($clientSiteType == \Zaly\Proto\Core\UserClientType::UserClientMobileApp) {
-                $bodyFormat = "pb";
-            }
-
-
-            if ($gatewayURL == "" || $gatewaySocketId == "") {
-                return;
-            }
-            $any = new \Google\Protobuf\Any();
-            $any->pack($request);
-
-            $transportData = new \Zaly\Proto\Core\TransportData();
-            $transportData->setAction($action);
-            $transportData->setBody($any);
-            $transportData->setPackageId(mt_rand(0, 1000000000));
-
-            // TODO: Fix header
-            //$transportData->setHeader();
-
-            $dataForWrite = "";
-            switch ($bodyFormat) {
-                case "json":
-                    $dataForWrite = $transportData->serializeToJsonString();
-                    $dataForWrite = trim($dataForWrite);
-                    break;
-                case "pb":
-                    $dataForWrite = $transportData->serializeToString();
-                    break;
-                case "base64pb":
-                    $dataForWrite = $transportData->serializeToString();
-                    $dataForWrite = base64_encode($dataForWrite);
-                    break;
-                default:
-                    return;
-            }
-
-            $requestProto = new GwSocketWriteRequest();
-            $requestProto->setSocketId($gatewaySocketId);
-            $requestProto->setContent($dataForWrite);
-            $gatewayURL = "http://{$gatewayURL}/gw/socket/write";
-            $response = $this->curl($gatewayURL, $requestProto->serializeToString());
-            $responseProto = new \Zaly\Proto\Gateway\GwSocketWriteResponse();
-            $responseProto->mergeFromString($response);
-            $writeLength = $responseProto->getLength();
-            return;
-        }catch (Exception $ex) {
-            $this->ctx->Wpf_Logger->error($tag, $ex->getMessage());
-        }
-    }
-
-    private function curl($url, $body) {
+    private function curl($url, $body)
+    {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);

@@ -30,17 +30,17 @@ class Im_Cts_AuthController extends Im_BaseController
      */
     public function doRequest(\Google\Protobuf\Internal\Message $request, TransportData $transportData)
     {
-        $tag = __CLASS__.'-'.__FUNCTION__;
-        try{
+        $tag = __CLASS__ . '-' . __FUNCTION__;
+        try {
             $result = true;
 
             $gatewayHost = !empty($_GET["gw-host"]) ? $_GET["gw-host"] : $_SERVER["REMOTE_ADDR"];
             $gatewayPort = !empty($_GET["gw-port"]) ? $_GET["gw-port"] : "";
             $gatewaySocketId = !empty($_GET['gw-socket-id']) ? $_GET['gw-socket-id'] : "";
 
+            $sessionId = $this->getSessionId($transportData);
             if (!empty($gatewayPort) && !empty($gatewaySocketId)) {
                 $gatewayURL = "{$gatewayHost}:{$gatewayPort}";
-                $sessionId = $this->getSessionId($transportData);
                 $where = ["sessionId" => $sessionId];
                 /**
                  * UserClientMobileApp = 1;
@@ -62,6 +62,7 @@ class Im_Cts_AuthController extends Im_BaseController
             if ($result) {
                 $this->setRpcError($this->defaultErrorCode, "");
                 $this->keepSocket();//keep socket
+                $this->notifySyncNotice($sessionId);
             } else {
                 $errorCode = $this->zalyError->errorSession;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
@@ -70,10 +71,17 @@ class Im_Cts_AuthController extends Im_BaseController
             }
 
             $this->rpcReturn($transportData->getAction(), new $this->classNameForCtsAuthResponse());
-        }catch (Exception $ex) {
-            $this->ctx->Wpf_Logger->error($tag, "error_msg ==" .$ex->getMessage());
+        } catch (Exception $ex) {
+            $this->ctx->Wpf_Logger->error($tag, "error_msg ==" . $ex->getMessage());
+            $this->returnErrorRPC(new $this->classNameForCtsAuthResponse(), $ex);
         }
+
+        return;
     }
 
+    private function notifySyncNotice($sessionId)
+    {
+        $this->ctx->Message_News->tellClientNewsBySession($sessionId);
+    }
 
 }
