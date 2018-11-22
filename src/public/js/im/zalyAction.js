@@ -33,6 +33,7 @@ var ZalyAction = {
     im_cts_sync : "site.ImCtsSyncRequest",
     im_cts_auth : "site.ImCtsAuthRequest",
     im_cts_updatePointer : "site.ImCtsUpdatePointerRequest",
+    im_cts_ping:"site.ImCtsPingRequest",
 
     api_passport_passwordReg : "site.ApiPassportPasswordRegRequest",
     api_passport_passwordLogin : "site.ApiPassportPasswordLoginRequest",
