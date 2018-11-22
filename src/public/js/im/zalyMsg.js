@@ -370,9 +370,29 @@ function auth()
     handleImSendRequest(action, "", handleAuth);
 }
 
+var isPingSendNum = 0;
 function handleAuth()
 {
+    setInterval(function () {
+        if(isPingSendNum == 1) {
+            isPingSendNum = 0;
+            auth();
+            return;
+        }
+        pingFunc();
+    }, 10000);
+
     syncMsgForRoom();
+}
+
+function pingFunc() {
+    isPingSendNum = 1;
+    var action = 'im.cts.ping';
+    handleImSendRequest(action, "", handlePingFunc);
+}
+
+function handlePingFunc() {
+    isPingSendNum = 0;
 }
 
 function syncMsgForRoom()
