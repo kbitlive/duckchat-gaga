@@ -45,6 +45,11 @@
  * @property ZalyHelper ZalyHelper
  * @property SiteUserGifTable SiteUserGifTable
  *
+ * @property PassportCustomerServiceTable PassportCustomerServiceTable
+ * @property PassportCustomerServicePreSessionTable PassportCustomerServicePreSessionTable
+ * @property SiteCustomerServiceTable SiteCustomerServiceTable
+ * @property SiteCustomerServiceSettingTable SiteCustomerServiceSettingTable
+ *
  * @property Pinyin Pinyin
  *
  * @property DuckChat_Client DuckChat_Client
@@ -54,6 +59,7 @@
  * @property DuckChat_Group DuckChat_Group
  * @property Manual_User Manual_User
  * @property Manual_Group Manual_Group
+ * @property Manual_Friend Manual_Friend
  * @property Upgrade_Client Upgrade_Client
  *
  */
@@ -106,7 +112,7 @@ class BaseCtx extends Wpf_Ctx
 
                     $options = array(
                         PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4',
-//                        PDO::ATTR_PERSISTENT => true,
+                        PDO::ATTR_PERSISTENT => true,
                     );
                     try {
                         $this->db = new \PDO($dbDsn, $dbUserName, $dbPwssword, $options);//创建一个pdo对象

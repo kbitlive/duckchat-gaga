@@ -207,6 +207,7 @@ roomListMsgMuteUnReadNumKey = "room_list_msg_mute_unread_num";
 applyFriendListNumKey = "apply_friend_list_num";
 chatTypeKey = "chat_type";
 WidgetChat = "widget_chat";
+ServiceChat = "service_chat";
 DefaultChat = "default_chat";
 MobileChat = "mobile_chat";
 speakerUserIdsKey="speaker_userIds_";

@@ -89,7 +89,7 @@ class PassportPasswordPreSessionTable extends  BaseTable
             $sql = "delete from $this->table where userId=:userId";
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
-            $prepare->bindValue(":usrId", $userId);
+            $prepare->bindValue(":userId", $userId);
             $prepare->execute();
             $this->ctx->Wpf_Logger->writeSqlLog($tag, $sql, $userId, $startTime);
         } catch (Exception $ex) {

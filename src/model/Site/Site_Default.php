@@ -89,7 +89,7 @@ class Site_Default
         $text = ZalyText::$keyDefaultFriendsText;
 
         try {
-            $this->ctx->Message_Client->proxyU2TextMessage($userId, $defaultUserId, $userId, $text);
+            $this->ctx->Message_Client->proxyU2TextMessage($userId, $defaultUserId, $userId, $text, true);
         } catch (Exception $e) {
             $this->ctx->Wpf_Logger->error($tag, $e);
         }

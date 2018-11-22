@@ -149,8 +149,7 @@ class Im_Cts_MessageController extends Im_BaseController
         $hrefUrl = 'duckchat://0.0.0.0/goto?page=addFriend&x=u-' . $toUserId;
 
         //代发一个web消息给from
-        $this->ctx->Message_Client->proxyU2WebNoticeMessage($fromUserId, $toUserId, $fromUserId, $title, $code, $hrefUrl, $height);
-        $this->ctx->Message_News->tellClientNews(false, $fromUserId);
+        $this->ctx->Message_Client->proxyU2WebNoticeMessage($fromUserId, $toUserId, $fromUserId, $title, $code, $hrefUrl, $height, true);
     }
 
     //return if group is not lawful
@@ -161,9 +160,8 @@ class Im_Cts_MessageController extends Im_BaseController
         $this->finish_request();
 
         //proxy group message to u2
-        $this->ctx->Message_Client->proxyGroupAsU2NoticeMessage($fromUserId, $fromUserId, $groupId, $noticeText);
-        //send im.stc.news to client
-        $this->ctx->Message_News->tellClientNews(false, $fromUserId);
+        $this->ctx->Message_Client->proxyGroupAsU2NoticeMessage($fromUserId, $fromUserId, $groupId, $noticeText, true);
+
     }
 
 

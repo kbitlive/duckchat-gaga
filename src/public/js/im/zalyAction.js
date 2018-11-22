@@ -71,9 +71,6 @@ var ZalyAction = {
             if(actionUrl.indexOf("./") != -1) {
                 actionUrl = actionUrl.replace("./", "/");
             }
-            if(siteAddress != undefined) {
-                actionUrl = siteAddress + actionUrl;
-            }
         }
 
         if(actionUrl.indexOf("?") == -1) {
