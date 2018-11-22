@@ -17,7 +17,6 @@ function getRoomList()
     var length = roomList.length;
     var currentChatSessionId  = localStorage.getItem(chatSessionIdKey);
 
-    getMsgFromRoom(currentChatSessionId);
 
     var i;
     for(i=0;i <length; i++) {
@@ -27,12 +26,16 @@ function getRoomList()
             localStorage.setItem(chatSessionIdKey, msg.chatSessionId);
             currentChatSessionId = msg.chatSessionId;
         }
-        $(".right-chatbox").attr("chat-session-id", currentChatSessionId);
         if( msg.chatSessionId == currentChatSessionId) {
             localStorage.setItem(msg.chatSessionId, msg.roomType);
         }
+        $(".right-chatbox").attr("chat-session-id", currentChatSessionId);
+
         appendOrInsertRoomList(msg, false, false);
     }
+
+    getMsgFromRoom(currentChatSessionId);
+
     var roomType = localStorage.getItem(currentChatSessionId);
     getInitChatPlugin(roomType);
     displayCurrentProfile();
