@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>安装</title>
+    <title><?php echo $chatTitle;?></title>
     <!-- Latest compiled and minified CSS -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -337,7 +337,9 @@
         </div>
     </div>
 </div>
+notEnableCustomerService
 
+<input type="hidden" data='<?php echo $enableCustomerService;?>' class="enableCustomerService">
 
 <input type="hidden" value='<?php echo $thirdLoginKey;?>' class="thirdLoginKey">
 <input type="hidden" data='<?php echo $userId;?>' class="service_token">
@@ -370,6 +372,8 @@
     var serviceAvatar = $(".service_avatar").attr("data");
     var serviceNickname = $(".service_nickname").attr("data");
     var serviceLoginName = $(".service_loginName").attr("data");
+    var enableCustomerService = $(".enableCustomerService").attr("data");
+
     var thirdPartyKey  = $(".thirdLoginKey").val();
     var isRegister = false;
 
@@ -392,11 +396,19 @@
 
     function displayChatDialogByClick()
     {
+
         var type = $(".close_chat_png").attr("type");
         if(type == "hide") {
-            showLoading($(".chat_dialog_div"));
+
             $(".close_chat_png").attr("type", "display");
             $(".chat_dialog_div")[0].style.display = "block";
+
+            if(Number(enableCustomerService) != 1) {
+                notEnableCustomerServiceFunc();
+                return;
+            }
+            showLoading($(".chat_dialog_div"));
+
             if(serviceSessionId == undefined || serviceSessionId =="" || serviceSessionId == "") {
                 createCustomerServiceAccount();
                 return;
@@ -436,7 +448,7 @@
             var result = JSON.parse(result);
             var chatSessionId = result['customerServiceId'];
             if(chatSessionId == "") {
-                $(".warning_tip")[0].style.display = "flex";
+                notEnableCustomerServiceFunc();
                 return;
             }
             localStorage.removeItem(roomKey+chatSessionId);
@@ -446,6 +458,14 @@
         }catch (error) {
             closeChatDialog();
         }
+    }
+
+    function notEnableCustomerServiceFunc()
+    {
+        $(".warning_tip")[0].style.display = "flex";
+        $(".msg_content").attr("disabled", "disabled");
+        $(".chat_box")[0].style.backgroundColor = "#f4f4f6";
+        $(".msg_content")[0].style.backgroundColor = "#f4f4f6";
     }
 
     function createCustomerServiceAccount()
@@ -546,7 +566,7 @@
     }
 
     function closeChatDialog() {
-        alert("请稍候再试");
+        // alert("请稍候再试");
         hideLoading();
     }
 

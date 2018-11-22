@@ -18,10 +18,7 @@ class Page_CustomerService_IndexController extends CustomerServiceController
         $method = strtolower($_SERVER['REQUEST_METHOD']);
 
         $setting = $this->getCustomerServiceSetting();
-        if(!isset($setting[MiniProgram_CustomerService_ConfigController::ENABLE_CUSTOMER_SERVICE]) || $setting[MiniProgram_CustomerService_ConfigController::ENABLE_CUSTOMER_SERVICE] != 1) {
-            echo json_encode(['errorCode' => 'failed']);
-            return;
-        }
+
         $greetings = isset($setting[MiniProgram_CustomerService_ConfigController::GREETING]) ?$setting[MiniProgram_CustomerService_ConfigController::GREETING] : $this->defaltGreeting;
         if($method == "post") {
             $operation = $_POST['operation'];
@@ -43,7 +40,10 @@ class Page_CustomerService_IndexController extends CustomerServiceController
             $this->getUserIdByServiceCookie();
         }catch (Exception $ex) {
         }
-
+        $params['enableCustomerService'] = 1;
+        if(!isset($setting[MiniProgram_CustomerService_ConfigController::ENABLE_CUSTOMER_SERVICE]) || $setting[MiniProgram_CustomerService_ConfigController::ENABLE_CUSTOMER_SERVICE] != 1) {
+            $params['enableCustomerService'] = 0;
+        }
         $params['chatTitle'] = isset($setting[MiniProgram_CustomerService_ConfigController::CHAT_TITLE]) ?$setting[MiniProgram_CustomerService_ConfigController::CHAT_TITLE] : $this->defaltChatTitle;
         $params['thirdLoginKey'] = $this->thirdLoginKey;
         echo $this->display("customerService_index", $params);
