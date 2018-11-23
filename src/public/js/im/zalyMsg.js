@@ -372,25 +372,7 @@ function auth()
 
 var isPingSendNum = 0;
 var pingIntervalId = false;
-function handleAuth()
-{
-    console.log('------auth------');
-    pingFunc();
-    if(pingIntervalId != false) {
-        clearInterval(pingIntervalId);
-        pingIntervalId = false;
-    }
-    pingIntervalId = setInterval(function () {
-        if(isPingSendNum > 1) {
-            isPingSendNum = 0;
-            auth();
-            return;
-        }
-        pingFunc();
-    }, 10000);
 
-    syncMsgForRoom();
-}
 
 function pingFunc() {
     console.log('------ping------');
@@ -401,6 +383,30 @@ function pingFunc() {
 
 function handlePingFunc() {
     isPingSendNum = 0;
+}
+
+function handleAuth()
+{
+    try{
+        pingFunc();
+        if(pingIntervalId != false) {
+            clearInterval(pingIntervalId);
+            pingIntervalId = false;
+        }
+        pingIntervalId = setInterval(function () {
+            if(isPingSendNum > 1) {
+                isPingSendNum = 0;
+                auth();
+                return;
+            }
+            pingFunc();
+        }, 10000);
+
+    }catch (error) {
+        console.log(error)
+    }
+    syncMsgForRoom();
+
 }
 
 function syncMsgForRoom()
