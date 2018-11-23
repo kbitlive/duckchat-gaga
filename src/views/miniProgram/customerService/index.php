@@ -80,7 +80,7 @@
         </div>
 
     </div>
-
+<input type="hidden" data="<?php echo $signVerifyKey; ?>" class="signVerifyKey">
 
     <!--  site basic config  -->
     <div class="layout-all-row">
@@ -314,11 +314,12 @@
     $("#enableCustomerService").change(function () {
         var isChecked = $(this).is(':checked');
         var url = "index.php?action=miniProgram.customerService.index";
-
+        var signVerifyKey = $(".signVerifyKey").attr("data");
         var data = {
             "operation" : "update",
             'key': 'enableCustomerService',
             'value': isChecked ? 1 : 0,
+            'signVerifyKey': signVerifyKey
         };
 
         zalyjsCommonAjaxPostJson(url, data, enableCustomerServiceResponse);
@@ -327,18 +328,11 @@
     function enableCustomerServiceResponse(url, data, result) {
         if (result) {
             var res = JSON.parse(result);
-            if (!"success" == res.errCode) {
+            if ("success" != res.errCode) {
                 alert(getLanguage() == 1 ? "操作失败" : "update error");
                 return;
             }
-            if(data.value == 1) {
-                var code = template("tpl-code", {
-                    code:code
-                })
-                $(".service_code_div")[0].style.display = 'block';
-            } else {
-                $(".service_code_div")[0].style.display = 'none';
-            }
+            window.location.reload();
         } else {
             alert(getLanguage() == 1 ? "操作失败" : "update error");
         }

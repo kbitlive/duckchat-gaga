@@ -44,6 +44,12 @@ class Page_CustomerService_IndexController extends CustomerServiceController
         if(!isset($setting[MiniProgram_CustomerService_ConfigController::ENABLE_CUSTOMER_SERVICE]) || $setting[MiniProgram_CustomerService_ConfigController::ENABLE_CUSTOMER_SERVICE] != 1) {
             $params['enableCustomerService'] = 0;
         }
+        $params['signatureError'] = 0;
+        $signature = isset($_GET['signature']) ? $_GET['signature'] : "";
+        if(isset($setting[MiniProgram_CustomerService_ConfigController::SIGN_VERIFY_KEY]) && $setting[MiniProgram_CustomerService_ConfigController::SIGN_VERIFY_KEY] != $signature ) {
+            $params['enableCustomerService'] = 0;
+            $params['signatureError'] = 1;
+        }
         $params['chatTitle'] = isset($setting[MiniProgram_CustomerService_ConfigController::CHAT_TITLE]) ?$setting[MiniProgram_CustomerService_ConfigController::CHAT_TITLE] : $this->defaltChatTitle;
         $params['thirdLoginKey'] = $this->thirdLoginKey;
         echo $this->display("customerService_index", $params);
