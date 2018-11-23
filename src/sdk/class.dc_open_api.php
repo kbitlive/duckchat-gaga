@@ -158,7 +158,7 @@ class DC_Open_Api
     }
 
     //send web message
-    public function sendWebMessage($isGroup, $fromUserId, $toId, $title, $webHtmlCode, $width, $height)
+    public function sendWebMessage($isGroup, $fromUserId, $toId, $title, $webHtmlCode, $width, $height, $gotoUrl = false, $useProxy = false)
     {
         $requestAction = "duckchat.message.send";
 
@@ -176,6 +176,13 @@ class DC_Open_Api
                         "code" => $webHtmlCode,
                         "width" => $width,
                         "height" => $height,
+                        "hrefURL" => $useProxy ? $gotoUrl : "",
+                        "pluginId" => $this->miniProgramId,
+                        "jumpPluginProfile" => array(
+                            "id" => $this->miniProgramId,
+                            "landingPageUrl" => $gotoUrl,
+                            "landingPageWithProxy" => true,
+                        ),
                     ),
                     "timeServer" => $this->getTimeMillis(),
                 ),
@@ -196,7 +203,7 @@ class DC_Open_Api
     }
 
     //send web notice message
-    public function sendWebNoticeMessage($isGroup, $fromUserId, $toId, $title, $noticeHtmlCode, $height)
+    public function sendWebNoticeMessage($isGroup, $fromUserId, $toId, $title, $noticeHtmlCode, $height, $gotoUrl = false, $useProxy = false)
     {
         $requestAction = "duckchat.message.send";
 
@@ -213,6 +220,13 @@ class DC_Open_Api
                         "title" => $title,
                         "code" => $noticeHtmlCode,
                         "height" => $height,
+                        "hrefURL" => $useProxy ? $gotoUrl : "",
+                        "pluginId" => $this->miniProgramId,
+                        "jumpPluginProfile" => array(
+                            "id" => $this->miniProgramId,
+                            "landingPageUrl" => $gotoUrl,
+                            "landingPageWithProxy" => true,
+                        ),
                     ),
                     "timeServer" => $this->getTimeMillis(),
                 ),
