@@ -195,6 +195,7 @@ function displayRoomListMsgUnReadNum()
             }
             localStorage.setItem(newSiteTipKey, "new_msg");
             setDocumentTitle();
+            $(".unread-num-mute")[0].style.display = "none";
             $(".room-list-msg-unread")[0].style.display = 'block';
             $(".room-list-msg-unread").html(unReadAllNum);
         } else {
