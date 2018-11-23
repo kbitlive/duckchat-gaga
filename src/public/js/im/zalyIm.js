@@ -138,7 +138,6 @@ function handleReceivedImMessage(resp, callback)
                     if(wsImObj != "" && wsImObj != undefined) {
                         wsImObj.close();
                     }
-                    console.log("resp-----"+resp);
                     localStorage.clear();
                     window.location.href = "./index.php?action=page.logout";
                     return;

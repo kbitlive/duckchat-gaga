@@ -13,23 +13,39 @@ if(enableWebsocketGw == "true") {
         enableWebsocketGw = localStorage.getItem(websocketGW);
         if(enableWebsocketGw != "true") {
             syncMsgForRoom();
-        } else {
-            auth();
         }
     }, 1000);
 }
 
 function auth()
 {
-    console.log("auth");
     var action = "im.cts.auth";
     handleImSendRequest(action, "", handleAuth);
 }
 
+var isPingSendNum = 0;
 function handleAuth()
 {
-    console.log("handleAuth");
+    setInterval(function () {
+        if(isPingSendNum == 1) {
+            isPingSendNum = 0;
+            auth();
+            return;
+        }
+        pingFunc();
+    }, 10000);
+
     syncMsgForRoom();
+}
+
+function pingFunc() {
+    isPingSendNum = 1;
+    var action = 'im.cts.ping';
+    handleImSendRequest(action, "", handlePingFunc);
+}
+
+function handlePingFunc() {
+    isPingSendNum = 0;
 }
 
 isPreSyncingMsgTime = "";
