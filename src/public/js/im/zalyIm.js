@@ -9,6 +9,9 @@ function websocketIm(transportDataJson, callback)
     ////TODO gateway 地址需要传入
     if(!wsImObj || wsImObj == '' || wsImObj.readyState == WS_CLOSED || wsImObj.readyState == WS_CLOSING) {
         wsImObj = new WebSocket(wsUrl);
+        if(wsImObj.readyState == WS_OPEN) {
+            auth();
+        }
     }
 
     if(wsImObj.readyState == WS_OPEN) {
