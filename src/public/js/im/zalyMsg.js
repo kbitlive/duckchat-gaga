@@ -372,7 +372,6 @@ function auth()
 
 var isPingSendNum = 0;
 var pingIntervalId = false;
-console.log("----isSendingPing---"+isSendingPing);
 function handleAuth()
 {
     pingFunc();
