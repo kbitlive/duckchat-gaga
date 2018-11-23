@@ -922,8 +922,9 @@ function setDocumentTitle()
         }
         if(isHidden) {
             try{
-                var chatSessionId = $(".chatsession-row-active").attr("chat-session-id");
+                var chatSessionId = $(".chatsession-lists .chatsession-row-active").attr("chat-session-id");
                 var currentChatSessionId = localStorage.getItem(chatSessionIdKey);
+
                 if(chatSessionId != currentChatSessionId) {
                     window.location.reload();
                 }
