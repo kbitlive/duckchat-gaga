@@ -364,11 +364,6 @@ if(enableWebsocketGw == "true") {
     }, 1000);
 }
 
-function auth()
-{
-    var action = "im.cts.auth";
-    handleImSendRequest(action, "", handleAuth);
-}
 
 var isPingSendNum = 0;
 var pingIntervalId = false;
@@ -406,8 +401,14 @@ function handleAuth()
         console.log(error)
     }
     syncMsgForRoom();
-
 }
+
+function auth()
+{
+    var action = "im.cts.auth";
+    handleImSendRequest(action, "", handleAuth);
+}
+
 
 function syncMsgForRoom()
 {
