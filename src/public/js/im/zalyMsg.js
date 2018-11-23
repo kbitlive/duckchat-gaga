@@ -374,9 +374,11 @@ var isPingSendNum = 0;
 var pingIntervalId = false;
 function handleAuth()
 {
+    console.log('------auth------');
     pingFunc();
     if(pingIntervalId != false) {
         clearInterval(pingIntervalId);
+        pingIntervalId = false;
     }
     pingIntervalId = setInterval(function () {
         if(isPingSendNum > 1) {
@@ -391,8 +393,8 @@ function handleAuth()
 }
 
 function pingFunc() {
+    console.log('------ping------');
     ++isPingSendNum;
-    console.log("-handleAuth---isPingSendNum---"+isPingSendNum);
     var action = 'im.cts.ping';
     handleImSendRequest(action, "", handlePingFunc);
 }

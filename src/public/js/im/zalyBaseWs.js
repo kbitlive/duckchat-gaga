@@ -37,7 +37,6 @@ function ZalyIm(params)
         var webSocketGw = webSocketGwDomain + wsUrlSuffix;
         if(webSocketGwDomain.length > 1) {
             localStorage.setItem(websocketGW, "true");////是否开启
-            console.log("webSocketGw-----"+webSocketGw);
             localStorage.setItem(websocketGWUrl, webSocketGw);
             try{
                 auth();
