@@ -24,10 +24,16 @@ function auth()
 }
 
 var isPingSendNum = 0;
+var pingIntervalId = false;
+
 function handleAuth()
 {
-    setInterval(function () {
-        if(isPingSendNum == 1) {
+    pingFunc();
+    if(pingIntervalId != false) {
+        clearInterval(pingIntervalId);
+    }
+    pingIntervalId = setInterval(function () {
+        if(isPingSendNum > 1) {
             isPingSendNum = 0;
             auth();
             return;
@@ -39,7 +45,7 @@ function handleAuth()
 }
 
 function pingFunc() {
-    isPingSendNum = 1;
+    ++isPingSendNum;
     var action = 'im.cts.ping';
     handleImSendRequest(action, "", handlePingFunc);
 }

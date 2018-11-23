@@ -364,7 +364,6 @@ if(enableWebsocketGw == "true") {
     }, 1000);
 }
 
-var isSendingPing = false;
 function auth()
 {
     var action = "im.cts.auth";
@@ -372,27 +371,29 @@ function auth()
 }
 
 var isPingSendNum = 0;
-
+var pingIntervalId = false;
+console.log("----isSendingPing---"+isSendingPing);
 function handleAuth()
 {
-    if(!isSendingPing) {
-        isSendingPing = true;
-        setInterval(function () {
-            if(isPingSendNum > 1) {
-                isPingSendNum = 0;
-                isSendingPing = false;
-                auth();
-                return;
-            }
-            pingFunc();
-        }, 10000);
+    pingFunc();
+    if(pingIntervalId != false) {
+        clearInterval(pingIntervalId);
     }
+    pingIntervalId = setInterval(function () {
+        if(isPingSendNum > 1) {
+            isPingSendNum = 0;
+            auth();
+            return;
+        }
+        pingFunc();
+    }, 10000);
 
     syncMsgForRoom();
 }
 
 function pingFunc() {
     ++isPingSendNum;
+    console.log("-handleAuth---isPingSendNum---"+isPingSendNum);
     var action = 'im.cts.ping';
     handleImSendRequest(action, "", handlePingFunc);
 }
