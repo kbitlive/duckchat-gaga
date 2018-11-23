@@ -53,7 +53,9 @@ function reConnectWs()
 
     websocketIntervalId = setInterval(function () {
         if(wsImObj.readyState == WS_OPEN ) {
+            console.log(wsImObj.readyState+" wsImObj   reConnectWs ok");
             clearInterval(websocketIntervalId);
+            websocketIntervalId = false;
             return;
         }
         createWsConnect();
@@ -92,6 +94,8 @@ function handleImSendRequest(action, reqData, callback)
         var transportDataJson = JSON.stringify(transportData);
 
         var enableWebsocketGw = localStorage.getItem(websocketGW);
+        wsUrl = localStorage.getItem(websocketGWUrl);
+
         if(enableWebsocketGw == "true" && wsUrl != null && wsUrl) {
             websocketIm(transportDataJson, callback);
         } else {
