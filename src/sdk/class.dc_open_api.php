@@ -181,7 +181,6 @@ class DC_Open_Api
                         "jumpPluginProfile" => array(
                             "id" => $this->miniProgramId,
                             "landingPageUrl" => $gotoUrl,
-                            "landingPageWithProxy" => true,
                         ),
                     ),
                     "timeServer" => $this->getTimeMillis(),
@@ -225,7 +224,6 @@ class DC_Open_Api
                         "jumpPluginProfile" => array(
                             "id" => $this->miniProgramId,
                             "landingPageUrl" => $gotoUrl,
-                            "landingPageWithProxy" => true,
                         ),
                     ),
                     "timeServer" => $this->getTimeMillis(),
