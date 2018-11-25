@@ -6,7 +6,7 @@
  * Time: 2:46 PM
  */
 
-class Api_Passport_PasswordRegController  extends Api_Passport_PasswordBase
+class Api_Passport_PasswordRegController extends Api_Passport_PasswordBase
 {
     private $classNameForRequest = '\Zaly\Proto\Site\ApiPassportPasswordRegRequest';
     private $classNameForResponse = '\Zaly\Proto\Site\ApiPassportPasswordRegResponse';
@@ -26,43 +26,48 @@ class Api_Passport_PasswordRegController  extends Api_Passport_PasswordBase
         try {
             header('Access-Control-Allow-Origin: *');
             $loginName = $request->getLoginName();
-            $email     = $request->getEmail();
-            $password  = $request->getPassword();
-            $sitePubkPem =  $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_ID_PUBK_PEM);
+            $email = $request->getEmail();
+            $password = $request->getPassword();
+            $sitePubkPem = $this->ctx->Site_Config->getConfigValue(SiteConfig::SITE_ID_PUBK_PEM);
 
             $invitationCode = $request->getInvitationCode();
 
             $this->getCustomLoginConfig();
 
             $loginName = trim($loginName);
-            if(!$loginName || mb_strlen($loginName)>$this->loginNameMaxLength || mb_strlen($loginName) < $this->loginNameMinLength ) {
+            if (!$loginName || mb_strlen($loginName) > $this->loginNameMaxLength || mb_strlen($loginName) < $this->loginNameMinLength) {
                 $errorCode = $this->zalyError->errorLoginNameLength;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
                 throw new Exception($errorInfo);
             }
 
-            if(!$password || (strlen($password) > $this->pwdMaxLength) || (strlen($password) < $this->pwdMinLength)) {
+            if (!$password || (strlen($password) > $this->pwdMaxLength) || (strlen($password) < $this->pwdMinLength)) {
                 $errorCode = $this->zalyError->errorPassowrdLength;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
                 throw new Exception($errorInfo);
             }
 
             $flag = ZalyHelper::verifyChars($password, $this->pwdContainCharacters);
-            if(!$flag) {
+            if (!$flag) {
                 $errorInfo = ZalyText::getText("text.pwd.type", $this->language);
                 throw new Exception($errorInfo);
             }
-            $nickname = $loginName;
 
-            if(!$sitePubkPem || strlen($sitePubkPem) < 0) {
+
+            $nickname = $request->getNickname();
+            if (empty($nickname)) {
+                $nickname = $loginName;
+            }
+
+            if (!$sitePubkPem || strlen($sitePubkPem) < 0) {
                 $errorCode = $this->zalyError->errorSitePubkPem;
                 $errorInfo = $this->zalyError->getErrorInfo($errorCode);
                 throw new Exception($errorInfo);
             }
 
-            if($this->passwordResetRequired == 1 && mb_strlen(trim($email))<1) {
+            if ($this->passwordResetRequired == 1 && mb_strlen(trim($email)) < 1) {
                 $tip = ZalyText::getText("text.param.void", $this->language);
-                $errorInfo = $this->passwordRestWay." " .$tip;
+                $errorInfo = $this->passwordRestWay . " " . $tip;
                 $this->setRpcError("error.alert", $errorInfo);
                 throw new Exception("$errorInfo  is  not exists");
             }
@@ -83,7 +88,7 @@ class Api_Passport_PasswordRegController  extends Api_Passport_PasswordBase
     private function checkLoginName($loginName)
     {
         $user = $this->ctx->PassportPasswordTable->getUserByLoginName($loginName);
-        if($user){
+        if ($user) {
             $errorCode = $this->zalyError->errorExistLoginName;
             $errorInfo = $this->zalyError->getErrorInfo($errorCode);
             throw new Exception($errorInfo);
@@ -92,37 +97,37 @@ class Api_Passport_PasswordRegController  extends Api_Passport_PasswordBase
 
     private function registerUserForPassport($loginName, $email, $password, $nickname, $invitationCode, $sitePubkPem)
     {
-       try{
-           $tag = __CLASS__ . '-' . __FUNCTION__;
+        try {
+            $tag = __CLASS__ . '-' . __FUNCTION__;
 
-           $this->ctx->BaseTable->db->beginTransaction();
-           $userId   = ZalyHelper::generateStrId();
-           $userInfo = [
-               "userId"    => $userId,
-               "loginName" => $loginName,
-               "email"     => $email,
-               "password"  => password_hash($password, PASSWORD_BCRYPT),
-               "nickname"  => $nickname,
-               "invitationCode" => $invitationCode,
-               "timeReg" => ZalyHelper::getMsectime()
-           ];
-           $this->ctx->PassportPasswordTable->insertUserInfo($userInfo);
-           $preSessionId = ZalyHelper::generateStrId();
+            $this->ctx->BaseTable->db->beginTransaction();
+            $userId = ZalyHelper::generateStrId();
+            $userInfo = [
+                "userId" => $userId,
+                "loginName" => $loginName,
+                "email" => $email,
+                "password" => password_hash($password, PASSWORD_BCRYPT),
+                "nickname" => $nickname,
+                "invitationCode" => $invitationCode,
+                "timeReg" => ZalyHelper::getMsectime()
+            ];
+            $this->ctx->PassportPasswordTable->insertUserInfo($userInfo);
+            $preSessionId = ZalyHelper::generateStrId();
 
-           $preSessionInfo = [
-               "userId" => $userId,
-               "preSessionId" => $preSessionId,
-               "sitePubkPem" => base64_encode($sitePubkPem)
-           ];
-           $this->ctx->PassportPasswordPreSessionTable->insertPreSessionData($preSessionInfo);
+            $preSessionInfo = [
+                "userId" => $userId,
+                "preSessionId" => $preSessionId,
+                "sitePubkPem" => base64_encode($sitePubkPem)
+            ];
+            $this->ctx->PassportPasswordPreSessionTable->insertPreSessionData($preSessionInfo);
 
-           $this->ctx->BaseTable->db->commit();
-           return $preSessionId;
-       }catch (Exception $ex) {
-           $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $ex);
-           $this->ctx->BaseTable->db->rollback();
-           throw new Exception($ex);
-       }
+            $this->ctx->BaseTable->db->commit();
+            return $preSessionId;
+        } catch (Exception $ex) {
+            $this->ctx->Wpf_Logger->error($tag, "error_msg=" . $ex);
+            $this->ctx->BaseTable->db->rollback();
+            throw new Exception($ex);
+        }
     }
 
 }
