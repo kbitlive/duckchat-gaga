@@ -13,7 +13,7 @@ class Page_Passport_RegisterController extends HttpBaseController
     {
         $tag = __CLASS__ . '->' . __FUNCTION__;
         try {
-            isset($_GET['token']) ? $this->checkUserToken($_GET['token']) : $this->checkUserCookie(); ;
+            isset($_GET['token']) ? $this->checkUserToken($_GET['token']) : $this->checkUserCookie();;
             if ($this->userId) {
                 $jumpPage = $this->getJumpUrlFromParams();
                 $apiPageIndex = ZalyConfig::getApiIndexUrl();
@@ -46,8 +46,9 @@ class Page_Passport_RegisterController extends HttpBaseController
 
         $loginNameAliasConfig = isset($loginConfig[LoginConfig::LOGIN_NAME_ALIAS]) ? $loginConfig[LoginConfig::LOGIN_NAME_ALIAS] : "";
         $loginNameAlias = isset($loginNameAliasConfig["configValue"]) ? $loginNameAliasConfig["configValue"] : "";
-        $passwordResetWayConfig = isset($loginConfig[LoginConfig::PASSWORD_RESET_WAY]) ? $loginConfig[LoginConfig::PASSWORD_RESET_WAY] : "";
-        $passwordRestWay = isset($passwordResetWayConfig["configValue"]) ? $passwordResetWayConfig["configValue"] : "";
+
+        $nicknameRequiredConfig = isset($loginConfig[LoginConfig::NICK_NAME_REQUIRED]) ? $loginConfig[LoginConfig::NICK_NAME_REQUIRED] : [];
+        $nicknameRequired = isset($nicknameRequiredConfig["configValue"]) ? $nicknameRequiredConfig["configValue"] : false;
 
         $loginConfig = $this->ctx->Site_Custom->getLoginAllConfig();
 
@@ -84,13 +85,13 @@ class Page_Passport_RegisterController extends HttpBaseController
         $enableRealName = $this->getSiteConfigFromDB(SiteConfig::SITE_ENABLE_REAL_NAME);
 
 
-        $loginNameTip =  ZalyText::getText("text.length", $this->language)." " .$loginNameMinLength."-".$loginNameMaxLength;
-        $pwdTip =  ZalyText::getText("text.length", $this->language)." " .$pwdMinLength."-".$pwdMaxLength;
+        $loginNameTip = ZalyText::getText("text.length", $this->language) . " " . $loginNameMinLength . "-" . $loginNameMaxLength;
+        $pwdTip = ZalyText::getText("text.length", $this->language) . " " . $pwdMinLength . "-" . $pwdMaxLength;
         if ($pwdContainCharacters) {
-            $pwdTip = $pwdContainCharacters . ",". ZalyText::getText("text.length", $this->language)." " .$pwdMinLength . "-" . $pwdMaxLength;
+            $pwdTip = $pwdContainCharacters . "," . ZalyText::getText("text.length", $this->language) . " " . $pwdMinLength . "-" . $pwdMaxLength;
         }
         $pwdTip = str_replace(["letter", "number", "special_characters"], ["字母", "数字", "特殊字符"], $pwdTip);
-        $title = ZalyText::getText("text.register", $this->language)."-".$siteName;
+        $title = ZalyText::getText("text.register", $this->language) . "-" . $siteName;
 
         $registerCustoms = $this->getRegisterCustoms();
         $params = [
@@ -127,8 +128,8 @@ class Page_Passport_RegisterController extends HttpBaseController
     private function getRegisterCustoms()
     {
         $registerCustoms = $this->ctx->SiteUserCustomTable->getColumnInfosForRegister();
-        foreach ($registerCustoms as $key =>  $custom) {
-            if(isset($custom['keyIcon'])) {
+        foreach ($registerCustoms as $key => $custom) {
+            if (isset($custom['keyIcon'])) {
                 $custom['keyIcon'] = $this->ctx->File_Manager->getCustomPathByFileId($custom['keyIcon']);
             }
             $registerCustoms[$key] = $custom;
