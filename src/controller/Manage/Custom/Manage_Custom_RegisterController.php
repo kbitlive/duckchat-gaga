@@ -16,11 +16,16 @@ class Manage_Custom_RegisterController extends Manage_ServletController
         $loginNameAliasConfig = isset($loginConfig[LoginConfig::LOGIN_NAME_ALIAS]) ? $loginConfig[LoginConfig::LOGIN_NAME_ALIAS] : "";
         $loginNameAlias = isset($loginNameAliasConfig["configValue"]) ? $loginNameAliasConfig["configValue"] : "";
 
+
+        $nicknameRequiredConfig = isset($loginConfig[LoginConfig::NICK_NAME_REQUIRED]) ? $loginConfig[LoginConfig::NICK_NAME_REQUIRED] : "";
+        $nicknameRequired = isset($nicknameRequiredConfig["configValue"]) ? $nicknameRequiredConfig["configValue"] : false;
+
         $userCustomsForRegister = $this->getUserCustomForRegister();
 
         $params = [
             "lang" => $this->language,
             "loginNameAlias" => $loginNameAlias,
+            "nicknameRequired" => $nicknameRequired,
             "userCustoms" => $userCustomsForRegister,
         ];
 
@@ -38,12 +43,6 @@ class Manage_Custom_RegisterController extends Manage_ServletController
             $key = $_POST["key"];
             $value = $_POST["value"];
 
-            if ($key == LoginConfig::LOGIN_PAGE_BACKGROUND_IMAGE) {
-                $fileId = $value;
-                $imageDir = WPF_LIB_DIR . "../public/site/image/";
-                $this->ctx->File_Manager->moveImage($fileId, $imageDir);
-            }
-
             $res = $this->ctx->Site_Custom->updateLoginConfig($key, $value, "", $this->userId);
             if ($res) {
                 $result["errCode"] = "success";
@@ -53,6 +52,8 @@ class Manage_Custom_RegisterController extends Manage_ServletController
             $this->logger->error($this->action, $e);
 
         }
+
+        error_log("=================register = ".json_encode($result));
         echo json_encode($result);
         return;
     }

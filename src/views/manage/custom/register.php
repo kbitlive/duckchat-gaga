@@ -42,6 +42,28 @@
                 </div>
             </div>
             <div class="division-line"></div>
+
+            <div class="item-row">
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <?php if ($lang == "1") { ?>
+                            <div class="item-body-desc">用户昵称必填</div>
+                        <?php } else { ?>
+                            <div class="item-body-desc">Nickname Required</div>
+                        <?php } ?>
+
+                        <div class="item-body-tail">
+                            <?php if ($nicknameRequired == 1) { ?>
+                                <input id="nicknameSwitch" class="weui_switch" type="checkbox" checked>
+                            <?php } else { ?>
+                                <input id="nicknameSwitch" class="weui_switch" type="checkbox">
+                            <?php } ?>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="division-line"></div>
         </div>
 
 
@@ -193,6 +215,36 @@
         var url = "index.php?action=manage.custom.userUpdate&lang=" + getLanguage() + "&customKey=" + customKey;
         zalyjsOpenPage(url);
     }
+
+
+    $("#nicknameSwitch").change(function () {
+        var isChecked = $(this).is(':checked')
+        var url = "index.php?action=manage.custom.register&lang=" + getLanguage();
+
+        var data = {
+            'key': 'nicknameRequired',
+            'value': isChecked ? 1 : 0,
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, enableSwitchResponse);
+    });
+
+    function enableSwitchResponse(url, data, result) {
+        if (result) {
+
+            var res = JSON.parse(result);
+
+            if ("success" != res.errCode) {
+                var errInfo = res.errInfo;
+                var errMsg = (getLanguage() == 1 ? "操作失败,原因：" : "update error, cause:") + errInfo;
+                alert(errMsg);
+            }
+
+        } else {
+            alert(getLanguage() == 1 ? "操作失败" : "update error");
+        }
+    }
+
 </script>
 
 </body>
