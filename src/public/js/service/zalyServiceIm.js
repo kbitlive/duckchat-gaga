@@ -9,6 +9,9 @@ function websocketIm(transportDataJson, callback)
     ////TODO gateway 地址需要传入
     if(!wsImObj || wsImObj == '' || wsImObj.readyState == WS_CLOSED || wsImObj.readyState == WS_CLOSING) {
         wsImObj = new WebSocket(wsUrl);
+        if(wsImObj.readyState == WS_OPEN) {
+            auth();
+        }
     }
 
     if(wsImObj.readyState == WS_OPEN) {
@@ -37,6 +40,9 @@ function createWsConnect()
 {
     if(!wsImObj || wsImObj == '' || wsImObj.readyState == WS_CLOSED || wsImObj.readyState == WS_CLOSING) {
         wsImObj = new WebSocket(wsUrl);
+        if(wsImObj.readyState == WS_OPEN) {
+            auth();
+        }
     }
 }
 
@@ -88,6 +94,8 @@ function handleImSendRequest(action, reqData, callback)
         var transportDataJson = JSON.stringify(transportData);
 
         var enableWebsocketGw = localStorage.getItem(websocketGW);
+        wsUrl = localStorage.getItem(websocketGWUrl);
+
         if(enableWebsocketGw == "true" && wsUrl != null && wsUrl) {
             websocketIm(transportDataJson, callback);
         } else {

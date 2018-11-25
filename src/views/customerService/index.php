@@ -340,6 +340,7 @@
 notEnableCustomerService
 
 <input type="hidden" data='<?php echo $enableCustomerService;?>' class="enableCustomerService">
+<input type="hidden" data='<?php echo $signatureError;?>' class="signatureError">
 
 <input type="hidden" value='<?php echo $thirdLoginKey;?>' class="thirdLoginKey">
 <input type="hidden" data='<?php echo $userId;?>' class="service_token">
@@ -373,6 +374,7 @@ notEnableCustomerService
     var serviceNickname = $(".service_nickname").attr("data");
     var serviceLoginName = $(".service_loginName").attr("data");
     var enableCustomerService = $(".enableCustomerService").attr("data");
+    var signatureError = $(".signatureError").attr("data");
 
     var thirdPartyKey  = $(".thirdLoginKey").val();
     var isRegister = false;
@@ -463,6 +465,9 @@ notEnableCustomerService
 
     function notEnableCustomerServiceFunc()
     {
+        if(signatureError == 1) {
+            $(".warning_tip").html("签名不对，请稍候再试");
+        }
         $(".warning_tip")[0].style.display = "flex";
         $(".msg_content").attr("disabled", "disabled");
         $(".chat_box")[0].style.backgroundColor = "#f4f4f6";

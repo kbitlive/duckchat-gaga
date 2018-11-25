@@ -11,8 +11,9 @@ class MiniProgram_CustomerService_IndexController extends MiniProgram_BaseContro
 
     private $gifMiniProgramId = 107;
     private $title = "客服小程序";
-    private $defaltGreeting = "您好，很高兴为您服务。";
-    private $defaltChatTitle = "客服系统";
+    private $defaultGreeting = "您好，很高兴为您服务。";
+    private $defaultChatTitle = "客服系统";
+    private $defaultSign = "";
 
     public function getMiniProgramId()
     {
@@ -33,22 +34,26 @@ class MiniProgram_CustomerService_IndexController extends MiniProgram_BaseContro
         header('Access-Control-Allow-Origin: *');
         $method = strtolower($_SERVER['REQUEST_METHOD']);
         $tag = __CLASS__ . "-" . __FUNCTION__;
-        $url = ZalyHelper::getRequestAddressPath().'/?action=page.customerService.index';
-        $customerServiceCode = <<<CODE
-<div style="width:380px;position: fixed; top:0; bottom:0;right:0px;z-index:9000;">
-    <iframe src="$url" frameborder="no" height="100%" width="100%">
-</div>
-CODE;
 
         if($method == 'get') {
             $settingConfig = $this->getCustomerServiceSetting();
             $settingConfig['lang'] = $this->language;
+
+            $url = ZalyHelper::getRequestAddressPath().'/?action=page.customerService.index&signature='.$settingConfig[ MiniProgram_CustomerService_ConfigController::SIGN_VERIFY_KEY];
+            $customerServiceCode = <<<CODE
+<div style="width:380px;position: fixed; top:0; bottom:0;right:0px;z-index:9000;">
+    <iframe src="$url" frameborder="no" height="100%" width="100%">
+</div>
+CODE;
             $settingConfig['code'] = $customerServiceCode;
+
             echo $this->display("miniProgram_customerService_index", $settingConfig);
         } else {
             $operation = $_POST['operation'];
             $key = $_POST['key'];
             $value = $_POST['value'];
+            error_log("-----------post------".json_encode($_POST));
+
             switch ($operation) {
                 case "update":
                     $flag = $this->updateCustomerServiceSetting($key, $value);
@@ -62,8 +67,9 @@ CODE;
     {
         $settingConfig = [
             MiniProgram_CustomerService_ConfigController::ENABLE_CUSTOMER_SERVICE => "",
-            MiniProgram_CustomerService_ConfigController::CHAT_TITLE => $this->defaltChatTitle,
-            MiniProgram_CustomerService_ConfigController::GREETING => $this->defaltGreeting,
+            MiniProgram_CustomerService_ConfigController::CHAT_TITLE => $this->defaultChatTitle,
+            MiniProgram_CustomerService_ConfigController::GREETING => $this->defaultGreeting,
+            MiniProgram_CustomerService_ConfigController::SIGN_VERIFY_KEY => $this->defaultSign,
         ];
         $setting = $this->ctx->SiteCustomerServiceSettingTable->getCustomerServiceSettingLists();
         if($setting) {
@@ -90,6 +96,21 @@ CODE;
                 'serviceValue' => $value,
             ];
             $flag = $this->ctx->SiteCustomerServiceSettingTable->updateCustomerServiceData($where, $data);
+        }
+        try{
+            if($key == MiniProgram_CustomerService_ConfigController::ENABLE_CUSTOMER_SERVICE) {
+                $signVerifyKey = isset( $_POST['signVerifyKey']) ?  $_POST['signVerifyKey'] : "";
+                if(!$signVerifyKey) {
+                    $signVerifyKey = md5(ZalyHelper::generateStrKey());
+                    $info = [
+                        'serviceKey'   => MiniProgram_CustomerService_ConfigController::SIGN_VERIFY_KEY,
+                        'serviceValue' => $signVerifyKey,
+                    ];
+                    $flag = $this->ctx->SiteCustomerServiceSettingTable->insertCustomerServiceSettingData($info);
+                }
+            }
+        }catch (Exception $ex) {
+
         }
         return $flag;
     }

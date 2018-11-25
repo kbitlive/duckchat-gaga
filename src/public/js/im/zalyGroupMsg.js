@@ -195,6 +195,7 @@ function displayRoomListMsgUnReadNum()
             }
             localStorage.setItem(newSiteTipKey, "new_msg");
             setDocumentTitle();
+            $(".unread-num-mute")[0].style.display = "none";
             $(".room-list-msg-unread")[0].style.display = 'block';
             $(".room-list-msg-unread").html(unReadAllNum);
         } else {
@@ -922,8 +923,9 @@ function setDocumentTitle()
         }
         if(isHidden) {
             try{
-                var chatSessionId = $(".chatsession-row-active").attr("chat-session-id");
+                var chatSessionId = $(".chatsession-lists .chatsession-row-active").attr("chat-session-id");
                 var currentChatSessionId = localStorage.getItem(chatSessionIdKey);
+
                 if(chatSessionId != currentChatSessionId) {
                     window.location.reload();
                 }

@@ -50,7 +50,6 @@ function ZalyIm(params)
 
     try{
         displayFrontPage();
-
     }catch (error) {
 
     }
