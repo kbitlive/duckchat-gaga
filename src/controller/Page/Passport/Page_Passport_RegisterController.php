@@ -116,7 +116,7 @@ class Page_Passport_RegisterController extends HttpBaseController
             'loginNameAlias' => $loginNameAlias,
             'enableInvitationCode' => $enableInvitationCode,
             'enableRealName' => $enableRealName,
-
+            'nicknameRequired' => $nicknameRequired,
             'registerCustoms' => $registerCustoms
         ];
 

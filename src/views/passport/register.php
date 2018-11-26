@@ -26,6 +26,9 @@
 <input type="hidden" value="<?php echo $pwdMaxLength;?>" class="pwdMaxLength">
 <input type="hidden" value="<?php echo $pwdMinLength;?>" class="pwdMinLength">
 
+<input type="hidden" value="<?php echo $nicknameRequired;?>" class="nicknameRequired">
+
+
 
 <div class="site-warning"></div>
 
@@ -92,6 +95,17 @@
                             </div>
                             <div class="register_line"></div>
                             <div style="font-size:1.31rem;font-family:PingFangSC-Regular;font-weight:400;color:rgba(153,153,153,1);" ><?php echo $loginNameTip;?></div>
+
+                            <?php if($nicknameRequired) :?>
+                                <div class="login_name_div" style="margin-top: 1rem;">
+                                    <img src="./public/img/login/nickname.png" class="img"/>
+                                    <input type="text" class="input_login_site register_input_nickname" autocapitalize="off"   id="register_input_nickname" data-local-placeholder="nicknamePlaceholder"  placeholder="输入昵称"  >
+                                    <span class="img-required register_input_nickname_required" >*</span>
+                                    <img src="./public/img/msg/msg_failed.png" class="img-failed register_input_nickname_failed">
+                                </div>
+                                <div class="register_line"></div>
+                            <?php endif; ?>
+
 
 
                             <div class="login_name_div" style="margin-top: 1rem;">
