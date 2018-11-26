@@ -650,7 +650,6 @@ function getChatPluginList(results)
 
 
 $(document).on("click", ".chat_plugin", function () {
-    $("#chat_plugin")[0].style.display = "block";
     var pluginId = $(this).attr("plugin-id");
     var duckchatSessionId = $(this).attr("plugin-duckchatSessionId");
     var loadingType = $(this).attr("plugin-loadingType");
@@ -669,6 +668,7 @@ $(document).on("click", ".chat_plugin", function () {
     if(loadingType == PluginLoadingType.PluginLoadingNewPage) {
         window.open(landingPageUrl, "_blank");
     } else {
+        $("#chat_plugin")[0].style.display = "block";
         $(".chat_plugin_iframe").attr("src", landingPageUrl);
     }
 });
