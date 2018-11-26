@@ -136,14 +136,14 @@ function handleReceivedImMessage(resp, respCallback)
 
     try{
         var result = JSON.parse(resp);
-        if(result.action == 'im.cts.auth') {
+        if(result.action == ZalyAction.im_cts_auth_key) {
             try{
                 handleAuth();
             }catch (error) {
             }
             return;
         }
-        if(result.action == ZalyAction.im_stc_news) {
+        if(result.action == ZalyAction.im_stc_news_key) {
             syncMsgForRoom();
             return;
         }
@@ -174,6 +174,7 @@ function handleReceivedImMessage(resp, respCallback)
         }
     }catch (error) {
         console.log(error);
+        isSyncingMsg = false;
     }
 
 }

@@ -4,44 +4,37 @@ isSyncingMsg = false;
 chatSessionIdKey = "service_chat_sessionid";
 
 
-enableWebsocketGw = localStorage.getItem(websocketGW);
-
-if(enableWebsocketGw == "true") {
-    auth();
-} else {
-    setInterval(function (args) {
-        enableWebsocketGw = localStorage.getItem(websocketGW);
-        if(enableWebsocketGw != "true") {
-            syncMsgForRoom();
-        }
-    }, 1000);
-}
-
-function auth()
-{
-    var action = "im.cts.auth";
-    handleImSendRequest(action, "", handleAuth);
-}
 
 var isPingSendNum = 0;
 var pingIntervalId = false;
 
 function handleAuth()
 {
-    pingFunc();
-    if(pingIntervalId != false) {
-        clearInterval(pingIntervalId);
-    }
-    pingIntervalId = setInterval(function () {
-        if(isPingSendNum > 1) {
-            isPingSendNum = 0;
-            auth();
-            return;
-        }
+    try{
         pingFunc();
-    }, 10000);
+        if(pingIntervalId != false) {
+            clearInterval(pingIntervalId);
+            pingIntervalId = false;
+        }
+        pingIntervalId = setInterval(function () {
+            if(isPingSendNum > 1) {
+                isPingSendNum = 0;
+                auth();
+                return;
+            }
+            pingFunc();
+        }, 10000);
 
+    }catch (error) {
+        console.log(error)
+    }
     syncMsgForRoom();
+}
+
+function auth()
+{
+    var action = "im.cts.auth";
+    handleImSendRequest(action, "", handleAuth);
 }
 
 function pingFunc() {

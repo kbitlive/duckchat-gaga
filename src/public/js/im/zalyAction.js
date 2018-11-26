@@ -46,7 +46,8 @@ var ZalyAction = {
     api_friend_search:"site.ApiFriendSearchRequest",
     api_group_setSpeaker: "site.ApiGroupSetSpeakerRequest",
 
-    im_stc_news :"im.stc.news",
+    im_cts_auth_key:"im.cts.auth",
+    im_stc_news_key :"im.stc.news",
     im_stc_message_key :"im.stc.message",
 
     api_plugin_list:"site.ApiPluginListRequest",

@@ -350,27 +350,11 @@ function handleSetItemError(error)
     }
 }
 
-enableWebsocketGw = localStorage.getItem(websocketGW);
-var syncMsgIntervalId = false;
-
-if(enableWebsocketGw == "true") {
-    auth();
-} else {
-    setInterval(function (args) {
-        enableWebsocketGw = localStorage.getItem(websocketGW);
-        if(enableWebsocketGw != "true") {
-            syncMsgForRoom();
-        }
-    }, 1000);
-}
-
-
 var isPingSendNum = 0;
 var pingIntervalId = false;
 
 
 function pingFunc() {
-    console.log('------ping------');
     ++isPingSendNum;
     var action = 'im.cts.ping';
     handleImSendRequest(action, "", handlePingFunc);
