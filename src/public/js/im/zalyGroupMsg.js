@@ -195,6 +195,7 @@ function displayRoomListMsgUnReadNum()
             }
             localStorage.setItem(newSiteTipKey, "new_msg");
             setDocumentTitle();
+            $(".unread-num-mute")[0].style.display = "none";
             $(".room-list-msg-unread")[0].style.display = 'block';
             $(".room-list-msg-unread").html(unReadAllNum);
         } else {
@@ -649,7 +650,6 @@ function getChatPluginList(results)
 
 
 $(document).on("click", ".chat_plugin", function () {
-    $("#chat_plugin")[0].style.display = "block";
     var pluginId = $(this).attr("plugin-id");
     var duckchatSessionId = $(this).attr("plugin-duckchatSessionId");
     var loadingType = $(this).attr("plugin-loadingType");
@@ -668,6 +668,7 @@ $(document).on("click", ".chat_plugin", function () {
     if(loadingType == PluginLoadingType.PluginLoadingNewPage) {
         window.open(landingPageUrl, "_blank");
     } else {
+        $("#chat_plugin")[0].style.display = "block";
         $(".chat_plugin_iframe").attr("src", landingPageUrl);
     }
 });
@@ -922,8 +923,9 @@ function setDocumentTitle()
         }
         if(isHidden) {
             try{
-                var chatSessionId = $(".chatsession-row-active").attr("chat-session-id");
+                var chatSessionId = $(".chatsession-lists .chatsession-row-active").attr("chat-session-id");
                 var currentChatSessionId = localStorage.getItem(chatSessionIdKey);
+
                 if(chatSessionId != currentChatSessionId) {
                     window.location.reload();
                 }

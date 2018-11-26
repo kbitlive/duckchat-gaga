@@ -54,6 +54,29 @@ class DuckChat_User
         return $response;
     }
 
+    private function getPublicUserProfile($userInfo)
+    {
+        try {
+            $publicUserProfile = new \Zaly\Proto\Core\PublicUserProfile();
+            $avatar = isset($userInfo['avatar']) ? $userInfo['avatar'] : "";
+            $publicUserProfile->setAvatar($avatar);
+            $publicUserProfile->setUserId($userInfo['userId']);
+            $publicUserProfile->setLoginname($userInfo['loginName']);
+            $publicUserProfile->setNickname($userInfo['nickname']);
+            $publicUserProfile->setNicknameInLatin($userInfo['nicknameInLatin']);
+
+            if (isset($userInfo['availableType'])) {
+                $publicUserProfile->setAvailableType($userInfo['availableType']);
+            } else {
+                $publicUserProfile->setAvailableType(\Zaly\Proto\Core\UserAvailableType::UserAvailableNormal);
+            }
+            return $publicUserProfile;
+        } catch (Exception $ex) {
+            $this->ctx->Wpf_Logger->error("get public user profile", $ex);
+            $publicUserProfile = new \Zaly\Proto\Core\PublicUserProfile();
+            return $publicUserProfile;
+        }
+    }
 
     /**
      * duckchat.user.relation

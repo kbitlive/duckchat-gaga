@@ -1,33 +1,4 @@
 
-jQuery.i18n.properties({
-    name: "lang",
-    path: '../../public/js/config/',
-    mode: 'map',
-    language: languageName,
-    callback: function () {
-        try {
-            //初始化页面元素
-            $('[data-local]').each(function () {
-                var changeData = $(this).attr("data-local");
-                var changeDatas = changeData.split(":");
-                var changeDataName = changeDatas[0];
-                var changeDataValue = changeDatas[1];
-                $(this).attr(changeDataName, $.i18n.map[changeDataValue]);
-            });
-            $('[data-local-value]').each(function () {
-                var changeHtmlValue = $(this).attr("data-local-value");
-                $(this).html($.i18n.map[changeHtmlValue]);
-            });
-            $('[data-local-placeholder]').each(function () {
-                var placeholderValue = $(this).attr("data-local-placeholder");
-                $(this).attr("placeholder", $.i18n.map[placeholderValue]);
-            });
-        }
-        catch(ex){
-            console.log(ex.message);
-        }
-    }
-});
 
 $(document).on("click", ".update_code_btn", function () {
     invitationCode = $(".update_input_code").val();

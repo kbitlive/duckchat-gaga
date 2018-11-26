@@ -12,13 +12,7 @@ function handleClientSendRequest(action, reqData, callback)
             body[key] = reqData[key];
         }
 
-        sessionId = $(".service_session_id").attr("data");
-
-        if((sessionId == "" || sessionId == undefined || sessionId == false) && action !="api.site.config" ) {
-            isSyncingMsg = false;
-            return;
-        }
-
+        var sessionId = $(".service_session_id").attr("data");
 
         var header = {};
         header[HeaderSessionid] = sessionId;
@@ -52,6 +46,7 @@ function handleClientSendRequest(action, reqData, callback)
         });
     } catch(e) {
         console.log(e.message);
+        isSyncingMsg = false;
         return false;
     }
 }
@@ -99,5 +94,6 @@ function handleClientReceivedMessage(resp, callback)
         }
     }catch (error) {
         console.log(error);
+        isSyncingMsg = false;
     }
 }

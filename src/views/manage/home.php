@@ -12,12 +12,12 @@
             padding: 0px;
             margin: 0px;
             font-family: PingFangSC-Regular, "MicrosoftYaHei";
-            overflow: hidden;
             width: 100%;
             height: 100%;
             background: rgba(245, 245, 245, 1);
             font-size: 14px;
-
+            overflow-x: hidden;
+            overflow-y: scroll;
         }
 
         .wrapper_div {

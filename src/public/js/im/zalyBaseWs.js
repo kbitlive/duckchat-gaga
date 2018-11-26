@@ -33,6 +33,12 @@ function ZalyIm(params)
     var webSocketGwDomain = config[siteConfigKeys.serverAddressForIM];
     if(webSocketGwDomain == undefined || webSocketGwDomain == null || webSocketGwDomain.length<1 || webSocketGwDomain.indexOf("http://") > -1 ||  webSocketGwDomain.indexOf("https://") > -1) {
         localStorage.setItem(websocketGW, "false");////是否开启    console.log("webSocketGwDomain ==" + webSocketGwDomain);
+            setInterval(function (args) {
+                try{
+                    syncMsgForRoom();
+                }catch (error) {
+                }
+            }, 1000);
     } else {
         var webSocketGw = webSocketGwDomain + wsUrlSuffix;
         if(webSocketGwDomain.length > 1) {
@@ -50,7 +56,6 @@ function ZalyIm(params)
 
     try{
         displayFrontPage();
-
     }catch (error) {
 
     }

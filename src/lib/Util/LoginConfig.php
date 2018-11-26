@@ -11,6 +11,8 @@ class LoginConfig
 
     const LOGIN_NAME_ALIAS = "loginNameAlias"; //登录名别称
 
+    const NICK_NAME_REQUIRED = "nicknameRequired"; //昵称是否必填
+
     const PASSWORD_RESET_WAY = "passwordResetWay";//密码重置方式
 
     const PASSWORD_RESET_REQUIRED = "passwordResetRequired";//找回密码方式是否必填

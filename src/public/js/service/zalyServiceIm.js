@@ -9,6 +9,9 @@ function websocketIm(transportDataJson, callback)
     ////TODO gateway 地址需要传入
     if(!wsImObj || wsImObj == '' || wsImObj.readyState == WS_CLOSED || wsImObj.readyState == WS_CLOSING) {
         wsImObj = new WebSocket(wsUrl);
+        if(wsImObj.readyState == WS_OPEN) {
+            auth();
+        }
     }
 
     if(wsImObj.readyState == WS_OPEN) {
@@ -37,6 +40,9 @@ function createWsConnect()
 {
     if(!wsImObj || wsImObj == '' || wsImObj.readyState == WS_CLOSED || wsImObj.readyState == WS_CLOSING) {
         wsImObj = new WebSocket(wsUrl);
+        if(wsImObj.readyState == WS_OPEN) {
+            auth();
+        }
     }
 }
 
@@ -63,14 +69,10 @@ function handleImSendRequest(action, reqData, callback)
             body[key] = reqData[key];
         }
 
-        sessionId = $(".service_session_id").attr("data");
+        var sessionId = $(".service_session_id").attr("data");
 
         var header = {};
         header[HeaderSessionid] = sessionId;
-        if((sessionId == "" || sessionId == undefined || sessionId == false) && action !="api.site.config" ) {
-            isSyncingMsg = false;
-            return;
-        }
         header[HeaderHostUrl] = originDomain;
         header[HeaderUserClientLang] = getLanguage();
         header[HeaderUserAgent] = navigator.userAgent;
@@ -88,6 +90,8 @@ function handleImSendRequest(action, reqData, callback)
         var transportDataJson = JSON.stringify(transportData);
 
         var enableWebsocketGw = localStorage.getItem(websocketGW);
+        wsUrl = localStorage.getItem(websocketGWUrl);
+
         if(enableWebsocketGw == "true" && wsUrl != null && wsUrl) {
             websocketIm(transportDataJson, callback);
         } else {
@@ -123,7 +127,15 @@ function handleReceivedImMessage(resp, callback)
 
     try{
         var result = JSON.parse(resp);
-        if(result.action == ZalyAction.im_stc_news) {
+        if(result.action == ZalyAction.im_cts_auth_key) {
+            try{
+                handleAuth();
+            }catch (error) {
+            }
+            return;
+        }
+
+        if(result.action == ZalyAction.im_stc_news_key) {
             syncMsgForRoom();
             return;
         }
@@ -153,6 +165,7 @@ function handleReceivedImMessage(resp, callback)
         }
     }catch (error) {
         console.log(error.message);
+        isSyncingMsg = false;
     }
 
 }

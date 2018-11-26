@@ -16,6 +16,7 @@ function loginNameNotExist()
         password:registerPassword,
         email:registerEmail,
         invitationCode:invitationCode,
+        nickname:registerNickname,
     }
     handleClientSendRequest(action, reqData, handlePassportPasswordReg);
 }
@@ -105,6 +106,8 @@ var loginNameMaxLength = $(".loginNameMaxLength").val();
 var loginNameMinLength = $(".loginNameMinLength").val();
 var pwdMaxLength = $(".pwdMaxLength").val();
 var pwdMinLength = $(".pwdMinLength").val();
+var nicknameRequired = $(".nicknameRequired").val();
+
 
 var registerCustom = new Array();
 function checkRegisterInfo()
@@ -113,6 +116,7 @@ function checkRegisterInfo()
     registerPassword  = $(".register_input_pwd").val();
     repassword = $(".register_input_repwd").val();
     registerEmail = $(".register_input_email").val();
+    registerNickname = $(".register_input_nickname").val();
     isFocus = false;
 
     registerLoginName = trimString(registerLoginName);
@@ -125,6 +129,21 @@ function checkRegisterInfo()
         $(".register_input_loginName_required")[0].style.display = "none";
         isFocus = true;
     }
+    nicknameRequired = trimString(nicknameRequired);
+
+    if(Number(nicknameRequired) == 1) {
+        if(registerNickname == "" || registerNickname == undefined) {
+            $(".register_input_nickname_failed")[0].style.display = "block";
+            $(".register_input_nickname_required")[0].style.display = "none";
+            if (isFocus == false) {
+                $("#register_input_nickname").focus();
+                $(".register_input_loginName_failed")[0].style.display = "none";
+                $(".register_input_loginName_required")[0].style.display = "block";
+                isFocus = true;
+            }
+        }
+    }
+
     registerPassword = trimString(registerPassword);
 
     if(registerPassword == "" || registerPassword == undefined
@@ -136,11 +155,22 @@ function checkRegisterInfo()
         $(".register_input_pwd_required")[0].style.display = "none";
         if (isFocus == false) {
             $("#register_input_pwd").focus();
-            $(".register_input_loginName_failed")[0].style.display = "none";
-            $(".register_input_loginName_required")[0].style.display = "block";
+            try{
+                $(".register_input_nickname_failed")[0].style.display = "none";
+                $(".register_input_nickname_required")[0].style.display = "block";
+            }catch (error) {
+
+            }
+            try{
+                $(".register_input_loginName_failed")[0].style.display = "none";
+                $(".register_input_loginName_required")[0].style.display = "block";
+            }catch (error) {
+
+            }
             isFocus = true;
         }
     }
+
 
     if(repassword == "" || repassword == undefined
         || repassword.length<0 || (repassword != registerPassword)

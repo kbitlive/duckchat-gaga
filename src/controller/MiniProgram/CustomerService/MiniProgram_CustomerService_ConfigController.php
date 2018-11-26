@@ -14,4 +14,6 @@ class MiniProgram_CustomerService_ConfigController
 
     const CHAT_TITLE = "chatTitle";
 
+    const SIGN_VERIFY_KEY = "signVerifyKey";
+
 }

@@ -4,32 +4,47 @@ isSyncingMsg = false;
 chatSessionIdKey = "service_chat_sessionid";
 
 
-enableWebsocketGw = localStorage.getItem(websocketGW);
 
-if(enableWebsocketGw == "true") {
-    auth();
-} else {
-    setInterval(function (args) {
-        enableWebsocketGw = localStorage.getItem(websocketGW);
-        if(enableWebsocketGw != "true") {
-            syncMsgForRoom();
-        } else {
-            auth();
+var isPingSendNum = 0;
+var pingIntervalId = false;
+
+function handleAuth()
+{
+    try{
+        pingFunc();
+        if(pingIntervalId != false) {
+            clearInterval(pingIntervalId);
+            pingIntervalId = false;
         }
-    }, 1000);
+        pingIntervalId = setInterval(function () {
+            if(isPingSendNum > 1) {
+                isPingSendNum = 0;
+                auth();
+                return;
+            }
+            pingFunc();
+        }, 10000);
+
+    }catch (error) {
+        console.log(error)
+    }
+    syncMsgForRoom();
 }
 
 function auth()
 {
-    console.log("auth");
     var action = "im.cts.auth";
     handleImSendRequest(action, "", handleAuth);
 }
 
-function handleAuth()
-{
-    console.log("handleAuth");
-    syncMsgForRoom();
+function pingFunc() {
+    ++isPingSendNum;
+    var action = 'im.cts.ping';
+    handleImSendRequest(action, "", handlePingFunc);
+}
+
+function handlePingFunc() {
+    isPingSendNum = 0;
 }
 
 isPreSyncingMsgTime = "";
