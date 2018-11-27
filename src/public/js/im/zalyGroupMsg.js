@@ -781,8 +781,8 @@ function changeZalySchemeToDuckChat(chatSessionId, type)
     if(chatSessionId != "") {
         urlLink = urlLink.indexOf("?") > -1 ? urlLink+"&x="+type+"-"+chatSessionId : urlLink+"/?x="+type+"-"+chatSessionId;
     }
-    urlLink = jumpPage.indexOf("?") > -1 ? jumpPage+"&jumpUrl="+encodeURIComponent(urlLink) :jumpPage+"?jumpUrl="+encodeURIComponent(urlLink);
-    return encodeURIComponent(urlLink);
+    urlLink = jumpPage.indexOf("?") > -1 ? jumpPage+"&jumpUrl="+encodeURI(urlLink) :jumpPage+"?jumpUrl="+encodeURI(urlLink);
+    return encodeURI(urlLink);
 }
 
 function getAddressDomain()
