@@ -73,7 +73,7 @@
                         <?php if ($lang == "1") { ?>
                             <div class="item-body-desc">群组名称</div>
                         <?php } else { ?>
-                            <div class="item-body-desc ">Group Name</div>
+                            <div class="item-body-desc">Group Name</div>
                         <?php } ?>
 
                         <div class="item-body-tail" id="user-nickname-text">
@@ -399,6 +399,10 @@
 
         if (keyName == null || keyName == "") {
             alert("update fail");
+            return;
+        }
+        if(keyName == "name" && (value.length > 16  || value.length <1)) {
+            alert("群名称长度1到16个字符");
             return;
         }
 

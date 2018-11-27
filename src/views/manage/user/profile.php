@@ -529,6 +529,16 @@
             return;
         }
 
+        if(nameData == "loginName" && (value.length > 16  || value.length <1)) {
+            alert("用户名长度1到16个字符");
+            return;
+        }
+
+        if(nameData == "nickname" && (value.length > 16  || value.length <1)) {
+            alert("用户昵称长度1到16个字符");
+            return;
+        }
+
         var data = {
             'userId': userId,
             'key': nameData,
