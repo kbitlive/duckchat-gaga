@@ -662,9 +662,9 @@ $(document).on("click", ".chat_plugin", function () {
     setCookie("duckchat_page_url", url, 30);
 
     if(landingPageUrl.indexOf("?") > -1) {
-        landingPageUrl = landingPageUrl+"&duckchat_sessionid="+duckchatSessionId+"&duckchat_page_url="+encodeURI(url);
+        landingPageUrl = landingPageUrl+"&duckchat_sessionid="+duckchatSessionId+"&duckchat_page_url="+encodeURIComponent(url);
     } else {
-        landingPageUrl = landingPageUrl+"?duckchat_sessionid="+duckchatSessionId+"&duckchat_page_url="+encodeURI(url);
+        landingPageUrl = landingPageUrl+"?duckchat_sessionid="+duckchatSessionId+"&duckchat_page_url="+encodeURIComponent(url);
     }
 
     if(loadingType == PluginLoadingType.PluginLoadingNewPage) {
@@ -781,8 +781,8 @@ function changeZalySchemeToDuckChat(chatSessionId, type)
     if(chatSessionId != "") {
         urlLink = urlLink.indexOf("?") > -1 ? urlLink+"&x="+type+"-"+chatSessionId : urlLink+"/?x="+type+"-"+chatSessionId;
     }
-    urlLink = jumpPage.indexOf("?") > -1 ? jumpPage+"&jumpUrl="+encodeURI(urlLink) :jumpPage+"?jumpUrl="+encodeURI(urlLink);
-    return encodeURI(urlLink);
+    urlLink = jumpPage.indexOf("?") > -1 ? jumpPage+"&jumpUrl="+encodeURIComponent(urlLink) :jumpPage+"?jumpUrl="+encodeURIComponent(urlLink);
+    return encodeURIComponent(urlLink);
 }
 
 function getAddressDomain()
@@ -2292,7 +2292,7 @@ $(document).on("click", ".share-group", function () {
     var src = $("#share_group").attr("src");
 
     if(src == "" || src == undefined) {
-        src="../../public/img/msg/group_default_avatar.png";
+        src="./public/img/msg/group_default_avatar.png";
     }
     var urlLink = changeZalySchemeToDuckChat(chatSessionId, "g");
     $("#share_group").attr("urlLink", urlLink);
