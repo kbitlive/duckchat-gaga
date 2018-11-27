@@ -77,7 +77,7 @@
                         <?php } ?>
 
                         <div class="item-body-tail" id="user-nickname-text">
-                            <div class="item-body-value"><?php echo $name ?></div>
+                            <div class="item-body-value font-size-12"><?php echo $name ?></div>
                             <div class="item-body-value">
                                 <img class="more-img"
                                      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAnCAYAAAAVW4iAAAABfElEQVRIS8WXvU6EQBCAZ5YHsdTmEk3kJ1j4HDbGxMbG5N7EwkIaCy18DxtygMFopZ3vAdkxkMMsB8v+XqQi2ex8ux/D7CyC8NR1fdC27RoRszAMv8Ux23ccJhZFcQoA9wCQAMAbEd0mSbKxDTzM6wF5nq+CIHgGgONhgIi+GGPXURTlLhDstDRN8wQA5zOB3hljFy66sCzLOyJaL6zSSRdWVXVIRI9EdCaDuOgavsEJY+wFEY8WdmKlS5ZFMo6xrj9AF3EfukaAbcp61TUBdJCdn85J1yzApy4pwJeuRYAPXUqAqy4tgIsubYCtLiOAjS5jgKkuK8BW1w0APCgOo8wKMHcCzoA+AeDSGKA4AXsOEf1wzq/SNH01AtjUKG2AiZY4jj9GXYWqazDVIsZT7sBGizbAVosWwEWLEuCqZRHgQ4sU4EvLLMCnlgnAt5YRYB9aRoD/7q77kivWFlVZ2R2XdtdiyTUNqpNFxl20bBGT7ppz3t12MhctIuwXEK5/O55iCBQAAAAASUVORK5CYII="/>
@@ -399,6 +399,10 @@
 
         if (keyName == null || keyName == "") {
             alert("update fail");
+            return;
+        }
+        if(keyName == "name" && (value.length > 16  || value.length <1)) {
+            alert("群名称长度1到16个字符");
             return;
         }
 

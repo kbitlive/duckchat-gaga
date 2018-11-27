@@ -71,7 +71,7 @@
                         <?php } ?>
 
                         <div class="item-body-tail" id="user-nickname-text">
-                            <div class="item-body-value"><?php echo $nickname; ?></div>
+                            <div class="item-body-value font-size-12"><?php echo $nickname; ?></div>
                             <div class="item-body-value">
                                 <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
@@ -84,22 +84,19 @@
 
 
             <!--      part1: site name      -->
-            <div class="item-row" id="user-loginName">
+            <div class="item-row" id="user-loginName-name">
                 <div class="item-body">
                     <div class="item-body-display">
 
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">登陆名</div>
+                            <div class="item-body-desc">用户名</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">LoginName</div>
+                            <div class="item-body-desc ">LoginName</div>
                         <?php } ?>
 
 
                         <div class="item-body-tail" id="user-nickname-text">
-                            <div class="item-body-value"><?php echo $loginName; ?></div>
-                            <div class="item-body-value">
-                                <img class="more-img" src="../../public/img/manage/more.png"/>
-                            </div>
+                            <div class="item-body-value font-size-12"><?php echo $loginName; ?></div>
                         </div>
 
                     </div>
@@ -496,16 +493,16 @@
 
     });
 
-    $("#user-loginName").click(function () {
-        var title = $(this).find(".item-body-desc").html();
-        var inputBody = $(this).find(".item-body-value").html();
-
-        $("#update-user-button").attr("data", "loginName");
-        showWindow($(".config-hidden"));
-
-        $(".popup-group-title").html(title);
-        $(".popup-group-input").val(inputBody);
-    });
+    // $("#user-loginName").click(function () {
+    //     var title = $(this).find(".item-body-desc").html();
+    //     var inputBody = $(this).find(".item-body-value").html();
+    //
+    //     $("#update-user-button").attr("data", "loginName");
+    //     showWindow($(".config-hidden"));
+    //
+    //     $(".popup-group-title").html(title);
+    //     $(".popup-group-input").val(inputBody);
+    // });
 
 
     $("#change-user-password").click(function () {
@@ -526,6 +523,16 @@
 
         if (nameData == null || nameData == "") {
             alert("update fail");
+            return;
+        }
+
+        // if(nameData == "loginName" && (value.length > 16  || value.length <1)) {
+        //     alert("用户名长度1到16个字符");
+        //     return;
+        // }
+
+        if(nameData == "nickname" && (value.length > 16  || value.length <1)) {
+            alert("用户昵称长度1到16个字符");
             return;
         }
 

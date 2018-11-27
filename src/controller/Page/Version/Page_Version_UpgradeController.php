@@ -63,6 +63,10 @@ class Page_Version_UpgradeController extends Page_VersionController
                 $this->versionCode = 10105;
                 $this->versionName = "1.1.5";
                 $this->checkoutPreviousUpgrade($currentCode, "1.1.5");
+            }  elseif ($currentCode == 10105) {
+                $this->versionCode = 10106;
+                $this->versionName = "1.1.6";
+                $this->checkoutPreviousUpgrade($currentCode, "1.1.6");
                 // change upgrade password
                 $this->updatePassword();
             } else {
