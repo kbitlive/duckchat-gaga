@@ -465,7 +465,11 @@
 
     function showPluginAdmin(url) {
         var duckchatSessionId = getCookie("duckchat_sessionid");
-        url += "&duckchat_sessionid="+duckchatSessionId+"&lang=" + getLanguage();
+        if(url.indexOf('?') == -1) {
+            url += "?duckchat_sessionid="+duckchatSessionId+"&lang=" + getLanguage();
+        } else {
+            url += "&duckchat_sessionid="+duckchatSessionId+"&lang=" + getLanguage();
+        }
         openPage(url);
     }
 
