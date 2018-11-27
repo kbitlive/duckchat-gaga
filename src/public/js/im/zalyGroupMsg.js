@@ -680,13 +680,17 @@ $(document).on("click", ".plugin_back", function () {
         var pluginId =  $(".plugin-iframe").attr("id");
         $(".plugin-iframe")[0].contentWindow.history.go(-1); // back
         var onReload = false;
-        $(".plugin-iframe")[0].onload = function() {
-            if( onReload == false) {
-                $(".plugin-iframe")[0].contentWindow.self.location.href = $(".plugin-iframe")[0].contentWindow.self.location.href;
-                setPluginTitle(pluginId);
-                onReload = true;
-            }
-        }
+       try{
+           $(".plugin-iframe")[0].onload = function() {
+               if( onReload == false) {
+                   $(".plugin-iframe")[0].contentWindow.self.location.href = $(".plugin-iframe")[0].contentWindow.self.location.href;
+                   setPluginTitle(pluginId);
+                   onReload = true;
+               }
+           }
+       }catch (error){
+
+       }
     }catch (error){
         console.log(error);
     }
@@ -1703,6 +1707,8 @@ function handleClickGroupUserImg(results)
         var memberIsOwner = checkGroupOwnerType(clickImgUserId, groupProfile);
         var isFriend = localStorage.getItem(friendRelationKey+clickImgUserId) == FriendRelation.FriendRelationFollow ? 1 : 0;
         var isCanAddFriend = groupProfile.canAddFriend == true ? true : false;
+
+        console.log("isCanAddFriend----"+isCanAddFriend);
         var html = template("tpl-group-user-menu", {
             userId : clickImgUserId,
             isFriend : isFriend,

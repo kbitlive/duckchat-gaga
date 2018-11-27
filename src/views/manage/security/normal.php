@@ -258,17 +258,12 @@
             <div class="list-item-center">
                 <div class="item-row">
                     <div class="item-body">
-                        <div class="item-body-display passwordMinLength" onclick="showPwdMinLength()">
+                        <div class="item-body-display passwordMinLength">
                             <?php if ($lang == "1") { ?>
                                 <div class="item-body-desc tip">必须包含字符</div>
                             <?php } else { ?>
                                 <div class="item-body-desc tip">Must contain characters</div>
                             <?php } ?>
-                            <div class="item-body-tail">
-                                <div class="item-body-value">
-                                    <img class="more-img" src="../../public/img/manage/more.png"/>
-                                </div>
-                            </div>
 
                         </div>
 

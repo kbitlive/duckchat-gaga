@@ -71,7 +71,7 @@
                         <?php } ?>
 
                         <div class="item-body-tail" id="user-nickname-text">
-                            <div class="item-body-value"><?php echo $nickname; ?></div>
+                            <div class="item-body-value font-size-12"><?php echo $nickname; ?></div>
                             <div class="item-body-value">
                                 <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>
@@ -89,14 +89,14 @@
                     <div class="item-body-display">
 
                         <?php if ($lang == "1") { ?>
-                            <div class="item-body-desc">登陆名</div>
+                            <div class="item-body-desc">用户名</div>
                         <?php } else { ?>
-                            <div class="item-body-desc">LoginName</div>
+                            <div class="item-body-desc ">LoginName</div>
                         <?php } ?>
 
 
                         <div class="item-body-tail" id="user-nickname-text">
-                            <div class="item-body-value"><?php echo $loginName; ?></div>
+                            <div class="item-body-value font-size-12"><?php echo $loginName; ?></div>
                             <div class="item-body-value">
                                 <img class="more-img" src="../../public/img/manage/more.png"/>
                             </div>

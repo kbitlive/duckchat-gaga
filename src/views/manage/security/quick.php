@@ -136,6 +136,8 @@
             margin-top: 12px;
         }
         .item-body-tail {
+            width: 20px;
+            max-width: 25px;
             height:110px;
             display: flex;
             justify-content: start;

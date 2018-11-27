@@ -140,6 +140,8 @@ html, body {
     /*vertical-align: middle;*/
     justify-content: center; /*x轴对齐方式*/
     align-items: center; /*y轴对滴方式*/
+    max-width: 70%;
+    overflow: hidden;
 }
 
 .item-body-desc {
@@ -337,4 +339,8 @@ html, body {
 
 .main-color {
     color: #4C3BB1;
+}
+.font-size-12 {
+    font-size: 12px;
+    overflow: hidden;
 }
