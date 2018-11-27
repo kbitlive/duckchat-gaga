@@ -1708,7 +1708,6 @@ function handleClickGroupUserImg(results)
         var isFriend = localStorage.getItem(friendRelationKey+clickImgUserId) == FriendRelation.FriendRelationFollow ? 1 : 0;
         var isCanAddFriend = groupProfile.canAddFriend == true ? true : false;
 
-        console.log("isCanAddFriend----"+isCanAddFriend);
         var html = template("tpl-group-user-menu", {
             userId : clickImgUserId,
             isFriend : isFriend,
