@@ -337,7 +337,6 @@
         </div>
     </div>
 </div>
-notEnableCustomerService
 
 <input type="hidden" data='<?php echo $enableCustomerService;?>' class="enableCustomerService">
 <input type="hidden" data='<?php echo $signatureError;?>' class="signatureError">
