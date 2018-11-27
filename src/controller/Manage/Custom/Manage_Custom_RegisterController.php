@@ -53,7 +53,6 @@ class Manage_Custom_RegisterController extends Manage_ServletController
 
         }
 
-        error_log("=================register = ".json_encode($result));
         echo json_encode($result);
         return;
     }

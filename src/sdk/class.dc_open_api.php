@@ -279,7 +279,7 @@ class DC_Open_Api
             $_curlObj = curl_init();
 
             curl_setopt($_curlObj, CURLOPT_URL, $url);
-            curl_setopt($_curlObj, CURLOPT_TIMEOUT, DC_CURLOPT_TIMEOUT);//3s timeout
+            curl_setopt($_curlObj, CURLOPT_TIMEOUT, $this->requestTimeOut);//3s timeout
             curl_setopt($_curlObj, CURLOPT_NOBODY, false);
             curl_setopt($_curlObj, CURLOPT_POST, true);
             curl_setopt($_curlObj, CURLOPT_POSTFIELDS, $params);

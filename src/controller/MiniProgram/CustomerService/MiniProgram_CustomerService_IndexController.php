@@ -52,7 +52,6 @@ CODE;
             $operation = $_POST['operation'];
             $key = $_POST['key'];
             $value = $_POST['value'];
-            error_log("-----------post------".json_encode($_POST));
 
             switch ($operation) {
                 case "update":
