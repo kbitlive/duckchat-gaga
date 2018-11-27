@@ -660,11 +660,13 @@ $(document).on("click", ".chat_plugin", function () {
     var roomType = localStorage.getItem(chatSessionId);
     var url = getPluginDuckchatPageUrl(roomType, chatSessionId);
     setCookie("duckchat_page_url", url, 30);
+
     if(landingPageUrl.indexOf("?") > -1) {
-        landingPageUrl = landingPageUrl+"&duckchat_sessionid="+duckchatSessionId;
+        landingPageUrl = landingPageUrl+"&duckchat_sessionid="+duckchatSessionId+"&duckchat_page_url="+encodeURI(url);
     } else {
-        landingPageUrl = landingPageUrl+"?duckchat_sessionid="+duckchatSessionId;
+        landingPageUrl = landingPageUrl+"?duckchat_sessionid="+duckchatSessionId+"&duckchat_page_url="+encodeURI(url);
     }
+
     if(loadingType == PluginLoadingType.PluginLoadingNewPage) {
         window.open(landingPageUrl, "_blank");
     } else {
