@@ -89,6 +89,23 @@ class DC_Open_Api
         return $response;
     }
 
+    public function getSiteAdmins()
+    {
+        $requestAction = "duckchat.site.admins";
+
+        $requestData = array(
+            "action" => $requestAction,
+            "body" => array(
+                "@type" => "type.googleapis.com/plugin.DuckChatSiteAdminsRequest",
+            ),
+            "timeMillis" => $this->getTimeMillis(),
+        );
+
+        $response = $this->duckChatRequest($requestAction, $requestData);
+
+        return $response;
+    }
+
     //send proxy text message
     public function sendTextMessage($isGroup, $fromUserId, $toId, $textBody)
     {
