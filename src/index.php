@@ -9,7 +9,7 @@ $timeRequestStart = microtime(true);
 
 //$_SERVER['REQUEST_URI'] = "/User/100369-api.html
 ini_set("display_errors", "Off");
-ini_set("log_errors", "On");
+ini_set("log_errors", "Off");
 
 $_ENV['WPF_URL_PATH_SUFFIX'] = '/wpf';
 
@@ -24,7 +24,6 @@ if (!empty($_GET['action'])) {
 
     $_ENV['WPF_URL_CONTROLLER_NAME'] = $controllerName;
     $_ENV['WPF_URL_CONTROLLER_METHOD_PARAM_NAME'] = "doIndex";
-
 }
 
 
