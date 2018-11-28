@@ -24,7 +24,6 @@ if (!empty($_GET['action'])) {
 
     $_ENV['WPF_URL_CONTROLLER_NAME'] = $controllerName;
     $_ENV['WPF_URL_CONTROLLER_METHOD_PARAM_NAME'] = "doIndex";
-
 }
 
 
