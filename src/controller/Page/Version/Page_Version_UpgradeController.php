@@ -31,49 +31,59 @@ class Page_Version_UpgradeController extends Page_VersionController
             if ($currentCode <= 10011) {
                 $this->versionCode = 10012;
                 $this->versionName = "1.0.12";
+                $result = Upgrade_Client::doUpgrade($currentCode, $this->versionCode);
             } elseif ($currentCode == 10012) {
                 $this->versionCode = 10013;
                 $this->versionName = "1.0.13";
                 $this->checkoutPreviousUpgrade($currentCode, "1.0.12");
+                $result = Upgrade_Client::doUpgrade($currentCode, $this->versionCode);
             } elseif ($currentCode == 10013) {
                 $this->versionCode = 10014;
                 $this->versionName = "1.0.14";
                 $this->checkoutPreviousUpgrade($currentCode, "1.0.13");
+                $result = Upgrade_Client::doUpgrade($currentCode, $this->versionCode);
             } elseif ($currentCode >= 10014 && $currentCode < 10100) {
                 $this->versionCode = 10100;
                 $this->versionName = "1.1.0";
                 $this->checkoutPreviousUpgrade($currentCode, "1.0.14");
+                $result = Upgrade_Client::doUpgrade($currentCode, $this->versionCode);
             } elseif ($currentCode == 10100) {
                 $this->versionCode = 10101;
                 $this->versionName = "1.1.1";
                 $this->checkoutPreviousUpgrade($currentCode, "1.1.1");
+                $result = Upgrade_Client::doUpgrade($currentCode, $this->versionCode);
             } elseif ($currentCode == 10101) {
                 $this->versionCode = 10102;
                 $this->versionName = "1.1.2";
                 $this->checkoutPreviousUpgrade($currentCode, "1.1.2");
+                $result = Upgrade_Client::doUpgrade($currentCode, $this->versionCode);
             } elseif ($currentCode == 10102) {
                 $this->versionCode = 10103;
                 $this->versionName = "1.1.3";
                 $this->checkoutPreviousUpgrade($currentCode, "1.1.3");
+                $result = Upgrade_Client::doUpgrade($currentCode, $this->versionCode);
             } elseif ($currentCode == 10103) {
                 $this->versionCode = 10104;
                 $this->versionName = "1.1.4";
                 $this->checkoutPreviousUpgrade($currentCode, "1.1.4");
-            }  elseif ($currentCode == 10104) {
+                $result = Upgrade_Client::doUpgrade($currentCode, $this->versionCode);
+            } elseif ($currentCode == 10104) {
                 $this->versionCode = 10105;
                 $this->versionName = "1.1.5";
                 $this->checkoutPreviousUpgrade($currentCode, "1.1.5");
-            }  elseif ($currentCode == 10105) {
+                $result = Upgrade_Client::doUpgrade($currentCode, $this->versionCode);
+            } elseif ($currentCode == 10105) {
                 $this->versionCode = 10106;
                 $this->versionName = "1.1.6";
                 $this->checkoutPreviousUpgrade($currentCode, "1.1.6");
+            } elseif ($currentCode == 10106) {
+                $this->versionCode = 10107;
+                $this->versionName = "1.1.7";
                 // change upgrade password
                 $this->updatePassword();
             } else {
                 throw new Exception("unsupport site version code = " . $currentCode);
             }
-
-            $result = Upgrade_Client::doUpgrade($currentCode, $this->versionCode);
 
             if ($result) {
                 $this->upgradeErrCode = "success";
