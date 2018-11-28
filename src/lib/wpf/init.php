@@ -98,20 +98,19 @@ $preAutoloadFiles = array(
 $autoloader->registerClass($preAutoloadFiles);
 
 
-if (!ini_get("error_log")) {
-    $phpErrorLog = ZalyConfig::getConfig("errorLog");
-
+if (!ini_get("error_log") ) {
     $logDirName = WPF_ROOT_DIR . "/logs";
     if (!is_dir($logDirName)) {
         mkdir($logDirName, 0755, true);
     }
+    $phpErrorLog = ZalyConfig::getConfig("errorLog");
 
-    if ($phpErrorLog) {
+    if($phpErrorLog) {
+        ini_set("log_errors", "On");
         ini_set("error_log", $logDirName . "/" . $phpErrorLog);
-    } else {
-        $strPrefix = ZalyHelper::generateStrKey(10);
-        ini_set("error_log", $logDirName . $strPrefix."_error_logs.log");
     }
+} else {
+    ini_set("log_errors", "On");
 }
 
 ////生成WEB程序管理器，开始执行逻辑
