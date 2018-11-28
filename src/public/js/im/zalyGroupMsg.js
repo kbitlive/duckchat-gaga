@@ -660,11 +660,13 @@ $(document).on("click", ".chat_plugin", function () {
     var roomType = localStorage.getItem(chatSessionId);
     var url = getPluginDuckchatPageUrl(roomType, chatSessionId);
     setCookie("duckchat_page_url", url, 30);
+
     if(landingPageUrl.indexOf("?") > -1) {
-        landingPageUrl = landingPageUrl+"&duckchat_sessionid="+duckchatSessionId;
+        landingPageUrl = landingPageUrl+"&duckchat_sessionid="+duckchatSessionId+"&duckchat_page_url="+encodeURIComponent(url);
     } else {
-        landingPageUrl = landingPageUrl+"?duckchat_sessionid="+duckchatSessionId;
+        landingPageUrl = landingPageUrl+"?duckchat_sessionid="+duckchatSessionId+"&duckchat_page_url="+encodeURIComponent(url);
     }
+
     if(loadingType == PluginLoadingType.PluginLoadingNewPage) {
         window.open(landingPageUrl, "_blank");
     } else {
@@ -1708,7 +1710,6 @@ function handleClickGroupUserImg(results)
         var isFriend = localStorage.getItem(friendRelationKey+clickImgUserId) == FriendRelation.FriendRelationFollow ? 1 : 0;
         var isCanAddFriend = groupProfile.canAddFriend == true ? true : false;
 
-        console.log("isCanAddFriend----"+isCanAddFriend);
         var html = template("tpl-group-user-menu", {
             userId : clickImgUserId,
             isFriend : isFriend,
@@ -2291,7 +2292,7 @@ $(document).on("click", ".share-group", function () {
     var src = $("#share_group").attr("src");
 
     if(src == "" || src == undefined) {
-        src="../../public/img/msg/group_default_avatar.png";
+        src="./public/img/msg/group_default_avatar.png";
     }
     var urlLink = changeZalySchemeToDuckChat(chatSessionId, "g");
     $("#share_group").attr("urlLink", urlLink);
