@@ -76,6 +76,7 @@ class Page_Version_UpgradeController extends Page_VersionController
                 $this->versionCode = 10106;
                 $this->versionName = "1.1.6";
                 $this->checkoutPreviousUpgrade($currentCode, "1.1.6");
+                $result = true;
             } elseif ($currentCode == 10106) {
                 $this->versionCode = 10107;
                 $this->versionName = "1.1.7";
