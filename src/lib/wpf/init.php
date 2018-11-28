@@ -99,13 +99,12 @@ $autoloader->registerClass($preAutoloadFiles);
 
 
 if (!ini_get("error_log") ) {
-    $logDirName = WPF_ROOT_DIR . "/logs";
-    if (!is_dir($logDirName)) {
-        mkdir($logDirName, 0755, true);
-    }
     $phpErrorLog = ZalyConfig::getConfig("errorLog");
-
     if($phpErrorLog) {
+        $logDirName = WPF_ROOT_DIR . "/logs";
+        if (!is_dir($logDirName)) {
+            mkdir($logDirName, 0755, true);
+        }
         ini_set("log_errors", "On");
         ini_set("error_log", $logDirName . "/" . $phpErrorLog);
     }
