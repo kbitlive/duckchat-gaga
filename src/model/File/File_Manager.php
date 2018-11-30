@@ -43,7 +43,7 @@ class File_Manager
         $dateDir = str_replace("../", "", $dateDir);
         $dirName = WPF_LIB_DIR . "/../{$this->attachmentDir}/$dateDir";
         if (!is_dir($dirName) && $isCreateFolder) {
-            mkdir($dirName, 0755, true);
+            mkdir($dirName, 0665, true);
         }
         return $dirName . "/" . $fileId;
     }
@@ -381,7 +381,7 @@ class File_Manager
 
 
         if (!is_dir($newDir)) {
-            mkdir($newDir, 0755, true);
+            mkdir($newDir, 0665, true);
         }
 
         $lastStr = substr($newDir, -1);
